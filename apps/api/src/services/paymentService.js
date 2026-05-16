@@ -1,88 +1,110 @@
-import Stripe from "stripe";
 import { env } from "../config/env.js";
 
-let cachedStripeClient;
+const SUPPORTED_CURRENCIES = new Set(["usd", "eur", "gbp"]);
+const DEFAULT_PAYMENT_METHOD_TYPES = ["card"];
 
-function getStripeClient(stripeClient) {
+let stripeClient;
+
+export class PaymentError extends Error {
+  constructor(message, statusCode = 400) {
+    super(message);
+    this.name = "PaymentError";
+    this.statusCode = statusCode;
+  }
+}
+
+export function setStripeClientForTesting(client) {
+  stripeClient = client;
+}
+
+export function calculatePlatformFee(amount, feePercent = env.platformFeePercent) {
+  const normalizedPercent = Number.isFinite(feePercent) && feePercent >= 0 ? feePercent : 0;
+  return Math.round(amount * (normalizedPercent / 100));
+}
+
+async function getStripeClient() {
   if (stripeClient) {
     return stripeClient;
   }
 
   if (!env.stripeSecretKey) {
-    throw new Error("STRIPE_SECRET_KEY is required to create payment intents");
+    throw new PaymentError("Stripe is not configured", 503);
   }
 
-  cachedStripeClient ??= new Stripe(env.stripeSecretKey);
-  return cachedStripeClient;
+  const { default: Stripe } = await import("stripe");
+  stripeClient = new Stripe(env.stripeSecretKey);
+  return stripeClient;
+}
+
+function normalizeCurrency(currency = "usd") {
+  const normalized = String(currency).trim().toLowerCase();
+
+  if (!SUPPORTED_CURRENCIES.has(normalized)) {
+    throw new PaymentError("Unsupported payment currency");
+  }
+
+  return normalized;
 }
 
 function normalizeAmount(amount) {
   if (!Number.isInteger(amount) || amount <= 0) {
-    throw new TypeError("Payment amount must be a positive integer in the smallest currency unit");
+    throw new PaymentError("Payment amount must be a positive integer in the smallest currency unit");
+  }
+
+  if (amount < 50) {
+    throw new PaymentError("Payment amount is below the Stripe minimum");
   }
 
   return amount;
 }
 
-function normalizeCurrency(currency = "usd") {
-  if (typeof currency !== "string") {
-    throw new TypeError("Payment currency must be a three-letter ISO currency code");
-  }
-
-  const normalizedCurrency = currency.trim().toLowerCase();
-  if (!/^[a-z]{3}$/.test(normalizedCurrency)) {
-    throw new TypeError("Payment currency must be a three-letter ISO currency code");
-  }
-
-  return normalizedCurrency;
+function buildPaymentMetadata(payload, platformFeeAmount, netAmount) {
+  return {
+    job_id: payload.jobId ?? "",
+    proposal_id: payload.proposalId ?? "",
+    payer_id: payload.payerId ?? "",
+    platform_fee_amount: String(platformFeeAmount),
+    net_amount: String(netAmount)
+  };
 }
 
-function normalizeMetadata(metadata) {
-  if (metadata == null) {
-    return undefined;
-  }
-
-  if (typeof metadata !== "object" || Array.isArray(metadata)) {
-    throw new TypeError("Payment metadata must be an object when provided");
-  }
-
-  const normalizedMetadata = Object.fromEntries(
-    Object.entries(metadata)
-      .filter(([, value]) => value != null)
-      .map(([key, value]) => [key, String(value)])
-  );
-
-  return Object.keys(normalizedMetadata).length > 0 ? normalizedMetadata : undefined;
-}
-
-function getStripeErrorMessage(error) {
-  return error?.raw?.message ?? error?.message ?? "Unknown Stripe API error";
-}
-
-export async function createPaymentIntent(payload = {}, options = {}) {
+export async function createPaymentIntent(payload = {}) {
   const amount = normalizeAmount(payload.amount);
   const currency = normalizeCurrency(payload.currency);
-  const metadata = normalizeMetadata(payload.metadata);
-  const stripe = getStripeClient(options.stripeClient);
+  const platformFeeAmount = calculatePlatformFee(amount);
+  const netAmount = amount - platformFeeAmount;
+  const client = await getStripeClient();
 
-  const params = { amount, currency };
-  if (metadata) {
-    params.metadata = metadata;
+  const paymentIntentPayload = {
+    amount,
+    currency,
+    capture_method: "manual",
+    payment_method_types: DEFAULT_PAYMENT_METHOD_TYPES,
+    metadata: buildPaymentMetadata(payload, platformFeeAmount, netAmount)
+  };
+
+  if (payload.description) {
+    paymentIntentPayload.description = payload.description;
   }
 
-  try {
-    const paymentIntent = await stripe.paymentIntents.create(params);
-
-    return {
-      paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
-      amount,
-      currency,
-      provider: "stripe"
+  if (payload.freelancerAccountId) {
+    paymentIntentPayload.application_fee_amount = platformFeeAmount;
+    paymentIntentPayload.transfer_data = {
+      destination: payload.freelancerAccountId
     };
-  } catch (error) {
-    throw new Error(`Stripe payment intent creation failed: ${getStripeErrorMessage(error)}`, {
-      cause: error
-    });
   }
+
+  const intent = await client.paymentIntents.create(paymentIntentPayload);
+
+  return {
+    paymentId: intent.id,
+    clientSecret: intent.client_secret,
+    amount,
+    currency,
+    provider: "stripe",
+    captureMethod: intent.capture_method ?? paymentIntentPayload.capture_method,
+    platformFeeAmount,
+    netAmount,
+    status: intent.status
+  };
 }

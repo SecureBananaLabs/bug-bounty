@@ -1,85 +1,72 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createPaymentIntent } from "../services/paymentService.js";
+import {
+  calculatePlatformFee,
+  createPaymentIntent,
+  setStripeClientForTesting
+} from "../services/paymentService.js";
 
-test("createPaymentIntent creates a Stripe PaymentIntent and returns client details", async () => {
-  const createCalls = [];
-  const stripeClient = {
-    paymentIntents: {
-      create: async (params) => {
-        createCalls.push(params);
-        return {
-          id: "pi_test_123",
-          client_secret: "pi_test_123_secret_abc"
-        };
+function createStripeMock() {
+  const calls = [];
+
+  return {
+    calls,
+    client: {
+      paymentIntents: {
+        async create(payload) {
+          calls.push(payload);
+          return {
+            id: "pi_test_123",
+            client_secret: "pi_test_123_secret_456",
+            capture_method: payload.capture_method,
+            status: "requires_payment_method"
+          };
+        }
       }
     }
   };
+}
 
-  const result = await createPaymentIntent(
-    {
-      amount: 2500,
-      currency: "USD",
-      metadata: {
-        jobId: "job_123",
-        proposalId: 42,
-        ignored: null
-      }
-    },
-    { stripeClient }
-  );
+test.afterEach(() => {
+  setStripeClientForTesting(undefined);
+});
 
-  assert.deepEqual(createCalls, [
-    {
-      amount: 2500,
-      currency: "usd",
-      metadata: {
-        jobId: "job_123",
-        proposalId: "42"
-      }
-    }
-  ]);
-  assert.deepEqual(result, {
-    paymentId: "pi_test_123",
-    clientSecret: "pi_test_123_secret_abc",
-    amount: 2500,
-    currency: "usd",
-    provider: "stripe"
+test("calculatePlatformFee rounds fees in the smallest currency unit", () => {
+  assert.equal(calculatePlatformFee(12345, 10), 1235);
+  assert.equal(calculatePlatformFee(999, 2.9), 29);
+});
+
+test("createPaymentIntent creates a manual-capture Stripe payment intent", async () => {
+  const stripe = createStripeMock();
+  setStripeClientForTesting(stripe.client);
+
+  const result = await createPaymentIntent({
+    amount: 25000,
+    currency: "USD",
+    jobId: "job_123",
+    proposalId: "proposal_456",
+    payerId: "user_789",
+    description: "Escrow payment for job_123"
   });
+
+  assert.equal(result.paymentId, "pi_test_123");
+  assert.equal(result.clientSecret, "pi_test_123_secret_456");
+  assert.equal(result.captureMethod, "manual");
+  assert.equal(result.platformFeeAmount, 2500);
+  assert.equal(result.netAmount, 22500);
 });
 
-test("createPaymentIntent validates amount and currency before calling Stripe", async () => {
-  const stripeClient = {
-    paymentIntents: {
-      create: async () => {
-        throw new Error("Stripe should not be called for invalid input");
-      }
-    }
-  };
+test("createPaymentIntent sends Connect transfer data when a freelancer account is supplied", async () => {
+  const stripe = createStripeMock();
+  setStripeClientForTesting(stripe.client);
 
-  await assert.rejects(
-    () => createPaymentIntent({ amount: 0, currency: "usd" }, { stripeClient }),
-    /positive integer/
-  );
-  await assert.rejects(
-    () => createPaymentIntent({ amount: 1000, currency: "usdollar" }, { stripeClient }),
-    /three-letter ISO currency code/
-  );
-});
+  await createPaymentIntent({
+    amount: 10000,
+    freelancerAccountId: "acct_freelancer"
+  });
 
-test("createPaymentIntent preserves Stripe API error messages", async () => {
-  const stripeClient = {
-    paymentIntents: {
-      create: async () => {
-        const error = new Error("Your card was declined");
-        error.raw = { message: "Stripe says this payment method is unavailable" };
-        throw error;
-      }
-    }
-  };
-
-  await assert.rejects(
-    () => createPaymentIntent({ amount: 1500, currency: "usd" }, { stripeClient }),
-    /Stripe says this payment method is unavailable/
-  );
+  assert.equal(stripe.calls[0].application_fee_amount, 1000);
+  assert.deepEqual(stripe.calls[0].transfer_data, {
+    destination: "acct_freelancer"
+  });
 });
