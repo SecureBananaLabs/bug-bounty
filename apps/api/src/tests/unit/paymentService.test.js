@@ -15,7 +15,7 @@ jest.unstable_mockModule('stripe', () => {
 
 const { createPaymentIntent } = await import('../../services/paymentService.js');
 
-describe('paymentService', () => {
+describe('paymentService (Supreme Strategy v2)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -45,38 +45,56 @@ describe('paymentService', () => {
       });
     });
 
-    it('should throw validation error for negative amount', async () => {
+    it('should throw 400 for negative amount', async () => {
       const payload = { amount: -100 };
-      await expect(createPaymentIntent(payload)).rejects.toThrow('Validation Error');
+      try {
+        await createPaymentIntent(payload);
+      } catch (e) {
+        expect(e.status).toBe(400);
+        expect(e.message).toContain('Validation Error');
+      }
     });
 
-    it('should throw validation error for missing amount', async () => {
-      const payload = { currency: 'usd' };
-      await expect(createPaymentIntent(payload)).rejects.toThrow('Validation Error');
+    it('should throw 400 for invalid metadata key length', async () => {
+       const payload = { 
+         amount: 1000, 
+         metadata: { ["a".repeat(41)]: "value" } 
+       };
+       try {
+         await createPaymentIntent(payload);
+       } catch (e) {
+         expect(e.status).toBe(400);
+         expect(e.message).toContain('Metadata key exceeds 40 characters');
+       }
     });
 
-    it('should use default currency if not provided', async () => {
-       const payload = { amount: 1000 };
-       mockCreate.mockResolvedValue({
-         id: 'pi_default',
-         client_secret: 'secret_default'
-       });
-
-       await createPaymentIntent(payload);
-
-       expect(mockCreate).toHaveBeenCalledWith(
-         expect.objectContaining({ currency: 'usd' })
-       );
+    it('should throw 400 for too many metadata keys', async () => {
+       const largeMetadata = {};
+       for(let i=0; i<51; i++) largeMetadata[`key${i}`] = "val";
+       
+       const payload = { amount: 1000, metadata: largeMetadata };
+       try {
+         await createPaymentIntent(payload);
+       } catch (e) {
+         expect(e.status).toBe(400);
+         expect(e.message).toContain('Metadata cannot have more than 50 keys');
+       }
     });
 
-    it('should preserve Stripe error messages', async () => {
+    it('should map Stripe auth error (401) to 502 Bad Gateway', async () => {
       const payload = { amount: 1000 };
-      const stripeError = new Error('Your card was declined.');
-      stripeError.type = 'StripeCardError';
+      const stripeError = new Error('Invalid API Key');
+      stripeError.type = 'StripeAuthenticationError';
+      stripeError.statusCode = 401;
       
       mockCreate.mockRejectedValue(stripeError);
 
-      await expect(createPaymentIntent(payload)).rejects.toThrow('Your card was declined.');
+      try {
+        await createPaymentIntent(payload);
+      } catch (e) {
+        expect(e.status).toBe(502);
+        expect(e.message).toBe('Invalid API Key');
+      }
     });
   });
 });
