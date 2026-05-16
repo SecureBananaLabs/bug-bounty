@@ -1,0 +1,6 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0b1020; color: #f2f5ff; }
+a { color: inherit; text-decoration: none; }
+main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+.card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }

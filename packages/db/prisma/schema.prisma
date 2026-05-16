@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CLIENT
+  FREELANCER
+  ADMIN
+}
+
+enum JobStatus {
+  DRAFT
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id             String      @id @default(cuid())
+  email          String      @unique
+  passwordHash   String
+  fullName       String
+  bio            String?
+  role           UserRole    @default(CLIENT)
+  isVerified     Boolean     @default(false)
+  skills         Skill[]
+  postedJobs     Job[]       @relation("ClientJobs")
+  proposals      Proposal[]
+  sentMessages   Message[]   @relation("SentMessages")
+  receivedMsgs   Message[]   @relation("ReceivedMessages")
+  reviewsGiven   Review[]    @relation("Reviewer")
+  reviewsGot     Review[]    @relation("Reviewee")
+  notifications  Notification[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model Job {
+  id            String      @id @default(cuid())
+  title         String
+  description   String
+  budgetMin     Float
+  budgetMax     Float
+  status        JobStatus   @default(OPEN)
+  clientId      String
+  client        User        @relation("ClientJobs", fields: [clientId], references: [id])
+  categoryId    String
+  category      Category    @relation(fields: [categoryId], references: [id])
+  proposals     Proposal[]
+  payments      Payment[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Proposal {
+  id            String      @id @default(cuid())
+  coverLetter   String
+  bidAmount     Float
+  estDuration   String
+  jobId         String
+  job           Job         @relation(fields: [jobId], references: [id])
+  freelancerId  String
+  freelancer    User        @relation(fields: [freelancerId], references: [id])
+  createdAt     DateTime    @default(now())
+}
+
+model Payment {
+  id            String      @id @default(cuid())
+  amount        Float
+  currency      String      @default("USD")
+  status        String
+  stripeRef     String?
+  jobId         String
+  job           Job         @relation(fields: [jobId], references: [id])
+  createdAt     DateTime    @default(now())
+}
+
+model Review {
+  id            String      @id @default(cuid())
+  rating        Int
+  comment       String
+  reviewerId    String
+  reviewer      User        @relation("Reviewer", fields: [reviewerId], references: [id])
+  revieweeId    String
+  reviewee      User        @relation("Reviewee", fields: [revieweeId], references: [id])
+  createdAt     DateTime    @default(now())
+}
+
+model Message {
+  id            String      @id @default(cuid())
+  body          String
+  senderId      String
+  sender        User        @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId    String
+  receiver      User        @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  isRead        Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+}
+
+model Category {
+  id            String      @id @default(cuid())
+  name          String      @unique
+  description   String?
+  jobs          Job[]
+}
+
+model Skill {
+  id            String      @id @default(cuid())
+  name          String      @unique
+  users         User[]
+}
+
+model Notification {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  title         String
+  body          String
+  read          Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+}
