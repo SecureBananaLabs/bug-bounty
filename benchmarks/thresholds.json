@@ -1,0 +1,32 @@
+{
+  "thresholds": {
+    "p50_ms": {
+      "max": 500,
+      "description": "Median latency must stay under 500ms"
+    },
+    "p95_ms": {
+      "max": 2000,
+      "description": "95th percentile latency must stay under 2000ms"
+    },
+    "p99_ms": {
+      "max": 5000,
+      "description": "99th percentile latency must stay under 5000ms"
+    },
+    "error_rate_pct": {
+      "max": 10,
+      "description": "Error rate must stay below 10%"
+    },
+    "rps_min": {
+      "min": 5,
+      "description": "Minimum sustained requests per second"
+    }
+  },
+  "smoke_test": {
+    "vus": 2,
+    "duration": "5s"
+  },
+  "full_benchmark": {
+    "vus": 10,
+    "duration": "30s"
+  }
+}
