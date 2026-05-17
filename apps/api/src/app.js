@@ -14,8 +14,10 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { resetAdminData } from "./services/adminData.js";
 
 export function createApp() {
+  resetAdminData();
   const app = express();
 
   app.use(helmet());
