@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,38 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* ── Light theme (default) ────────────── */
   :root {
+    --bg: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --bg-elevated: #F1F5F9;
+    --text: #0F172A;
+    --text-dim: #64748B;
+    --accent: #16A34A;
+    --accent-glow: rgba(22,163,74,0.2);
+    --red: #DC2626;
+    --yellow: #D97706;
+    --blue: #2563EB;
+    --purple: #9333EA;
+    --cyan: #0891B2;
+    --border: #E2E8F0;
+    --nav-bg: rgba(248,250,252,0.85);
+    --nav-border: rgba(226,232,240,0.7);
+    --code-bg: #F1F5F9;
+    --code-border: #E2E8F0;
+    --glow-hero: rgba(22,163,74,0.08);
+    --glow-cta: rgba(22,163,74,0.06);
+    --radius: 12px;
+    --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-hover: 0 8px 30px rgba(22,163,74,0.12);
+  }
+
+  /* ── Dark theme ───────────────────────── */
+  [data-theme="dark"] {
     --bg: #0F172A;
     --bg-card: #1E293B;
     --bg-elevated: #334155;
@@ -22,11 +53,17 @@
     --purple: #A855F7;
     --cyan: #06B6D4;
     --border: #334155;
-    --radius: 12px;
-    --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --nav-bg: rgba(15,23,42,0.85);
+    --nav-border: rgba(51,65,85,0.5);
+    --code-bg: #0F172A;
+    --code-border: #334155;
+    --glow-hero: rgba(34,197,94,0.06);
+    --glow-cta: rgba(34,197,94,0.06);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.3);
+    --shadow-hover: 0 8px 30px rgba(34,197,94,0.12);
   }
+
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior: smooth; }
   body {
@@ -35,8 +72,17 @@
     color: var(--text);
     line-height: 1.6;
     overflow-x: hidden;
+    transition: background 0.4s var(--ease-out), color 0.4s var(--ease-out);
   }
   ::selection { background: var(--accent-glow); }
+
+  /* ── Theme transition ─────────────────── */
+  *, *::before, *::after {
+    transition: background-color 0.4s var(--ease-out),
+                border-color 0.4s var(--ease-out),
+                color 0.4s var(--ease-out),
+                box-shadow 0.4s var(--ease-out);
+  }
 
   /* ── Scroll reveal ─────────────────────── */
   .reveal {
@@ -49,8 +95,8 @@
   /* ── Nav ──────────────────────────────── */
   nav {
     position: fixed; top:0; left:0; right:0; z-index:100;
-    background: rgba(15,23,42,0.85); backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(51,65,85,0.5);
+    background: var(--nav-bg); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--nav-border);
     padding: 0 2rem; height: 56px;
     display: flex; align-items: center; justify-content: space-between;
   }
@@ -59,11 +105,40 @@
     background: linear-gradient(135deg, var(--accent), var(--cyan));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
+  nav .nav-links { display:flex; align-items:center; gap:0.5rem; }
   nav a {
     color: var(--text-dim); text-decoration: none; font-size: 0.875rem;
     transition: color 0.2s; margin-left: 1.5rem;
   }
   nav a:hover { color: var(--text); }
+
+  /* ── Theme toggle ─────────────────────── */
+  .theme-toggle {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.4rem;
+    display: flex; align-items: center; gap: 0.25rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: border-color 0.3s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); }
+  .theme-toggle .toggle-option {
+    width: 32px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    transition: background 0.3s var(--spring);
+  }
+  .theme-toggle .toggle-option.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  [data-theme="dark"] .theme-toggle .toggle-option.active {
+    background: var(--accent);
+    color: #0F172A;
+  }
 
   /* ── Container ────────────────────────── */
   .container { max-width: 1100px; margin:0 auto; padding:0 2rem; }
@@ -74,19 +149,19 @@
   .hero::before {
     content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%);
     width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--glow-hero) 0%, transparent 70%);
     pointer-events: none;
   }
   .hero .badge {
     display: inline-flex; align-items: center; gap: 0.5rem;
-    background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2);
+    background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2);
     padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.85rem;
     color: var(--accent); margin-bottom: 1.5rem;
     animation: badge-pulse 3s ease-in-out infinite;
   }
   .hero .badge .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; }
   @keyframes badge-pulse {
-    0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.3); }
+    0%,100% { box-shadow: 0 0 0 0 var(--accent-glow); }
     50% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
   }
   .hero h1 {
@@ -106,17 +181,20 @@
     display: inline-flex; align-items: center; gap:0.5rem;
     padding: 0.75rem 1.75rem; border-radius: 100px; font-weight: 600;
     font-size: 0.95rem; text-decoration: none;
-    transition: transform 0.2s var(--spring), box-shadow 0.2s;
+    transition: transform 0.2s var(--spring), box-shadow 0.2s var(--spring);
   }
   .btn-primary {
-    background: var(--accent); color: #0F172A;
-    box-shadow: 0 0 20px rgba(34,197,94,0.25);
+    background: var(--accent); color: #fff;
+    box-shadow: 0 0 20px var(--accent-glow);
   }
-  .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 35px rgba(34,197,94,0.4); }
+  [data-theme="light"] .btn-primary { color: #fff; }
+  [data-theme="dark"] .btn-primary { color: #0F172A; }
+  .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 35px var(--accent-glow); }
   .btn-ghost {
     border: 1px solid var(--border); color: var(--text);
+    background: transparent;
   }
-  .btn-ghost:hover { transform: scale(1.05); border-color: var(--text-dim); }
+  .btn-ghost:hover { transform: scale(1.05); border-color: var(--accent); }
 
   /* ── Stats grid ──────────────────────── */
   .stats-grid {
@@ -127,12 +205,13 @@
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 1.5rem; text-align: center;
     cursor: default;
-    transition: transform 0.3s var(--spring), border-color 0.3s, box-shadow 0.3s;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s var(--spring), border-color 0.3s, box-shadow 0.3s var(--spring);
   }
   .stat-card:hover {
     transform: translateY(-4px) scale(1.03);
     border-color: var(--accent);
-    box-shadow: 0 8px 30px rgba(34,197,94,0.1);
+    box-shadow: var(--shadow-hover);
   }
   .stat-card .number {
     font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums;
@@ -149,21 +228,23 @@
   .step {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 2rem; position: relative; overflow: hidden;
-    transition: transform 0.3s var(--spring), border-color 0.3s;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s var(--spring), border-color 0.3s, box-shadow 0.3s var(--spring);
   }
-  .step:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .step:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: var(--shadow-hover); }
   .step .step-num {
-    font-size: 3.5rem; font-weight: 800; color: rgba(34,197,94,0.08);
+    font-size: 3.5rem; font-weight: 800; color: var(--accent-glow);
     position: absolute; top: -8px; right: 16px; line-height: 1;
+    opacity: 0.35;
   }
   .step code {
-    display: block; background: #0F172A; padding: 0.75rem 1rem;
+    display: block; background: var(--code-bg); padding: 0.75rem 1rem;
     border-radius: 8px; margin-top: 1rem; font-size: 0.85rem;
-    color: var(--accent); border: 1px solid var(--border);
-    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--accent); border: 1px solid var(--code-border);
+    font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
     transition: box-shadow 0.3s;
   }
-  .step:hover code { box-shadow: 0 0 15px rgba(34,197,94,0.1); }
+  .step:hover code { box-shadow: 0 0 15px var(--accent-glow); }
   .step h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
 
   /* ── Comparison ──────────────────────── */
@@ -172,7 +253,10 @@
   .comp-col {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.3s var(--spring);
   }
+  .comp-col:hover { box-shadow: var(--shadow-md); }
   .comp-col.basic { border-top: 3px solid var(--red); }
   .comp-col.pro { border-top: 3px solid var(--accent); }
   .comp-col h3 { font-size:1.1rem; margin-bottom:1rem; }
@@ -189,16 +273,22 @@
   .arch-block {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 1.25rem 1.5rem; text-align:center;
-    transition: transform 0.3s var(--spring), box-shadow 0.3s;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s var(--spring), box-shadow 0.3s var(--spring);
     min-width: 110px;
   }
-  .arch-block:hover { transform: scale(1.08); box-shadow: 0 4px 25px rgba(34,197,94,0.15); }
+  .arch-block:hover { transform: scale(1.08); box-shadow: var(--shadow-hover); }
   .arch-block .icon { font-size:1.8rem; margin-bottom:0.25rem; }
   .arch-block .name { font-weight:600; font-size:0.9rem; }
   .arch-arrow { color:var(--accent); font-size:1.5rem; font-weight:300; }
 
   /* ── CTA ─────────────────────────────── */
-  .cta-section { text-align:center; background: radial-gradient(ellipse at center, rgba(34,197,94,0.06) 0%, transparent 70%); border-radius: var(--radius); padding:4rem 2rem; }
+  .cta-section {
+    text-align:center;
+    background: radial-gradient(ellipse at center, var(--glow-cta) 0%, transparent 70%);
+    border-radius: var(--radius); padding:4rem 2rem;
+    border: 1px solid var(--border);
+  }
   .cta-section h2 { font-size:2rem; margin-bottom:0.75rem; }
   .cta-section p { color:var(--text-dim); margin-bottom:2rem; font-size:1.1rem; }
 
@@ -230,6 +320,8 @@
     .hero { padding-top:7rem; }
     .arch { flex-direction:column; }
     .arch-arrow { transform:rotate(90deg); }
+    nav { padding: 0 1rem; }
+    nav a { margin-left: 0.75rem; font-size: 0.8rem; }
   }
 </style>
 </head>
@@ -237,10 +329,15 @@
 
 <nav>
   <div class="logo">⚡ BenchmarkFlow</div>
-  <div>
+  <div class="nav-links">
     <a href="#how">How</a>
     <a href="#compare">Compare</a>
     <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/68" target="_blank">PR #68 ↗</a>
+    <!-- Theme toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="toggle-option" data-theme-val="light" id="lightOpt">☀️</span>
+      <span class="toggle-option" data-theme-val="dark" id="darkOpt">🌙</span>
+    </button>
   </div>
 </nav>
 
@@ -284,7 +381,7 @@
       <div class="step">
         <div class="step-num">03</div>
         <h3>View the dashboard</h3>
-        <p style="color:var(--text-dim);font-size:0.9rem;">Dark-themed HTML report with color-coded metrics.</p>
+        <p style="color:var(--text-dim);font-size:0.9rem;">Interactive HTML report with color-coded metrics. Light & dark mode.</p>
         <code>make bench-report</code>
       </div>
     </div>
@@ -344,7 +441,7 @@
 <section id="compare">
   <div class="container">
     <div class="section-header reveal">
-      <h2>Why this over <code style="color:var(--red);background:rgba(239,68,68,0.1);padding:0.15rem 0.5rem;border-radius:4px;">autocannon</code></h2>
+      <h2>Why this over <code style="color:var(--red);background:rgba(239,68,68,0.08);padding:0.15rem 0.5rem;border-radius:4px;">autocannon</code></h2>
       <p>The bounty asked for a CSV. Here's why this delivers more.</p>
     </div>
     <div class="comparison stagger" id="comparison">
@@ -368,7 +465,7 @@
           <li>Auto on every push & PR</li>
           <li>GitHub Actions CI</li>
           <li>PR comment with diff</li>
-          <li>Dark-themed dashboard</li>
+          <li>Light & dark dashboard</li>
           <li>Docker Compose reproducible</li>
         </ul>
       </div>
@@ -381,7 +478,7 @@
   <div class="container">
     <div class="cta-section reveal">
       <h2>Ready to benchmark your API?</h2>
-      <p>Fork, run <code style="background:rgba(34,197,94,0.1);padding:0.2rem 0.6rem;border-radius:4px;">make bench</code>, and see the dashboard in 30 seconds.</p>
+      <p>Fork, run <code style="background:rgba(34,197,94,0.08);padding:0.2rem 0.6rem;border-radius:4px;color:var(--accent);">make bench</code>, and see the dashboard in 30 seconds.</p>
       <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
         <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/68" target="_blank" class="btn btn-primary">View PR #68 on GitHub</a>
         <a href="https://github.com/AtlasNexusOps/bug-bounty" target="_blank" class="btn btn-ghost">Fork the repo</a>
@@ -396,6 +493,31 @@
 </footer>
 
 <script>
+// ── Theme toggle ─────────────────────────
+(function() {
+  const html = document.documentElement;
+  const lightOpt = document.getElementById('lightOpt');
+  const darkOpt = document.getElementById('darkOpt');
+
+  // Load saved preference (default: light)
+  const saved = localStorage.getItem('benchmarkflow-theme') || 'light';
+  html.setAttribute('data-theme', saved);
+  updateToggle(saved);
+
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('benchmarkflow-theme', next);
+    updateToggle(next);
+  });
+
+  function updateToggle(theme) {
+    lightOpt.classList.toggle('active', theme === 'light');
+    darkOpt.classList.toggle('active', theme === 'dark');
+  }
+})();
+
 // ── Scroll-triggered reveals ─────────────
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -426,7 +548,6 @@ function animateCounters() {
 
     function tick(now) {
       const progress = Math.min((now - start) / duration, 1);
-      // spring-like easing
       const eased = 1 - Math.pow(1 - progress, 4);
       current = Math.round(target * eased);
       el.textContent = isCurrency ? current + '$' : current + suffix;
@@ -436,7 +557,6 @@ function animateCounters() {
   });
 }
 
-// Trigger counters when hero stats become visible
 const heroStats = document.getElementById('hero-stats');
 const heroObs = new IntersectionObserver((entries) => {
   if (entries[0].isIntersecting) {
