@@ -1,10 +1,11 @@
 import { ok } from "../utils/response.js";
 import { createNotification, listNotifications } from "../services/notificationService.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
-export async function getNotifications(req, res) {
+export const getNotifications = asyncHandler(async (req, res) => {
   return ok(res, await listNotifications());
-}
+});
 
-export async function postNotification(req, res) {
+export const postNotification = asyncHandler(async (req, res) => {
   return ok(res, await createNotification(req.body), 201);
-}
+});

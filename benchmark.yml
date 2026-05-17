@@ -1,0 +1,28 @@
+name: Benchmark
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    name: Smoke benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run smoke benchmark
+        run: npm run benchmark:ci
+        env:
+          RATE_LIMIT_MAX: 10000
+          BENCHMARK_CONCURRENCY: 2
+          BENCHMARK_REQUESTS: 20
+          CI: "true"
