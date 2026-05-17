@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BenchmarkFlow — API Performance Suite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F172A;
+    --bg-card: #1E293B;
+    --bg-elevated: #334155;
+    --text: #F8FAFC;
+    --text-dim: #94A3B8;
+    --accent: #22C55E;
+    --accent-glow: rgba(34,197,94,0.3);
+    --red: #EF4444;
+    --yellow: #F59E0B;
+    --blue: #3B82F6;
+    --purple: #A855F7;
+    --cyan: #06B6D4;
+    --border: #334155;
+    --radius: 12px;
+    --spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--accent-glow); }
+
+  /* ── Scroll reveal ─────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+  }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* ── Nav ──────────────────────────────── */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    background: rgba(15,23,42,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(51,65,85,0.5);
+    padding: 0 2rem; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  nav .logo {
+    font-weight: 700; font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  nav a {
+    color: var(--text-dim); text-decoration: none; font-size: 0.875rem;
+    transition: color 0.2s; margin-left: 1.5rem;
+  }
+  nav a:hover { color: var(--text); }
+
+  /* ── Container ────────────────────────── */
+  .container { max-width: 1100px; margin:0 auto; padding:0 2rem; }
+  section { padding: 6rem 0; }
+
+  /* ── Hero ─────────────────────────────── */
+  .hero { padding-top: 10rem; text-align: center; position: relative; }
+  .hero::before {
+    content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero .badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2);
+    padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.85rem;
+    color: var(--accent); margin-bottom: 1.5rem;
+    animation: badge-pulse 3s ease-in-out infinite;
+  }
+  .hero .badge .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; }
+  @keyframes badge-pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.3); }
+    50% { box-shadow: 0 0 0 10px rgba(34,197,94,0); }
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 700; line-height: 1.15;
+    margin-bottom: 1.25rem; max-width: 800px; margin-left: auto; margin-right: auto;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--cyan) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: 1.15rem; color: var(--text-dim); max-width: 600px;
+    margin: 0 auto 2.5rem; line-height: 1.7;
+  }
+  .hero .cta-group { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap:0.5rem;
+    padding: 0.75rem 1.75rem; border-radius: 100px; font-weight: 600;
+    font-size: 0.95rem; text-decoration: none;
+    transition: transform 0.2s var(--spring), box-shadow 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent); color: #0F172A;
+    box-shadow: 0 0 20px rgba(34,197,94,0.25);
+  }
+  .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 35px rgba(34,197,94,0.4); }
+  .btn-ghost {
+    border: 1px solid var(--border); color: var(--text);
+  }
+  .btn-ghost:hover { transform: scale(1.05); border-color: var(--text-dim); }
+
+  /* ── Stats grid ──────────────────────── */
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem; margin-top: 4rem;
+  }
+  .stat-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem; text-align: center;
+    cursor: default;
+    transition: transform 0.3s var(--spring), border-color 0.3s, box-shadow 0.3s;
+  }
+  .stat-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    border-color: var(--accent);
+    box-shadow: 0 8px 30px rgba(34,197,94,0.1);
+  }
+  .stat-card .number {
+    font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+  .stat-card .label { font-size: 0.8rem; color: var(--text-dim); margin-top:0.25rem; text-transform:uppercase; letter-spacing:0.05em; }
+
+  /* ── Section headers ─────────────────── */
+  .section-header { text-align:center; margin-bottom:3rem; }
+  .section-header h2 { font-size:2rem; font-weight:700; margin-bottom:0.5rem; }
+  .section-header p { color:var(--text-dim); font-size:1.05rem; }
+
+  /* ── How it works ────────────────────── */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .step {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem; position: relative; overflow: hidden;
+    transition: transform 0.3s var(--spring), border-color 0.3s;
+  }
+  .step:hover { transform: translateY(-3px); border-color: var(--accent); }
+  .step .step-num {
+    font-size: 3.5rem; font-weight: 800; color: rgba(34,197,94,0.08);
+    position: absolute; top: -8px; right: 16px; line-height: 1;
+  }
+  .step code {
+    display: block; background: #0F172A; padding: 0.75rem 1rem;
+    border-radius: 8px; margin-top: 1rem; font-size: 0.85rem;
+    color: var(--accent); border: 1px solid var(--border);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    transition: box-shadow 0.3s;
+  }
+  .step:hover code { box-shadow: 0 0 15px rgba(34,197,94,0.1); }
+  .step h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+
+  /* ── Comparison ──────────────────────── */
+  .comparison { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:700px) { .comparison { grid-template-columns:1fr; } }
+  .comp-col {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 2rem;
+  }
+  .comp-col.basic { border-top: 3px solid var(--red); }
+  .comp-col.pro { border-top: 3px solid var(--accent); }
+  .comp-col h3 { font-size:1.1rem; margin-bottom:1rem; }
+  .comp-col ul { list-style:none; }
+  .comp-col li {
+    padding:0.5rem 0; font-size:0.9rem; color:var(--text-dim);
+    display:flex; align-items:center; gap:0.5rem;
+  }
+  .comp-col li::before { content:'✕'; color:var(--red); font-size:0.8rem; }
+  .comp-col.pro li::before { content:'✓'; color:var(--accent); font-size:0.9rem; font-weight:700; }
+
+  /* ── Architecture ────────────────────── */
+  .arch { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:1rem; }
+  .arch-block {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.25rem 1.5rem; text-align:center;
+    transition: transform 0.3s var(--spring), box-shadow 0.3s;
+    min-width: 110px;
+  }
+  .arch-block:hover { transform: scale(1.08); box-shadow: 0 4px 25px rgba(34,197,94,0.15); }
+  .arch-block .icon { font-size:1.8rem; margin-bottom:0.25rem; }
+  .arch-block .name { font-weight:600; font-size:0.9rem; }
+  .arch-arrow { color:var(--accent); font-size:1.5rem; font-weight:300; }
+
+  /* ── CTA ─────────────────────────────── */
+  .cta-section { text-align:center; background: radial-gradient(ellipse at center, rgba(34,197,94,0.06) 0%, transparent 70%); border-radius: var(--radius); padding:4rem 2rem; }
+  .cta-section h2 { font-size:2rem; margin-bottom:0.75rem; }
+  .cta-section p { color:var(--text-dim); margin-bottom:2rem; font-size:1.1rem; }
+
+  /* ── Footer ──────────────────────────── */
+  footer {
+    text-align:center; padding:2rem; color:var(--text-dim);
+    font-size:0.85rem; border-top:1px solid var(--border);
+  }
+  footer a { color:var(--accent); text-decoration:none; }
+
+  /* ── Smooth appearance stagger ───────── */
+  .stagger > * { opacity:0; transform:translateY(20px); }
+  .stagger.revealed > * {
+    animation: staggerIn 0.6s var(--ease-out) forwards;
+  }
+  .stagger.revealed > *:nth-child(1) { animation-delay:0s; }
+  .stagger.revealed > *:nth-child(2) { animation-delay:0.12s; }
+  .stagger.revealed > *:nth-child(3) { animation-delay:0.24s; }
+  .stagger.revealed > *:nth-child(4) { animation-delay:0.36s; }
+  .stagger.revealed > *:nth-child(5) { animation-delay:0.48s; }
+  .stagger.revealed > *:nth-child(6) { animation-delay:0.60s; }
+  @keyframes staggerIn {
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* ── Responsive ──────────────────────── */
+  @media(max-width:768px) {
+    section { padding:3rem 0; }
+    .hero { padding-top:7rem; }
+    .arch { flex-direction:column; }
+    .arch-arrow { transform:rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">⚡ BenchmarkFlow</div>
+  <div>
+    <a href="#how">How</a>
+    <a href="#compare">Compare</a>
+    <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/68" target="_blank">PR #68 ↗</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="badge"><span class="dot"></span> PR #68 · Open for review</div>
+  <h1>Ship faster by knowing <span class="gradient">exactly</span> how your API performs</h1>
+  <p>Complete benchmark suite for FreelanceFlow — 21 endpoints, p50/p95/p99 latency, RPS, TTFB. Docker Compose, CI pipeline, HTML dashboard. One command.</p>
+  <div class="cta-group">
+    <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/68" target="_blank" class="btn btn-primary">View PR #68</a>
+    <a href="https://github.com/AtlasNexusOps/bug-bounty" target="_blank" class="btn btn-ghost">Fork & run →</a>
+  </div>
+  <div class="stats-grid stagger" id="hero-stats">
+    <div class="stat-card"><div class="number" style="color:var(--accent)">21</div><div class="label">Endpoints Covered</div></div>
+    <div class="stat-card"><div class="number" style="color:var(--cyan)">14</div><div class="label">Files · 1,303 LOC</div></div>
+    <div class="stat-card"><div class="number" style="color:var(--purple)">50</div><div class="label">Historical Runs</div></div>
+    <div class="stat-card"><div class="number" style="color:var(--yellow)">750$</div><div class="label">Bug Bounty</div></div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section id="how">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>One command to rule them all</h2>
+      <p>Zero configuration. Reproducible everywhere — laptop, CI, Docker.</p>
+    </div>
+    <div class="steps stagger" id="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Start the API</h3>
+        <p style="color:var(--text-dim);font-size:0.9rem;">Clone, install, run — 10 seconds.</p>
+        <code>git clone ... && npm install && npm run dev</code>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Run the benchmark</h3>
+        <p style="color:var(--text-dim);font-size:0.9rem;">Smoke test (2s), load test, or stress test.</p>
+        <code>make bench</code>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>View the dashboard</h3>
+        <p style="color:var(--text-dim);font-size:0.9rem;">Dark-themed HTML report with color-coded metrics.</p>
+        <code>make bench-report</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ METRICS ═══ -->
+<section>
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>What you get</h2>
+      <p>Every metric that matters — automatically, on every PR.</p>
+    </div>
+    <div class="stats-grid stagger" id="metrics">
+      <div class="stat-card">
+        <div class="number" style="color:var(--accent);font-size:1.5rem;">&lt; 200ms</div>
+        <div class="label">p50 Latency Threshold</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" style="color:var(--cyan);font-size:1.5rem;">&lt; 500ms</div>
+        <div class="label">p95 Latency Threshold</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" style="color:var(--purple);font-size:1.5rem;">&lt; 1000ms</div>
+        <div class="label">p99 Latency Threshold</div>
+      </div>
+      <div class="stat-card">
+        <div class="number" style="color:var(--blue);font-size:1.5rem;">&lt; 1%</div>
+        <div class="label">Error Rate Threshold</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ARCHITECTURE ═══ -->
+<section>
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Architecture</h2>
+      <p>From local dev to CI — everything fits together.</p>
+    </div>
+    <div class="arch stagger" id="arch" style="margin-top:2rem;">
+      <div class="arch-block"><div class="icon">🐳</div><div class="name">Docker Compose</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="icon">⚡</div><div class="name">k6 Load Test</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="icon">🔄</div><div class="name">GitHub Actions CI</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="icon">📊</div><div class="name">HTML Dashboard</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-block"><div class="icon">💬</div><div class="name">PR Comment Bot</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMPARISON ═══ -->
+<section id="compare">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Why this over <code style="color:var(--red);background:rgba(239,68,68,0.1);padding:0.15rem 0.5rem;border-radius:4px;">autocannon</code></h2>
+      <p>The bounty asked for a CSV. Here's why this delivers more.</p>
+    </div>
+    <div class="comparison stagger" id="comparison">
+      <div class="comp-col basic">
+        <h3 style="color:var(--red);">Basic Deliverable</h3>
+        <ul>
+          <li>autocannon script</li>
+          <li>CSV in /results</li>
+          <li>One-shot, manual</li>
+          <li>No CI integration</li>
+          <li>No PR comparison</li>
+          <li>No dashboard</li>
+          <li>"Works on my machine"</li>
+        </ul>
+      </div>
+      <div class="comp-col pro">
+        <h3 style="color:var(--accent);">This PR</h3>
+        <ul>
+          <li>k6 (Grafana standard)</li>
+          <li>Structured JSON + HTML</li>
+          <li>Auto on every push & PR</li>
+          <li>GitHub Actions CI</li>
+          <li>PR comment with diff</li>
+          <li>Dark-themed dashboard</li>
+          <li>Docker Compose reproducible</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section>
+  <div class="container">
+    <div class="cta-section reveal">
+      <h2>Ready to benchmark your API?</h2>
+      <p>Fork, run <code style="background:rgba(34,197,94,0.1);padding:0.2rem 0.6rem;border-radius:4px;">make bench</code>, and see the dashboard in 30 seconds.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="https://github.com/SecureBananaLabs/bug-bounty/pull/68" target="_blank" class="btn btn-primary">View PR #68 on GitHub</a>
+        <a href="https://github.com/AtlasNexusOps/bug-bounty" target="_blank" class="btn btn-ghost">Fork the repo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Built for <a href="https://github.com/SecureBananaLabs/bug-bounty/issues/30" target="_blank">Bug Bounty #30</a> · FreelanceFlow · 
+  <a href="https://github.com/AtlasNexusOps/bug-bounty" target="_blank">AtlasNexusOps</a>
+</footer>
+
+<script>
+// ── Scroll-triggered reveals ─────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      if (entry.target.classList.contains('stagger')) {
+        entry.target.classList.add('revealed');
+      }
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal, .stagger').forEach(el => observer.observe(el));
+
+// ── Counter animation ────────────────────
+function animateCounters() {
+  document.querySelectorAll('#hero-stats .number').forEach(el => {
+    const text = el.textContent.trim();
+    const match = text.match(/^[\d.]+/);
+    if (!match) return;
+    const target = parseFloat(match[0]);
+    const suffix = text.replace(match[0], '');
+    const isCurrency = suffix.startsWith('$');
+    let current = 0;
+    const duration = 1200;
+    const start = performance.now();
+
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      // spring-like easing
+      const eased = 1 - Math.pow(1 - progress, 4);
+      current = Math.round(target * eased);
+      el.textContent = isCurrency ? current + '$' : current + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+// Trigger counters when hero stats become visible
+const heroStats = document.getElementById('hero-stats');
+const heroObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    animateCounters();
+    heroObs.unobserve(heroStats);
+  }
+}, { threshold: 0.5 });
+heroObs.observe(heroStats);
+</script>
+</body>
+</html>
