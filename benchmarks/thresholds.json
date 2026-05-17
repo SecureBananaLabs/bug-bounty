@@ -1,0 +1,5 @@
+{
+  "defaultP99Ms": 1000,
+  "smokeConcurrency": 1,
+  "smokeDurationSeconds": 2
+}

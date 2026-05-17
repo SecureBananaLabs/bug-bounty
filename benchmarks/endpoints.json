@@ -1,0 +1,22 @@
+[
+  {"name":"health","method":"GET","path":"/health"},
+  {"name":"auth-register","method":"POST","path":"/api/auth/register","body":{"email":"bench@example.com","password":"Password123!","name":"Bench User"}},
+  {"name":"auth-login","method":"POST","path":"/api/auth/login","body":{"email":"bench@example.com","password":"Password123!"}},
+  {"name":"auth-refresh","method":"POST","path":"/api/auth/refresh","body":{"refreshToken":"bench-refresh-token"}},
+  {"name":"auth-oauth-callback","method":"GET","path":"/api/auth/oauth/google/callback?code=bench"},
+  {"name":"users-list","method":"GET","path":"/api/users"},
+  {"name":"users-create","method":"POST","path":"/api/users","body":{"name":"Bench User","email":"bench-user@example.com"}},
+  {"name":"jobs-list","method":"GET","path":"/api/jobs"},
+  {"name":"jobs-create","method":"POST","path":"/api/jobs","body":{"title":"Benchmark Job","description":"Benchmark payload","budget":1000,"skills":["node","api"]}},
+  {"name":"proposals-list","method":"GET","path":"/api/proposals"},
+  {"name":"proposals-create","method":"POST","path":"/api/proposals","body":{"jobId":"bench-job","coverLetter":"Benchmark proposal","bidAmount":500}},
+  {"name":"payments-create","method":"POST","path":"/api/payments","body":{"amount":1000,"currency":"usd"}},
+  {"name":"reviews-list","method":"GET","path":"/api/reviews"},
+  {"name":"reviews-create","method":"POST","path":"/api/reviews","body":{"targetUserId":"bench-user","rating":5,"comment":"Benchmark review"}},
+  {"name":"messages-list","method":"GET","path":"/api/messages"},
+  {"name":"messages-create","method":"POST","path":"/api/messages","body":{"recipientId":"bench-user","body":"Benchmark message"}},
+  {"name":"notifications-list","method":"GET","path":"/api/notifications"},
+  {"name":"notifications-create","method":"POST","path":"/api/notifications","body":{"userId":"bench-user","type":"benchmark","message":"Benchmark notification"}},
+  {"name":"search","method":"GET","path":"/api/search?q=benchmark"},
+  {"name":"admin-metrics","method":"GET","path":"/api/admin/metrics","auth":true}
+]

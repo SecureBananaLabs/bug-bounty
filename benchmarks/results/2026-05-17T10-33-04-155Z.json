@@ -1,0 +1,222 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health",
+    "p50": 0,
+    "p99": 1,
+    "rpsAverage": 2039.5,
+    "rpsMax": 2203,
+    "errorRate": 0,
+    "ttfbAverage": 0.03
+  },
+  {
+    "name": "auth-register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "p50": 0,
+    "p99": 1,
+    "rpsAverage": 1836.5,
+    "rpsMax": 2010,
+    "errorRate": 0,
+    "ttfbAverage": 0.03
+  },
+  {
+    "name": "auth-login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2303,
+    "rpsMax": 2328,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "auth-refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2363,
+    "rpsMax": 2369,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "auth-oauth-callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/google/callback?code=bench",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2918,
+    "rpsMax": 3006,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "users-list",
+    "method": "GET",
+    "path": "/api/users",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 3213,
+    "rpsMax": 3273,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "users-create",
+    "method": "POST",
+    "path": "/api/users",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2366,
+    "rpsMax": 2366,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 3295,
+    "rpsMax": 3311,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "jobs-create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2405,
+    "rpsMax": 2424,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 3136,
+    "rpsMax": 3168,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "proposals-create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2337,
+    "rpsMax": 2360,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "payments-create",
+    "method": "POST",
+    "path": "/api/payments",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2389,
+    "rpsMax": 2445,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 3171,
+    "rpsMax": 3181,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "reviews-create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2420,
+    "rpsMax": 2430,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "messages-list",
+    "method": "GET",
+    "path": "/api/messages",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 3147,
+    "rpsMax": 3152,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "messages-create",
+    "method": "POST",
+    "path": "/api/messages",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2409,
+    "rpsMax": 2416,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 3222,
+    "rpsMax": 3271,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "notifications-create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2361,
+    "rpsMax": 2379,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "search",
+    "method": "GET",
+    "path": "/api/search?q=benchmark",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 2907,
+    "rpsMax": 2914,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  },
+  {
+    "name": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "p50": 0,
+    "p99": 0,
+    "rpsAverage": 3135,
+    "rpsMax": 3206,
+    "errorRate": 0,
+    "ttfbAverage": 0.01
+  }
+]
