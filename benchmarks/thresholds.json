@@ -1,0 +1,15 @@
+{
+  "defaults": {
+    "maxP99Ms": 1500,
+    "maxErrorRatePct": 1,
+    "minSustainedRps": 1
+  },
+  "routes": {
+    "auth.register": {
+      "maxP99Ms": 2000
+    },
+    "uploads.create": {
+      "maxP99Ms": 2500
+    }
+  }
+}

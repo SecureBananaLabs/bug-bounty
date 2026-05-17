@@ -1,0 +1,717 @@
+{
+  "mode": "full",
+  "target": "local ephemeral Express server",
+  "generatedAt": "2026-05-17T18:15:17.891Z",
+  "config": {
+    "connections": 4,
+    "requests": 60,
+    "timeoutSeconds": 10,
+    "ttfbSamples": 5
+  },
+  "environment": {
+    "node": "v24.15.0",
+    "platform": "win32",
+    "release": "10.0.26200",
+    "arch": "x64",
+    "cpu": "AMD Ryzen 7 4800H with Radeon Graphics         ",
+    "logicalCores": 16,
+    "totalMemoryMb": 64893,
+    "freeMemoryMb": 37452
+  },
+  "results": [
+    {
+      "id": "health",
+      "method": "GET",
+      "path": "/health",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Liveness probe used as a low-cost baseline.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 27,
+          "p99": 27
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.86220000000003,
+          "p95": 35.05430000000001,
+          "p99": 35.05430000000001
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.02,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "expectedStatus": [
+        201
+      ],
+      "description": "Client registration with a production-shaped credential payload.",
+      "metrics": {
+        "latency": {
+          "p50": 4,
+          "p95": 31,
+          "p99": 31
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 3.499300000000403,
+          "p95": 7.1983000000000175,
+          "p99": 7.1983000000000175
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Login payload with realistic email and password sizes.",
+      "metrics": {
+        "latency": {
+          "p50": 4,
+          "p95": 15,
+          "p99": 15
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.942399999999907,
+          "p95": 5.509500000000116,
+          "p99": 5.509500000000116
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.02,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "auth.oauthCallback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "expectedStatus": [
+        200
+      ],
+      "description": "OAuth callback route using GitHub as a representative provider.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 9,
+          "p99": 10
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.6307999999999083,
+          "p95": 2.770999999999731,
+          "p99": 2.770999999999731
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.02,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Refresh-token endpoint with an empty POST body.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 8,
+          "p99": 8
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.549300000000585,
+          "p95": 3.041900000000169,
+          "p99": 3.041900000000169
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.02,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "expectedStatus": [
+        200
+      ],
+      "description": "User index route.",
+      "metrics": {
+        "latency": {
+          "p50": 2,
+          "p95": 8,
+          "p99": 9
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.9975000000004002,
+          "p95": 3.304200000000492,
+          "p99": 3.304200000000492
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "expectedStatus": [
+        201
+      ],
+      "description": "User creation payload shaped like a client profile.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 7,
+          "p99": 7
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.054500000000189,
+          "p95": 3.4736000000002605,
+          "p99": 3.4736000000002605
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.02,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Job listing route.",
+      "metrics": {
+        "latency": {
+          "p50": 2,
+          "p95": 7,
+          "p99": 7
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.8671999999987747,
+          "p95": 3.1520000000000437,
+          "p99": 3.1520000000000437
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "expectedStatus": [
+        201
+      ],
+      "description": "Job creation payload matching the current Zod schema.",
+      "metrics": {
+        "latency": {
+          "p50": 4,
+          "p95": 8,
+          "p99": 8
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.9027999999998428,
+          "p95": 3.3443999999999505,
+          "p99": 3.3443999999999505
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Proposal listing route.",
+      "metrics": {
+        "latency": {
+          "p50": 2,
+          "p95": 6,
+          "p99": 6
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.7336000000013883,
+          "p95": 4.915800000000672,
+          "p99": 4.915800000000672
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "expectedStatus": [
+        201
+      ],
+      "description": "Proposal payload with bid and short cover letter.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 9,
+          "p99": 9
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.522499999999127,
+          "p95": 5.122100000000501,
+          "p99": 5.122100000000501
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "expectedStatus": [
+        201
+      ],
+      "description": "Payment intent creation payload with currency and amount.",
+      "metrics": {
+        "latency": {
+          "p50": 2,
+          "p95": 8,
+          "p99": 9
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.0318000000006577,
+          "p95": 3.0694000000003143,
+          "p99": 3.0694000000003143
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.02,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Review listing route.",
+      "metrics": {
+        "latency": {
+          "p50": 2,
+          "p95": 8,
+          "p99": 8
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.8399000000008527,
+          "p95": 2.853399999999965,
+          "p99": 2.853399999999965
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "expectedStatus": [
+        201
+      ],
+      "description": "Review creation payload with rating and comments.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 8,
+          "p99": 8
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.101199999999153,
+          "p95": 3.4134999999987485,
+          "p99": 3.4134999999987485
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Message listing route.",
+      "metrics": {
+        "latency": {
+          "p50": 2,
+          "p95": 8,
+          "p99": 8
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.5391000000017812,
+          "p95": 2.966200000000754,
+          "p99": 2.966200000000754
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "expectedStatus": [
+        201
+      ],
+      "description": "Message payload representative of a client/freelancer conversation.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 9,
+          "p99": 9
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.2202999999972235,
+          "p95": 3.3192000000017288,
+          "p99": 3.3192000000017288
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Notification listing route.",
+      "metrics": {
+        "latency": {
+          "p50": 2,
+          "p95": 6,
+          "p99": 6
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.8113999999986845,
+          "p95": 2.489000000001397,
+          "p99": 2.489000000001397
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "expectedStatus": [
+        201
+      ],
+      "description": "Notification payload for a marketplace workflow event.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 8,
+          "p99": 8
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.4333000000005995,
+          "p95": 2.8310999999994237,
+          "p99": 2.8310999999994237
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.02,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "expectedStatus": [
+        201
+      ],
+      "description": "Multipart upload with a small text attachment.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 13,
+          "p99": 13
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.8480999999992491,
+          "p95": 2.962499999997817,
+          "p99": 2.962499999997817
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "search.query",
+      "method": "GET",
+      "path": "/api/search?q=benchmark%20marketplace",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Search route with a realistic query string.",
+      "metrics": {
+        "latency": {
+          "p50": 2,
+          "p95": 9,
+          "p99": 9
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 2.9090999999971245,
+          "p95": 4.840299999999843,
+          "p99": 4.840299999999843
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    },
+    {
+      "id": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "expectedStatus": [
+        200
+      ],
+      "description": "Protected admin metrics endpoint using a benchmark bearer token.",
+      "metrics": {
+        "latency": {
+          "p50": 3,
+          "p95": 8,
+          "p99": 9
+        },
+        "rps": {
+          "sustained": 60,
+          "peak": 60
+        },
+        "errorRate": 0,
+        "ttfb": {
+          "p50": 1.5512999999991735,
+          "p95": 2.928199999998469,
+          "p99": 2.928199999998469
+        }
+      },
+      "raw": {
+        "requests": 60,
+        "durationSeconds": 1.01,
+        "errors": 0,
+        "non2xx": 0,
+        "timeouts": 0
+      }
+    }
+  ],
+  "thresholdFailures": []
+}
