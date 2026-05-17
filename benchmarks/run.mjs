@@ -315,7 +315,7 @@ async function main() {
         requests_total: result.requests.total,
         latency: {
           p50_ms: result.latency.p50,
-          p95_ms: result.latency.p95,
+          p97_5_ms: result.latency.p97_5,
           p99_ms: result.latency.p99,
           avg_ms: result.latency.average,
           min_ms: result.latency.min,
@@ -328,7 +328,6 @@ async function main() {
             ? ((result.errors / result.requests.total) * 100).toFixed(2)
             : '0.00'
         },
-        ttfb: result.latency.average, // autocannon latency == TTFB for lightweight responses
         throughput_bytes: result.throughput.average,
         status_2xx: result['2xx'] || 0,
         status_3xx: result['3xx'] || 0,
@@ -355,7 +354,7 @@ async function main() {
 
       // Print summary for this endpoint
       console.log(`  ✅ ${ep.name}`);
-      console.log(`     RPS: ${metrics.rps.toFixed(1)} | p50: ${metrics.latency.p50_ms}ms | p95: ${metrics.latency.p95_ms}ms | p99: ${metrics.latency.p99_ms}ms | TTFB: ${metrics.ttfb}ms | Errors: ${metrics.errors.rate_pct}%`);
+      console.log(`     RPS: ${metrics.rps.toFixed(1)} | p50: ${metrics.latency.p50_ms}ms | p97_5: ${metrics.latency.p97_5_ms}ms | p99: ${metrics.latency.p99_ms}ms | Errors: ${metrics.errors.rate_pct}%`);
 
     } catch (err) {
       console.error(`  ❌ ${ep.name} FAILED: ${err.message}`);
@@ -436,13 +435,13 @@ function generateMarkdownSummary(results, violations, config) {
 
 ## Results Overview
 
-| Endpoint | RPS | p50 (ms) | p95 (ms) | p99 (ms) | TTFB (ms) | Errors (%) | Status Codes |
-|---|---|---|---|---|---|---|---|
+| Endpoint | RPS | p50 (ms) | p97_5 (ms) | p99 (ms) | Errors (%) | Status Codes |
+|---|---|---|---|---|---|
 `;
 
   for (const r of results) {
     if (r.error) {
-      md += `| ${r.endpoint} | ❌ FAILED | - | - | - | - | ${r.error} | - |
+      md += `| ${r.endpoint} | ❌ FAILED | - | - | - | ${r.error} | - |
 `;
     } else {
       const codes = [];
@@ -450,7 +449,7 @@ function generateMarkdownSummary(results, violations, config) {
       if (r.status_3xx) codes.push(`3xx:${r.status_3xx}`);
       if (r.status_4xx) codes.push(`4xx:${r.status_4xx}`);
       if (r.status_5xx) codes.push(`5xx:${r.status_5xx}`);
-      md += `| ${r.endpoint} | ${r.rps.toFixed(1)} | ${r.latency.p50_ms} | ${r.latency.p95_ms} | ${r.latency.p99_ms} | ${r.ttfb} | ${r.errors.rate_pct} | ${codes.join(', ')} |
+      md += `| ${r.endpoint} | ${r.rps.toFixed(1)} | ${r.latency.p50_ms} | ${r.latency.p97_5_ms} | ${r.latency.p99_ms} | ${r.errors.rate_pct} | ${codes.join(', ')} |
 `;
     }
   }
