@@ -1,0 +1,2080 @@
+{
+  "metadata": {
+    "generatedAt": "2026-05-17T06:34:08.016Z",
+    "targetUrl": "http://127.0.0.1:43817",
+    "mode": "smoke",
+    "nodeVersion": "v22.22.1",
+    "platform": "Linux 6.6.87.2-microsoft-standard-WSL2 x64",
+    "cpu": "Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz",
+    "logicalCores": 6,
+    "totalMemoryBytes": 16727642112,
+    "rateLimitDisabled": true
+  },
+  "config": {
+    "mode": "smoke",
+    "connections": 1,
+    "amount": 2,
+    "duration": 0,
+    "pipelining": 1,
+    "timeoutSeconds": 10,
+    "ttfbSamples": 1
+  },
+  "thresholds": {
+    "defaults": {
+      "p99LatencyMs": 1500,
+      "errorRatePercent": 5
+    },
+    "endpoints": {
+      "POST /api/uploads": {
+        "p99LatencyMs": 2500,
+        "errorRatePercent": 5
+      },
+      "GET /api/admin/metrics": {
+        "p99LatencyMs": 2000,
+        "errorRatePercent": 5
+      }
+    }
+  },
+  "endpoints": [
+    {
+      "name": "Register client",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "description": "Client account creation payload based on auth validators.",
+      "protected": false,
+      "payloadBytes": 101,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 2,
+          "p95Ms": 168,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 168,
+          "averageMs": 85,
+          "maxMs": 168
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            6.88
+          ],
+          "p50Ms": 6.88,
+          "p95Ms": 6.88,
+          "p99Ms": 6.88,
+          "averageMs": 6.88,
+          "maxMs": 6.88
+        }
+      },
+      "threshold": {
+        "key": "POST /api/auth/register",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1.01,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 85,
+          "mean": 85,
+          "stddev": 83,
+          "min": 2,
+          "max": 168,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 168,
+          "p90": 168,
+          "p97_5": 168,
+          "p99": 168,
+          "p99_9": 168,
+          "p99_99": 168,
+          "p99_999": 168,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Login client",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "description": "Password login payload matching the auth schema.",
+      "protected": false,
+      "payloadBytes": 71,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 1,
+          "p95Ms": 3,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 3,
+          "averageMs": 2,
+          "maxMs": 3
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            2.29
+          ],
+          "p50Ms": 2.29,
+          "p95Ms": 2.29,
+          "p99Ms": 2.29,
+          "averageMs": 2.29,
+          "maxMs": 2.29
+        }
+      },
+      "threshold": {
+        "key": "POST /api/auth/login",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 1,
+          "min": 1,
+          "max": 3,
+          "p0_001": 1,
+          "p0_01": 1,
+          "p0_1": 1,
+          "p1": 1,
+          "p2_5": 1,
+          "p10": 1,
+          "p25": 1,
+          "p50": 1,
+          "p75": 3,
+          "p90": 3,
+          "p97_5": 3,
+          "p99": 3,
+          "p99_9": 3,
+          "p99_99": 3,
+          "p99_999": 3,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "OAuth callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "description": "Provider callback route with a representative provider path.",
+      "protected": false,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 1,
+          "p95Ms": 2,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 2,
+          "averageMs": 1.5,
+          "maxMs": 2
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            2.78
+          ],
+          "p50Ms": 2.78,
+          "p95Ms": 2.78,
+          "p99Ms": 2.78,
+          "averageMs": 2.78,
+          "maxMs": 2.78
+        }
+      },
+      "threshold": {
+        "key": "GET /api/auth/oauth/github/callback",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 1.5,
+          "mean": 1.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 2,
+          "p0_001": 1,
+          "p0_01": 1,
+          "p0_1": 1,
+          "p1": 1,
+          "p2_5": 1,
+          "p10": 1,
+          "p25": 1,
+          "p50": 1,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Refresh token",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "description": "Refresh route with a realistic token-sized body.",
+      "protected": false,
+      "payloadBytes": 42,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 2,
+          "p95Ms": 2,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 2,
+          "averageMs": 2,
+          "maxMs": 2
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            2.27
+          ],
+          "p50Ms": 2.27,
+          "p95Ms": 2.27,
+          "p99Ms": 2.27,
+          "averageMs": 2.27,
+          "maxMs": 2.27
+        }
+      },
+      "threshold": {
+        "key": "POST /api/auth/refresh",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "List users",
+      "method": "GET",
+      "path": "/api/users",
+      "description": "User listing endpoint.",
+      "protected": false,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 1,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 1,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.11
+          ],
+          "p50Ms": 1.11,
+          "p95Ms": 1.11,
+          "p99Ms": 1.11,
+          "averageMs": 1.11,
+          "maxMs": 1.11
+        }
+      },
+      "threshold": {
+        "key": "GET /api/users",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 1,
+          "mean": 1,
+          "stddev": 0,
+          "min": 1,
+          "max": 1,
+          "p0_001": 1,
+          "p0_01": 1,
+          "p0_1": 1,
+          "p1": 1,
+          "p2_5": 1,
+          "p10": 1,
+          "p25": 1,
+          "p50": 1,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Create user",
+      "method": "POST",
+      "path": "/api/users",
+      "description": "Freelancer profile payload with representative profile fields.",
+      "protected": false,
+      "payloadBytes": 212,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.15
+          ],
+          "p50Ms": 1.15,
+          "p95Ms": 1.15,
+          "p99Ms": 1.15,
+          "averageMs": 1.15,
+          "maxMs": 1.15
+        }
+      },
+      "threshold": {
+        "key": "POST /api/users",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "List jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "description": "Job listing endpoint.",
+      "protected": false,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1
+          ],
+          "p50Ms": 1,
+          "p95Ms": 1,
+          "p99Ms": 1,
+          "averageMs": 1,
+          "maxMs": 1
+        }
+      },
+      "threshold": {
+        "key": "GET /api/jobs",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Create job",
+      "method": "POST",
+      "path": "/api/jobs",
+      "description": "Job creation payload based on the production job validator.",
+      "protected": false,
+      "payloadBytes": 319,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 2,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 2,
+          "averageMs": 1,
+          "maxMs": 2
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.95
+          ],
+          "p50Ms": 1.95,
+          "p95Ms": 1.95,
+          "p99Ms": 1.95,
+          "averageMs": 1.95,
+          "maxMs": 1.95
+        }
+      },
+      "threshold": {
+        "key": "POST /api/jobs",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 1,
+          "mean": 1,
+          "stddev": 1,
+          "min": 2,
+          "max": 2,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "List proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "description": "Proposal listing endpoint.",
+      "protected": false,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 2,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 2,
+          "averageMs": 1,
+          "maxMs": 2
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.66
+          ],
+          "p50Ms": 1.66,
+          "p95Ms": 1.66,
+          "p99Ms": 1.66,
+          "averageMs": 1.66,
+          "maxMs": 1.66
+        }
+      },
+      "threshold": {
+        "key": "GET /api/proposals",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 1,
+          "mean": 1,
+          "stddev": 1,
+          "min": 2,
+          "max": 2,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Create proposal",
+      "method": "POST",
+      "path": "/api/proposals",
+      "description": "Proposal payload with milestones and cover-letter size close to real submissions.",
+      "protected": false,
+      "payloadBytes": 421,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.17
+          ],
+          "p50Ms": 1.17,
+          "p95Ms": 1.17,
+          "p99Ms": 1.17,
+          "averageMs": 1.17,
+          "maxMs": 1.17
+        }
+      },
+      "threshold": {
+        "key": "POST /api/proposals",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Create payment",
+      "method": "POST",
+      "path": "/api/payments",
+      "description": "Payment payload using cents and marketplace identifiers.",
+      "protected": false,
+      "payloadBytes": 149,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.08
+          ],
+          "p50Ms": 1.08,
+          "p95Ms": 1.08,
+          "p99Ms": 1.08,
+          "averageMs": 1.08,
+          "maxMs": 1.08
+        }
+      },
+      "threshold": {
+        "key": "POST /api/payments",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "List reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "description": "Review listing endpoint.",
+      "protected": false,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 1,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 1,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            0.98
+          ],
+          "p50Ms": 0.98,
+          "p95Ms": 0.98,
+          "p99Ms": 0.98,
+          "averageMs": 0.98,
+          "maxMs": 0.98
+        }
+      },
+      "threshold": {
+        "key": "GET /api/reviews",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 1,
+          "mean": 1,
+          "stddev": 0,
+          "min": 1,
+          "max": 1,
+          "p0_001": 1,
+          "p0_01": 1,
+          "p0_1": 1,
+          "p1": 1,
+          "p2_5": 1,
+          "p10": 1,
+          "p25": 1,
+          "p50": 1,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Create review",
+      "method": "POST",
+      "path": "/api/reviews",
+      "description": "Review payload with rating and human-readable comment.",
+      "protected": false,
+      "payloadBytes": 232,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.21
+          ],
+          "p50Ms": 1.21,
+          "p95Ms": 1.21,
+          "p99Ms": 1.21,
+          "averageMs": 1.21,
+          "maxMs": 1.21
+        }
+      },
+      "threshold": {
+        "key": "POST /api/reviews",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "List messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "description": "Message listing endpoint.",
+      "protected": false,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.09
+          ],
+          "p50Ms": 1.09,
+          "p95Ms": 1.09,
+          "p99Ms": 1.09,
+          "averageMs": 1.09,
+          "maxMs": 1.09
+        }
+      },
+      "threshold": {
+        "key": "GET /api/messages",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Create message",
+      "method": "POST",
+      "path": "/api/messages",
+      "description": "Message payload representative of project collaboration traffic.",
+      "protected": false,
+      "payloadBytes": 222,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.2
+          ],
+          "p50Ms": 1.2,
+          "p95Ms": 1.2,
+          "p99Ms": 1.2,
+          "averageMs": 1.2,
+          "maxMs": 1.2
+        }
+      },
+      "threshold": {
+        "key": "POST /api/messages",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "List notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "description": "Notification listing endpoint.",
+      "protected": false,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.3
+          ],
+          "p50Ms": 1.3,
+          "p95Ms": 1.3,
+          "p99Ms": 1.3,
+          "averageMs": 1.3,
+          "maxMs": 1.3
+        }
+      },
+      "threshold": {
+        "key": "GET /api/notifications",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Create notification",
+      "method": "POST",
+      "path": "/api/notifications",
+      "description": "Notification payload with metadata commonly used by activity feeds.",
+      "protected": false,
+      "payloadBytes": 244,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 0,
+          "p95Ms": 1,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 1,
+          "averageMs": 0.5,
+          "maxMs": 1
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.87
+          ],
+          "p50Ms": 1.87,
+          "p95Ms": 1.87,
+          "p99Ms": 1.87,
+          "averageMs": 1.87,
+          "maxMs": 1.87
+        }
+      },
+      "threshold": {
+        "key": "POST /api/notifications",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 0.5,
+          "mean": 0.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 1,
+          "p0_001": 0,
+          "p0_01": 0,
+          "p0_1": 0,
+          "p1": 0,
+          "p2_5": 0,
+          "p10": 0,
+          "p25": 0,
+          "p50": 0,
+          "p75": 1,
+          "p90": 1,
+          "p97_5": 1,
+          "p99": 1,
+          "p99_9": 1,
+          "p99_99": 1,
+          "p99_999": 1,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Upload attachment",
+      "method": "POST",
+      "path": "/api/uploads",
+      "description": "Small multipart attachment matching the upload middleware path.",
+      "protected": false,
+      "payloadBytes": 273,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 2,
+          "p95Ms": 11,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 11,
+          "averageMs": 6.5,
+          "maxMs": 11
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.9
+          ],
+          "p50Ms": 1.9,
+          "p95Ms": 1.9,
+          "p99Ms": 1.9,
+          "averageMs": 1.9,
+          "maxMs": 1.9
+        }
+      },
+      "threshold": {
+        "key": "POST /api/uploads",
+        "active": {
+          "p99LatencyMs": 2500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "201": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 6.5,
+          "mean": 6.5,
+          "stddev": 4.5,
+          "min": 2,
+          "max": 11,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 11,
+          "p90": 11,
+          "p97_5": 11,
+          "p99": 11,
+          "p99_9": 11,
+          "p99_99": 11,
+          "p99_999": 11,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Search marketplace",
+      "method": "GET",
+      "path": "/api/search?q=senior%20react%20payments",
+      "description": "Search route with a representative keyword query.",
+      "protected": false,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 1,
+          "p95Ms": 2,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 2,
+          "averageMs": 1.5,
+          "maxMs": 2
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.07
+          ],
+          "p50Ms": 1.07,
+          "p95Ms": 1.07,
+          "p99Ms": 1.07,
+          "averageMs": 1.07,
+          "maxMs": 1.07
+        }
+      },
+      "threshold": {
+        "key": "GET /api/search",
+        "active": {
+          "p99LatencyMs": 1500,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 1.5,
+          "mean": 1.5,
+          "stddev": 0.5,
+          "min": 1,
+          "max": 2,
+          "p0_001": 1,
+          "p0_01": 1,
+          "p0_1": 1,
+          "p1": 1,
+          "p2_5": 1,
+          "p10": 1,
+          "p25": 1,
+          "p50": 1,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "Admin metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "description": "Auth-protected admin metrics endpoint using the benchmark token.",
+      "protected": true,
+      "payloadBytes": 0,
+      "metrics": {
+        "totalRequests": 2,
+        "latency": {
+          "p50Ms": 1,
+          "p95Ms": 3,
+          "p95Source": "autocannon.p97_5",
+          "p99Ms": 3,
+          "averageMs": 2,
+          "maxMs": 3
+        },
+        "requestsPerSecond": {
+          "sustained": 2,
+          "peak": 2
+        },
+        "errorRatePercent": 0,
+        "failedRequests": 0,
+        "ttfb": {
+          "samples": [
+            1.3
+          ],
+          "p50Ms": 1.3,
+          "p95Ms": 1.3,
+          "p99Ms": 1.3,
+          "averageMs": 1.3,
+          "maxMs": 1.3
+        }
+      },
+      "threshold": {
+        "key": "GET /api/admin/metrics",
+        "active": {
+          "p99LatencyMs": 2000,
+          "errorRatePercent": 5
+        },
+        "passed": true,
+        "failures": []
+      },
+      "statusCodeStats": {
+        "200": {
+          "count": 2
+        }
+      },
+      "raw": {
+        "durationSeconds": 1,
+        "requests": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 0,
+          "min": 2,
+          "max": 2,
+          "total": 2,
+          "p0_001": 2,
+          "p0_01": 2,
+          "p0_1": 2,
+          "p1": 2,
+          "p2_5": 2,
+          "p10": 2,
+          "p25": 2,
+          "p50": 2,
+          "p75": 2,
+          "p90": 2,
+          "p97_5": 2,
+          "p99": 2,
+          "p99_9": 2,
+          "p99_99": 2,
+          "p99_999": 2,
+          "sent": 2
+        },
+        "latency": {
+          "average": 2,
+          "mean": 2,
+          "stddev": 1,
+          "min": 1,
+          "max": 3,
+          "p0_001": 1,
+          "p0_01": 1,
+          "p0_1": 1,
+          "p1": 1,
+          "p2_5": 1,
+          "p10": 1,
+          "p25": 1,
+          "p50": 1,
+          "p75": 3,
+          "p90": 3,
+          "p97_5": 3,
+          "p99": 3,
+          "p99_9": 3,
+          "p99_99": 3,
+          "p99_999": 3,
+          "totalCount": 2
+        },
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    }
+  ]
+}

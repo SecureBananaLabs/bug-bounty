@@ -1,0 +1,16 @@
+{
+  "defaults": {
+    "p99LatencyMs": 1500,
+    "errorRatePercent": 5
+  },
+  "endpoints": {
+    "POST /api/uploads": {
+      "p99LatencyMs": 2500,
+      "errorRatePercent": 5
+    },
+    "GET /api/admin/metrics": {
+      "p99LatencyMs": 2000,
+      "errorRatePercent": 5
+    }
+  }
+}
