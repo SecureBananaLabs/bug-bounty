@@ -45,6 +45,17 @@ Each endpoint report includes:
 - time to first byte in milliseconds
 - response status code distribution
 
+## Regression Gate
+
+Reviewable smoke-test thresholds live in `benchmarks/thresholds.json`.
+Set `BENCHMARK_FAIL_ON_THRESHOLD=true` to fail the benchmark command when an endpoint exceeds its p99 latency or error-rate threshold:
+
+```bash
+BENCHMARK_DURATION_SECONDS=1 BENCHMARK_CONNECTIONS=2 BENCHMARK_FAIL_ON_THRESHOLD=true npm run benchmark
+```
+
+The `API benchmark smoke` GitHub Actions workflow runs this low-concurrency gate for benchmark and API changes.
+
 ## Endpoint Coverage
 
 The endpoint inventory lives in `api-endpoints.js`. It currently covers:

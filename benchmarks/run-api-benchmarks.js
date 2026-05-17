@@ -7,9 +7,11 @@ import { apiEndpoints } from "./api-endpoints.js";
 process.env.BENCHMARK_MODE ??= "true";
 
 const resultDir = new URL("./results/", import.meta.url);
+const thresholdFile = new URL("./thresholds.json", import.meta.url);
 const duration = Number(process.env.BENCHMARK_DURATION_SECONDS ?? 5);
 const connections = Number(process.env.BENCHMARK_CONNECTIONS ?? 10);
 const pipelining = Number(process.env.BENCHMARK_PIPELINING ?? 1);
+const failOnThreshold = process.env.BENCHMARK_FAIL_ON_THRESHOLD === "true";
 
 async function startLocalServer() {
   if (process.env.BENCHMARK_BASE_URL) {
@@ -136,6 +138,41 @@ ${rows}
 `;
 }
 
+async function loadThresholds() {
+  try {
+    const content = await fs.readFile(thresholdFile, "utf8");
+    return JSON.parse(content);
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      return { defaults: {}, endpoints: {} };
+    }
+    throw error;
+  }
+}
+
+function checkThresholds(results, thresholds) {
+  const failures = [];
+  const defaults = thresholds.defaults ?? {};
+  const endpointThresholds = thresholds.endpoints ?? {};
+
+  for (const result of results) {
+    const key = `${result.method} ${result.path}`;
+    const limits = { ...defaults, ...(endpointThresholds[key] ?? {}) };
+
+    if (limits.p99LatencyMs != null && result.latencyMs.p99 > limits.p99LatencyMs) {
+      failures.push(`${key} p99 ${result.latencyMs.p99}ms > ${limits.p99LatencyMs}ms`);
+    }
+
+    if (limits.errorRatePercent != null && result.errorRatePercent > limits.errorRatePercent) {
+      failures.push(
+        `${key} error rate ${result.errorRatePercent}% > ${limits.errorRatePercent}%`
+      );
+    }
+  }
+
+  return failures;
+}
+
 async function run() {
   await fs.mkdir(resultDir, { recursive: true });
   const server = await startLocalServer();
@@ -186,6 +223,18 @@ async function run() {
 
     await fs.writeFile(new URL("api-benchmark-results.json", resultDir), JSON.stringify(report, null, 2));
     await fs.writeFile(new URL("api-benchmark-summary.md", resultDir), toMarkdown(metadata, results));
+
+    if (failOnThreshold) {
+      const thresholds = await loadThresholds();
+      const failures = checkThresholds(results, thresholds);
+      if (failures.length > 0) {
+        console.error("Benchmark threshold failures:");
+        for (const failure of failures) {
+          console.error(`- ${failure}`);
+        }
+        process.exitCode = 1;
+      }
+    }
   } finally {
     await server.close();
   }
