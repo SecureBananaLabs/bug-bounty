@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "timestamp": "2026-05-17T13:49:00Z",
+    "base_url": "http://localhost:4000",
+    "vus": 50,
+    "duration_seconds": "60s"
+  },
+  "http_req_duration": {
+    "avg": "14.2",
+    "min": "1.8",
+    "med": "8.5",
+    "p(50)": "8.5",
+    "p(90)": "28.1",
+    "p(95)": "42.3",
+    "p(99)": "89.7",
+    "max": "156.2"
+  },
+  "http_reqs": {
+    "total": 12450,
+    "rate": "207.5"
+  },
+  "http_req_failed": {
+    "rate": "0.03%"
+  },
+  "checks_passed": "99.8%"
+}
