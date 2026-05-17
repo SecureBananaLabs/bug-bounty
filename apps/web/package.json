@@ -2,9 +2,9 @@
   "name": "@freelanceflow/web",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev -p 3005",
     "build": "next build",
-    "start": "next start -p 3000"
+    "start": "next start -p 3005"
   },
   "devDependencies": {
     "@types/node": "22.15.19",
