@@ -1,12 +1,14 @@
 {
   "name": "freelance-platform-monorepo",
   "private": true,
+  "type": "module",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "benchmark": "node benchmarks/run-benchmark.js",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
