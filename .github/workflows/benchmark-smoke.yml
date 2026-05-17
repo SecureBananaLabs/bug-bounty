@@ -1,0 +1,27 @@
+name: API Benchmark Smoke
+
+on:
+  pull_request:
+    paths:
+      - 'apps/api/**'
+      - 'benchmarks/**'
+
+jobs:
+  smoke-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - name: Start API
+        run: |
+          npm run dev -w apps/api &
+          sleep 5
+      - name: Run smoke benchmark
+        run: SMOKE=true node benchmarks/run-benchmark.mjs
+        continue-on-error: true
+      - name: Check thresholds
+        run: node benchmarks/check-thresholds.mjs
