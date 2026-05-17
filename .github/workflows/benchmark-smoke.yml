@@ -1,0 +1,123 @@
+name: API Benchmark (Smoke)
+
+on:
+  pull_request:
+    paths:
+      - 'apps/api/**'
+      - 'benchmarks/**'
+  push:
+    branches: [main]
+    paths:
+      - 'apps/api/**'
+      - 'benchmarks/**'
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: benchmark
+          POSTGRES_PASSWORD: benchmark
+          POSTGRES_DB: securebanana_bench
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install API dependencies
+        run: |
+          cd apps/api
+          npm ci
+
+      - name: Run database migrations
+        run: |
+          cd apps/api
+          npx prisma migrate deploy
+          npx prisma db seed || true
+        env:
+          DATABASE_URL: postgresql://benchmark:benchmark@localhost:5432/securebanana_bench
+          JWT_SECRET: ci-benchmark-secret
+          NODE_ENV: test
+
+      - name: Start API server
+        run: |
+          cd apps/api
+          npm start &
+          sleep 5
+          curl -s http://localhost:4000/health || (sleep 5 && curl -s http://localhost:4000/health)
+        env:
+          DATABASE_URL: postgresql://benchmark:benchmark@localhost:5432/securebanana_bench
+          JWT_SECRET: ci-benchmark-secret
+          NODE_ENV: test
+          PORT: 4000
+
+      - name: Install benchmark dependencies
+        run: |
+          cd benchmarks
+          npm ci
+
+      - name: Run smoke benchmark
+        id: benchmark
+        run: |
+          cd benchmarks
+          SMOKE=true npm run benchmark
+        env:
+          BENCHMARK_HOST: http://localhost:4000
+          JWT_SECRET: ci-benchmark-secret
+          TEST_EMAIL: benchmark@securebanana.dev
+          TEST_PASSWORD: Benchmark123!
+
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
+          retention-days: 7
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            let mdPath = '';
+            const resultsDir = 'benchmarks/results/';
+            if (fs.existsSync(resultsDir)) {
+              const files = fs.readdirSync(resultsDir).filter(f => f.startsWith('latest-smoke') && f.endsWith('.md'));
+              if (files.length > 0) {
+                mdPath = path.join(resultsDir, files[0]);
+              }
+            }
+
+            let body = '';
+            if (mdPath && fs.existsSync(mdPath)) {
+              body = fs.readFileSync(mdPath, 'utf-8');
+            } else {
+              body = '⚠️ Benchmark results not available. Check CI logs.';
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });

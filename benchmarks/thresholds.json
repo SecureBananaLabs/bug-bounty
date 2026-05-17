@@ -1,0 +1,14 @@
+{
+  "p99_latency_ms": 500,
+  "p95_latency_ms": 300,
+  "error_rate_pct": 5,
+  "min_rps": 100,
+  "description": "CI smoke benchmark thresholds. PRs are blocked if p99 exceeds threshold. Values are reviewable and should be tuned as the platform matures.",
+  "last_updated": "2026-05-17",
+  "endpoints": {
+    "GET /health": { "p99_latency_ms": 100 },
+    "POST /api/auth/login": { "p99_latency_ms": 500 },
+    "GET /api/jobs": { "p99_latency_ms": 500 },
+    "GET /api/search": { "p99_latency_ms": 500 }
+  }
+}
