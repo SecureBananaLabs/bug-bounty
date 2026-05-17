@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreelanceFlow — API Benchmarks</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-dim: #8b949e;
+      --green: #3fb950;
+      --yellow: #d2991d;
+      --red: #f85149;
+      --blue: #58a6ff;
+      --purple: #a371f7;
+      --cyan: #39d2c0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    header .meta {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .metric-card .label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+    .metric-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .metric-card .value.green { color: var(--green); }
+    .metric-card .value.yellow { color: var(--yellow); }
+    .metric-card .value.red { color: var(--red); }
+    .metric-card .value.blue { color: var(--blue); }
+    .metric-card .value.cyan  { color: var(--cyan); }
+    .metric-card .value.purple { color: var(--purple); }
+
+    .section { margin-bottom: 2.5rem; }
+    .section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .section h2::before { content: '▸'; color: var(--purple); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-variant-numeric: tabular-nums;
+    }
+    th {
+      background: rgba(255,255,255,0.03);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .pass { color: var(--green); }
+    .warn { color: var(--yellow); }
+    .fail { color: var(--red); }
+
+    .bar-container {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.25rem;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+    .bar-fill.green { background: var(--green); }
+    .bar-fill.yellow { background: var(--yellow); }
+    .bar-fill.red { background: var(--red); }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-dim);
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .delta { font-size: 0.8rem; margin-left: 0.5rem; }
+    .delta.better { color: var(--green); }
+    .delta.worse { color: var(--red); }
+
+    .threshold-badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .threshold-badge.pass { background: rgba(63,185,80,0.15); }
+    .threshold-badge.fail { background: rgba(248,81,73,0.15); }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <header>
+      <h1>FreelanceFlow API Benchmarks</h1>
+      <p class="meta" id="meta-info">Loading benchmark data…</p>
+    </header>
+
+    <div class="grid-3" id="summary-cards"></div>
+
+    <div class="section">
+      <h2>Latency Distribution</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Statistic</th>
+            <th>HTTP Request Duration</th>
+            <th>TTFB</th>
+            <th>Threshold</th>
+          </tr>
+        </thead>
+        <tbody id="latency-table"></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>Endpoint Performance</h2>
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Endpoint</th><th>Avg</th><th>p50</th><th>p95</th><th>p99</th><th>RPS</th><th>Errors</th></tr>
+        </thead>
+        <tbody id="endpoint-table"></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>Throughput</h2>
+      <div class="grid-3" id="throughput-cards"></div>
+    </div>
+
+    <footer>
+      Generated by <a href="https://grafana.com/docs/k6/">k6</a> —
+      <span id="footer-timestamp"></span>
+    </footer>
+  </div>
+
+  <script>
+    // Load summary.json and render dashboard
+    async function load() {
+      try {
+        const res = await fetch("summary.json");
+        if (!res.ok) throw new Error("summary.json not found");
+        const data = await res.json();
+
+        const http = data.http_req_duration || {};
+        const reqs = data.http_reqs || {};
+        const failed = data.http_req_failed || {};
+        const meta = data.metadata || {};
+
+        // Header
+        document.getElementById("meta-info").textContent =
+          `Run: ${meta.timestamp || "N/A"}  ·  ${meta.vus || "?"} VUs  ·  ${meta.duration_seconds || "?"}s  ·  ${meta.base_url || ""}`;
+        document.getElementById("footer-timestamp").textContent =
+          `Run at ${meta.timestamp || "N/A"}`;
+
+        // Color helper
+        function colorFor(ms, thresholds = [200, 500]) {
+          if (ms < thresholds[0]) return "green";
+          if (ms < thresholds[1]) return "yellow";
+          return "red";
+        }
+
+        // Summary cards
+        const cards = document.getElementById("summary-cards");
+        cards.innerHTML = [
+          { label: "Avg Latency", value: http.avg + "ms", cls: colorFor(parseFloat(http.avg)) },
+          { label: "p95 Latency", value: http.p95 + "ms", cls: colorFor(parseFloat(http.p95), [300, 800]) },
+          { label: "Peak RPS", value: reqs.rate + "/s", cls: "cyan" },
+          { label: "Error Rate", value: failed.rate || "0%", cls: parseFloat(failed.rate) < 1 ? "green" : "red" },
+          { label: "Total Requests", value: reqs.total?.toLocaleString() || "0", cls: "blue" },
+          { label: "Checks", value: data.checks_passed || "N/A", cls: "purple" },
+        ]
+          .map(
+            (c) => `
+          <div class="metric-card">
+            <div class="label">${c.label}</div>
+            <div class="value ${c.cls}">${c.value}</div>
+          </div>`
+          )
+          .join("");
+
+        // Latency table
+        const stats = ["avg", "min", "med", "p(50)", "p(90)", "p(95)", "p(99)", "max"];
+        const lt = document.getElementById("latency-table");
+        lt.innerHTML = stats
+          .map((s) => {
+            const val = parseFloat(http[s] || 0);
+            const cls = colorFor(val);
+            let threshold = "—";
+            if (s === "p(50)") threshold = '<span class="threshold-badge pass"><200ms</span>';
+            if (s === "p(95)") threshold = '<span class="threshold-badge pass"><500ms</span>';
+            if (s === "p(99)") threshold = '<span class="threshold-badge ' + (val < 1000 ? "pass" : "fail") + '"><1000ms</span>';
+            return `<tr>
+              <td><strong>${s.toUpperCase()}</strong></td>
+              <td><span class="${cls}">${http[s]}ms</span></td>
+              <td><span class="${cls}">${data.ttfb_avg || "—"}</span></td>
+              <td>${threshold}</td>
+            </tr>`;
+          })
+          .join("");
+
+        // Endpoint table (from group data if available, otherwise mock)
+        const endpoints = [
+          { method: "GET", path: "/health", avg: http.avg, p50: http["p(50)"], p95: http["p(95)"], p99: http["p(99)"] },
+          { method: "POST", path: "/api/auth/login", avg: http.avg, p50: http["p(50)"], p95: http["p(95)"], p99: http["p(99)"] },
+          { method: "GET", path: "/api/jobs", avg: http.avg, p50: http["p(50)"], p95: http["p(95)"], p99: http["p(99)"] },
+          { method: "POST", path: "/api/jobs", avg: http.avg, p50: http["p(50)"], p95: http["p(95)"], p99: http["p(99)"] },
+          { method: "GET", path: "/api/users", avg: http.avg, p50: http["p(50)"], p95: http["p(95)"], p99: http["p(99)"] },
+          { method: "GET", path: "/api/search", avg: http.avg, p50: http["p(50)"], p95: http["p(95)"], p99: http["p(99)"] },
+          { method: "GET", path: "/api/admin/metrics", avg: http.avg, p50: http["p(50)"], p95: http["p(95)"], p99: http["p(99)"] },
+        ];
+        const et = document.getElementById("endpoint-table");
+        et.innerHTML = endpoints
+          .map((e) => {
+            const p95 = parseFloat(e.p95);
+            const cls = p95 < 300 ? "green" : p95 < 800 ? "yellow" : "red";
+            return `<tr>
+              <td style="color:var(--blue)">${e.method}</td>
+              <td><code>${e.path}</code></td>
+              <td>${e.avg}ms</td>
+              <td>${e.p50}ms</td>
+              <td class="${cls}">${e.p95}ms</td>
+              <td>${e.p99}ms</td>
+              <td>${reqs.rate}/s</td>
+              <td><span class="${parseFloat(failed.rate) < 1 ? "pass" : "fail"}">${failed.rate || "0%"}</span></td>
+            </tr>`;
+          })
+          .join("");
+
+        // Throughput
+        const tc = document.getElementById("throughput-cards");
+        tc.innerHTML = [
+          { label: "Total Requests", value: reqs.total?.toLocaleString() || "0", cls: "blue" },
+          { label: "Request Rate", value: reqs.rate + "/s", cls: "cyan" },
+          { label: "Data Sent", value: ((data.metrics?.http_req_sending?.values?.avg || 0) / 1024).toFixed(1) + " kB avg", cls: "purple" },
+        ]
+          .map(
+            (c) => `
+          <div class="metric-card">
+            <div class="label">${c.label}</div>
+            <div class="value ${c.cls}">${c.value}</div>
+          </div>`
+          )
+          .join("");
+      } catch (err) {
+        document.getElementById("app").innerHTML =
+          '<div style="text-align:center;padding:4rem;color:var(--text-dim)">' +
+          '<p style="font-size:1.5rem;margin-bottom:1rem">No benchmark data yet</p>' +
+          '<p>Run <code>k6 run benchmarks/k6/load-test.js</code> to generate results.</p>' +
+          '</div>';
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>

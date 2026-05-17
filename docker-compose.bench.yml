@@ -1,0 +1,7 @@
+# Benchmark overrides — used in CI and local testing
+# Disable rate limiting for load tests
+services:
+  api:
+    environment:
+      BENCHMARK_MODE: "true"
+      RATE_LIMIT_DISABLED: "true"

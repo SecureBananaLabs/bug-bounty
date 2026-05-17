@@ -1,0 +1,26 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+# Install only API dependencies
+COPY package.json package-lock.json ./
+COPY apps/api/package.json apps/api/
+COPY packages/db/package.json packages/db/
+
+RUN npm ci --workspace=apps/api --omit=dev 2>/dev/null || npm install --workspace=apps/api
+
+COPY apps/api/src apps/api/src
+
+ENV NODE_ENV=production
+ENV PORT=4000
+ENV JWT_SECRET=benchmark-secret-do-not-use-in-prod
+
+# Disable rate limiting for benchmark mode
+ENV BENCHMARK_MODE=true
+
+EXPOSE 4000
+
+HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget -qO- http://localhost:4000/health || exit 1
+
+CMD ["node", "apps/api/src/server.js"]

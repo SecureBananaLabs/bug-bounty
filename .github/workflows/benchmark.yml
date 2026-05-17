@@ -1,0 +1,119 @@
+name: API Benchmarks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - ".github/workflows/benchmark.yml"
+  workflow_dispatch:
+    inputs:
+      vus:
+        description: "Number of virtual users"
+        required: false
+        default: "50"
+      duration:
+        description: "Test duration (e.g. 60s, 2m)"
+        required: false
+        default: "60s"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: benchmark-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci --workspace=apps/api 2>/dev/null || npm install --workspace=apps/api
+
+      - name: Start API in background
+        run: |
+          NODE_ENV=production PORT=4000 JWT_SECRET=ci-benchmark-secret \
+            node apps/api/src/server.js &
+          # Wait for API to be ready
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:4000/health | grep -q '"ok":true'; then
+              echo "✅ API ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "❌ API failed to start"
+          exit 1
+
+      - name: Smoke test
+        run: |
+          echo "🔍 Running smoke test…"
+          npx k6 run --quiet benchmarks/k6/smoke-test.js 2>&1 || {
+            echo "❌ Smoke test failed — API may be broken"
+            exit 1
+          }
+          echo "✅ Smoke test passed"
+
+      - name: Run load test
+        run: |
+          echo "🚀 Running load test (VUs=${{ inputs.vus || '50' }}, duration=${{ inputs.duration || '60s' }})…"
+          npx k6 run \
+            --summary-export=benchmarks/results/summary.json \
+            --out json=benchmarks/results/raw.ndjson \
+            benchmarks/k6/load-test.js 2>&1 | tee benchmarks/results/console.log
+
+      - name: Generate HTML report
+        run: |
+          mkdir -p benchmarks/results/history
+          # Copy report template and inject summary data
+          cp benchmarks/report.html benchmarks/results/index.html
+          # Copy summary.json for the dashboard to load
+          cp benchmarks/results/summary.json benchmarks/results/summary-latest.json
+
+      - name: Save historical run
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          RUN_DIR="benchmarks/results/history/${TIMESTAMP}"
+          mkdir -p "${RUN_DIR}"
+          cp benchmarks/results/summary.json "${RUN_DIR}/summary.json"
+          cp benchmarks/results/console.log "${RUN_DIR}/console.log" 2>/dev/null || true
+
+          # Keep only last 50 runs
+          ls -1dt benchmarks/results/history/*/ | tail -n +51 | xargs rm -rf 2>/dev/null || true
+
+          echo "📦 Saved historical run: ${RUN_DIR}"
+
+      - name: Commit benchmark results
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add benchmarks/results/
+          git diff --cached --quiet -- benchmarks/results/ && exit 0
+
+          git commit -m "chore: update API benchmarks [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Upload benchmark artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: |
+            benchmarks/results/summary.json
+            benchmarks/results/console.log
+            benchmarks/results/raw.ndjson
+          retention-days: 30

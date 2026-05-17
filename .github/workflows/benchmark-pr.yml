@@ -1,0 +1,197 @@
+name: Benchmark PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  benchmark-pr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci --workspace=apps/api 2>/dev/null || npm install --workspace=apps/api
+
+      - name: Start API (PR branch)
+        run: |
+          NODE_ENV=production PORT=4001 JWT_SECRET=ci-pr-secret \
+            node apps/api/src/server.js &
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:4001/health | grep -q '"ok":true'; then
+              echo "✅ PR API ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+
+      - name: Run benchmark (PR branch)
+        run: |
+          npx k6 run \
+            --summary-export=benchmarks/results/pr-summary.json \
+            benchmarks/k6/load-test.js 2>&1 | tee benchmarks/results/pr-console.log
+        env:
+          BASE_URL: http://localhost:4001
+
+      - name: Checkout main for baseline
+        run: |
+          git fetch origin main:main-ref 2>/dev/null || true
+          if git show-ref --verify --quiet refs/heads/main-ref; then
+            git checkout main-ref -- apps/api/ benchmarks/k6/ || true
+          fi
+
+      - name: Start API (main branch)
+        run: |
+          NODE_ENV=production PORT=4002 JWT_SECRET=ci-main-secret \
+            node apps/api/src/server.js &
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:4002/health | grep -q '"ok":true'; then
+              echo "✅ Main API ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+
+      - name: Run benchmark (main branch)
+        run: |
+          npx k6 run \
+            --summary-export=benchmarks/results/main-summary.json \
+            benchmarks/k6/load-test.js 2>&1 | tee benchmarks/results/main-console.log
+        env:
+          BASE_URL: http://localhost:4002
+
+      - name: Compute diff
+        id: diff
+        run: |
+          # Extract key metrics from both runs
+          PR_P95=$(jq -r '.http_req_duration.p95 // "0"' benchmarks/results/pr-summary.json)
+          MAIN_P95=$(jq -r '.http_req_duration.p95 // "0"' benchmarks/results/main-summary.json)
+          PR_P99=$(jq -r '.http_req_duration.p99 // "0"' benchmarks/results/pr-summary.json)
+          MAIN_P99=$(jq -r '.http_req_duration.p99 // "0"' benchmarks/results/main-summary.json)
+          PR_AVG=$(jq -r '.http_req_duration.avg // "0"' benchmarks/results/pr-summary.json)
+          MAIN_AVG=$(jq -r '.http_req_duration.avg // "0"' benchmarks/results/main-summary.json)
+          PR_RPS=$(jq -r '.http_reqs.rate // "0"' benchmarks/results/pr-summary.json)
+          MAIN_RPS=$(jq -r '.http_reqs.rate // "0"' benchmarks/results/main-summary.json)
+          PR_ERR=$(jq -r '.http_req_failed.rate // "0%"' benchmarks/results/pr-summary.json)
+          MAIN_ERR=$(jq -r '.http_req_failed.rate // "0%"' benchmarks/results/main-summary.json)
+
+          # Compute deltas
+          DELTA_P95=$(awk "BEGIN {printf \"%.1f\", ($PR_P95 - $MAIN_P95)}")
+          DELTA_P99=$(awk "BEGIN {printf \"%.1f\", ($PR_P99 - $MAIN_P99)}")
+          DELTA_AVG=$(awk "BEGIN {printf \"%.1f\", ($PR_AVG - $MAIN_AVG)}")
+          DELTA_RPS=$(awk "BEGIN {printf \"%.1f\", ($PR_RPS - $MAIN_RPS)}")
+
+          # Determine severity
+          if (( $(echo "$DELTA_P95 > 50" | bc -l) )); then
+            SEVERITY="⚠️"
+          elif (( $(echo "$DELTA_P95 > 20" | bc -l) )); then
+            SEVERITY="👀"
+          else
+            SEVERITY="✅"
+          fi
+
+          # Generate markdown comment
+          cat > /tmp/benchmark-comment.md << 'HEREDOC'
+          ## 📊 API Benchmark Results
+
+          | Metric | Main (`base`) | This PR | Delta |
+          |--------|:------------:|:-------:|:-----:|
+          | **Avg Latency** | MAIN_AVG ms | PR_AVG ms | DELTA_AVG ms |
+          | **p95 Latency** | MAIN_P95 ms | PR_P95 ms | DELTA_P95 ms |
+          | **p99 Latency** | MAIN_P99 ms | PR_P99 ms | DELTA_P99 ms |
+          | **RPS** | MAIN_RPS/s | PR_RPS/s | DELTA_RPS/s |
+          | **Error Rate** | MAIN_ERR | PR_ERR | — |
+
+          SEVERITY **Verdict:** DELTA_VERDICT
+
+          ---
+          <details>
+          <summary>📋 Full benchmark details</summary>
+
+          ### PR Branch
+          ```
+          $(cat benchmarks/results/pr-console.log | tail -30)
+          ```
+
+          ### Main Branch
+          ```
+          $(cat benchmarks/results/main-console.log | tail -30)
+          ```
+          </details>
+
+          <sub>⚡ Benchmarks run with k6 • 50 VUs • 60s duration</sub>
+          HEREDOC
+
+          # Substitute placeholders
+          sed -i "s/MAIN_AVG/$MAIN_AVG/g; s/PR_AVG/$PR_AVG/g; s/DELTA_AVG/${DELTA_AVG}/g" /tmp/benchmark-comment.md
+          sed -i "s/MAIN_P95/$MAIN_P95/g; s/PR_P95/$PR_P95/g; s/DELTA_P95/${DELTA_P95}/g" /tmp/benchmark-comment.md
+          sed -i "s/MAIN_P99/$MAIN_P99/g; s/PR_P99/$PR_P99/g; s/DELTA_P99/${DELTA_P99}/g" /tmp/benchmark-comment.md
+          sed -i "s/MAIN_RPS/$MAIN_RPS/g; s/PR_RPS/$PR_RPS/g; s/DELTA_RPS/${DELTA_RPS}/g" /tmp/benchmark-comment.md
+          sed -i "s|MAIN_ERR|$MAIN_ERR|g; s|PR_ERR|$PR_ERR|g" /tmp/benchmark-comment.md
+          sed -i "s/SEVERITY/$SEVERITY/g" /tmp/benchmark-comment.md
+
+          if [ "$SEVERITY" = "✅" ]; then
+            DELTA_VERDICT="No significant performance regression detected."
+          elif [ "$SEVERITY" = "👀" ]; then
+            DELTA_VERDICT="Minor latency increase — worth reviewing but not blocking."
+          else
+            DELTA_VERDICT="⚠️ Significant p95 latency increase (+${DELTA_P95}ms) — investigate before merging."
+          fi
+          sed -i "s/DELTA_VERDICT/$DELTA_VERDICT/" /tmp/benchmark-comment.md
+
+          cat /tmp/benchmark-comment.md
+
+      - name: Post PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('/tmp/benchmark-comment.md', 'utf8');
+
+            // Find existing benchmark comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c =>
+              c.body.includes('API Benchmark Results') &&
+              c.user.login === 'github-actions[bot]'
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

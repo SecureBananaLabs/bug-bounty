@@ -1,0 +1,27 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      JWT_SECRET: benchmark-secret
+      BENCHMARK_MODE: "true"
+    restart: unless-stopped
+
+  k6:
+    image: grafana/k6:latest
+    entrypoint: ["k6"]
+    command: ["run", "--summary-export=/tmp/k6-summary.json", "/scripts/load-test.js"]
+    profiles:
+      - bench
+    volumes:
+      - ./benchmarks/k6:/scripts:ro
+      - ./benchmarks/results:/tmp:rw
+    network_mode: host
+    depends_on:
+      api:
+        condition: service_healthy
