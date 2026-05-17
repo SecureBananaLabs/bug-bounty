@@ -270,19 +270,22 @@ export default function AdminPanelPage() {
 
     try {
       const token = window.localStorage.getItem("freelanceflow_token");
-      const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+      const apiBase = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:4000";
       if (!token) {
         throw new Error("No admin API token found in localStorage.");
       }
 
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 2500);
       const headers = { authorization: `Bearer ${token}` };
+      const fetchOptions = { headers, signal: controller.signal };
       const [overviewRes, usersRes, listingsRes, disputesRes, auditRes] = await Promise.all([
-        fetch(`${apiBase}/api/admin/overview`, { headers }),
-        fetch(`${apiBase}/api/admin/users?pageSize=25`, { headers }),
-        fetch(`${apiBase}/api/admin/moderation?pageSize=25`, { headers }),
-        fetch(`${apiBase}/api/admin/disputes?pageSize=25`, { headers }),
-        fetch(`${apiBase}/api/admin/audit-log?pageSize=25`, { headers })
-      ]);
+        fetch(`${apiBase}/api/admin/overview`, fetchOptions),
+        fetch(`${apiBase}/api/admin/users?pageSize=25`, fetchOptions),
+        fetch(`${apiBase}/api/admin/moderation?pageSize=25`, fetchOptions),
+        fetch(`${apiBase}/api/admin/disputes?pageSize=25`, fetchOptions),
+        fetch(`${apiBase}/api/admin/audit-log?pageSize=25`, fetchOptions)
+      ]).finally(() => window.clearTimeout(timeout));
 
       if ([overviewRes, usersRes, listingsRes, disputesRes, auditRes].some((response) => !response.ok)) {
         throw new Error("Admin API returned an authorization or loading error.");
@@ -377,7 +380,9 @@ export default function AdminPanelPage() {
 
       <div className="admin-state-row" role="status">
         <span>Last refresh: {lastRefresh || "pending"}</span>
-        {error ? <span className="inline-error">{error} Showing seeded review data.</span> : <span>Live admin data loaded.</span>}
+        {loading ? <span>Loading admin data.</span> : null}
+        {!loading && error ? <span className="inline-error">{error} Showing seeded review data.</span> : null}
+        {!loading && !error ? <span>Live admin data loaded.</span> : null}
       </div>
 
       <nav className="admin-tabs" aria-label="Admin sections">
