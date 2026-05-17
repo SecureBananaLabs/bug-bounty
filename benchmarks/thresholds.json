@@ -1,0 +1,23 @@
+{
+  "GET /health": { "p99_ms": 100 },
+  "POST /api/auth/register": { "p99_ms": 500 },
+  "POST /api/auth/login": { "p99_ms": 500 },
+  "GET /api/auth/oauth/github/callback": { "p99_ms": 300 },
+  "POST /api/auth/refresh": { "p99_ms": 500 },
+  "GET /api/users": { "p99_ms": 200 },
+  "POST /api/users": { "p99_ms": 300 },
+  "GET /api/jobs": { "p99_ms": 200 },
+  "POST /api/jobs": { "p99_ms": 400 },
+  "GET /api/proposals": { "p99_ms": 200 },
+  "POST /api/proposals": { "p99_ms": 300 },
+  "GET /api/messages": { "p99_ms": 200 },
+  "POST /api/messages": { "p99_ms": 300 },
+  "GET /api/reviews": { "p99_ms": 200 },
+  "POST /api/reviews": { "p99_ms": 300 },
+  "POST /api/payments": { "p99_ms": 500 },
+  "GET /api/search": { "p99_ms": 300 },
+  "POST /api/uploads": { "p99_ms": 500 },
+  "GET /api/notifications": { "p99_ms": 200 },
+  "POST /api/notifications": { "p99_ms": 300 },
+  "GET /api/admin/metrics": { "p99_ms": 400 }
+}
