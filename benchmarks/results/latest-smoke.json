@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-17T06:23:15.542Z",
+  "generatedAt": "2026-05-17T06:28:27.534Z",
   "mode": "smoke",
   "target": "local-auto-start",
   "concurrency": 1,
@@ -10,29 +10,29 @@
     "cpu": "AMD Ryzen 5 7530U with Radeon Graphics         ",
     "cores": 12,
     "totalMemoryMb": 15712,
-    "freeMemoryMb": 3151
+    "freeMemoryMb": 3239
   },
   "endpoints": [
     {
       "name": "auth.register",
       "method": "POST",
       "path": "/api/auth/register",
-      "durationMs": 95,
+      "durationMs": 114,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 7.92,
-        "p95": 86.38,
-        "p99": 86.38
+        "p50": 10.58,
+        "p95": 102.89,
+        "p99": 102.89
       },
       "ttfbMs": {
-        "p50": 7.59,
-        "p95": 85.1,
-        "p99": 85.1
+        "p50": 10.09,
+        "p95": 100.85,
+        "p99": 100.85
       },
       "rps": {
-        "sustained": 21.09,
+        "sustained": 17.53,
         "peak": 2
       },
       "statusCodes": {
@@ -43,22 +43,22 @@
       "name": "auth.login",
       "method": "POST",
       "path": "/api/auth/login",
-      "durationMs": 9,
+      "durationMs": 13,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 3.48,
-        "p95": 4.87,
-        "p99": 4.87
+        "p50": 4.71,
+        "p95": 7.81,
+        "p99": 7.81
       },
       "ttfbMs": {
-        "p50": 3.25,
-        "p95": 4.63,
-        "p99": 4.63
+        "p50": 4.47,
+        "p95": 7.35,
+        "p99": 7.35
       },
       "rps": {
-        "sustained": 233.99,
+        "sustained": 157.26,
         "peak": 2
       },
       "statusCodes": {
@@ -74,17 +74,17 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 2.68,
-        "p95": 4.52,
-        "p99": 4.52
+        "p50": 2.74,
+        "p95": 3.71,
+        "p99": 3.71
       },
       "ttfbMs": {
-        "p50": 2.49,
-        "p95": 4.14,
-        "p99": 4.14
+        "p50": 2.48,
+        "p95": 3.4,
+        "p99": 3.4
       },
       "rps": {
-        "sustained": 273.06,
+        "sustained": 303.63,
         "peak": 2
       },
       "statusCodes": {
@@ -95,22 +95,22 @@
       "name": "auth.refresh",
       "method": "POST",
       "path": "/api/auth/refresh",
-      "durationMs": 5,
+      "durationMs": 7,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.97,
-        "p95": 2.66,
-        "p99": 2.66
+        "p50": 3.49,
+        "p95": 3.61,
+        "p99": 3.61
       },
       "ttfbMs": {
-        "p50": 1.78,
-        "p95": 2.44,
-        "p99": 2.44
+        "p50": 3.21,
+        "p95": 3.33,
+        "p99": 3.33
       },
       "rps": {
-        "sustained": 425.82,
+        "sustained": 277.76,
         "peak": 2
       },
       "statusCodes": {
@@ -121,22 +121,22 @@
       "name": "users.list",
       "method": "GET",
       "path": "/api/users",
-      "durationMs": 6,
+      "durationMs": 8,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 2.15,
-        "p95": 3.37,
-        "p99": 3.37
+        "p50": 3.78,
+        "p95": 4.34,
+        "p99": 4.34
       },
       "ttfbMs": {
-        "p50": 1.91,
-        "p95": 3.2,
-        "p99": 3.2
+        "p50": 3.49,
+        "p95": 4.11,
+        "p99": 4.11
       },
       "rps": {
-        "sustained": 356.96,
+        "sustained": 241.52,
         "peak": 2
       },
       "statusCodes": {
@@ -147,22 +147,22 @@
       "name": "users.create",
       "method": "POST",
       "path": "/api/users",
-      "durationMs": 5,
+      "durationMs": 7,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 2.21,
-        "p95": 2.33,
-        "p99": 2.33
+        "p50": 3.16,
+        "p95": 3.62,
+        "p99": 3.62
       },
       "ttfbMs": {
-        "p50": 2.08,
-        "p95": 2.2,
-        "p99": 2.2
+        "p50": 2.97,
+        "p95": 3.21,
+        "p99": 3.21
       },
       "rps": {
-        "sustained": 435.07,
+        "sustained": 291.6,
         "peak": 2
       },
       "statusCodes": {
@@ -173,22 +173,22 @@
       "name": "jobs.list",
       "method": "GET",
       "path": "/api/jobs",
-      "durationMs": 3,
+      "durationMs": 4,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.42,
-        "p95": 1.56,
-        "p99": 1.56
+        "p50": 1.78,
+        "p95": 2.08,
+        "p99": 2.08
       },
       "ttfbMs": {
-        "p50": 1.23,
-        "p95": 1.43,
-        "p99": 1.43
+        "p50": 1.64,
+        "p95": 1.91,
+        "p99": 1.91
       },
       "rps": {
-        "sustained": 659.17,
+        "sustained": 508.98,
         "peak": 2
       },
       "statusCodes": {
@@ -199,22 +199,22 @@
       "name": "jobs.create",
       "method": "POST",
       "path": "/api/jobs",
-      "durationMs": 5,
+      "durationMs": 8,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.7,
-        "p95": 2.84,
-        "p99": 2.84
+        "p50": 3.12,
+        "p95": 4.76,
+        "p99": 4.76
       },
       "ttfbMs": {
-        "p50": 1.59,
-        "p95": 2.65,
-        "p99": 2.65
+        "p50": 2.93,
+        "p95": 4.26,
+        "p99": 4.26
       },
       "rps": {
-        "sustained": 435.37,
+        "sustained": 251.15,
         "peak": 2
       },
       "statusCodes": {
@@ -225,22 +225,22 @@
       "name": "proposals.list",
       "method": "GET",
       "path": "/api/proposals",
-      "durationMs": 4,
+      "durationMs": 6,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.78,
-        "p95": 1.78,
-        "p99": 1.78
+        "p50": 2.76,
+        "p95": 2.97,
+        "p99": 2.97
       },
       "ttfbMs": {
-        "p50": 1.52,
-        "p95": 1.59,
-        "p99": 1.59
+        "p50": 2.53,
+        "p95": 2.61,
+        "p99": 2.61
       },
       "rps": {
-        "sustained": 553.56,
+        "sustained": 343.97,
         "peak": 2
       },
       "statusCodes": {
@@ -251,22 +251,22 @@
       "name": "proposals.create",
       "method": "POST",
       "path": "/api/proposals",
-      "durationMs": 6,
+      "durationMs": 8,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 2.88,
-        "p95": 3.1,
-        "p99": 3.1
+        "p50": 3.79,
+        "p95": 4.33,
+        "p99": 4.33
       },
       "ttfbMs": {
-        "p50": 2.64,
-        "p95": 2.92,
-        "p99": 2.92
+        "p50": 3.59,
+        "p95": 4.13,
+        "p99": 4.13
       },
       "rps": {
-        "sustained": 331.09,
+        "sustained": 243.47,
         "peak": 2
       },
       "statusCodes": {
@@ -277,22 +277,22 @@
       "name": "payments.create",
       "method": "POST",
       "path": "/api/payments",
-      "durationMs": 6,
+      "durationMs": 8,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 2.84,
-        "p95": 3.29,
-        "p99": 3.29
+        "p50": 3.03,
+        "p95": 4.61,
+        "p99": 4.61
       },
       "ttfbMs": {
-        "p50": 2.65,
-        "p95": 3.11,
-        "p99": 3.11
+        "p50": 2.82,
+        "p95": 4.38,
+        "p99": 4.38
       },
       "rps": {
-        "sustained": 323.04,
+        "sustained": 259,
         "peak": 2
       },
       "statusCodes": {
@@ -303,22 +303,22 @@
       "name": "reviews.list",
       "method": "GET",
       "path": "/api/reviews",
-      "durationMs": 8,
+      "durationMs": 4,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.84,
-        "p95": 6.09,
-        "p99": 6.09
+        "p50": 1.61,
+        "p95": 2.17,
+        "p99": 2.17
       },
       "ttfbMs": {
-        "p50": 1.73,
-        "p95": 5.92,
-        "p99": 5.92
+        "p50": 1.42,
+        "p95": 1.96,
+        "p99": 1.96
       },
       "rps": {
-        "sustained": 250.72,
+        "sustained": 521.06,
         "peak": 2
       },
       "statusCodes": {
@@ -334,17 +334,17 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.54,
-        "p95": 2.21,
-        "p99": 2.21
+        "p50": 1.89,
+        "p95": 2.36,
+        "p99": 2.36
       },
       "ttfbMs": {
-        "p50": 1.42,
-        "p95": 2.03,
-        "p99": 2.03
+        "p50": 1.78,
+        "p95": 2.18,
+        "p99": 2.18
       },
       "rps": {
-        "sustained": 526.3,
+        "sustained": 465.18,
         "peak": 2
       },
       "statusCodes": {
@@ -360,17 +360,17 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.45,
-        "p95": 1.51,
-        "p99": 1.51
+        "p50": 1.51,
+        "p95": 1.53,
+        "p99": 1.53
       },
       "ttfbMs": {
-        "p50": 1.33,
-        "p95": 1.41,
-        "p99": 1.41
+        "p50": 1.39,
+        "p95": 1.39,
+        "p99": 1.39
       },
       "rps": {
-        "sustained": 658.83,
+        "sustained": 648.03,
         "peak": 2
       },
       "statusCodes": {
@@ -381,22 +381,22 @@
       "name": "messages.create",
       "method": "POST",
       "path": "/api/messages",
-      "durationMs": 4,
+      "durationMs": 5,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.74,
-        "p95": 2.03,
-        "p99": 2.03
+        "p50": 2.39,
+        "p95": 2.62,
+        "p99": 2.62
       },
       "ttfbMs": {
-        "p50": 1.64,
-        "p95": 1.88,
-        "p99": 1.88
+        "p50": 2.23,
+        "p95": 2.47,
+        "p99": 2.47
       },
       "rps": {
-        "sustained": 525.13,
+        "sustained": 395.09,
         "peak": 2
       },
       "statusCodes": {
@@ -407,22 +407,22 @@
       "name": "notifications.list",
       "method": "GET",
       "path": "/api/notifications",
-      "durationMs": 3,
+      "durationMs": 4,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.32,
-        "p95": 1.46,
-        "p99": 1.46
+        "p50": 1.78,
+        "p95": 1.98,
+        "p99": 1.98
       },
       "ttfbMs": {
-        "p50": 1.19,
-        "p95": 1.22,
-        "p99": 1.22
+        "p50": 1.6,
+        "p95": 1.83,
+        "p99": 1.83
       },
       "rps": {
-        "sustained": 704.2,
+        "sustained": 517.73,
         "peak": 2
       },
       "statusCodes": {
@@ -433,22 +433,22 @@
       "name": "notifications.create",
       "method": "POST",
       "path": "/api/notifications",
-      "durationMs": 4,
+      "durationMs": 5,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.83,
-        "p95": 2,
-        "p99": 2
+        "p50": 2.31,
+        "p95": 2.78,
+        "p99": 2.78
       },
       "ttfbMs": {
-        "p50": 1.71,
-        "p95": 1.87,
-        "p99": 1.87
+        "p50": 2.13,
+        "p95": 2.64,
+        "p99": 2.64
       },
       "rps": {
-        "sustained": 516.1,
+        "sustained": 387.8,
         "peak": 2
       },
       "statusCodes": {
@@ -459,22 +459,22 @@
       "name": "uploads.create",
       "method": "POST",
       "path": "/api/uploads",
-      "durationMs": 14,
+      "durationMs": 18,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 3.14,
-        "p95": 11.17,
-        "p99": 11.17
+        "p50": 3.22,
+        "p95": 14.59,
+        "p99": 14.59
       },
       "ttfbMs": {
-        "p50": 3.03,
-        "p95": 11.03,
-        "p99": 11.03
+        "p50": 3.12,
+        "p95": 14.46,
+        "p99": 14.46
       },
       "rps": {
-        "sustained": 139.24,
+        "sustained": 111.95,
         "peak": 2
       },
       "statusCodes": {
@@ -485,22 +485,22 @@
       "name": "search.global",
       "method": "GET",
       "path": "/api/search?q=benchmark%20developer",
-      "durationMs": 4,
+      "durationMs": 7,
       "requests": 2,
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.25,
-        "p95": 2.62,
-        "p99": 2.62
+        "p50": 2.83,
+        "p95": 3.98,
+        "p99": 3.98
       },
       "ttfbMs": {
-        "p50": 1.16,
-        "p95": 2.51,
-        "p99": 2.51
+        "p50": 2.7,
+        "p95": 3.83,
+        "p99": 3.83
       },
       "rps": {
-        "sustained": 511.46,
+        "sustained": 291.35,
         "peak": 2
       },
       "statusCodes": {
@@ -516,17 +516,17 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.91,
-        "p95": 2.65,
-        "p99": 2.65
+        "p50": 2.1,
+        "p95": 2.98,
+        "p99": 2.98
       },
       "ttfbMs": {
-        "p50": 1.71,
-        "p95": 2.54,
-        "p99": 2.54
+        "p50": 1.96,
+        "p95": 2.86,
+        "p99": 2.86
       },
       "rps": {
-        "sustained": 435.17,
+        "sustained": 389.04,
         "peak": 2
       },
       "statusCodes": {
