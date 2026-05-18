@@ -1,0 +1,11 @@
+{
+  "name": "@freelance-flow/benchmarks",
+  "version": "1.0.0",
+  "scripts": {
+    "benchmark": "k6 run --out json=results/bench_$SHA.json api_benchmark.js",
+    "check": "node check_thresholds.js results/*.json"
+  },
+  "devDependencies": {
+    "k6": "^0.53.0"
+  }
+}
