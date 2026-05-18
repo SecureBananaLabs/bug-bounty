@@ -33,7 +33,7 @@ The API includes:
 
 - Auth routes (register, login, OAuth callback, JWT refresh)
 - CRUD routes for users, jobs, and proposals
-- Payments routes (Stripe-focused service placeholder)
+- Payments routes backed by Stripe PaymentIntent creation
 - Reviews, messaging, notifications
 - File uploads and search
 - Admin routes
