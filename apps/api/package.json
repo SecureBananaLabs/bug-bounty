@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "node --test src/tests",
+    "benchmark": "cd ../../benchmarks && npm install --silent && node benchmark.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

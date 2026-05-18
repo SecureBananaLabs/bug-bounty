@@ -1,0 +1,12 @@
+{
+  "name": "api-benchmarks",
+  "version": "1.0.0",
+  "description": "API benchmark suite measuring p50/p95/p99 latency, RPS, error rate and TTFB",
+  "scripts": {
+    "benchmark": "node benchmark.js",
+    "benchmark:ci": "BENCHMARK_DURATION=30 BENCHMARK_CONNECTIONS=50 node benchmark.js"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0"
+  }
+}
