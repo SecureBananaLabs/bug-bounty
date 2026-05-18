@@ -1,7 +1,7 @@
 {
   "mode": "full",
   "target": "local ephemeral Express server",
-  "generatedAt": "2026-05-17T18:15:17.891Z",
+  "generatedAt": "2026-05-18T15:15:06.547Z",
   "config": {
     "connections": 4,
     "requests": 60,
@@ -16,7 +16,7 @@
     "cpu": "AMD Ryzen 7 4800H with Radeon Graphics         ",
     "logicalCores": 16,
     "totalMemoryMb": 64893,
-    "freeMemoryMb": 37452
+    "freeMemoryMb": 39903
   },
   "results": [
     {
@@ -29,9 +29,9 @@
       "description": "Liveness probe used as a low-cost baseline.",
       "metrics": {
         "latency": {
-          "p50": 3,
-          "p95": 27,
-          "p99": 27
+          "p50": 5,
+          "p95": 38,
+          "p99": 38
         },
         "rps": {
           "sustained": 60,
@@ -39,17 +39,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.86220000000003,
-          "p95": 35.05430000000001,
-          "p99": 35.05430000000001
+          "p50": 3.4735999999998057,
+          "p95": 60.04279999999994,
+          "p99": 60.04279999999994
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1.02,
+        "durationSeconds": 1.03,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -62,9 +66,9 @@
       "description": "Client registration with a production-shaped credential payload.",
       "metrics": {
         "latency": {
-          "p50": 4,
-          "p95": 31,
-          "p99": 31
+          "p50": 6,
+          "p95": 45,
+          "p99": 46
         },
         "rps": {
           "sustained": 60,
@@ -72,9 +76,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 3.499300000000403,
-          "p95": 7.1983000000000175,
-          "p99": 7.1983000000000175
+          "p50": 4.556300000000192,
+          "p95": 7.498700000000099,
+          "p99": 7.498700000000099
         }
       },
       "raw": {
@@ -82,7 +86,11 @@
         "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -95,9 +103,9 @@
       "description": "Login payload with realistic email and password sizes.",
       "metrics": {
         "latency": {
-          "p50": 4,
-          "p95": 15,
-          "p99": 15
+          "p50": 6,
+          "p95": 21,
+          "p99": 21
         },
         "rps": {
           "sustained": 60,
@@ -105,9 +113,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.942399999999907,
-          "p95": 5.509500000000116,
-          "p99": 5.509500000000116
+          "p50": 3.267700000000332,
+          "p95": 6.0349999999998545,
+          "p99": 6.0349999999998545
         }
       },
       "raw": {
@@ -115,7 +123,11 @@
         "durationSeconds": 1.02,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -129,7 +141,7 @@
       "metrics": {
         "latency": {
           "p50": 3,
-          "p95": 9,
+          "p95": 10,
           "p99": 10
         },
         "rps": {
@@ -138,17 +150,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.6307999999999083,
-          "p95": 2.770999999999731,
-          "p99": 2.770999999999731
+          "p50": 1.532600000000457,
+          "p95": 3.1388999999999214,
+          "p99": 3.1388999999999214
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1.02,
+        "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -161,9 +177,9 @@
       "description": "Refresh-token endpoint with an empty POST body.",
       "metrics": {
         "latency": {
-          "p50": 3,
-          "p95": 8,
-          "p99": 8
+          "p50": 4,
+          "p95": 11,
+          "p99": 11
         },
         "rps": {
           "sustained": 60,
@@ -171,17 +187,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.549300000000585,
-          "p95": 3.041900000000169,
-          "p99": 3.041900000000169
+          "p50": 1.730199999999968,
+          "p95": 3.519499999999425,
+          "p99": 3.519499999999425
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1.02,
+        "durationSeconds": 1,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -195,8 +215,8 @@
       "metrics": {
         "latency": {
           "p50": 2,
-          "p95": 8,
-          "p99": 9
+          "p95": 7,
+          "p99": 7
         },
         "rps": {
           "sustained": 60,
@@ -204,9 +224,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.9975000000004002,
-          "p95": 3.304200000000492,
-          "p99": 3.304200000000492
+          "p50": 1.5390999999999622,
+          "p95": 2.2833999999993466,
+          "p99": 2.2833999999993466
         }
       },
       "raw": {
@@ -214,7 +234,11 @@
         "durationSeconds": 1,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -237,17 +261,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.054500000000189,
-          "p95": 3.4736000000002605,
-          "p99": 3.4736000000002605
+          "p50": 2.0769000000000233,
+          "p95": 3.350300000000061,
+          "p99": 3.350300000000061
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1.02,
+        "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -260,9 +288,9 @@
       "description": "Job listing route.",
       "metrics": {
         "latency": {
-          "p50": 2,
-          "p95": 7,
-          "p99": 7
+          "p50": 3,
+          "p95": 8,
+          "p99": 8
         },
         "rps": {
           "sustained": 60,
@@ -270,9 +298,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.8671999999987747,
-          "p95": 3.1520000000000437,
-          "p99": 3.1520000000000437
+          "p50": 2.1867999999994936,
+          "p95": 4.094600000000355,
+          "p99": 4.094600000000355
         }
       },
       "raw": {
@@ -280,7 +308,11 @@
         "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -293,9 +325,9 @@
       "description": "Job creation payload matching the current Zod schema.",
       "metrics": {
         "latency": {
-          "p50": 4,
-          "p95": 8,
-          "p99": 8
+          "p50": 5,
+          "p95": 13,
+          "p99": 13
         },
         "rps": {
           "sustained": 60,
@@ -303,9 +335,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.9027999999998428,
-          "p95": 3.3443999999999505,
-          "p99": 3.3443999999999505
+          "p50": 2.935800000001109,
+          "p95": 3.320399999998699,
+          "p99": 3.320399999998699
         }
       },
       "raw": {
@@ -313,7 +345,11 @@
         "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -326,9 +362,9 @@
       "description": "Proposal listing route.",
       "metrics": {
         "latency": {
-          "p50": 2,
-          "p95": 6,
-          "p99": 6
+          "p50": 3,
+          "p95": 7,
+          "p99": 7
         },
         "rps": {
           "sustained": 60,
@@ -336,17 +372,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.7336000000013883,
-          "p95": 4.915800000000672,
-          "p99": 4.915800000000672
+          "p50": 1.836699999999837,
+          "p95": 4.806900000001406,
+          "p99": 4.806900000001406
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1,
+        "durationSeconds": 1.02,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -359,9 +399,9 @@
       "description": "Proposal payload with bid and short cover letter.",
       "metrics": {
         "latency": {
-          "p50": 3,
-          "p95": 9,
-          "p99": 9
+          "p50": 4,
+          "p95": 12,
+          "p99": 12
         },
         "rps": {
           "sustained": 60,
@@ -369,17 +409,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.522499999999127,
-          "p95": 5.122100000000501,
-          "p99": 5.122100000000501
+          "p50": 5.066199999999299,
+          "p95": 9.142899999998917,
+          "p99": 9.142899999998917
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1,
+        "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -392,9 +436,9 @@
       "description": "Payment intent creation payload with currency and amount.",
       "metrics": {
         "latency": {
-          "p50": 2,
-          "p95": 8,
-          "p99": 9
+          "p50": 5,
+          "p95": 13,
+          "p99": 13
         },
         "rps": {
           "sustained": 60,
@@ -402,9 +446,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.0318000000006577,
-          "p95": 3.0694000000003143,
-          "p99": 3.0694000000003143
+          "p50": 2.8562999999994645,
+          "p95": 3.906199999999444,
+          "p99": 3.906199999999444
         }
       },
       "raw": {
@@ -412,7 +456,11 @@
         "durationSeconds": 1.02,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -425,9 +473,9 @@
       "description": "Review listing route.",
       "metrics": {
         "latency": {
-          "p50": 2,
-          "p95": 8,
-          "p99": 8
+          "p50": 3,
+          "p95": 10,
+          "p99": 10
         },
         "rps": {
           "sustained": 60,
@@ -435,17 +483,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.8399000000008527,
-          "p95": 2.853399999999965,
-          "p99": 2.853399999999965
+          "p50": 1.8514999999988504,
+          "p95": 2.918999999999869,
+          "p99": 2.918999999999869
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1.01,
+        "durationSeconds": 1,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -459,8 +511,8 @@
       "metrics": {
         "latency": {
           "p50": 3,
-          "p95": 8,
-          "p99": 8
+          "p95": 10,
+          "p99": 11
         },
         "rps": {
           "sustained": 60,
@@ -468,9 +520,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.101199999999153,
-          "p95": 3.4134999999987485,
-          "p99": 3.4134999999987485
+          "p50": 4.471099999998842,
+          "p95": 5.664300000000367,
+          "p99": 5.664300000000367
         }
       },
       "raw": {
@@ -478,7 +530,11 @@
         "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -491,9 +547,9 @@
       "description": "Message listing route.",
       "metrics": {
         "latency": {
-          "p50": 2,
-          "p95": 8,
-          "p99": 8
+          "p50": 4,
+          "p95": 11,
+          "p99": 12
         },
         "rps": {
           "sustained": 60,
@@ -501,9 +557,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.5391000000017812,
-          "p95": 2.966200000000754,
-          "p99": 2.966200000000754
+          "p50": 1.483299999999872,
+          "p95": 2.6476000000002387,
+          "p99": 2.6476000000002387
         }
       },
       "raw": {
@@ -511,7 +567,11 @@
         "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -525,8 +585,8 @@
       "metrics": {
         "latency": {
           "p50": 3,
-          "p95": 9,
-          "p99": 9
+          "p95": 7,
+          "p99": 7
         },
         "rps": {
           "sustained": 60,
@@ -534,9 +594,9 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.2202999999972235,
-          "p95": 3.3192000000017288,
-          "p99": 3.3192000000017288
+          "p50": 4.066999999999098,
+          "p95": 5.580699999998615,
+          "p99": 5.580699999998615
         }
       },
       "raw": {
@@ -544,7 +604,11 @@
         "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -558,8 +622,8 @@
       "metrics": {
         "latency": {
           "p50": 2,
-          "p95": 6,
-          "p99": 6
+          "p95": 9,
+          "p99": 9
         },
         "rps": {
           "sustained": 60,
@@ -567,17 +631,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.8113999999986845,
-          "p95": 2.489000000001397,
-          "p99": 2.489000000001397
+          "p50": 1.5751999999993131,
+          "p95": 3.0874000000003434,
+          "p99": 3.0874000000003434
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1,
+        "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -590,9 +658,9 @@
       "description": "Notification payload for a marketplace workflow event.",
       "metrics": {
         "latency": {
-          "p50": 3,
-          "p95": 8,
-          "p99": 8
+          "p50": 2,
+          "p95": 6,
+          "p99": 7
         },
         "rps": {
           "sustained": 60,
@@ -600,17 +668,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.4333000000005995,
-          "p95": 2.8310999999994237,
-          "p99": 2.8310999999994237
+          "p50": 2.415499999999156,
+          "p95": 4.191000000002532,
+          "p99": 4.191000000002532
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1.02,
+        "durationSeconds": 1,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -623,9 +695,9 @@
       "description": "Multipart upload with a small text attachment.",
       "metrics": {
         "latency": {
-          "p50": 3,
-          "p95": 13,
-          "p99": 13
+          "p50": 4,
+          "p95": 16,
+          "p99": 17
         },
         "rps": {
           "sustained": 60,
@@ -633,17 +705,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.8480999999992491,
-          "p95": 2.962499999997817,
-          "p99": 2.962499999997817
+          "p50": 1.644799999998213,
+          "p95": 3.044799999999668,
+          "p99": 3.044799999999668
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1.01,
+        "durationSeconds": 1,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "201": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -657,8 +733,8 @@
       "metrics": {
         "latency": {
           "p50": 2,
-          "p95": 9,
-          "p99": 9
+          "p95": 7,
+          "p99": 7
         },
         "rps": {
           "sustained": 60,
@@ -666,17 +742,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 2.9090999999971245,
-          "p95": 4.840299999999843,
-          "p99": 4.840299999999843
+          "p50": 1.7426999999988766,
+          "p95": 4.714600000002974,
+          "p99": 4.714600000002974
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1,
+        "durationSeconds": 1.01,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     },
     {
@@ -689,8 +769,8 @@
       "description": "Protected admin metrics endpoint using a benchmark bearer token.",
       "metrics": {
         "latency": {
-          "p50": 3,
-          "p95": 8,
+          "p50": 4,
+          "p95": 9,
           "p99": 9
         },
         "rps": {
@@ -699,17 +779,21 @@
         },
         "errorRate": 0,
         "ttfb": {
-          "p50": 1.5512999999991735,
-          "p95": 2.928199999998469,
-          "p99": 2.928199999998469
+          "p50": 2.130799999998999,
+          "p95": 3.237300000000687,
+          "p99": 3.237300000000687
         }
       },
       "raw": {
         "requests": 60,
-        "durationSeconds": 1.01,
+        "durationSeconds": 1,
         "errors": 0,
         "non2xx": 0,
-        "timeouts": 0
+        "timeouts": 0,
+        "sampledStatusCodes": {
+          "200": 5
+        },
+        "unexpectedStatusSamples": 0
       }
     }
   ],

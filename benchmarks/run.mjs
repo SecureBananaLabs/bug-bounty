@@ -48,7 +48,7 @@ function createBenchmarkToken(config) {
 }
 
 function startLocalServer() {
-  const app = createApp();
+  const app = createApp({ rateLimit: false });
   const server = app.listen(0);
 
   return new Promise((resolve, reject) => {
@@ -99,9 +99,34 @@ function normalizeAutocannonResult(route, raw) {
       durationSeconds: raw.duration,
       errors: raw.errors,
       non2xx: raw.non2xx,
-      timeouts: raw.timeouts
+      timeouts: raw.timeouts,
+      sampledStatusCodes: {},
+      unexpectedStatusSamples: 0
     }
   };
+}
+
+function countUnexpectedStatusSamples(expectedStatus, statusCounts) {
+  const expected = new Set(expectedStatus.map((status) => Number(status)));
+  let unexpected = 0;
+
+  for (const [status, count] of Object.entries(statusCounts)) {
+    if (!expected.has(Number(status))) {
+      unexpected += count;
+    }
+  }
+
+  return unexpected;
+}
+
+function applyTtfbMeasurement(result, measurement) {
+  result.metrics.ttfb = measurement.percentiles;
+  result.raw.sampledStatusCodes = measurement.statusCounts;
+  result.raw.unexpectedStatusSamples = countUnexpectedStatusSamples(
+    result.expectedStatus,
+    measurement.statusCounts
+  );
+  return result;
 }
 
 async function runAutocannon(baseUrl, route, config, authToken) {
@@ -132,6 +157,7 @@ async function runAutocannon(baseUrl, route, config, authToken) {
 
 async function measureTtfb(baseUrl, route, config, authToken) {
   const samples = [];
+  const statusCounts = {};
 
   for (let index = 0; index < config.ttfbSamples; index += 1) {
     const request = materializeRequest(route, { sequence: index + 1000, authToken });
@@ -142,39 +168,34 @@ async function measureTtfb(baseUrl, route, config, authToken) {
       body: request.body
     });
     const firstByteMs = performance.now() - started;
+    statusCounts[response.status] = (statusCounts[response.status] ?? 0) + 1;
     await response.arrayBuffer();
     samples.push(firstByteMs);
   }
 
   return {
-    p50: percentile(samples, 50),
-    p95: percentile(samples, 95),
-    p99: percentile(samples, 99)
+    percentiles: {
+      p50: percentile(samples, 50),
+      p95: percentile(samples, 95),
+      p99: percentile(samples, 99)
+    },
+    statusCounts
   };
 }
 
 async function runExternalRoute(route, config, authToken) {
   const result = await runAutocannon(config.baseUrl, route, config, authToken);
-  result.metrics.ttfb = await measureTtfb(config.baseUrl, route, config, authToken);
-  return result;
+  return applyTtfbMeasurement(result, await measureTtfb(config.baseUrl, route, config, authToken));
 }
 
 async function runLocalRoute(route, config, authToken) {
-  const previousRateLimitFlag = process.env.BENCHMARK_DISABLE_RATE_LIMIT;
-  process.env.BENCHMARK_DISABLE_RATE_LIMIT = "true";
   const server = await startLocalServer();
 
   try {
     const result = await runAutocannon(server.baseUrl, route, config, authToken);
-    result.metrics.ttfb = await measureTtfb(server.baseUrl, route, config, authToken);
-    return result;
+    return applyTtfbMeasurement(result, await measureTtfb(server.baseUrl, route, config, authToken));
   } finally {
     await server.close();
-    if (previousRateLimitFlag === undefined) {
-      delete process.env.BENCHMARK_DISABLE_RATE_LIMIT;
-    } else {
-      process.env.BENCHMARK_DISABLE_RATE_LIMIT = previousRateLimitFlag;
-    }
   }
 }
 

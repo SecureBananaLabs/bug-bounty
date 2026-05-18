@@ -9,6 +9,19 @@ function safeTimestamp(value) {
   return value.replace(/[:.]/g, "-");
 }
 
+function formatStatusCounts(statusCounts) {
+  const entries = Object.entries(statusCounts ?? {});
+
+  if (entries.length === 0) {
+    return "n/a";
+  }
+
+  return entries
+    .sort(([left], [right]) => Number(left) - Number(right))
+    .map(([status, count]) => `${status}: ${count}`)
+    .join(", ");
+}
+
 export function renderMarkdownReport(report) {
   const lines = [
     `# API Benchmark Report (${report.mode})`,
@@ -21,8 +34,8 @@ export function renderMarkdownReport(report) {
     `Memory: ${report.environment.totalMemoryMb} MB total`,
     `Load: ${report.config.connections} connection(s), ${report.config.requests} request(s) per endpoint`,
     "",
-    "| Endpoint | Method | Expected | p50 ms | p95 ms | p99 ms | TTFB p50 ms | TTFB p95 ms | TTFB p99 ms | Sustained RPS | Peak RPS | Error % |",
-    "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"
+    "| Endpoint | Method | Expected | Sampled statuses | p50 ms | p95 ms | p99 ms | TTFB p50 ms | TTFB p95 ms | TTFB p99 ms | Sustained RPS | Peak RPS | Error % |",
+    "| --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"
   ];
 
   for (const result of report.results) {
@@ -31,6 +44,7 @@ export function renderMarkdownReport(report) {
         `| ${result.id}`,
         result.method,
         result.expectedStatus.join(", "),
+        formatStatusCounts(result.raw?.sampledStatusCodes),
         formatNumber(result.metrics.latency.p50),
         formatNumber(result.metrics.latency.p95),
         formatNumber(result.metrics.latency.p99),

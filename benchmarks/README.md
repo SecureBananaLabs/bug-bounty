@@ -9,8 +9,7 @@ npm run benchmark
 npm run benchmark:smoke
 ```
 
-By default, the runner starts a local ephemeral API server for each endpoint. Starting a fresh local server per endpoint keeps the application-level rate limiter from turning a route inventory benchmark into a global limiter benchmark.
-Local ephemeral runs also set `BENCHMARK_DISABLE_RATE_LIMIT=true` inside the runner process. External `BENCHMARK_BASE_URL` runs do not change the target server and should use that server's normal rate-limit policy.
+By default, the runner starts a local ephemeral API server for each endpoint with the API rate limiter disabled through an in-process app option. Starting a fresh local server per endpoint keeps state isolated and prevents the shared development limiter from dominating route latency. External `BENCHMARK_BASE_URL` runs do not change the target server and should use that server's normal rate-limit policy.
 
 To target an already running local or staging server, set `BENCHMARK_BASE_URL`:
 
@@ -33,7 +32,6 @@ Copy `.env.benchmark.example` to `.env.benchmark` when you want persistent local
 | `BENCHMARK_TIMEOUT_SECONDS` | Request timeout for autocannon. | `10` |
 | `BENCHMARK_RESULTS_DIR` | Report output directory. | `benchmarks/results` |
 | `BENCHMARK_THRESHOLDS_PATH` | Threshold JSON path. | `benchmarks/thresholds.json` |
-| `BENCHMARK_DISABLE_RATE_LIMIT` | Internal local-run switch used by the runner to avoid measuring the shared in-memory limiter store. | unset |
 
 ## Metrics
 
@@ -43,5 +41,6 @@ Each endpoint report includes:
 - Sustained and peak requests per second.
 - Error rate, counting request errors and non-2xx responses.
 - p50, p95, and p99 TTFB from direct `fetch` samples.
+- Sampled status codes from the TTFB probes. The regression gate fails if a sampled status is outside the route's expected status list.
 
 Thresholds live in `benchmarks/thresholds.json` so reviewers can tune the CI smoke gate without changing the runner.

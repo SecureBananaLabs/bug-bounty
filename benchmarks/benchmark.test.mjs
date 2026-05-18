@@ -1,9 +1,28 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { createApp } from "../apps/api/src/app.js";
 import { loadBenchmarkConfig } from "./config.mjs";
 import { renderMarkdownReport } from "./report.mjs";
 import { API_ROUTE_MANIFEST, materializeRequest } from "./routes.mjs";
 import { evaluateThresholds } from "./thresholds.mjs";
+
+async function startTestServer(app) {
+  const server = app.listen(0);
+
+  await new Promise((resolve, reject) => {
+    server.once("listening", resolve);
+    server.once("error", reject);
+  });
+
+  const { port } = server.address();
+  return {
+    baseUrl: `http://127.0.0.1:${port}`,
+    close: () =>
+      new Promise((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+      })
+  };
+}
 
 test("route manifest covers the current API surface", () => {
   const expectedIds = [
@@ -60,6 +79,31 @@ test("materializeRequest creates realistic request options", () => {
   assert.match(uploadRequest.body, /benchmark-upload-3.txt/);
 });
 
+test("benchmark app mode disables the API limiter without global environment switches", async () => {
+  const previousRateLimitFlag = process.env.BENCHMARK_DISABLE_RATE_LIMIT;
+  delete process.env.BENCHMARK_DISABLE_RATE_LIMIT;
+
+  const server = await startTestServer(createApp({ rateLimit: false }));
+
+  try {
+    const statuses = [];
+    for (let index = 0; index < 205; index += 1) {
+      const response = await fetch(`${server.baseUrl}/health`);
+      statuses.push(response.status);
+      await response.arrayBuffer();
+    }
+
+    assert.equal(statuses.every((status) => status === 200), true);
+  } finally {
+    await server.close();
+    if (previousRateLimitFlag === undefined) {
+      delete process.env.BENCHMARK_DISABLE_RATE_LIMIT;
+    } else {
+      process.env.BENCHMARK_DISABLE_RATE_LIMIT = previousRateLimitFlag;
+    }
+  }
+});
+
 test("threshold evaluation reports reviewable failures", () => {
   const failures = evaluateThresholds(
     [
@@ -84,6 +128,39 @@ test("threshold evaluation reports reviewable failures", () => {
 
   assert.equal(failures.length, 1);
   assert.match(failures[0].message, /p99/);
+});
+
+test("threshold evaluation reports unexpected status samples", () => {
+  const failures = evaluateThresholds(
+    [
+      {
+        id: "jobs.create",
+        expectedStatus: [201],
+        metrics: {
+          latency: { p99: 25 },
+          rps: { sustained: 8 },
+          errorRate: 0
+        },
+        raw: {
+          sampledStatusCodes: {
+            200: 2
+          },
+          unexpectedStatusSamples: 2
+        }
+      }
+    ],
+    {
+      defaults: {
+        maxP99Ms: 900,
+        maxErrorRatePct: 1,
+        minSustainedRps: 5
+      },
+      routes: {}
+    }
+  );
+
+  assert.equal(failures.length, 1);
+  assert.match(failures[0].message, /expected 201/);
 });
 
 test("config and markdown report expose benchmark context", () => {
@@ -113,6 +190,11 @@ test("config and markdown report expose benchmark context", () => {
           rps: { sustained: 50, peak: 60 },
           errorRate: 0,
           ttfb: { p50: 9, p95: 19, p99: 29 }
+        },
+        raw: {
+          sampledStatusCodes: {
+            200: 1
+          }
         }
       }
     ],
@@ -123,4 +205,5 @@ test("config and markdown report expose benchmark context", () => {
   assert.match(markdown, /p95/);
   assert.match(markdown, /p99/);
   assert.match(markdown, /TTFB/);
+  assert.match(markdown, /200: 1/);
 });
