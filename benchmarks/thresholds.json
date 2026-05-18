@@ -1,0 +1,11 @@
+{
+  "_comment": "Threshold values for CI regression gate. p99 in ms, maxErrorRate in %, minRPS as number.",
+  "GET /health": { "maxP99": 200, "maxErrorRate": 1, "minRPS": null },
+  "GET /api/users": { "maxP99": 500, "maxErrorRate": 5, "minRPS": null },
+  "GET /api/jobs": { "maxP99": 500, "maxErrorRate": 5, "minRPS": null },
+  "GET /api/proposals": { "maxP99": 500, "maxErrorRate": 5, "minRPS": null },
+  "GET /api/reviews": { "maxP99": 500, "maxErrorRate": 5, "minRPS": null },
+  "GET /api/messages": { "maxP99": 500, "maxErrorRate": 5, "minRPS": null },
+  "GET /api/notifications": { "maxP99": 500, "maxErrorRate": 5, "minRPS": null },
+  "GET /api/search?q=test": { "maxP99": 500, "maxErrorRate": 5, "minRPS": null }
+}
