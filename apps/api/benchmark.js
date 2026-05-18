@@ -1,4 +1,3 @@
-import http from 'node:http';
 import { URL } from 'node:url';
 
 const BASE_URL = process.env.API_URL || 'http://127.0.0.1:3000';
@@ -166,10 +165,26 @@ function formatReport(allResults) {
 
 async function main() {
   console.error(`Benchmarking ${BASE_URL}...`);
-  console.error(`Endpoints: ${ENDPOINTS.length}, Concurrency: ${CONCURRENCY}, Duration: ${DURATION_SEC}s\n`);
-  
+  console.error(`Endpoints: ${ENDPOINTS.length}, Concurrency: ${CONCURRENCY}, Duration: ${DURATION_SEC}s, Warmup: ${WARMUP_SEC}s\n`);
+
+  // Warmup phase: send requests for WARMUP_SEC seconds before measuring
+  if (WARMUP_SEC > 0) {
+    console.error(`Warming up for ${WARMUP_SEC}s...`);
+    const warmupEnd = Date.now() + (WARMUP_SEC * 1000);
+    const warmupWorkers = Array(CONCURRENCY).fill().map(async () => {
+      while (Date.now() < warmupEnd) {
+        for (const ep of ENDPOINTS) {
+          if (Date.now() >= warmupEnd) break;
+          await makeRequest(ep.method, ep.path, ep.body).catch(() => {});
+        }
+      }
+    });
+    await Promise.all(warmupWorkers);
+    console.error('Warmup complete.\n');
+  }
+
   const allResults = [];
-  
+
   for (const endpoint of ENDPOINTS) {
     console.error(`Benchmarking ${endpoint.method} ${endpoint.path}...`);
     const result = await runBenchmark(endpoint);
