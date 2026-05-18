@@ -9,7 +9,7 @@ const WARMUP_SEC = parseInt(process.env.WARMUP_SEC || '2');
 // All API endpoints to benchmark
 const ENDPOINTS = [
   { method: 'GET', path: '/health', name: 'health' },
-  { method: 'GET', path: '/api/auth/login', name: 'auth-login', body: { email: 'test@test.com', password: 'test' } },
+  { method: 'POST', path: '/api/auth/login', name: 'auth-login', body: { email: 'test@test.com', password: 'test' } },
   { method: 'GET', path: '/api/jobs', name: 'jobs-list' },
   { method: 'GET', path: '/api/users', name: 'users-list' },
   { method: 'GET', path: '/api/search', name: 'search' },
@@ -38,6 +38,9 @@ async function makeRequest(method, path, body = null) {
     const res = await fetch(url.toString(), options);
     clearTimeout(timeout);
     const elapsed = performance.now() - start;
+    if (!res.ok) {
+      return { status: res.status, elapsed, error: `HTTP ${res.status}` };
+    }
     return { status: res.status, elapsed, error: null };
   } catch (err) {
     const elapsed = performance.now() - start;
@@ -78,6 +81,7 @@ async function runBenchmark(endpoint) {
       path: endpoint.path,
       method: endpoint.method,
       totalRequests,
+      successfulRequests: 0,
       errors: errors.length,
       errorRate: 1.0,
       rps: 0,
@@ -146,8 +150,15 @@ function formatReport(allResults) {
   lines.push('Endpoints sorted by p95 latency (highest first):\n');
   for (let i = 0; i < sorted.length; i++) {
     const r = sorted[i];
-    const severity = r.p95 > 1000 ? '🔴 CRITICAL' : r.p95 > 500 ? '🟡 WARNING' : '🟢 OK';
-    lines.push(`${i+1}. **${r.endpoint}** - p95: ${r.p95.toFixed(1)}ms ${severity}`);
+    let severity;
+    if (r.errorRate > 0.5) {
+      severity = '🔴 CRITICAL';
+    } else if (r.p95 > 1000 || r.errorRate > 0.1) {
+      severity = '🟡 WARNING';
+    } else {
+      severity = '🟢 OK';
+    }
+    lines.push(`${i+1}. **${r.endpoint}** - p95: ${r.p95.toFixed(1)}ms, error rate: ${(r.errorRate * 100).toFixed(1)}% ${severity}`);
   }
   
   return lines.join('\n');
@@ -171,10 +182,12 @@ async function main() {
   // Output report to stdout
   console.log(report);
   
-  // Also save to file
+  // Also save to file (relative to cwd for portability)
   const fs = await import('node:fs');
-  fs.writeFileSync('/root/money-maker/bug-bounty/benchmark-report.md', report);
-  fs.writeFileSync('/root/money-maker/bug-bounty/benchmark-results.json', JSON.stringify(allResults, null, 2));
+  const outputDir = process.env.BENCHMARK_OUTPUT_DIR || process.cwd();
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.writeFileSync(`${outputDir}/benchmark-report.md`, report);
+  fs.writeFileSync(`${outputDir}/benchmark-results.json`, JSON.stringify(allResults, null, 2));
   
   console.error('\n✅ Report saved to benchmark-report.md and benchmark-results.json');
 }
