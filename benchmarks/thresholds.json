@@ -1,0 +1,17 @@
+{
+  "default": {
+    "p99": 500,
+    "errorRate": 1
+  },
+  "endpoints": {
+    "/api/auth/login": {
+      "p99": 800
+    },
+    "/api/jobs": {
+      "p99": 400
+    },
+    "/health": {
+      "p99": 100
+    }
+  }
+}

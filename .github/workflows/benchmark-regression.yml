@@ -1,0 +1,41 @@
+name: Benchmark Regression Check
+
+on:
+  pull_request:
+    paths:
+      - 'apps/api/**'
+      - 'benchmarks/**'
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+          
+      - name: Install dependencies
+        run: pnpm install
+        
+      - name: Build and Start API (Staging)
+        run: |
+          # This would typically build the monorepo and start the API
+          # For the sake of the benchmark demo in CI, we start the API in the background
+          cd apps/api && pnpm start &
+          sleep 10 # Give it time to start
+          
+      - name: Run Smoke Benchmark
+        env:
+          BENCHMARK_URL: http://localhost:3000
+          FAIL_ON_REGRESSION: 'true'
+        run: |
+          cd benchmarks
+          pnpm benchmark

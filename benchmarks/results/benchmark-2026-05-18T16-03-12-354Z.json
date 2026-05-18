@@ -1,0 +1,46 @@
+[
+  {
+    "path": "/health",
+    "method": "GET",
+    "p50": 1,
+    "p99": 3,
+    "rps": 7079.46,
+    "errors": 0,
+    "timeouts": 0,
+    "ttfb": 1.14,
+    "errorRate": 0
+  },
+  {
+    "path": "/api/jobs",
+    "method": "GET",
+    "p50": 26,
+    "p99": 50,
+    "rps": 382.6,
+    "errors": 0,
+    "timeouts": 0,
+    "ttfb": 25.6,
+    "errorRate": 0
+  },
+  {
+    "path": "/api/search",
+    "method": "GET",
+    "p50": 1,
+    "p99": 3,
+    "rps": 6370,
+    "errors": 0,
+    "timeouts": 0,
+    "ttfb": 1.16,
+    "errorRate": 0
+  },
+  {
+    "path": "/api/auth/login",
+    "method": "POST",
+    "p50": 151,
+    "p99": 200,
+    "rps": 65.3,
+    "errors": 0,
+    "timeouts": 0,
+    "ttfb": 151.37,
+    "errorRate": 0
+  }
+]
