@@ -245,3 +245,38 @@ test("platform controls require confirmation and every change is audited", async
     await close();
   }
 });
+
+test("admin audit log supports action, admin, and date range filters", async () => {
+  const { baseUrl, close } = await startTestServer();
+  const adminToken = tokenFor("admin", "admin_106");
+  try {
+    const from = encodeURIComponent(new Date(Date.now() - 60_000).toISOString());
+    const to = encodeURIComponent(new Date(Date.now() + 60_000).toISOString());
+
+    const status = await apiRequest(baseUrl, "/api/admin/users/usr_freelancer_2/status", {
+      token: adminToken,
+      method: "PATCH",
+      body: { status: "banned", reason: "Chargeback and identity review failed" }
+    });
+    assert.equal(status.response.status, 200);
+
+    const filtered = await apiRequest(
+      baseUrl,
+      `/api/admin/audit-logs?actionType=user_status&admin=admin_106&from=${from}&to=${to}`,
+      { token: adminToken }
+    );
+    assert.equal(filtered.response.status, 200);
+    assert.equal(filtered.payload.data.items.length >= 1, true);
+    assert.equal(filtered.payload.data.items[0].adminId, "admin_106");
+    assert.equal(filtered.payload.data.items[0].actionType, "user_status");
+
+    const futureFrom = encodeURIComponent(new Date(Date.now() + 86_400_000).toISOString());
+    const future = await apiRequest(baseUrl, `/api/admin/audit-logs?actionType=user_status&from=${futureFrom}`, {
+      token: adminToken
+    });
+    assert.equal(future.response.status, 200);
+    assert.equal(future.payload.data.items.length, 0);
+  } finally {
+    await close();
+  }
+});
