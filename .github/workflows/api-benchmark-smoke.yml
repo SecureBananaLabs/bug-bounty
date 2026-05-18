@@ -1,0 +1,54 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/api-benchmark-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run smoke benchmark
+        env:
+          BENCHMARK_BASE_URL: http://127.0.0.1:4000
+          BENCHMARK_PROFILE: smoke
+          BENCHMARK_DURATION_SECONDS: 1
+          BENCHMARK_CONNECTIONS: 1
+          BENCHMARK_OVERALL_RATE: 5
+          BENCHMARK_TTFB_SAMPLES: 3
+          RATE_LIMIT_MAX: 10000
+          JWT_SECRET: benchmark-secret
+        run: |
+          npm run start -w apps/api &
+          api_pid=$!
+          trap 'kill "$api_pid"' EXIT
+
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4000/health >/dev/null; then
+              npm run benchmark
+              exit $?
+            fi
+            sleep 1
+          done
+
+          echo "API did not become healthy in time"
+          exit 1

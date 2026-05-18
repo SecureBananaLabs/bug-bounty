@@ -1,0 +1,19 @@
+{
+  "default": {
+    "maxP99LatencyMs": 750,
+    "maxP99TtfbMs": 750,
+    "maxErrorRatePct": 1
+  },
+  "endpoints": {
+    "uploads-create": {
+      "maxP99LatencyMs": 1500,
+      "maxP99TtfbMs": 1500,
+      "maxErrorRatePct": 1
+    },
+    "admin-metrics": {
+      "maxP99LatencyMs": 1000,
+      "maxP99TtfbMs": 1000,
+      "maxErrorRatePct": 1
+    }
+  }
+}
