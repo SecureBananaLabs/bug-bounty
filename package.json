@@ -8,6 +8,11 @@
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api",
+    "benchmark": "node benchmarks/run-benchmark.mjs",
+    "benchmark:smoke": "BENCHMARK_PROFILE=smoke node benchmarks/run-benchmark.mjs"
+  },
+  "devDependencies": {
+    "autocannon": "^8.0.0"
   }
 }
