@@ -1,0 +1,7 @@
+{
+  "_comment": "Performance thresholds for CI smoke test. Benchmark fails if any metric exceeds these values.",
+  "p99_latency_ms": 2000,
+  "p95_latency_ms": 1000,
+  "error_rate_pct": 5,
+  "min_rps": 10
+}
