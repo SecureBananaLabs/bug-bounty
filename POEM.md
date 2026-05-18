@@ -1,21 +1,26 @@
-# Between Green Checks
+# Milestones in the Flow
 
-At half past one, the build lights blink,
-small moons above a borrowed desk.
-A branch leans out across the dark,
-asking only to be read.
+FreelanceFlow opens with a posted need,
+a job card bright against the morning glass;
+scope, budget, skill tags, dates agreed,
+so scattered talent knows which doors to pass.
 
-Someone has swept the logs again,
-folded the warnings into rows,
-left comments plain as kitchen notes:
-try this, this breaks, this now goes.
+A freelancer answers with a proposal,
+not thunder, just a plan drawn close and clear;
+the client reads the path from task to handoff,
+and risk grows smaller when intent is near.
 
-The work is rarely trumpet-shaped.
-It sounds more like a quiet key,
-turned once inside a stubborn lock
-so other hands can enter free.
+Messages keep the work from turning vague,
+each note a rail beneath the moving day;
+milestones mark the proof behind the pledge,
+and dashboards show where every promise stays.
 
-By morning, nothing wears a crown.
-The diff is small, the thread is clean.
-Yet in that narrow strip of green,
-a hundred future hours are seen.
+When payments wait behind the service layer,
+they carry trust without a louder claim;
+reviews return the human weight of work,
+not just a score, but memory with a name.
+
+Admins watch the quiet health of routes,
+notifications surface what must be known;
+a marketplace is strongest when its flow
+lets careful strangers build as if at home.
