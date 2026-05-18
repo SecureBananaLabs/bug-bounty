@@ -24,7 +24,7 @@ function tokenFromBrowser() {
 }
 
 export function hasAdminApiConfig() {
-  return Boolean(process.env.NEXT_PUBLIC_API_BASE_URL && (process.env.NEXT_PUBLIC_ADMIN_TOKEN || tokenFromBrowser()));
+  return Boolean(process.env.NEXT_PUBLIC_API_BASE_URL && tokenFromBrowser());
 }
 
 function queryString(values: Record<string, QueryValue>) {
@@ -40,7 +40,7 @@ function queryString(values: Record<string, QueryValue>) {
 
 async function request<T>(path: string, init: RequestInit = {}) {
   const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const token = process.env.NEXT_PUBLIC_ADMIN_TOKEN || tokenFromBrowser();
+  const token = tokenFromBrowser();
 
   if (!apiBase || !token) {
     throw new Error("Admin API is not configured");

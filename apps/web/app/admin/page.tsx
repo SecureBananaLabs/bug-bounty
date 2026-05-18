@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { cookies, headers } from "next/headers";
+import { forbidden } from "next/navigation";
 import { AdminPanelClient } from "./AdminPanelClient";
 
 type AdminPageProps = {
@@ -58,16 +59,9 @@ export default async function AdminPanelPage({ searchParams }: AdminPageProps) {
   const cookieToken = cookieStore.get("freelanceflow_access_token")?.value;
   const bearerToken = headerStore.get("authorization")?.replace(/^Bearer\s+/i, "");
   const hasAdminToken = hasVerifiedAdminToken(cookieToken) || hasVerifiedAdminToken(bearerToken);
-  const hasAdminHeader = headerStore.get("x-user-role")?.toLowerCase() === "admin";
 
-  if (!requestedDemoAccess && !hasAdminToken && !hasAdminHeader) {
-    return (
-      <section className="admin-forbidden" aria-labelledby="admin-forbidden-title">
-        <p className="eyebrow">403</p>
-        <h2 id="admin-forbidden-title">Admin access required</h2>
-        <p>Sign in with an admin session before opening the operations console.</p>
-      </section>
-    );
+  if (!requestedDemoAccess && !hasAdminToken) {
+    forbidden();
   }
 
   return <AdminPanelClient />;

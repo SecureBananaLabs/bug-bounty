@@ -11,9 +11,11 @@ The `/admin` page performs a server-side guard before rendering the console. It 
 
 The token must be signed with `JWT_SECRET` and include `role: "admin"` or `role: "ADMIN"`. The Express API repeats the same role check on every `/api/admin/*` route, so the page guard is not the only protection layer.
 
+Non-admin requests receive the route's 403 forbidden response before the admin console is rendered.
+
 For local UI review, set `NEXT_PUBLIC_ADMIN_DEMO_MODE=true` and open `/admin?admin=true`. This only bypasses the page guard for the Next.js demo shell; admin API calls still require a valid admin token.
 
-The client prefers live API data whenever `NEXT_PUBLIC_API_BASE_URL` and an admin token are present. Without those values it falls back to deterministic demo data so the interface can still be reviewed in isolation.
+The client prefers live API data whenever `NEXT_PUBLIC_API_BASE_URL` is present and the browser has a valid admin JWT in `localStorage.freelanceflow_admin_token`. Without those values it falls back to deterministic demo data so the interface can still be reviewed in isolation.
 
 ## API Routes
 
