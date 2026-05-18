@@ -1,0 +1,14 @@
+{
+  "health": { "maxP99": 50, "maxP95": 30, "maxErrorRate": 1, "minRps": 100 },
+  "auth-register": { "maxP99": 300, "maxP95": 200, "maxErrorRate": 5, "minRps": 50 },
+  "auth-login": { "maxP99": 300, "maxP95": 200, "maxErrorRate": 5, "minRps": 50 },
+  "users-list": { "maxP99": 500, "maxP95": 300, "maxErrorRate": 5, "minRps": 40 },
+  "jobs-list": { "maxP99": 500, "maxP95": 300, "maxErrorRate": 5, "minRps": 40 },
+  "jobs-create": { "maxP99": 600, "maxP95": 400, "maxErrorRate": 5, "minRps": 30 },
+  "proposals-list": { "maxP99": 500, "maxP95": 300, "maxErrorRate": 5, "minRps": 40 },
+  "reviews-list": { "maxP99": 500, "maxP95": 300, "maxErrorRate": 5, "minRps": 40 },
+  "messages-list": { "maxP99": 500, "maxP95": 300, "maxErrorRate": 5, "minRps": 40 },
+  "notifications-list": { "maxP99": 500, "maxP95": 300, "maxErrorRate": 5, "minRps": 40 },
+  "search": { "maxP99": 600, "maxP95": 400, "maxErrorRate": 5, "minRps": 30 },
+  "admin-metrics": { "maxP99": 500, "maxP95": 300, "maxErrorRate": 5, "minRps": 40 }
+}
