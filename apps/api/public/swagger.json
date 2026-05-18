@@ -1,0 +1,12 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SecureBanana Admin API",
+    "version": "1.0.0",
+    "description": "Hardened Administrative Command Center APIs"
+  },
+  "paths": {
+    "/api/admin/metrics": { "get": { "summary": "Strategic Overview" } },
+    "/api/admin/lockdown": { "post": { "summary": "Emergency Lockdown" } }
+  }
+}
