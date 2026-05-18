@@ -1,0 +1,19 @@
+name: Benchmark smoke
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run start -w apps/api &
+      - run: npx wait-on http://127.0.0.1:4000/health
+      - run: BENCHMARK_CONCURRENCY=1 BENCHMARK_DURATION_MS=500 BENCHMARK_MAX_P99_MS=1000 npm run benchmark
