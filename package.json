@@ -3,14 +3,13 @@
   "private": true,
   "workspaces": [
     "apps/*",
-    "packages/*",
-    "benchmarks"
+    "packages/*"
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api",
-    "benchmark": "npm run benchmark -w benchmarks",
-    "benchmark:smoke": "npm run benchmark:smoke -w benchmarks"
+    "benchmark": "cd benchmarks && npm run benchmark",
+    "benchmark:smoke": "cd benchmarks && npm run benchmark:smoke"
   }
 }

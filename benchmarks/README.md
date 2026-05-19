@@ -6,14 +6,14 @@ Performance benchmark for all FreelanceFlow API endpoints under `/api/`.
 
 ```bash
 # 1. Install dependencies
-npm install -w benchmarks
+cd benchmarks && npm install
 
 # 2. Configure target
 cp benchmarks/.env.benchmark benchmarks/.env
 # Edit benchmarks/.env — set BENCHMARK_HOST to your running server
 
 # 3. Run benchmark
-npm run benchmark -w benchmarks
+npm run benchmark
 ```
 
 ## Commands

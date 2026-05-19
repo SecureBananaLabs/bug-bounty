@@ -16,8 +16,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: Install root dependencies
         run: npm ci
+
+      - name: Install benchmark dependencies
+        run: cd benchmarks && npm install
 
       - name: Start API server
         run: |
