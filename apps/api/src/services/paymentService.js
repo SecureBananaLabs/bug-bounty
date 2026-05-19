@@ -53,11 +53,12 @@ function validatePaymentPayload(payload = {}) {
  * @param {Object} [payload.metadata] - Optional metadata for Stripe.
  * @returns {Promise<Object>} Safe PaymentIntent response for the client.
  */
-export async function createPaymentIntent(payload) {
+export async function createPaymentIntent(payload, stripeClient) {
   const input = validatePaymentPayload(payload);
+  const client = stripeClient ?? getStripeClient();
 
   try {
-    const paymentIntent = await getStripeClient().paymentIntents.create({
+    const paymentIntent = await client.paymentIntents.create({
       amount: input.amount,
       currency: input.currency,
       metadata: input.metadata,
