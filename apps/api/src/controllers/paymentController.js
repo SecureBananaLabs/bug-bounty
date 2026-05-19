@@ -1,6 +1,14 @@
-import { ok } from "../utils/response.js";
-import { createPaymentIntent } from "../services/paymentService.js";
+import { ok, badRequest, serverError } from "../utils/response.js";
+import { createPaymentIntent, PaymentValidationError } from "../services/paymentService.js";
 
 export async function createPayment(req, res) {
-  return ok(res, await createPaymentIntent(req.body), 201);
+  try {
+    const result = await createPaymentIntent(req.body);
+    return ok(res, result, 201);
+  } catch (error) {
+    if (error instanceof PaymentValidationError) {
+      return badRequest(res, error.message);
+    }
+    return serverError(res, error.message);
+  }
 }
