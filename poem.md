@@ -1,3 +1,42 @@
+------------------------------------------------------------------------------------------------------------------------------------------------
+# The Keepers of the Quiet Code
+
+At midnight’s hour the servers glow,  
+Like distant stars in tides below,  
+While weary eyes and tired hands  
+Still guard the pulse of hidden lands.  
+Through endless logs and phantom light,  
+We teach the dark to fail less bright.  
+
+A thousand strangers, none the same,  
+Still patch the cracks without a name,  
+One writes a fix in falling rain,  
+One tests the build at dawn again,  
+And somewhere through the cables deep,  
+Their silent promises still keep.  
+
+Inside repositories sleep  
+Old ghosts developers still keep,  
+Forgotten lines, abandoned schemes,  
+Half-finished thoughts and fragile dreams.  
+Yet every comment left behind  
+Feels strangely, painfully, human-kind.  
+
+Security is not loud war,  
+No flashing screens from films before,  
+It lives in small, unnoticed things:  
+Rotated keys and warning pings,  
+A single merge, a careful scan,  
+A quiet shield built hand by hand.  
+
+And still we build though systems break,  
+Though perfect code no soul can make,  
+Because beyond each firewall’s light  
+Lives someone trusting us tonight.  
+So every commit drifting through  
+Becomes a vow the world holds to.
+
+------------------------------------------------------------------------------------------------------------------------------------------------
 # Things We Hide in Repositories
 
 There is a strange loneliness
