@@ -1,4 +1,26 @@
 {
+<<<<<<< HEAD
+"name": "freelance-platform-monorepo",
+"private": true,
+"workspaces": [
+"apps/*",
+"packages/*"
+],
+"scripts": {
+"build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+"lint": "echo \"No root lint configured\"",
+"test": "npm run test -w apps/api",
+"benchmark": "node benchmarks/api-benchmark.js",
+"benchmark:smoke": "node benchmarks/api-benchmark.js --smoke"
+},
+"dependencies": {
+"stripe": "^22.1.1"
+},
+"devDependencies": {
+"autocannon": "^7.0.0",
+"jest": "^30.4.2"
+}
+=======
   "name": "freelance-platform-monorepo",
   "private": true,
   "workspaces": [
@@ -16,4 +38,5 @@
   "devDependencies": {
     "jest": "^30.4.2"
   }
+>>>>>>> main
 }
