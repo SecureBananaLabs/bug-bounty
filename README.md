@@ -86,3 +86,5 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+- `STRIPE_SECRET_KEY` — Stripe secret key used by `apps/api` to create PaymentIntents.
