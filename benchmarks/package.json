@@ -1,0 +1,12 @@
+{
+  "name": "bug-bounty-benchmarks",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "benchmark": "node benchmark.mjs",
+    "benchmark:quick": "BENCHMARK_DURATION=5 BENCHMARK_CONNECTIONS=5 node benchmark.mjs"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0"
+  }
+}

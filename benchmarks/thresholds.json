@@ -1,0 +1,9 @@
+{
+  "description": "Benchmark regression thresholds — CI fails if any exceeded",
+  "thresholds": {
+    "p99_latency_ms": 5000,
+    "max_error_rate_pct": 5,
+    "min_rps": 1
+  },
+  "per_endpoint": {}
+}
