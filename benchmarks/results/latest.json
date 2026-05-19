@@ -1,0 +1,366 @@
+{
+  "startedAt": "2026-05-19T01:46:53.321Z",
+  "finishedAt": "2026-05-19T01:46:53.399Z",
+  "mode": "full",
+  "targetUrl": "local ephemeral Express server",
+  "requestCount": 6,
+  "concurrency": 4,
+  "thresholds": {
+    "p99Ms": 1500,
+    "errorRate": 0.05
+  },
+  "environment": {
+    "cpu": "Apple M2",
+    "logicalCores": 8,
+    "totalMemoryBytes": 8589934592,
+    "freeMemoryBytes": 110985216,
+    "platform": "darwin",
+    "release": "25.4.0",
+    "arch": "arm64",
+    "node": "v24.14.1",
+    "network": "loopback when BENCHMARK_TARGET_URL is omitted"
+  },
+  "endpoints": [
+    {
+      "name": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 6,
+      "p50Ms": 19.35,
+      "p95Ms": 28.12,
+      "p99Ms": 28.12,
+      "ttfbP95Ms": 27.73,
+      "sustainedRps": 182.58,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 6,
+      "p50Ms": 3,
+      "p95Ms": 3.3,
+      "p99Ms": 3.3,
+      "ttfbP95Ms": 3.25,
+      "sustainedRps": 1201.52,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "auth.oauth.callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "requests": 6,
+      "p50Ms": 1.21,
+      "p95Ms": 1.39,
+      "p99Ms": 1.39,
+      "ttfbP95Ms": 1.35,
+      "sustainedRps": 2769.71,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 6,
+      "p50Ms": 1.33,
+      "p95Ms": 1.71,
+      "p99Ms": 1.71,
+      "ttfbP95Ms": 1.68,
+      "sustainedRps": 2374,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 6,
+      "p50Ms": 0.89,
+      "p95Ms": 1.18,
+      "p99Ms": 1.18,
+      "ttfbP95Ms": 1.15,
+      "sustainedRps": 3455.23,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 6,
+      "p50Ms": 1.23,
+      "p95Ms": 1.66,
+      "p99Ms": 1.66,
+      "ttfbP95Ms": 1.63,
+      "sustainedRps": 2554.64,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 6,
+      "p50Ms": 0.76,
+      "p95Ms": 0.96,
+      "p99Ms": 0.96,
+      "ttfbP95Ms": 0.94,
+      "sustainedRps": 4055.65,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 6,
+      "p50Ms": 1.42,
+      "p95Ms": 1.61,
+      "p99Ms": 1.61,
+      "ttfbP95Ms": 1.58,
+      "sustainedRps": 1940.65,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 6,
+      "p50Ms": 0.76,
+      "p95Ms": 0.94,
+      "p99Ms": 0.94,
+      "ttfbP95Ms": 0.92,
+      "sustainedRps": 4211.88,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 6,
+      "p50Ms": 0.9,
+      "p95Ms": 1.19,
+      "p99Ms": 1.19,
+      "ttfbP95Ms": 1.17,
+      "sustainedRps": 3424.09,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 6,
+      "p50Ms": 0.87,
+      "p95Ms": 1.12,
+      "p99Ms": 1.12,
+      "ttfbP95Ms": 1.1,
+      "sustainedRps": 3692.88,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 6,
+      "p50Ms": 0.64,
+      "p95Ms": 0.81,
+      "p99Ms": 0.81,
+      "ttfbP95Ms": 0.79,
+      "sustainedRps": 4500.85,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 6,
+      "p50Ms": 0.79,
+      "p95Ms": 1.02,
+      "p99Ms": 1.02,
+      "ttfbP95Ms": 1,
+      "sustainedRps": 4042.67,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 6,
+      "p50Ms": 0.74,
+      "p95Ms": 0.84,
+      "p99Ms": 0.84,
+      "ttfbP95Ms": 0.82,
+      "sustainedRps": 4261.61,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 6,
+      "p50Ms": 0.89,
+      "p95Ms": 1.16,
+      "p99Ms": 1.16,
+      "ttfbP95Ms": 1.13,
+      "sustainedRps": 3201.92,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 6,
+      "p50Ms": 1.55,
+      "p95Ms": 1.79,
+      "p99Ms": 1.79,
+      "ttfbP95Ms": 1.75,
+      "sustainedRps": 2490.14,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 6,
+      "p50Ms": 1,
+      "p95Ms": 1.23,
+      "p99Ms": 1.23,
+      "ttfbP95Ms": 1.21,
+      "sustainedRps": 3295.12,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 6,
+      "p50Ms": 4.34,
+      "p95Ms": 4.64,
+      "p99Ms": 4.64,
+      "ttfbP95Ms": 4.6,
+      "sustainedRps": 984.46,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "search.global",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "requests": 6,
+      "p50Ms": 1.17,
+      "p95Ms": 1.35,
+      "p99Ms": 1.35,
+      "ttfbP95Ms": 1.33,
+      "sustainedRps": 3184.64,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    },
+    {
+      "name": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 6,
+      "p50Ms": 1.43,
+      "p95Ms": 1.64,
+      "p99Ms": 1.64,
+      "ttfbP95Ms": 1.6,
+      "sustainedRps": 2632.3,
+      "peakRps": 6,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 6
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}

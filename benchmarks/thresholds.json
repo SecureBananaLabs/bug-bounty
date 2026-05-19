@@ -1,0 +1,10 @@
+{
+  "default": {
+    "p99Ms": 1500,
+    "errorRate": 0.05
+  },
+  "smoke": {
+    "p99Ms": 3000,
+    "errorRate": 0.1
+  }
+}
