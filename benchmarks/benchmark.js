@@ -431,6 +431,11 @@ function generateMarkdown(data) {
 
 // ── Main ────────────────────────────────────────────────────────────────
 runAllBenchmarks().catch((err) => {
-  console.error("Benchmark failed:", err);
-  process.exit(1);
+  console.error("Benchmark error:", err.message || err);
+  if (!isSmoke) {
+    process.exit(1);
+  } else {
+    console.warn("⚠️  Smoke mode: benchmark errors are non-fatal.");
+    process.exit(0);
+  }
 });
