@@ -71,13 +71,12 @@ function MetricsTab({ data }: { data: Metrics }) {
   );
 }
 
-function UsersTab() {
+function UsersTab({ onAudit }: { onAudit: (e: AuditEntry) => void }) {
   const [users, setUsers] = useState<User[]>(MOCK_USERS);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [confirm, setConfirm] = useState<{ userId: string; action: string } | null>(null);
-  const [audit, setAudit] = useState<AuditEntry[]>([]);
 
   const filtered = users.filter(u =>
     (!search || u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase())) &&
@@ -87,7 +86,7 @@ function UsersTab() {
 
   function applyAction(userId: string, action: string) {
     setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: action } : u));
-    setAudit(prev => [{ id: `log-${Date.now()}`, adminId: "admin-1", action: `user_${action}`, target: userId, detail: `Status set to ${action}`, timestamp: new Date().toISOString() }, ...prev]);
+    onAudit({ id: `log-${Date.now()}`, adminId: "admin-1", action: `user_${action}`, target: userId, detail: `Status set to ${action}`, timestamp: new Date().toISOString() });
     setConfirm(null);
   }
 
@@ -151,12 +150,13 @@ function UsersTab() {
   );
 }
 
-function JobsTab() {
+function JobsTab({ onAudit }: { onAudit: (e: AuditEntry) => void }) {
   const [jobs, setJobs] = useState<FlaggedJob[]>(MOCK_JOBS);
   const [confirm, setConfirm] = useState<{ jobId: string; action: string } | null>(null);
 
   function applyAction(jobId: string, action: string) {
     setJobs(prev => prev.map(j => j.id === jobId ? { ...j, status: action } : j));
+    onAudit({ id: `log-${Date.now()}`, adminId: "admin-1", action: `job_${action}`, target: jobId, detail: `Job marked as ${action}`, timestamp: new Date().toISOString() });
     setConfirm(null);
   }
 
@@ -204,12 +204,13 @@ function JobsTab() {
   );
 }
 
-function DisputesTab() {
+function DisputesTab({ onAudit }: { onAudit: (e: AuditEntry) => void }) {
   const [disputes, setDisputes] = useState<Dispute[]>(MOCK_DISPUTES);
   const [ruling, setRuling] = useState<{ id: string; value: string } | null>(null);
 
   function applyRuling(id: string, value: string) {
     setDisputes(prev => prev.map(d => d.id === id ? { ...d, status: "resolved" } : d));
+    onAudit({ id: `log-${Date.now()}`, adminId: "admin-1", action: "dispute_resolved", target: id, detail: `Ruled in favour of: ${value}`, timestamp: new Date().toISOString() });
     setRuling(null);
   }
 
@@ -261,14 +262,13 @@ function DisputesTab() {
   );
 }
 
-function ControlsTab() {
+function ControlsTab({ onAudit }: { onAudit: (e: AuditEntry) => void }) {
   const [settings, setSettings] = useState({ registrationsEnabled: true, jobPostingsEnabled: true });
   const [confirm, setConfirm] = useState<{ key: keyof typeof settings; value: boolean } | null>(null);
-  const [audit, setAudit] = useState<AuditEntry[]>([]);
 
   function applyToggle(key: keyof typeof settings, value: boolean) {
     setSettings(prev => ({ ...prev, [key]: value }));
-    setAudit(prev => [{ id: `log-${Date.now()}`, adminId: "admin-1", action: `toggle_${key}`, target: "platform", detail: `Set to ${value}`, timestamp: new Date().toISOString() }, ...prev]);
+    onAudit({ id: `log-${Date.now()}`, adminId: "admin-1", action: `toggle_${key}`, target: "platform", detail: `Set to ${value}`, timestamp: new Date().toISOString() });
     setConfirm(null);
   }
 
@@ -303,12 +303,7 @@ function ControlsTab() {
   );
 }
 
-function AuditTab() {
-  const [entries] = useState<AuditEntry[]>([
-    { id: "log-1", adminId: "admin-1", action: "user_suspended", target: "u3", detail: "Changed status from active to suspended", timestamp: "2026-05-17T10:00:00Z" },
-    { id: "log-2", adminId: "admin-1", action: "job_rejected", target: "j2", detail: "Duplicate listing", timestamp: "2026-05-17T11:30:00Z" },
-    { id: "log-3", adminId: "admin-1", action: "dispute_resolved", target: "d3", detail: "Ruled in favour of: freelancer", timestamp: "2026-05-17T14:00:00Z" },
-  ]);
+function AuditTab({ entries }: { entries: AuditEntry[] }) {
 
   return (
     <div>
@@ -342,6 +337,11 @@ function AuditTab() {
 // ── Main Page ──────────────────────────────────────────────────────────────
 export default function AdminPanelPage() {
   const [tab, setTab] = useState<Tab>("metrics");
+  const [auditLog, setAuditLog] = useState<AuditEntry[]>([]);
+
+  function addAudit(entry: AuditEntry) {
+    setAuditLog(prev => [entry, ...prev]);
+  }
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "metrics", label: "📊 Metrics" },
@@ -375,11 +375,11 @@ export default function AdminPanelPage() {
 
       <div className="card">
         {tab === "metrics" && <MetricsTab data={MOCK_METRICS} />}
-        {tab === "users" && <UsersTab />}
-        {tab === "jobs" && <JobsTab />}
-        {tab === "disputes" && <DisputesTab />}
-        {tab === "controls" && <ControlsTab />}
-        {tab === "audit" && <AuditTab />}
+        {tab === "users" && <UsersTab onAudit={addAudit} />}
+        {tab === "jobs" && <JobsTab onAudit={addAudit} />}
+        {tab === "disputes" && <DisputesTab onAudit={addAudit} />}
+        {tab === "controls" && <ControlsTab onAudit={addAudit} />}
+        {tab === "audit" && <AuditTab entries={auditLog} />}
       </div>
     </section>
   );
