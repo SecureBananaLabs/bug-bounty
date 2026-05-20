@@ -195,6 +195,15 @@ const settings = {
   jobPostingsEnabled: true
 };
 
+function parseMoneyAmount(amount) {
+  if (typeof amount !== "string") {
+    return 0;
+  }
+
+  const numeric = Number(amount.replace(/[^0-9.-]/g, ""));
+  return Number.isFinite(numeric) ? numeric : 0;
+}
+
 function paginate(items, page, limit) {
   const start = (page - 1) * limit;
   const pageItems = items.slice(start, start + limit);
@@ -229,12 +238,18 @@ function pushNotification(recipient, type, detail) {
 }
 
 export async function getAdminMetrics() {
+  const revenue = disputes.reduce((total, dispute) => {
+    return dispute.transaction.status === "captured" || dispute.transaction.status === "settled"
+      ? total + parseMoneyAmount(dispute.transaction.amount)
+      : total;
+  }, 0);
+
   return {
     totalUsers: users.length,
     activeJobs: jobs.filter((job) => job.status === "approved").length,
     openDisputes: disputes.filter((dispute) => dispute.status === "open").length,
     flaggedListings: jobs.filter((job) => job.status === "flagged").length,
-    revenue: 128900,
+    revenue,
     trustScoreBuckets: [
       { label: "90-100", count: 6 },
       { label: "80-89", count: 13 },

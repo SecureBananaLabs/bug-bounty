@@ -3,7 +3,7 @@ export const adminMetrics = {
   activeJobs: 128,
   openDisputes: 7,
   flaggedListings: 14,
-  revenue: 128900,
+  revenue: 850,
   trustScoreBuckets: [
     { label: "90-100", count: 12 },
     { label: "80-89", count: 31 },

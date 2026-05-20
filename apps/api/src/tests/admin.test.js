@@ -37,6 +37,7 @@ test("admin metrics are protected and return summary data", async () => {
     assert.equal(payload.success, true);
     assert.equal(payload.data.totalUsers, 5);
     assert.equal(payload.data.flaggedListings, 1);
+    assert.equal(payload.data.revenue, 850);
   });
 });
 
