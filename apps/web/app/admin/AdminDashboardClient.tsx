@@ -36,6 +36,10 @@ type AuditFilters = {
   to: string;
 };
 
+type DisputeFilters = {
+  status: string;
+};
+
 const defaultFilters = (): UserFilters => ({
   query: "",
   role: "",
@@ -49,6 +53,10 @@ const defaultAuditFilters = (): AuditFilters => ({
   action: "",
   from: "",
   to: ""
+});
+
+const defaultDisputeFilters = (): DisputeFilters => ({
+  status: ""
 });
 
 function formatRevenue(value: number | string) {
@@ -139,6 +147,8 @@ export default function AdminDashboardClient({ token, initialData, previewState 
   const [notificationPage, setNotificationPage] = useState(initialData.notifications.page);
   const [filters, setFilters] = useState<UserFilters>(defaultFilters);
   const [draftFilters, setDraftFilters] = useState<UserFilters>(defaultFilters);
+  const [disputeFilters, setDisputeFilters] = useState<DisputeFilters>(defaultDisputeFilters);
+  const [draftDisputeFilters, setDraftDisputeFilters] = useState<DisputeFilters>(defaultDisputeFilters);
   const [auditFilters, setAuditFilters] = useState<AuditFilters>(defaultAuditFilters);
   const [draftAuditFilters, setDraftAuditFilters] = useState<AuditFilters>(defaultAuditFilters);
   const [selectedUserId, setSelectedUserId] = useState(initialData.users.items[0]?.id ?? null);
@@ -265,13 +275,21 @@ export default function AdminDashboardClient({ token, initialData, previewState 
     }
   }
 
-  async function loadDisputes(nextPage = disputePage) {
+  async function loadDisputes(nextPage = disputePage, nextFilters = disputeFilters) {
     try {
-      const disputes = await apiJson<TablePage<AdminDispute>>(
-        `/api/admin/disputes?page=${nextPage}&limit=${ADMIN_PAGE_SIZE}`
-      );
+      const params = new URLSearchParams({
+        page: String(nextPage),
+        limit: String(ADMIN_PAGE_SIZE)
+      });
+
+      if (nextFilters.status) {
+        params.set("status", nextFilters.status);
+      }
+
+      const disputes = await apiJson<TablePage<AdminDispute>>(`/api/admin/disputes?${params.toString()}`);
       setDashboard((current) => ({ ...current, disputes }));
       setDisputePage(nextPage);
+      setDisputeFilters(nextFilters);
       if (!disputes.items.some((dispute) => dispute.id === selectedDisputeId)) {
         setSelectedDisputeId(disputes.items[0]?.id ?? null);
       }
@@ -398,6 +416,15 @@ export default function AdminDashboardClient({ token, initialData, previewState 
     setAuditFilters(next);
     startTransition(() => {
       void loadAudit(1, next);
+    });
+  }
+
+  function submitDisputeFilters(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const next = draftDisputeFilters;
+    setDisputeFilters(next);
+    startTransition(() => {
+      void loadDisputes(1, next);
     });
   }
 
@@ -727,6 +754,40 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Open dispute queue"
             description="Threads, evidence, and transaction details with one-click resolutions."
           />
+          <form className="filter-grid admin-filters" onSubmit={submitDisputeFilters}>
+            <label>
+              <span>Status</span>
+              <select
+                aria-label="Filter dispute queue by status"
+                value={draftDisputeFilters.status}
+                onChange={(event) => setDraftDisputeFilters((current) => ({ ...current, status: event.target.value }))}
+              >
+                <option value="">All statuses</option>
+                <option value="open">Open</option>
+                <option value="under_review">Under review</option>
+                <option value="resolved">Resolved</option>
+              </select>
+            </label>
+            <div className="filter-actions">
+              <button className="admin-button" type="submit">
+                Apply filters
+              </button>
+              <button
+                className="admin-button secondary"
+                type="button"
+                onClick={() => {
+                  const next = defaultDisputeFilters();
+                  setDraftDisputeFilters(next);
+                  setDisputeFilters(next);
+                  startTransition(() => {
+                    void loadDisputes(1, next);
+                  });
+                }}
+              >
+                Reset
+              </button>
+            </div>
+          </form>
           <div className="stack">
             {dashboard.disputes.items.map((dispute) => (
               <div
@@ -760,12 +821,12 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             totalPages={dashboard.disputes.totalPages}
             onPrev={() => {
               startTransition(() => {
-                void loadDisputes(Math.max(1, dashboard.disputes.page - 1));
+                void loadDisputes(Math.max(1, dashboard.disputes.page - 1), disputeFilters);
               });
             }}
             onNext={() => {
               startTransition(() => {
-                void loadDisputes(Math.min(dashboard.disputes.totalPages, dashboard.disputes.page + 1));
+                void loadDisputes(Math.min(dashboard.disputes.totalPages, dashboard.disputes.page + 1), disputeFilters);
               });
             }}
           />
