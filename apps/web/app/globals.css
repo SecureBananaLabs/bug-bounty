@@ -4,3 +4,32 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+button, input, select { font: inherit; }
+button { cursor: pointer; border: 1px solid #51639d; border-radius: 8px; background: #22305f; color: #f2f5ff; padding: 0.5rem 0.7rem; }
+button:hover, button:focus-visible { background: #2f4380; outline: 2px solid #7db3ff; outline-offset: 2px; }
+input, select { width: 100%; border: 1px solid #3b4d85; border-radius: 8px; background: #0f1730; color: #f2f5ff; padding: 0.45rem 0.55rem; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border-bottom: 1px solid #2a3765; padding: 0.65rem; text-align: left; vertical-align: top; }
+td span { display: block; color: #aebbe7; font-size: 0.85rem; margin-top: 0.2rem; }
+.admin-header { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+.admin-header h2 { margin-bottom: 0.25rem; }
+.admin-header p, .admin-muted { color: #aebbe7; }
+.admin-button { min-width: 6rem; }
+.admin-metrics { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin: 1rem 0; }
+.admin-metric { min-height: 6rem; display: flex; flex-direction: column; justify-content: space-between; margin: 0; }
+.admin-metric span { color: #aebbe7; }
+.admin-metric strong { font-size: 1.45rem; }
+.admin-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+.admin-panel h3 { margin-top: 0; }
+.admin-toolbar { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-bottom: 1rem; }
+.admin-toolbar label { color: #aebbe7; display: grid; gap: 0.35rem; }
+.table-wrap { overflow-x: auto; }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.admin-row, .control-row, .trust-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-top: 1px solid #2a3765; padding: 0.9rem 0; }
+.admin-row span { display: block; color: #aebbe7; margin-top: 0.25rem; }
+.trust-row meter { flex: 1; min-width: 8rem; }
+@media (max-width: 720px) {
+  .admin-header, .admin-row, .control-row, .trust-row { align-items: stretch; flex-direction: column; }
+  .admin-actions button { flex: 1; }
+}
