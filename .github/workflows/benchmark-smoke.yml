@@ -40,7 +40,7 @@ jobs:
           BENCHMARK_DURATION_SECONDS: "3"
           BENCHMARK_CONCURRENCY: "2"
           BENCHMARK_WARMUP_REQUESTS: "1"
-          RATE_LIMIT_MAX: "100000"
+          RATE_LIMIT_MAX: "10000000"
         run: npm run benchmark
 
       - name: Upload benchmark reports

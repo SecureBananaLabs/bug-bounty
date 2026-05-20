@@ -48,7 +48,7 @@ function loadEnvFile() {
 
 async function startLocalServer() {
   process.env.NODE_ENV = process.env.NODE_ENV ?? "benchmark";
-  process.env.RATE_LIMIT_MAX = process.env.RATE_LIMIT_MAX ?? "100000";
+  process.env.RATE_LIMIT_MAX = process.env.RATE_LIMIT_MAX ?? "10000000";
 
   const app = createApp();
   const server = createServer(app);
