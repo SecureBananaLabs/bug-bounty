@@ -1,0 +1,51 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npm run test -w apps/api
+
+      - name: Run benchmark config tests
+        run: npm run test:benchmarks
+
+      - name: Run API benchmark smoke gate
+        env:
+          NODE_ENV: benchmark
+          BENCHMARK_SMOKE: "true"
+          BENCHMARK_DURATION_SECONDS: "3"
+          BENCHMARK_CONCURRENCY: "2"
+          BENCHMARK_WARMUP_REQUESTS: "1"
+          RATE_LIMIT_MAX: "100000"
+        run: npm run benchmark
+
+      - name: Upload benchmark reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-benchmark-results
+          path: benchmarks/results/
