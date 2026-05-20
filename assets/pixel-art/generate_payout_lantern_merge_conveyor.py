@@ -9,6 +9,7 @@ GRID = 32
 SCALE = 4
 WIDTH = GRID * SCALE
 HEIGHT = GRID * SCALE
+SCANLINE_BYTES = WIDTH * 4 + 1
 
 
 def rgba(hex_color: str, alpha: int = 255) -> tuple[int, int, int, int]:
@@ -149,7 +150,49 @@ def draw_conveyor(grid: list[list[tuple[int, int, int, int]]]) -> None:
     set_px(grid, 23, 17, COLORS["highlight"])
 
 
-def scale_grid(grid: list[list[tuple[int, int, int, int]]]) -> bytes:
+def draw_frame_accents(grid: list[list[tuple[int, int, int, int]]], frame_index: int) -> None:
+    pulse_sets = [
+        [(8, 23), (9, 23), (10, 23)],
+        [(12, 23), (13, 23), (14, 23)],
+        [(16, 23), (17, 23), (18, 23)],
+        [(20, 23), (21, 23), (22, 23)],
+        [(24, 23), (25, 23), (26, 23)],
+        [(20, 16), (21, 15), (22, 14)],
+    ]
+    glow_ring = [
+        [(10, 11), (21, 11), (12, 17), (19, 17)],
+        [(9, 12), (22, 12), (11, 18), (20, 18)],
+        [(10, 13), (21, 13), (13, 18), (18, 18)],
+        [(9, 12), (22, 12), (11, 18), (20, 18)],
+        [(10, 11), (21, 11), (12, 17), (19, 17)],
+        [(11, 10), (20, 10), (14, 18), (17, 18)],
+    ]
+    sparkle_path = [(6, 9), (10, 7), (14, 6), (18, 7), (22, 9), (25, 10)]
+
+    for x, y in pulse_sets[frame_index % len(pulse_sets)]:
+        set_px(grid, x, y, COLORS["highlight"])
+    for x, y in glow_ring[frame_index % len(glow_ring)]:
+        set_px(grid, x, y, COLORS["glow"])
+    sparkle_x, sparkle_y = sparkle_path[frame_index % len(sparkle_path)]
+    set_px(grid, sparkle_x, sparkle_y, COLORS["spark"])
+    if frame_index % 2 == 0:
+        set_px(grid, 15, 12, COLORS["highlight"])
+        set_px(grid, 16, 12, COLORS["highlight"])
+    else:
+        set_px(grid, 15, 13, COLORS["highlight"])
+        set_px(grid, 16, 13, COLORS["highlight"])
+
+
+def build_frame(frame_index: int) -> list[list[tuple[int, int, int, int]]]:
+    grid = blank_grid(COLORS["void"])
+    draw_background(grid)
+    draw_lantern(grid)
+    draw_conveyor(grid)
+    draw_frame_accents(grid, frame_index)
+    return grid
+
+
+def scaled_scanlines(grid: list[list[tuple[int, int, int, int]]]) -> bytes:
     rows: list[bytes] = []
     for source_y in range(GRID):
         expanded = bytearray()
@@ -158,7 +201,7 @@ def scale_grid(grid: list[list[tuple[int, int, int, int]]]) -> bytes:
         line = bytes(expanded)
         for _ in range(SCALE):
             rows.append(b"\x00" + line)
-    return zlib.compress(b"".join(rows), level=9)
+    return b"".join(rows)
 
 
 def png_chunk(name: bytes, payload: bytes) -> bytes:
@@ -176,14 +219,54 @@ def write_png(path: Path, compressed_pixels: bytes) -> None:
     path.write_bytes(bytes(png))
 
 
+def frame_control_chunk(sequence_number: int, delay_num: int = 10, delay_den: int = 100) -> bytes:
+    return struct.pack(
+        ">IIIIIHHBB",
+        sequence_number,
+        WIDTH,
+        HEIGHT,
+        0,
+        0,
+        delay_num,
+        delay_den,
+        0,
+        0,
+    )
+
+
+def write_apng(path: Path, frame_scanlines: list[bytes]) -> None:
+    ihdr = struct.pack(">IIBBBBB", WIDTH, HEIGHT, 8, 6, 0, 0, 0)
+    png = bytearray(b"\x89PNG\r\n\x1a\n")
+    png.extend(png_chunk(b"IHDR", ihdr))
+    png.extend(png_chunk(b"acTL", struct.pack(">II", len(frame_scanlines), 0)))
+
+    sequence_number = 0
+    png.extend(png_chunk(b"fcTL", frame_control_chunk(sequence_number)))
+    sequence_number += 1
+    png.extend(png_chunk(b"IDAT", zlib.compress(frame_scanlines[0], level=9)))
+
+    for scanlines in frame_scanlines[1:]:
+        png.extend(png_chunk(b"fcTL", frame_control_chunk(sequence_number)))
+        sequence_number += 1
+        frame_payload = struct.pack(">I", sequence_number) + zlib.compress(scanlines, level=9)
+        png.extend(png_chunk(b"fdAT", frame_payload))
+        sequence_number += 1
+
+    png.extend(png_chunk(b"IEND", b""))
+    path.write_bytes(bytes(png))
+
+
 def main() -> None:
-    out_path = Path(__file__).with_name("payout-lantern-merge-conveyor.png")
-    grid = blank_grid(COLORS["void"])
-    draw_background(grid)
-    draw_lantern(grid)
-    draw_conveyor(grid)
-    write_png(out_path, scale_grid(grid))
-    print(f"Wrote {out_path.name} ({WIDTH}x{HEIGHT})")
+    still_path = Path(__file__).with_name("payout-lantern-merge-conveyor.png")
+    demo_path = Path(__file__).with_name("payout-lantern-merge-conveyor-demo.png")
+
+    frames = [build_frame(frame_index) for frame_index in range(6)]
+    scaled_frames = [scaled_scanlines(frame) for frame in frames]
+
+    write_png(still_path, zlib.compress(scaled_frames[0], level=9))
+    write_apng(demo_path, scaled_frames)
+    print(f"Wrote {still_path.name} ({WIDTH}x{HEIGHT})")
+    print(f"Wrote {demo_path.name} ({WIDTH}x{HEIGHT}, {len(frames)} frames)")
 
 
 if __name__ == "__main__":
