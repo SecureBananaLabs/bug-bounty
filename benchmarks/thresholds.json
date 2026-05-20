@@ -1,0 +1,12 @@
+{
+  "defaults": {
+    "p99Ms": 2000,
+    "maxErrorRatePercent": 0,
+    "minSustainedRps": 0.5
+  },
+  "endpoints": {
+    "uploads.create": {
+      "p99Ms": 3000
+    }
+  }
+}

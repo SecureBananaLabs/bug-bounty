@@ -1,0 +1,166 @@
+[
+  {
+    "name": "auth.register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "body": {
+      "email": "bench-register-{{runId}}-{{iteration}}@example.com",
+      "password": "benchmark-password",
+      "role": "client"
+    }
+  },
+  {
+    "name": "auth.login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "body": {
+      "email": "client@example.com",
+      "password": "benchmark-password"
+    }
+  },
+  {
+    "name": "auth.oauthCallback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback"
+  },
+  {
+    "name": "auth.refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh"
+  },
+  {
+    "name": "users.list",
+    "method": "GET",
+    "path": "/api/users"
+  },
+  {
+    "name": "users.create",
+    "method": "POST",
+    "path": "/api/users",
+    "body": {
+      "email": "freelancer-{{runId}}-{{iteration}}@example.com",
+      "name": "Benchmark Freelancer {{iteration}}",
+      "role": "freelancer",
+      "headline": "Full-stack developer for marketplace builds",
+      "hourlyRate": 85,
+      "skills": ["node", "react", "postgres"]
+    }
+  },
+  {
+    "name": "jobs.list",
+    "method": "GET",
+    "path": "/api/jobs"
+  },
+  {
+    "name": "jobs.create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "body": {
+      "title": "Build a marketplace onboarding flow",
+      "description": "Create a polished client onboarding workflow with profile setup, project intake, and notification hooks.",
+      "budgetMin": 1500,
+      "budgetMax": 4500,
+      "categoryId": "cat_web",
+      "skills": ["node", "react", "ux"]
+    }
+  },
+  {
+    "name": "proposals.list",
+    "method": "GET",
+    "path": "/api/proposals"
+  },
+  {
+    "name": "proposals.create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "body": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark_freelancer",
+      "coverLetter": "I can deliver a production-ready marketplace workflow with clear milestones and measurable acceptance criteria.",
+      "bidAmount": 3200,
+      "deliveryDays": 21
+    }
+  },
+  {
+    "name": "payments.create",
+    "method": "POST",
+    "path": "/api/payments",
+    "body": {
+      "proposalId": "prp_benchmark",
+      "amount": 3200,
+      "currency": "usd",
+      "customerId": "cus_benchmark"
+    }
+  },
+  {
+    "name": "reviews.list",
+    "method": "GET",
+    "path": "/api/reviews"
+  },
+  {
+    "name": "reviews.create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "body": {
+      "contractId": "ctr_benchmark",
+      "reviewerId": "usr_benchmark_client",
+      "revieweeId": "usr_benchmark_freelancer",
+      "rating": 5,
+      "comment": "Clear delivery, strong communication, and reliable handoff documentation."
+    }
+  },
+  {
+    "name": "messages.list",
+    "method": "GET",
+    "path": "/api/messages"
+  },
+  {
+    "name": "messages.create",
+    "method": "POST",
+    "path": "/api/messages",
+    "body": {
+      "conversationId": "cnv_benchmark",
+      "senderId": "usr_benchmark_client",
+      "recipientId": "usr_benchmark_freelancer",
+      "body": "Can you confirm the milestone schedule and the first delivery checkpoint?"
+    }
+  },
+  {
+    "name": "notifications.list",
+    "method": "GET",
+    "path": "/api/notifications"
+  },
+  {
+    "name": "notifications.create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "body": {
+      "userId": "usr_benchmark_freelancer",
+      "type": "proposal_viewed",
+      "message": "A client viewed your proposal for the onboarding workflow project."
+    }
+  },
+  {
+    "name": "uploads.create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "bodyType": "multipart",
+    "multipart": {
+      "fieldName": "file",
+      "filename": "benchmark-brief.txt",
+      "contentType": "text/plain",
+      "content": "Benchmark upload payload representing a small client project brief.\n"
+    }
+  },
+  {
+    "name": "search.global",
+    "method": "GET",
+    "path": "/api/search?q=react%20marketplace%20developer"
+  },
+  {
+    "name": "admin.metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": "benchmark"
+  }
+]
