@@ -36,4 +36,3 @@
 ## Threshold Gate
 
 No threshold failures.
-
