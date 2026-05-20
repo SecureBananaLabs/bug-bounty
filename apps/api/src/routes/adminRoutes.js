@@ -6,6 +6,7 @@ import {
   jobAction,
   jobs,
   metrics,
+  notifications,
   settings,
   userAction,
   users
@@ -27,3 +28,4 @@ adminRoutes.patch("/disputes/:disputeId", disputeAction);
 adminRoutes.get("/settings", settings);
 adminRoutes.patch("/settings", settings);
 adminRoutes.get("/audit-log", auditLog);
+adminRoutes.get("/notifications", notifications);

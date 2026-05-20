@@ -121,7 +121,17 @@ const disputes = [
     status: "open",
     evidence: "Screenshots, chat transcript, milestone deliverables",
     amount: "$1,200",
-    updatedAt: "2026-05-18"
+    updatedAt: "2026-05-18",
+    thread: [
+      { author: "maya@example.com", body: "Deliverables were approved but payment is still frozen.", at: "2026-05-18T08:15:00Z" },
+      { author: "jordan@example.com", body: "The handoff missed two requested revisions.", at: "2026-05-18T08:42:00Z" }
+    ],
+    transaction: {
+      id: "txn_7001",
+      amount: "$1,200",
+      currency: "USD",
+      status: "pending"
+    }
   },
   {
     id: "dsp_3002",
@@ -130,7 +140,36 @@ const disputes = [
     status: "under_review",
     evidence: "Logs, failing CI, payment receipt",
     amount: "$850",
-    updatedAt: "2026-05-19"
+    updatedAt: "2026-05-19",
+    thread: [
+      { author: "ava@example.com", body: "The integration failed in staging and production.", at: "2026-05-19T10:05:00Z" },
+      { author: "rafi@example.com", body: "I have a patch ready, but the refund seems premature.", at: "2026-05-19T10:21:00Z" }
+    ],
+    transaction: {
+      id: "txn_7002",
+      amount: "$850",
+      currency: "USD",
+      status: "captured"
+    }
+  }
+];
+
+const notifications = [
+  {
+    id: "ntf_1",
+    recipient: "Ava Chen",
+    type: "job_flagged",
+    detail: "Your listing was flagged for moderation review.",
+    createdAt: "2026-05-20T09:00:00Z",
+    status: "unread"
+  },
+  {
+    id: "ntf_2",
+    recipient: "Jordan Cole",
+    type: "dispute_update",
+    detail: "A dispute is under review by an admin.",
+    createdAt: "2026-05-20T09:30:00Z",
+    status: "unread"
   }
 ];
 
@@ -175,6 +214,17 @@ function logAction(adminId, action, detail) {
     action,
     detail,
     createdAt: new Date().toISOString()
+  });
+}
+
+function pushNotification(recipient, type, detail) {
+  notifications.unshift({
+    id: `ntf_${Date.now()}`,
+    recipient,
+    type,
+    detail,
+    createdAt: new Date().toISOString(),
+    status: "unread"
   });
 }
 
@@ -260,6 +310,7 @@ export async function updateJobStatus(jobId, action, reason, adminId) {
   } else if (action === "reject") {
     job.status = "rejected";
     job.reason = reason ?? "Rejected by admin";
+    pushNotification(job.owner, "listing_rejected", `${job.title} was rejected${reason ? `: ${reason}` : ""}`);
   } else if (action === "escalate") {
     job.status = "escalated";
     job.reason = reason ?? job.reason;
@@ -294,6 +345,10 @@ export async function updateDisputeStatus(disputeId, action, reason, adminId) {
     dispute.resolution = reason ?? "Escalated to senior admin";
   }
 
+  const [firstParty, secondParty] = dispute.parties.split(" vs ");
+  const resolutionMessage = `${dispute.title} -> ${dispute.resolution ?? action}`;
+  pushNotification(firstParty, "dispute_update", resolutionMessage);
+  pushNotification(secondParty, "dispute_update", resolutionMessage);
   logAction(adminId, `${action}_dispute`, `${action} ${disputeId}${reason ? `: ${reason}` : ""}`);
   return dispute;
 }
@@ -315,7 +370,7 @@ export async function updatePlatformSettings(patch, adminId) {
   return { ...settings };
 }
 
-export async function listAuditLog({ page, limit, admin, action }) {
+export async function listAuditLog({ page, limit, admin, action, from, to }) {
   const filtered = auditLog.filter((entry) => {
     if (admin && entry.admin !== admin) {
       return false;
@@ -325,8 +380,26 @@ export async function listAuditLog({ page, limit, admin, action }) {
       return false;
     }
 
+    if (from && entry.createdAt < String(from)) {
+      return false;
+    }
+
+    if (to && entry.createdAt > String(to)) {
+      return false;
+    }
+
     return true;
   });
+
+  return paginate(filtered, page, limit);
+}
+
+export async function listNotifications({ page, limit, recipient }) {
+  const filtered = recipient
+    ? notifications.filter((notification) =>
+        notification.recipient.toLowerCase().includes(String(recipient).toLowerCase())
+      )
+    : notifications;
 
   return paginate(filtered, page, limit);
 }

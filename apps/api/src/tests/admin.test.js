@@ -121,6 +121,72 @@ test("admin user actions update status and write audit entries", async () => {
   });
 });
 
+test("admin job rejection creates a notification", async () => {
+  await withServer(async (baseUrl) => {
+    const rejectResponse = await fetch(`${baseUrl}/api/admin/jobs/job_2001`, {
+      method: "PATCH",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ action: "reject", reason: "Scope is unclear" })
+    });
+
+    assert.equal(rejectResponse.status, 200);
+
+    const notificationsResponse = await fetch(`${baseUrl}/api/admin/notifications?recipient=Ava`, {
+      headers: { authorization: `Bearer ${token}` }
+    });
+
+    assert.equal(notificationsResponse.status, 200);
+    const notificationsPayload = await notificationsResponse.json();
+    assert.ok(notificationsPayload.data.total >= 1);
+    assert.match(notificationsPayload.data.items[0].detail, /rejected/);
+  });
+});
+
+test("admin dispute rulings surface thread and transaction details", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/admin/disputes?page=1&limit=1`, {
+      headers: { authorization: `Bearer ${token}` }
+    });
+
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.ok(Array.isArray(payload.data.items[0].thread));
+    assert.equal(payload.data.items[0].transaction.id, "txn_7001");
+  });
+});
+
+test("admin audit log supports admin, action, and date range filters", async () => {
+  await withServer(async (baseUrl) => {
+    const actionResponse = await fetch(`${baseUrl}/api/admin/users/usr_1002`, {
+      method: "PATCH",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ action: "ban" })
+    });
+
+    assert.equal(actionResponse.status, 200);
+
+    const response = await fetch(
+      `${baseUrl}/api/admin/audit-log?admin=admin_1&action=ban_user&from=2026-05-19T00:00:00Z&to=2026-05-21T00:00:00Z`,
+      {
+        headers: { authorization: `Bearer ${token}` }
+      }
+    );
+
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.ok(payload.data.total >= 1);
+    assert.equal(payload.data.items[0].admin, "admin_1");
+    assert.equal(payload.data.items[0].action, "ban_user");
+    assert.ok(payload.data.items.some((item) => item.detail.includes("usr_1002")));
+  });
+});
+
 test("admin settings endpoint supports read and update", async () => {
   await withServer(async (baseUrl) => {
     const readResponse = await fetch(`${baseUrl}/api/admin/settings`, {

@@ -54,6 +54,8 @@ export type AdminDispute = {
   evidence: string;
   amount: string;
   updatedAt: string;
+  thread: Array<{ author: string; body: string; at: string }>;
+  transaction: { id: string; amount: string; currency: string; status: string };
   resolution?: string;
 };
 
@@ -63,6 +65,15 @@ export type AdminAuditEntry = {
   action: string;
   detail: string;
   createdAt: string;
+};
+
+export type AdminNotification = {
+  id: string;
+  recipient: string;
+  type: string;
+  detail: string;
+  createdAt: string;
+  status: string;
 };
 
 export type AdminSettings = {
@@ -85,6 +96,7 @@ export type AdminDashboardData = {
   jobs: TablePage<AdminJob>;
   disputes: TablePage<AdminDispute>;
   auditLog: TablePage<AdminAuditEntry>;
+  notifications: TablePage<AdminNotification>;
   settings: AdminSettings;
 };
 
@@ -126,12 +138,13 @@ async function apiJson<T>(path: string, token: string | null): Promise<T> {
 
 export async function loadAdminDashboard({ token }: FetchOptions): Promise<AdminDashboardData> {
   try {
-    const [metrics, users, jobs, disputes, auditLog, settings] = await Promise.all([
+    const [metrics, users, jobs, disputes, auditLog, notifications, settings] = await Promise.all([
       apiJson<AdminMetrics>("/api/admin/metrics", token),
       apiJson<TablePage<AdminUser>>(`/api/admin/users?page=1&limit=${ADMIN_PAGE_SIZE}`, token),
       apiJson<TablePage<AdminJob>>(`/api/admin/jobs?page=1&limit=${ADMIN_PAGE_SIZE}`, token),
       apiJson<TablePage<AdminDispute>>(`/api/admin/disputes?page=1&limit=${ADMIN_PAGE_SIZE}`, token),
       apiJson<TablePage<AdminAuditEntry>>(`/api/admin/audit-log?page=1&limit=${ADMIN_PAGE_SIZE}`, token),
+      apiJson<TablePage<AdminNotification>>(`/api/admin/notifications?page=1&limit=${ADMIN_PAGE_SIZE}`, token),
       apiJson<AdminSettings>("/api/admin/settings", token)
     ]);
 
@@ -142,6 +155,7 @@ export async function loadAdminDashboard({ token }: FetchOptions): Promise<Admin
       jobs,
       disputes,
       auditLog,
+      notifications,
       settings
     };
   } catch {
@@ -152,6 +166,16 @@ export async function loadAdminDashboard({ token }: FetchOptions): Promise<Admin
       jobs: wrapPage(mockJobs as AdminJob[]),
       disputes: wrapPage(mockDisputes as AdminDispute[]),
       auditLog: wrapPage(mockAuditTrail as AdminAuditEntry[]),
+      notifications: wrapPage([
+        {
+          id: "ntf_1",
+          recipient: "Ava Chen",
+          type: "job_flagged",
+          detail: "Your listing was flagged for moderation review.",
+          createdAt: "2026-05-20T09:00:00Z",
+          status: "unread"
+        }
+      ]),
       settings: {
         registrationsEnabled: true,
         jobPostingsEnabled: true

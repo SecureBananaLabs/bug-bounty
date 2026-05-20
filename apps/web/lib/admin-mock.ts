@@ -98,7 +98,18 @@ export const disputes = [
     parties: "maya@example.com vs jordan@example.com",
     status: "open",
     evidence: "Screenshots, chat transcript, milestone deliverables",
-    amount: "$1,200"
+    amount: "$1,200",
+    updatedAt: "2026-05-18",
+    thread: [
+      { author: "maya@example.com", body: "Deliverables were approved but payment is still frozen.", at: "2026-05-18T08:15:00Z" },
+      { author: "jordan@example.com", body: "The handoff missed two requested revisions.", at: "2026-05-18T08:42:00Z" }
+    ],
+    transaction: {
+      id: "txn_7001",
+      amount: "$1,200",
+      currency: "USD",
+      status: "pending"
+    }
   },
   {
     id: "dsp_3002",
@@ -106,7 +117,18 @@ export const disputes = [
     parties: "ava@example.com vs rafi@example.com",
     status: "under_review",
     evidence: "Logs, failing CI, payment receipt",
-    amount: "$850"
+    amount: "$850",
+    updatedAt: "2026-05-19",
+    thread: [
+      { author: "ava@example.com", body: "The integration failed in staging and production.", at: "2026-05-19T10:05:00Z" },
+      { author: "rafi@example.com", body: "I have a patch ready, but the refund seems premature.", at: "2026-05-19T10:21:00Z" }
+    ],
+    transaction: {
+      id: "txn_7002",
+      amount: "$850",
+      currency: "USD",
+      status: "captured"
+    }
   }
 ];
 

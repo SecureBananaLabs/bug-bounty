@@ -6,6 +6,7 @@ import {
   listAdminJobs,
   listAdminUsers,
   listAuditLog,
+  listNotifications,
   updateDisputeStatus,
   updateJobStatus,
   updatePlatformSettings,
@@ -103,6 +104,12 @@ export async function settings(req, res) {
 
 export async function auditLog(req, res) {
   const { page, limit } = paginationSchema.parse(req.query);
-  const { admin, action } = req.query;
-  return ok(res, await listAuditLog({ page, limit, admin, action }));
+  const { admin, action, from, to } = req.query;
+  return ok(res, await listAuditLog({ page, limit, admin, action, from, to }));
+}
+
+export async function notifications(req, res) {
+  const { page, limit } = paginationSchema.parse(req.query);
+  const { recipient } = req.query;
+  return ok(res, await listNotifications({ page, limit, recipient }));
 }

@@ -8,6 +8,7 @@ import type {
   AdminDispute,
   AdminJob,
   AdminMetrics,
+  AdminNotification,
   AdminSettings,
   AdminUser,
   TablePage
@@ -28,12 +29,26 @@ type UserFilters = {
   joinedBefore: string;
 };
 
+type AuditFilters = {
+  admin: string;
+  action: string;
+  from: string;
+  to: string;
+};
+
 const defaultFilters = (): UserFilters => ({
   query: "",
   role: "",
   status: "",
   joinedAfter: "",
   joinedBefore: ""
+});
+
+const defaultAuditFilters = (): AuditFilters => ({
+  admin: "",
+  action: "",
+  from: "",
+  to: ""
 });
 
 function formatRevenue(value: number | string) {
@@ -121,9 +136,13 @@ export default function AdminDashboardClient({ token, initialData, previewState 
   const [jobPage, setJobPage] = useState(initialData.jobs.page);
   const [disputePage, setDisputePage] = useState(initialData.disputes.page);
   const [auditPage, setAuditPage] = useState(initialData.auditLog.page);
+  const [notificationPage, setNotificationPage] = useState(initialData.notifications.page);
   const [filters, setFilters] = useState<UserFilters>(defaultFilters);
   const [draftFilters, setDraftFilters] = useState<UserFilters>(defaultFilters);
+  const [auditFilters, setAuditFilters] = useState<AuditFilters>(defaultAuditFilters);
+  const [draftAuditFilters, setDraftAuditFilters] = useState<AuditFilters>(defaultAuditFilters);
   const [selectedUserId, setSelectedUserId] = useState(initialData.users.items[0]?.id ?? null);
+  const [selectedDisputeId, setSelectedDisputeId] = useState(initialData.disputes.items[0]?.id ?? null);
 
   useEffect(() => {
     if (!selectedUserId && dashboard.users.items[0]) {
@@ -134,6 +153,14 @@ export default function AdminDashboardClient({ token, initialData, previewState 
   const selectedUser = useMemo(
     () => dashboard.users.items.find((user) => user.id === selectedUserId) ?? dashboard.users.items[0] ?? null,
     [dashboard.users.items, selectedUserId]
+  );
+
+  const selectedDispute = useMemo(
+    () =>
+      dashboard.disputes.items.find((dispute) => dispute.id === selectedDisputeId) ??
+      dashboard.disputes.items[0] ??
+      null,
+    [dashboard.disputes.items, selectedDisputeId]
   );
 
   function authHeaders() {
@@ -245,18 +272,49 @@ export default function AdminDashboardClient({ token, initialData, previewState 
       );
       setDashboard((current) => ({ ...current, disputes }));
       setDisputePage(nextPage);
+      if (!disputes.items.some((dispute) => dispute.id === selectedDisputeId)) {
+        setSelectedDisputeId(disputes.items[0]?.id ?? null);
+      }
     } catch (error) {
       reportError(error);
     }
   }
 
-  async function loadAudit(nextPage = auditPage) {
+  async function loadAudit(nextPage = auditPage, nextFilters = auditFilters) {
     try {
-      const auditLog = await apiJson<TablePage<AdminAuditEntry>>(
-        `/api/admin/audit-log?page=${nextPage}&limit=${ADMIN_PAGE_SIZE}`
-      );
+      const params = new URLSearchParams({
+        page: String(nextPage),
+        limit: String(ADMIN_PAGE_SIZE)
+      });
+
+      if (nextFilters.admin) {
+        params.set("admin", nextFilters.admin);
+      }
+      if (nextFilters.action) {
+        params.set("action", nextFilters.action);
+      }
+      if (nextFilters.from) {
+        params.set("from", nextFilters.from);
+      }
+      if (nextFilters.to) {
+        params.set("to", nextFilters.to);
+      }
+
+      const auditLog = await apiJson<TablePage<AdminAuditEntry>>(`/api/admin/audit-log?${params.toString()}`);
       setDashboard((current) => ({ ...current, auditLog }));
       setAuditPage(nextPage);
+    } catch (error) {
+      reportError(error);
+    }
+  }
+
+  async function loadNotifications(nextPage = notificationPage) {
+    try {
+      const notifications = await apiJson<TablePage<AdminNotification>>(
+        `/api/admin/notifications?page=${nextPage}&limit=${ADMIN_PAGE_SIZE}`
+      );
+      setDashboard((current) => ({ ...current, notifications }));
+      setNotificationPage(nextPage);
     } catch (error) {
       reportError(error);
     }
@@ -265,7 +323,14 @@ export default function AdminDashboardClient({ token, initialData, previewState 
   async function refreshAll() {
     setMessage(null);
     try {
-      await Promise.all([loadMetricsAndSettings(), loadUsers(), loadJobs(), loadDisputes(), loadAudit()]);
+      await Promise.all([
+        loadMetricsAndSettings(),
+        loadUsers(),
+        loadJobs(),
+        loadDisputes(),
+        loadAudit(),
+        loadNotifications()
+      ]);
       setMessage("Dashboard refreshed from the admin API.");
     } catch {
       // Individual loaders already surfaced the error message.
@@ -324,6 +389,15 @@ export default function AdminDashboardClient({ token, initialData, previewState 
     event.preventDefault();
     startTransition(() => {
       void loadUsers(1, draftFilters);
+    });
+  }
+
+  function submitAuditFilters(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const next = draftAuditFilters;
+    setAuditFilters(next);
+    startTransition(() => {
+      void loadAudit(1, next);
     });
   }
 
@@ -655,9 +729,14 @@ export default function AdminDashboardClient({ token, initialData, previewState 
           />
           <div className="stack">
             {dashboard.disputes.items.map((dispute) => (
-              <div key={dispute.id} className="stack-item">
+              <div
+                key={dispute.id}
+                className={`stack-item ${selectedDispute?.id === dispute.id ? "row-selected" : ""}`}
+              >
                 <div>
-                  <strong>{dispute.title}</strong>
+                  <button className="text-button" type="button" onClick={() => setSelectedDisputeId(dispute.id)}>
+                    <strong>{dispute.title}</strong>
+                  </button>
                   <div className="muted">{dispute.parties}</div>
                   <div className="muted">{dispute.evidence}</div>
                   <div className="muted">{dispute.amount}</div>
@@ -690,6 +769,58 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               });
             }}
           />
+          {selectedDispute ? (
+            <div className="detail-grid">
+              <article className="card detail-card">
+                <SectionTitle
+                  eyebrow="Selected dispute"
+                  title={selectedDispute.title}
+                  description="Thread, evidence, and transaction details for the active case."
+                />
+                <div className="detail-list">
+                  <div>
+                    <span className="muted">Status</span>
+                    <strong>{selectedDispute.status}</strong>
+                  </div>
+                  <div>
+                    <span className="muted">Amount</span>
+                    <strong>{selectedDispute.amount}</strong>
+                  </div>
+                  <div>
+                    <span className="muted">Transaction</span>
+                    <strong>{selectedDispute.transaction.id}</strong>
+                  </div>
+                  <div>
+                    <span className="muted">Payout state</span>
+                    <strong>{selectedDispute.transaction.status}</strong>
+                  </div>
+                </div>
+                <p className="muted">{selectedDispute.evidence}</p>
+
+                <div className="two-column-list">
+                  <div>
+                    <h4>Thread</h4>
+                    <ul>
+                      {selectedDispute.thread.map((entry) => (
+                        <li key={`${entry.author}-${entry.at}`}>
+                          <strong>{entry.author}</strong>: {entry.body} <span className="muted">{entry.at}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4>Transaction</h4>
+                    <ul>
+                      <li>Transaction ID: {selectedDispute.transaction.id}</li>
+                      <li>Amount: {selectedDispute.transaction.amount}</li>
+                      <li>Currency: {selectedDispute.transaction.currency}</li>
+                      <li>Status: {selectedDispute.transaction.status}</li>
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            </div>
+          ) : null}
         </article>
       </section>
 
@@ -728,6 +859,63 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Append-only admin actions"
             description="Bans, rulings, toggles, and moderation actions are recorded for review."
           />
+          <form className="filter-grid admin-filters" onSubmit={submitAuditFilters}>
+            <label>
+              <span>Admin</span>
+              <input
+                aria-label="Filter audit log by admin"
+                placeholder="admin id"
+                value={draftAuditFilters.admin}
+                onChange={(event) => setDraftAuditFilters((current) => ({ ...current, admin: event.target.value }))}
+              />
+            </label>
+            <label>
+              <span>Action</span>
+              <input
+                aria-label="Filter audit log by action"
+                placeholder="ban_user"
+                value={draftAuditFilters.action}
+                onChange={(event) => setDraftAuditFilters((current) => ({ ...current, action: event.target.value }))}
+              />
+            </label>
+            <label>
+              <span>From</span>
+              <input
+                aria-label="Audit log from date"
+                placeholder="2026-05-20T00:00:00Z"
+                value={draftAuditFilters.from}
+                onChange={(event) => setDraftAuditFilters((current) => ({ ...current, from: event.target.value }))}
+              />
+            </label>
+            <label>
+              <span>To</span>
+              <input
+                aria-label="Audit log to date"
+                placeholder="2026-05-20T23:59:59Z"
+                value={draftAuditFilters.to}
+                onChange={(event) => setDraftAuditFilters((current) => ({ ...current, to: event.target.value }))}
+              />
+            </label>
+            <div className="filter-actions">
+              <button className="admin-button" type="submit">
+                Apply filters
+              </button>
+              <button
+                className="admin-button secondary"
+                type="button"
+                onClick={() => {
+                  const next = defaultAuditFilters();
+                  setDraftAuditFilters(next);
+                  setAuditFilters(next);
+                  startTransition(() => {
+                    void loadAudit(1, next);
+                  });
+                }}
+              >
+                Reset
+              </button>
+            </div>
+          </form>
           <div className="stack">
             {dashboard.auditLog.items.map((entry) => (
               <div key={entry.id} className="stack-item">
@@ -747,12 +935,49 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             totalPages={dashboard.auditLog.totalPages}
             onPrev={() => {
               startTransition(() => {
-                void loadAudit(Math.max(1, dashboard.auditLog.page - 1));
+                void loadAudit(Math.max(1, dashboard.auditLog.page - 1), auditFilters);
               });
             }}
             onNext={() => {
               startTransition(() => {
-                void loadAudit(Math.min(dashboard.auditLog.totalPages, dashboard.auditLog.page + 1));
+                void loadAudit(Math.min(dashboard.auditLog.totalPages, dashboard.auditLog.page + 1), auditFilters);
+              });
+            }}
+          />
+        </article>
+
+        <article className="card">
+          <SectionTitle
+            eyebrow="Notifications"
+            title="Action outcomes"
+            description="Rejected listings and dispute rulings generate notification records for the affected parties."
+          />
+          <div className="stack">
+            {dashboard.notifications.items.map((notification) => (
+              <div key={notification.id} className="stack-item">
+                <div>
+                  <strong>{notification.recipient}</strong>
+                  <div className="muted">{notification.type}</div>
+                  <div className="muted">{notification.detail}</div>
+                </div>
+                <div className="muted">
+                  <div>{notification.status}</div>
+                  <div>{notification.createdAt}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Pagination
+            page={dashboard.notifications.page}
+            totalPages={dashboard.notifications.totalPages}
+            onPrev={() => {
+              startTransition(() => {
+                void loadNotifications(Math.max(1, dashboard.notifications.page - 1));
+              });
+            }}
+            onNext={() => {
+              startTransition(() => {
+                void loadNotifications(Math.min(dashboard.notifications.totalPages, dashboard.notifications.page + 1));
               });
             }}
           />
