@@ -1,4 +1,4 @@
-import { createPaymentIntent, PaymentError, mapStripeError } from "../services/paymentService.js";
+import { createPaymentIntent, mapStripeError } from "../services/paymentService.js";
 import { ok, fail } from "../utils/response.js";
 
 export async function createPayment(req, res) {

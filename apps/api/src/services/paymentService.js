@@ -1,16 +1,31 @@
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2024-06-20",
-});
+/**
+ * Lazily create a Stripe client so missing STRIPE_SECRET_KEY fails clearly
+ * at call-time rather than at module-load.
+ */
+let _stripe = null;
+function getStripe() {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) {
+      throw new PaymentError("STRIPE_SECRET_KEY environment variable is required", 500);
+    }
+    _stripe = new Stripe(key, { apiVersion: "2024-06-20" });
+  }
+  return _stripe;
+}
 
 /**
  * Create a Stripe PaymentIntent.
  *
  * @param {{ amount?: number, currency?: string, metadata?: object }} payload
+ * @param {{ stripe?: Stripe }} [deps] - Optional dependency injection for testing
  * @returns {Promise<{ paymentId: string, clientSecret: string, amount: number, currency: string }>}
  */
-export async function createPaymentIntent(payload) {
+export async function createPaymentIntent(payload, deps = {}) {
+  const stripe = deps.stripe ?? getStripe();
+
   // --- Input validation ---
   if (payload.amount == null) {
     throw new PaymentError("amount is required", 400);
@@ -20,9 +35,9 @@ export async function createPaymentIntent(payload) {
     throw new PaymentError("amount must be a positive integer (smallest currency unit, e.g. cents)", 400);
   }
 
-  const currency = payload.currency ?? "usd";
+  const currency = (payload.currency ?? "usd").toLowerCase();
 
-  if (typeof currency !== "string" || !/^[a-z]{3}$/.test(currency)) {
+  if (!/^[a-z]{3}$/.test(currency)) {
     throw new PaymentError("currency must be a 3-letter ISO code", 400);
   }
 
@@ -81,4 +96,11 @@ export function mapStripeError(err) {
   }
   // Generic Stripe or unknown errors
   return new PaymentError(err.message || "Payment processing failed", 500);
+}
+
+/**
+ * Reset the cached Stripe client (for testing).
+ */
+export function _resetStripe() {
+  _stripe = null;
 }

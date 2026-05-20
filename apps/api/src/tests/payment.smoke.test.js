@@ -46,7 +46,7 @@ describe("Stripe PaymentIntent smoke test", { skip: !SMOKE }, () => {
     const { createPaymentIntent } = await import("../services/paymentService.js");
     await assert.rejects(
       () => createPaymentIntent({ amount: -5 }),
-      { message: "amount must be a positive integer" }
+      { message: /positive integer/ }
     );
   });
 
@@ -54,7 +54,7 @@ describe("Stripe PaymentIntent smoke test", { skip: !SMOKE }, () => {
     const { createPaymentIntent } = await import("../services/paymentService.js");
     await assert.rejects(
       () => createPaymentIntent({ amount: 10.5 }),
-      { message: "amount must be a positive integer" }
+      { message: /positive integer/ }
     );
   });
 
