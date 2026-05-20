@@ -40,6 +40,13 @@ type DisputeFilters = {
   status: string;
 };
 
+type SectionKey = "metrics" | "users" | "jobs" | "disputes" | "auditLog" | "notifications" | "settings";
+
+type SectionStatus = {
+  loading: boolean;
+  error: string | null;
+};
+
 const defaultFilters = (): UserFilters => ({
   query: "",
   role: "",
@@ -57,6 +64,16 @@ const defaultAuditFilters = (): AuditFilters => ({
 
 const defaultDisputeFilters = (): DisputeFilters => ({
   status: ""
+});
+
+const defaultSectionStatus = (): Record<SectionKey, SectionStatus> => ({
+  metrics: { loading: false, error: null },
+  users: { loading: false, error: null },
+  jobs: { loading: false, error: null },
+  disputes: { loading: false, error: null },
+  auditLog: { loading: false, error: null },
+  notifications: { loading: false, error: null },
+  settings: { loading: false, error: null }
 });
 
 function formatRevenue(value: number | string) {
@@ -121,6 +138,24 @@ function EmptyState({ message, colspan }: { message: string; colspan?: number })
   return <div className="state-card empty">{message}</div>;
 }
 
+function SectionState({
+  label,
+  status
+}: {
+  label: string;
+  status: SectionStatus;
+}) {
+  if (status.loading) {
+    return <div className="state-card loading">{label} are refreshing.</div>;
+  }
+
+  if (status.error) {
+    return <div className="state-card error">{label} could not be refreshed: {status.error}</div>;
+  }
+
+  return null;
+}
+
 function Pagination({
   page,
   totalPages,
@@ -167,6 +202,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
   const [draftAuditFilters, setDraftAuditFilters] = useState<AuditFilters>(defaultAuditFilters);
   const [selectedUserId, setSelectedUserId] = useState(initialData.users.items[0]?.id ?? null);
   const [selectedDisputeId, setSelectedDisputeId] = useState(initialData.disputes.items[0]?.id ?? null);
+  const [sectionStatus, setSectionStatus] = useState<Record<SectionKey, SectionStatus>>(defaultSectionStatus);
 
   useEffect(() => {
     if (!selectedUserId && dashboard.users.items[0]) {
@@ -200,6 +236,16 @@ export default function AdminDashboardClient({ token, initialData, previewState 
     setMessage(message);
   }
 
+  function updateSectionStatus(section: SectionKey, next: Partial<SectionStatus>) {
+    setSectionStatus((current) => ({
+      ...current,
+      [section]: {
+        ...current[section],
+        ...next
+      }
+    }));
+  }
+
   async function apiJson<T>(path: string, init: RequestInit = {}) {
     const headers = new Headers(init.headers ?? {});
     for (const [key, value] of Object.entries(authHeaders())) {
@@ -225,6 +271,8 @@ export default function AdminDashboardClient({ token, initialData, previewState 
   }
 
   async function loadMetricsAndSettings() {
+    updateSectionStatus("metrics", { loading: true, error: null });
+    updateSectionStatus("settings", { loading: true, error: null });
     try {
       const [metrics, settings] = await Promise.all([
         apiJson<AdminMetrics>("/api/admin/metrics"),
@@ -236,13 +284,20 @@ export default function AdminDashboardClient({ token, initialData, previewState 
         metrics,
         settings
       }));
+      updateSectionStatus("metrics", { loading: false, error: null });
+      updateSectionStatus("settings", { loading: false, error: null });
+      return true;
     } catch (error) {
       reportError(error);
-      throw error;
+      const message = error instanceof Error ? error.message : "Request failed";
+      updateSectionStatus("metrics", { loading: false, error: message });
+      updateSectionStatus("settings", { loading: false, error: message });
+      return false;
     }
   }
 
   async function loadUsers(nextPage = userPage, nextFilters = filters) {
+    updateSectionStatus("users", { loading: true, error: null });
     try {
       const params = new URLSearchParams({
         page: String(nextPage),
@@ -272,24 +327,36 @@ export default function AdminDashboardClient({ token, initialData, previewState 
       if (!users.items.some((user) => user.id === selectedUserId)) {
         setSelectedUserId(users.items[0]?.id ?? null);
       }
+      updateSectionStatus("users", { loading: false, error: null });
+      return true;
     } catch (error) {
       reportError(error);
+      const message = error instanceof Error ? error.message : "Request failed";
+      updateSectionStatus("users", { loading: false, error: message });
+      return false;
     }
   }
 
   async function loadJobs(nextPage = jobPage) {
+    updateSectionStatus("jobs", { loading: true, error: null });
     try {
       const jobs = await apiJson<TablePage<AdminJob>>(
         `/api/admin/jobs?page=${nextPage}&limit=${ADMIN_PAGE_SIZE}`
       );
       setDashboard((current) => ({ ...current, jobs }));
       setJobPage(nextPage);
+      updateSectionStatus("jobs", { loading: false, error: null });
+      return true;
     } catch (error) {
       reportError(error);
+      const message = error instanceof Error ? error.message : "Request failed";
+      updateSectionStatus("jobs", { loading: false, error: message });
+      return false;
     }
   }
 
   async function loadDisputes(nextPage = disputePage, nextFilters = disputeFilters) {
+    updateSectionStatus("disputes", { loading: true, error: null });
     try {
       const params = new URLSearchParams({
         page: String(nextPage),
@@ -307,12 +374,18 @@ export default function AdminDashboardClient({ token, initialData, previewState 
       if (!disputes.items.some((dispute) => dispute.id === selectedDisputeId)) {
         setSelectedDisputeId(disputes.items[0]?.id ?? null);
       }
+      updateSectionStatus("disputes", { loading: false, error: null });
+      return true;
     } catch (error) {
       reportError(error);
+      const message = error instanceof Error ? error.message : "Request failed";
+      updateSectionStatus("disputes", { loading: false, error: message });
+      return false;
     }
   }
 
   async function loadAudit(nextPage = auditPage, nextFilters = auditFilters) {
+    updateSectionStatus("auditLog", { loading: true, error: null });
     try {
       const params = new URLSearchParams({
         page: String(nextPage),
@@ -335,27 +408,37 @@ export default function AdminDashboardClient({ token, initialData, previewState 
       const auditLog = await apiJson<TablePage<AdminAuditEntry>>(`/api/admin/audit-log?${params.toString()}`);
       setDashboard((current) => ({ ...current, auditLog }));
       setAuditPage(nextPage);
+      updateSectionStatus("auditLog", { loading: false, error: null });
+      return true;
     } catch (error) {
       reportError(error);
+      const message = error instanceof Error ? error.message : "Request failed";
+      updateSectionStatus("auditLog", { loading: false, error: message });
+      return false;
     }
   }
 
   async function loadNotifications(nextPage = notificationPage) {
+    updateSectionStatus("notifications", { loading: true, error: null });
     try {
       const notifications = await apiJson<TablePage<AdminNotification>>(
         `/api/admin/notifications?page=${nextPage}&limit=${ADMIN_PAGE_SIZE}`
       );
       setDashboard((current) => ({ ...current, notifications }));
       setNotificationPage(nextPage);
+      updateSectionStatus("notifications", { loading: false, error: null });
+      return true;
     } catch (error) {
       reportError(error);
+      const message = error instanceof Error ? error.message : "Request failed";
+      updateSectionStatus("notifications", { loading: false, error: message });
+      return false;
     }
   }
 
   async function refreshAll() {
     setMessage(null);
-    try {
-      await Promise.all([
+    const results = await Promise.all([
         loadMetricsAndSettings(),
         loadUsers(),
         loadJobs(),
@@ -363,10 +446,8 @@ export default function AdminDashboardClient({ token, initialData, previewState 
         loadAudit(),
         loadNotifications()
       ]);
-      setMessage("Dashboard refreshed from the admin API.");
-    } catch {
-      // Individual loaders already surfaced the error message.
-    }
+    setMessage(results.every(Boolean) ? "Dashboard refreshed from the admin API." : "Dashboard refreshed with section errors.");
+    return results.every(Boolean);
   }
 
   async function mutate(path: string, init: RequestInit, refresh = true) {
@@ -375,7 +456,13 @@ export default function AdminDashboardClient({ token, initialData, previewState 
     try {
       await apiJson(path, init);
       if (refresh) {
-        await refreshAll();
+        const refreshed = await refreshAll();
+        if (!refreshed) {
+          setMessage("Action completed, but some sections failed to refresh.");
+        } else {
+          setMessage("Action completed successfully.");
+        }
+        return;
       }
       setMessage("Action completed successfully.");
     } catch (error) {
@@ -490,6 +577,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
       {previewCards}
 
       <section className="grid admin-metrics-grid" aria-label="Trust metrics overview">
+        <SectionState label="Metrics" status={sectionStatus.metrics} />
         <MetricCard label="Total users" value={dashboard.metrics.totalUsers} helper="Registered clients and freelancers" />
         <MetricCard label="Active jobs" value={dashboard.metrics.activeJobs} helper="Live marketplace work" />
         <MetricCard label="Open disputes" value={dashboard.metrics.openDisputes} helper="Needs moderation" />
@@ -503,6 +591,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
           title="Distribution across the user base"
           description="Quick glance at healthy, at-risk, and low-trust cohorts."
         />
+        <SectionState label="Trust score distribution" status={sectionStatus.metrics} />
         <div className="trust-bars" aria-label="Trust score distribution chart">
           {dashboard.metrics.trustScoreBuckets.map((bucket) => (
             <div key={bucket.label} className="trust-bar-row">
@@ -522,6 +611,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
           title="Searchable user table"
           description="Server-side filters and pagination keep the table bounded and reviewable."
         />
+        <SectionState label="User table" status={sectionStatus.users} />
         <form className="filter-grid admin-filters" onSubmit={submitUserFilters}>
           <label>
             <span>Search users</span>
@@ -728,6 +818,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Flagged listings queue"
             description="Approve, reject, or escalate items reported by automated rules or users."
           />
+          <SectionState label="Moderation queue" status={sectionStatus.jobs} />
           <div className="stack">
             {dashboard.jobs.items.length > 0 ? (
               dashboard.jobs.items.map((item) => (
@@ -776,6 +867,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Open dispute queue"
             description="Threads, evidence, and transaction details with one-click resolutions."
           />
+          <SectionState label="Dispute queue" status={sectionStatus.disputes} />
           <form className="filter-grid admin-filters" onSubmit={submitDisputeFilters}>
             <label>
               <span>Status</span>
@@ -918,6 +1010,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Registration and posting toggles"
             description="Confirmation-first controls for changing platform behavior."
           />
+          <SectionState label="Platform controls" status={sectionStatus.settings} />
           <div className="toggle-grid">
             <label className="toggle-item">
               <span>Enable new registrations</span>
@@ -946,6 +1039,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Append-only admin actions"
             description="Bans, rulings, toggles, and moderation actions are recorded for review."
           />
+          <SectionState label="Audit log" status={sectionStatus.auditLog} />
           <form className="filter-grid admin-filters" onSubmit={submitAuditFilters}>
             <label>
               <span>Admin</span>
@@ -1043,6 +1137,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Action outcomes"
             description="Rejected listings and dispute rulings generate notification records for the affected parties."
           />
+          <SectionState label="Notifications" status={sectionStatus.notifications} />
           <div className="stack">
             {dashboard.notifications.items.length > 0 ? (
               dashboard.notifications.items.map((notification) => (
