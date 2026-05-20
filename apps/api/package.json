@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test src/tests",
+    "test": "node --test \"src/tests/**/*.test.js\"",
     "test:smoke": "STRIPE_SMOKE_TEST=1 node --test src/tests/payment.smoke.test.js"
   },
   "dependencies": {
