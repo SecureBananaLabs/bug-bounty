@@ -11,6 +11,7 @@ This asset is an original 64x64 pixel-art PNG showing a cyber banana guardian pr
 - `assets/pixel-art/cyber-banana-guardian.png` - original 64x64 PNG pixel-art asset
 - `assets/pixel-art/generate_cyber_banana_guardian.py` - stdlib-only generator that recreates the PNG
 - `assets/pixel-art/cyber-banana-guardian-demo.svg` - animated preview card for quick review
+- `demos/cyber-banana-guardian-demo.mp4` - short demo video showing the pixel art at review scale
 
 ## Acceptance Checklist
 
@@ -25,4 +26,5 @@ This asset is an original 64x64 pixel-art PNG showing a cyber banana guardian pr
 python3 assets/pixel-art/generate_cyber_banana_guardian.py /tmp/cyber-banana-guardian.png
 python3 -m py_compile assets/pixel-art/generate_cyber_banana_guardian.py
 file assets/pixel-art/cyber-banana-guardian.png
+file demos/cyber-banana-guardian-demo.mp4
 ```
