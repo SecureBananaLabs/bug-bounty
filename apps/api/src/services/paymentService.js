@@ -11,6 +11,27 @@ function normalizeCurrency(payload) {
   return payload?.currency ?? "usd";
 }
 
+function normalizeMetadata(payload) {
+  if (payload?.metadata == null) {
+    return undefined;
+  }
+
+  if (typeof payload.metadata !== "object" || Array.isArray(payload.metadata)) {
+    throw new Error("payload.metadata must be an object of string values");
+  }
+
+  const metadata = {};
+  for (const [key, value] of Object.entries(payload.metadata)) {
+    if (typeof value !== "string") {
+      throw new Error(`payload.metadata.${key} must be a string`);
+    }
+
+    metadata[key] = value;
+  }
+
+  return metadata;
+}
+
 function getStripeClient() {
   if (!env.stripeSecretKey) {
     throw new Error("STRIPE_SECRET_KEY is required");
@@ -23,13 +44,20 @@ export async function createPaymentIntent(payload, stripeClient = getStripeClien
   validateAmount(payload);
 
   const currency = normalizeCurrency(payload);
+  const metadata = normalizeMetadata(payload);
   let paymentIntent;
 
   try {
-    paymentIntent = await stripeClient.paymentIntents.create({
+    const request = {
       amount: payload.amount,
       currency
-    });
+    };
+
+    if (metadata) {
+      request.metadata = metadata;
+    }
+
+    paymentIntent = await stripeClient.paymentIntents.create(request);
   } catch (error) {
     throw new Error(error instanceof Error ? error.message : "Stripe API error");
   }

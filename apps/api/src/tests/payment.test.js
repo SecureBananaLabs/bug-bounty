@@ -34,6 +34,44 @@ test("createPaymentIntent uses Stripe paymentIntents.create with normalized curr
   });
 });
 
+test("createPaymentIntent forwards metadata to Stripe", async () => {
+  const calls = [];
+  const fakeStripe = {
+    paymentIntents: {
+      create: async (payload) => {
+        calls.push(payload);
+        return {
+          id: "pi_test_meta",
+          client_secret: "secret_test_meta"
+        };
+      }
+    }
+  };
+
+  await createPaymentIntent(
+    {
+      amount: 750,
+      currency: "usd",
+      metadata: {
+        orderId: "order_123",
+        source: "dashboard"
+      }
+    },
+    fakeStripe
+  );
+
+  assert.deepEqual(calls, [
+    {
+      amount: 750,
+      currency: "usd",
+      metadata: {
+        orderId: "order_123",
+        source: "dashboard"
+      }
+    }
+  ]);
+});
+
 test("createPaymentIntent defaults currency to usd", async () => {
   const calls = [];
   const fakeStripe = {
@@ -68,6 +106,21 @@ test("createPaymentIntent rejects invalid amounts", async () => {
   );
 });
 
+test("createPaymentIntent rejects invalid metadata", async () => {
+  const fakeStripe = {
+    paymentIntents: {
+      create: async () => {
+        throw new Error("should not be called");
+      }
+    }
+  };
+
+  await assert.rejects(
+    () => createPaymentIntent({ amount: 1000, metadata: { orderId: 123 } }, fakeStripe),
+    /payload\.metadata\.orderId must be a string/
+  );
+});
+
 test("createPaymentIntent preserves Stripe error messages", async () => {
   const fakeStripe = {
     paymentIntents: {
@@ -90,15 +143,14 @@ test("integration smoke is gated by env flag", async (t) => {
   }
 
   assert.ok(process.env.STRIPE_SECRET_KEY, "STRIPE_SECRET_KEY must be set for smoke test");
-  assert.ok(process.env.STRIPE_SMOKE_PAYMENT_METHOD, "STRIPE_SMOKE_PAYMENT_METHOD must be set");
 
-  const payment = await createPaymentIntent(
-    {
-      amount: 100,
-      currency: "usd"
-    },
-    undefined
-  );
+  const payment = await createPaymentIntent({
+    amount: 100,
+    currency: "usd",
+    metadata: {
+      source: "smoke-test"
+    }
+  });
 
   assert.equal(payment.provider, "stripe");
   assert.ok(payment.paymentId);
