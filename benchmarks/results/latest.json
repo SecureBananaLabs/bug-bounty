@@ -1,0 +1,532 @@
+{
+  "mode": "full",
+  "targetUrl": "http://127.0.0.1:4000",
+  "requestsPerEndpoint": 8,
+  "concurrency": 2,
+  "warmupRequests": 1,
+  "generatedAt": "2026-05-20T05:22:21.413Z",
+  "results": [
+    {
+      "name": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.65,
+      "p95Ms": 1.32,
+      "p99Ms": 1.32,
+      "ttfbP50Ms": 0.64,
+      "sustainedRps": 2287.43,
+      "peakRps": 2287.43,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.41,
+      "p95Ms": 0.48,
+      "p99Ms": 0.48,
+      "ttfbP50Ms": 0.4,
+      "sustainedRps": 4492.91,
+      "peakRps": 4492.91,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "auth.oauthCallback",
+      "method": "GET",
+      "path": "/api/auth/oauth/google/callback",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.25,
+      "p95Ms": 0.38,
+      "p99Ms": 0.38,
+      "ttfbP50Ms": 0.24,
+      "sustainedRps": 6770.34,
+      "peakRps": 6770.34,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.33,
+      "p95Ms": 0.46,
+      "p99Ms": 0.46,
+      "ttfbP50Ms": 0.33,
+      "sustainedRps": 5418.68,
+      "peakRps": 5418.68,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.24,
+      "p95Ms": 0.27,
+      "p99Ms": 0.27,
+      "ttfbP50Ms": 0.23,
+      "sustainedRps": 7827.79,
+      "peakRps": 7827.79,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.25,
+      "p95Ms": 0.31,
+      "p99Ms": 0.31,
+      "ttfbP50Ms": 0.25,
+      "sustainedRps": 7189.12,
+      "peakRps": 7189.12,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.21,
+      "p95Ms": 0.28,
+      "p99Ms": 0.28,
+      "ttfbP50Ms": 0.2,
+      "sustainedRps": 8000,
+      "peakRps": 8000,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.35,
+      "p95Ms": 0.49,
+      "p99Ms": 0.49,
+      "ttfbP50Ms": 0.35,
+      "sustainedRps": 4643.74,
+      "peakRps": 4643.74,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.22,
+      "p95Ms": 0.31,
+      "p99Ms": 0.31,
+      "ttfbP50Ms": 0.21,
+      "sustainedRps": 8000,
+      "peakRps": 8000,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.22,
+      "p95Ms": 0.26,
+      "p99Ms": 0.26,
+      "ttfbP50Ms": 0.22,
+      "sustainedRps": 8000,
+      "peakRps": 8000,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.26,
+      "p95Ms": 0.49,
+      "p99Ms": 0.49,
+      "ttfbP50Ms": 0.25,
+      "sustainedRps": 6338.31,
+      "peakRps": 6338.31,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.22,
+      "p95Ms": 0.25,
+      "p99Ms": 0.25,
+      "ttfbP50Ms": 0.22,
+      "sustainedRps": 8000,
+      "peakRps": 8000,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.22,
+      "p95Ms": 0.27,
+      "p99Ms": 0.27,
+      "ttfbP50Ms": 0.21,
+      "sustainedRps": 8000,
+      "peakRps": 8000,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.2,
+      "p95Ms": 0.28,
+      "p99Ms": 0.28,
+      "ttfbP50Ms": 0.2,
+      "sustainedRps": 8000,
+      "peakRps": 8000,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.22,
+      "p95Ms": 0.33,
+      "p99Ms": 0.33,
+      "ttfbP50Ms": 0.22,
+      "sustainedRps": 7552.51,
+      "peakRps": 7552.51,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.21,
+      "p95Ms": 0.27,
+      "p99Ms": 0.27,
+      "ttfbP50Ms": 0.2,
+      "sustainedRps": 8000,
+      "peakRps": 8000,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.25,
+      "p95Ms": 0.31,
+      "p99Ms": 0.31,
+      "ttfbP50Ms": 0.24,
+      "sustainedRps": 7088.79,
+      "peakRps": 7088.79,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "201": 8
+      },
+      "p50Ms": 0.41,
+      "p95Ms": 0.61,
+      "p99Ms": 0.61,
+      "ttfbP50Ms": 0.4,
+      "sustainedRps": 4236.45,
+      "peakRps": 4236.45,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "search.global",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.28,
+      "p95Ms": 0.35,
+      "p99Ms": 0.35,
+      "ttfbP50Ms": 0.27,
+      "sustainedRps": 6324.11,
+      "peakRps": 6324.11,
+      "errorRatePercent": 0,
+      "errors": []
+    },
+    {
+      "name": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 8,
+      "concurrency": 2,
+      "statusCodes": {
+        "200": 8
+      },
+      "p50Ms": 0.36,
+      "p95Ms": 0.54,
+      "p99Ms": 0.54,
+      "ttfbP50Ms": 0.36,
+      "sustainedRps": 4880.53,
+      "peakRps": 4880.53,
+      "errorRatePercent": 0,
+      "errors": []
+    }
+  ],
+  "gates": [
+    {
+      "name": "auth.register",
+      "passed": true,
+      "p99Ms": 1.32,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "auth.login",
+      "passed": true,
+      "p99Ms": 0.48,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "auth.oauthCallback",
+      "passed": true,
+      "p99Ms": 0.38,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "auth.refresh",
+      "passed": true,
+      "p99Ms": 0.46,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "users.list",
+      "passed": true,
+      "p99Ms": 0.27,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "users.create",
+      "passed": true,
+      "p99Ms": 0.31,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "jobs.list",
+      "passed": true,
+      "p99Ms": 0.28,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "jobs.create",
+      "passed": true,
+      "p99Ms": 0.49,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "proposals.list",
+      "passed": true,
+      "p99Ms": 0.31,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "proposals.create",
+      "passed": true,
+      "p99Ms": 0.26,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "payments.create",
+      "passed": true,
+      "p99Ms": 0.49,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "reviews.list",
+      "passed": true,
+      "p99Ms": 0.25,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "reviews.create",
+      "passed": true,
+      "p99Ms": 0.27,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "messages.list",
+      "passed": true,
+      "p99Ms": 0.28,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "messages.create",
+      "passed": true,
+      "p99Ms": 0.33,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "notifications.list",
+      "passed": true,
+      "p99Ms": 0.27,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "notifications.create",
+      "passed": true,
+      "p99Ms": 0.31,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "uploads.create",
+      "passed": true,
+      "p99Ms": 0.61,
+      "maxP99Ms": 2000,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "search.global",
+      "passed": true,
+      "p99Ms": 0.35,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    },
+    {
+      "name": "admin.metrics",
+      "passed": true,
+      "p99Ms": 0.54,
+      "maxP99Ms": 750,
+      "errorRatePercent": 0,
+      "maxErrorRatePercent": 0
+    }
+  ]
+}
