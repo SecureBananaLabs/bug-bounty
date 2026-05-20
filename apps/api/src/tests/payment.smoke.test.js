@@ -2,7 +2,7 @@
  * Integration / smoke test for Stripe PaymentIntent creation.
  *
  * This test makes REAL API calls to Stripe in test mode.
- * It only runs when STRIPE_SMOKE_TEST=1 is set in the environment.
+ * It only runs when STRIPE_SMOKE_TEST=1 and STRIPE_SECRET_KEY are set.
  *
  * Usage:
  *   STRIPE_SMOKE_TEST=1 STRIPE_SECRET_KEY=sk_test_... npm run test:smoke
@@ -13,7 +13,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 
-const SMOKE = process.env.STRIPE_SMOKE_TEST === "1";
+const SMOKE = process.env.STRIPE_SMOKE_TEST === "1" && Boolean(process.env.STRIPE_SECRET_KEY);
 
 describe("Stripe PaymentIntent smoke test", { skip: !SMOKE }, () => {
   it("creates a test-mode PaymentIntent and returns clientSecret", async () => {

@@ -34,6 +34,15 @@ describe("createPaymentIntent - validation", () => {
     });
   });
 
+  it("should validate payload before requiring Stripe credentials", async () => {
+    _resetStripe();
+    delete process.env.STRIPE_SECRET_KEY;
+    await assert.rejects(() => createPaymentIntent({}), {
+      message: "amount is required",
+    });
+    process.env.STRIPE_SECRET_KEY = "sk_test_mock_key_for_unit_tests";
+  });
+
   it("should reject non-positive amount", async () => {
     await assert.rejects(() => createPaymentIntent({ amount: -5 }), {
       message: /positive integer/,

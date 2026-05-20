@@ -24,8 +24,6 @@ function getStripe() {
  * @returns {Promise<{ paymentId: string, clientSecret: string, amount: number, currency: string }>}
  */
 export async function createPaymentIntent(payload, deps = {}) {
-  const stripe = deps.stripe ?? getStripe();
-
   // --- Input validation ---
   if (payload.amount == null) {
     throw new PaymentError("amount is required", 400);
@@ -40,6 +38,8 @@ export async function createPaymentIntent(payload, deps = {}) {
   if (!/^[a-z]{3}$/.test(currency)) {
     throw new PaymentError("currency must be a 3-letter ISO code", 400);
   }
+
+  const stripe = deps.stripe ?? getStripe();
 
   // --- Create PaymentIntent via Stripe SDK ---
   const paymentIntent = await stripe.paymentIntents.create({

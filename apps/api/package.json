@@ -6,7 +6,7 @@
     "dev": "node src/server.js",
     "start": "node src/server.js",
     "test": "node --test \"src/tests/**/*.test.js\"",
-    "test:smoke": "STRIPE_SMOKE_TEST=1 node --test src/tests/payment.smoke.test.js"
+    "test:smoke": "node --test src/tests/payment.smoke.test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
