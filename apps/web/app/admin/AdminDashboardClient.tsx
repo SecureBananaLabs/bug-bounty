@@ -577,12 +577,17 @@ export default function AdminDashboardClient({ token, initialData, previewState 
       {previewCards}
 
       <section className="grid admin-metrics-grid" aria-label="Trust metrics overview">
-        <SectionState label="Metrics" status={sectionStatus.metrics} />
-        <MetricCard label="Total users" value={dashboard.metrics.totalUsers} helper="Registered clients and freelancers" />
-        <MetricCard label="Active jobs" value={dashboard.metrics.activeJobs} helper="Live marketplace work" />
-        <MetricCard label="Open disputes" value={dashboard.metrics.openDisputes} helper="Needs moderation" />
-        <MetricCard label="Flagged listings" value={dashboard.metrics.flaggedListings} helper="Review queue" />
-        <MetricCard label="Revenue" value={formatRevenue(dashboard.metrics.revenue)} helper="Current period" />
+        {sectionStatus.metrics.loading || sectionStatus.metrics.error ? (
+          <SectionState label="Metrics" status={sectionStatus.metrics} />
+        ) : (
+          <>
+            <MetricCard label="Total users" value={dashboard.metrics.totalUsers} helper="Registered clients and freelancers" />
+            <MetricCard label="Active jobs" value={dashboard.metrics.activeJobs} helper="Live marketplace work" />
+            <MetricCard label="Open disputes" value={dashboard.metrics.openDisputes} helper="Needs moderation" />
+            <MetricCard label="Flagged listings" value={dashboard.metrics.flaggedListings} helper="Review queue" />
+            <MetricCard label="Revenue" value={formatRevenue(dashboard.metrics.revenue)} helper="Current period" />
+          </>
+        )}
       </section>
 
       <section className="card">
@@ -591,18 +596,21 @@ export default function AdminDashboardClient({ token, initialData, previewState 
           title="Distribution across the user base"
           description="Quick glance at healthy, at-risk, and low-trust cohorts."
         />
-        <SectionState label="Trust score distribution" status={sectionStatus.metrics} />
-        <div className="trust-bars" aria-label="Trust score distribution chart">
-          {dashboard.metrics.trustScoreBuckets.map((bucket) => (
-            <div key={bucket.label} className="trust-bar-row">
-              <span>{bucket.label}</span>
-              <div className="trust-bar-track">
-                <div className="trust-bar-fill" style={{ width: `${Math.min(bucket.count * 7, 100)}%` }} />
+        {sectionStatus.metrics.loading || sectionStatus.metrics.error ? (
+          <SectionState label="Trust score distribution" status={sectionStatus.metrics} />
+        ) : (
+          <div className="trust-bars" aria-label="Trust score distribution chart">
+            {dashboard.metrics.trustScoreBuckets.map((bucket) => (
+              <div key={bucket.label} className="trust-bar-row">
+                <span>{bucket.label}</span>
+                <div className="trust-bar-track">
+                  <div className="trust-bar-fill" style={{ width: `${Math.min(bucket.count * 7, 100)}%` }} />
+                </div>
+                <strong>{bucket.count}</strong>
               </div>
-              <strong>{bucket.count}</strong>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="card">
@@ -611,7 +619,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
           title="Searchable user table"
           description="Server-side filters and pagination keep the table bounded and reviewable."
         />
-        <SectionState label="User table" status={sectionStatus.users} />
         <form className="filter-grid admin-filters" onSubmit={submitUserFilters}>
           <label>
             <span>Search users</span>
@@ -701,7 +708,13 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               </tr>
             </thead>
             <tbody>
-              {dashboard.users.items.length > 0 ? (
+              {sectionStatus.users.loading || sectionStatus.users.error ? (
+                <tr>
+                  <td colSpan={7}>
+                    <SectionState label="User table" status={sectionStatus.users} />
+                  </td>
+                </tr>
+              ) : dashboard.users.items.length > 0 ? (
                 dashboard.users.items.map((user) => (
                   <tr key={user.id} className={selectedUser?.id === user.id ? "row-selected" : undefined}>
                     <td>
@@ -747,7 +760,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
           }}
         />
 
-        {selectedUser ? (
+        {selectedUser && !sectionStatus.users.loading && !sectionStatus.users.error ? (
           <div className="detail-grid">
             <article className="card detail-card">
               <SectionTitle
@@ -818,9 +831,11 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Flagged listings queue"
             description="Approve, reject, or escalate items reported by automated rules or users."
           />
-          <SectionState label="Moderation queue" status={sectionStatus.jobs} />
-          <div className="stack">
-            {dashboard.jobs.items.length > 0 ? (
+          {sectionStatus.jobs.loading || sectionStatus.jobs.error ? (
+            <SectionState label="Moderation queue" status={sectionStatus.jobs} />
+          ) : (
+            <div className="stack">
+              {dashboard.jobs.items.length > 0 ? (
               dashboard.jobs.items.map((item) => (
                 <div key={item.id} className="stack-item">
                   <div>
@@ -841,10 +856,11 @@ export default function AdminDashboardClient({ token, initialData, previewState 
                   />
                 </div>
               ))
-            ) : (
-              <EmptyState message="No flagged listings are waiting in this queue." />
-            )}
-          </div>
+              ) : (
+                <EmptyState message="No flagged listings are waiting in this queue." />
+              )}
+            </div>
+          )}
           <Pagination
             page={dashboard.jobs.page}
             totalPages={dashboard.jobs.totalPages}
@@ -867,7 +883,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Open dispute queue"
             description="Threads, evidence, and transaction details with one-click resolutions."
           />
-          <SectionState label="Dispute queue" status={sectionStatus.disputes} />
           <form className="filter-grid admin-filters" onSubmit={submitDisputeFilters}>
             <label>
               <span>Status</span>
@@ -902,8 +917,11 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               </button>
             </div>
           </form>
-          <div className="stack">
-            {dashboard.disputes.items.length > 0 ? (
+          {sectionStatus.disputes.loading || sectionStatus.disputes.error ? (
+            <SectionState label="Dispute queue" status={sectionStatus.disputes} />
+          ) : (
+            <div className="stack">
+              {dashboard.disputes.items.length > 0 ? (
               dashboard.disputes.items.map((dispute) => (
                 <div
                   key={dispute.id}
@@ -930,10 +948,11 @@ export default function AdminDashboardClient({ token, initialData, previewState 
                   />
                 </div>
               ))
-            ) : (
-              <EmptyState message="No disputes match the current filter state." />
-            )}
-          </div>
+              ) : (
+                <EmptyState message="No disputes match the current filter state." />
+              )}
+            </div>
+          )}
           <Pagination
             page={dashboard.disputes.page}
             totalPages={dashboard.disputes.totalPages}
@@ -948,7 +967,7 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               });
             }}
           />
-          {selectedDispute ? (
+          {selectedDispute && !sectionStatus.disputes.loading && !sectionStatus.disputes.error ? (
             <div className="detail-grid">
               <article className="card detail-card">
                 <SectionTitle
@@ -1010,27 +1029,30 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Registration and posting toggles"
             description="Confirmation-first controls for changing platform behavior."
           />
-          <SectionState label="Platform controls" status={sectionStatus.settings} />
-          <div className="toggle-grid">
-            <label className="toggle-item">
-              <span>Enable new registrations</span>
-              <ConfirmToggle
-                label="new registrations"
-                enabled={dashboard.settings.registrationsEnabled}
-                onChange={(next) => void handleSettingChange("registrationsEnabled", next)}
-                disabled={busy === "/api/admin/settings"}
-              />
-            </label>
-            <label className="toggle-item">
-              <span>Enable new job postings</span>
-              <ConfirmToggle
-                label="new job postings"
-                enabled={dashboard.settings.jobPostingsEnabled}
-                onChange={(next) => void handleSettingChange("jobPostingsEnabled", next)}
-                disabled={busy === "/api/admin/settings"}
-              />
-            </label>
-          </div>
+          {sectionStatus.settings.loading || sectionStatus.settings.error ? (
+            <SectionState label="Platform controls" status={sectionStatus.settings} />
+          ) : (
+            <div className="toggle-grid">
+              <label className="toggle-item">
+                <span>Enable new registrations</span>
+                <ConfirmToggle
+                  label="new registrations"
+                  enabled={dashboard.settings.registrationsEnabled}
+                  onChange={(next) => void handleSettingChange("registrationsEnabled", next)}
+                  disabled={busy === "/api/admin/settings"}
+                />
+              </label>
+              <label className="toggle-item">
+                <span>Enable new job postings</span>
+                <ConfirmToggle
+                  label="new job postings"
+                  enabled={dashboard.settings.jobPostingsEnabled}
+                  onChange={(next) => void handleSettingChange("jobPostingsEnabled", next)}
+                  disabled={busy === "/api/admin/settings"}
+                />
+              </label>
+            </div>
+          )}
         </article>
 
         <article className="card">
@@ -1039,7 +1061,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Append-only admin actions"
             description="Bans, rulings, toggles, and moderation actions are recorded for review."
           />
-          <SectionState label="Audit log" status={sectionStatus.auditLog} />
           <form className="filter-grid admin-filters" onSubmit={submitAuditFilters}>
             <label>
               <span>Admin</span>
@@ -1097,8 +1118,11 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               </button>
             </div>
           </form>
-          <div className="stack">
-            {dashboard.auditLog.items.length > 0 ? (
+          {sectionStatus.auditLog.loading || sectionStatus.auditLog.error ? (
+            <SectionState label="Audit log" status={sectionStatus.auditLog} />
+          ) : (
+            <div className="stack">
+              {dashboard.auditLog.items.length > 0 ? (
               dashboard.auditLog.items.map((entry) => (
                 <div key={entry.id} className="stack-item">
                   <div>
@@ -1111,10 +1135,11 @@ export default function AdminDashboardClient({ token, initialData, previewState 
                   </div>
                 </div>
               ))
-            ) : (
-              <EmptyState message="No audit events match these filters." />
-            )}
-          </div>
+              ) : (
+                <EmptyState message="No audit events match these filters." />
+              )}
+            </div>
+          )}
           <Pagination
             page={dashboard.auditLog.page}
             totalPages={dashboard.auditLog.totalPages}
@@ -1137,9 +1162,11 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             title="Action outcomes"
             description="Rejected listings and dispute rulings generate notification records for the affected parties."
           />
-          <SectionState label="Notifications" status={sectionStatus.notifications} />
-          <div className="stack">
-            {dashboard.notifications.items.length > 0 ? (
+          {sectionStatus.notifications.loading || sectionStatus.notifications.error ? (
+            <SectionState label="Notifications" status={sectionStatus.notifications} />
+          ) : (
+            <div className="stack">
+              {dashboard.notifications.items.length > 0 ? (
               dashboard.notifications.items.map((notification) => (
                 <div key={notification.id} className="stack-item">
                   <div>
@@ -1153,10 +1180,11 @@ export default function AdminDashboardClient({ token, initialData, previewState 
                   </div>
                 </div>
               ))
-            ) : (
-              <EmptyState message="No notification records are available for this page." />
-            )}
-          </div>
+              ) : (
+                <EmptyState message="No notification records are available for this page." />
+              )}
+            </div>
+          )}
           <Pagination
             page={dashboard.notifications.page}
             totalPages={dashboard.notifications.totalPages}
