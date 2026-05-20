@@ -9,10 +9,20 @@ export const userActionSchema = z.object({
   action: z.enum(["suspend", "reinstate", "ban"])
 });
 
-export const jobActionSchema = z.object({
-  action: z.enum(["approve", "reject", "escalate"]),
-  reason: z.string().min(3).optional()
-});
+export const jobActionSchema = z
+  .object({
+    action: z.enum(["approve", "reject", "escalate"]),
+    reason: z.string().min(3).optional()
+  })
+  .superRefine((value, ctx) => {
+    if (value.action === "reject" && !value.reason) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["reason"],
+        message: "Reason is required when rejecting a listing"
+      });
+    }
+  });
 
 export const disputeActionSchema = z.object({
   action: z.enum(["rule_freelancer", "rule_client", "refund", "escalate"]),

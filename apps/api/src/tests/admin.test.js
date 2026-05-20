@@ -146,6 +146,24 @@ test("admin job rejection creates a notification", async () => {
   });
 });
 
+test("admin job rejection requires a reason", async () => {
+  await withServer(async (baseUrl) => {
+    const rejectResponse = await fetch(`${baseUrl}/api/admin/jobs/job_2002`, {
+      method: "PATCH",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ action: "reject" })
+    });
+
+    assert.equal(rejectResponse.status, 400);
+    const payload = await rejectResponse.json();
+    assert.equal(payload.success, false);
+    assert.match(payload.message, /reason/i);
+  });
+});
+
 test("admin dispute rulings surface thread and transaction details", async () => {
   await withServer(async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/admin/disputes?page=1&limit=1`, {

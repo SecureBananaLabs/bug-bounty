@@ -361,8 +361,18 @@ export default function AdminDashboardClient({ token, initialData, previewState 
   }
 
   async function handleJobAction(jobId: string, action: string) {
-    const prompted = action === "reject" || action === "escalate" ? window.prompt("Optional reason") : null;
-    const reason = prompted && prompted.trim().length >= 3 ? prompted.trim() : undefined;
+    let reason: string | undefined;
+    if (action === "reject") {
+      const prompted = window.prompt("Reason for rejection");
+      reason = prompted && prompted.trim().length >= 3 ? prompted.trim() : undefined;
+      if (!reason) {
+        setMessage("A rejection reason is required.");
+        return;
+      }
+    } else if (action === "escalate") {
+      const prompted = window.prompt("Optional reason");
+      reason = prompted && prompted.trim().length >= 3 ? prompted.trim() : undefined;
+    }
     await mutate(`/api/admin/jobs/${jobId}`, {
       method: "PATCH",
       body: JSON.stringify({ action, reason })
