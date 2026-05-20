@@ -12,6 +12,7 @@ import autocannon from "autocannon";
 import { writeFileSync, mkdirSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
+import { spawn } from "child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BASE_URL = process.env.BENCHMARK_URL || "http://localhost:3000";
@@ -32,8 +33,8 @@ const endpoints = [
     name: "auth-register",
     method: "POST",
     path: "/api/auth/register",
-    body: JSON.stringify({
-      email: `bench_${Date.now()}@test.com`,
+    bodyFn: () => JSON.stringify({
+      email: `bench_${Date.now()}_${Math.random().toString(36).slice(2, 8)}@test.com`,
       password: "BenchTest123!",
       name: "Benchmark User",
       role: "client",
@@ -70,8 +71,8 @@ const endpoints = [
     name: "users-create",
     method: "POST",
     path: "/api/users",
-    body: JSON.stringify({
-      email: `bench_user_${Date.now()}@test.com`,
+    bodyFn: () => JSON.stringify({
+      email: `bench_user_${Date.now()}_${Math.random().toString(36).slice(2, 8)}@test.com`,
       password: "BenchTest123!",
       name: "Benchmark Created User",
       role: "freelancer",
@@ -206,15 +207,33 @@ async function benchmarkEndpoint(config) {
     ? { Authorization: `Bearer ${BENCHMARK_TOKEN}` }
     : {};
 
+  const mergedHeaders = { ...authHeaders, ...(config.headers || {}) };
+
   const options = {
     url: BASE_URL,
     duration: parseInt(DURATION),
     connections: parseInt(CONNECTIONS),
-    method: config.method,
-    path: config.path,
-    headers: { ...authHeaders, ...(config.headers || {}) },
-    body: config.body,
   };
+
+  // 使用 bodyFn 动态生成请求体（每次请求调用一次），避免 Date.now() 静态求值
+  if (config.bodyFn) {
+    options.requests = [
+      {
+        method: config.method,
+        path: config.path,
+        headers: mergedHeaders,
+        setupRequest: (req) => {
+          req.body = config.bodyFn();
+          return req;
+        },
+      },
+    ];
+  } else {
+    options.method = config.method;
+    options.path = config.path;
+    options.headers = mergedHeaders;
+    options.body = config.body;
+  }
 
   try {
     const result = await autocannon(options);
@@ -365,6 +384,53 @@ function saveJsonReport(results) {
   console.log(`  Report saved: ${filename}`);
 }
 
+// 服务器进程引用
+let serverProcess = null;
+
+// 启动 API 服务器（仅在目标为 localhost 时自动管理）
+async function startServer() {
+  const url = new URL(BASE_URL);
+  if (url.hostname !== "localhost" && url.hostname !== "127.0.0.1") {
+    return; // 远程服务器，不需要管理
+  }
+
+  const serverPath = join(__dirname, "..", "apps", "api", "src", "server.js");
+  serverProcess = spawn("node", [serverPath], {
+    cwd: join(__dirname, "..", "apps", "api"),
+    stdio: "pipe",
+    env: { ...process.env, PORT: url.port || "3000" },
+  });
+
+  console.log("  Starting API server...");
+  await waitForServer();
+}
+
+// 等待服务器就绪（轮询 /health 端点）
+async function waitForServer(maxRetries = 30, intervalMs = 1000) {
+  for (let i = 0; i < maxRetries; i++) {
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    try {
+      const res = await fetch(`${BASE_URL}/health`);
+      if (res.ok) {
+        console.log("  Server is ready\n");
+        return;
+      }
+    } catch {
+      // 服务器尚未启动，继续等待
+    }
+  }
+  throw new Error("Server failed to start within timeout");
+}
+
+// 停止 API 服务器
+function stopServer() {
+  if (serverProcess) {
+    serverProcess.kill("SIGTERM");
+    serverProcess = null;
+    console.log("  Server stopped.");
+  }
+}
+
 // 主函数
 async function main() {
   const targetEndpoint = process.argv.find((a) => a.startsWith("--endpoint="));
@@ -383,6 +449,9 @@ async function main() {
     }
   }
 
+  // 自动管理服务器生命周期（CI 环境支持）
+  await startServer();
+
   console.log(
     `\nRunning benchmarks for ${targets.length} endpoint(s) against ${BASE_URL}...\n`,
   );
@@ -396,6 +465,13 @@ async function main() {
 
   printReport(results);
   saveJsonReport(results);
+
+  // 基准测试完成后停止服务器
+  stopServer();
 }
 
-main().catch(console.error);
+main().catch((err) => {
+  stopServer();
+  console.error(err);
+  process.exit(1);
+});
