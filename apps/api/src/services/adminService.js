@@ -62,6 +62,11 @@ const disputes = [
     status: "open",
     amountUsd: 1200,
     evidenceCount: 4,
+    transaction: { paymentId: "pay_441", escrowStatus: "held", refundableAmountUsd: 1200 },
+    evidence: [
+      { id: "ev_001", type: "message", label: "Missed milestone report" },
+      { id: "ev_002", type: "upload", label: "Delivery archive" }
+    ],
     thread: ["Client reports missed milestone.", "Freelancer uploaded delivery evidence."]
   },
   {
@@ -72,6 +77,10 @@ const disputes = [
     status: "under_review",
     amountUsd: 640,
     evidenceCount: 2,
+    transaction: { paymentId: "pay_502", escrowStatus: "review", refundableAmountUsd: 640 },
+    evidence: [
+      { id: "ev_003", type: "screenshot", label: "Scope comparison screenshot" }
+    ],
     thread: ["Scope dispute opened.", "Senior admin requested screenshots."]
   }
 ];
@@ -141,11 +150,16 @@ export async function listAdminUsers(filters = {}) {
   const query = String(filters.search ?? "").toLowerCase();
   const role = String(filters.role ?? "");
   const status = String(filters.status ?? "");
+  const joinedFrom = filters.joinedFrom ? new Date(String(filters.joinedFrom)) : null;
+  const joinedTo = filters.joinedTo ? new Date(String(filters.joinedTo)) : null;
   const filtered = users.filter((user) => {
+    const joinedAt = new Date(user.joinedAt);
     const matchesSearch = !query || `${user.name} ${user.email}`.toLowerCase().includes(query);
     const matchesRole = !role || user.role === role;
     const matchesStatus = !status || user.status === status;
-    return matchesSearch && matchesRole && matchesStatus;
+    const matchesJoinedFrom = !joinedFrom || joinedAt >= joinedFrom;
+    const matchesJoinedTo = !joinedTo || joinedAt <= joinedTo;
+    return matchesSearch && matchesRole && matchesStatus && matchesJoinedFrom && matchesJoinedTo;
   });
   return paginate(filtered, filters);
 }
@@ -177,12 +191,14 @@ export async function moderateListing(listingId, action, reason, adminId) {
   }
   listing.status = nextStatuses[action];
   const audit = recordAudit(adminId, `listing.${listing.status}`, listingId, reason || "Moderation action applied");
+  const notification = {
+    userId: listing.ownerId,
+    reason: reason || `Listing ${listing.status}`,
+    sent: listing.status === "rejected"
+  };
   return {
     listing,
-    notification: {
-      userId: listing.ownerId,
-      reason: reason || `Listing ${listing.status}`
-    },
+    notification,
     audit
   };
 }
@@ -205,6 +221,9 @@ export async function resolveDispute(disputeId, ruling, adminId) {
   const audit = recordAudit(adminId, `dispute.${ruling}`, disputeId, `Ruling: ${ruling}`);
   return {
     dispute,
+    refund: ruling === "client"
+      ? { paymentId: dispute.transaction.paymentId, amountUsd: dispute.transaction.refundableAmountUsd }
+      : null,
     notifications: [dispute.clientId, dispute.freelancerId],
     audit
   };
@@ -222,10 +241,15 @@ export async function updatePlatformControl(control, enabled, adminId) {
 export async function listAuditLog(filters = {}) {
   const adminId = String(filters.adminId ?? "");
   const action = String(filters.action ?? "");
+  const from = filters.from ? new Date(String(filters.from)) : null;
+  const to = filters.to ? new Date(String(filters.to)) : null;
   const filtered = auditLog.filter((entry) => {
+    const createdAt = new Date(entry.createdAt);
     const matchesAdmin = !adminId || entry.adminId === adminId;
     const matchesAction = !action || entry.action.startsWith(action);
-    return matchesAdmin && matchesAction;
+    const matchesFrom = !from || createdAt >= from;
+    const matchesTo = !to || createdAt <= to;
+    return matchesAdmin && matchesAction && matchesFrom && matchesTo;
   });
   return paginate(filtered, filters);
 }
