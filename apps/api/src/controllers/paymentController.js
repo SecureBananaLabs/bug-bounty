@@ -1,6 +1,12 @@
-import { ok } from "../utils/response.js";
-import { createPaymentIntent } from "../services/paymentService.js";
+import { createPaymentIntent, PaymentError, mapStripeError } from "../services/paymentService.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function createPayment(req, res) {
-  return ok(res, await createPaymentIntent(req.body), 201);
+  try {
+    const result = await createPaymentIntent(req.body);
+    return ok(res, result, 201);
+  } catch (err) {
+    const error = mapStripeError(err);
+    return fail(res, error.message, error.statusCode);
+  }
 }
