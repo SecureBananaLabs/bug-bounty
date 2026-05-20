@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState, useTransition, type FormEvent } from "react";
-import { ConfirmActions, ConfirmToggle } from "./AdminActions";
 import type {
   AdminAuditEntry,
   AdminDashboardData,
@@ -14,6 +13,20 @@ import type {
   TablePage
 } from "../../lib/admin-data";
 import { ADMIN_PAGE_SIZE } from "../../lib/admin-data";
+import {
+  AuditLogSection,
+  DisputesSection,
+  MetricsSection,
+  ModerationSection,
+  NotificationsSection,
+  PlatformControlsSection,
+  SectionTitle,
+  UsersSection,
+  type AuditFilters,
+  type DisputeFilters,
+  type SectionStatus,
+  type UserFilters
+} from "./AdminDashboardSections";
 
 type Props = {
   token: string | null;
@@ -21,31 +34,7 @@ type Props = {
   previewState: string;
 };
 
-type UserFilters = {
-  query: string;
-  role: string;
-  status: string;
-  joinedAfter: string;
-  joinedBefore: string;
-};
-
-type AuditFilters = {
-  admin: string;
-  action: string;
-  from: string;
-  to: string;
-};
-
-type DisputeFilters = {
-  status: string;
-};
-
 type SectionKey = "metrics" | "users" | "jobs" | "disputes" | "auditLog" | "notifications" | "settings";
-
-type SectionStatus = {
-  loading: boolean;
-  error: string | null;
-};
 
 const defaultFilters = (): UserFilters => ({
   query: "",
@@ -75,114 +64,6 @@ const defaultSectionStatus = (): Record<SectionKey, SectionStatus> => ({
   notifications: { loading: false, error: null },
   settings: { loading: false, error: null }
 });
-
-function formatRevenue(value: number | string) {
-  if (typeof value === "number") {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0
-    }).format(value);
-  }
-
-  return value;
-}
-
-function SectionTitle({
-  eyebrow,
-  title,
-  description
-}: {
-  eyebrow: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="admin-section-title">
-      <span>{eyebrow}</span>
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
-  );
-}
-
-function MetricCard({
-  label,
-  value,
-  helper
-}: {
-  label: string;
-  value: string | number;
-  helper: string;
-}) {
-  return (
-    <article className="card admin-metric">
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>{helper}</small>
-    </article>
-  );
-}
-
-function EmptyState({ message, colspan }: { message: string; colspan?: number }) {
-  if (typeof colspan === "number") {
-    return (
-      <tr>
-        <td colSpan={colspan}>
-          <div className="state-card empty">{message}</div>
-        </td>
-      </tr>
-    );
-  }
-
-  return <div className="state-card empty">{message}</div>;
-}
-
-function SectionState({
-  label,
-  status
-}: {
-  label: string;
-  status: SectionStatus;
-}) {
-  if (status.loading) {
-    return <div className="state-card loading">{label} are refreshing.</div>;
-  }
-
-  if (status.error) {
-    return <div className="state-card error">{label} could not be refreshed: {status.error}</div>;
-  }
-
-  return null;
-}
-
-function Pagination({
-  page,
-  totalPages,
-  onPrev,
-  onNext
-}: {
-  page: number;
-  totalPages: number;
-  onPrev: () => void;
-  onNext: () => void;
-}) {
-  return (
-    <div className="pagination-row">
-      <span className="muted">
-        Page {page} of {totalPages}
-      </span>
-      <div className="button-row">
-        <button className="admin-button secondary" type="button" onClick={onPrev} disabled={page <= 1}>
-          Previous
-        </button>
-        <button className="admin-button secondary" type="button" onClick={onNext} disabled={page >= totalPages}>
-          Next
-        </button>
-      </div>
-    </div>
-  );
-}
 
 export default function AdminDashboardClient({ token, initialData, previewState }: Props) {
   const [dashboard, setDashboard] = useState(initialData);
@@ -576,623 +457,134 @@ export default function AdminDashboardClient({ token, initialData, previewState 
 
       {previewCards}
 
-      <section className="grid admin-metrics-grid" aria-label="Trust metrics overview">
-        {sectionStatus.metrics.loading || sectionStatus.metrics.error ? (
-          <SectionState label="Metrics" status={sectionStatus.metrics} />
-        ) : (
-          <>
-            <MetricCard label="Total users" value={dashboard.metrics.totalUsers} helper="Registered clients and freelancers" />
-            <MetricCard label="Active jobs" value={dashboard.metrics.activeJobs} helper="Live marketplace work" />
-            <MetricCard label="Open disputes" value={dashboard.metrics.openDisputes} helper="Needs moderation" />
-            <MetricCard label="Flagged listings" value={dashboard.metrics.flaggedListings} helper="Review queue" />
-            <MetricCard label="Revenue" value={formatRevenue(dashboard.metrics.revenue)} helper="Current period" />
-          </>
-        )}
-      </section>
-
-      <section className="card">
-        <SectionTitle
-          eyebrow="Trust score"
-          title="Distribution across the user base"
-          description="Quick glance at healthy, at-risk, and low-trust cohorts."
-        />
-        {sectionStatus.metrics.loading || sectionStatus.metrics.error ? (
-          <SectionState label="Trust score distribution" status={sectionStatus.metrics} />
-        ) : (
-          <div className="trust-bars" aria-label="Trust score distribution chart">
-            {dashboard.metrics.trustScoreBuckets.map((bucket) => (
-              <div key={bucket.label} className="trust-bar-row">
-                <span>{bucket.label}</span>
-                <div className="trust-bar-track">
-                  <div className="trust-bar-fill" style={{ width: `${Math.min(bucket.count * 7, 100)}%` }} />
-                </div>
-                <strong>{bucket.count}</strong>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-
-      <section className="card">
-        <SectionTitle
-          eyebrow="User management"
-          title="Searchable user table"
-          description="Server-side filters and pagination keep the table bounded and reviewable."
-        />
-        <form className="filter-grid admin-filters" onSubmit={submitUserFilters}>
-          <label>
-            <span>Search users</span>
-            <input
-              aria-label="Search users"
-              value={draftFilters.query}
-              onChange={(event) => setDraftFilters((current) => ({ ...current, query: event.target.value }))}
-            />
-          </label>
-          <label>
-            <span>Role</span>
-            <select
-              aria-label="Filter by role"
-              value={draftFilters.role}
-              onChange={(event) => setDraftFilters((current) => ({ ...current, role: event.target.value }))}
-            >
-              <option value="">All roles</option>
-              <option value="client">Client</option>
-              <option value="freelancer">Freelancer</option>
-            </select>
-          </label>
-          <label>
-            <span>Status</span>
-            <select
-              aria-label="Filter by status"
-              value={draftFilters.status}
-              onChange={(event) => setDraftFilters((current) => ({ ...current, status: event.target.value }))}
-            >
-              <option value="">All statuses</option>
-              <option value="active">Active</option>
-              <option value="suspended">Suspended</option>
-              <option value="flagged">Flagged</option>
-              <option value="banned">Banned</option>
-            </select>
-          </label>
-          <label>
-            <span>Join date after</span>
-            <input
-              aria-label="Join date after"
-              value={draftFilters.joinedAfter}
-              onChange={(event) => setDraftFilters((current) => ({ ...current, joinedAfter: event.target.value }))}
-            />
-          </label>
-          <label>
-            <span>Join date before</span>
-            <input
-              aria-label="Join date before"
-              value={draftFilters.joinedBefore}
-              onChange={(event) => setDraftFilters((current) => ({ ...current, joinedBefore: event.target.value }))}
-            />
-          </label>
-          <div className="filter-actions">
-            <button className="admin-button" type="submit" disabled={isPending}>
-              Apply filters
-            </button>
-            <button
-              className="admin-button secondary"
-              type="button"
-              onClick={() => {
-                const next = defaultFilters();
-                setDraftFilters(next);
-                startTransition(() => {
-                  void loadUsers(1, next);
-                });
-              }}
-              disabled={isPending}
-            >
-              Reset
-            </button>
-          </div>
-        </form>
-
-        <div className="table-wrap">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th scope="col">User</th>
-                <th scope="col">Role</th>
-                <th scope="col">Status</th>
-                <th scope="col">Joined</th>
-                <th scope="col">Jobs</th>
-                <th scope="col">Disputes</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sectionStatus.users.loading || sectionStatus.users.error ? (
-                <tr>
-                  <td colSpan={7}>
-                    <SectionState label="User table" status={sectionStatus.users} />
-                  </td>
-                </tr>
-              ) : dashboard.users.items.length > 0 ? (
-                dashboard.users.items.map((user) => (
-                  <tr key={user.id} className={selectedUser?.id === user.id ? "row-selected" : undefined}>
-                    <td>
-                      <button className="text-button" type="button" onClick={() => setSelectedUserId(user.id)}>
-                        <strong>{user.name}</strong>
-                      </button>
-                      <div className="muted">{user.email}</div>
-                      <div className="muted">{user.profile.headline}</div>
-                    </td>
-                    <td>{user.role}</td>
-                    <td>
-                      <span className={`status-chip ${user.status}`}>{user.status}</span>
-                    </td>
-                    <td>{user.joinedAt}</td>
-                    <td>{user.activeJobs}</td>
-                    <td>{user.disputes}</td>
-                    <td>
-                      <button className="admin-button secondary" type="button" onClick={() => setSelectedUserId(user.id)}>
-                        View profile
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <EmptyState colspan={7} message="No users match the current filters." />
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        <Pagination
-          page={dashboard.users.page}
-          totalPages={dashboard.users.totalPages}
+      <MetricsSection metrics={dashboard.metrics} status={sectionStatus.metrics} />
+      <UsersSection
+        users={dashboard.users}
+        selectedUser={selectedUser}
+        status={sectionStatus.users}
+        filters={filters}
+        draftFilters={draftFilters}
+        setDraftFilters={setDraftFilters}
+        onSubmit={submitUserFilters}
+        onReset={() => {
+          const next = defaultFilters();
+          setDraftFilters(next);
+          startTransition(() => {
+            void loadUsers(1, next);
+          });
+        }}
+        isPending={isPending}
+        onPrev={() => {
+          startTransition(() => {
+            void loadUsers(Math.max(1, dashboard.users.page - 1), filters);
+          });
+        }}
+        onNext={() => {
+          startTransition(() => {
+            void loadUsers(Math.min(dashboard.users.totalPages, dashboard.users.page + 1), filters);
+          });
+        }}
+        onSelectUser={(userId) => setSelectedUserId(userId)}
+        onUserAction={(userId, action) => void handleUserAction(userId, action)}
+        busy={busy}
+      />
+      <section className="grid admin-columns" aria-label="Moderation and disputes">
+        <ModerationSection
+          jobs={dashboard.jobs}
+          status={sectionStatus.jobs}
           onPrev={() => {
             startTransition(() => {
-              void loadUsers(Math.max(1, dashboard.users.page - 1), filters);
+              void loadJobs(Math.max(1, dashboard.jobs.page - 1));
             });
           }}
           onNext={() => {
             startTransition(() => {
-              void loadUsers(Math.min(dashboard.users.totalPages, dashboard.users.page + 1), filters);
+              void loadJobs(Math.min(dashboard.jobs.totalPages, dashboard.jobs.page + 1));
             });
           }}
+          onJobAction={(jobId, action) => void handleJobAction(jobId, action)}
+          busy={busy}
+          isPending={isPending}
         />
-
-        {selectedUser && !sectionStatus.users.loading && !sectionStatus.users.error ? (
-          <div className="detail-grid">
-            <article className="card detail-card">
-              <SectionTitle
-                eyebrow="Selected user"
-                title={`${selectedUser.name} profile`}
-                description="Profile, active jobs, and dispute history surfaced from the user table."
-              />
-              <div className="detail-list">
-                <div>
-                  <span className="muted">Headline</span>
-                  <strong>{selectedUser.profile.headline}</strong>
-                </div>
-                <div>
-                  <span className="muted">Location</span>
-                  <strong>{selectedUser.profile.location}</strong>
-                </div>
-                <div>
-                  <span className="muted">Trust score</span>
-                  <strong>{selectedUser.profile.trustScore}</strong>
-                </div>
-                <div>
-                  <span className="muted">Last seen</span>
-                  <strong>{selectedUser.lastSeenAt}</strong>
-                </div>
-              </div>
-              <p className="muted">{selectedUser.profile.bio}</p>
-
-              <div className="two-column-list">
-                <div>
-                  <h4>Active jobs</h4>
-                  <ul>
-                    {selectedUser.activeJobTitles.map((job) => (
-                      <li key={job}>{job}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4>Dispute history</h4>
-                  <ul>
-                    {selectedUser.disputeHistory.length > 0 ? (
-                      selectedUser.disputeHistory.map((item) => <li key={item}>{item}</li>)
-                    ) : (
-                      <li>No prior disputes</li>
-                    )}
-                  </ul>
-                </div>
-              </div>
-
-              <ConfirmActions
-                subject={selectedUser.name}
-                actions={[
-                  { label: "Suspend", value: "suspend" },
-                  { label: "Reinstate", value: "reinstate" },
-                  { label: "Ban", value: "ban" }
-                ]}
-                onAction={(action) => void handleUserAction(selectedUser.id, action)}
-                disabled={busy === `/api/admin/users/${selectedUser.id}`}
-              />
-            </article>
-          </div>
-        ) : null}
-      </section>
-
-      <section className="grid admin-columns" aria-label="Moderation and disputes">
-        <article className="card">
-          <SectionTitle
-            eyebrow="Moderation"
-            title="Flagged listings queue"
-            description="Approve, reject, or escalate items reported by automated rules or users."
-          />
-          {sectionStatus.jobs.loading || sectionStatus.jobs.error ? (
-            <SectionState label="Moderation queue" status={sectionStatus.jobs} />
-          ) : (
-            <div className="stack">
-              {dashboard.jobs.items.length > 0 ? (
-              dashboard.jobs.items.map((item) => (
-                <div key={item.id} className="stack-item">
-                  <div>
-                    <strong>{item.title}</strong>
-                    <div className="muted">{item.owner}</div>
-                    <div className="muted">{item.reason}</div>
-                    <div className="muted">Updated {item.updatedAt}</div>
-                  </div>
-                  <ConfirmActions
-                    subject={item.title}
-                    actions={[
-                      { label: "Approve", value: "approve" },
-                      { label: "Reject", value: "reject" },
-                      { label: "Escalate", value: "escalate" }
-                    ]}
-                    onAction={(action) => void handleJobAction(item.id, action)}
-                    disabled={busy === `/api/admin/jobs/${item.id}`}
-                  />
-                </div>
-              ))
-              ) : (
-                <EmptyState message="No flagged listings are waiting in this queue." />
-              )}
-            </div>
-          )}
-          <Pagination
-            page={dashboard.jobs.page}
-            totalPages={dashboard.jobs.totalPages}
-            onPrev={() => {
-              startTransition(() => {
-                void loadJobs(Math.max(1, dashboard.jobs.page - 1));
-              });
-            }}
-            onNext={() => {
-              startTransition(() => {
-                void loadJobs(Math.min(dashboard.jobs.totalPages, dashboard.jobs.page + 1));
-              });
-            }}
-          />
-        </article>
-
-        <article className="card">
-          <SectionTitle
-            eyebrow="Disputes"
-            title="Open dispute queue"
-            description="Threads, evidence, and transaction details with one-click resolutions."
-          />
-          <form className="filter-grid admin-filters" onSubmit={submitDisputeFilters}>
-            <label>
-              <span>Status</span>
-              <select
-                aria-label="Filter dispute queue by status"
-                value={draftDisputeFilters.status}
-                onChange={(event) => setDraftDisputeFilters((current) => ({ ...current, status: event.target.value }))}
-              >
-                <option value="">All statuses</option>
-                <option value="open">Open</option>
-                <option value="under_review">Under review</option>
-                <option value="resolved">Resolved</option>
-              </select>
-            </label>
-            <div className="filter-actions">
-              <button className="admin-button" type="submit">
-                Apply filters
-              </button>
-              <button
-                className="admin-button secondary"
-                type="button"
-                onClick={() => {
-                  const next = defaultDisputeFilters();
-                  setDraftDisputeFilters(next);
-                  setDisputeFilters(next);
-                  startTransition(() => {
-                    void loadDisputes(1, next);
-                  });
-                }}
-              >
-                Reset
-              </button>
-            </div>
-          </form>
-          {sectionStatus.disputes.loading || sectionStatus.disputes.error ? (
-            <SectionState label="Dispute queue" status={sectionStatus.disputes} />
-          ) : (
-            <div className="stack">
-              {dashboard.disputes.items.length > 0 ? (
-              dashboard.disputes.items.map((dispute) => (
-                <div
-                  key={dispute.id}
-                  className={`stack-item ${selectedDispute?.id === dispute.id ? "row-selected" : ""}`}
-                >
-                  <div>
-                    <button className="text-button" type="button" onClick={() => setSelectedDisputeId(dispute.id)}>
-                      <strong>{dispute.title}</strong>
-                    </button>
-                    <div className="muted">{dispute.parties}</div>
-                    <div className="muted">{dispute.evidence}</div>
-                    <div className="muted">{dispute.amount}</div>
-                  </div>
-                  <ConfirmActions
-                    subject={dispute.title}
-                    actions={[
-                      { label: "Freelancer", value: "rule_freelancer" },
-                      { label: "Client", value: "rule_client" },
-                      { label: "Refund", value: "refund" },
-                      { label: "Escalate", value: "escalate" }
-                    ]}
-                    onAction={(action) => void handleDisputeAction(dispute.id, action)}
-                    disabled={busy === `/api/admin/disputes/${dispute.id}`}
-                  />
-                </div>
-              ))
-              ) : (
-                <EmptyState message="No disputes match the current filter state." />
-              )}
-            </div>
-          )}
-          <Pagination
-            page={dashboard.disputes.page}
-            totalPages={dashboard.disputes.totalPages}
-            onPrev={() => {
-              startTransition(() => {
-                void loadDisputes(Math.max(1, dashboard.disputes.page - 1), disputeFilters);
-              });
-            }}
-            onNext={() => {
-              startTransition(() => {
-                void loadDisputes(Math.min(dashboard.disputes.totalPages, dashboard.disputes.page + 1), disputeFilters);
-              });
-            }}
-          />
-          {selectedDispute && !sectionStatus.disputes.loading && !sectionStatus.disputes.error ? (
-            <div className="detail-grid">
-              <article className="card detail-card">
-                <SectionTitle
-                  eyebrow="Selected dispute"
-                  title={selectedDispute.title}
-                  description="Thread, evidence, and transaction details for the active case."
-                />
-                <div className="detail-list">
-                  <div>
-                    <span className="muted">Status</span>
-                    <strong>{selectedDispute.status}</strong>
-                  </div>
-                  <div>
-                    <span className="muted">Amount</span>
-                    <strong>{selectedDispute.amount}</strong>
-                  </div>
-                  <div>
-                    <span className="muted">Transaction</span>
-                    <strong>{selectedDispute.transaction.id}</strong>
-                  </div>
-                  <div>
-                    <span className="muted">Payout state</span>
-                    <strong>{selectedDispute.transaction.status}</strong>
-                  </div>
-                </div>
-                <p className="muted">{selectedDispute.evidence}</p>
-
-                <div className="two-column-list">
-                  <div>
-                    <h4>Thread</h4>
-                    <ul>
-                      {selectedDispute.thread.map((entry) => (
-                        <li key={`${entry.author}-${entry.at}`}>
-                          <strong>{entry.author}</strong>: {entry.body} <span className="muted">{entry.at}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4>Transaction</h4>
-                    <ul>
-                      <li>Transaction ID: {selectedDispute.transaction.id}</li>
-                      <li>Amount: {selectedDispute.transaction.amount}</li>
-                      <li>Currency: {selectedDispute.transaction.currency}</li>
-                      <li>Status: {selectedDispute.transaction.status}</li>
-                    </ul>
-                  </div>
-                </div>
-              </article>
-            </div>
-          ) : null}
-        </article>
+        <DisputesSection
+          disputes={dashboard.disputes}
+          selectedDispute={selectedDispute}
+          status={sectionStatus.disputes}
+          draftFilters={draftDisputeFilters}
+          setDraftDisputeFilters={setDraftDisputeFilters}
+          onSubmit={submitDisputeFilters}
+          onReset={() => {
+            const next = defaultDisputeFilters();
+            setDraftDisputeFilters(next);
+            setDisputeFilters(next);
+            startTransition(() => {
+              void loadDisputes(1, next);
+            });
+          }}
+          onPrev={() => {
+            startTransition(() => {
+              void loadDisputes(Math.max(1, dashboard.disputes.page - 1), disputeFilters);
+            });
+          }}
+          onNext={() => {
+            startTransition(() => {
+              void loadDisputes(Math.min(dashboard.disputes.totalPages, dashboard.disputes.page + 1), disputeFilters);
+            });
+          }}
+          onSelectDispute={(disputeId) => setSelectedDisputeId(disputeId)}
+          onDisputeAction={(disputeId, action) => void handleDisputeAction(disputeId, action)}
+          busy={busy}
+          isPending={isPending}
+        />
       </section>
 
       <section className="grid admin-columns">
-        <article className="card">
-          <SectionTitle
-            eyebrow="Platform controls"
-            title="Registration and posting toggles"
-            description="Confirmation-first controls for changing platform behavior."
-          />
-          {sectionStatus.settings.loading || sectionStatus.settings.error ? (
-            <SectionState label="Platform controls" status={sectionStatus.settings} />
-          ) : (
-            <div className="toggle-grid">
-              <label className="toggle-item">
-                <span>Enable new registrations</span>
-                <ConfirmToggle
-                  label="new registrations"
-                  enabled={dashboard.settings.registrationsEnabled}
-                  onChange={(next) => void handleSettingChange("registrationsEnabled", next)}
-                  disabled={busy === "/api/admin/settings"}
-                />
-              </label>
-              <label className="toggle-item">
-                <span>Enable new job postings</span>
-                <ConfirmToggle
-                  label="new job postings"
-                  enabled={dashboard.settings.jobPostingsEnabled}
-                  onChange={(next) => void handleSettingChange("jobPostingsEnabled", next)}
-                  disabled={busy === "/api/admin/settings"}
-                />
-              </label>
-            </div>
-          )}
-        </article>
-
-        <article className="card">
-          <SectionTitle
-            eyebrow="Audit log"
-            title="Append-only admin actions"
-            description="Bans, rulings, toggles, and moderation actions are recorded for review."
-          />
-          <form className="filter-grid admin-filters" onSubmit={submitAuditFilters}>
-            <label>
-              <span>Admin</span>
-              <input
-                aria-label="Filter audit log by admin"
-                value={draftAuditFilters.admin}
-                onChange={(event) => setDraftAuditFilters((current) => ({ ...current, admin: event.target.value }))}
-              />
-            </label>
-            <label>
-              <span>Action</span>
-              <input
-                aria-label="Filter audit log by action"
-                value={draftAuditFilters.action}
-                onChange={(event) => setDraftAuditFilters((current) => ({ ...current, action: event.target.value }))}
-              />
-            </label>
-            <label>
-              <span>From</span>
-              <input
-                aria-label="Audit log from date"
-                value={draftAuditFilters.from}
-                onChange={(event) => setDraftAuditFilters((current) => ({ ...current, from: event.target.value }))}
-              />
-            </label>
-            <label>
-              <span>To</span>
-              <input
-                aria-label="Audit log to date"
-                value={draftAuditFilters.to}
-                onChange={(event) => setDraftAuditFilters((current) => ({ ...current, to: event.target.value }))}
-              />
-            </label>
-            <div className="filter-actions">
-              <button className="admin-button" type="submit">
-                Apply filters
-              </button>
-              <button
-                className="admin-button secondary"
-                type="button"
-                onClick={() => {
-                  const next = defaultAuditFilters();
-                  setDraftAuditFilters(next);
-                  setAuditFilters(next);
-                  startTransition(() => {
-                    void loadAudit(1, next);
-                  });
-                }}
-              >
-                Reset
-              </button>
-            </div>
-          </form>
-          {sectionStatus.auditLog.loading || sectionStatus.auditLog.error ? (
-            <SectionState label="Audit log" status={sectionStatus.auditLog} />
-          ) : (
-            <div className="stack">
-              {dashboard.auditLog.items.length > 0 ? (
-              dashboard.auditLog.items.map((entry) => (
-                <div key={entry.id} className="stack-item">
-                  <div>
-                    <strong>{entry.action}</strong>
-                    <div className="muted">{entry.detail}</div>
-                  </div>
-                  <div className="muted">
-                    <div>{entry.admin}</div>
-                    <div>{entry.createdAt}</div>
-                  </div>
-                </div>
-              ))
-              ) : (
-                <EmptyState message="No audit events match these filters." />
-              )}
-            </div>
-          )}
-          <Pagination
-            page={dashboard.auditLog.page}
-            totalPages={dashboard.auditLog.totalPages}
-            onPrev={() => {
-              startTransition(() => {
-                void loadAudit(Math.max(1, dashboard.auditLog.page - 1), auditFilters);
-              });
-            }}
-            onNext={() => {
-              startTransition(() => {
-                void loadAudit(Math.min(dashboard.auditLog.totalPages, dashboard.auditLog.page + 1), auditFilters);
-              });
-            }}
-          />
-        </article>
-
-        <article className="card">
-          <SectionTitle
-            eyebrow="Notifications"
-            title="Action outcomes"
-            description="Rejected listings and dispute rulings generate notification records for the affected parties."
-          />
-          {sectionStatus.notifications.loading || sectionStatus.notifications.error ? (
-            <SectionState label="Notifications" status={sectionStatus.notifications} />
-          ) : (
-            <div className="stack">
-              {dashboard.notifications.items.length > 0 ? (
-              dashboard.notifications.items.map((notification) => (
-                <div key={notification.id} className="stack-item">
-                  <div>
-                    <strong>{notification.recipient}</strong>
-                    <div className="muted">{notification.type}</div>
-                    <div className="muted">{notification.detail}</div>
-                  </div>
-                  <div className="muted">
-                    <div>{notification.status}</div>
-                    <div>{notification.createdAt}</div>
-                  </div>
-                </div>
-              ))
-              ) : (
-                <EmptyState message="No notification records are available for this page." />
-              )}
-            </div>
-          )}
-          <Pagination
-            page={dashboard.notifications.page}
-            totalPages={dashboard.notifications.totalPages}
-            onPrev={() => {
-              startTransition(() => {
-                void loadNotifications(Math.max(1, dashboard.notifications.page - 1));
-              });
-            }}
-            onNext={() => {
-              startTransition(() => {
-                void loadNotifications(Math.min(dashboard.notifications.totalPages, dashboard.notifications.page + 1));
-              });
-            }}
-          />
-        </article>
+        <PlatformControlsSection
+          settings={dashboard.settings}
+          status={sectionStatus.settings}
+          onSettingChange={(setting, next) => void handleSettingChange(setting, next)}
+          busy={busy}
+        />
+        <AuditLogSection
+          auditLog={dashboard.auditLog}
+          status={sectionStatus.auditLog}
+          draftFilters={draftAuditFilters}
+          setDraftAuditFilters={setDraftAuditFilters}
+          onSubmit={submitAuditFilters}
+          onReset={() => {
+            const next = defaultAuditFilters();
+            setDraftAuditFilters(next);
+            setAuditFilters(next);
+            startTransition(() => {
+              void loadAudit(1, next);
+            });
+          }}
+          onPrev={() => {
+            startTransition(() => {
+              void loadAudit(Math.max(1, dashboard.auditLog.page - 1), auditFilters);
+            });
+          }}
+          onNext={() => {
+            startTransition(() => {
+              void loadAudit(Math.min(dashboard.auditLog.totalPages, dashboard.auditLog.page + 1), auditFilters);
+            });
+          }}
+          isPending={isPending}
+        />
+        <NotificationsSection
+          notifications={dashboard.notifications}
+          status={sectionStatus.notifications}
+          onPrev={() => {
+            startTransition(() => {
+              void loadNotifications(Math.max(1, dashboard.notifications.page - 1));
+            });
+          }}
+          onNext={() => {
+            startTransition(() => {
+              void loadNotifications(Math.min(dashboard.notifications.totalPages, dashboard.notifications.page + 1));
+            });
+          }}
+        />
       </section>
     </section>
   );
