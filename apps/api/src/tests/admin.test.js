@@ -64,3 +64,41 @@ test("admin users endpoint supports pagination", async () => {
     assert.equal(payload.data.items.length, 2);
   });
 });
+
+test("admin filters users by role and status", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/admin/users?role=freelancer&status=active`, {
+      headers: { authorization: `Bearer ${token}` }
+    });
+
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.equal(payload.data.total, 1);
+    assert.equal(payload.data.items[0].id, "usr_1001");
+  });
+});
+
+test("admin settings endpoint supports read and update", async () => {
+  await withServer(async (baseUrl) => {
+    const readResponse = await fetch(`${baseUrl}/api/admin/settings`, {
+      headers: { authorization: `Bearer ${token}` }
+    });
+
+    assert.equal(readResponse.status, 200);
+    const before = await readResponse.json();
+    assert.equal(before.data.registrationsEnabled, true);
+
+    const updateResponse = await fetch(`${baseUrl}/api/admin/settings`, {
+      method: "PATCH",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ registrationsEnabled: false })
+    });
+
+    assert.equal(updateResponse.status, 200);
+    const after = await updateResponse.json();
+    assert.equal(after.data.registrationsEnabled, false);
+  });
+});

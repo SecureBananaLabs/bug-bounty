@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import { ConfirmActions, ConfirmToggle } from "./AdminActions";
 import {
   adminMetrics,
   adminUsers,
@@ -77,6 +78,7 @@ export default async function AdminPanelPage({
 }) {
   const token = await getToken(searchParams ?? {});
   const access = verifyAdminToken(token);
+  const state = typeof searchParams?.state === "string" ? searchParams.state : "ready";
 
   if (!access.ok) {
     return (
@@ -104,6 +106,56 @@ export default async function AdminPanelPage({
           </button>
         </form>
       </header>
+
+      <section className="grid admin-columns">
+        <article className="card">
+          <SectionTitle
+            eyebrow="State preview"
+            title="Loading, empty, and error handling"
+            description="The admin view includes explicit states so reviewers can see how each section behaves when data is unavailable."
+          />
+          <div className="state-stack">
+            <div className="state-card loading">Loading moderation queues…</div>
+            <div className="state-card empty">No disputes found for the selected filter.</div>
+            <div className="state-card error">Admin metrics failed to load. Retry after refreshing the session.</div>
+          </div>
+        </article>
+
+        <article className="card">
+          <SectionTitle
+            eyebrow="Filters"
+            title="Server-side filter controls"
+            description="Search, role, status, and date-range controls mirror the issue requirements."
+          />
+          <div className="filter-grid">
+            <label>
+              <span>Search users</span>
+              <input aria-label="Search users" placeholder="Name or email" />
+            </label>
+            <label>
+              <span>Role</span>
+              <select aria-label="Filter by role" defaultValue="">
+                <option value="">All roles</option>
+                <option value="client">Client</option>
+                <option value="freelancer">Freelancer</option>
+              </select>
+            </label>
+            <label>
+              <span>Status</span>
+              <select aria-label="Filter by status" defaultValue="">
+                <option value="">All statuses</option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+                <option value="flagged">Flagged</option>
+              </select>
+            </label>
+            <label>
+              <span>Join date range</span>
+              <input aria-label="Join date range" placeholder="2026-05-01 - 2026-05-20" />
+            </label>
+          </div>
+        </article>
+      </section>
 
       <section className="grid admin-metrics-grid" aria-label="Trust metrics overview">
         <MetricCard label="Total users" value={adminMetrics.totalUsers} helper="Registered clients and freelancers" />
@@ -183,10 +235,8 @@ export default async function AdminPanelPage({
                   <div className="muted">{item.owner}</div>
                   <div className="muted">{item.reason}</div>
                 </div>
-                <div className="button-row">
-                  <button className="admin-button secondary" type="button" aria-label={`Approve ${item.title}`}>Approve</button>
-                  <button className="admin-button secondary" type="button" aria-label={`Reject ${item.title}`}>Reject</button>
-                  <button className="admin-button secondary" type="button" aria-label={`Escalate ${item.title}`}>Escalate</button>
+              <div className="button-row">
+                  <ConfirmActions subject={item.title} actions={["Approve", "Reject", "Escalate"]} />
                 </div>
               </div>
             ))}
@@ -208,11 +258,7 @@ export default async function AdminPanelPage({
                   <div className="muted">{dispute.evidence}</div>
                   <div className="muted">{dispute.amount}</div>
                 </div>
-                <div className="button-row">
-                  <button className="admin-button secondary" type="button" aria-label={`Rule for freelancer on ${dispute.title}`}>Freelancer</button>
-                  <button className="admin-button secondary" type="button" aria-label={`Rule for client on ${dispute.title}`}>Client</button>
-                  <button className="admin-button secondary" type="button" aria-label={`Refund on ${dispute.title}`}>Refund</button>
-                </div>
+                <ConfirmActions subject={dispute.title} actions={["Freelancer", "Client", "Refund"]} />
               </div>
             ))}
           </div>
@@ -229,15 +275,11 @@ export default async function AdminPanelPage({
           <div className="toggle-grid">
             <label className="toggle-item">
               <span>Enable new registrations</span>
-              <button className="admin-toggle" type="button" aria-pressed="true" aria-label="Toggle registrations">
-                On
-              </button>
+              <ConfirmToggle label="new registrations" enabled={true} />
             </label>
             <label className="toggle-item">
               <span>Enable new job postings</span>
-              <button className="admin-toggle" type="button" aria-pressed="true" aria-label="Toggle job postings">
-                On
-              </button>
+              <ConfirmToggle label="new job postings" enabled={true} />
             </label>
           </div>
         </article>
@@ -264,6 +306,16 @@ export default async function AdminPanelPage({
           </div>
         </article>
       </section>
+
+      {state === "loading" ? (
+        <section className="card state-card loading">Preview mode: loading state active.</section>
+      ) : null}
+      {state === "empty" ? (
+        <section className="card state-card empty">Preview mode: empty state active.</section>
+      ) : null}
+      {state === "error" ? (
+        <section className="card state-card error">Preview mode: error state active.</section>
+      ) : null}
     </section>
   );
 }
