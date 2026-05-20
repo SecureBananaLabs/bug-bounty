@@ -3,7 +3,7 @@ export const adminMetrics = {
   activeJobs: 128,
   openDisputes: 7,
   flaggedListings: 14,
-  revenue: 850,
+  revenue: 1490,
   trustScoreBuckets: [
     { label: "90-100", count: 12 },
     { label: "80-89", count: 31 },
@@ -128,6 +128,26 @@ export const disputes = [
       amount: "$850",
       currency: "USD",
       status: "captured"
+    }
+  },
+  {
+    id: "dsp_3003",
+    title: "Late delivery settlement",
+    parties: "maya@example.com vs tessa@example.com",
+    status: "resolved",
+    evidence: "Signed acceptance note, milestone screenshots, transaction receipt",
+    amount: "$640",
+    updatedAt: "2026-05-17",
+    thread: [
+      { author: "maya@example.com", body: "The milestone was completed and approved after mediation.", at: "2026-05-17T08:30:00Z" },
+      { author: "tessa@example.com", body: "Agreed to settlement after reviewing the evidence.", at: "2026-05-17T09:05:00Z" }
+    ],
+    resolution: "Split settlement approved",
+    transaction: {
+      id: "txn_7003",
+      amount: "$640",
+      currency: "USD",
+      status: "settled"
     }
   }
 ];

@@ -37,7 +37,7 @@ test("admin metrics are protected and return summary data", async () => {
     assert.equal(payload.success, true);
     assert.equal(payload.data.totalUsers, 5);
     assert.equal(payload.data.flaggedListings, 1);
-    assert.equal(payload.data.revenue, 850);
+    assert.equal(payload.data.revenue, 1490);
   });
 });
 
@@ -156,6 +156,20 @@ test("admin dispute rulings surface thread and transaction details", async () =>
     const payload = await response.json();
     assert.ok(Array.isArray(payload.data.items[0].thread));
     assert.equal(payload.data.items[0].transaction.id, "txn_7001");
+  });
+});
+
+test("admin disputes endpoint can surface resolved cases", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/admin/disputes?status=resolved`, {
+      headers: { authorization: `Bearer ${token}` }
+    });
+
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.equal(payload.data.total, 1);
+    assert.equal(payload.data.items[0].status, "resolved");
+    assert.equal(payload.data.items[0].transaction.status, "settled");
   });
 });
 
