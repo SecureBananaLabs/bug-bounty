@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Stripe PaymentIntent bounty demo</title>
+  <desc id="desc">Demo summary for the secure payment gateway implementation.</desc>
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect x="54" y="54" width="1172" height="612" rx="22" fill="#162033"/>
+  <rect x="54" y="54" width="1172" height="10" fill="#6ee7b7"/>
+  <text x="90" y="135" fill="#ffffff" font-family="Arial, sans-serif" font-size="46" font-weight="700">
+    Stripe PaymentIntent demo
+  </text>
+  <text x="90" y="210" fill="#d9e6ff" font-family="Arial, sans-serif" font-size="30">
+    Real Stripe PaymentIntent creation
+  </text>
+  <text x="90" y="275" fill="#d9e6ff" font-family="Arial, sans-serif" font-size="30">
+    Validates payload and idempotency key
+  </text>
+  <text x="90" y="340" fill="#d9e6ff" font-family="Arial, sans-serif" font-size="30">
+    Returns paymentId and clientSecret
+  </text>
+  <rect x="90" y="405" width="760" height="92" rx="12" fill="#0d1728"/>
+  <text x="125" y="462" fill="#8df0b3" font-family="Menlo, Consolas, monospace" font-size="30">
+    npm test -w apps/api
+  </text>
+  <text x="90" y="555" fill="#8df0b3" font-family="Arial, sans-serif" font-size="30">
+    7 passed, 1 live smoke test skipped by default
+  </text>
+  <text x="90" y="610" fill="#9fb1c8" font-family="Arial, sans-serif" font-size="24">
+    Live smoke uses an opt-in Stripe test key
+  </text>
+</svg>
