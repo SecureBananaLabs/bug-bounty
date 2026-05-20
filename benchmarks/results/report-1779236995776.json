@@ -1,0 +1,202 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health",
+    "p50": 9,
+    "p99": 22,
+    "rps": 1847,
+    "errorRate": "0.00",
+    "ttfb": "45.65"
+  },
+  {
+    "name": "auth_register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "p50": 61,
+    "p99": 235,
+    "rps": 266.67,
+    "errorRate": "0.00",
+    "ttfb": "25.93"
+  },
+  {
+    "name": "auth_login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "p50": 35,
+    "p99": 81,
+    "rps": 526.67,
+    "errorRate": "0.00",
+    "ttfb": "6.34"
+  },
+  {
+    "name": "auth_refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "p50": 41,
+    "p99": 135,
+    "rps": 380,
+    "errorRate": "0.00",
+    "ttfb": "12.10"
+  },
+  {
+    "name": "users_list",
+    "method": "GET",
+    "path": "/api/users",
+    "p50": 9,
+    "p99": 26,
+    "rps": 1960.34,
+    "errorRate": "0.00",
+    "ttfb": "10.95"
+  },
+  {
+    "name": "users_create",
+    "method": "POST",
+    "path": "/api/users",
+    "p50": 10,
+    "p99": 29,
+    "rps": 1800,
+    "errorRate": "0.00",
+    "ttfb": "5.39"
+  },
+  {
+    "name": "jobs_list",
+    "method": "GET",
+    "path": "/api/jobs",
+    "p50": 9,
+    "p99": 34,
+    "rps": 1973.67,
+    "errorRate": "0.00",
+    "ttfb": "5.06"
+  },
+  {
+    "name": "jobs_create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "p50": 11,
+    "p99": 47,
+    "rps": 1313.34,
+    "errorRate": "0.00",
+    "ttfb": "6.96"
+  },
+  {
+    "name": "proposals_list",
+    "method": "GET",
+    "path": "/api/proposals",
+    "p50": 14,
+    "p99": 54,
+    "rps": 1206.67,
+    "errorRate": "0.00",
+    "ttfb": "11.09"
+  },
+  {
+    "name": "proposals_create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "p50": 11,
+    "p99": 46,
+    "rps": 1534.34,
+    "errorRate": "0.00",
+    "ttfb": "14.05"
+  },
+  {
+    "name": "payments_create",
+    "method": "POST",
+    "path": "/api/payments",
+    "p50": 10,
+    "p99": 23,
+    "rps": 1840.34,
+    "errorRate": "0.00",
+    "ttfb": "3.20"
+  },
+  {
+    "name": "reviews_list",
+    "method": "GET",
+    "path": "/api/reviews",
+    "p50": 8,
+    "p99": 15,
+    "rps": 2240.67,
+    "errorRate": "0.00",
+    "ttfb": "8.73"
+  },
+  {
+    "name": "reviews_create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "p50": 11,
+    "p99": 34,
+    "rps": 1566.67,
+    "errorRate": "0.00",
+    "ttfb": "4.37"
+  },
+  {
+    "name": "messages_list",
+    "method": "GET",
+    "path": "/api/messages",
+    "p50": 9,
+    "p99": 21,
+    "rps": 1887,
+    "errorRate": "0.00",
+    "ttfb": "4.98"
+  },
+  {
+    "name": "messages_create",
+    "method": "POST",
+    "path": "/api/messages",
+    "p50": 10,
+    "p99": 26,
+    "rps": 1746.67,
+    "errorRate": "0.00",
+    "ttfb": "4.79"
+  },
+  {
+    "name": "notifications_list",
+    "method": "GET",
+    "path": "/api/notifications",
+    "p50": 10,
+    "p99": 46,
+    "rps": 1673.34,
+    "errorRate": "0.00",
+    "ttfb": "4.50"
+  },
+  {
+    "name": "notifications_create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "p50": 9,
+    "p99": 15,
+    "rps": 2073.67,
+    "errorRate": "0.00",
+    "ttfb": "6.65"
+  },
+  {
+    "name": "uploads_create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "p50": 12,
+    "p99": 27,
+    "rps": 1513.34,
+    "errorRate": "0.00",
+    "ttfb": "19.83"
+  },
+  {
+    "name": "search",
+    "method": "GET",
+    "path": "/api/search?q=bench",
+    "p50": 8,
+    "p99": 31,
+    "rps": 1967,
+    "errorRate": "0.00",
+    "ttfb": "6.71"
+  },
+  {
+    "name": "admin_metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "p50": 31,
+    "p99": 76,
+    "rps": 600,
+    "errorRate": "0.00",
+    "ttfb": "7.73"
+  }
+]

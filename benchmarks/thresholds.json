@@ -1,0 +1,22 @@
+{
+  "health": 150,
+  "auth_register": 300,
+  "auth_login": 200,
+  "auth_refresh": 200,
+  "users_list": 150,
+  "users_create": 150,
+  "jobs_list": 150,
+  "jobs_create": 150,
+  "proposals_list": 150,
+  "proposals_create": 150,
+  "payments_create": 150,
+  "reviews_list": 150,
+  "reviews_create": 150,
+  "messages_list": 150,
+  "messages_create": 150,
+  "notifications_list": 150,
+  "notifications_create": 200,
+  "uploads_create": 250,
+  "search": 150,
+  "admin_metrics": 150
+}
