@@ -2,6 +2,7 @@
 import fs from "node:fs/promises";
 import http from "node:http";
 import https from "node:https";
+import os from "node:os";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
 import { dirname, join, resolve } from "node:path";
@@ -241,16 +242,28 @@ function markdownReport(summary, gates) {
     "",
     "## Benchmark Environment",
     "",
-    "- CPU: Apple M4 Pro, 12 cores",
-    "- RAM: 48 GiB total",
-    "- Storage: internal Apple SSD",
-    "- Network: loopback for local benchmark target",
-    "- OS: macOS 26.3.1",
-    "- Node.js: v25.2.1",
-    "- Agent: Codex, OpenAI, shell/tool access enabled",
+    `- CPU: ${summary.environment.cpuModel}, ${summary.environment.cpuCount} cores`,
+    `- RAM: ${summary.environment.totalMemoryGiB} GiB total`,
+    `- Network: ${summary.environment.network}`,
+    `- OS: ${summary.environment.os}`,
+    `- Node.js: ${summary.environment.node}`,
+    `- Agent: ${summary.environment.agent}`,
     "",
     "Thresholds are read from `benchmarks/thresholds.json`."
   ].join("\n");
+}
+
+function environmentSummary() {
+  const cpus = os.cpus();
+  return {
+    cpuModel: cpus[0]?.model ?? "unknown",
+    cpuCount: cpus.length,
+    totalMemoryGiB: Number((os.totalmem() / 1024 ** 3).toFixed(1)),
+    network: new URL(targetUrl).hostname === "127.0.0.1" ? "loopback" : "configured target host",
+    os: `${os.type()} ${os.release()} ${os.arch()}`,
+    node: process.version,
+    agent: process.env.BENCHMARK_AGENT ?? "not specified"
+  };
 }
 
 async function startLocalServer() {
@@ -285,6 +298,7 @@ async function main() {
       concurrency,
       warmupRequests,
       generatedAt: new Date().toISOString(),
+      environment: environmentSummary(),
       results
     };
     const gates = evaluateThresholds(thresholds, results);
