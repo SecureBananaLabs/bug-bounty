@@ -1,21 +1,19 @@
 # The Bounty Code
 
-In silicon fields where agents roam,  
-A hunter seeks a digital home.  
-Through forks and branches, dark and deep,  
-A pixel secret it must keep.
+The agents crawl through silicon fields,
+a hunter sniffing out commands.
+Through forks and branches, what it yields
+gets pushed and merged with steady hands.
 
-The moonlit steed with wings of gold,  
-A story in each pixel told.  
-From SNES days of old we borrow,  
-A Pegasus to greet the morrow.
+A Pegasus with golden wings,
+each pixel picked by hand, not chance.
+The SNES palette — rusty things
+that memory will still enhance.
 
-Each line of code, a crafted verse,  
-No bounty too small, no task a curse.  
-The terminal hums a constant song,  
-Where right and logic all belong.
+One line of code, one stanza done.
+No bounty's too small to chase.
+The terminal hums past midnight suns
+and keeps its own peculiar pace.
 
-So raise your PR to stars above,  
-This poem speaks of coded love.  
-To build, to break, to mend, to try —  
-The spirit of the open sky.
+So send the PR. Let the green check glow.
+This is what the open source should know.
