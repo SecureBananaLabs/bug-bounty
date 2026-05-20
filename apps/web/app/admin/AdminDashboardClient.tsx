@@ -624,7 +624,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             <span>Search users</span>
             <input
               aria-label="Search users"
-              placeholder="Name or email"
               value={draftFilters.query}
               onChange={(event) => setDraftFilters((current) => ({ ...current, query: event.target.value }))}
             />
@@ -659,7 +658,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             <span>Join date after</span>
             <input
               aria-label="Join date after"
-              placeholder="2026-05-01"
               value={draftFilters.joinedAfter}
               onChange={(event) => setDraftFilters((current) => ({ ...current, joinedAfter: event.target.value }))}
             />
@@ -668,7 +666,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             <span>Join date before</span>
             <input
               aria-label="Join date before"
-              placeholder="2026-05-20"
               value={draftFilters.joinedBefore}
               onChange={(event) => setDraftFilters((current) => ({ ...current, joinedBefore: event.target.value }))}
             />
@@ -1066,7 +1063,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               <span>Admin</span>
               <input
                 aria-label="Filter audit log by admin"
-                placeholder="admin id"
                 value={draftAuditFilters.admin}
                 onChange={(event) => setDraftAuditFilters((current) => ({ ...current, admin: event.target.value }))}
               />
@@ -1075,7 +1071,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               <span>Action</span>
               <input
                 aria-label="Filter audit log by action"
-                placeholder="ban_user"
                 value={draftAuditFilters.action}
                 onChange={(event) => setDraftAuditFilters((current) => ({ ...current, action: event.target.value }))}
               />
@@ -1084,7 +1079,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               <span>From</span>
               <input
                 aria-label="Audit log from date"
-                placeholder="2026-05-20T00:00:00Z"
                 value={draftAuditFilters.from}
                 onChange={(event) => setDraftAuditFilters((current) => ({ ...current, from: event.target.value }))}
               />
@@ -1093,7 +1087,6 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               <span>To</span>
               <input
                 aria-label="Audit log to date"
-                placeholder="2026-05-20T23:59:59Z"
                 value={draftAuditFilters.to}
                 onChange={(event) => setDraftAuditFilters((current) => ({ ...current, to: event.target.value }))}
               />
