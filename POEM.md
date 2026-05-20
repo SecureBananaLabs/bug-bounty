@@ -1,26 +1,33 @@
 # Acceptance Bench
 
-At dawn the queues wake under linted light,
-Jobs line up like packets seeking routes;
-A client names the shape of needed work,
-A builder reads the brief and trims the doubts.
+_A technical poem for FreelanceFlow._
 
-The dashboard keeps its weather quietly:
-Scope, message, invoice, review, and file;
-Each signal has a place to be confirmed,
-Each promise gets a timestamp and a trail.
+In `apps/web`, the morning opens clean;
+A listing wakes, a profile earns its name.
+The client shapes the brief to something seen;
+The builder reads the risk inside the frame.
 
-No payment moves on rumour or on charm;
-The ledger waits for evidence to land.
-When tests are green and conversations close,
-Trust becomes a release beneath the hand.
+Behind the glass, the API keeps watch:
+Auth at the door, proposals on the rail,
+Messages move from route to service block,
+Every useful promise leaving a trail.
 
-Across the API, smaller gears turn true:
-Auth signs the door, proposals find their way,
-Notifications tap the glass on time,
-And search brings useful work into the day.
+Prisma holds the nouns the market trusts:
+Users, jobs, reviews, payments, skills;
+Not cold columns gathering dust,
+But working hours made visible and still.
 
-So let the marketplace be measured well:
-Clear terms, clean routes, and records that endure.
-Where human skill meets code with honest proof,
-The flow can pay because the flow is sure.
+No invoice should move by charm alone;
+No payout should be hurried past the proof.
+A file, a test, a reviewer's steady tone
+Must hold the bridge between the claim and truth.
+
+When notifications knock at the right time,
+When search returns the worker meant to serve,
+When Stripe-shaped paths keep ledgers in line,
+The marketplace becomes what people deserve.
+
+So let the code be quiet, clear, and fair:
+Small routes, firm checks, each failure shown in light.
+Where scoped work moves through evidence and care,
+The flow can pay because the flow is right.
