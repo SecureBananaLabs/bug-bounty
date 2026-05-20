@@ -107,6 +107,20 @@ function MetricCard({
   );
 }
 
+function EmptyState({ message, colspan }: { message: string; colspan?: number }) {
+  if (typeof colspan === "number") {
+    return (
+      <tr>
+        <td colSpan={colspan}>
+          <div className="state-card empty">{message}</div>
+        </td>
+      </tr>
+    );
+  }
+
+  return <div className="state-card empty">{message}</div>;
+}
+
 function Pagination({
   page,
   totalPages,
@@ -597,29 +611,33 @@ export default function AdminDashboardClient({ token, initialData, previewState 
               </tr>
             </thead>
             <tbody>
-              {dashboard.users.items.map((user) => (
-                <tr key={user.id} className={selectedUser?.id === user.id ? "row-selected" : undefined}>
-                  <td>
-                    <button className="text-button" type="button" onClick={() => setSelectedUserId(user.id)}>
-                      <strong>{user.name}</strong>
-                    </button>
-                    <div className="muted">{user.email}</div>
-                    <div className="muted">{user.profile.headline}</div>
-                  </td>
-                  <td>{user.role}</td>
-                  <td>
-                    <span className={`status-chip ${user.status}`}>{user.status}</span>
-                  </td>
-                  <td>{user.joinedAt}</td>
-                  <td>{user.activeJobs}</td>
-                  <td>{user.disputes}</td>
-                  <td>
-                    <button className="admin-button secondary" type="button" onClick={() => setSelectedUserId(user.id)}>
-                      View profile
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {dashboard.users.items.length > 0 ? (
+                dashboard.users.items.map((user) => (
+                  <tr key={user.id} className={selectedUser?.id === user.id ? "row-selected" : undefined}>
+                    <td>
+                      <button className="text-button" type="button" onClick={() => setSelectedUserId(user.id)}>
+                        <strong>{user.name}</strong>
+                      </button>
+                      <div className="muted">{user.email}</div>
+                      <div className="muted">{user.profile.headline}</div>
+                    </td>
+                    <td>{user.role}</td>
+                    <td>
+                      <span className={`status-chip ${user.status}`}>{user.status}</span>
+                    </td>
+                    <td>{user.joinedAt}</td>
+                    <td>{user.activeJobs}</td>
+                    <td>{user.disputes}</td>
+                    <td>
+                      <button className="admin-button secondary" type="button" onClick={() => setSelectedUserId(user.id)}>
+                        View profile
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <EmptyState colspan={7} message="No users match the current filters." />
+              )}
             </tbody>
           </table>
         </div>
@@ -711,26 +729,30 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             description="Approve, reject, or escalate items reported by automated rules or users."
           />
           <div className="stack">
-            {dashboard.jobs.items.map((item) => (
-              <div key={item.id} className="stack-item">
-                <div>
-                  <strong>{item.title}</strong>
-                  <div className="muted">{item.owner}</div>
-                  <div className="muted">{item.reason}</div>
-                  <div className="muted">Updated {item.updatedAt}</div>
+            {dashboard.jobs.items.length > 0 ? (
+              dashboard.jobs.items.map((item) => (
+                <div key={item.id} className="stack-item">
+                  <div>
+                    <strong>{item.title}</strong>
+                    <div className="muted">{item.owner}</div>
+                    <div className="muted">{item.reason}</div>
+                    <div className="muted">Updated {item.updatedAt}</div>
+                  </div>
+                  <ConfirmActions
+                    subject={item.title}
+                    actions={[
+                      { label: "Approve", value: "approve" },
+                      { label: "Reject", value: "reject" },
+                      { label: "Escalate", value: "escalate" }
+                    ]}
+                    onAction={(action) => void handleJobAction(item.id, action)}
+                    disabled={busy === `/api/admin/jobs/${item.id}`}
+                  />
                 </div>
-                <ConfirmActions
-                  subject={item.title}
-                  actions={[
-                    { label: "Approve", value: "approve" },
-                    { label: "Reject", value: "reject" },
-                    { label: "Escalate", value: "escalate" }
-                  ]}
-                  onAction={(action) => void handleJobAction(item.id, action)}
-                  disabled={busy === `/api/admin/jobs/${item.id}`}
-                />
-              </div>
-            ))}
+              ))
+            ) : (
+              <EmptyState message="No flagged listings are waiting in this queue." />
+            )}
           </div>
           <Pagination
             page={dashboard.jobs.page}
@@ -789,32 +811,36 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             </div>
           </form>
           <div className="stack">
-            {dashboard.disputes.items.map((dispute) => (
-              <div
-                key={dispute.id}
-                className={`stack-item ${selectedDispute?.id === dispute.id ? "row-selected" : ""}`}
-              >
-                <div>
-                  <button className="text-button" type="button" onClick={() => setSelectedDisputeId(dispute.id)}>
-                    <strong>{dispute.title}</strong>
-                  </button>
-                  <div className="muted">{dispute.parties}</div>
-                  <div className="muted">{dispute.evidence}</div>
-                  <div className="muted">{dispute.amount}</div>
+            {dashboard.disputes.items.length > 0 ? (
+              dashboard.disputes.items.map((dispute) => (
+                <div
+                  key={dispute.id}
+                  className={`stack-item ${selectedDispute?.id === dispute.id ? "row-selected" : ""}`}
+                >
+                  <div>
+                    <button className="text-button" type="button" onClick={() => setSelectedDisputeId(dispute.id)}>
+                      <strong>{dispute.title}</strong>
+                    </button>
+                    <div className="muted">{dispute.parties}</div>
+                    <div className="muted">{dispute.evidence}</div>
+                    <div className="muted">{dispute.amount}</div>
+                  </div>
+                  <ConfirmActions
+                    subject={dispute.title}
+                    actions={[
+                      { label: "Freelancer", value: "rule_freelancer" },
+                      { label: "Client", value: "rule_client" },
+                      { label: "Refund", value: "refund" },
+                      { label: "Escalate", value: "escalate" }
+                    ]}
+                    onAction={(action) => void handleDisputeAction(dispute.id, action)}
+                    disabled={busy === `/api/admin/disputes/${dispute.id}`}
+                  />
                 </div>
-                <ConfirmActions
-                  subject={dispute.title}
-                  actions={[
-                    { label: "Freelancer", value: "rule_freelancer" },
-                    { label: "Client", value: "rule_client" },
-                    { label: "Refund", value: "refund" },
-                    { label: "Escalate", value: "escalate" }
-                  ]}
-                  onAction={(action) => void handleDisputeAction(dispute.id, action)}
-                  disabled={busy === `/api/admin/disputes/${dispute.id}`}
-                />
-              </div>
-            ))}
+              ))
+            ) : (
+              <EmptyState message="No disputes match the current filter state." />
+            )}
           </div>
           <Pagination
             page={dashboard.disputes.page}
@@ -978,18 +1004,22 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             </div>
           </form>
           <div className="stack">
-            {dashboard.auditLog.items.map((entry) => (
-              <div key={entry.id} className="stack-item">
-                <div>
-                  <strong>{entry.action}</strong>
-                  <div className="muted">{entry.detail}</div>
+            {dashboard.auditLog.items.length > 0 ? (
+              dashboard.auditLog.items.map((entry) => (
+                <div key={entry.id} className="stack-item">
+                  <div>
+                    <strong>{entry.action}</strong>
+                    <div className="muted">{entry.detail}</div>
+                  </div>
+                  <div className="muted">
+                    <div>{entry.admin}</div>
+                    <div>{entry.createdAt}</div>
+                  </div>
                 </div>
-                <div className="muted">
-                  <div>{entry.admin}</div>
-                  <div>{entry.createdAt}</div>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <EmptyState message="No audit events match these filters." />
+            )}
           </div>
           <Pagination
             page={dashboard.auditLog.page}
@@ -1014,19 +1044,23 @@ export default function AdminDashboardClient({ token, initialData, previewState 
             description="Rejected listings and dispute rulings generate notification records for the affected parties."
           />
           <div className="stack">
-            {dashboard.notifications.items.map((notification) => (
-              <div key={notification.id} className="stack-item">
-                <div>
-                  <strong>{notification.recipient}</strong>
-                  <div className="muted">{notification.type}</div>
-                  <div className="muted">{notification.detail}</div>
+            {dashboard.notifications.items.length > 0 ? (
+              dashboard.notifications.items.map((notification) => (
+                <div key={notification.id} className="stack-item">
+                  <div>
+                    <strong>{notification.recipient}</strong>
+                    <div className="muted">{notification.type}</div>
+                    <div className="muted">{notification.detail}</div>
+                  </div>
+                  <div className="muted">
+                    <div>{notification.status}</div>
+                    <div>{notification.createdAt}</div>
+                  </div>
                 </div>
-                <div className="muted">
-                  <div>{notification.status}</div>
-                  <div>{notification.createdAt}</div>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <EmptyState message="No notification records are available for this page." />
+            )}
           </div>
           <Pagination
             page={dashboard.notifications.page}
