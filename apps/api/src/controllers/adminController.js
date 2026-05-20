@@ -29,8 +29,19 @@ export async function metrics(req, res) {
 
 export async function users(req, res) {
   const { page, limit } = paginationSchema.parse(req.query);
-  const { role, status } = req.query;
-  return ok(res, await listAdminUsers({ page, limit, role, status }));
+  const { role, status, query, joinedAfter, joinedBefore } = req.query;
+  return ok(
+    res,
+    await listAdminUsers({
+      page,
+      limit,
+      role,
+      status,
+      query,
+      joinedAfter,
+      joinedBefore
+    })
+  );
 }
 
 export async function userAction(req, res) {

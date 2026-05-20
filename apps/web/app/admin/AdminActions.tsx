@@ -3,16 +3,18 @@
 type ToggleProps = {
   label: string;
   enabled: boolean;
-  onChange?: (next: boolean) => void;
+  onChange?: (next: boolean) => void | Promise<void>;
+  disabled?: boolean;
 };
 
-export function ConfirmToggle({ label, enabled, onChange }: ToggleProps) {
+export function ConfirmToggle({ label, enabled, onChange, disabled = false }: ToggleProps) {
   return (
     <button
       className="admin-toggle"
       type="button"
       aria-pressed={enabled}
       aria-label={`Toggle ${label}`}
+      disabled={disabled}
       onClick={() => {
         const next = !enabled;
         const ok = window.confirm(
@@ -20,7 +22,7 @@ export function ConfirmToggle({ label, enabled, onChange }: ToggleProps) {
         );
 
         if (ok) {
-          onChange?.(next);
+          void onChange?.(next);
         }
       }}
     >
@@ -31,23 +33,29 @@ export function ConfirmToggle({ label, enabled, onChange }: ToggleProps) {
 
 type ActionButtonsProps = {
   subject: string;
-  actions: string[];
+  actions: Array<{ label: string; value: string }>;
+  onAction?: (value: string) => void | Promise<void>;
+  disabled?: boolean;
 };
 
-export function ConfirmActions({ subject, actions }: ActionButtonsProps) {
+export function ConfirmActions({ subject, actions, onAction, disabled = false }: ActionButtonsProps) {
   return (
     <div className="button-row">
       {actions.map((action) => (
         <button
-          key={action}
+          key={action.value}
           className="admin-button secondary"
           type="button"
+          disabled={disabled}
           onClick={() => {
-            window.confirm(`Apply ${action} to ${subject}?`);
+            const ok = window.confirm(`Apply ${action.label} to ${subject}?`);
+            if (ok) {
+              void onAction?.(action.value);
+            }
           }}
-          aria-label={`${action} ${subject}`}
+          aria-label={`${action.label} ${subject}`}
         >
-          {action}
+          {action.label}
         </button>
       ))}
     </div>

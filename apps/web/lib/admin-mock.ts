@@ -3,7 +3,7 @@ export const adminMetrics = {
   activeJobs: 128,
   openDisputes: 7,
   flaggedListings: 14,
-  revenue: "$128.9k",
+  revenue: 128900,
   trustScoreBuckets: [
     { label: "90-100", count: 12 },
     { label: "80-89", count: 31 },
@@ -21,7 +21,16 @@ export const adminUsers = [
     status: "active",
     joinedAt: "2026-04-04",
     activeJobs: 3,
-    disputes: 1
+    disputes: 1,
+    profile: {
+      headline: "Senior UI engineer",
+      location: "Austin, TX",
+      bio: "Designs marketplace interfaces and shipping flows.",
+      trustScore: 92
+    },
+    activeJobTitles: ["Design review dashboard", "Email onboarding refresh", "Audit trail polish"],
+    disputeHistory: ["Scope dispute over design handoff"],
+    lastSeenAt: "2026-05-19"
   },
   {
     id: "usr_1002",
@@ -31,7 +40,16 @@ export const adminUsers = [
     status: "suspended",
     joinedAt: "2026-04-18",
     activeJobs: 1,
-    disputes: 0
+    disputes: 0,
+    profile: {
+      headline: "Growth lead",
+      location: "New York, NY",
+      bio: "Hires specialists for product launches.",
+      trustScore: 68
+    },
+    activeJobTitles: ["Analytics migration"],
+    disputeHistory: [],
+    lastSeenAt: "2026-05-17"
   },
   {
     id: "usr_1003",
@@ -41,7 +59,16 @@ export const adminUsers = [
     status: "active",
     joinedAt: "2026-04-22",
     activeJobs: 5,
-    disputes: 2
+    disputes: 2,
+    profile: {
+      headline: "Founder and product owner",
+      location: "San Francisco, CA",
+      bio: "Runs a small product team and contracts specialists for launch work.",
+      trustScore: 88
+    },
+    activeJobTitles: ["Build onboarding analytics", "Migrate billing notifications", "Design search revamp"],
+    disputeHistory: ["Refund request for broken webhook"],
+    lastSeenAt: "2026-05-20"
   }
 ];
 

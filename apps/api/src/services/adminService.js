@@ -5,7 +5,16 @@ const users = [
     email: "maya@example.com",
     role: "freelancer",
     status: "active",
-    joinedAt: "2026-04-04"
+    joinedAt: "2026-04-04",
+    profile: {
+      headline: "Senior UI engineer",
+      location: "Austin, TX",
+      bio: "Designs marketplace interfaces and shipping flows.",
+      trustScore: 92
+    },
+    activeJobTitles: ["Design review dashboard", "Email onboarding refresh", "Audit trail polish"],
+    disputeHistory: ["Scope dispute over design handoff"],
+    lastSeenAt: "2026-05-19"
   },
   {
     id: "usr_1002",
@@ -13,7 +22,16 @@ const users = [
     email: "jordan@example.com",
     role: "client",
     status: "suspended",
-    joinedAt: "2026-04-18"
+    joinedAt: "2026-04-18",
+    profile: {
+      headline: "Growth lead",
+      location: "New York, NY",
+      bio: "Hires specialists for product launches.",
+      trustScore: 68
+    },
+    activeJobTitles: ["Analytics migration"],
+    disputeHistory: [],
+    lastSeenAt: "2026-05-17"
   },
   {
     id: "usr_1003",
@@ -21,7 +39,16 @@ const users = [
     email: "ava@example.com",
     role: "client",
     status: "active",
-    joinedAt: "2026-04-22"
+    joinedAt: "2026-04-22",
+    profile: {
+      headline: "Founder and product owner",
+      location: "San Francisco, CA",
+      bio: "Runs a small product team and contracts specialists for launch work.",
+      trustScore: 88
+    },
+    activeJobTitles: ["Build onboarding analytics", "Migrate billing notifications", "Design search revamp"],
+    disputeHistory: ["Refund request for broken webhook"],
+    lastSeenAt: "2026-05-20"
   },
   {
     id: "usr_1004",
@@ -29,7 +56,16 @@ const users = [
     email: "rafi@example.com",
     role: "freelancer",
     status: "flagged",
-    joinedAt: "2026-05-02"
+    joinedAt: "2026-05-02",
+    profile: {
+      headline: "Backend engineer",
+      location: "Toronto, ON",
+      bio: "Works on payment and messaging integrations.",
+      trustScore: 74
+    },
+    activeJobTitles: ["Webhook recovery", "Notification retry fixes"],
+    disputeHistory: ["Refund request for broken webhook"],
+    lastSeenAt: "2026-05-19"
   },
   {
     id: "usr_1005",
@@ -37,7 +73,16 @@ const users = [
     email: "tessa@example.com",
     role: "client",
     status: "active",
-    joinedAt: "2026-05-10"
+    joinedAt: "2026-05-10",
+    profile: {
+      headline: "Operations manager",
+      location: "Chicago, IL",
+      bio: "Coordinates freelance delivery and vendor review.",
+      trustScore: 81
+    },
+    activeJobTitles: ["Billing notification migration"],
+    disputeHistory: [],
+    lastSeenAt: "2026-05-18"
   }
 ];
 
@@ -149,13 +194,28 @@ export async function getAdminMetrics() {
   };
 }
 
-export async function listAdminUsers({ page, limit, role, status }) {
+export async function listAdminUsers({ page, limit, role, status, query, joinedAfter, joinedBefore }) {
   const filtered = users.filter((user) => {
     if (role && user.role !== role) {
       return false;
     }
 
     if (status && user.status !== status) {
+      return false;
+    }
+
+    if (query) {
+      const haystack = `${user.name} ${user.email}`.toLowerCase();
+      if (!haystack.includes(String(query).toLowerCase())) {
+        return false;
+      }
+    }
+
+    if (joinedAfter && user.joinedAt < String(joinedAfter)) {
+      return false;
+    }
+
+    if (joinedBefore && user.joinedAt > String(joinedBefore)) {
       return false;
     }
 

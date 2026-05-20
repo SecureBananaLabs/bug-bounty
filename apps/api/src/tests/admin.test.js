@@ -78,6 +78,49 @@ test("admin filters users by role and status", async () => {
   });
 });
 
+test("admin users endpoint supports search and join date filters", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(
+      `${baseUrl}/api/admin/users?query=ava&joinedAfter=2026-04-01&joinedBefore=2026-05-01`,
+      {
+        headers: { authorization: `Bearer ${token}` }
+      }
+    );
+
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.equal(payload.data.total, 1);
+    assert.equal(payload.data.items[0].id, "usr_1003");
+    assert.equal(payload.data.items[0].profile.headline, "Founder and product owner");
+  });
+});
+
+test("admin user actions update status and write audit entries", async () => {
+  await withServer(async (baseUrl) => {
+    const actionResponse = await fetch(`${baseUrl}/api/admin/users/usr_1003`, {
+      method: "PATCH",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ action: "ban" })
+    });
+
+    assert.equal(actionResponse.status, 200);
+    const actionPayload = await actionResponse.json();
+    assert.equal(actionPayload.data.status, "banned");
+
+    const auditResponse = await fetch(`${baseUrl}/api/admin/audit-log?admin=admin_1&action=ban_user`, {
+      headers: { authorization: `Bearer ${token}` }
+    });
+
+    assert.equal(auditResponse.status, 200);
+    const auditPayload = await auditResponse.json();
+    assert.equal(auditPayload.data.total, 1);
+    assert.match(auditPayload.data.items[0].detail, /usr_1003/);
+  });
+});
+
 test("admin settings endpoint supports read and update", async () => {
   await withServer(async (baseUrl) => {
     const readResponse = await fetch(`${baseUrl}/api/admin/settings`, {
