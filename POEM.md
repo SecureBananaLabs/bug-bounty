@@ -1,26 +1,31 @@
-# Station Log for a Small Bounty
+# FreelanceFlow, With Receipts
 
-At intake, the room is mostly quiet:
-a title, a thread, a promised sum,
-one narrow task pinned under glass,
-waiting for hands that can make it done.
+A job begins as a square of light:
+budget, deadline, scope in ink.
+The client names the useful thing,
+then waits where messages can link.
 
-At proof, the desk lamp learns the details:
-files changed, commands, the shape of a test.
-No thunder is needed for honest work,
-only a trail that can survive a second look.
+A profile answers with its craft,
+not thunder, just a quoted plan:
+hours counted, risks made plain,
+across the wire from hand to hand.
 
-At review, the margin fills with signal:
-why this line moved, why that risk stayed still.
-The patch becomes less like a guess
-and more like a door with a working key.
+A proposal crosses through the API,
+plain fields, no handshake in the dark.
+Prisma pins the nouns in place;
+the payment rail waits for the mark.
 
-At merge, the green mark is almost modest:
-not a parade, just a switch thrown clean.
-The branch folds back into the main road,
-and the issue exhales its numbered name.
+In review, charm is only static.
+Evidence carries the load:
+a screenshot, a test, a narrowed diff,
+a branch that leaves main whole.
 
-At settlement, the ledger does not sing.
-It records, releases, and goes quiet again.
-Somewhere a small balance changes state,
-and the next clear task begins to glow.
+When merge turns green, the balance moves,
+not as a trophy or applause;
+trust becomes a visible thing
+inside the ledger's careful laws.
+
+So let the platform keep this vow:
+clear work in, fair payment out.
+Each ticket less a loose request
+than a bridge with both banks written down.
