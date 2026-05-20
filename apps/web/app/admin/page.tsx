@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import jwt from "jsonwebtoken";
 import AdminDashboardClient from "./AdminDashboardClient";
 import { loadAdminDashboard } from "../../lib/admin-data";
@@ -39,16 +40,7 @@ export default async function AdminPanelPage({
   const state = typeof searchParams?.state === "string" ? searchParams.state : "ready";
 
   if (!access.ok) {
-    return (
-      <section className="card">
-        <h2>403</h2>
-        <p>
-          Admin access required. Provide a valid admin JWT via the <code>ff_access_token</code> cookie or <code>?token=</code>{" "}
-          query param for preview.
-        </p>
-        <p className="muted">{access.reason}</p>
-      </section>
-    );
+    redirect("/403");
   }
 
   const dashboard = await loadAdminDashboard({ token });
