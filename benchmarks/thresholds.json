@@ -1,0 +1,14 @@
+{
+  "defaults": {
+    "p99Ms": 1500,
+    "errorRatePercent": 0
+  },
+  "endpoints": {
+    "health": {
+      "p99Ms": 500
+    },
+    "admin-metrics": {
+      "p99Ms": 1000
+    }
+  }
+}
