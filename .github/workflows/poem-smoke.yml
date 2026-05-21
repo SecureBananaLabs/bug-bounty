@@ -1,0 +1,42 @@
+name: Poem smoke
+
+on:
+  pull_request:
+    paths:
+      - "POEM.md"
+      - ".github/workflows/poem-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-poem:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate poem file
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+
+          poem = Path("POEM.md")
+          text = poem.read_text()
+          lines = text.splitlines()
+          stanzas = [block for block in text.strip().split("\n\n") if block.strip()]
+          digest = hashlib.sha256(poem.read_bytes()).hexdigest()
+          expected = (
+              "b15cb8efb245ec3a1446f8940c0a699e1ebf5b0049abe380e7d9a7aefc23a352"
+          )
+
+          assert poem.exists(), "POEM.md must exist at the repo root"
+          assert len(lines) == 21, len(lines)
+          assert len(stanzas) == 5, len(stanzas)
+          assert lines[0] == "# Field Notes for a Fair Merge"
+          assert "FreelanceFlow" in text
+          assert digest == expected, digest
+          print(f"{poem}: 21 lines, 5 stanzas, sha256={digest}")
+          PY
