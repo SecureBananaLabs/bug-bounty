@@ -14,14 +14,23 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import path from "path";
+import { fileURLToPath } from 'url';
 
 export function createApp() {
   const app = express();
+
+  // For __dirname equivalent in ES modules
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
 
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
+
+  // Serve static pixel art assets from the project root 'assets' directory
+  app.use('/assets', express.static(path.join(__dirname, '../../../assets')));
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
