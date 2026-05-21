@@ -1,0 +1,12 @@
+{
+  "name": "@freelanceflow/benchmarks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "benchmark": "node bench.js",
+    "benchmark:smoke": "SMOKE=true node bench.js"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0"
+  }
+}
