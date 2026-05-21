@@ -330,7 +330,12 @@ export async function moderateListing(jobId, action, reason, adminId) {
     `${job.title} marked ${nextStatus}${reason ? `: ${reason}` : "."}`
   );
 
-  return { job: clone(job), audit };
+  const notification = notifications.at(-1);
+  return {
+    job: clone(job),
+    audit,
+    notification: nextStatus === "rejected" ? clone(notification) : null
+  };
 }
 
 export async function listDisputes(query) {
@@ -360,7 +365,7 @@ export async function ruleOnDispute(disputeId, ruling, reason, adminId) {
   dispute.rulingReason = reason ?? "";
 
   const firstNotificationId = notifications.length + 1;
-  notifications.push(
+  const rulingNotifications = [
     {
       id: `ntf_${firstNotificationId}`,
       userId: dispute.clientId,
@@ -373,7 +378,8 @@ export async function ruleOnDispute(disputeId, ruling, reason, adminId) {
       message: `Dispute ${dispute.id} ruling: ${ruling}`,
       createdAt: new Date().toISOString()
     }
-  );
+  ];
+  notifications.push(...rulingNotifications);
 
   const audit = addAudit(
     adminId,
@@ -382,7 +388,11 @@ export async function ruleOnDispute(disputeId, ruling, reason, adminId) {
     `Dispute ${disputeId} ruled ${ruling}${reason ? `: ${reason}` : "."}`
   );
 
-  return { dispute: clone(dispute), audit };
+  return {
+    dispute: clone(dispute),
+    audit,
+    notifications: clone(rulingNotifications)
+  };
 }
 
 export async function getPlatformControls() {

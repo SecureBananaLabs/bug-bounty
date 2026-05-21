@@ -124,6 +124,11 @@ test("admin can moderate listings, rule disputes, and update platform controls",
     const moderationPayload = await moderation.json();
     assert.equal(moderation.status, 200);
     assert.equal(moderationPayload.data.job.moderationStatus, "rejected");
+    assert.equal(moderationPayload.data.notification.userId, "usr_client_001");
+    assert.match(
+      moderationPayload.data.notification.message,
+      /External payment request/
+    );
 
     const ruling = await fetch(`${baseUrl}/api/admin/disputes/dsp_300/ruling`, {
       method: "PATCH",
@@ -134,6 +139,10 @@ test("admin can moderate listings, rule disputes, and update platform controls",
     assert.equal(ruling.status, 200);
     assert.equal(rulingPayload.data.dispute.status, "resolved");
     assert.equal(rulingPayload.data.dispute.ruling, "refund");
+    assert.deepEqual(
+      rulingPayload.data.notifications.map((item) => item.userId),
+      ["usr_client_001", "usr_freelancer_002"]
+    );
 
     const control = await fetch(`${baseUrl}/api/admin/controls`, {
       method: "PATCH",

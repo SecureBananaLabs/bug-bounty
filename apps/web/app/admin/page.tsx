@@ -92,7 +92,12 @@ export default function AdminPanelPage() {
   const [userSearch, setUserSearch] = useState("");
   const [userRole, setUserRole] = useState("");
   const [userStatus, setUserStatus] = useState("");
+  const [joinedFrom, setJoinedFrom] = useState("");
+  const [joinedTo, setJoinedTo] = useState("");
+  const [auditAdmin, setAuditAdmin] = useState("");
   const [auditType, setAuditType] = useState("");
+  const [auditFrom, setAuditFrom] = useState("");
+  const [auditTo, setAuditTo] = useState("");
   const [selectedUser, setSelectedUser] = useState<Record<string, unknown> | null>(null);
   const [selectedDispute, setSelectedDispute] = useState<Record<string, unknown> | null>(null);
 
@@ -157,7 +162,9 @@ export default function AdminPanelPage() {
           `/api/admin/users?${new URLSearchParams({
             search: userSearch,
             role: userRole,
-            status: userStatus
+            status: userStatus,
+            joinedFrom,
+            joinedTo
           }).toString()}`,
           {},
           activeToken,
@@ -166,7 +173,12 @@ export default function AdminPanelPage() {
         request<Paginated<ModerationJob>>("/api/admin/moderation", {}, activeToken, activeApiBase),
         request<Paginated<Dispute>>("/api/admin/disputes", {}, activeToken, activeApiBase),
         request<Paginated<AuditEntry>>(
-          `/api/admin/audit?${new URLSearchParams({ actionType: auditType }).toString()}`,
+          `/api/admin/audit?${new URLSearchParams({
+            adminId: auditAdmin,
+            actionType: auditType,
+            from: auditFrom,
+            to: auditTo
+          }).toString()}`,
           {},
           activeToken,
           activeApiBase
@@ -342,6 +354,18 @@ export default function AdminPanelPage() {
             <option value="suspended">Suspended</option>
             <option value="banned">Banned</option>
           </select>
+          <input
+            aria-label="Filter users joined after"
+            type="date"
+            value={joinedFrom}
+            onChange={(event) => setJoinedFrom(event.target.value)}
+          />
+          <input
+            aria-label="Filter users joined before"
+            type="date"
+            value={joinedTo}
+            onChange={(event) => setJoinedTo(event.target.value)}
+          />
           <button type="button" onClick={() => void refresh()}>
             Apply
           </button>
@@ -479,9 +503,26 @@ export default function AdminPanelPage() {
         <div className="table-toolbar">
           <h3>Audit Log</h3>
           <input
+            placeholder="Admin ID"
+            value={auditAdmin}
+            onChange={(event) => setAuditAdmin(event.target.value)}
+          />
+          <input
             placeholder="Action type"
             value={auditType}
             onChange={(event) => setAuditType(event.target.value)}
+          />
+          <input
+            aria-label="Filter audit from"
+            type="datetime-local"
+            value={auditFrom}
+            onChange={(event) => setAuditFrom(event.target.value)}
+          />
+          <input
+            aria-label="Filter audit to"
+            type="datetime-local"
+            value={auditTo}
+            onChange={(event) => setAuditTo(event.target.value)}
           />
           <button type="button" onClick={() => void refresh()}>
             Filter
