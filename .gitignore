@@ -5,3 +5,5 @@ dist
 .env.*
 coverage
 *.log
+__pycache__/
+demos/review-microscope-frames/
