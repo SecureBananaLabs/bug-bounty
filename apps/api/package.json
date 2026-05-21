@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "node --test src/tests",
+    "benchmark": "node benchmark/benchmark.js",
+    "benchmark:ci": "BASE_URL=https://api.freelanceflow.example.com node benchmark/benchmark.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
