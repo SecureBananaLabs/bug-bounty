@@ -1,0 +1,17 @@
+{
+  "default": 200,
+  "/api/auth/register": 250,
+  "/api/auth/login": 250,
+  "/api/auth/oauth/github/callback": 100,
+  "/api/auth/refresh": 100,
+  "/api/users": 150,
+  "/api/jobs": 150,
+  "/api/proposals": 150,
+  "/api/payments": 150,
+  "/api/reviews": 150,
+  "/api/messages": 150,
+  "/api/notifications": 150,
+  "/api/uploads": 200,
+  "/api/search": 150,
+  "/api/admin/metrics": 200
+}
