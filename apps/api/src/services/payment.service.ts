@@ -1,13 +1,7 @@
 import Stripe from 'stripe';
 import { PaymentIntentPayload } from '../types/payment.types';
 
-// Initialize Stripe with secret key from environment variables
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-04-10',
-  typescript: true,
-});
-
-export async function createPaymentIntent(payload: PaymentIntentPayload) {
+export async function createPaymentIntent(payload: any) {
   // Validate amount
   if (payload.amount === undefined || payload.amount === null) {
     throw new Error('Amount is required');
@@ -19,6 +13,12 @@ export async function createPaymentIntent(payload: PaymentIntentPayload) {
 
   // Set default currency to USD if not provided
   const currency = payload.currency || 'usd';
+  
+  // Initialize Stripe
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+    apiVersion: '2024-04-10',
+    typescript: true,
+  });
   
   try {
     // Create PaymentIntent with Stripe
@@ -37,8 +37,11 @@ export async function createPaymentIntent(payload: PaymentIntentPayload) {
       currency: currency,
       provider: "stripe"
     };
-  } catch (error) {
+  } catch (error: any) {
     // Re-throw Stripe errors with original messages preserved
+    if (error.type && error.type.startsWith('Stripe')) {
+      throw new Error(`Stripe API Error: ${error.message}`);
+    }
     throw error;
   }
 }
