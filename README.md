@@ -1,18 +1,17 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-<img width="64" height="64" alt="Cyberpunk Cityscape Pixel Art" src="assets/pixel-art/cyberpunk_cityscape.png" />
 
+![Cyberpunk City Pixel Art](assets/pixel-art/cyberpunk_city.png)
 
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+
 ## Workspace Structure
 
 - `apps/web` — Next.js 14 App Router frontend
-- `assets/pixel-art/` — Community-contributed pixel art gallery
 - `apps/api` — Express.js backend with layered REST API
 - `packages/db` — Prisma schema and database package
-- `packages/ui` — Shared UI components
 - `packages/ui` — Shared UI components
 
 ## Frontend
