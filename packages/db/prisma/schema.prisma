@@ -21,6 +21,13 @@ enum JobStatus {
   CANCELLED
 }
 
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  CLOSED
+}
+
 model User {
   id             String      @id @default(cuid())
   email          String      @unique
@@ -37,6 +44,8 @@ model User {
   reviewsGiven   Review[]    @relation("Reviewer")
   reviewsGot     Review[]    @relation("Reviewee")
   notifications  Notification[]
+  disputes       Dispute[]
+  auditLogs      AuditLog[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -54,6 +63,7 @@ model Job {
   category      Category    @relation(fields: [categoryId], references: [id])
   proposals     Proposal[]
   payments      Payment[]
+  disputes      Dispute[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -124,4 +134,39 @@ model Notification {
   body          String
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
+}
+
+model Dispute {
+  id            String        @id @default(cuid())
+  jobId         String
+  job           Job           @relation(fields: [jobId], references: [id])
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  reason        String
+  description   String?
+  status        DisputeStatus @default(OPEN)
+  resolution    String?
+  reviewedBy    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model AuditLog {
+  id            String    @id @default(cuid())
+  action        String
+  entityType    String
+  entityId      String
+  performedBy   String
+  performedByUser User?   @relation(fields: [performedBy], references: [id])
+  details       String?
+  createdAt     DateTime  @default(now())
+}
+
+model PlatformConfig {
+  id            String    @id @default(cuid())
+  key           String    @unique
+  value         String
+  description   String?
+  updatedBy     String?
+  updatedAt     DateTime  @updatedAt
 }
