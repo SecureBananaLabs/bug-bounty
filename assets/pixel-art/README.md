@@ -1,12 +1,11 @@
-# Pixel Art Submission
+# Pixel Art: Cyberpunk City
 
-## Cyberpunk City Sunset
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-**File:** `cyberpunk_city.png`
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+**Why:** I chose this theme because cyberpunk aesthetics naturally lend themselves to pixel art—the high contrast neon colors against dark backgrounds, the geometric shapes of skyscrapers, and the nostalgic retro-futurism vibe. The limited color palette of pixel art enhances the moody, atmospheric quality of a rain-soaked metropolis. This piece represents creative thinking through its use of dithering techniques to simulate light reflection on wet streets and the careful placement of glowing windows to suggest life within the towering structures.
 
-### Description
-A vibrant cyberpunk cityscape at sunset, featuring neon-lit skyscrapers, 
-flying vehicles, and a glowing sun reflecting off wet streets. Created with 
-a limited color palette to emphasize the retro-futuristic pixel art aesthetic.
+## Technical Details
+- Canvas size: 64x64 pixels
+- Format: PNG with transparency
+- Color palette: 16 colors
+- Created with: Aseprite (pixel art editor)
