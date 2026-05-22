@@ -24,7 +24,7 @@ export default function AdminPanelPage() {
     }
 
     // Attempt to fetch metrics to verify admin status
-    fetch("http://localhost:3000/api/admin/metrics", {
+    fetch("http://localhost:4000/api/admin/metrics", {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -49,7 +49,7 @@ export default function AdminPanelPage() {
 
   const loadData = async (endpoint, setter) => {
     const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:3000/api/admin/${endpoint}`, {
+    const res = await fetch(`http://localhost:4000/api/admin/${endpoint}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (res.ok) {
@@ -100,7 +100,7 @@ export default function AdminPanelPage() {
                 <input type="checkbox" onChange={(e) => {
                   if(window.confirm("Are you sure you want to toggle user registration?")) {
                     const token = localStorage.getItem("token");
-                    fetch(`http://localhost:3000/api/admin/controls`, {
+                    fetch(`http://localhost:4000/api/admin/controls`, {
                       method: "POST",
                       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                       body: JSON.stringify({ setting: "registration", enabled: e.target.checked })
@@ -115,7 +115,7 @@ export default function AdminPanelPage() {
                 <input type="checkbox" onChange={(e) => {
                   if(window.confirm("Are you sure you want to toggle job postings?")) {
                     const token = localStorage.getItem("token");
-                    fetch(`http://localhost:3000/api/admin/controls`, {
+                    fetch(`http://localhost:4000/api/admin/controls`, {
                       method: "POST",
                       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                       body: JSON.stringify({ setting: "job_posting", enabled: e.target.checked })
@@ -142,7 +142,7 @@ export default function AdminPanelPage() {
                       <td>
                         <button onClick={() => {
                           const token = localStorage.getItem("token");
-                          fetch(`http://localhost:3000/api/admin/users/${u.id}/status`, {
+                          fetch(`http://localhost:4000/api/admin/users/${u.id}/status`, {
                             method: "POST",
                             headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                             body: JSON.stringify({ status: "suspended" })
@@ -155,7 +155,7 @@ export default function AdminPanelPage() {
               </table>
             ) : <p>Loading users...</p>}
             <div style={{ marginTop: "10px" }}>
-              <button>Prev Page</button> <button>Next Page</button>
+              <button disabled>Prev Page</button> <button disabled>Next Page</button>
             </div>
           </div>
         )}
@@ -173,7 +173,7 @@ export default function AdminPanelPage() {
                       <td>
                         <button onClick={() => {
                           const token = localStorage.getItem("token");
-                          fetch(`http://localhost:3000/api/admin/moderation/${m.id}/status`, {
+                          fetch(`http://localhost:4000/api/admin/moderation/${m.id}/status`, {
                             method: "POST",
                             headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                             body: JSON.stringify({ status: "approved" })
@@ -181,7 +181,7 @@ export default function AdminPanelPage() {
                         }}>Approve</button>
                         <button onClick={() => {
                           const token = localStorage.getItem("token");
-                          fetch(`http://localhost:3000/api/admin/moderation/${m.id}/status`, {
+                          fetch(`http://localhost:4000/api/admin/moderation/${m.id}/status`, {
                             method: "POST",
                             headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                             body: JSON.stringify({ status: "rejected", reason: "Policy violation" })
@@ -194,7 +194,7 @@ export default function AdminPanelPage() {
               </table>
             ) : <p>Loading moderation queue...</p>}
             <div style={{ marginTop: "10px" }}>
-              <button>Prev Page</button> <button>Next Page</button>
+              <button disabled>Prev Page</button> <button disabled>Next Page</button>
             </div>
           </div>
         )}
@@ -212,7 +212,7 @@ export default function AdminPanelPage() {
                       <td>
                         <button onClick={() => {
                           const token = localStorage.getItem("token");
-                          fetch(`http://localhost:3000/api/admin/disputes/${d.id}/ruling`, {
+                          fetch(`http://localhost:4000/api/admin/disputes/${d.id}/ruling`, {
                             method: "POST",
                             headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
                             body: JSON.stringify({ ruling: "freelancer", refund: false })
@@ -225,7 +225,7 @@ export default function AdminPanelPage() {
               </table>
             ) : <p>Loading disputes...</p>}
             <div style={{ marginTop: "10px" }}>
-              <button>Prev Page</button> <button>Next Page</button>
+              <button disabled>Prev Page</button> <button disabled>Next Page</button>
             </div>
           </div>
         )}
@@ -249,7 +249,7 @@ export default function AdminPanelPage() {
               </table>
             ) : <p>Loading audit log...</p>}
             <div style={{ marginTop: "10px" }}>
-              <button>Prev Page</button> <button>Next Page</button>
+              <button disabled>Prev Page</button> <button disabled>Next Page</button>
             </div>
           </div>
         )}

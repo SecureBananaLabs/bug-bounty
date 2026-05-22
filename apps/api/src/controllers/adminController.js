@@ -17,7 +17,7 @@ export async function updateUserStatus(req, res) {
   if (!['active', 'suspended', 'banned'].includes(status)) {
     return fail(res, "Invalid status", 400);
   }
-  const result = await adminService.updateUserStatus(req.user.id, id, status);
+  const result = await adminService.updateUserStatus(req.user.sub, id, status);
   return ok(res, result);
 }
 
@@ -33,7 +33,7 @@ export async function moderateJob(req, res) {
   if (!['approved', 'rejected', 'escalated'].includes(status)) {
     return fail(res, "Invalid status", 400);
   }
-  const result = await adminService.moderateJob(req.user.id, id, status, reason);
+  const result = await adminService.moderateJob(req.user.sub, id, status, reason);
   return ok(res, result);
 }
 
@@ -46,13 +46,13 @@ export async function getDisputes(req, res) {
 export async function resolveDispute(req, res) {
   const { id } = req.params;
   const { ruling, refund, escalationReason } = req.body;
-  const result = await adminService.resolveDispute(req.user.id, id, { ruling, refund, escalationReason });
+  const result = await adminService.resolveDispute(req.user.sub, id, { ruling, refund, escalationReason });
   return ok(res, result);
 }
 
 export async function toggleControl(req, res) {
   const { setting, enabled } = req.body;
-  const result = await adminService.toggleControl(req.user.id, setting, enabled);
+  const result = await adminService.toggleControl(req.user.sub, setting, enabled);
   return ok(res, result);
 }
 

@@ -22,8 +22,12 @@ export async function getAdminMetrics() {
 export async function getUsers({ page, limit }) {
   // Return stub pagination
   return {
-    items: [],
-    total: 0,
+    items: [
+      { id: 'usr_1', role: 'freelancer', status: 'active' },
+      { id: 'usr_2', role: 'client', status: 'active' },
+      { id: 'usr_3', role: 'freelancer', status: 'suspended' }
+    ],
+    total: 3,
     page: parseInt(page),
     limit: parseInt(limit)
   };
@@ -36,8 +40,11 @@ export async function updateUserStatus(adminId, userId, status) {
 
 export async function getModerationQueue({ page, limit }) {
   return {
-    items: [],
-    total: 0,
+    items: [
+      { id: 'job_991', status: 'pending_review' },
+      { id: 'job_992', status: 'pending_review' }
+    ],
+    total: 2,
     page: parseInt(page),
     limit: parseInt(limit)
   };
@@ -50,8 +57,11 @@ export async function moderateJob(adminId, jobId, status, reason) {
 
 export async function getDisputes({ page, limit }) {
   return {
-    items: [],
-    total: 0,
+    items: [
+      { id: 'disp_12', status: 'open' },
+      { id: 'disp_13', status: 'escalated' }
+    ],
+    total: 2,
     page: parseInt(page),
     limit: parseInt(limit)
   };
