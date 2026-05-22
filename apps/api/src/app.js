@@ -15,22 +15,19 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 import path from "path";
-import { fileURLToPath } from 'url';
 
 export function createApp() {
   const app = express();
-
-  // For __dirname equivalent in ES modules
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
 
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
 
-  // Serve static pixel art assets from the project root 'assets' directory
-  app.use('/assets', express.static(path.join(__dirname, '../../../assets')));
+  // Serve static assets, including pixel art, from the project's 'assets' directory.
+  // This assumes the 'assets' directory is at the root of the repository.
+  // process.cwd() gets the current working directory, which is typically the project root when the app is run.
+  app.use('/assets', express.static(path.join(process.cwd(), 'assets')));
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
