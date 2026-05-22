@@ -1,0 +1,17 @@
+{
+  "default": {
+    "p99Ms": 750,
+    "errorRate": 0.05,
+    "minRequestsPerSecond": 5
+  },
+  "GET /health": {
+    "p99Ms": 250,
+    "errorRate": 0,
+    "minRequestsPerSecond": 20
+  },
+  "POST /api/uploads": {
+    "p99Ms": 1000,
+    "errorRate": 0.05,
+    "minRequestsPerSecond": 2
+  }
+}
