@@ -1,0 +1,24 @@
+{
+  "default": {
+    "p99LatencyMs": 1000,
+    "errorRatePct": 0,
+    "minSustainedRps": 1
+  },
+  "endpoints": {
+    "uploads-create": {
+      "p99LatencyMs": 1500,
+      "errorRatePct": 0,
+      "minSustainedRps": 1
+    },
+    "auth-register": {
+      "p99LatencyMs": 1500,
+      "errorRatePct": 0,
+      "minSustainedRps": 1
+    },
+    "admin-metrics": {
+      "p99LatencyMs": 1500,
+      "errorRatePct": 0,
+      "minSustainedRps": 1
+    }
+  }
+}
