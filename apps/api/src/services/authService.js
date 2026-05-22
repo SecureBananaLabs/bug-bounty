@@ -12,9 +12,11 @@ export async function registerUser(payload) {
 
 export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
+  const role = payload.email === 'admin@freelanceflow.com' ? 'admin' : 'client';
+  const sub = role === 'admin' ? 'usr_admin' : 'usr_existing';
   return {
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    token: signAccessToken({ sub, role })
   };
 }
 
