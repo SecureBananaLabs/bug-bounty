@@ -1,0 +1,387 @@
+{
+  "metadata": {
+    "mode": "full",
+    "targetUrl": "http://127.0.0.1:61903",
+    "startedAt": "2026-05-22T02:31:07.278Z",
+    "finishedAt": "2026-05-22T02:31:07.544Z",
+    "requestCount": 5,
+    "concurrency": 2,
+    "timeoutMs": 5000,
+    "routeCount": 21,
+    "environment": {
+      "node": "v22.15.0",
+      "platform": "win32 10.0.26200 x64",
+      "cpu": "AMD Ryzen 5 7530U with Radeon Graphics         ",
+      "cpuCount": 12,
+      "totalMemoryMb": 14173,
+      "freeMemoryMb": 1904
+    }
+  },
+  "endpoints": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 4.34,
+      "p95Ms": 17.11,
+      "p99Ms": 17.11,
+      "p99TtfbMs": 16.42,
+      "sustainedRps": 192.48,
+      "peakRps": 460.41,
+      "errorRatePct": 0,
+      "elapsedMs": 25.98
+    },
+    {
+      "name": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 14.53,
+      "p95Ms": 24.14,
+      "p99Ms": 24.14,
+      "p99TtfbMs": 23.99,
+      "sustainedRps": 116.17,
+      "peakRps": 137.66,
+      "errorRatePct": 0,
+      "elapsedMs": 43.04
+    },
+    {
+      "name": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 7.12,
+      "p95Ms": 9.17,
+      "p99Ms": 9.17,
+      "p99TtfbMs": 9.05,
+      "sustainedRps": 244.88,
+      "peakRps": 281.06,
+      "errorRatePct": 0,
+      "elapsedMs": 20.42
+    },
+    {
+      "name": "auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 2.82,
+      "p95Ms": 2.97,
+      "p99Ms": 2.97,
+      "p99TtfbMs": 2.84,
+      "sustainedRps": 729,
+      "peakRps": 708.39,
+      "errorRatePct": 0,
+      "elapsedMs": 6.86
+    },
+    {
+      "name": "auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 3.48,
+      "p95Ms": 4.39,
+      "p99Ms": 4.39,
+      "p99TtfbMs": 4.23,
+      "sustainedRps": 469.24,
+      "peakRps": 574.55,
+      "errorRatePct": 0,
+      "elapsedMs": 10.66
+    },
+    {
+      "name": "users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 2.85,
+      "p95Ms": 3.55,
+      "p99Ms": 3.55,
+      "p99TtfbMs": 3.46,
+      "sustainedRps": 585.86,
+      "peakRps": 701.14,
+      "errorRatePct": 0,
+      "elapsedMs": 8.53
+    },
+    {
+      "name": "users-create",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 3.43,
+      "p95Ms": 4.12,
+      "p99Ms": 4.12,
+      "p99TtfbMs": 4,
+      "sustainedRps": 488.84,
+      "peakRps": 583.4,
+      "errorRatePct": 0,
+      "elapsedMs": 10.23
+    },
+    {
+      "name": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 2.9,
+      "p95Ms": 4.2,
+      "p99Ms": 4.2,
+      "p99TtfbMs": 4.08,
+      "sustainedRps": 574.27,
+      "peakRps": 689.08,
+      "errorRatePct": 0,
+      "elapsedMs": 8.71
+    },
+    {
+      "name": "jobs-create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 3.56,
+      "p95Ms": 4.93,
+      "p99Ms": 4.93,
+      "p99TtfbMs": 4.83,
+      "sustainedRps": 504.7,
+      "peakRps": 562.27,
+      "errorRatePct": 0,
+      "elapsedMs": 9.91
+    },
+    {
+      "name": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 3.67,
+      "p95Ms": 4.87,
+      "p99Ms": 4.87,
+      "p99TtfbMs": 4.73,
+      "sustainedRps": 480.11,
+      "peakRps": 545.51,
+      "errorRatePct": 0,
+      "elapsedMs": 10.41
+    },
+    {
+      "name": "proposals-create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 2.35,
+      "p95Ms": 2.64,
+      "p99Ms": 2.64,
+      "p99TtfbMs": 2.56,
+      "sustainedRps": 671.82,
+      "peakRps": 849.33,
+      "errorRatePct": 0,
+      "elapsedMs": 7.44
+    },
+    {
+      "name": "payments-create",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 3.35,
+      "p95Ms": 4.25,
+      "p99Ms": 4.25,
+      "p99TtfbMs": 4.17,
+      "sustainedRps": 516.13,
+      "peakRps": 596.32,
+      "errorRatePct": 0,
+      "elapsedMs": 9.69
+    },
+    {
+      "name": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 2.92,
+      "p95Ms": 3.46,
+      "p99Ms": 3.46,
+      "p99TtfbMs": 3.35,
+      "sustainedRps": 617.75,
+      "peakRps": 685.12,
+      "errorRatePct": 0,
+      "elapsedMs": 8.09
+    },
+    {
+      "name": "reviews-create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 4.98,
+      "p95Ms": 5.29,
+      "p99Ms": 5.29,
+      "p99TtfbMs": 5.08,
+      "sustainedRps": 395.72,
+      "peakRps": 401.99,
+      "errorRatePct": 0,
+      "elapsedMs": 12.64
+    },
+    {
+      "name": "messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 3.14,
+      "p95Ms": 4.78,
+      "p99Ms": 4.78,
+      "p99TtfbMs": 4.67,
+      "sustainedRps": 499.28,
+      "peakRps": 636.19,
+      "errorRatePct": 0,
+      "elapsedMs": 10.01
+    },
+    {
+      "name": "messages-create",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 3.57,
+      "p95Ms": 4.73,
+      "p99Ms": 4.73,
+      "p99TtfbMs": 4.54,
+      "sustainedRps": 467.99,
+      "peakRps": 560.63,
+      "errorRatePct": 0,
+      "elapsedMs": 10.68
+    },
+    {
+      "name": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 2.05,
+      "p95Ms": 4.13,
+      "p99Ms": 4.13,
+      "p99TtfbMs": 4.01,
+      "sustainedRps": 674.7,
+      "peakRps": 977.66,
+      "errorRatePct": 0,
+      "elapsedMs": 7.41
+    },
+    {
+      "name": "notifications-create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 1.97,
+      "p95Ms": 2.3,
+      "p99Ms": 2.3,
+      "p99TtfbMs": 2.24,
+      "sustainedRps": 922.58,
+      "peakRps": 1013.07,
+      "errorRatePct": 0,
+      "elapsedMs": 5.42
+    },
+    {
+      "name": "uploads-create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50Ms": 3.04,
+      "p95Ms": 11.13,
+      "p99Ms": 11.13,
+      "p99TtfbMs": 11.06,
+      "sustainedRps": 317.39,
+      "peakRps": 658.52,
+      "errorRatePct": 0,
+      "elapsedMs": 15.75
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 2,
+      "p95Ms": 4.27,
+      "p99Ms": 4.27,
+      "p99TtfbMs": 4.19,
+      "sustainedRps": 673.15,
+      "peakRps": 999.65,
+      "errorRatePct": 0,
+      "elapsedMs": 7.43
+    },
+    {
+      "name": "admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50Ms": 4.55,
+      "p95Ms": 5.87,
+      "p99Ms": 5.87,
+      "p99TtfbMs": 5.77,
+      "sustainedRps": 357.96,
+      "peakRps": 439.86,
+      "errorRatePct": 0,
+      "elapsedMs": 13.97
+    }
+  ],
+  "totals": {
+    "endpoints": 21,
+    "requests": 105,
+    "maxP99Ms": 24.14,
+    "maxP99TtfbMs": 23.99,
+    "aggregateErrorRatePct": 0
+  },
+  "thresholdFailures": []
+}

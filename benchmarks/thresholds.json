@@ -1,0 +1,8 @@
+{
+  "default": {
+    "p99Ms": 1000,
+    "p99TtfbMs": 1000,
+    "errorRatePct": 0
+  },
+  "endpoints": {}
+}

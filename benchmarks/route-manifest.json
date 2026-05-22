@@ -1,0 +1,204 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health",
+    "expectedStatus": [200],
+    "description": "Process health endpoint"
+  },
+  {
+    "name": "auth-register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "expectedStatus": [201],
+    "json": {
+      "email": "benchmark-user@example.com",
+      "password": "benchmark-password",
+      "role": "client"
+    },
+    "description": "Register a user with representative credentials"
+  },
+  {
+    "name": "auth-login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "expectedStatus": [200],
+    "json": {
+      "email": "benchmark-user@example.com",
+      "password": "benchmark-password"
+    },
+    "description": "Log in with representative credentials"
+  },
+  {
+    "name": "auth-oauth-callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback",
+    "expectedStatus": [200],
+    "description": "OAuth provider callback acknowledgement"
+  },
+  {
+    "name": "auth-refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "expectedStatus": [200],
+    "description": "Access token refresh"
+  },
+  {
+    "name": "users-list",
+    "method": "GET",
+    "path": "/api/users",
+    "expectedStatus": [200],
+    "description": "List users"
+  },
+  {
+    "name": "users-create",
+    "method": "POST",
+    "path": "/api/users",
+    "expectedStatus": [201],
+    "json": {
+      "email": "benchmark-profile@example.com",
+      "name": "Benchmark Profile",
+      "role": "freelancer"
+    },
+    "description": "Create a representative user profile"
+  },
+  {
+    "name": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs",
+    "expectedStatus": [200],
+    "description": "List jobs"
+  },
+  {
+    "name": "jobs-create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "expectedStatus": [201],
+    "json": {
+      "title": "Benchmark API project",
+      "description": "Representative benchmark payload for a project posting.",
+      "budgetMin": 1000,
+      "budgetMax": 3000,
+      "categoryId": "software",
+      "skills": ["node", "api", "benchmark"]
+    },
+    "description": "Create a project posting with realistic payload size"
+  },
+  {
+    "name": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals",
+    "expectedStatus": [200],
+    "description": "List proposals"
+  },
+  {
+    "name": "proposals-create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "expectedStatus": [201],
+    "json": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark",
+      "amount": 2250,
+      "coverLetter": "I can deliver the benchmarked implementation with tests and reporting."
+    },
+    "description": "Create a representative proposal"
+  },
+  {
+    "name": "payments-create",
+    "method": "POST",
+    "path": "/api/payments",
+    "expectedStatus": [201],
+    "json": {
+      "amount": 2250,
+      "currency": "usd",
+      "jobId": "job_benchmark"
+    },
+    "description": "Create a payment intent"
+  },
+  {
+    "name": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews",
+    "expectedStatus": [200],
+    "description": "List reviews"
+  },
+  {
+    "name": "reviews-create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "expectedStatus": [201],
+    "json": {
+      "targetId": "usr_benchmark",
+      "rating": 5,
+      "comment": "Benchmark review payload."
+    },
+    "description": "Create a representative review"
+  },
+  {
+    "name": "messages-list",
+    "method": "GET",
+    "path": "/api/messages",
+    "expectedStatus": [200],
+    "description": "List messages"
+  },
+  {
+    "name": "messages-create",
+    "method": "POST",
+    "path": "/api/messages",
+    "expectedStatus": [201],
+    "json": {
+      "threadId": "thr_benchmark",
+      "senderId": "usr_benchmark",
+      "body": "Benchmark message payload for API latency measurement."
+    },
+    "description": "Create a representative message"
+  },
+  {
+    "name": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications",
+    "expectedStatus": [200],
+    "description": "List notifications"
+  },
+  {
+    "name": "notifications-create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "expectedStatus": [201],
+    "json": {
+      "userId": "usr_benchmark",
+      "type": "proposal",
+      "message": "A proposal was submitted for your benchmark project."
+    },
+    "description": "Create a representative notification"
+  },
+  {
+    "name": "uploads-create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "expectedStatus": [201],
+    "multipart": {
+      "fieldName": "file",
+      "filename": "benchmark.txt",
+      "contentType": "text/plain",
+      "content": "benchmark upload payload\n"
+    },
+    "description": "Upload a small representative file"
+  },
+  {
+    "name": "search",
+    "method": "GET",
+    "path": "/api/search?q=benchmark",
+    "expectedStatus": [200],
+    "description": "Run global search"
+  },
+  {
+    "name": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": true,
+    "expectedStatus": [200],
+    "description": "Read protected admin metrics with a benchmark token"
+  }
+]
