@@ -25,7 +25,14 @@ jobs:
       run: |
         npm run dev -w apps/api &
         # Wait for server to start
-        sleep 5
+        echo "Waiting for API server..."
+        for i in {1..30}; do
+          if curl -s http://localhost:3000/health > /dev/null; then
+            echo "Server is up!"
+            break
+          fi
+          sleep 1
+        done
       env:
         STRIPE_SECRET_KEY: sk_test_benchmark
         PORT: 3000
@@ -34,6 +41,7 @@ jobs:
       run: |
         export BENCHMARK_DURATION=2
         export BENCHMARK_CONNECTIONS=5
+        export BENCHMARK_AUTH_TOKEN=$(node -e "const jwt = require('./apps/api/node_modules/jsonwebtoken'); console.log(jwt.sign({ sub: 'admin_123', role: 'admin' }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '1h' }))")
         npm run benchmark
       env:
         CI: true

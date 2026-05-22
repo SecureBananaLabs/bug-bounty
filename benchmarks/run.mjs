@@ -7,10 +7,14 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load env config
-dotenv.config({ path: path.join(__dirname, '.env.benchmark') });
+// Load env config (fallback to standard .env if .env.benchmark doesn't exist)
+if (fs.existsSync && require('fs').existsSync(path.join(__dirname, '.env.benchmark'))) {
+  dotenv.config({ path: path.join(__dirname, '.env.benchmark') });
+} else {
+  dotenv.config();
+}
 
-const HOST = process.env.BENCHMARK_TARGET_HOST || 'http://localhost:3000';
+const HOST = process.env.BENCHMARK_TARGET_HOST || 'http://localhost:4000';
 const TOKEN = process.env.BENCHMARK_AUTH_TOKEN || 'test_token';
 const DURATION = parseInt(process.env.BENCHMARK_DURATION || '5', 10);
 const CONNECTIONS = parseInt(process.env.BENCHMARK_CONNECTIONS || '10', 10);
@@ -19,17 +23,18 @@ const THRESHOLDS_PATH = path.join(__dirname, 'thresholds.json');
 
 const endpoints = [
   { name: 'Health Check', path: '/health', method: 'GET' },
+  { name: 'Auth Login', path: '/api/auth/login', method: 'POST', body: JSON.stringify({ email: 'test@example.com', password: 'test' }) },
   { name: 'Get Users', path: '/api/users', method: 'GET', auth: true },
   { name: 'Get Jobs', path: '/api/jobs', method: 'GET' },
+  { name: 'Post Job', path: '/api/jobs', method: 'POST', auth: true, body: JSON.stringify({ title: 'Benchmark Test Job', description: 'Test', budget: 100 }) },
+  { name: 'Get Proposals', path: '/api/proposals', method: 'GET', auth: true },
+  { name: 'Get Payments', path: '/api/payments', method: 'GET', auth: true },
+  { name: 'Get Reviews', path: '/api/reviews', method: 'GET', auth: true },
+  { name: 'Get Messages', path: '/api/messages', method: 'GET', auth: true },
+  { name: 'Get Notifications', path: '/api/notifications', method: 'GET', auth: true },
+  { name: 'Get Uploads', path: '/api/uploads', method: 'GET', auth: true },
   { name: 'Search', path: '/api/search?q=test', method: 'GET' },
-  { name: 'Admin Metrics', path: '/api/admin/metrics', method: 'GET', auth: true },
-  { 
-    name: 'Post Job', 
-    path: '/api/jobs', 
-    method: 'POST', 
-    auth: true, 
-    body: JSON.stringify({ title: 'Benchmark Test Job', description: 'Test', budget: 100 })
-  }
+  { name: 'Admin Metrics', path: '/api/admin/metrics', method: 'GET', auth: true }
 ];
 
 async function runBenchmark(endpoint) {
@@ -45,6 +50,9 @@ async function runBenchmark(endpoint) {
     };
 
     if (endpoint.auth) {
+      if (TOKEN === 'test_token' || !TOKEN) {
+        return reject(new Error(`BENCHMARK_AUTH_TOKEN must be set to a valid token for authenticated endpoint: ${endpoint.name}`));
+      }
       opts.headers['Authorization'] = `Bearer ${TOKEN}`;
     }
 
@@ -76,20 +84,21 @@ async function main() {
     try {
       const result = await runBenchmark(endpoint);
       
-      const p50 = result.latency.p50;
-      const p95 = result.latency.p95;
-      const p99 = result.latency.p99;
-      const rps = result.requests.average;
-      const errorRate = (result.errors / result.requests.total) * 100 || 0;
+      const p50 = result.latency.p50 || null;
+      const p95 = result.latency.p97_5 || null;
+      const p99 = result.latency.p99 || null;
+      const rps = result.requests.average || 0;
+      const totalErrors = result.errors + (result.non2xx || 0);
+      const errorRate = (totalErrors / result.requests.total) * 100 || 0;
       // We estimate TTFB by using min latency or a proxy, but autocannon latency is effectively TTFB to full response.
-      const ttfb = result.latency.min; 
+      const ttfb = result.latency.min || null; 
 
       const data = {
         name: endpoint.name,
         path: endpoint.path,
         method: endpoint.method,
         p50, p95, p99, rps, errorRate, ttfb,
-        passed: p99 <= thresholds.maxP99LatencyMs && errorRate <= thresholds.maxErrorRatePercent
+        passed: p99 <= thresholds.maxP99LatencyMs && errorRate <= thresholds.maxErrorRatePercent && rps >= (thresholds.minRps || 0)
       };
 
       results.push(data);
