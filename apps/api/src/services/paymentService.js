@@ -1,9 +1,24 @@
+import Stripe from "stripe";
+
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 export async function createPaymentIntent(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
-  return {
-    paymentId: `pay_${Date.now()}`,
+  if (!payload || typeof payload.amount !== 'number' || !Number.isInteger(payload.amount) || payload.amount <= 0) {
+    throw new Error('Invalid amount: amount must be a positive integer.');
+  }
+
+  const currency = payload.currency ?? "usd";
+
+  const paymentIntent = await stripe.paymentIntents.create({
     amount: payload.amount,
-    currency: payload.currency ?? "usd",
-    provider: "stripe"
+    currency: currency,
+  });
+
+  return {
+    paymentId: paymentIntent.id,
+    amount: payload.amount,
+    currency: currency,
+    provider: "stripe",
+    clientSecret: paymentIntent.client_secret
   };
 }
