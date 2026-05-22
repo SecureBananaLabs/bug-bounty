@@ -1,0 +1,164 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health"
+  },
+  {
+    "name": "auth-register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "json": {
+      "email": "benchmark-freelancer@example.com",
+      "password": "benchmark-password",
+      "role": "freelancer"
+    }
+  },
+  {
+    "name": "auth-login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "json": {
+      "email": "benchmark-client@example.com",
+      "password": "benchmark-password"
+    }
+  },
+  {
+    "name": "auth-oauth-callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback"
+  },
+  {
+    "name": "auth-refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh"
+  },
+  {
+    "name": "users-list",
+    "method": "GET",
+    "path": "/api/users"
+  },
+  {
+    "name": "users-create",
+    "method": "POST",
+    "path": "/api/users",
+    "json": {
+      "email": "benchmark-user@example.com",
+      "name": "Benchmark User",
+      "role": "client"
+    }
+  },
+  {
+    "name": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs"
+  },
+  {
+    "name": "jobs-create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "json": {
+      "title": "Benchmark landing page redesign",
+      "description": "Create a responsive landing page and deliver source files.",
+      "budgetMin": 500,
+      "budgetMax": 1200,
+      "categoryId": "design",
+      "skills": ["figma", "nextjs", "tailwind"]
+    }
+  },
+  {
+    "name": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals"
+  },
+  {
+    "name": "proposals-create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "json": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark",
+      "amount": 900,
+      "coverLetter": "I can deliver the benchmark project in one week."
+    }
+  },
+  {
+    "name": "payments-create",
+    "method": "POST",
+    "path": "/api/payments",
+    "json": {
+      "jobId": "job_benchmark",
+      "amount": 90000,
+      "currency": "usd"
+    }
+  },
+  {
+    "name": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews"
+  },
+  {
+    "name": "reviews-create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "json": {
+      "jobId": "job_benchmark",
+      "reviewerId": "usr_client",
+      "revieweeId": "usr_freelancer",
+      "rating": 5,
+      "comment": "Fast delivery and clear communication."
+    }
+  },
+  {
+    "name": "messages-list",
+    "method": "GET",
+    "path": "/api/messages"
+  },
+  {
+    "name": "messages-create",
+    "method": "POST",
+    "path": "/api/messages",
+    "json": {
+      "threadId": "thread_benchmark",
+      "senderId": "usr_client",
+      "body": "Can you share the first milestone by Friday?"
+    }
+  },
+  {
+    "name": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications"
+  },
+  {
+    "name": "notifications-create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "json": {
+      "userId": "usr_benchmark",
+      "type": "proposal_received",
+      "message": "A freelancer submitted a proposal."
+    }
+  },
+  {
+    "name": "uploads-create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "formData": {
+      "file": {
+        "filename": "benchmark.txt",
+        "content": "benchmark upload payload"
+      }
+    }
+  },
+  {
+    "name": "search-global",
+    "method": "GET",
+    "path": "/api/search?q=designer"
+  },
+  {
+    "name": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": true
+  }
+]

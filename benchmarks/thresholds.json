@@ -1,0 +1,10 @@
+{
+  "default": {
+    "p99LatencyMs": 250,
+    "errorRatePercent": 0
+  },
+  "smoke": {
+    "p99LatencyMs": 500,
+    "errorRatePercent": 0
+  }
+}

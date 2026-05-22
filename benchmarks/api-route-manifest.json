@@ -1,0 +1,23 @@
+[
+  { "method": "GET", "path": "/health", "auth": false },
+  { "method": "POST", "path": "/api/auth/register", "auth": false },
+  { "method": "POST", "path": "/api/auth/login", "auth": false },
+  { "method": "GET", "path": "/api/auth/oauth/github/callback", "auth": false },
+  { "method": "POST", "path": "/api/auth/refresh", "auth": false },
+  { "method": "GET", "path": "/api/users", "auth": false },
+  { "method": "POST", "path": "/api/users", "auth": false },
+  { "method": "GET", "path": "/api/jobs", "auth": false },
+  { "method": "POST", "path": "/api/jobs", "auth": false },
+  { "method": "GET", "path": "/api/proposals", "auth": false },
+  { "method": "POST", "path": "/api/proposals", "auth": false },
+  { "method": "POST", "path": "/api/payments", "auth": false },
+  { "method": "GET", "path": "/api/reviews", "auth": false },
+  { "method": "POST", "path": "/api/reviews", "auth": false },
+  { "method": "GET", "path": "/api/messages", "auth": false },
+  { "method": "POST", "path": "/api/messages", "auth": false },
+  { "method": "GET", "path": "/api/notifications", "auth": false },
+  { "method": "POST", "path": "/api/notifications", "auth": false },
+  { "method": "POST", "path": "/api/uploads", "auth": false },
+  { "method": "GET", "path": "/api/search?q=designer", "auth": false },
+  { "method": "GET", "path": "/api/admin/metrics", "auth": true }
+]
