@@ -1,0 +1,86 @@
+{
+  "GET /health": {
+    "p99_latency_ms": 50,
+    "error_rate_pct": 0
+  },
+  "POST /api/auth/register": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "POST /api/auth/login": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "GET /api/auth/oauth/:provider/callback": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 0
+  },
+  "POST /api/auth/refresh": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 5
+  },
+  "GET /api/users": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 0
+  },
+  "POST /api/users": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "GET /api/jobs": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 0
+  },
+  "POST /api/jobs": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "GET /api/proposals": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 0
+  },
+  "POST /api/proposals": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "POST /api/payments": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "GET /api/reviews": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 0
+  },
+  "POST /api/reviews": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "GET /api/messages": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 0
+  },
+  "POST /api/messages": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "GET /api/notifications": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 0
+  },
+  "POST /api/notifications": {
+    "p99_latency_ms": 200,
+    "error_rate_pct": 5
+  },
+  "POST /api/uploads": {
+    "p99_latency_ms": 500,
+    "error_rate_pct": 5
+  },
+  "GET /api/search": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 0
+  },
+  "GET /api/admin/metrics": {
+    "p99_latency_ms": 100,
+    "error_rate_pct": 5
+  }
+}
