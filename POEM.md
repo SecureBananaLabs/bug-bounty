@@ -1,31 +1,41 @@
-# Flow Under Review
+# Trust Interface
 
-A client writes a brief at dawn,
-a job card wakes in Next.js light;
-the marketplace begins to draw
-where scope and skill can meet upright.
+A client posts a need in morning light,
+`job-101` asking widgets how to care;
+Next.js lifts the listing into sight,
+and budgets learn the honest shape of air.
 
-A freelancer sends a careful bid,
-with proofs instead of empty flame;
-through messages kept close and clear,
-trust learns each user's proper name.
+Maya reads the scope, then sends her proof:
+TypeScript hands, a rate, a measured bid;
+no empty thunder rattles on the roof,
+just work made legible before it is hid.
 
-The API holds the rails below:
-a route, a guard, a Zod-shaped gate;
-Prisma keeps the ledger slow
-so hurried work still ships in state.
+The message thread keeps context warm and small,
+from brief to question, answer into plan;
+a notification crosses every wall
+so no one loses what the other began.
 
-When payment waits behind the door,
-Stripe dreams in service-layer seams;
-reviews return what clients saw,
-and ratings steady future teams.
+Below, the Express routes hold the line:
+register, login, refresh, search, upload;
+Zod names the gate where inputs sign,
+and helpers keep each clean response in code.
 
-An admin watches quiet flags,
-notifications cross the floor;
-each bug we catch, each test that passes,
-leaves the platform safer than before.
+Prisma writes the marketplace in rows:
+User, Job, Proposal, Payment, Review;
+foreign keys remember what trust owes,
+so every promise has a path back through.
 
-So FreelanceFlow can move as promised:
-from posted need to paid release;
-a cleaner path for honest work,
-a build where trust and trade increase.
+Stripe waits where release should be precise,
+not luck, not rumor, not a hurried hand;
+a client sees the invoice, pays the price,
+and delivery becomes something both can stand.
+
+Admins read the flags without a shout,
+rate limits calm the doors at heavy rain;
+errors surface, tests pull doubt out,
+and safer work returns to ship again.
+
+So FreelanceFlow is more than posted work:
+it is scope, evidence, message, merge, release;
+a quiet interface where trades do not lurk,
+but move from trust to proof to earned peace.
