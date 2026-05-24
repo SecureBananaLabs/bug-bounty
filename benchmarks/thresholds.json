@@ -1,0 +1,7 @@
+{
+  "default": {
+    "p99_ms": 1000,
+    "error_rate": 0
+  }
+}
+
