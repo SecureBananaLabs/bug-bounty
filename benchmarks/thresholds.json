@@ -1,0 +1,11 @@
+{
+  "/api/auth/login": {
+    "p99Latency": 500
+  },
+  "/api/auth/register": {
+    "p99Latency": 600
+  },
+  "/api/users": {
+    "p99Latency": 400
+  }
+}
