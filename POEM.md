@@ -1,29 +1,24 @@
-<div align="center">
-  <img width="300" src="https://github.com/SecureBananaLabs/bug-bounty/assets/133288149/9ac9d741-f1e7-480a-9691-080910562a0a" />
-</div>
+# Ode to the Flow
 
-# The Code's Silent Architecture
+In circuits deep where data streams,
+A marketplace of hopes and dreams,
+Where freelancers craft with steady hand,
+And clients seek across the land.
 
-In the realm where logic dwells,
-Silicon dreams are spun,
-Each line a thread that weaves the spells
-That bind what needs to be done.
+The monorepo stands so tall,
+With Next.js to answer every call,
+Express hums a backend tune,
+Beneath the watchful, silver moon.
 
-Functions bloom like digital flowers,
-Each algorithm a careful thought,
-Variables holding data's powers,
-In memory's keep, by darkness brought.
+Components shared, a UI bright,
+Prisma models hold the light,
+Jobs and proposals, payments too,
+Reviews and messages, fresh and new.
 
-The servers hum, the databases gleam,
-As users dance through cyberspace,
-In this world, nothing is as it seems,
-Each click reveals a new face.
+So here's to code that flows so free,
+A bounty earned for all to see,
+May every pull request find its way,
+To merge and ship another day.
 
-Data flows like a typed out stream,
-Through pipelines etched in lines of code,
-Where every byte holds a digital dream,
-And logic's path is firmly showed.
-
-So here's to the ones who code the net,
-May your logic be clean, your purpose set.
-\ No newline at end of file
+---
+*Written for the FreelanceFlow project — a celebration of open-source collaboration and the elegant architecture that powers modern freelance marketplaces.*
