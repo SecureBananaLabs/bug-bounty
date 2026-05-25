@@ -1,17 +1,13 @@
 {
   "name": "bug-bounty",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
+  "scripts": {
     "packages/*"
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "dependencies": {
-    "stripe": "^14.0.0"
+    "lint": "echo \"No root lint configured\"",
+    "test": "npm run test -w apps/api"
   }
 }
