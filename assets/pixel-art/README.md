@@ -1,7 +1,11 @@
-# Pixel Art: Retro Robot
+# Pixel Art: Cyberpunk City
 
-**File:** `retro-robot.png`  
-**Size:** 64x64 pixels  
-**Format:** PNG
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-A friendly retro robot with a boxy metallic body, glowing blue eyes, and an antenna with a red light. Inspired by 1980s sci-fi aesthetics and classic video game sprites. Created as original pixel art for the bug bounty challenge because robots represent the intersection of technology and creativity that defines this project.
+**Why:** I chose this theme because cyberpunk aesthetics naturally lend themselves to pixel art—the high contrast neon colors against dark backgrounds, the geometric shapes of skyscrapers, and the nostalgic retro-futurism vibe. The limited color palette of pixel art enhances the moody, atmospheric quality of a rain-soaked metropolis. This piece represents creative thinking through its use of dithering techniques to simulate light reflection on wet streets and the careful placement of glowing windows to suggest life within the towering structures.
+
+## Details
+- Canvas size: 64x64 pixels
+- Format: PNG with transparency
+- Color palette: 16 colors
+- Technique: Manual pixel placement with dithering for atmospheric effects
