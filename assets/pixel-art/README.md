@@ -1,7 +1,7 @@
-# Pixel Art: Cyberpunk Cityscape
+# Cosmic Cat Pixel Art
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night, featuring neon-lit skyscrapers, holographic billboards, and a glowing moon reflected in rain-slicked streets.
+**What:** A retro-style cat floating in space, gazing at a distant star.
 
-**Why:** I chose this theme because cyberpunk aesthetics perfectly showcase the creative potential of pixel art—limited resolution forces expressive use of color and silhouette. The contrast between dark shadows and vibrant neon highlights demonstrates how pixel art can evoke mood and atmosphere with minimal pixels.
+**Why:** I chose this theme because cats are universally loved in developer culture, and the cosmic setting represents the endless curiosity and exploration that drives creative coding. The limited color palette pays homage to classic 8-bit games while the composition evokes a sense of wonder and calm.
 
-**File:** `cyberpunk-cityscape.png` (64x64 pixels, PNG format)
+**Canvas size:** 64x64 pixels
