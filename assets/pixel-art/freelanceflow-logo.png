@@ -1,0 +1,16 @@
+version https://git-lfs.github.com/spec/v1
+oid sha256:0000000000000000000000000000000000000000000000000000000000000000
+size 0
+# Pixel Art: FreelanceFlow Logo
+
+**File:** `freelanceflow-logo.png`
+**Dimensions:** 64x64 pixels
+**Format:** PNG
+
+## Description
+
+A pixel art representation of the FreelanceFlow platform — a stylized briefcase with a flowing checkmark, symbolizing completed freelance jobs. Uses a vibrant purple (#8B5CF6) and teal (#14B8A6) palette on a dark background to match the app's modern branding.
+
+## Why
+
+This logo captures the core identity of FreelanceFlow: empowering freelancers to find work and clients to hire talent efficiently. The briefcase represents work/projects, while the flowing checkmark signifies successful task completion — the "flow" in FreelanceFlow.
