@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-19T05:49:06.714Z",
+  "generatedAt": "2026-05-25T09:15:48.370Z",
   "mode": "smoke",
   "target": "local",
   "config": {
@@ -12,7 +12,7 @@
     "cpu": "Apple M5",
     "cpuCount": 10,
     "totalMemoryMb": 16384,
-    "freeMemoryMb": 105
+    "freeMemoryMb": 143
   },
   "thresholds": {
     "defaults": {
@@ -37,18 +37,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 15.74,
-        "p95": 15.74,
-        "p99": 15.74
+        "p50": 15.51,
+        "p95": 15.51,
+        "p99": 15.51
       },
       "ttfbMs": {
-        "p50": 15.36,
-        "p95": 15.36,
-        "p99": 15.36
+        "p50": 15.1,
+        "p95": 15.1,
+        "p99": 15.1
       },
       "rps": {
-        "sustained": 63.38,
-        "peak": 63.53
+        "sustained": 64.29,
+        "peak": 64.46
       },
       "statuses": {
         "201": 1
@@ -63,18 +63,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 1.51,
-        "p95": 1.51,
-        "p99": 1.51
+        "p50": 1.59,
+        "p95": 1.59,
+        "p99": 1.59
       },
       "ttfbMs": {
-        "p50": 1.45,
-        "p95": 1.45,
-        "p99": 1.45
+        "p50": 1.53,
+        "p95": 1.53,
+        "p99": 1.53
       },
       "rps": {
-        "sustained": 662.01,
-        "peak": 664.12
+        "sustained": 628.29,
+        "peak": 630.82
       },
       "statuses": {
         "200": 1
@@ -89,18 +89,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.81,
-        "p95": 0.81,
-        "p99": 0.81
+        "p50": 0.82,
+        "p95": 0.82,
+        "p99": 0.82
       },
       "ttfbMs": {
-        "p50": 0.75,
-        "p95": 0.75,
-        "p99": 0.75
+        "p50": 0.76,
+        "p95": 0.76,
+        "p99": 0.76
       },
       "rps": {
-        "sustained": 1229.57,
-        "peak": 1236.28
+        "sustained": 1213.9,
+        "peak": 1220.88
       },
       "statuses": {
         "200": 1
@@ -115,18 +115,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.55,
-        "p95": 0.55,
-        "p99": 0.55
+        "p50": 0.57,
+        "p95": 0.57,
+        "p99": 0.57
       },
       "ttfbMs": {
-        "p50": 0.51,
-        "p95": 0.51,
-        "p99": 0.51
+        "p50": 0.53,
+        "p95": 0.53,
+        "p99": 0.53
       },
       "rps": {
-        "sustained": 1793.32,
-        "peak": 1803.29
+        "sustained": 1744.56,
+        "peak": 1754.39
       },
       "statuses": {
         "200": 1
@@ -141,18 +141,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.43,
-        "p95": 0.43,
-        "p99": 0.43
+        "p50": 0.46,
+        "p95": 0.46,
+        "p99": 0.46
       },
       "ttfbMs": {
-        "p50": 0.38,
-        "p95": 0.38,
-        "p99": 0.38
+        "p50": 0.41,
+        "p95": 0.41,
+        "p99": 0.41
       },
       "rps": {
-        "sustained": 2285.71,
-        "peak": 2300.83
+        "sustained": 2156.72,
+        "peak": 2171.75
       },
       "statuses": {
         "200": 1
@@ -167,9 +167,9 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.6,
-        "p95": 0.6,
-        "p99": 0.6
+        "p50": 0.59,
+        "p95": 0.59,
+        "p99": 0.59
       },
       "ttfbMs": {
         "p50": 0.55,
@@ -177,8 +177,8 @@
         "p99": 0.55
       },
       "rps": {
-        "sustained": 1667.13,
-        "peak": 1675.51
+        "sustained": 1684.45,
+        "peak": 1692.88
       },
       "statuses": {
         "201": 1
@@ -198,13 +198,13 @@
         "p99": 0.41
       },
       "ttfbMs": {
-        "p50": 0.37,
-        "p95": 0.37,
-        "p99": 0.37
+        "p50": 0.36,
+        "p95": 0.36,
+        "p99": 0.36
       },
       "rps": {
-        "sustained": 2398.32,
-        "peak": 2421.31
+        "sustained": 2434.32,
+        "peak": 2457
       },
       "statuses": {
         "200": 1
@@ -219,18 +219,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.62,
-        "p95": 0.62,
-        "p99": 0.62
+        "p50": 0.63,
+        "p95": 0.63,
+        "p99": 0.63
       },
       "ttfbMs": {
-        "p50": 0.58,
-        "p95": 0.58,
-        "p99": 0.58
+        "p50": 0.59,
+        "p95": 0.59,
+        "p99": 0.59
       },
       "rps": {
-        "sustained": 1598.94,
-        "peak": 1605.99
+        "sustained": 1593.31,
+        "peak": 1599.9
       },
       "statuses": {
         "201": 1
@@ -255,8 +255,8 @@
         "p99": 0.37
       },
       "rps": {
-        "sustained": 2423.51,
-        "peak": 2438.52
+        "sustained": 2422.04,
+        "peak": 2437.29
       },
       "statuses": {
         "200": 1
@@ -271,18 +271,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.61,
-        "p95": 0.61,
-        "p99": 0.61
+        "p50": 0.76,
+        "p95": 0.76,
+        "p99": 0.76
       },
       "ttfbMs": {
-        "p50": 0.57,
-        "p95": 0.57,
-        "p99": 0.57
+        "p50": 0.71,
+        "p95": 0.71,
+        "p99": 0.71
       },
       "rps": {
-        "sustained": 1637,
-        "peak": 1645.53
+        "sustained": 1316.44,
+        "peak": 1323.19
       },
       "statuses": {
         "201": 1
@@ -297,18 +297,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.41,
-        "p95": 0.41,
-        "p99": 0.41
+        "p50": 0.57,
+        "p95": 0.57,
+        "p99": 0.57
       },
       "ttfbMs": {
-        "p50": 0.39,
-        "p95": 0.39,
-        "p99": 0.39
+        "p50": 0.54,
+        "p95": 0.54,
+        "p99": 0.54
       },
       "rps": {
-        "sustained": 2406.5,
-        "peak": 2420.09
+        "sustained": 1749.78,
+        "peak": 1759.4
       },
       "statuses": {
         "201": 1
@@ -323,18 +323,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.32,
-        "p95": 0.32,
-        "p99": 0.32
+        "p50": 0.36,
+        "p95": 0.36,
+        "p99": 0.36
       },
       "ttfbMs": {
-        "p50": 0.29,
-        "p95": 0.29,
-        "p99": 0.29
+        "p50": 0.33,
+        "p95": 0.33,
+        "p99": 0.33
       },
       "rps": {
-        "sustained": 3069.44,
-        "peak": 3109.62
+        "sustained": 2763.06,
+        "peak": 2799.48
       },
       "statuses": {
         "200": 1
@@ -349,18 +349,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.38,
-        "p95": 0.38,
-        "p99": 0.38
+        "p50": 0.43,
+        "p95": 0.43,
+        "p99": 0.43
       },
       "ttfbMs": {
-        "p50": 0.36,
-        "p95": 0.36,
-        "p99": 0.36
+        "p50": 0.4,
+        "p95": 0.4,
+        "p99": 0.4
       },
       "rps": {
-        "sustained": 2591.23,
-        "peak": 2616.38
+        "sustained": 2312.36,
+        "peak": 2333.72
       },
       "statuses": {
         "201": 1
@@ -375,9 +375,9 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.24,
-        "p95": 0.24,
-        "p99": 0.24
+        "p50": 0.25,
+        "p95": 0.25,
+        "p99": 0.25
       },
       "ttfbMs": {
         "p50": 0.22,
@@ -385,8 +385,8 @@
         "p99": 0.22
       },
       "rps": {
-        "sustained": 4135.79,
-        "peak": 4169.55
+        "sustained": 4006.01,
+        "peak": 4039.03
       },
       "statuses": {
         "200": 1
@@ -401,18 +401,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.35,
-        "p95": 0.35,
-        "p99": 0.35
+        "p50": 0.37,
+        "p95": 0.37,
+        "p99": 0.37
       },
       "ttfbMs": {
-        "p50": 0.32,
-        "p95": 0.32,
-        "p99": 0.32
+        "p50": 0.34,
+        "p95": 0.34,
+        "p99": 0.34
       },
       "rps": {
-        "sustained": 2848.33,
-        "peak": 2858.16
+        "sustained": 2726.34,
+        "peak": 2736.61
       },
       "statuses": {
         "201": 1
@@ -432,13 +432,13 @@
         "p99": 0.24
       },
       "ttfbMs": {
-        "p50": 0.21,
-        "p95": 0.21,
-        "p99": 0.21
+        "p50": 0.22,
+        "p95": 0.22,
+        "p99": 0.22
       },
       "rps": {
-        "sustained": 4207.59,
-        "peak": 4229.08
+        "sustained": 4079.55,
+        "peak": 4097.66
       },
       "statuses": {
         "200": 1
@@ -453,18 +453,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 0.36,
-        "p95": 0.36,
-        "p99": 0.36
+        "p50": 0.37,
+        "p95": 0.37,
+        "p99": 0.37
       },
       "ttfbMs": {
-        "p50": 0.34,
-        "p95": 0.34,
-        "p99": 0.34
+        "p50": 0.35,
+        "p95": 0.35,
+        "p99": 0.35
       },
       "rps": {
-        "sustained": 2768.49,
-        "peak": 2776.17
+        "sustained": 2693.6,
+        "peak": 2708.81
       },
       "statuses": {
         "201": 1
@@ -479,18 +479,18 @@
       "errors": 0,
       "errorRatePercent": 0,
       "latencyMs": {
-        "p50": 3.47,
-        "p95": 3.47,
-        "p99": 3.47
+        "p50": 2.72,
+        "p95": 2.72,
+        "p99": 2.72
       },
       "ttfbMs": {
-        "p50": 3.44,
-        "p95": 3.44,
-        "p99": 3.44
+        "p50": 2.7,
+        "p95": 2.7,
+        "p99": 2.7
       },
       "rps": {
-        "sustained": 288.46,
-        "peak": 288.59
+        "sustained": 367.08,
+        "peak": 367.29
       },
       "statuses": {
         "201": 1
@@ -500,6 +500,32 @@
       "name": "search.query",
       "method": "GET",
       "path": "/api/search?q=benchmark",
+      "requests": 1,
+      "successful": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 0.61,
+        "p95": 0.61,
+        "p99": 0.61
+      },
+      "ttfbMs": {
+        "p50": 0.58,
+        "p95": 0.58,
+        "p99": 0.58
+      },
+      "rps": {
+        "sustained": 1642.6,
+        "peak": 1645.75
+      },
+      "statuses": {
+        "200": 1
+      }
+    },
+    {
+      "name": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
       "requests": 1,
       "successful": 1,
       "errors": 0,
@@ -515,34 +541,8 @@
         "p99": 0.61
       },
       "rps": {
-        "sustained": 1579.67,
-        "peak": 1583.74
-      },
-      "statuses": {
-        "200": 1
-      }
-    },
-    {
-      "name": "admin.metrics",
-      "method": "GET",
-      "path": "/api/admin/metrics",
-      "requests": 1,
-      "successful": 1,
-      "errors": 0,
-      "errorRatePercent": 0,
-      "latencyMs": {
-        "p50": 0.64,
-        "p95": 0.64,
-        "p99": 0.64
-      },
-      "ttfbMs": {
-        "p50": 0.61,
-        "p95": 0.61,
-        "p99": 0.61
-      },
-      "rps": {
-        "sustained": 1567.5,
-        "peak": 1570.68
+        "sustained": 1572.22,
+        "peak": 1575.32
       },
       "statuses": {
         "200": 1

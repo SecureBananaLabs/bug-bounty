@@ -11,6 +11,19 @@ npm run benchmark:smoke
 
 By default, the runner starts the local Express app on a random port and benchmarks every `/api/` endpoint. To run against an already running local or staging server, set `BENCHMARK_BASE_URL`.
 
+## Reviewer Demo
+
+Use `benchmark:smoke` for a short end-to-end review pass:
+
+```console
+npm ci
+npm test
+npm run benchmark:smoke
+sed -n '1,80p' benchmarks/results/api-benchmark-latest.md
+```
+
+The smoke run starts the local API automatically, exercises all configured routes once, checks the thresholds in `thresholds.json`, and writes the JSON and Markdown reports under `benchmarks/results/`. See `demo-walkthrough.md` for a recording-ready walkthrough.
+
 ## Environment
 
 Copy `.env.benchmark.example` into your local environment or CI secret store and set:
