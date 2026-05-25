@@ -3,7 +3,21 @@
 
 # FreelanceFlow Monorepo
 
-FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+# Benchmark Suite
+
+This project includes a comprehensive benchmark suite for all API endpoints under `/api/`.
+
+## Benchmark Files
+
+- `benchmarks/` - Contains benchmark scripts and configurations
+- `benchmarks/results/` - Directory for storing benchmark results
+- `benchmarks/thresholds.json` - Performance thresholds for CI regression checks
+
+## Setup
+
+To run the benchmarks:
+
+
 
 ## Workspace Structure
 
