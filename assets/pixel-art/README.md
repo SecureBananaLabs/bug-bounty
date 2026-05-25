@@ -1,5 +1,10 @@
-# Pixel Art: Retro Robot
+# Cyberpunk City Pixel Art
 
-A friendly retro robot character created in classic pixel art style. I chose this theme because robots represent the intersection of technology and creativity, which aligns with this project's focus on modern freelance tech work. The limited color palette and visible pixels evoke nostalgia for early computing while celebrating digital craftsmanship.
+A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night, featuring neon-lit skyscrapers, holographic billboards, and a glowing moon against a starry purple sky.
 
+Created for the bug bounty pixel art challenge. The theme represents the intersection of technology and creativity - core values of the FreelanceFlow project.
+
+## Details
 - Canvas size: 64x64 pixels
+- Format: PNG
+- Colors: Limited palette with neon accents
