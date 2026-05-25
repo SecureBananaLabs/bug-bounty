@@ -1,4 +1,18 @@
 {
+  "name": "freelanceflow",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "benchmark": "node benchmarks/run.js"
+  },
+  "benchmark": "node benchmarks/run.js"
+}
   "name": "freelance-platform-monorepo",
   "private": true,
   "workspaces": [
