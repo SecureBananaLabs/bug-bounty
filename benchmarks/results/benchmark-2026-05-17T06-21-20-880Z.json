@@ -1,0 +1,582 @@
+[
+  {
+    "endpoint": "/health",
+    "method": "GET",
+    "name": "Health Check",
+    "latencies": {
+      "avg": 0.96,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 7255.2,
+    "throughput": 7616307.2,
+    "errors": 0,
+    "totalRequests": 72539,
+    "errorRate": 0,
+    "ttfb": 0.96,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/auth/register",
+    "method": "POST",
+    "name": "Auth Register",
+    "latencies": {
+      "avg": 1.69,
+      "p50": 2,
+      "p95": 0,
+      "p99": 5
+    },
+    "rps": 4517.82,
+    "throughput": 4742888.73,
+    "errors": 0,
+    "totalRequests": 49685,
+    "errorRate": 0,
+    "ttfb": 1.69,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/auth/login",
+    "method": "POST",
+    "name": "Auth Login",
+    "latencies": {
+      "avg": 1.72,
+      "p50": 2,
+      "p95": 0,
+      "p99": 6
+    },
+    "rps": 4434,
+    "throughput": 4655290.19,
+    "errors": 0,
+    "totalRequests": 48770,
+    "errorRate": 0,
+    "ttfb": 1.72,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/auth/oauth/:provider/callback?provider=github",
+    "method": "GET",
+    "name": "OAuth Callback",
+    "latencies": {
+      "avg": 1.23,
+      "p50": 1,
+      "p95": 0,
+      "p99": 3
+    },
+    "rps": 6204.19,
+    "throughput": 6513570.91,
+    "errors": 0,
+    "totalRequests": 68239,
+    "errorRate": 0,
+    "ttfb": 1.23,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/auth/refresh",
+    "method": "POST",
+    "name": "Auth Refresh",
+    "latencies": {
+      "avg": 1.25,
+      "p50": 1,
+      "p95": 0,
+      "p99": 3
+    },
+    "rps": 5907.82,
+    "throughput": 6203019.64,
+    "errors": 0,
+    "totalRequests": 64981,
+    "errorRate": 0,
+    "ttfb": 1.25,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/users",
+    "method": "GET",
+    "name": "List Users",
+    "latencies": {
+      "avg": 1.02,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 7636,
+    "throughput": 8017175.28,
+    "errors": 0,
+    "totalRequests": 83987,
+    "errorRate": 0,
+    "ttfb": 1.02,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/users",
+    "method": "POST",
+    "name": "Create User",
+    "latencies": {
+      "avg": 1.1,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 6643.1,
+    "throughput": 6974557.1,
+    "errors": 0,
+    "totalRequests": 73066,
+    "errorRate": 0,
+    "ttfb": 1.1,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/jobs",
+    "method": "GET",
+    "name": "List Jobs",
+    "latencies": {
+      "avg": 1.42,
+      "p50": 1,
+      "p95": 0,
+      "p99": 5
+    },
+    "rps": 5371.64,
+    "throughput": 5639819.64,
+    "errors": 0,
+    "totalRequests": 59082,
+    "errorRate": 0,
+    "ttfb": 1.42,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/jobs",
+    "method": "POST",
+    "name": "Create Job",
+    "latencies": {
+      "avg": 1.61,
+      "p50": 1,
+      "p95": 0,
+      "p99": 5
+    },
+    "rps": 4758,
+    "throughput": 4995630.55,
+    "errors": 0,
+    "totalRequests": 52336,
+    "errorRate": 0,
+    "ttfb": 1.61,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/proposals",
+    "method": "GET",
+    "name": "List Proposals",
+    "latencies": {
+      "avg": 1,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 7800.91,
+    "throughput": 8191627.64,
+    "errors": 0,
+    "totalRequests": 85806,
+    "errorRate": 0,
+    "ttfb": 1,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/proposals",
+    "method": "POST",
+    "name": "Create Proposal",
+    "latencies": {
+      "avg": 1.14,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 6357.64,
+    "throughput": 6674804.37,
+    "errors": 0,
+    "totalRequests": 69927,
+    "errorRate": 0,
+    "ttfb": 1.14,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/payments",
+    "method": "POST",
+    "name": "Create Payment",
+    "latencies": {
+      "avg": 1.18,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 6083.46,
+    "throughput": 6387712,
+    "errors": 0,
+    "totalRequests": 66911,
+    "errorRate": 0,
+    "ttfb": 1.18,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/reviews",
+    "method": "GET",
+    "name": "List Reviews",
+    "latencies": {
+      "avg": 1.11,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 5948.91,
+    "throughput": 6246213.82,
+    "errors": 0,
+    "totalRequests": 65434,
+    "errorRate": 0,
+    "ttfb": 1.11,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/reviews",
+    "method": "POST",
+    "name": "Create Review",
+    "latencies": {
+      "avg": 1.22,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 5794.73,
+    "throughput": 6083863.28,
+    "errors": 0,
+    "totalRequests": 63733,
+    "errorRate": 0,
+    "ttfb": 1.22,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/messages",
+    "method": "GET",
+    "name": "List Messages",
+    "latencies": {
+      "avg": 1.23,
+      "p50": 1,
+      "p95": 0,
+      "p99": 3
+    },
+    "rps": 5878,
+    "throughput": 6171443.2,
+    "errors": 0,
+    "totalRequests": 58778,
+    "errorRate": 0,
+    "ttfb": 1.23,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/messages",
+    "method": "POST",
+    "name": "Create Message",
+    "latencies": {
+      "avg": 1.64,
+      "p50": 2,
+      "p95": 0,
+      "p99": 3
+    },
+    "rps": 4749.64,
+    "throughput": 4986321.46,
+    "errors": 0,
+    "totalRequests": 52239,
+    "errorRate": 0,
+    "ttfb": 1.64,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/notifications",
+    "method": "GET",
+    "name": "List Notifications",
+    "latencies": {
+      "avg": 1.09,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 6403.82,
+    "throughput": 6723584,
+    "errors": 0,
+    "totalRequests": 70439,
+    "errorRate": 0,
+    "ttfb": 1.09,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/notifications",
+    "method": "POST",
+    "name": "Create Notification",
+    "latencies": {
+      "avg": 1.3,
+      "p50": 1,
+      "p95": 0,
+      "p99": 2
+    },
+    "rps": 5459.82,
+    "throughput": 5732724.37,
+    "errors": 0,
+    "totalRequests": 60060,
+    "errorRate": 0,
+    "ttfb": 1.3,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/search?q=test",
+    "method": "GET",
+    "name": "Search",
+    "latencies": {
+      "avg": 1.25,
+      "p50": 1,
+      "p95": 0,
+      "p99": 3
+    },
+    "rps": 5651.5,
+    "throughput": 5932953.6,
+    "errors": 0,
+    "totalRequests": 56504,
+    "errorRate": 0,
+    "ttfb": 1.25,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  },
+  {
+    "endpoint": "/api/admin/metrics",
+    "method": "GET",
+    "name": "Admin Metrics",
+    "latencies": {
+      "avg": 1.26,
+      "p50": 1,
+      "p95": 0,
+      "p99": 4
+    },
+    "rps": 6044.37,
+    "throughput": 6345448.73,
+    "errors": 0,
+    "totalRequests": 66480,
+    "errorRate": 0,
+    "ttfb": 1.26,
+    "thresholds": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1,
+      "minRps": 100
+    },
+    "passed": {
+      "p99": true,
+      "p95": true,
+      "errorRate": true,
+      "rps": true
+    }
+  }
+]
