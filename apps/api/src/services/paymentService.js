@@ -1,9 +1,16 @@
+import Stripe from "stripe";
+import { env } from "../config/env.js";
+
+const stripe = new Stripe(env.stripeSecretKey);
+
 export async function createPaymentIntent(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
-  return {
-    paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
-    currency: payload.currency ?? "usd",
-    provider: "stripe"
-  };
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(payload.amount * 100),
+      currency: payload.currency ?? "usd",
+    });
+    return { client_secret: paymentIntent.client_secret };
+  } catch (err) {
+    throw new Error(`Stripe error: ${err.message}`);
+  }
 }
