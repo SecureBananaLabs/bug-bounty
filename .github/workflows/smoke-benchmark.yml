@@ -1,0 +1,29 @@
+name: Smoke Benchmark
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+
+jobs:
+  smoke-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: node apps/api/src/server.js &
+        env:
+          PORT: 4000
+          NODE_ENV: test
+      - name: Wait for server
+        run: |
+          for i in $(seq 1 30); do
+            curl -s http://localhost:4000/health > /dev/null 2>&1 && break
+            sleep 1
+          done
+      - run: npm run benchmark:smoke
+        env:
+          BENCHMARK_TARGET: http://localhost:4000

@@ -1,6 +1,7 @@
 {
   "name": "freelance-platform-monorepo",
   "private": true,
+  "type": "module",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -8,6 +9,9 @@
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api",
+    "benchmark": "node benchmarks/benchmark.js",
+    "benchmark:smoke": "BENCHMARK_CONNECTIONS=5 BENCHMARK_DURATION=3 node benchmarks/benchmark.js",
+    "benchmark:full": "BENCHMARK_CONNECTIONS=50 BENCHMARK_DURATION=30 BENCHMARK_PIPELINING=10 node benchmarks/benchmark.js"
   }
 }

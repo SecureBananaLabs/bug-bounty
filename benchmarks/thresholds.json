@@ -1,0 +1,6 @@
+{
+  "p99LatencyMs": 500,
+  "p95LatencyMs": 200,
+  "errorRatePct": 1,
+  "minRps": 100
+}
