@@ -1,3 +1,4 @@
+import "express-async-errors";
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
 import { ok } from "../utils/response.js";

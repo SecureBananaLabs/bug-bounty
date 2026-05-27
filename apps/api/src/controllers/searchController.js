@@ -1,3 +1,4 @@
+import "express-async-errors";
 import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
 

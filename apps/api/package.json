@@ -8,6 +8,7 @@
     "test": "node --test src/tests"
   },
   "dependencies": {
+    "express-async-errors": "^3.1.1",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",

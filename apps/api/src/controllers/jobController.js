@@ -1,3 +1,4 @@
+import "express-async-errors";
 import { ok } from "../utils/response.js";
 import { createJobSchema } from "../validators/job.js";
 import { createJob, listJobs } from "../services/jobService.js";
