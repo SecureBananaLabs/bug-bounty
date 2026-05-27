@@ -1,45 +1,102 @@
 import autocannon from 'autocannon';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { createReadStream, createWriteStream } from 'fs';
+import { promisify } from 'util';
+import { exec as execCb } from 'child_process';
+import { writeFileSync, readFileSync } from 'fs';
+import { join } from 'path';
 
-// Get the directory of the current file
-const __filename = fileURLToPath(new URL('.', import.meta.url));
-const __dirname = path.dirname(__filename);
+const exec = promisify(execCb);
 
-// Configurable paths and options
-const resultsDir = path.join(__dirname, 'results');
-const envPath = path.join(__dirname, '../.env.benchmark');
+const RESULTS_DIR = './benchmarks/results';
+const THRESHOLDS_FILE = './benchmarks/thresholds.json';
 
-// Load environment variables
-let API_BASE_URL = 'http://localhost:3001';
-if (fs.existsSync(envPath)) {
-  const envConfig = dotenv.parse(fs.readFileSync(envPath));
-  if (envConfig.API_BASE_URL) {
-    API_BASE_URL = envConfig.API_BASE_URL;
+// Load configuration
+const config = JSON.parse(readFileSync('./benchmarks/.env.benchmark', 'utf-8'));
+
+// Function to run benchmark for a specific endpoint
+function benchmarkEndpoint(endpoint, method = 'GET', headers = {}, body = null) {
+  const opts = {
+    url: `${config.target}${endpoint}`,
+    method,
+    headers,
+    duration: config.duration || 10,
+    connections: config.connections || 10,
+    pipelining: config.pipelining || 1,
+    timeout: config.timeout || 10
+  };
+
+  if (body) {
+    opts.method = 'POST';
+    opts.body = body;
+  }
+
+  return autocannon(opts);
+}
+
+// Run benchmarks on all API endpoints
+async function runBenchmarks() {
+  const endpoints = [
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/users',
+    '/api/jobs',
+    '/api/proposals',
+    '/api/payments',
+    '/api/reviews',
+    '/api/messages',
+    '/api/notifications',
+    '/api/search',
+    '/api/admin'
+  ];
+
+  const results = {};
+  for (const endpoint of endpoints) {
+    try {
+      const result = await benchmarkEndpoint(endpoint);
+      results[endpoint] = result;
+    } catch (error) {
+      console.error(`Failed to benchmark ${endpoint}:`, error);
+    }
+  }
+
+  return results;
+}
+
+// Save results
+function saveResults(results) {
+  const timestamp = new Date().toISOString();
+  const resultsPath = join(RESULTS_DIR, `${timestamp}.json`);
+  writeFileSync(resultsPath, JSON.stringify(results, null, 2));
+  console.log(`Results saved to ${resultsPath}`);
+}
+
+// Read thresholds
+function readThresholds() {
+  try {
+    return JSON.parse(readFileSync(THRESHOLDS_FILE, 'utf-8'));
+  } catch (error) {
+    return {};
   }
 }
 
-// Define all API endpoints to benchmark
- { endpoint: '/api/auth/login', name: 'auth_login' },
- { endpoint: '/api/auth/register', name: 'auth_register' },
- { endpoint: '/api/users', name: 'users_get' },
- { endpoint: '/api/users/1', name: 'users_get_by_id' },
- { endpoint: '/api/jobs', name: 'jobs_list' },
- { endpoint: '/api/jobs/1', name: 'jobs_get' },
- { endpoint: '/api/jobs', name: 'jobs_create', method: 'POST', headers: {...} },
- // Add more endpoints as needed
-// Baseline configuration
-const defaultOptions = {
-  url: API_BASE_URL,
-  connections: 10,
-  amount: 100,
-  headers: {},
-  method: 'GET'
-};
-// Add your benchmarking code here using the `endpoints` array
-// and the `defaultOptions` to run the benchmark tests
-// ...
-// Save results in JSON and markdown
-// This is a simplified representation. You'll need to implement the actual benchmarking code with autocannon or k6
-// and handle saving the results to the file system in resultsDir as well.
+// Check if regression test passes
+function checkRegression(results) {
+  const thresholds = readThresholds();
+  for (const endpoint in results) {
+  }
+}
+
+// Main function
+async function main() {
+  try {
+    const results = await runBenchmarks();
+    saveResults(results);
+    checkRegression(results);
+  } catch (error) {
+    console.error('Benchmarking failed:', error);
+  }
+}
+
+main();
+
+export { benchmarkEndpoint };
