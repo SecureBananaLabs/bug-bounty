@@ -1,3 +1,5 @@
+import crypto from "node:crypto";
+
 const jobs = [];
 
 export async function listJobs() {
@@ -5,7 +7,7 @@ export async function listJobs() {
 }
 
 export async function createJob(payload) {
-  const job = { id: `job_${Date.now()}`, status: "open", ...payload };
+  const job = { id: `job_${crypto.randomUUID().slice(0, 8)}`, status: "open", ...payload };
   jobs.push(job);
   return job;
 }
