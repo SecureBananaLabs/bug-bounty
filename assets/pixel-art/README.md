@@ -2,10 +2,8 @@
 
 **What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with moody atmospheric depth, which makes for striking pixel art. The contrast between dark silhouettes and glowing lights creates visual interest even at small resolutions, and it reflects the creative, tech-forward spirit of this project.
+**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with moody atmospheres, which creates a striking visual contrast even at small pixel scales. The limited canvas forces creative use of color and negative space to suggest depth, light, and urban density.
 
 ## Details
-- Canvas size: 64x64 pixels
-- Format: PNG
-- Colors: Limited palette with neon accents (cyan, magenta, yellow) against deep blues and blacks
-- Style: Retro pixel art with modern sci-fi inspiration
+- Canvas: 64x64 pixels
+- Style: Original pixel art with neon accents and silhouette architecture
