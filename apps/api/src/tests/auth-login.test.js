@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
 import { createApp } from "../app.js";
+import { verifyAccessToken } from "../utils/jwt.js";
 
 async function withServer(run) {
   const app = createApp();
@@ -74,11 +75,12 @@ test("POST /api/auth/login rejects wrong passwords for registered users", async 
 test("POST /api/auth/login issues a token only for registered credentials", async () => {
   await withServer(async (baseUrl) => {
     const email = uniqueEmail("registered-valid");
-    await postJson(baseUrl, "/api/auth/register", {
+    const registerResponse = await postJson(baseUrl, "/api/auth/register", {
       email,
       password: "correct-password",
       role: "freelancer"
     });
+    const registered = await registerResponse.json();
 
     const response = await postJson(baseUrl, "/api/auth/login", {
       email,
@@ -91,5 +93,9 @@ test("POST /api/auth/login issues a token only for registered credentials", asyn
     assert.equal(payload.data.email, email);
     assert.equal(typeof payload.data.token, "string");
     assert.ok(payload.data.token.length > 20);
+
+    const tokenPayload = verifyAccessToken(payload.data.token);
+    assert.equal(tokenPayload.sub, registered.data.id);
+    assert.equal(tokenPayload.role, "freelancer");
   });
 });
