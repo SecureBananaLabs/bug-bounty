@@ -1,8 +1,6 @@
 {
-  "health": {
-    "p99": 100
+  "latency": {
+    "p99_threshold": 1000
   },
-  "auth": {
-    "p99": 200
-  }
+  "endpoints": []
 }
