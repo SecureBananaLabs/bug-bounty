@@ -5,6 +5,8 @@ import { createNotification } from "../services/notificationService.js";
 import { createPaymentIntent } from "../services/paymentService.js";
 import { createProposal } from "../services/proposalService.js";
 import { createReview } from "../services/reviewService.js";
+import { registerUser } from "../services/authService.js";
+import { createUser } from "../services/userService.js";
 
 const uuidSuffix = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 
@@ -55,6 +57,14 @@ test("activity services assign distinct IDs when records are created in the same
         await createPaymentIntent({ amount: 1000, currency: "usd" }),
         await createPaymentIntent({ amount: 1000, currency: "usd" })
       ]
+    },
+    {
+      prefix: "usr",
+      key: "id",
+      records: [
+        await createUser({ email: "first@example.com", role: "client" }),
+        await createUser({ email: "second@example.com", role: "freelancer" })
+      ]
     }
   ];
 
@@ -64,3 +74,33 @@ test("activity services assign distinct IDs when records are created in the same
     assert.notEqual(records[0][key], records[1][key]);
   }
 });
+
+test("registerUser signs a token for the generated user ID", async (t) => {
+  const originalNow = Date.now;
+  t.after(() => {
+    Date.now = originalNow;
+  });
+  Date.now = () => 1_779_893_200_000;
+
+  const first = await registerUser({
+    email: "first@example.com",
+    password: "password123",
+    role: "client"
+  });
+  const second = await registerUser({
+    email: "second@example.com",
+    password: "password123",
+    role: "freelancer"
+  });
+
+  assert.match(first.id, new RegExp(`^usr_${uuidSuffix}$`));
+  assert.match(second.id, new RegExp(`^usr_${uuidSuffix}$`));
+  assert.notEqual(first.id, second.id);
+  assert.equal(decodeJwtPayload(first.token).sub, first.id);
+  assert.equal(decodeJwtPayload(second.token).sub, second.id);
+});
+
+function decodeJwtPayload(token) {
+  const [, payload] = token.split(".");
+  return JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+}
