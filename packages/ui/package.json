@@ -1,5 +1,8 @@
 {
   "name": "@freelanceflow/ui",
   "private": true,
-  "main": "src/index.ts"
+  "main": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit --jsx react-jsx --moduleResolution bundler --module esnext --target es2020 --strict src/ui-props.test.tsx"
+  }
 }
