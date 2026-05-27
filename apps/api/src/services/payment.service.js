@@ -5,23 +5,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export async function createPaymentIntent(payload) {
-  // Validate payload
   if (!payload || typeof payload !== 'object') {
     throw new Error('Payload is required and must be an object');
   }
 
-  // Validate amount
   if (payload.amount === undefined || payload.amount === null) {
     throw new Error('amount is required and must be a positive integer');
   }
 
-  const amount = Number(payload.amount);
-
-  if (!Number.isInteger(amount) || amount <= 0) {
+  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
     throw new Error('amount is required and must be a positive integer');
   }
 
-  // Validate currency
+  const amount = payload.amount;
   const currency = payload.currency ?? 'usd';
 
   try {
@@ -32,17 +28,24 @@ export async function createPaymentIntent(payload) {
 
     return {
       paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
       amount: paymentIntent.amount,
       currency: paymentIntent.currency,
+      clientSecret: paymentIntent.client_secret,
       provider: 'stripe',
     };
   } catch (error) {
     if (error.type && error.type.startsWith('Stripe')) {
-      const stripeError = new Error(error.message);
-      stripeError.name = error.type;
-      throw stripeError;
+      throw new Error(error.message);
     }
     throw error;
   }
 }
+
+// Re-export for testing
+export { stripe };
+
+// Legacy stub for backwards compatibility during migration
+export async function createPaymentIntentLegacy(payload) {
+  return {
+    paymentId: `pay_${Date.now()}`,
+    amount: payload.amount,
