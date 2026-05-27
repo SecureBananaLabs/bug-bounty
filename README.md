@@ -1,8 +1,7 @@
 # Project
-<img width="663" height="183" alt="Image" src="https=" />
-
-# FreelanceFlow Monorepo
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+
+[![Low Hanging Fruit Automation](https://github.com/SecureBananaLabs/bug-bounty/actions/workflows/low-hanging-fruit.yml/badge.svg)](https://github.com/SecureBananaLabs/bug-bounty/actions/workflows/low-hanging-fruit.yml)
 
 # FreelanceFlow Monorepo
 
@@ -72,9 +71,21 @@ npm run dev -w apps/web
 ```bash
 npm run dev -w apps/api
 ```
+## Environment Variables
 
-## Database
+Each app/package expects its own `.env` values for DB, auth, and integrations.
 
+## Low Hanging Fruit Automation
+
+This repository includes an automated workflow that recursively scans for low-hanging fruit bugs and creates GitHub issues for them. The automation:
+
+1. Scans the codebase for common bug patterns and improvement opportunities
+2. Creates detailed GitHub issues with reproduction steps and fix suggestions
+3. Tags issues appropriately for the bug bounty program
+4. Runs on a schedule and can be triggered manually
+
+To manually trigger the automation, go to the Actions tab and run the "Low Hanging Fruit Automation" workflow.
+Issues created by this automation will include the standard bounty disclaimer text.
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
 - Users
