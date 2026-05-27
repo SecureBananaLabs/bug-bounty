@@ -43,31 +43,28 @@ Thank you for contributing to this bug bounty repository.
 
 # Contributing to FreelanceFlow
 
-Thank you for your interest in contributing to FreelanceFlow!
+Thank you for considering contributing to FreelanceFlow! This document provides guidelines for contributing to this project.
 
-## Issue-Based Workflow
+## How to Contribute
 
-All contributions must be associated with a GitHub issue. **Pull requests without linked issues will not be considered.**
+1. Fork the repository
+2. Create a new branch for your feature or bug fix
+3. Make your changes
+4. Ensure your code follows the project's style guidelines
+5. Write tests for your changes when applicable
+6. Submit a pull request
 
-## Low Hanging Fruit / Bug Bounty Program
+## Low Hanging Fruit Automation
 
-We have an automated system that creates issues for low-hanging fruit bugs. These issues are tagged with:
-- `bug bounty`
-- `💎 Bounty`
-- `$700`
-
-### Rules for Bounty Issues
+This repository supports automated detection and creation of low-hanging fruit issues:
 
 1. Find a feature/bug to work on from this repository
-2. Create a GitHub issue on the repository to start working on it — **Pull requests without issues will not be considered**
-3. Use the following string in the issue that you created:
+2. Create a GitHub issue on the repository to start working on it -- Pull requests without issues will not be considered.
+3. Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
 
-> "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+## Issue and Pull Request Process
 
-### Bounty Payment
-
-- Bounties can only be paid upon successful PR merge
-- The current bounty amount is **$700**
-
-Please ensure you follow all instructions carefully and precisely.
+- All pull requests must be associated with an issue
+- Pull requests without issues will not be considered
+- Issues labeled as "low hanging fruit" are good for newcomers
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
