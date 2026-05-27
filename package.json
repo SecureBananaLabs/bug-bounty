@@ -1,8 +1,8 @@
 {
-  "name": "bug-bounty",
+  "name": "freelanceflow",
   "version": "1.0.0",
+  "description": "SecureBananaLabs bug bounty program",
   "main": "index.js",
-  "scripts": {
     "packages/*"
   ],
   "scripts": {
@@ -11,3 +11,11 @@
     "test": "npm run test -w apps/api"
   }
 }
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "stripe": "^14.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
