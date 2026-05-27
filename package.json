@@ -1,19 +1,14 @@
 {
-  "name": "freelanceflow-benchmark",
+  "name": "freelanceflow",
   "version": "1.0.0",
-  "description": "FreelanceFlow benchmark suite",
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
-  }
-}
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js",
-    "benchmark": "node benchmarks/run-benchmarks.js"
+    "benchmark": "node ./benchmarks/benchmark.js"
   },
   "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+}
