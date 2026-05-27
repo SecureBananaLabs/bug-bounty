@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { createEntityId } from "../utils/ids.js";
 
 const jobs = [];
 
@@ -7,7 +7,7 @@ export async function listJobs() {
 }
 
 export async function createJob(payload) {
-  const job = { id: `job_${randomUUID()}`, status: "open", ...payload };
+  const job = { id: createEntityId("job"), status: "open", ...payload };
   jobs.push(job);
   return job;
 }
