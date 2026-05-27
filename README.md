@@ -71,9 +71,23 @@ npm run dev -w apps/api
 ```
 
 ## Database
+## Environment Variables
 
-Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
+Each app/package expects its own `.env` values for DB, auth, and integrations.
 
+## Low Hanging Fruit Automation
+
+This repository includes an automated system for detecting and creating issues for low-hanging fruit bugs. The automation runs daily and scans the codebase for common patterns indicating potential issues.
+
+### How it works
+
+The `.github/workflows/low-hanging-fruit-automation.yml` GitHub Action:
+- Runs daily at 00:00 UTC or on manual trigger
+- Recursively scans source files for patterns like TODO, FIXME, console.log, debugger statements, and more
+- Automatically creates GitHub issues with the `💎 Bounty` and `$700` labels
+- Each created issue includes the required attribution string referencing issue #743
+
+To manually trigger the automation, go to the Actions tab and run the "Low Hanging Fruit Automation" workflow.
 - Users
 - Jobs
 - Proposals
