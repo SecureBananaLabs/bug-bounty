@@ -6,5 +6,5 @@ export function signAccessToken(payload) {
 }
 
 export function verifyAccessToken(token) {
-  return jwt.verify(token, env.jwtSecret);
+  return jwt.verify(token, env.jwtSecret, { algorithms: ["HS256"] });
 }
