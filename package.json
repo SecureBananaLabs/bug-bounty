@@ -1,7 +1,7 @@
 {
-  "name": "bug-bounty",
-  "version": "1.0.0",
-  "description": "A full-stack freelance marketplace",
+  "name": "freelance-platform-monorepo",
+  "private": true,
+  "workspaces": [
     "apps/*",
     "packages/*"
   ],
@@ -11,12 +11,3 @@
     "test": "npm run test -w apps/api"
   }
 }
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next dev",
-    "build": "next build",
-    "benchmark": "node benchmarks/run-benchmarks.js",
-    "benchmark:ci": "node benchmarks/ci-benchmark.js"
-  },
-  "keywords": [],
-  "author": "",
