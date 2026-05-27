@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0b1220"/>
+  <rect x="60" y="58" width="1160" height="604" rx="18" fill="#111827" stroke="#2dd4bf" stroke-width="4"/>
+  <text x="100" y="145" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="700">API benchmark smoke</text>
+  <text x="100" y="225" fill="#2dd4bf" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700">21 API endpoints covered</text>
+  <text x="100" y="305" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="36">npm run benchmark:smoke</text>
+  <text x="100" y="365" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="36">0% error rate</text>
+  <text x="100" y="425" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="36">p50, p95, p99, RPS, and TTFB captured</text>
+  <text x="100" y="505" fill="#2dd4bf" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700">GitHub Actions smoke gate passing</text>
+  <text x="100" y="595" fill="#94a3b8" font-family="Arial, Helvetica, sans-serif" font-size="30">SecureBananaLabs bug-bounty #30</text>
+</svg>
