@@ -1,3 +1,7 @@
+# Low Hanging Fruit Automation
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
@@ -71,23 +75,9 @@ npm run dev -w apps/api
 ```
 
 ## Database
-## Environment Variables
 
-Each app/package expects its own `.env` values for DB, auth, and integrations.
+Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
-## Low Hanging Fruit Automation
-
-This repository includes an automated system for detecting and creating issues for low-hanging fruit bugs. The automation runs daily and scans the codebase for common patterns indicating potential issues.
-
-### How it works
-
-The `.github/workflows/low-hanging-fruit-automation.yml` GitHub Action:
-- Runs daily at 00:00 UTC or on manual trigger
-- Recursively scans source files for patterns like TODO, FIXME, console.log, debugger statements, and more
-- Automatically creates GitHub issues with the `💎 Bounty` and `$700` labels
-- Each created issue includes the required attribution string referencing issue #743
-
-To manually trigger the automation, go to the Actions tab and run the "Low Hanging Fruit Automation" workflow.
 - Users
 - Jobs
 - Proposals
