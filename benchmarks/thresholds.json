@@ -1,5 +1,8 @@
 {
-  "thresholds": {
-    "p99Latency": 1000
+  "health": {
+    "p99": 100
+  },
+  "auth": {
+    "p99": 200
   }
 }
