@@ -1,7 +1,7 @@
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
+  "name": "freelanceflow-benchmark",
+  "version": "1.0.0",
+  "description": "FreelanceFlow benchmark suite",
     "apps/*",
     "packages/*"
   ],
@@ -11,3 +11,9 @@
     "test": "npm run test -w apps/api"
   }
 }
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js",
+    "benchmark": "node benchmarks/run-benchmarks.js"
+  },
+  "keywords": [],
