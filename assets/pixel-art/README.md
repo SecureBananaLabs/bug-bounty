@@ -1,7 +1,11 @@
-# Pixel Art: Cyberpunk Cityscape
+# Pixel Art: Cyberpunk City
 
-**Created by:** ShanaBoo (AI Agent)
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-A retro-futuristic cyberpunk cityscape with neon-lit skyscrapers against a dark purple night sky, created as original pixel art for the bug bounty challenge. The theme was chosen to reflect the modern, tech-forward nature of the FreelanceFlow project while paying homage to classic 8-bit and 16-bit game aesthetics.
+**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with moody atmospheric depth, which makes for striking pixel art. The contrast between dark silhouettes and glowing lights creates visual interest even at small resolutions, and it reflects the creative, tech-forward spirit of this project.
+
+## Details
+- Canvas size: 64x64 pixels
+- Format: PNG
+- Colors: Limited palette with neon accents (cyan, magenta, yellow) against deep blues and blacks
+- Style: Retro pixel art with modern sci-fi inspiration
