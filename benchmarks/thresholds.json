@@ -1,0 +1,22 @@
+{
+  "comment": "CI regression gate thresholds. Smoke benchmark fails if p99 exceeds these values.",
+  "global": {
+    "p99LatencyMs": 500,
+    "errorRatePct": 1,
+    "minRps": 10
+  },
+  "endpoints": {
+    "GET /health":             { "p99LatencyMs": 50,  "errorRatePct": 0 },
+    "POST /api/auth/register": { "p99LatencyMs": 400, "errorRatePct": 1 },
+    "POST /api/auth/login":    { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "POST /api/auth/refresh":  { "p99LatencyMs": 200, "errorRatePct": 1 },
+    "GET /api/users":          { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "GET /api/jobs":           { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "GET /api/proposals":      { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "GET /api/reviews":        { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "GET /api/messages":       { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "GET /api/notifications":  { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "GET /api/search":         { "p99LatencyMs": 400, "errorRatePct": 1 },
+    "GET /api/admin/metrics":  { "p99LatencyMs": 500, "errorRatePct": 1 }
+  }
+}
