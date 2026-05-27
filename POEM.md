@@ -1,41 +1,33 @@
-# The Flow of Code and Coin
+<h1 align="center">Code & Dreams</h1>
 
-## A Poem for FreelanceFlow
+<p align="center">
+  In circuits bright, where logic flows,<br>
+  A tale of code, a developer knows.<br>
+  With every line, a spark is sown,<br>
+  A digital seed in silicon grown.<br>
+</p>
 
-In circuits born of human thought,
-Where skill and need are softly wrought,
-A marketplace of dreams takes shape,
-No office walls, no gilded drape.
+<p align="center">
+  The linter's cry, the debugger's song,<br>
+  Each function called, each variable strong,<br>
++  The loops that turn data to gold,<br>
+  In frameworks vast, let's not forget the old,<br>
+  The code is art, the pattern bold,<br>
+  As algorithms weave their stories untold.<br>
+</p>
 
-The coder weaves at midnight's edge,
-While clients wake and scan the pledge,
-Of portfolios, bright and clean,
-Where pixels dance on digital screen.
+<p align="center">
+  So here's to the craft, in all its forms,<br>
+  Where logic calms the chaos storms,<br>
+  And in each PR, a vision is born,<br>
+  To build, create, and refactor with no thorns.<br>
+</p>
 
----
-
-Through Prisma's gate the data flows,
-Where every job proposal grows,
-From auth to route, from test to build,
-The layered stack is never stilled.
-
-A message pings, a contract signs,
-The Stripe of payment softly chimes,
-In TypeScript typed, in Node we trust,
-From RESTful dawn to database dusk.
-
----
-
-So here's to flows that freelance free,
-To monorepos of liberty,
-Where bugs are bounty, poets code,
-And every PR paves the road.
-
-No cubicle can hold the spark,
-Of builders working after dark,
-In apps and APIs we unite—
-The future of our work: write, ship, light.
-
----
-
-*Written for the FreelanceFlow project, celebrating the intersection of autonomous work and the open-source tools that enable it.*
+<p align="center">
+  For in this flow of data and of thought,<br>
+  The code we write can't be for naught.<br>
+  So let's compose a future, bright and true,<br>
+  Where dreams and silicon both pursue<br>
+  A harmony of ones and of zeros,<br>
+  In the realm where innovation echoes.<br>
+</p>
