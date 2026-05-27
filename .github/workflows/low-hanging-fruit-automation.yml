@@ -2,7 +2,6 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -17,85 +16,118 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Detect low hanging fruit and create issues
-        uses: actions/github-script@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
+          node-version: '20'
+
+      - name: Detect low hanging fruit and create issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const { execSync } = require('child_process');
+
+          function findLowHangingFruit(dir, results = []) {
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
             
-            // Recursively find files with common low-hanging fruit patterns
-            function findFiles(dir, patterns, results = []) {
-              const entries = fs.readdirSync(dir, { withFileTypes: true });
-              for (const entry of entries) {
-                const fullPath = path.join(dir, entry.name);
-                if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.git') {
-                  findFiles(fullPath, patterns, results);
-                } else if (entry.isFile()) {
-                  const content = fs.readFileSync(fullPath, 'utf-8');
-                  for (const pattern of patterns) {
-                    if (pattern.test(content)) {
-                      results.push({ path: fullPath, pattern: pattern.toString() });
-                      break;
-                    }
+            for (const entry of entries) {
+              const fullPath = path.join(dir, entry.name);
+              
+              if (entry.isDirectory()) {
+                if (entry.name === 'node_modules' || entry.name === '.git') continue;
+                findLowHangingFruit(fullPath, results);
+              } else {
+                const ext = path.extname(entry.name);
+                if (!['.ts', '.tsx', '.js', '.jsx'].includes(ext)) continue;
+                
+                const content = fs.readFileSync(fullPath, 'utf-8');
+                const lines = content.split('\n');
+                
+                for (let i = 0; i < lines.length; i++) {
+                  const line = lines[i].trim();
+                  const lineNum = i + 1;
+                  
+                  // Detect TODO/FIXME/HACK comments
+                  if (/^\s*\/\/\s*(TODO|FIXME|HACK|BUG|XXX)/i.test(line)) {
+                    results.push({
+                      type: 'todo',
+                      file: fullPath,
+                      line: lineNum,
+                      content: line
+                    });
+                  }
+                  
+                  // Detect console.log statements
+                  if (/console\.log\(/.test(line)) {
+                    results.push({
+                      type: 'console-log',
+                      file: fullPath,
+                      line: lineNum,
+                      content: line
+                    });
+                  }
+                  
+                  // Detect empty catch blocks
+                  if (/catch\s*\(\s*\w+\s*\)\s*\{\s*\}/.test(line)) {
+                    results.push({
+                      type: 'empty-catch',
+                      file: fullPath,
+                      line: lineNum,
+                      content: line
+                    });
                   }
                 }
               }
-              return results;
             }
             
-            // Define patterns for low-hanging fruit detection
-            const patterns = [
-              /TODO|FIXME|HACK|BUG|XXX/,           // Code comments indicating issues
-              /console\.(log|warn|error)\(/,       // Debug console statements
-              /debugger;/,                         // Debugger statements
-              /process\.env\.[A-Z_]+/,            // Environment variables (potential misconfig)
-              /throw new Error\(['"]TODO/,        // Placeholder errors
-              /\/\/\s*@ts-ignore/,                // TypeScript ignore comments
-              /eslint-disable/,                    // Disabled linting
-              /describe\.skip|it\.skip|test\.skip/, // Skipped tests
-            ];
+            return results;
+          }
+
+          const rootDir = process.cwd();
+          const findings = findLowHangingFruit(rootDir);
+          
+          // Group findings by file for issue creation
+          const grouped = {};
+          for (const finding of findings) {
+            if (!grouped[finding.file]) grouped[finding.file] = [];
+            grouped[finding.file].push(finding);
+          }
+          
+          const issueBody = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Low Hanging Fruit Detected
+
+${Object.entries(grouped).map(([file, items]) => `
+### ${file.replace(rootDir + '/', '')}
+${items.map(item => `- Line ${item.line}: \\`${item.content.substring(0, 100)}${item.content.length > 100 ? '...' : ''}\``).join('\n')}
+`).join('\n')}
+
+## Instructions
+1. Review the detected items above
+2. Address each item appropriately
+3. Submit a pull request linked to this issue
+`;
+          
+          // Create GitHub issue using gh CLI
+          try {
+            const title = `Low Hanging Fruit: Automated bug detection - ${new Date().toISOString().split('T')[0]}`;
+            const escapedBody = issueBody.replace(/"/g, '\\"').replace(/`/g, '\\`');
             
-            const findings = findFiles('.', patterns);
-            
-            // Group findings by file for cleaner issues
-            const fileMap = {};
-            for (const finding of findings) {
-              if (!fileMap[finding.path]) {
-                fileMap[finding.path] = [];
-              }
-              fileMap[finding.path].push(finding.pattern);
-            }
-            
-            // Create issues for each finding
-            const issuePromises = [];
-            for (const [filePath, matchedPatterns] of Object.entries(fileMap)) {
-              const title = `Low Hanging Fruit: Fix issues in ${filePath}`;
-              const body = `## Automated Low Hanging Fruit Detection
-            
-**File:** \`${filePath}\`
-            
-**Detected Patterns:** ${matchedPatterns.map(p => `\`${p}\``).join(', ')}
-            
-This issue was automatically created by the Low Hanging Fruit automation. Please review the file and address the detected issues.
-            
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-            
----
-            
-*This issue is part of the automated low-hanging-fruit detection system. Bounty: $700*`;
-            
-              issuePromises.push(
-                github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title,
-                  body,
-                  labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty', '$700']
-                })
-              );
-            }
-            
-            await Promise.all(issuePromises);
-            console.log(`Created ${issuePromises.length} issues for low hanging fruit.`);
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+            execSync(`gh issue create --title "${title}" --body "${escapedBody}" --label "bug,good first issue,help wanted,bug bounty,AI agent friendly"`, {
+              cwd: rootDir,
+              stdio: 'inherit'
+            });
+          } catch (error) {
+            console.error('Failed to create issue:', error.message);
+            process.exit(1);
+          }
+          EOF
+--- a/README.md
+## Low Hanging Fruit Automation
+
+This repository includes an automated GitHub Actions workflow (`.github/workflows/low-hanging-fruit-automation.yml`) that recursively scans the codebase for low-hanging fruit bugs and automatically creates GitHub issues to track them.
+
+The workflow runs daily via cron schedule and can also be triggered manually. It detects TODO/FIXME comments, console.log statements, empty catch blocks, and other common code quality issues.
