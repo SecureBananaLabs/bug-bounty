@@ -1,10 +1,8 @@
-# Project
-<img width="64" height="64" alt="Pixel Art - Cyberpunk City" src="assets/pixel-art/cyberpunk_city.png" />
-
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-
 # FreelanceFlow Monorepo
 
+<img width="64" height="64" alt="Pixel Art - Banana with Sunglasses" src="apps/web/public/pixel-art/my-pixel-art.png" />
+
+FreelanceFlow is a fullstack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
