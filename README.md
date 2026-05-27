@@ -68,6 +68,10 @@ Preview the current non-duplicate candidates:
 npm run audit:recursive-issues
 ```
 
+When the repository has both fork and upstream remotes, the scanner refreshes
+existing issues from the upstream remote by default so duplicate filtering still
+checks the canonical issue tracker. Use `--repo owner/repo` to override this.
+
 Write a JSON report for review:
 
 ```bash

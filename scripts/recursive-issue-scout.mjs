@@ -44,7 +44,8 @@ Options:
   --include-duplicates         Include candidates that appear to duplicate issues
   --existing-issues-json <f>   Read issue list JSON instead of calling gh
   --no-refresh-existing        Skip GitHub issue refresh
-  --repo <owner/repo>          GitHub repo for issue refresh/create
+  --repo <owner/repo>          GitHub repo for issue refresh/create.
+                              Defaults to upstream remote, then origin.
   --root <path>                Repository root. Default: current directory
   --create --confirm           Create non-duplicate GitHub issues via gh
   --help                       Show this help
@@ -187,11 +188,21 @@ function requireValue(argv, index, flag) {
 }
 
 function detectRepo(rootDir) {
-  const remote = run("git", ["remote", "get-url", "origin"], rootDir, { allowFailure: true });
-  if (!remote.ok) {
-    return null;
+  for (const remoteName of ["upstream", "origin"]) {
+    const remote = run("git", ["remote", "get-url", remoteName], rootDir, { allowFailure: true });
+    if (!remote.ok) {
+      continue;
+    }
+    const detected = parseGitHubRemote(remote.stdout.trim());
+    if (detected) {
+      return detected;
+    }
   }
-  const value = remote.stdout.trim();
+
+  return null;
+}
+
+function parseGitHubRemote(value) {
   const match = value.match(/github\.com[:/](?<owner>[^/]+)\/(?<repo>[^/.]+)(?:\.git)?$/u);
   return match?.groups ? `${match.groups.owner}/${match.groups.repo}` : null;
 }
