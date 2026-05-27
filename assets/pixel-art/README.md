@@ -1,9 +1,5 @@
-# Pixel Art: Cyberpunk City
+# Cyberpunk City Pixel Art
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at dusk.
 
-**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with moody atmospheres, which creates a striking visual contrast even at small pixel scales. The limited canvas forces creative use of color and negative space to suggest depth, light, and urban density.
-
-## Details
-- Canvas: 64x64 pixels
-- Style: Original pixel art with neon accents and silhouette architecture
+**Why:** I chose this theme because cyberpunk aesthetics blend retro digital art with imaginative future technology, making it a perfect subject for pixel art. The constrained canvas size challenges creative expression while the neon color palette captures the genre's iconic visual identity.
