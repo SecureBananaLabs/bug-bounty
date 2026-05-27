@@ -9,38 +9,13 @@ import { jobRoutes } from "./routes/jobRoutes.js";
 import { proposalRoutes } from "./routes/proposalRoutes.js";
 import { paymentRoutes } from "./routes/paymentRoutes.js";
 import { reviewRoutes } from "./routes/reviewRoutes.js";
-import { messageRoutes } from "./routes/messageRoutes.js";
-import { notificationRoutes } from "./routes/notificationRoutes.js";
-import { uploadRoutes } from "./routes/uploadRoutes.js";
-import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
 export function createApp() {
+  if (process.env.NODE_ENV === 'test') console.log("Benchmarking mode enabled");
   const app = express();
 
-  app.use(helmet());
-  app.use(cors());
-  app.use(express.json());
-  app.use(apiLimiter);
-
-  // Health route
-  app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
-  });
-import { apiLimiter } from "./middleware/rateLimit.js";
-import { errorHandler } from "./middleware/errorHandler.js";
-import { authRoutes } from "./routes/authRoutes.js";
-import { userRoutes } from "./routes/userRoutes.js";
-import { jobRoutes } from "./routes/jobRoutes.js";
-import { proposalRoutes } from "./routes/proposalRoutes.js";
-import { paymentRoutes } from "./routes/paymentRoutes.js";
-import { reviewRoutes } from "./routes/reviewRoutes.js";
-import { messageRoutes } from "./routes/messageRoutes.js";
-import { notificationRoutes } from "./routes/notificationRoutes.js";
-import { uploadRoutes } from "./routes/uploadRoutes.js";
-import { searchRoutes } from "./routes/searchRoutes.js";
-import { adminRoutes } from "./routes/adminRoutes.js";
-
+  app.use(helm
 export function createApp() {
   const app = express();
 
