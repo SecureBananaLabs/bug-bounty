@@ -1,47 +1,63 @@
 import Stripe from 'stripe';
-import { PaymentIntentPayload } from '../types/payment.types';
+import { z } from 'zod';
 
-export async function createPaymentIntent(payload: any) {
-  // Validate amount
-  if (payload.amount === undefined || payload.amount === null) {
-    throw new Error('Amount is required');
-  }
-  
-  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('Amount must be a positive integer in smallest currency unit');
-  }
+// Initialize Stripe with secret key from environment variables
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  apiVersion: '2023-10-16',
+});
 
-  // Set default currency to USD if not provided
-  const currency = payload.currency || 'usd';
-  
-  // Initialize Stripe
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-    apiVersion: '2024-04-10',
-    typescript: true,
-  });
-  
+// Validation schema for payment payload
+const PaymentPayloadSchema = z.object({
+  amount: z.number().positive().int(),
+  currency: z.string().optional().default('usd'),
+  metadata: z.record(z.string()).optional(),
+});
+
+export interface PaymentIntentResult {
+  paymentId: string;
+  clientSecret: string;
+  amount: number;
+  currency: string;
+  provider: string;
+}
+
+export async function createPaymentIntent(payload: any): Promise<PaymentIntentResult> {
   try {
+    // Validate payload
+    const validatedPayload = PaymentPayloadSchema.parse(payload);
+    
+    // Ensure amount is provided and is a positive integer
+    if (!validatedPayload.amount || validatedPayload.amount <= 0) {
+      throw new Error('Amount is required and must be a positive integer');
+    }
+
     // Create PaymentIntent with Stripe
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: payload.amount,
-      currency: currency,
-      // Add metadata if provided in payload
-      ...(payload.metadata && { metadata: payload.metadata })
+      amount: validatedPayload.amount,
+      currency: validatedPayload.currency,
+      metadata: validatedPayload.metadata || {},
     });
 
-    // Return the client secret and payment ID
+    // Return the required response format
     return {
-      clientSecret: paymentIntent.client_secret,
       paymentId: paymentIntent.id,
-      amount: payload.amount,
-      currency: currency,
-      provider: "stripe"
+      clientSecret: paymentIntent.client_secret || '',
+      amount: paymentIntent.amount,
+      currency: paymentIntent.currency,
+      provider: 'stripe'
     };
-  } catch (error: any) {
-    // Re-throw Stripe errors with original messages preserved
-    if (error.type && error.type.startsWith('Stripe')) {
-      throw new Error(`Stripe API Error: ${error.message}`);
+
+  } catch (error) {
+    // Handle Stripe-specific errors
+    if (error instanceof z.ZodError) {
+      throw new Error(`Validation error: ${error.errors.map(e => e.message).join(', ')}`);
     }
-    throw error;
+    
+    // Re-throw with original error message preserved
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    
+    throw new Error('An unknown error occurred during payment processing');
   }
 }
