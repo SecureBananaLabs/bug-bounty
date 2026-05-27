@@ -1,0 +1,101 @@
+name: Low Hanging Fruit Automation
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  detect-and-create-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Detect low hanging fruit and create issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Recursively scan for low hanging fruit patterns
+            async function scanForLowHangingFruit(dir, patterns) {
+              const results = [];
+              const entries = fs.readdirSync(dir, { withFileTypes: true });
+              
+              for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+                
+                if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.git' && entry.name !== 'dist' && entry.name !== 'build') {
+                  results.push(...await scanForLowHangingFruit(fullPath, patterns));
+                } else if (entry.isFile()) {
+                  const content = fs.readFileSync(fullPath, 'utf-8');
+                  for (const pattern of patterns) {
+                    if (pattern.test(content)) {
+                      results.push({
+                        file: fullPath,
+                        pattern: pattern.toString(),
+                        type: pattern.name || 'match'
+                      });
+                    }
+                  }
+                }
+              }
+              
+              return results;
+            }
+            
+            // Define patterns for low hanging fruit detection
+            const patterns = [
+              { regex: /TODO|FIXME|HACK|XXX|BUG/, name: 'TODO/FIXME markers' },
+              { regex: /console\.(log|warn|error)\(/, name: 'Console statements' },
+              { regex: /describe\.skip|it\.skip|test\.skip/, name: 'Skipped tests' },
+              { regex: /\/\/ @ts-ignore/, name: 'TypeScript ignore comments' },
+              { regex: /eslint-disable/, name: 'ESLint disabled rules' }
+            ];
+            
+            const findings = await scanForLowHangingFruit('.', patterns.map(p => p.regex));
+            
+            // Group findings by pattern
+            const grouped = {};
+            for (const finding of findings) {
+              const type = finding.pattern;
+              if (!grouped[type]) grouped[type] = [];
+              grouped[type].push(finding.file);
+            }
+            
+            // Create issues for each pattern group
+            for (const [pattern, files] of Object.entries(grouped)) {
+              const title = `Low Hanging Fruit: ${pattern} detected in ${files.length} file(s)`;
+              const body = `## Automated Low Hanging Fruit Detection
+              
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+### Files affected:
+${files.map(f => `- ${f}`).join('\n')}
+
+### Pattern: ${pattern}
+
+Please review and address these findings.`;
+              
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', 'bounty', '💎 Bounty']
+              });
+            }
+            
+            console.log(`Created ${Object.keys(grouped).length} issues for low hanging fruit.`);
