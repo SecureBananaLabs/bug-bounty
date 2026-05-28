@@ -1,4 +1,6 @@
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe'
+import { createPaymentIntent } from '../lib/stripe'
+import { loadStripe } from '@stripe/stripe'
 
 export async function createPaymentIntent(payload) {
   // TODO: integrate Stripe SDK and return client secret.
@@ -9,9 +11,9 @@ export async function createPaymentIntent(payload) {
     // Add other required fields
   });
   return {
-    paymentId: paymentIntent.id,
-    clientSecret: paymentIntent.client_secret,
+    paymentId: `pay_${Date.now()}`,
     amount: payload.amount,
-    currency: payload.currency ?? "usd"
+    currency: payload.currency ?? "usd",
+    provider: "stripe"
   };
 }
