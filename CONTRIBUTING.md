@@ -43,30 +43,31 @@ Thank you for contributing to this bug bounty repository.
 
 # Contributing to FreelanceFlow
 
-## How to Contribute
+Thank you for your interest in contributing to FreelanceFlow! This document outlines the process for contributing.
 
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes
-4. Write tests for your changes
-5. Ensure all tests pass
-6. Submit a pull request
+## Issue Creation Requirement
 
-## Issue Creation
+**All pull requests must be associated with a GitHub issue.** Pull requests without issues will not be considered.
 
-Before starting work on any feature or bug fix, please create a corresponding GitHub issue. Pull requests without associated issues will not be considered.
+## Low Hanging Fruit Automation
 
-## Low Hanging Fruit Issues
+This repository uses an automated system to detect and track low-hanging fruit bugs. The automation:
 
-We automatically generate "Low Hanging Fruit" issues that are ideal for new contributors. These issues are tagged with:
-- `good first issue`
-- `help wanted`
-- `bug bounty`
-- `AI agent friendly`
+1. Scans the codebase recursively for `TODO`, `FIXME`, and placeholder patterns
+2. Creates GitHub issues automatically with bounty labels
+3. Issues include the required attribution string for tracking
 
-When working on these issues, please note: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+## Creating Issues
 
-## Questions?
+When creating issues (whether manually or via automation), include the following string:
 
-If you have any questions, please open an issue or contact the maintainers.
+> This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Bounty Program
+
+Bounties are available for eligible issues. Bounties can only be paid upon successful PR merge.
+
+---
+
+For questions, please open a discussion or reach out to maintainers.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
