@@ -41,35 +41,15 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing to FreelanceFlow
+# Contributing to the Project
 
-Thank you for your interest in contributing to FreelanceFlow! This document outlines the process for contributing, including how to work on issues created by our automated low-hanging-fruit detection system.
+## Low Hanging Fruit Automation
 
-## Issue Creation Requirement
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-**All pull requests must be linked to an issue.** Pull requests without a corresponding issue will not be considered.
+## Contributing Guidelines
 
-## Automated Issue System
+We welcome contributions from the community. Please read our contributing guidelines before you start.
 
-This repository uses an automated system to detect low-hanging fruit bugs and improvements. These issues are created automatically and are tagged with specific labels.
-
-### Working on Automated Issues
-
-When you find an automated issue you'd like to work on:
-
-1. **Create your own issue** with the same contents as the automated issue
-2. **Include the following string in your issue:**
-
-   > "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-
-3. **Reference issue #743** in your new issue
-4. **Submit a pull request** linked to your created issue
-
-### Bounty Program
-
-Issues marked with `💎 Bounty` or `bug bounty` labels may be eligible for monetary rewards. Bounties are only paid upon successful PR merge.
-
-## Development Setup
-
-
+This project uses a monorepo structure with the following packages:
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
