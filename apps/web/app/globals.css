@@ -4,3 +4,273 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #53628f;
+  border-radius: 8px;
+  background: #20294a;
+  color: #f2f5ff;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: #a8c7fa;
+  outline: none;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+input,
+select {
+  background: #0f172d;
+  border: 1px solid #3c4a76;
+  border-radius: 8px;
+  color: #f2f5ff;
+  min-height: 2.4rem;
+  padding: 0.45rem 0.65rem;
+}
+
+.admin-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-header,
+.admin-state-row,
+.toolbar,
+.queue-item,
+.control-item {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.admin-header {
+  border-bottom: 1px solid #2a3765;
+  padding-bottom: 1rem;
+}
+
+.admin-header h2,
+.admin-panel h3,
+.queue-item h3 {
+  margin: 0;
+}
+
+.admin-header p,
+.queue-item p,
+.control-item span,
+td span {
+  color: #b8c2df;
+}
+
+.primary-button {
+  background: #2f6fed;
+  border-color: #77a7ff;
+}
+
+.admin-state-row {
+  background: #10172c;
+  border: 1px solid #28365f;
+  border-radius: 8px;
+  color: #cbd5f1;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+}
+
+.inline-error {
+  color: #ffcf8a;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-tabs button {
+  text-transform: capitalize;
+}
+
+.admin-tabs .tab-active {
+  background: #f7c948;
+  border-color: #f7c948;
+  color: #172033;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.metric,
+.admin-panel {
+  background: #151c35;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.metric {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.metric span {
+  color: #aeb9d8;
+}
+
+.metric strong {
+  font-size: 1.8rem;
+}
+
+.wide-panel {
+  grid-column: 1 / -1;
+}
+
+.trust-bars,
+.control-grid,
+.list-panel {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.trust-row {
+  align-items: center;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 72px 1fr 32px;
+}
+
+meter {
+  inline-size: 100%;
+}
+
+.control-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.control-item {
+  background: #10172c;
+  border: 1px solid #28365f;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.control-item div,
+td:first-child {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.toolbar {
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.toolbar input {
+  min-width: min(280px, 100%);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 760px;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #2a3765;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #aeb9d8;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.action-cell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.action-cell button {
+  padding: 0.4rem 0.55rem;
+}
+
+.queue-item {
+  background: #10172c;
+  border: 1px solid #28365f;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+
+.queue-item > div:first-child {
+  flex: 1 1 320px;
+}
+
+.status {
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.55rem;
+}
+
+.status-active,
+.status-approved,
+.status-resolved {
+  background: #164b35;
+  color: #a7f3d0;
+}
+
+.status-pending,
+.status-suspended,
+.status-under-review,
+.status-escalated {
+  background: #5b4417;
+  color: #fde68a;
+}
+
+.status-banned,
+.status-rejected,
+.status-open {
+  background: #5a1d24;
+  color: #fecdd3;
+}
+
+@media (max-width: 680px) {
+  main { padding: 1rem; }
+  .admin-header,
+  .admin-state-row,
+  .queue-item,
+  .control-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .primary-button,
+  .queue-item button,
+  .control-item button {
+    width: 100%;
+  }
+}
