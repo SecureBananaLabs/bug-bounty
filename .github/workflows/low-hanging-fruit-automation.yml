@@ -2,8 +2,8 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
-  workflow_dispatch:  # Allow manual trigger
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 permissions:
   issues: write
@@ -27,115 +27,87 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-
-            // Patterns that indicate potential bugs or issues
-            const bugPatterns = [
-              {
-                pattern: /TODO|FIXME|HACK|BUG|XXX/gi,
-                name: 'Code Markers',
-                description: 'Found TODO/FIXME/HACK markers in codebase that need attention'
-              },
-              {
-                pattern: /console\.(log|warn|error)/gi,
-                name: 'Console Statements',
-                description: 'Console statements found that should be replaced with proper logging'
-              },
-              {
-                pattern: /process\.env\.(\w+)/g,
-                name: 'Environment Variables',
-                description: 'Ensure all environment variables are properly documented and validated'
-              }
-            ];
-
-            // File extensions to scan
-            const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rb'];
-            const excludeDirs = ['node_modules', '.git', 'dist', 'build', '.next'];
-
-            function* walkDir(dir) {
-              const files = fs.readdirSync(dir, { withFileTypes: true });
-              for (const file of files) {
-                const fullPath = path.join(dir, file.name);
-                if (file.isDirectory()) {
-                  if (!excludeDirs.includes(file.name)) {
-                    yield* walkDir(fullPath);
-                  }
-                } else if (extensions.some(ext => file.name.endsWith(ext))) {
-                  yield fullPath;
-                }
-              }
-            }
-
-            const findings = [];
-
-            // Scan codebase
-            try {
-              for (const filePath of walkDir('.')) {
-                const content = fs.readFileSync(filePath, 'utf-8');
-                const relativePath = path.relative('.', filePath);
+            
+            // Recursive function to find files with potential issues patterns
+            async function findLowHangingFruit(dir, results = []) {
+              const items = fs.readdirSync(dir, { withFileTypes: true });
+              
+              for (const item of items) {
+                const fullPath = path.join(dir, item.name);
                 
-                for (const { pattern, name, description } of bugPatterns) {
-                  const matches = [...content.matchAll(pattern)];
-                  if (matches.length > 0) {
-                    findings.push({
-                      file: relativePath,
-                      pattern: name,
-                      description,
-                      count: matches.length
+                if (item.isDirectory() && item.name !== 'node_modules' && item.name !== '.git') {
+                  await findLowHangingFruit(fullPath, results);
+                } else if (item.isFile()) {
+                  const content = fs.readFileSync(fullPath, 'utf-8');
+                  const issues = [];
+                  
+                  // Check for TODO comments
+                  const todoMatches = content.match(/TODO[:\s].*/gi);
+                  if (todoMatches) {
+                    todoMatches.forEach(match => {
+                      issues.push({
+                        type: 'TODO',
+                        description: match.trim(),
+                        file: fullPath
+                      });
                     });
                   }
+                  
+                  // Check for FIXME comments
+                  const fixmeMatches = content.match(/FIXME[:\s].*/gi);
+                  if (fixmeMatches) {
+                    fixmeMatches.forEach(match => {
+                      issues.push({
+                        type: 'FIXME',
+                        description: match.trim(),
+                        file: fullPath
+                      });
+                    });
+                  }
+                  
+                  // Check for placeholder/empty implementations
+                  if (content.includes('// TODO') || content.includes('// FIXME') || content.includes('placeholder') || content.includes('Placeholder')) {
+                    if (issues.length === 0) {
+                      issues.push({
+                        type: 'PLACEHOLDER',
+                        description: 'Placeholder or incomplete implementation detected',
+                        file: fullPath
+                      });
+                    }
+                  }
+                  
+                  results.push(...issues);
                 }
               }
-            } catch (error) {
-              console.log('Error scanning:', error.message);
+              
+              return results;
             }
+            
+            const findings = await findLowHangingFruit('.');
+            
+            // Create GitHub issues for findings
+            for (const finding of findings.slice(0, 5)) { // Limit to 5 issues per run
+              const title = `[Low Hanging Fruit] ${finding.type} in ${finding.file.replace('./', '')}`;
+              const body = `## Automated Low Hanging Fruit Detection
 
-            // Group findings by pattern type
-            const groupedFindings = findings.reduce((acc, finding) => {
-              if (!acc[finding.pattern]) {
-                acc[finding.pattern] = [];
-              }
-              acc[finding.pattern].push(finding);
-              return acc;
-            }, {});
-
-            // Create issues for each pattern group
-            const issuePromises = Object.entries(groupedFindings).map(async ([patternName, patternFindings]) => {
-              const issueTitle = `[Low Hanging Fruit] ${patternName}: Automated detection found ${patternFindings.length} files`;
-              
-              const fileList = patternFindings.map(f => `- \`${f.file}\` (${f.count} occurrences)`).join('\n');
-              
-              const issueBody = `## Automated Low Hanging Fruit Detection
-
-${patternFindings[0].description}
-
-### Affected Files
-${fileList}
-
-### Next Steps
-- Review each file for potential issues
-- Create focused issues for specific problems found
-- Submit PRs with fixes
-
----
+**Type:** ${finding.type}
+**File:** \`${finding.file}\`
+**Description:** ${finding.description}
 
 This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-/bounty $50`;
+/bounty $50
 
-              try {
-                const issue = await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: issueTitle,
-                  body: issueBody,
-                  labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty']
-                });
-                console.log(`Created issue #${issue.data.number}: ${issueTitle}`);
-                return issue.data;
-              } catch (error) {
-                console.error(`Failed to create issue for ${patternName}:`, error.message);
-              }
-            });
+---
+*This issue was automatically created by the Low Hanging Fruit Automation workflow.*`;
 
-            await Promise.all(issuePromises);
-            console.log('Low hanging fruit automation complete');
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty']
+              });
+            }
+            
+            console.log(`Created ${Math.min(findings.length, 5)} issues from ${findings.length} findings.`);
