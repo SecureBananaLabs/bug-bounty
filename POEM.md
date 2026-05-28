@@ -1,19 +1,31 @@
 ---
-title: "Code's Crescendo"
-slug: "tech-poem"
+title: "POEM.md"
 ---
 
-# Code's Crescendo
+## The Project's Call
+In the realm of code and logic, we toil,
+A mind of its own, it does not boil,
+But with patterns fixed and logic that coils,
+The developer's heart, it slowly, it spoils.
 
-In circuits deep where logic flows,  
-A dancer's dream in data's pose,  
-Algorithms waltz with graceful ease,  
-In loops and conditions, hearts find keys.  
+## The Developer's Lament
+In the glow of the screen, where dreams are sown,
+And logic is born, but not yet fully grown,
+Lives the developer, in code and data drowns,
+Each bug fixed, each feature added, makes us prone
+To lose ourselves in loops that have no known
+End, as the night grows long and the day too soon.
 
-Binary beats, in rhythm they play,  
-As developers type the night away,  
-Each line a step, each function a spin,  
-The dance of the code begins within.  
+## The Cycle of Creation
+In the cycle of creation, we find our worth,
+Each line a step, each function a birth,
+Of logic and life, in the system's rebirth,
+We find our joy, in the silence, the mirth.
 
-With every merge and pull request made,  
-Our code lives on, both stark and staid.
+## The Silent Developer
+In the silence, the developer's mind,
+Where logic and lines are intertwined,
+Lives the silent developer, resigned
+To the cycle of the code, the sign
+Of progress, of the will that's signed
+In the code, the time, the mind.
