@@ -2,6 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
+    # Run daily at midnight UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -16,99 +17,101 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: Detect low hanging fruit and create issues
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
             const path = require('path');
-            
-            // Recursively scan for common low hanging fruit patterns
-            function scanForIssues(dir, patterns) {
-              const issues = [];
-              const files = fs.readdirSync(dir, { withFileTypes: true });
-              
-              for (const file of files) {
-                const fullPath = path.join(dir, file.name);
-                if (file.isDirectory() && file.name !== 'node_modules' && file.name !== '.git') {
-                  issues.push(...scanForIssues(fullPath, patterns));
-                } else if (file.isFile()) {
-                  const content = fs.readFileSync(fullPath, 'utf-8');
-                  for (const pattern of patterns) {
-                    if (pattern.test(content)) {
-                      issues.push({
-                        file: fullPath,
-                        type: pattern.name,
-                        description: pattern.description
-                      });
+
+            // Patterns that indicate low hanging fruit / easy fixes
+            const lowHangingPatterns = [
+              { pattern: /TODO|FIXME|HACK|XXX|BUG/g, label: 'todo-fixme' },
+              { pattern: /console\.log/g, label: 'remove-console-logs' },
+              { pattern: /unused|deprecated|legacy/gi, label: 'cleanup' },
+              { pattern: /type.*any/g, label: 'typescript-strictness' },
+              { pattern: /eslint-disable/g, label: 'eslint-cleanup' },
+            ];
+
+            // Files to scan
+            const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.md'];
+            const results = [];
+
+            function scanDirectory(dir, relativePath = '') {
+              const items = fs.readdirSync(dir, { withFileTypes: true });
+              for (const item of items) {
+                const fullPath = path.join(dir, item.name);
+                const relPath = path.join(relativePath, item.name);
+                
+                if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
+                  scanDirectory(fullPath, relPath);
+                } else if (item.isFile() && extensions.some(ext => item.name.endsWith(ext))) {
+                  try {
+                    const content = fs.readFileSync(fullPath, 'utf-8');
+                    for (const { pattern, label } of lowHangingPatterns) {
+                      const matches = content.match(pattern);
+                      if (matches) {
+                        results.push({
+                          file: relPath,
+                          issueType: label,
+                          count: matches.length,
+                          description: `Found ${matches.length} instance(s) of ${label} in ${relPath}`
+                        });
+                      }
                     }
+                  } catch (err) {
+                    console.log(`Error reading ${fullPath}: ${err.message}`);
                   }
                 }
               }
-              return issues;
             }
-            
-            const lowHangingFruitPatterns = [
-              {
-                name: 'TODO/FIXME comments',
-                test: /\/\/\s*(TODO|FIXME|HACK|BUG|XXX)/i,
-                description: 'Found TODO/FIXME comments indicating incomplete work'
-              },
-              {
-                name: 'Console logs in source',
-                test: /console\.(log|warn|error|debug)\(/,
-                description: 'Console statements found in production code'
-              },
-              {
-                name: 'Empty catch blocks',
-                test: /catch\s*\(\s*\)\s*\{\s*\}/,
-                description: 'Empty catch block found - error handling missing'
-              },
-              {
-                name: 'Hardcoded secrets',
-                test: /(password|secret|key|token)\s*[:=]\s*['"][^'"]+['"]/i,
-                description: 'Potential hardcoded secret detected'
-              }
-            ];
-            
-            const detectedIssues = scanForIssues('.', lowHangingFruitPatterns);
-            
-            // Group by type for issue creation
+
+            scanDirectory('.');
+
+            // Group results by issue type
             const grouped = {};
-            for (const issue of detectedIssues) {
-              if (!grouped[issue.type]) grouped[issue.type] = [];
-              grouped[issue.type].push(issue);
+            for (const result of results) {
+              if (!grouped[result.issueType]) {
+                grouped[result.issueType] = [];
+              }
+              grouped[result.issueType].push(result);
             }
-            
-            const issueBody = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-## Detected Low Hanging Fruit
+            // Create issues for each category
+            const issueTemplate = "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.";
 
-${Object.entries(grouped).map(([type, items]) => `
-### ${type}
-${items.map(i => `- \`${i.file}\`: ${i.description}`).join('\n')}
-`).join('\n')}
+            for (const [issueType, items] of Object.entries(grouped)) {
+              const title = `[Low Hanging Fruit] ${issueType}: ${items.length} file(s) need attention`;
+              const body = `## Automated Low Hanging Fruit Detection
 
-## Bounty
+${issueTemplate}
 
-/bounty $50
+### Files Affected
+${items.map(item => `- ${item.file} (${item.count} occurrence${item.count > 1 ? 's' : ''})`).join('\n')}
 
-## Instructions
+### Description
+This issue was automatically created by the Low Hanging Fruit automation to track easy fixes in the codebase.
 
-1. Claim this issue by commenting below
-2. Create a pull request that addresses the detected items
-3. Ensure all tests pass
-`;
-            
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `[AUTO] Low Hanging Fruit: ${Object.keys(grouped).join(', ')}`,
-              body: issueBody,
-              labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', 'bounty', '💎 Bounty']
-            });
+### Next Steps
+1. Review the affected files
+2. Create a focused issue for your specific fix
+3. Reference this issue (#743) in your new issue
+4. Submit a pull request linked to your created issue
+
+/bounty $50`;
+
+              try {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title,
+                  body,
+                  labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty']
+                });
+                console.log(`Created issue: ${title}`);
+              } catch (err) {
+                console.log(`Error creating issue for ${issueType}: ${err.message}`);
+              }
+            }
+
+            console.log('Low hanging fruit scan complete.');
