@@ -2,7 +2,7 @@
   "name": "@bug-bounty/benchmarks",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "description": "API benchmark suite for FreelanceFlow",
   "scripts": {
     "benchmark": "node run-benchmarks.js",
     "benchmark:smoke": "node run-benchmarks.js --smoke",
@@ -11,7 +11,5 @@
   "dependencies": {
     "autocannon": "^7.15.0",
     "dotenv": "^16.4.5"
-  },
-  "devDependencies": {
   }
 }
