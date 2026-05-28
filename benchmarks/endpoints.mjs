@@ -1,3 +1,45 @@
+function benchmarkEmail(prefix, sequence) {
+  return `${prefix}-${sequence}@example.com`;
+}
+
+function jobDescription(sequence) {
+  return [
+    `Benchmark marketplace integration project ${sequence}.`,
+    "The client needs a freelancer to audit a production API workflow, document latency-sensitive endpoints, add regression coverage, and prepare a rollout checklist.",
+    "The expected deliverables include a short implementation plan, endpoint-by-endpoint notes, screenshots or logs from validation, and a final handoff summary for the product team.",
+    "This payload is intentionally longer than a placeholder so the benchmark exercises realistic JSON parsing and response serialization sizes."
+  ].join(" ");
+}
+
+function proposalCoverLetter(sequence) {
+  return [
+    `Hello, I can help with benchmark project ${sequence}.`,
+    "I will start by confirming the target endpoints, then reproduce the current behavior locally, measure latency and error rates, and document any risk before making changes.",
+    "After implementation, I will provide clear test results, benchmark output, and a concise handoff note so the client can review the work quickly.",
+    "My bid includes communication time, validation, and one focused revision pass if the acceptance criteria need small adjustments."
+  ].join(" ");
+}
+
+function messageBody(sequence) {
+  return [
+    `Benchmark message ${sequence}:`,
+    "The latest API run is complete. Please review the attached summary, especially the endpoints with the highest p95 latency and any route that returned unexpected status codes.",
+    "I can prepare a shorter client-facing update once the benchmark numbers are approved."
+  ].join(" ");
+}
+
+function uploadPayload() {
+  return [
+    "benchmark upload payload",
+    "This file represents a small client attachment with notes, acceptance criteria, and validation details.",
+    "It is sized beyond a trivial token so upload handling, multipart parsing, and response generation are all exercised.",
+    "Repeatable benchmark content follows.",
+    "latency,p95,p99,error_rate,status_codes",
+    "jobs,1.35,2.77,0,201",
+    "messages,1.26,2.98,0,201"
+  ].join("\n");
+}
+
 export const endpoints = [
   {
     name: "health",
@@ -9,7 +51,7 @@ export const endpoints = [
     method: "POST",
     path: "/api/auth/register",
     body: ({ sequence }) => ({
-      email: `benchmark-${Date.now()}-${sequence}@example.com`,
+      email: benchmarkEmail("benchmark-register", sequence),
       password: "benchmark-password",
       role: "client"
     })
@@ -43,9 +85,11 @@ export const endpoints = [
     method: "POST",
     path: "/api/users",
     body: ({ sequence }) => ({
-      email: `user-${Date.now()}-${sequence}@example.com`,
-      name: `Benchmark User ${sequence}`,
-      role: "client"
+      email: benchmarkEmail("benchmark-user", sequence),
+      fullName: `Benchmark Client ${sequence}`,
+      bio: "Client profile used to exercise API response serialization for marketplace account data.",
+      role: "client",
+      skills: ["api review", "documentation", "qa"]
     })
   },
   {
@@ -58,12 +102,13 @@ export const endpoints = [
     method: "POST",
     path: "/api/jobs",
     body: ({ sequence }) => ({
-      title: `Benchmark job ${sequence}`,
-      description: "Synthetic benchmark job payload for API latency tracking.",
-      budgetMin: 100,
-      budgetMax: 500,
-      categoryId: "benchmark-category",
-      skills: ["api", "benchmark"]
+      title: `API performance audit and rollout support ${sequence}`,
+      description: jobDescription(sequence),
+      budgetMin: 750,
+      budgetMax: 2400,
+      categoryId: "software-development",
+      clientId: `benchmark-client-${sequence}`,
+      skills: ["api performance", "node.js", "benchmarking", "technical writing"]
     })
   },
   {
@@ -76,20 +121,22 @@ export const endpoints = [
     method: "POST",
     path: "/api/proposals",
     body: ({ sequence }) => ({
-      jobId: "benchmark-job",
+      jobId: `benchmark-job-${sequence}`,
       freelancerId: `benchmark-freelancer-${sequence}`,
-      coverLetter: "Synthetic benchmark proposal payload.",
-      bidAmount: 250
+      coverLetter: proposalCoverLetter(sequence),
+      bidAmount: 1250,
+      estDuration: "3 business days"
     })
   },
   {
     name: "payments-create",
     method: "POST",
     path: "/api/payments",
-    body: () => ({
-      amount: 2500,
+    body: ({ sequence }) => ({
+      amount: 125000,
       currency: "usd",
-      proposalId: "benchmark-proposal"
+      jobId: `benchmark-job-${sequence}`,
+      proposalId: `benchmark-proposal-${sequence}`
     })
   },
   {
@@ -101,10 +148,12 @@ export const endpoints = [
     name: "reviews-create",
     method: "POST",
     path: "/api/reviews",
-    body: () => ({
-      targetId: "benchmark-target",
+    body: ({ sequence }) => ({
+      reviewerId: `benchmark-client-${sequence}`,
+      revieweeId: `benchmark-freelancer-${sequence}`,
+      targetId: `benchmark-target-${sequence}`,
       rating: 5,
-      comment: "Synthetic benchmark review payload."
+      comment: "Delivered the API benchmark update on time, explained tradeoffs clearly, and provided reproducible results for the product and engineering teams."
     })
   },
   {
@@ -117,9 +166,10 @@ export const endpoints = [
     method: "POST",
     path: "/api/messages",
     body: ({ sequence }) => ({
-      threadId: "benchmark-thread",
-      senderId: "benchmark-sender",
-      body: `Synthetic benchmark message ${sequence}.`
+      threadId: `benchmark-thread-${sequence}`,
+      senderId: `benchmark-client-${sequence}`,
+      receiverId: `benchmark-freelancer-${sequence}`,
+      body: messageBody(sequence)
     })
   },
   {
@@ -132,9 +182,10 @@ export const endpoints = [
     method: "POST",
     path: "/api/notifications",
     body: ({ sequence }) => ({
-      userId: "benchmark-user",
-      type: "benchmark",
-      message: `Synthetic benchmark notification ${sequence}.`
+      userId: `benchmark-user-${sequence}`,
+      type: "proposal_status",
+      title: "Proposal benchmark update",
+      message: `Proposal benchmark ${sequence} moved to client review after the API performance report was generated.`
     })
   },
   {
@@ -143,7 +194,7 @@ export const endpoints = [
     path: "/api/uploads",
     formData: () => {
       const form = new FormData();
-      form.set("file", new Blob(["benchmark upload payload"], { type: "text/plain" }), "benchmark.txt");
+      form.set("file", new Blob([uploadPayload()], { type: "text/plain" }), "benchmark-report.txt");
       return form;
     }
   },
