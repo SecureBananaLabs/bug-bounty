@@ -5,41 +5,44 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 });
 
 export async function createPaymentIntent(payload) {
-  // Validate payload
-  if (payload.amount === undefined || payload.amount === null) {
-    throw new Error('amount is required and must be a positive integer');
+  if (!payload || typeof payload !== 'object') {
+    throw new Error('Payload is required and must be an object');
   }
-  
-  const amount = Number(payload.amount);
-  
+
+  const { amount, currency, ...metadata } = payload;
+
+  if (amount === undefined || amount === null) {
+    throw new Error('amount is required');
+  }
+
   if (!Number.isInteger(amount) || amount <= 0) {
-    throw new Error('amount is required and must be a positive integer');
+    throw new Error('amount must be a positive integer');
   }
-  
-  const currency = payload.currency ?? 'usd';
-  
+
+  const resolvedCurrency = currency ?? 'usd';
+
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
-      currency,
+      currency: resolvedCurrency,
+      metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
     });
-    
+
     return {
       paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
       amount: paymentIntent.amount,
       currency: paymentIntent.currency,
+      clientSecret: paymentIntent.client_secret,
       provider: 'stripe',
     };
   } catch (error) {
-    if (error.type === 'StripeCardError' || 
-        error.type === 'StripeInvalidRequestError' ||
-        error.type === 'StripeAPIError' ||
-        error.type === 'StripeConnectionError' ||
-        error.type === 'StripeAuthenticationError' ||
-        error.type === 'StripeRateLimitError' ||
-        error.type === 'StripeIdempotencyError') {
-      throw new Error(error.message);
+    if (error.type && error.type.startsWith('Stripe')) {
+      const enhancedError = new Error(error.message);
+      enhancedError.type = error.type;
+      enhancedError.code = error.code;
+      enhancedError.statusCode = error.statusCode;
+      enhancedError.stripeError = error;
+      throw enhancedError;
     }
     throw error;
   }
