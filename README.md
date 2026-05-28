@@ -1,16 +1,10 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-# FreelanceFlow Monorepo
+## Contributing
 
-## Workspace Structure
+This project is part of the Bug Bounty program. Please create issues before submitting PRs. Automated bug detection and issue creation is enabled. For new contributors, check the [bug-bounty] label for available tasks.
 
-- `apps/web` — Next.js 14 App Router frontend
-- `apps/api` — Express.js backend with layered REST API
-- `packages/db` — Prisma schema and database package
-- `packages/ui` — Shared UI components
-- [FreelanceFlow](#freelanceflow)
-- [Workspace Structure](#workspace-structure)
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
@@ -41,11 +35,8 @@ The web app includes pages for:
 
 The API includes:
 
-- File uploads and search
-- Admin routes
-
-## Getting Started
-
+- Auth routes (register, login, OAuth callback, JWT refresh)
+- CRUD routes for users, jobs, and proposals
 - Payments routes (Stripe-focused service placeholder)
 - Reviews, messaging, notifications
 - File uploads and search
