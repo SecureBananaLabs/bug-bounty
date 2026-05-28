@@ -1,10 +1,26 @@
 # Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+<img width="663" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-## Contributing
+# FreelanceFlow
 
-This project is part of the Bug Bounty program. Please create issues before submitting PRs. Automated bug detection and issue creation is enabled. For new contributors, check the [bug-bounty] label for available tasks.
+# Workspace Structure
 
+The web app includes pages for:
+
+- Landing
+- Job listings and job detail
+- Post a job
+- Freelancer profiles and freelancer search
+- Client and freelancer dashboards
+- Messaging, notifications, settings, billing
+- Admin panel
+
+## Backend
++
+The API includes:
++
+- Auth routes (register, login, OAuth callback, JWT refresh)
+ a/README.md
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
