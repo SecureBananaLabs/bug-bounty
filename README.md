@@ -1,11 +1,15 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-# FreelanceFlow Monorepo
+# FreelanceFlow - Low Hanging Fruit Automation
 
-FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+This repository contains the FreelanceFlow monorepo. This issue is focused on automating the detection of low-effort, high-impact tasks and creating new GitHub issues for them.
 
-## Workspace Structure
+## Low Hanging Fruit Automation
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Features
+This project is a full-stack freelance marketplace built with a modern TypeScript-first architecture.
 
 - `apps/web` — Next.js 14 App Router frontend
 - `apps/api` — Express.js backend with layered REST API
