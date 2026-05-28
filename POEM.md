@@ -1,4 +1,4 @@
-# Ledger of Quiet Work
+# FreelanceFlow Ledger of Quiet Work
 
 In FreelanceFlow's morning, the routes wake clean,
 JWTs whisper through middleware seams;
@@ -18,7 +18,7 @@ to people who build before people who wait.
 The API answers with measured restraint:
 not every error is failure, not every retry is loss.
 Rate limits stand guard where impatience grows faint,
-and validation catches the sparks before they cross.
+and Zod catches the sparks before Stripe lights the cross.
 
 So let the merge be more than green checks passing;
 let it be craft with a trail others can read.
