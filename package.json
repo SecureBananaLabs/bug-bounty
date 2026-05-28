@@ -1,18 +1,6 @@
 {
-  "name": "freelanceflow",
-  "scripts": {
-    "lhf:find": "node scripts/findLHF.js",
-    "lhf:create": "node scripts/createLHF.js"
-  },
-  "devDependencies": {
-    "@octokit/rest": "^19.0.0",
-    "dotenv": "^16.0.0"
-  }
-}
-
-{
-  "name": "freelanceflow",
-  "version": "1.0.0",
+  "name": "freelance-platform-monorepo",
+  "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -22,4 +10,16 @@
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
+{
+  "name": "bug-bounty",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint:low-hanging-fruit": "node scripts/detect-low-hanging-fruit.js",
+    "create:issue": "node scripts/create-issue.js"
+  },
+  "devDependencies": {
+    "@octokit/rest": "^20.0.0"
+  }
+}
 }
