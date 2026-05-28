@@ -1,4 +1,5 @@
 import { signAccessToken } from "../utils/jwt.js";
+import { users } from "./userService.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
@@ -11,10 +12,19 @@ export async function registerUser(payload) {
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  // Verify credentials before issuing token
+  const user = users.find(u => u.email === payload.email);
+  if (!user) {
+    throw new Error("Invalid credentials");
+  }
+  // TODO: use bcrypt.compare once password hashing is implemented
+  if (user.password !== payload.password) {
+    throw new Error("Invalid credentials");
+  }
+  const { password: _, ...safeUser } = user;
   return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    ...safeUser,
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
