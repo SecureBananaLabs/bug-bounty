@@ -1,428 +1,902 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-type Tab = 'dashboard' | 'users' | 'jobs' | 'moderation' | 'system';
+// ─── Types ─────────────────────────────────────────────────
+
+type Tab = 'dashboard' | 'users' | 'jobs' | 'disputes' | 'audit' | 'settings';
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: 'client' | 'freelancer' | 'admin';
-  status: 'active' | 'suspended' | 'flagged';
-  joined: string;
-  jobsPosted: number;
-  earnings: string;
+  role: string;
+  adminStatus: string;
+  joined?: string;
+  jobsPosted?: number;
+  earnings?: string;
 }
 
 interface Job {
   id: string;
   title: string;
-  postedBy: string;
-  budget: string;
-  status: 'open' | 'in-progress' | 'completed' | 'flagged' | 'disputed';
-  proposals: number;
-  posted: string;
+  postedBy?: string;
+  budget?: string;
+  status: string;
+  proposals?: number;
+  posted?: string;
 }
 
-const adminStyles = {
-  container: { padding: '1rem 0' },
-  header: { fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem', color: '#f2f5ff' },
-  tabs: { display: 'flex', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' as const },
-  tab: (active: boolean) => ({
-    padding: '0.6rem 1.2rem',
-    borderRadius: '8px',
-    border: active ? '1px solid #4a7cff' : '1px solid #2a3765',
-    background: active ? '#1a2a5c' : 'transparent',
-    color: active ? '#4a7cff' : '#8a9bc0',
-    cursor: 'pointer',
-    fontSize: '0.875rem',
-    fontWeight: active ? 600 : 400,
-  }),
-  metricsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-    gap: '1rem',
-    marginBottom: '1.5rem',
-  },
-  metricCard: {
-    background: '#151c35',
-    border: '1px solid #2a3765',
-    borderRadius: '12px',
-    padding: '1.2rem',
-  },
-  metricValue: { fontSize: '1.8rem', fontWeight: 700, color: '#4a7cff', marginBottom: '0.25rem' },
-  metricLabel: { fontSize: '0.8rem', color: '#8a9bc0', textTransform: 'uppercase' as const, letterSpacing: '0.05em' },
-  table: { width: '100%', borderCollapse: 'collapse' as const, fontSize: '0.875rem' },
-  th: { textAlign: 'left' as const, padding: '0.75rem 0.5rem', borderBottom: '1px solid #2a3765', color: '#8a9bc0', fontWeight: 500 },
-  td: { padding: '0.75rem 0.5rem', borderBottom: '1px solid #1a2240', color: '#c8d0e8' },
-  badge: (color: string) => ({
-    display: 'inline-block',
-    padding: '0.2rem 0.5rem',
-    borderRadius: '4px',
-    fontSize: '0.75rem',
-    fontWeight: 600,
-    background: `${color}20`,
-    color: color,
-  }),
-  logEntry: { padding: '0.5rem 0', borderBottom: '1px solid #1a2240', fontSize: '0.8125rem', color: '#a0b0d0' },
-  logTime: { color: '#4a7cff', marginRight: '0.75rem' },
-};
+interface Dispute {
+  id: string;
+  jobId: string;
+  jobTitle: string;
+  status: string;
+  reason: string;
+  openedAt: string;
+  thread: { author: string; message: string; timestamp: string }[];
+  resolution?: { ruling: string; refund?: boolean; resolvedBy: string; resolvedAt: string; notes?: string };
+}
 
-const mockUsers: User[] = [
-  { id: 'usr_1', name: 'Maya Chen', email: 'maya@example.com', role: 'freelancer', status: 'active', joined: '2025-11-15', jobsPosted: 0, earnings: '$12,400' },
-  { id: 'usr_2', name: 'Jordan UX', email: 'jordan@example.com', role: 'freelancer', status: 'active', joined: '2026-01-22', jobsPosted: 0, earnings: '$8,900' },
-  { id: 'usr_3', name: 'Alex Rivera', email: 'alex.r@example.com', role: 'client', status: 'active', joined: '2025-09-10', jobsPosted: 14, earnings: '$0' },
-  { id: 'usr_4', name: 'Sam Wilson', email: 'sam.w@example.com', role: 'client', status: 'flagged', joined: '2026-02-05', jobsPosted: 3, earnings: '$0' },
-  { id: 'usr_5', name: 'Priya Sharma', email: 'priya@example.com', role: 'freelancer', status: 'active', joined: '2026-03-18', jobsPosted: 0, earnings: '$3,200' },
-  { id: 'usr_6', name: 'Carlos Mendez', email: 'carlos@example.com', role: 'client', status: 'suspended', joined: '2024-07-30', jobsPosted: 8, earnings: '$0' },
-  { id: 'usr_7', name: 'Bot Account 42', email: 'bot42@example.com', role: 'freelancer', status: 'flagged', joined: '2026-05-26', jobsPosted: 0, earnings: '$0' },
-  { id: 'usr_8', name: 'Emma Watson', email: 'emma.w@example.com', role: 'admin', status: 'active', joined: '2024-01-15', jobsPosted: 0, earnings: '$0' },
-];
+interface AuditEntry {
+  id: string;
+  timestamp: string;
+  action: string;
+  adminId: string;
+  details: Record<string, unknown>;
+}
 
-const mockJobs: Job[] = [
-  { id: 'job_101', title: 'Build AI customer support widget', postedBy: 'Alex Rivera', budget: '$1,500', status: 'open', proposals: 8, posted: '2026-05-20' },
-  { id: 'job_102', title: 'Migrate legacy API to Node.js', postedBy: 'Sam Wilson', budget: '$2,800', status: 'in-progress', proposals: 5, posted: '2026-05-18' },
-  { id: 'job_103', title: 'Design SaaS onboarding flows', postedBy: 'Alex Rivera', budget: '$900', status: 'completed', proposals: 12, posted: '2026-05-10' },
-  { id: 'job_104', title: 'Full-stack e-commerce platform', postedBy: 'Carlos Mendez', budget: '$5,000', status: 'disputed', proposals: 15, posted: '2026-05-15' },
-  { id: 'job_105', title: 'Write technical documentation', postedBy: 'Sam Wilson', budget: '$600', status: 'flagged', proposals: 3, posted: '2026-05-22' },
-  { id: 'job_106', title: 'Build mobile app with React Native', postedBy: 'Alex Rivera', budget: '$3,200', status: 'open', proposals: 6, posted: '2026-05-25' },
-];
+interface Metrics {
+  totalUsers: number;
+  activeFreelancers: number;
+  openJobs: number;
+  activeJobs: number;
+  monthlyVolume: string;
+  flaggedAccounts: number;
+  pendingDisputes: number;
+  newToday: number;
+  totalReviews: number;
+  unreadNotifications: number;
+}
 
-const recentLogs = [
-  { time: '19:42:03', msg: 'New user registered: Bot Account 42 — flagged for suspicious email domain' },
-  { time: '19:38:17', msg: 'Job #105 flagged: "Write technical documentation" — possible scam pattern detected' },
-  { time: '19:30:44', msg: 'Payment processed: $1,500 released to @maya-dev for job #103' },
-  { time: '19:22:09', msg: 'Dispute filed on job #104 by @carlos_mendez — mediation required' },
-  { time: '19:15:33', msg: 'Rate limit triggered: 200+ requests from IP 45.33.xx.xxx in 1 minute' },
-  { time: '19:08:55', msg: 'User @sam.wilson flagged: 3 disputes opened in 24 hours' },
-  { time: '18:55:12', msg: 'Admin @emma.watson logged in from new device' },
-  { time: '18:45:00', msg: 'System health check passed: all services operational' },
-];
+interface PaginatedResponse<T> {
+  total: number;
+  page: number;
+  totalPages: number;
+  [key: string]: unknown;
+}
 
-const statusColors: Record<string, string> = {
-  active: '#22c55e', suspended: '#ef4444', flagged: '#f59e0b',
-  open: '#22c55e', 'in-progress': '#4a7cff', completed: '#8a9bc0',
-  disputed: '#ef4444', flagged_job: '#f59e0b',
-};
+interface ConfirmState {
+  title: string;
+  message: string;
+  onConfirm: () => void;
+  variant?: 'danger' | 'warning';
+}
+
+// ─── API Helper ────────────────────────────────────────────
+
+const API_BASE = typeof window !== 'undefined' ? window.location.origin : '';
+const ADMIN_API = `${API_BASE}/api/admin`;
+
+async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+  const res = await fetch(`${ADMIN_API}${path}`, {
+    headers: { 'Content-Type': 'application/json' },
+    ...options,
+  });
+  const data = await res.json();
+  if (!data.success) throw new Error(data.message || 'Request failed');
+  return data.data as T;
+}
+
+// ─── Helpers ───────────────────────────────────────────────
+
+function formatTime(iso: string): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+function formatDate(iso: string): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function badgeClass(status: string): string {
+  const map: Record<string, string> = {
+    active: 'admin-badge-green',
+    suspended: 'admin-badge-red',
+    banned: 'admin-badge-red',
+    flagged: 'admin-badge-yellow',
+    open: 'admin-badge-green',
+    'in-progress': 'admin-badge-blue',
+    completed: 'admin-badge-gray',
+    disputed: 'admin-badge-red',
+    rejected: 'admin-badge-red',
+    escalated: 'admin-badge-yellow',
+    freelancer: 'admin-badge-green',
+    client: 'admin-badge-yellow',
+    admin: 'admin-badge-blue',
+    under_review: 'admin-badge-yellow',
+    resolved: 'admin-badge-gray',
+  };
+  return map[status] || 'admin-badge-gray';
+}
+
+function ActionButton({ label, onClick, variant = 'primary', ariaLabel }: {
+  label: string;
+  onClick: () => void;
+  variant?: 'primary' | 'danger' | 'success' | 'ghost';
+  ariaLabel?: string;
+}) {
+  const cls = `admin-btn admin-btn-${variant} admin-btn-lg`;
+  return (
+    <button className={cls} onClick={onClick} aria-label={ariaLabel || label}>
+      {label}
+    </button>
+  );
+}
+
+// ─── Pagination ────────────────────────────────────────────
+
+function Pagination({ page, totalPages, onPage, label }: {
+  page: number;
+  totalPages: number;
+  onPage: (p: number) => void;
+  label: string;
+}) {
+  if (totalPages <= 1) return null;
+  return (
+    <div className="admin-pagination" role="navigation" aria-label={`${label} pagination`}>
+      <button disabled={page <= 1} onClick={() => onPage(page - 1)} aria-label="Previous page">
+        ← Prev
+      </button>
+      <span>Page {page} of {totalPages}</span>
+      <button disabled={page >= totalPages} onClick={() => onPage(page + 1)} aria-label="Next page">
+        Next →
+      </button>
+    </div>
+  );
+}
+
+// ─── Confirm Dialog ────────────────────────────────────────
+
+function ConfirmDialog({ state, onClose }: { state: ConfirmState | null; onClose: () => void }) {
+  if (!state) return null;
+  return (
+    <div className="admin-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="confirm-title" onClick={onClose}>
+      <div className="admin-confirm-dialog" onClick={e => e.stopPropagation()}>
+        <h3 id="confirm-title">{state.title}</h3>
+        <p>{state.message}</p>
+        <div className="admin-confirm-actions">
+          <button className="admin-btn admin-btn-ghost admin-btn-lg" onClick={onClose}>Cancel</button>
+          <button
+            className={`admin-btn ${state.variant === 'danger' ? 'admin-btn-danger' : 'admin-btn-primary'} admin-btn-lg`}
+            onClick={() => { state.onConfirm(); onClose(); }}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Component ────────────────────────────────────────
 
 export default function AdminPanelPage() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
+  const [confirm, setConfirm] = useState<ConfirmState | null>(null);
+
+  // Data states
+  const [metrics, setMetrics] = useState<Metrics | null>(null);
+  const [metricsLoading, setMetricsLoading] = useState(false);
+  const [metricsError, setMetricsError] = useState('');
+
+  // Users
+  const [users, setUsers] = useState<User[]>([]);
+  const [usersTotal, setUsersTotal] = useState(0);
+  const [usersPage, setUsersPage] = useState(1);
+  const [usersPages, setUsersPages] = useState(1);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [usersError, setUsersError] = useState('');
+  const [usersSearch, setUsersSearch] = useState('');
+  const [usersRoleFilter, setUsersRoleFilter] = useState('');
+  const [usersStatusFilter, setUsersStatusFilter] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  // Jobs
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobsTotal, setJobsTotal] = useState(0);
+  const [jobsPage, setJobsPage] = useState(1);
+  const [jobsPages, setJobsPages] = useState(1);
+  const [jobsLoading, setJobsLoading] = useState(false);
+  const [jobsError, setJobsError] = useState('');
+  const [jobsSearch, setJobsSearch] = useState('');
+  const [jobsStatusFilter, setJobsStatusFilter] = useState('');
+  const [jobsFlaggedOnly, setJobsFlaggedOnly] = useState(false);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
-  const metrics = {
-    totalUsers: 1285,
-    activeFreelancers: 342,
-    openJobs: 47,
-    monthlyVolume: '$128,900',
-    flaggedAccounts: 3,
-    pendingDisputes: 2,
-    newUsersToday: 14,
-    systemUptime: '99.97%',
+  // Disputes
+  const [disputes, setDisputes] = useState<Dispute[]>([]);
+  const [disputesTotal, setDisputesTotal] = useState(0);
+  const [disputesPage, setDisputesPage] = useState(1);
+  const [disputesPages, setDisputesPages] = useState(1);
+  const [disputesLoading, setDisputesLoading] = useState(false);
+  const [disputesError, setDisputesError] = useState('');
+  const [disputesFilter, setDisputesFilter] = useState('');
+  const [selectedDispute, setSelectedDispute] = useState<Dispute | null>(null);
+  const [disputeNote, setDisputeNote] = useState('');
+
+  // Audit
+  const [auditEntries, setAuditEntries] = useState<AuditEntry[]>([]);
+  const [auditTotal, setAuditTotal] = useState(0);
+  const [auditPage, setAuditPage] = useState(1);
+  const [auditPages, setAuditPages] = useState(1);
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [auditError, setAuditError] = useState('');
+
+  // Settings
+  const [settings, setSettings] = useState<{ registrationsOpen: boolean; jobPostingOpen: boolean } | null>(null);
+  const [settingsLoading, setSettingsLoading] = useState(false);
+  const [settingsError, setSettingsError] = useState('');
+
+  // ─── Data Fetching ───────────────────────────────────────
+
+  const fetchMetrics = useCallback(async () => {
+    setMetricsLoading(true);
+    setMetricsError('');
+    try {
+      const data = await apiFetch<Metrics>('/metrics');
+      setMetrics(data);
+    } catch (err) {
+      setMetricsError((err as Error).message);
+    } finally {
+      setMetricsLoading(false);
+    }
+  }, []);
+
+  const fetchUsers = useCallback(async (page: number, search: string, role: string, status: string) => {
+    setUsersLoading(true);
+    setUsersError('');
+    try {
+      const params = new URLSearchParams({ page: String(page), limit: '20' });
+      if (search) params.set('search', search);
+      if (role) params.set('role', role);
+      if (status) params.set('status', status);
+      const data = await apiFetch<PaginatedResponse<User>>(`/users?${params}`);
+      setUsers((data as unknown as { users: User[] }).users || []);
+      setUsersTotal(data.total);
+      setUsersPage(data.page);
+      setUsersPages(data.totalPages);
+    } catch (err) {
+      setUsersError((err as Error).message);
+    } finally {
+      setUsersLoading(false);
+    }
+  }, []);
+
+  const fetchJobs = useCallback(async (page: number, search: string, status: string, flaggedOnly: boolean) => {
+    setJobsLoading(true);
+    setJobsError('');
+    try {
+      const params = new URLSearchParams({ page: String(page), limit: '20' });
+      if (search) params.set('search', search);
+      if (status) params.set('status', status);
+      if (flaggedOnly) params.set('flagged', 'true');
+      const data = await apiFetch<PaginatedResponse<Job>>(`/jobs?${params}`);
+      setJobs((data as unknown as { jobs: Job[] }).jobs || []);
+      setJobsTotal(data.total);
+      setJobsPage(data.page);
+      setJobsPages(data.totalPages);
+    } catch (err) {
+      setJobsError((err as Error).message);
+    } finally {
+      setJobsLoading(false);
+    }
+  }, []);
+
+  const fetchDisputes = useCallback(async (page: number, status: string) => {
+    setDisputesLoading(true);
+    setDisputesError('');
+    try {
+      const params = new URLSearchParams({ page: String(page), limit: '20' });
+      if (status) params.set('status', status);
+      const data = await apiFetch<PaginatedResponse<Dispute>>(`/disputes?${params}`);
+      setDisputes((data as unknown as { disputes: Dispute[] }).disputes || []);
+      setDisputesTotal(data.total);
+      setDisputesPage(data.page);
+      setDisputesPages(data.totalPages);
+    } catch (err) {
+      setDisputesError((err as Error).message);
+    } finally {
+      setDisputesLoading(false);
+    }
+  }, []);
+
+  const fetchAudit = useCallback(async (page: number) => {
+    setAuditLoading(true);
+    setAuditError('');
+    try {
+      const params = new URLSearchParams({ page: String(page), limit: '30' });
+      const data = await apiFetch<PaginatedResponse<AuditEntry>>(`/audit-log?${params}`);
+      setAuditEntries((data as unknown as { entries: AuditEntry[] }).entries || []);
+      setAuditTotal(data.total);
+      setAuditPage(data.page);
+      setAuditPages(data.totalPages);
+    } catch (err) {
+      setAuditError((err as Error).message);
+    } finally {
+      setAuditLoading(false);
+    }
+  }, []);
+
+  const fetchSettings = useCallback(async () => {
+    setSettingsLoading(true);
+    setSettingsError('');
+    try {
+      const data = await apiFetch<{ registrationsOpen: boolean; jobPostingOpen: boolean }>('/settings');
+      setSettings(data);
+    } catch (err) {
+      setSettingsError((err as Error).message);
+    } finally {
+      setSettingsLoading(false);
+    }
+  }, []);
+
+  // ─── Auto-fetch on tab change ────────────────────────────
+
+  useEffect(() => {
+    if (activeTab === 'dashboard') fetchMetrics();
+    else if (activeTab === 'users') fetchUsers(usersPage, usersSearch, usersRoleFilter, usersStatusFilter);
+    else if (activeTab === 'jobs') fetchJobs(jobsPage, jobsSearch, jobsStatusFilter, jobsFlaggedOnly);
+    else if (activeTab === 'disputes') fetchDisputes(disputesPage, disputesFilter);
+    else if (activeTab === 'audit') fetchAudit(auditPage);
+    else if (activeTab === 'settings') fetchSettings();
+  }, [activeTab]);
+
+  // ─── Actions ─────────────────────────────────────────────
+
+  const applyUserAction = async (userId: string, action: 'suspend' | 'reinstate' | 'ban') => {
+    try {
+      await apiFetch(`/users/${userId}/${action}`, { method: 'POST' });
+      fetchUsers(usersPage, usersSearch, usersRoleFilter, usersStatusFilter);
+      setSelectedUser(null);
+    } catch (err) {
+      alert(`Failed to ${action} user: ${(err as Error).message}`);
+    }
   };
 
-  const renderDashboard = () => (
-    <>
-      <div style={adminStyles.metricsGrid}>
-        {[
-          { value: metrics.totalUsers.toLocaleString(), label: 'Total Users' },
-          { value: metrics.activeFreelancers.toString(), label: 'Active Freelancers' },
-          { value: metrics.openJobs.toString(), label: 'Open Jobs' },
-          { value: metrics.monthlyVolume, label: 'Monthly Volume' },
-          { value: metrics.flaggedAccounts.toString(), label: 'Flagged Accounts' },
-          { value: metrics.pendingDisputes.toString(), label: 'Pending Disputes' },
-          { value: metrics.newUsersToday.toString(), label: 'New Today' },
-          { value: metrics.systemUptime, label: 'System Uptime' },
-        ].map((m, i) => (
-          <div key={i} style={adminStyles.metricCard}>
-            <div style={adminStyles.metricValue}>{m.value}</div>
-            <div style={adminStyles.metricLabel}>{m.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="card" style={{ marginTop: '1rem' }}>
-        <h3 style={{ marginBottom: '0.75rem', color: '#f2f5ff', fontSize: '1rem' }}>Recent Activity Log</h3>
-        {recentLogs.map((log, i) => (
-          <div key={i} style={adminStyles.logEntry}>
-            <span style={adminStyles.logTime}>{log.time}</span>
-            {log.msg}
-          </div>
-        ))}
-      </div>
-    </>
-  );
-
-  const renderUsers = () => (
-    <div className="card" style={{ overflowX: 'auto' }}>
-      <table style={adminStyles.table}>
-        <thead>
-          <tr>
-            <th style={adminStyles.th}>Name</th>
-            <th style={adminStyles.th}>Email</th>
-            <th style={adminStyles.th}>Role</th>
-            <th style={adminStyles.th}>Status</th>
-            <th style={adminStyles.th}>Joined</th>
-            <th style={adminStyles.th}>Earnings</th>
-            <th style={adminStyles.th}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {mockUsers.map(u => (
-            <tr key={u.id} style={{ cursor: 'pointer' }}
-                onClick={() => { setSelectedUser(u); setSelectedJob(null); }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#1a2240')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-              <td style={adminStyles.td}>{u.name}</td>
-              <td style={adminStyles.td}>{u.email}</td>
-              <td style={adminStyles.td}>
-                <span style={adminStyles.badge(u.role === 'admin' ? '#4a7cff' : u.role === 'freelancer' ? '#22c55e' : '#f59e0b')}>
-                  {u.role}
-                </span>
-              </td>
-              <td style={adminStyles.td}>
-                <span style={adminStyles.badge(statusColors[u.status])}>{u.status}</span>
-              </td>
-              <td style={adminStyles.td}>{u.joined}</td>
-              <td style={adminStyles.td}>{u.earnings}</td>
-              <td style={adminStyles.td}>
-                <button onClick={(e) => { e.stopPropagation(); setSelectedUser(u); }}
-                  style={{ background: '#4a7cff', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.3rem 0.6rem', cursor: 'pointer', fontSize: '0.75rem' }}>
-                  View
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-
-  const renderJobs = () => (
-    <div className="card" style={{ overflowX: 'auto' }}>
-      <table style={adminStyles.table}>
-        <thead>
-          <tr>
-            <th style={adminStyles.th}>Title</th>
-            <th style={adminStyles.th}>Posted By</th>
-            <th style={adminStyles.th}>Budget</th>
-            <th style={adminStyles.th}>Status</th>
-            <th style={adminStyles.th}>Proposals</th>
-            <th style={adminStyles.th}>Posted</th>
-            <th style={adminStyles.th}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {mockJobs.map(j => (
-            <tr key={j.id} style={{ cursor: 'pointer' }}
-                onClick={() => { setSelectedJob(j); setSelectedUser(null); }}
-                onMouseEnter={e => (e.currentTarget.style.background = '#1a2240')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-              <td style={adminStyles.td}>{j.title}</td>
-              <td style={adminStyles.td}>{j.postedBy}</td>
-              <td style={adminStyles.td}>{j.budget}</td>
-              <td style={adminStyles.td}>
-                <span style={adminStyles.badge(statusColors[j.status] || statusColors.flagged_job)}>{j.status}</span>
-              </td>
-              <td style={adminStyles.td}>{j.proposals}</td>
-              <td style={adminStyles.td}>{j.posted}</td>
-              <td style={adminStyles.td}>
-                <button onClick={(e) => { e.stopPropagation(); setSelectedJob(j); }}
-                  style={{ background: '#4a7cff', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.3rem 0.6rem', cursor: 'pointer', fontSize: '0.75rem' }}>
-                  Review
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-
-  const renderModeration = () => (
-    <div>
-      <div className="card">
-        <h3 style={{ marginBottom: '0.75rem', color: '#f59e0b', fontSize: '1rem' }}>⚠️ Flagged Accounts</h3>
-        {mockUsers.filter(u => u.status === 'flagged' || u.status === 'suspended').map(u => (
-          <div key={u.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 0', borderBottom: '1px solid #1a2240' }}>
-            <div>
-              <span style={{ fontWeight: 600 }}>{u.name}</span>
-              <span style={{ color: '#8a9bc0', marginLeft: '0.5rem' }}>{u.email}</span>
-              <span style={adminStyles.badge(statusColors[u.status])} style={{marginLeft: '0.5rem', ...adminStyles.badge(statusColors[u.status])}}>{u.status}</span>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button style={{ background: '#22c55e', color: '#000', border: 'none', borderRadius: '4px', padding: '0.3rem 0.6rem', cursor: 'pointer', fontSize: '0.75rem' }}>Approve</button>
-              <button style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.3rem 0.6rem', cursor: 'pointer', fontSize: '0.75rem' }}>Suspend</button>
-              <button style={{ background: 'transparent', color: '#8a9bc0', border: '1px solid #2a3765', borderRadius: '4px', padding: '0.3rem 0.6rem', cursor: 'pointer', fontSize: '0.75rem' }}>Dismiss</button>
-            </div>
-          </div>
-        ))}
-        {mockUsers.filter(u => u.status === 'flagged' || u.status === 'suspended').length === 0 && (
-          <p style={{ color: '#8a9bc0' }}>No flagged accounts</p>
-        )}
-      </div>
-
-      <div className="card" style={{ marginTop: '1rem' }}>
-        <h3 style={{ marginBottom: '0.75rem', color: '#ef4444', fontSize: '1rem' }}>🚩 Disputed Jobs</h3>
-        {mockJobs.filter(j => j.status === 'disputed' || j.status === 'flagged').map(j => (
-          <div key={j.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 0', borderBottom: '1px solid #1a2240' }}>
-            <div>
-              <div style={{ fontWeight: 600 }}>{j.title}</div>
-              <div style={{ color: '#8a9bc0', fontSize: '0.8125rem' }}>By {j.postedBy} — {j.budget}</div>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <span style={adminStyles.badge(statusColors[j.status] || '#f59e0b')}>{j.status}</span>
-              <button style={{ background: '#4a7cff', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.3rem 0.6rem', cursor: 'pointer', fontSize: '0.75rem' }}>Mediate</button>
-            </div>
-          </div>
-        ))}
-        {mockJobs.filter(j => j.status === 'disputed' || j.status === 'flagged').length === 0 && (
-          <p style={{ color: '#8a9bc0' }}>No disputes</p>
-        )}
-      </div>
-    </div>
-  );
-
-  const renderSystem = () => (
-    <div>
-      <div style={adminStyles.metricsGrid}>
-        {[
-          { value: 'Online', label: 'API Status' },
-          { value: 'Connected', label: 'Database' },
-          { value: '145ms', label: 'Avg Response Time' },
-          { value: '1.2K/min', label: 'Req/min' },
-        ].map((m, i) => (
-          <div key={i} style={adminStyles.metricCard}>
-            <div style={{ ...adminStyles.metricValue, fontSize: '1.2rem', color: '#22c55e' }}>{m.value}</div>
-            <div style={adminStyles.metricLabel}>{m.label}</div>
-          </div>
-        ))}
-      </div>
-      <div className="card">
-        <h3 style={{ marginBottom: '0.75rem', color: '#f2f5ff', fontSize: '1rem' }}>Server Configuration</h3>
-        <table style={adminStyles.table}>
-          <tbody>
-            {[
-              ['Node Version', 'v22.22.2'],
-              ['Environment', 'Production'],
-              ['Database', 'PostgreSQL 16'],
-              ['Cache', 'Redis 7 (cluster)'],
-              ['CDN', 'Cloudflare'],
-              ['Queue', 'BullMQ'],
-              ['Last Deploy', '2026-05-27 18:30 UTC'],
-            ].map(([key, val]) => (
-              <tr key={key}>
-                <td style={{ ...adminStyles.td, color: '#8a9bc0', width: '200px' }}>{key}</td>
-                <td style={adminStyles.td}>{val}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-
-  const renderDetailPanel = () => {
-    if (selectedUser) {
-      return (
-        <div className="card" style={{ marginTop: '1rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <h3 style={{ color: '#f2f5ff', fontSize: '1rem', margin: 0 }}>User Detail: {selectedUser.name}</h3>
-            <button onClick={() => setSelectedUser(null)} style={{ background: 'transparent', color: '#8a9bc0', border: '1px solid #2a3765', borderRadius: '4px', padding: '0.3rem 0.6rem', cursor: 'pointer', fontSize: '0.75rem' }}>Close</button>
-          </div>
-          <table style={adminStyles.table}>
-            <tbody>
-              {[
-                ['ID', selectedUser.id],
-                ['Email', selectedUser.email],
-                ['Role', selectedUser.role],
-                ['Status', selectedUser.status],
-                ['Joined', selectedUser.joined],
-                ['Jobs Posted', String(selectedUser.jobsPosted)],
-                ['Earnings', selectedUser.earnings],
-              ].map(([key, val]) => (
-                <tr key={key}>
-                  <td style={{ ...adminStyles.td, color: '#8a9bc0', width: '150px' }}>{key}</td>
-                  <td style={adminStyles.td}>{val}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-            {selectedUser.status !== 'suspended' && <button style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer' }}>Suspend User</button>}
-            {selectedUser.status === 'suspended' && <button style={{ background: '#22c55e', color: '#000', border: 'none', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer' }}>Reinstate</button>}
-            <button style={{ background: 'transparent', color: '#8a9bc0', border: '1px solid #2a3765', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer' }}>View Activity Log</button>
-            <button style={{ background: 'transparent', color: '#8a9bc0', border: '1px solid #2a3765', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer' }}>Send Warning</button>
-          </div>
-        </div>
-      );
+  const applyJobAction = async (jobId: string, action: 'approve' | 'reject' | 'escalate') => {
+    try {
+      const body = action === 'reject' ? { reason: 'Violates platform policy' } : undefined;
+      await apiFetch(`/jobs/${jobId}/${action}`, { method: 'POST', body: body ? JSON.stringify(body) : undefined });
+      fetchJobs(jobsPage, jobsSearch, jobsStatusFilter, jobsFlaggedOnly);
+      setSelectedJob(null);
+    } catch (err) {
+      alert(`Failed to ${action} job: ${(err as Error).message}`);
     }
-    if (selectedJob) {
-      return (
-        <div className="card" style={{ marginTop: '1rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <h3 style={{ color: '#f2f5ff', fontSize: '1rem', margin: 0 }}>Job Detail: {selectedJob.title}</h3>
-            <button onClick={() => setSelectedJob(null)} style={{ background: 'transparent', color: '#8a9bc0', border: '1px solid #2a3765', borderRadius: '4px', padding: '0.3rem 0.6rem', cursor: 'pointer', fontSize: '0.75rem' }}>Close</button>
-          </div>
-          <table style={adminStyles.table}>
-            <tbody>
-              {[
-                ['ID', selectedJob.id],
-                ['Posted By', selectedJob.postedBy],
-                ['Budget', selectedJob.budget],
-                ['Status', selectedJob.status],
-                ['Proposals', String(selectedJob.proposals)],
-                ['Posted', selectedJob.posted],
-              ].map(([key, val]) => (
-                <tr key={key}>
-                  <td style={{ ...adminStyles.td, color: '#8a9bc0', width: '150px' }}>{key}</td>
-                  <td style={adminStyles.td}>{val}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-            {selectedJob.status !== 'completed' && <button style={{ background: '#22c55e', color: '#000', border: 'none', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer' }}>Mark Complete</button>}
-            {(selectedJob.status === 'disputed' || selectedJob.status === 'flagged') && <button style={{ background: '#4a7cff', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer' }}>Assign Mediator</button>}
-            <button style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: '4px', padding: '0.5rem 1rem', cursor: 'pointer' }}>Remove Listing</button>
-          </div>
-        </div>
-      );
-    }
-    return null;
   };
 
-  const tabLabels: { key: Tab; label: string; icon: string }[] = [
+  const applyDisputeAction = async (disputeId: string, action: 'resolve' | 'escalate', ruling?: string) => {
+    try {
+      const body = action === 'resolve' ? { favor: ruling || 'split', refund: false, notes: '' } : undefined;
+      await apiFetch(`/disputes/${disputeId}/${action}`, { method: 'POST', body: body ? JSON.stringify(body) : undefined });
+      fetchDisputes(disputesPage, disputesFilter);
+      setSelectedDispute(null);
+    } catch (err) {
+      alert(`Failed to ${action} dispute: ${(err as Error).message}`);
+    }
+  };
+
+  const addDisputeNote = async (disputeId: string) => {
+    if (!disputeNote.trim()) return;
+    try {
+      await apiFetch(`/disputes/${disputeId}/note`, {
+        method: 'POST',
+        body: JSON.stringify({ note: disputeNote }),
+      });
+      setDisputeNote('');
+      fetchDisputes(disputesPage, disputesFilter);
+    } catch (err) {
+      alert(`Failed to add note: ${(err as Error).message}`);
+    }
+  };
+
+  const toggleSetting = async (setting: 'registrations' | 'job-posting') => {
+    try {
+      await apiFetch(`/settings/toggle-${setting}`, { method: 'POST' });
+      fetchSettings();
+    } catch (err) {
+      alert(`Failed to toggle: ${(err as Error).message}`);
+    }
+  };
+
+  // ─── Tab labels ──────────────────────────────────────────
+
+  const tabs: { key: Tab; label: string; icon: string }[] = [
     { key: 'dashboard', label: 'Dashboard', icon: '📊' },
     { key: 'users', label: 'Users', icon: '👥' },
     { key: 'jobs', label: 'Jobs', icon: '💼' },
-    { key: 'moderation', label: 'Moderation', icon: '🛡️' },
-    { key: 'system', label: 'System', icon: '⚙️' },
+    { key: 'disputes', label: 'Disputes', icon: '⚖️' },
+    { key: 'audit', label: 'Audit Log', icon: '📋' },
+    { key: 'settings', label: 'Controls', icon: '⚙️' },
   ];
 
+  // ─── Render: Dashboard ───────────────────────────────────
+
+  const renderDashboard = () => {
+    if (metricsLoading) return <div className="admin-loading" role="status" aria-label="Loading metrics">Loading dashboard data…</div>;
+    if (metricsError) return <div className="admin-error" role="alert">Failed to load metrics: {metricsError}</div>;
+    if (!metrics) return <div className="admin-empty">No data available</div>;
+
+    const metricItems = [
+      { value: metrics.totalUsers.toLocaleString(), label: 'Total Users' },
+      { value: metrics.activeFreelancers.toString(), label: 'Active Freelancers' },
+      { value: metrics.openJobs.toString(), label: 'Open Jobs' },
+      { value: metrics.activeJobs.toString(), label: 'Active Jobs' },
+      { value: metrics.monthlyVolume, label: 'Monthly Volume' },
+      { value: metrics.flaggedAccounts.toString(), label: 'Flagged Accounts' },
+      { value: metrics.pendingDisputes.toString(), label: 'Pending Disputes' },
+      { value: metrics.newToday.toString(), label: 'New Today' },
+    ];
+
+    return (
+      <>
+        <div className="admin-metrics-grid" role="region" aria-label="Dashboard metrics">
+          {metricItems.map((m, i) => (
+            <div key={i} className="admin-metric-card">
+              <div className="admin-metric-value">{m.value}</div>
+              <div className="admin-metric-label">{m.label}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+          <button className="admin-btn admin-btn-primary admin-btn-lg" onClick={fetchMetrics} aria-label="Refresh dashboard data">
+            🔄 Refresh
+          </button>
+        </div>
+      </>
+    );
+  };
+
+  // ─── Render: Users ────────────────────────────────────────
+
+  const renderUsers = () => {
+    const doSearch = () => {
+      setUsersPage(1);
+      fetchUsers(1, usersSearch, usersRoleFilter, usersStatusFilter);
+    };
+
+    return (
+      <div>
+        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <input
+            className="admin-input"
+            placeholder="Search by name, email, ID…"
+            value={usersSearch}
+            onChange={e => setUsersSearch(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && doSearch()}
+            aria-label="Search users"
+          />
+          <select className="admin-select" value={usersRoleFilter} onChange={e => { setUsersRoleFilter(e.target.value); setUsersPage(1); fetchUsers(1, usersSearch, e.target.value, usersStatusFilter); }} aria-label="Filter by role">
+            <option value="">All Roles</option>
+            <option value="freelancer">Freelancer</option>
+            <option value="client">Client</option>
+            <option value="admin">Admin</option>
+          </select>
+          <select className="admin-select" value={usersStatusFilter} onChange={e => { setUsersStatusFilter(e.target.value); setUsersPage(1); fetchUsers(1, usersSearch, usersRoleFilter, e.target.value); }} aria-label="Filter by status">
+            <option value="">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+            <option value="banned">Banned</option>
+          </select>
+          <button className="admin-btn admin-btn-primary admin-btn-sm" onClick={doSearch}>Search</button>
+        </div>
+
+        {usersLoading && <div className="admin-loading" role="status">Loading users…</div>}
+        {usersError && <div className="admin-error" role="alert">{usersError}</div>}
+
+        {!usersLoading && !usersError && users.length === 0 && (
+          <div className="admin-empty">No users found{usersSearch ? ' matching your search' : ''}.</div>
+        )}
+
+        {users.length > 0 && (
+          <div className="card" style={{ overflowX: 'auto' }}>
+            <table className="admin-table" role="table" aria-label="User management">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(u => (
+                  <tr key={u.id} onClick={() => setSelectedUser(u)} aria-label={`View details for ${u.name}`}>
+                    <td>{u.name || u.id}</td>
+                    <td>{u.email || '—'}</td>
+                    <td><span className={`admin-badge ${badgeClass(u.role)}`}>{u.role}</span></td>
+                    <td><span className={`admin-badge ${badgeClass(u.adminStatus)}`}>{u.adminStatus}</span></td>
+                    <td>{u.joined ? formatDate(u.joined) : '—'}</td>
+                    <td>
+                      <button className="admin-btn admin-btn-primary admin-btn-sm" onClick={(e) => { e.stopPropagation(); setSelectedUser(u); }} aria-label={`View ${u.name}`}>
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Pagination page={usersPage} totalPages={usersPages} onPage={p => fetchUsers(p, usersSearch, usersRoleFilter, usersStatusFilter)} label="Users" />
+          </div>
+        )}
+
+        {/* User Detail Panel */}
+        {selectedUser && (
+          <div className="card" style={{ marginTop: '1rem' }} role="region" aria-label={`User detail: ${selectedUser.name}`}>
+            <div className="admin-detail-header">
+              <h3 className="admin-detail-title">User: {selectedUser.name}</h3>
+              <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => setSelectedUser(null)} aria-label="Close user detail">Close</button>
+            </div>
+            <table className="admin-table">
+              <tbody>
+                {[
+                  ['ID', selectedUser.id],
+                  ['Email', selectedUser.email || '—'],
+                  ['Role', selectedUser.role],
+                  ['Status', selectedUser.adminStatus],
+                  ['Joined', selectedUser.joined ? formatDate(selectedUser.joined) : '—'],
+                  ['Jobs Posted', String(selectedUser.jobsPosted ?? '—')],
+                  ['Earnings', selectedUser.earnings || '—'],
+                ].map(([k, v]) => (
+                  <tr key={k}><td style={{ color: '#8a9bc0', width: '150px', padding: '0.5rem' }}>{k}</td><td style={{ padding: '0.5rem' }}>{v}</td></tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="admin-action-bar">
+              {selectedUser.adminStatus !== 'suspended' && selectedUser.adminStatus !== 'banned' && (
+                <ActionButton label="Suspend" variant="danger" onClick={() => setConfirm({ title: 'Suspend User', message: `Are you sure you want to suspend ${selectedUser.name}?`, onConfirm: () => applyUserAction(selectedUser.id, 'suspend'), variant: 'danger' })} />
+              )}
+              {selectedUser.adminStatus === 'suspended' && (
+                <ActionButton label="Reinstate" variant="success" onClick={() => applyUserAction(selectedUser.id, 'reinstate')} />
+              )}
+              {selectedUser.adminStatus !== 'banned' && (
+                <ActionButton label="Ban Permanently" variant="danger" onClick={() => setConfirm({ title: 'Ban User', message: `Permanently ban ${selectedUser.name}? This cannot be undone.`, onConfirm: () => applyUserAction(selectedUser.id, 'ban'), variant: 'danger' })} />
+              )}
+              <button className="admin-btn admin-btn-ghost admin-btn-lg" onClick={() => setSelectedUser(null)}>Close</button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // ─── Render: Jobs ────────────────────────────────────────
+
+  const renderJobs = () => {
+    const doSearch = () => {
+      setJobsPage(1);
+      fetchJobs(1, jobsSearch, jobsStatusFilter, jobsFlaggedOnly);
+    };
+
+    return (
+      <div>
+        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <input
+            className="admin-input"
+            placeholder="Search jobs…"
+            value={jobsSearch}
+            onChange={e => setJobsSearch(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && doSearch()}
+            aria-label="Search jobs"
+          />
+          <select className="admin-select" value={jobsStatusFilter} onChange={e => { setJobsStatusFilter(e.target.value); setJobsPage(1); fetchJobs(1, jobsSearch, e.target.value, jobsFlaggedOnly); }} aria-label="Filter by status">
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="flagged">Flagged</option>
+            <option value="disputed">Disputed</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <label style={{ color: '#8a9bc0', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+            <input type="checkbox" checked={jobsFlaggedOnly} onChange={e => { setJobsFlaggedOnly(e.target.checked); setJobsPage(1); fetchJobs(1, jobsSearch, jobsStatusFilter, e.target.checked); }} />
+            Flagged only
+          </label>
+          <button className="admin-btn admin-btn-primary admin-btn-sm" onClick={doSearch}>Search</button>
+        </div>
+
+        {jobsLoading && <div className="admin-loading" role="status">Loading jobs…</div>}
+        {jobsError && <div className="admin-error" role="alert">{jobsError}</div>}
+
+        {!jobsLoading && !jobsError && jobs.length === 0 && (
+          <div className="admin-empty">No jobs found.</div>
+        )}
+
+        {jobs.length > 0 && (
+          <div className="card" style={{ overflowX: 'auto' }}>
+            <table className="admin-table" role="table" aria-label="Job management">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Posted By</th>
+                  <th>Budget</th>
+                  <th>Status</th>
+                  <th>Proposals</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {jobs.map(j => (
+                  <tr key={j.id} onClick={() => setSelectedJob(j)} aria-label={`Review ${j.title}`}>
+                    <td>{j.title}</td>
+                    <td>{j.postedBy || '—'}</td>
+                    <td>{j.budget || '—'}</td>
+                    <td><span className={`admin-badge ${badgeClass(j.status)}`}>{j.status}</span></td>
+                    <td>{j.proposals ?? '—'}</td>
+                    <td>
+                      <button className="admin-btn admin-btn-primary admin-btn-sm" onClick={(e) => { e.stopPropagation(); setSelectedJob(j); }} aria-label={`Review ${j.title}`}>
+                        Review
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Pagination page={jobsPage} totalPages={jobsPages} onPage={p => fetchJobs(p, jobsSearch, jobsStatusFilter, jobsFlaggedOnly)} label="Jobs" />
+          </div>
+        )}
+
+        {selectedJob && (
+          <div className="card" style={{ marginTop: '1rem' }} role="region" aria-label={`Job detail: ${selectedJob.title}`}>
+            <div className="admin-detail-header">
+              <h3 className="admin-detail-title">Job: {selectedJob.title}</h3>
+              <button className="admin-btn admin-btn-ghost admin-btn-sm" onClick={() => setSelectedJob(null)} aria-label="Close job detail">Close</button>
+            </div>
+            <table className="admin-table">
+              <tbody>
+                {[
+                  ['ID', selectedJob.id],
+                  ['Posted By', selectedJob.postedBy || '—'],
+                  ['Budget', selectedJob.budget || '—'],
+                  ['Status', selectedJob.status],
+                  ['Proposals', String(selectedJob.proposals ?? '—')],
+                ].map(([k, v]) => (
+                  <tr key={k}><td style={{ color: '#8a9bc0', width: '150px', padding: '0.5rem' }}>{k}</td><td style={{ padding: '0.5rem' }}>{v}</td></tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="admin-action-bar">
+              {(selectedJob.status === 'flagged' || selectedJob.status === 'rejected') && (
+                <ActionButton label="Approve" variant="success" onClick={() => applyJobAction(selectedJob.id, 'approve')} />
+              )}
+              {selectedJob.status !== 'rejected' && selectedJob.status !== 'completed' && (
+                <ActionButton label="Reject" variant="danger" onClick={() => setConfirm({ title: 'Reject Job', message: `Reject "${selectedJob.title}"? The poster will be notified.`, onConfirm: () => applyJobAction(selectedJob.id, 'reject'), variant: 'danger' })} />
+              )}
+              {selectedJob.status === 'flagged' && (
+                <ActionButton label="Escalate" variant="primary" onClick={() => applyJobAction(selectedJob.id, 'escalate')} />
+              )}
+              <button className="admin-btn admin-btn-ghost admin-btn-lg" onClick={() => setSelectedJob(null)}>Close</button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // ─── Render: Disputes ────────────────────────────────────
+
+  const renderDisputes = () => (
+    <div>
+      <div style={{ marginBottom: '1rem' }}>
+        <select className="admin-select" value={disputesFilter} onChange={e => { setDisputesFilter(e.target.value); setDisputesPage(1); fetchDisputes(1, e.target.value); }} aria-label="Filter disputes">
+          <option value="">All Disputes</option>
+          <option value="open">Open</option>
+          <option value="under_review">Under Review</option>
+          <option value="resolved">Resolved</option>
+          <option value="escalated">Escalated</option>
+        </select>
+      </div>
+
+      {disputesLoading && <div className="admin-loading" role="status">Loading disputes…</div>}
+      {disputesError && <div className="admin-error" role="alert">{disputesError}</div>}
+
+      {!disputesLoading && !disputesError && disputes.length === 0 && (
+        <div className="admin-empty">No disputes found.</div>
+      )}
+
+      {disputes.length > 0 && (
+        <div className="card">
+          {disputes.map(d => (
+            <div key={d.id} style={{ padding: '0.75rem 0', borderBottom: '1px solid #1a2240', cursor: 'pointer' }}
+                 onClick={() => setSelectedDispute(selectedDispute?.id === d.id ? null : d)}
+                 aria-label={`Dispute: ${d.jobTitle}`} role="button" tabIndex={0}
+                 onKeyDown={e => e.key === 'Enter' && setSelectedDispute(selectedDispute?.id === d.id ? null : d)}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontWeight: 600, color: '#f2f5ff' }}>{d.jobTitle}</div>
+                  <div style={{ color: '#8a9bc0', fontSize: '0.8125rem' }}>
+                    {d.reason} — Opened {formatDate(d.openedAt)}
+                  </div>
+                </div>
+                <span className={`admin-badge ${badgeClass(d.status)}`}>{d.status}</span>
+              </div>
+
+              {selectedDispute?.id === d.id && (
+                <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#0d1320', borderRadius: '8px' }}>
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
+                    <ActionButton label="Rule for Freelancer" variant="primary" onClick={() => setConfirm({ title: 'Resolve Dispute', message: `Rule in favor of the freelancer for "${d.jobTitle}"?`, onConfirm: () => applyDisputeAction(d.id, 'resolve', 'freelancer'), variant: 'warning' })} />
+                    <ActionButton label="Rule for Client" variant="primary" onClick={() => setConfirm({ title: 'Resolve Dispute', message: `Rule in favor of the client for "${d.jobTitle}"?`, onConfirm: () => applyDisputeAction(d.id, 'resolve', 'client'), variant: 'warning' })} />
+                    <ActionButton label="Split" variant="success" onClick={() => applyDisputeAction(d.id, 'resolve', 'split')} />
+                    {d.status !== 'escalated' && (
+                      <ActionButton label="Escalate" variant="danger" onClick={() => applyDisputeAction(d.id, 'escalate')} />
+                    )}
+                  </div>
+
+                  {/* Dispute thread / notes */}
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <h4 style={{ color: '#8a9bc0', fontSize: '0.8125rem', margin: '0 0 0.5rem' }}>Notes & Evidence</h4>
+                    {d.thread?.map((entry, i) => (
+                      <div key={i} style={{ fontSize: '0.8125rem', color: '#a0b0d0', padding: '0.3rem 0', borderBottom: '1px solid #1a2240' }}>
+                        <span style={{ color: '#4a7cff', marginRight: '0.5rem' }}>{formatTime(entry.timestamp)}</span>
+                        {entry.author}: {entry.message}
+                      </div>
+                    ))}
+                    {(!d.thread || d.thread.length === 0) && (
+                      <p style={{ color: '#5a6a90', fontSize: '0.8125rem' }}>No notes yet.</p>
+                    )}
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                      <input className="admin-input" style={{ flex: 1, width: 'auto' }}
+                             placeholder="Add a note…"
+                             value={disputeNote}
+                             onChange={e => setDisputeNote(e.target.value)}
+                             aria-label="Add dispute note" />
+                      <button className="admin-btn admin-btn-primary admin-btn-sm" onClick={() => addDisputeNote(d.id)} disabled={!disputeNote.trim()}>Add Note</button>
+                    </div>
+                  </div>
+
+                  {d.resolution && (
+                    <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: '#151c35', borderRadius: '6px' }}>
+                      <span style={{ color: '#22c55e', fontWeight: 600 }}>✅ Resolved</span>
+                      <span style={{ color: '#8a9bc0', marginLeft: '0.5rem', fontSize: '0.8125rem' }}>
+                        Ruling: {d.resolution.ruling} — by {d.resolution.resolvedAt ? formatDate(d.resolution.resolvedAt) : '—'}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+          <Pagination page={disputesPage} totalPages={disputesPages} onPage={p => fetchDisputes(p, disputesFilter)} label="Disputes" />
+        </div>
+      )}
+    </div>
+  );
+
+  // ─── Render: Audit Log ───────────────────────────────────
+
+  const renderAudit = () => {
+    if (auditLoading) return <div className="admin-loading" role="status">Loading audit log…</div>;
+    if (auditError) return <div className="admin-error" role="alert">{auditError}</div>;
+    if (auditEntries.length === 0) return <div className="admin-empty">No audit entries yet.</div>;
+
+    return (
+      <div className="card">
+        <div style={{ color: '#8a9bc0', fontSize: '0.8125rem', marginBottom: '0.75rem' }}>
+          {auditTotal} total entries — Page {auditPage} of {auditPages}
+        </div>
+        {auditEntries.map(e => (
+          <div key={e.id} className="admin-log-entry" style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+            <span className="admin-log-time" style={{ whiteSpace: 'nowrap', minWidth: '4.5rem' }}>{formatTime(e.timestamp)}</span>
+            <span style={{ color: '#4a7cff', minWidth: '6rem', fontSize: '0.75rem', fontWeight: 600 }}>{e.action.replace(/_/g, ' ')}</span>
+            <span style={{ color: '#8a9bc0', fontSize: '0.75rem', minWidth: '4rem' }}>by {e.adminId.slice(0, 8)}</span>
+            <span style={{ color: '#a0b0d0', fontSize: '0.75rem' }}>{JSON.stringify(e.details)}</span>
+          </div>
+        ))}
+        <Pagination page={auditPage} totalPages={auditPages} onPage={p => fetchAudit(p)} label="Audit log" />
+      </div>
+    );
+  };
+
+  // ─── Render: Settings / Platform Controls ────────────────
+
+  const renderSettings = () => {
+    if (settingsLoading) return <div className="admin-loading" role="status">Loading settings…</div>;
+    if (settingsError) return <div className="admin-error" role="alert">{settingsError}</div>;
+    if (!settings) return <div className="admin-empty">No settings available.</div>;
+
+    return (
+      <div className="card">
+        <h3 style={{ color: '#f2f5ff', marginBottom: '1rem' }}>Platform Controls</h3>
+
+        <div className="admin-toggle-row">
+          <div>
+            <div className="admin-toggle-label">New User Registrations</div>
+            <div style={{ fontSize: '0.75rem', color: '#8a9bc0' }}>
+              {settings.registrationsOpen ? 'Users can create new accounts' : 'Registration is disabled'}
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span className={`admin-badge ${settings.registrationsOpen ? 'admin-badge-green' : 'admin-badge-red'}`}>
+              {settings.registrationsOpen ? 'OPEN' : 'CLOSED'}
+            </span>
+            <button className={`admin-btn ${settings.registrationsOpen ? 'admin-btn-danger' : 'admin-btn-success'} admin-btn-sm`}
+                    onClick={() => setConfirm({
+                      title: `${settings.registrationsOpen ? 'Disable' : 'Enable'} Registrations`,
+                      message: `Are you sure you want to ${settings.registrationsOpen ? 'disable' : 'enable'} new user registrations?`,
+                      onConfirm: () => toggleSetting('registrations'),
+                      variant: settings.registrationsOpen ? 'danger' : 'warning',
+                    })}
+                    aria-label="Toggle user registrations">
+              {settings.registrationsOpen ? 'Disable' : 'Enable'}
+            </button>
+          </div>
+        </div>
+
+        <div className="admin-toggle-row">
+          <div>
+            <div className="admin-toggle-label">New Job Postings</div>
+            <div style={{ fontSize: '0.75rem', color: '#8a9bc0' }}>
+              {settings.jobPostingOpen ? 'Clients can post new jobs' : 'Job posting is disabled'}
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span className={`admin-badge ${settings.jobPostingOpen ? 'admin-badge-green' : 'admin-badge-red'}`}>
+              {settings.jobPostingOpen ? 'OPEN' : 'CLOSED'}
+            </span>
+            <button className={`admin-btn ${settings.jobPostingOpen ? 'admin-btn-danger' : 'admin-btn-success'} admin-btn-sm`}
+                    onClick={() => setConfirm({
+                      title: `${settings.jobPostingOpen ? 'Disable' : 'Enable'} Job Postings`,
+                      message: `Are you sure you want to ${settings.jobPostingOpen ? 'disable' : 'enable'} new job postings?`,
+                      onConfirm: () => toggleSetting('job-posting'),
+                      variant: settings.jobPostingOpen ? 'danger' : 'warning',
+                    })}
+                    aria-label="Toggle job postings">
+              {settings.jobPostingOpen ? 'Disable' : 'Enable'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ─── Main Render ─────────────────────────────────────────
+
   return (
-    <section>
-      <h2 style={adminStyles.header}>🛠️ Admin Panel</h2>
+    <div className="admin-container">
+      <h2 className="admin-header">🛠️ Admin Panel</h2>
       <p style={{ color: '#8a9bc0', marginBottom: '1rem', fontSize: '0.875rem' }}>
         Platform management, moderation, and system health — full admin controls.
       </p>
 
-      <div style={adminStyles.tabs}>
-        {tabLabels.map(t => (
-          <button key={t.key} style={adminStyles.tab(activeTab === t.key)} onClick={() => setActiveTab(t.key)}>
+      <div className="admin-tabs" role="tablist" aria-label="Admin sections">
+        {tabs.map(t => (
+          <button
+            key={t.key}
+            role="tab"
+            aria-selected={activeTab === t.key}
+            className={`admin-tab${activeTab === t.key ? ' active' : ''}`}
+            onClick={() => setActiveTab(t.key)}
+          >
             {t.icon} {t.label}
           </button>
         ))}
       </div>
 
-      {activeTab === 'dashboard' && renderDashboard()}
-      {activeTab === 'users' && renderUsers()}
-      {activeTab === 'jobs' && renderJobs()}
-      {activeTab === 'moderation' && renderModeration()}
-      {activeTab === 'system' && renderSystem()}
+      <div role="tabpanel" aria-label={`${activeTab} section`}>
+        {activeTab === 'dashboard' && renderDashboard()}
+        {activeTab === 'users' && renderUsers()}
+        {activeTab === 'jobs' && renderJobs()}
+        {activeTab === 'disputes' && renderDisputes()}
+        {activeTab === 'audit' && renderAudit()}
+        {activeTab === 'settings' && renderSettings()}
+      </div>
 
-      {renderDetailPanel()}
-    </section>
+      <ConfirmDialog state={confirm} onClose={() => setConfirm(null)} />
+    </div>
   );
 }
