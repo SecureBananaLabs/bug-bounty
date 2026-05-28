@@ -1,0 +1,5 @@
+fix: require authentication for user list endpoint (#1210)
+
+GET /users now requires valid JWT authentication to prevent
+unauthorized access to the full user list.
+Fixes #1210
