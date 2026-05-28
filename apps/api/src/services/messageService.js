@@ -1,3 +1,4 @@
+import crypto from "crypto";
 const messages = [];
 
 export async function listMessages() {
@@ -5,7 +6,7 @@ export async function listMessages() {
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
+  const message = { id: `${m.group(1)}_${crypto.randomUUID()}`, ...payload, sentAt: new Date().toISOString() };
   messages.push(message);
   return message;
 }
