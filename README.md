@@ -1,10 +1,10 @@
+# Project
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+
+![Pixel Art - Cyberpunk City](/assets/pixel-art/cyberpunk_city.png)
+
 # FreelanceFlow Monorepo
 
-FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
-
-![Byte the Robot Mascot](/apps/web/public/assets/pixel-art/byte-mascot.png)
-
-## Workspace Structure
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
