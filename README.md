@@ -3,24 +3,26 @@
 
 # FreelanceFlow Monorepo
 
-This is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
-# Workspace Structure
+## Workspace Structure
 
 - `apps/web` — Next.js 14 App Router frontend
-  - `apps/api` — Express.js backend with layered REST API
- packages/ui
+- `apps/api` — Express.js backend with layered REST API
+- `packages/db` — Prisma schema and database package
+- `packages/ui` — Shared UI components
 
 ## Frontend
+
 The web app includes pages for:
 
 - Landing
 - Job listings and job detail
 - Post a job
-- Freelance profiles and freelancer search
+- Freelancer profiles and freelancer search
 - Client and freelancer dashboards
 - Messaging
--
+- Notifications
 - Settings
 - Billing
 - Admin panel
