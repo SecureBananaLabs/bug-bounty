@@ -3,8 +3,8 @@ import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-import { authRoutes, userRoutes, jobRoutes, proposalRoutes, paymentRoutes, reviewRoutes, reviewRoutes, messageRoutes, notificationRoutes, uploadRoutes, searchRoutes, adminRoutes } from an array of route imports
-import { createApp } from 'app' import
+import { authRoutes } from "./routes/authRoutes.js";
+import { userRoutes } from "./routes/userRoutes.js";
 import { jobRoutes } from "./routes/jobRoutes.js";
 import { proposalRoutes } from "./routes/proposalRoutes.js";
 import { paymentRoutes } from "./routes/paymentRoutes.js";
