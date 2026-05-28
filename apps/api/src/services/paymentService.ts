@@ -1,60 +1,49 @@
 import Stripe from 'stripe';
-import { StripeError } from 'stripe';
+import { createPaymentIntent } from './paymentService';
 
-// Initialize Stripe with the secret key from environment variables
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2023-10-16',
-  typescript: true,
+  apiVersion: '2023-08-01'
 });
 
-interface PaymentIntentPayload {
-  amount: number;
-  currency?: string;
-  [key: string]: any; // Allow additional metadata
-}
-
-interface PaymentIntentResult {
-  paymentId: string;
-  clientSecret: string;
-  amount: number;
-  currency: string;
-  provider: string;
-}
-
-export async function createPaymentIntent(payload: PaymentIntentPayload): Promise<PaymentIntentResult> {
-  // Validate amount
-  if (payload.amount === undefined || payload.amount === null) {
-    throw new Error('Amount is required');
+export async function createPaymentIntent(payload) {
+  // Validate payload
+  if (!payload.amount || !Number.isInteger(payload.amount) || payload.amount <= 0) {
+    throw new Error('Invalid amount: must be a positive integer');
   }
   
-  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('Amount must be a positive integer (in smallest currency unit, e.g. cents)');
+  if (!payload.currency) {
+    payload.currency = 'usd';
   }
 
-  // Set default currency
-  const currency = payload.currency ?? 'usd';
-
   try {
-    // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
       amount: payload.amount,
-      currency: currency,
-      // In the future, you can add more options here
-      // automatic_payment_methods: { enabled: true },
+      currency: payload.currency,
+      // Include metadata if provided
+      metadata: payload.metadata || {}
     });
 
     return {
       paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret || '',
-      amount: payload.amount,
-      currency: currency,
-      provider: 'stripe'
+      clientSecret: paymentIntent.client_secret,
+      provider: "stripe"
     };
   } catch (error) {
-    // Re-throw Stripe errors with original message preserved
-    if (error instanceof StripeError) {
-      throw new Error(error.message);
+    // Handle Stripe errors
+    if (error.type) {
+      throw new Error(`Stripe Error: ${error.message}`);
     }
     throw error;
   }
+}
+
+// Original stub implementation
+export async function createPaymentIntent(payload) {
+  // TODO: integrate Stripe SDK and return client secret.
+  return {
+    paymentId: `pay_${Date.now()}`,
+    amount: payload.amount,
+    currency: payload.currency ?? "usd",
+    provider: "stripe"
+  };
 }
