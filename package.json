@@ -1,16 +1,22 @@
 {
-  "type": "module",
-  "scripts": {
-    "benchmark": "node benchmarks/index.js"
-  }
-}
+  "name": "freelanceflow",
+  "version": "1.0.0",
+  "description": "Freelance marketplace monorepo",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "dev": "concurrently \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "build": "npm run build -w apps/api && npm run build -w apps/web",
+    "test": "npm run test -w apps/api && npm run test -w apps/web",
+    "benchmark": "node benchmarks/run.js",
+    "benchmark:ci": "node benchmarks/run-ci.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0"
   }
 }
