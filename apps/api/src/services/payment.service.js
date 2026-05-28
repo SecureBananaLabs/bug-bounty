@@ -9,41 +9,43 @@ export async function createPaymentIntent(payload) {
     throw new Error('Payload is required and must be an object');
   }
 
-  const { amount, currency, ...metadata } = payload;
-
-  if (amount === undefined || amount === null) {
-    throw new Error('amount is required');
+  if (payload.amount === undefined || payload.amount === null) {
+    throw new Error('amount is required and must be a positive integer');
   }
 
-  if (!Number.isInteger(amount) || amount <= 0) {
-    throw new Error('amount must be a positive integer');
+  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
+    throw new Error('amount is required and must be a positive integer');
   }
 
-  const resolvedCurrency = currency ?? 'usd';
+  const amount = payload.amount;
+  const currency = payload.currency ?? 'usd';
 
+  let paymentIntent;
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
+    paymentIntent = await stripe.paymentIntents.create({
       amount,
-      currency: resolvedCurrency,
-      metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
+      currency,
     });
-
-    return {
-      paymentId: paymentIntent.id,
-      amount: paymentIntent.amount,
-      currency: paymentIntent.currency,
-      clientSecret: paymentIntent.client_secret,
-      provider: 'stripe',
-    };
   } catch (error) {
-    if (error.type && error.type.startsWith('Stripe')) {
-      const err = new Error(error.message);
-      err.type = error.type;
-      err.code = error.code;
-      err.decline_code = error.decline_code;
-      err.stripeStatusCode = error.statusCode;
-      throw err;
+    if (
+      error.type === 'StripeCardError' ||
+      error.type === 'StripeInvalidRequestError' ||
+      error.type === 'StripeAPIError' ||
+      error.type === 'StripeConnectionError' ||
+      error.type === 'StripeAuthenticationError' ||
+      error.type === 'StripeRateLimitError' ||
+      error.type === 'StripeIdempotencyError'
+    ) {
+      throw new Error(error.message);
     }
     throw error;
   }
+
+  return {
+    paymentId: paymentIntent.id,
+    amount,
+    currency,
+    provider: 'stripe',
+    clientSecret: paymentIntent.client_secret,
+  };
 }
