@@ -1,0 +1,10 @@
+{
+  "default": {
+    "p99_ms": 750,
+    "error_rate_pct": 5
+  },
+  "admin-metrics": {
+    "p99_ms": 1000,
+    "error_rate_pct": 5
+  }
+}
