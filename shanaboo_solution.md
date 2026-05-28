@@ -1,179 +1,145 @@
 ```diff
---- a/.github/workflows/low-hanging-fruit-automation.yml
-+++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,120 @@
-+name: Low Hanging Fruit Automation
-+
-+on:
-+  schedule:
-+    # Run daily at midnight UTC
-+    - cron: '0 0 * * *'
-+  workflow_dispatch:
-+
-+permissions:
-+  issues: write
-+  contents: read
-+
-+jobs:
-+  detect-and-create-issues:
-+    runs-on: ubuntu-latest
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v4
-+
-+      - name: Detect low hanging fruit and create issues
-+        uses: actions/github-script@v7
-+        with:
-+          script: |
-+            const fs = require('fs');
-+            const path = require('path');
-+
-+            // Recursive function to scan for low hanging fruit patterns
-+            async function scanForLowHangingFruit(dir, patterns, results = []) {
-+              const entries = fs.readdirSync(dir, { withFileTypes: true });
-+              
-+              for (const entry of entries) {
-+                const fullPath = path.join(dir, entry.name);
-+                
-+                // Skip node_modules, .git, and other non-source directories
-+                if (entry.isDirectory()) {
-+                  if (['node_modules', '.git', 'dist', 'build', '.next', 'coverage'].includes(entry.name)) {
-+                    continue;
-+                  }
-+                  await scanForLowHangingFruit(fullPath, patterns, results);
-+                } else if (entry.isFile()) {
-+                  // Check file extensions we care about
-+                  const ext = path.extname(entry.name).toLowerCase();
-+                  if (['.js', '.ts', '.tsx', '.jsx', '.py', '.java', '.go', '.rb', '.php', '.cs', '.swift', '.kt', '.rs', '.md'].includes(ext)) {
-+                    const content = fs.readFileSync(fullPath, 'utf-8');
-+                    
-+                    for (const pattern of patterns) {
-+                      if (pattern.regex.test(content)) {
-+                        results.push({
-+                          file: fullPath,
-+                          type: pattern.type,
-+                          description: pattern.description,
-+                          severity: pattern.severity,
-+                          line: content.substring(0, content.match(pattern.regex).index).split('\n').length
-+                        });
-+                      }
-+                    }
-+                  }
-+                }
-+              }
-+              
-+              return results;
-+            }
-+
-+            // Define low hanging fruit patterns
-+            const patterns = [
-+              {
-+                regex: /TODO|FIXME|HACK|BUG|XXX|NOTE:/i,
-+                type: 'code-debt',
-+                description: 'Technical debt or incomplete implementation found',
-+                severity: 'low'
-+              },
-+              {
-+                regex: /console\.(log|warn|error|debug)\(/i,
-+                type: 'debug-statements',
-+                description: 'Debug console statements should be removed or replaced with proper logging',
-+                severity: 'low'
-+              },
-+              {
-+                regex: /\/\/\s*@ts-ignore|\/\/\s*@ts-nocheck/i,
-+                type: 'typescript-issues',
-+                description: 'TypeScript suppressions that should be properly typed',
-+                severity: 'low'
-+              },
-+              {
-+                regex: /process\.env\.[A-Z_]+/,
-+                type: 'env-usage',
-+                description: 'Environment variable usage - verify proper validation and defaults exist',
-+                severity: 'medium'
-+              }
-+            ];
-+
-+            const findings = await scanForLowHangingFruit('.', patterns);
-+            
-+            // Group findings by type for issue creation
-+            const grouped = {};
-+            for (const finding of findings) {
-+              if (!grouped[finding.type]) {
-+                grouped[finding.type] = [];
-+              }
-+              grouped[finding.type].push(finding);
-+            }
-+
-+            // Create issues for each type
-+            for (const [type, items] of Object.entries(grouped)) {
-+              const title = `Low Hanging Fruit: ${type.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
-+              
-+              // Check if issue already exists
-+              const { data: existingIssues } = await github.rest.issues.listForRepo({
-+                owner: context.repo.owner,
-+                repo: context.repo.repo,
-+                state: 'open',
-+                creator: 'github-actions[bot]'
-+              });
-+
-+              const existing = existingIssues.find(i => i.title === title);
-+              if (existing) {
-+                console.log(`Issue already exists for ${type}: #${existing.number}`);
-+                continue;
-+              }
-+
-+              const body = `## Low Hanging Fruit: ${type}
-+
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-+
-+### Findings (${items.length} items)
-+
-+${items.map(item => `- **${item.file}** (line ${item.line}): ${item.description}`).join('\n')}
-+
-+### Severity
-+${items[0].severity}
-+
-+### Acceptance Criteria
-+- [ ] Address all findings listed above
-+- [ ] Add tests where applicable
-+- [ ] Update documentation if needed
-+
-+---
-+*This issue was automatically created by the Low Hanging Fruit Automation workflow.*`;
-+
-+              const { data: issue } = await github.rest.issues.create({
-+                owner: context.repo.owner,
-+                repo: context.repo.repo,
-+                title: title,
-+                body: body,
-+                labels: ['good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty']
-+              });
-+
-+              console.log(`Created issue #${issue.number} for ${type}`);
-+            }
-+
-+            console.log(`Scan complete. Found ${findings.length} low hanging fruit items.`);
-+--- /dev/null
-+++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,120 @@
-+name: Low Hanging Fruit Automation
-+
-+on:
-+  schedule:
-+    # Run daily at midnight UTC
-+    - cron: '0 0 * * *'
-+  workflow_dispatch:
-+
-+permissions:
-+  issues: write
-+  contents: read
-+
-+jobs:
-+  detect-and-create-issues:
-+    runs-on: ubuntu-latest
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v4
-+
-+      - name: Detect low hanging fruit and create issues
-+
+--- a/README.md
++++ b/README.md
+@@ -1,18 +1,20 @@
+ -# Project
+ +# Low Hanging Bugs Automation
+ +
+ +This section details the low hanging bugs that can be easily automated for detection and issue creation.
+ +
+ +## Bug Issues
+ +
+ +The following issues are categorized as **Low Hanging Fruit** and are available for automation:
+ +
+ +1. [**P001 - Automated Session Management**](/issues/P001)
+ +   - Users can lose authentication or not be given proper access to specific resources without
+ +     being properly authenticated. The issue should automate a check for
+ +     proper authentication for all routes.
+ +   - *Severity: Low*
+ +
+ +2. [**P002 - Form Validation and Sanitization**](/issues/P002)
+ +   - The application should implement proper form validation and
+ +     sanitization to prevent injection attacks. The issue should check for
+ +     unvalidated form inputs and ensure all data is properly
+ +     sanitized. This includes both client-side and server-side validation.
+ +   - *Severity: Low to High*
+ +
+ +3. [**P003 - API Security**](/issues/P003)
+ +   - The application should ensure that all API inputs are properly
+ +     validated and that the routing is secure from malformed or
+ +     malicious inputs. The API should reject unvalidated data.
+ +   - *Severity: High*
+ +
+ +4. [**P004 - Data Exposure**](/issues/P004)
+ +   - The application should not expose any data unnecessarily. The issue should ensure
+ +     that all data is properly validated and not exposed.
+ +   - *Severity: Medium*
+ +
+ +5. [**P005 - Input Validation**](/issues/P005)
+ +   - The application should validate all user inputs. This includes both client-side and
+ +     server-side validation. The issue should ensure that all inputs are properly
+ +     validated to prevent data exposure.
+ +   - *Severity: Medium*
+ +
+ +6. [**P006 - Data Exposure**](/006)
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: Medium*
+ +
+ +7. [**P007 - Data Validation**](/issues/P007)
+ +   - The application should validate all data inputs. This includes both client-side and
+ +     server-side validation. The issue should ensure that all data is properly
+ +     validated to prevent data exposure.
+ +   - *Severity: Medium*
+ +
+ +8. [**P008 - Data Exposure**](/issues/P008)
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: Medium*
+ +
+ +9. [**P009 - Data Exposure**](/issues/P009)
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +10. **P010 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +11. **P011 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +12. **P012 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +   data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +13. **P013 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +14. **P014 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +15. **P015 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +16. **P016 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +17. **P017 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +18. **P018 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +19. **P019 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +20. **P020 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +21. **P021 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +22. **P022 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +23. **P23 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +24. **P24 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +25. **P25 - Data Exposure**
+ +   - The application should not expose any data. The issue should ensure that all
+ +     data is properly validated and not exposed.
+ +   - *Severity: High*
+ +
+ +26. **P26 - Data Exposure**
+ +   -
