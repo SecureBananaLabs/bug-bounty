@@ -11,15 +11,24 @@
     "test": "npm run test -w apps/api"
   }
 {
-  "name": "bug-bounty",
+  "name": "freelanceflow-monorepo",
   "version": "1.0.0",
-  "private": true,
+  "description": "A full-stack freelance marketplace monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "lint:low-hanging-fruit": "node scripts/detect-low-hanging-fruit.js",
-    "create:issue": "node scripts/create-issue.js"
+    "dev": "npm run dev --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "build": "npm run build --workspaces"
   },
-  "devDependencies": {
-    "@octokit/rest": "^20.0.0"
-  }
+  "keywords": [
+    "freelance",
+    "marketplace",
+    "monorepo"
+  ],
+  "license": "MIT"
 }
 }
