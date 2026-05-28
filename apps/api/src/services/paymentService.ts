@@ -1,16 +1,24 @@
 import Stripe from 'stripe';
-import { createPaymentIntent } from './paymentService';
 
+// Stripe setup
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2023-08-01'
 });
 
-export async function createPaymentIntent(payload) {
-  // Validate payload
+interface CreatePaymentIntentParams {
+  amount: number;
+  currency?: string;
+  metadata?: Record<string, string>;
+  [key: string]: any;
+}
+
+export async function createPaymentIntent(payload: CreatePaymentIntentParams) {
+  // Validate amount
   if (!payload.amount || !Number.isInteger(payload.amount) || payload.amount <= 0) {
     throw new Error('Invalid amount: must be a positive integer');
   }
   
+  // Set default currency if not provided
   if (!payload.currency) {
     payload.currency = 'usd';
   }
@@ -19,7 +27,6 @@ export async function createPaymentIntent(payload) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: payload.amount,
       currency: payload.currency,
-      // Include metadata if provided
       metadata: payload.metadata || {}
     });
 
@@ -29,7 +36,6 @@ export async function createPaymentIntent(payload) {
       provider: "stripe"
     };
   } catch (error) {
-    // Handle Stripe errors
     if (error.type) {
       throw new Error(`Stripe Error: ${error.message}`);
     }
