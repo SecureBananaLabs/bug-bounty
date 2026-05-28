@@ -1,11 +1,11 @@
 # Pixel Art: Cyberpunk City
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night, featuring neon-lit skyscrapers, a glowing moon, and reflective wet streets.
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-**Why:** I chose this theme because cyberpunk aesthetics naturally lend themselves to striking pixel art—the high contrast between dark shadows and vibrant neon colors creates visual depth even at low resolution. The rainy atmosphere and verticality of skyscrapers also help convey scale and mood within the constrained canvas.
+**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with moody atmospheric depth, which challenges creative thinking within the constraints of limited pixel space. The contrast between warm neon pinks/cyans against cool dark blues creates visual energy that draws the eye through the layered cityscape.
 
-## Details
-- Canvas size: 64x64 pixels
-- Color palette: Limited neon palette (cyber blue, hot pink, electric purple, toxic green)
-- Style: Retro-futuristic with dithering for atmospheric effects
-- Inspiration: Classic cyberpunk visuals from games like Blade Runner and Cyberpunk 2077
+**Details:**
+- Canvas: 64x64 pixels
+- Style: Pixel art with limited palette
+- Subject: Futuristic city skyline with neon signs, holographic billboards, and reflective wet streets
+- Color emphasis: Neon pink, electric cyan, deep purple, and midnight blue
