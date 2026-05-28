@@ -11,4 +11,20 @@
   "devDependencies": {
     "prisma": "^5.17.0"
   }
+{
+  "name": "freelanceflow-db",
+  "version": "1.0.0",
+  "description": "Database package for FreelanceFlow using Prisma",
+  "main": "index.js",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.0.0"
+  },
+  "devDependencies": {
+  }
+}
 }
