@@ -1,9 +1,2 @@
-export async function createPaymentIntent(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
-  return {
-    paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
-    currency: payload.currency || "usd",
-    provider: "stripe"
-  };
-}
+const createPaymentIntent = async (payload) => {
+  const stripe = require('stripe')(process. v
