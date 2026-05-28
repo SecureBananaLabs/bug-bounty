@@ -1,31 +1,44 @@
-# The Flow of Freelance
+# The Flow of Code and Coin
 
-## A Poem for FreelanceFlow
+> A poem for FreelanceFlow
 
-In circuits of code where the dreamers convene,
-A marketplace hums, built on promise and screen,
-Where the client casts jobs like a stone in a stream,
-And the freelancer swims through the digital dream.
+## I. The Marketplace Awakens
 
-No cubicle walls, no commute in the rain,
-Just tokens and APIs that run through the vein,
-Of a monorepo heart where the packages reign,
-From the Prisma-schemed data to UI's domain.
+In digital halls where skill meets need,
+A thousand keyboards softly plead—
+Not for mercy, not for grace,
+But for clients who know their place.
 
-The Next.js app routes with a fluidity sweet,
-While Express bears the load where the services meet,
-Controllers and middleware, layered and neat,
-In the dance of deployment where systems compete.
+The job post blooms like morning light,
+A contract born from byte and byte,
+Where Next.js routes the eager eye
+To API dreams that never die.
 
-So here's to the builders who ship through the night,
-Who debug by moonlight and deploy by daylight,
-May your pipelines stay green and your diffs stay right,
-In the flow of the freelance, forever take flight.
+## II. The Architecture of Trust
+
+Prisma weaves the data's thread,
+Through tables where our hopes are fed—
+Users, jobs, proposals sent,
+Each relation eloquent.
+
+Stripe holds coin in digital palm,
+While Zod ensures no schema harm,
+And middleware stands guard at night
+To validate each token's right.
+
+## III. The Flow Completes
+
+So here's to flows that freelance free,
+To monorepos of TypeScript glee,
+To every dev who bids and builds,
+Whose craft in production yields.
+
+May your tests pass green and true,
+Your PRs merge, your reviews be few—
+And may the gig you seek tonight
+Find you in FreelanceFlow's light.
 
 ---
 
-*Written for the FreelanceFlow project, 2025.*
-
-## Creative Decision
-
-**Theme & Form:** I chose a flowing, four-stanza ballad form with an AABB rhyme scheme to mirror the "flow" concept in FreelanceFlow's name. The poem personifies the technical architecture (Next.js, Express, Prisma, monorepo structure) as a living ecosystem, celebrating both the technology and the human freelancers who use it. The tone is aspirational and warm—intended to welcome contributors and honor the remote work revolution that platforms like this enable.
+*Written for SecureBananaLabs/bug-bounty, 2025.*
+*Creative decision: I chose a three-stanza structure with AABB rhyme scheme to mirror the structured, layered architecture of the FreelanceFlow monorepo itself—each stanza representing a layer of the stack (frontend, backend/data, and the human community that uses it), with a tone that balances technical specificity with the romantic spirit of independent work.*
