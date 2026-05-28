@@ -1,7 +1,5 @@
-# Pixel Art Submission
+# Cyberpunk City Pixel Art
 
-**Title:** Cyberpunk Cityscape at Dusk
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at dusk.
 
-**Description:** A 64x64 pixel art depicting a futuristic cyberpunk city skyline with neon-lit buildings, reflecting off rain-soaked streets. Created to capture the nostalgic feel of retro-futurism with vibrant purple, cyan, and magenta tones against a deep twilight sky.
-
-**Why:** I chose this theme because cyberpunk aesthetics blend creativity with technical constraint — the limited palette and small canvas force deliberate choices, making every pixel meaningful. It represents the intersection of human imagination and digital precision.
+**Why:** I chose this theme because cyberpunk aesthetics blend retro digital art with imaginative future technology, making it a perfect subject for pixel art. The limited canvas size challenges the artist to convey depth, atmosphere, and storytelling through careful color choices and deliberate placement of light sources.
