@@ -1,25 +1,21 @@
-# The Code Weaver's Lament
+# The Flow of Work
 
-In circuits born of logic's careful thought,  
-Where data flows in streams of ones and naught,  
-I toil beneath the glow of monitors,  
-Till dawn breaks free from bugs I've fought.  
+In markets digital, vast and deep,
+Where talent wakes while others sleep,
+A client posts their dream anew,
+And freelancers emerge in view.
 
-Each line a thread in software's grand design,  
-Where functions weave a pattern, pure and fine,  
-But errors creep where careless fingers roam,  
-And null pointers claim their time.  
+No borders bind the skilled and keen,
+The code they craft, the designs seen,
+From Prisma schemas, strong and tight,
+To Next.js pages, shining bright.
 
-So I debug through stacks of if and while,  
-Each loop a chance to simplify the trial,  
-The code unfolds in silence, stark and clean,  
-Where beauty lives in logic, mean by mean.  
+Proposals flow like rivers wide,
+With Stripe to trust, with hope to guide,
+Reviews like stars that light the way,
+For those who'll join another day.
 
-The linter's cry, the syntax sharp and shrill,  
-Can't capture hearts that dream of greater skill,  
-For every function, every nested call,  
-Must rise like towers, precise and tall.  
-
-Yet in the code, the heart does dwell,  
-Where poetry in silicon spells,  
-And dreams are born in every line we tell.
+So here's to flows that freelance true,
+To payments sent, to projects through,
+To every gig that starts right here—
+The marketplace we hold sincere.
