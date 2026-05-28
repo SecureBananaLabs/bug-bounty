@@ -1,10 +1,3 @@
 {
-  "latency": {
-    "p99": 1000
-  },
-  "endpoints": {
-    "/api/health": {
-      "p99": 1000
-    }
-  }
+  "p99_latency_threshold": 1000
 }
