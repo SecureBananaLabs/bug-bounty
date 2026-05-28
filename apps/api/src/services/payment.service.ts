@@ -1,19 +1,16 @@
 import Stripe from 'stripe';
-import { z } from 'zod';
 
-// Initialize Stripe with secret key from environment variables
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2023-10-16',
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2024-06-20',
 });
 
-// Validation schema for payment payload
-const PaymentPayloadSchema = z.object({
-  amount: z.number().positive().int(),
-  currency: z.string().optional().default('usd'),
-  metadata: z.record(z.string()).optional(),
-});
+interface PaymentPayload {
+  amount: number;
+  currency?: string;
+  metadata?: Record<string, string>;
+}
 
-export interface PaymentIntentResult {
+interface PaymentResult {
   paymentId: string;
   clientSecret: string;
   amount: number;
@@ -21,43 +18,31 @@ export interface PaymentIntentResult {
   provider: string;
 }
 
-export async function createPaymentIntent(payload: any): Promise<PaymentIntentResult> {
-  try {
-    // Validate payload
-    const validatedPayload = PaymentPayloadSchema.parse(payload);
-    
-    // Ensure amount is provided and is a positive integer
-    if (!validatedPayload.amount || validatedPayload.amount <= 0) {
-      throw new Error('Amount is required and must be a positive integer');
-    }
+export async function createPaymentIntent(payload: PaymentPayload): Promise<PaymentResult> {
+  if (typeof payload.amount !== 'number' || !Number.isInteger(payload.amount) || payload.amount <= 0) {
+    throw new Error('amount is required and must be a positive integer');
+  }
 
-    // Create PaymentIntent with Stripe
+  const currency = payload.currency ?? 'usd';
+
+  try {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: validatedPayload.amount,
-      currency: validatedPayload.currency,
-      metadata: validatedPayload.metadata || {},
+      amount: payload.amount,
+      currency,
+      metadata: payload.metadata,
     });
 
-    // Return the required response format
     return {
       paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret || '',
-      amount: paymentIntent.amount,
-      currency: paymentIntent.currency,
-      provider: 'stripe'
+      clientSecret: paymentIntent.client_secret!,
+      amount: payload.amount,
+      currency,
+      provider: 'stripe',
     };
-
   } catch (error) {
-    // Handle Stripe-specific errors
-    if (error instanceof z.ZodError) {
-      throw new Error(`Validation error: ${error.errors.map(e => e.message).join(', ')}`);
+    if (error instanceof Stripe.errors.StripeError) {
+      throw new Error(`Stripe error: ${error.message}`);
     }
-    
-    // Re-throw with original error message preserved
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    
-    throw new Error('An unknown error occurred during payment processing');
+    throw error;
   }
 }
