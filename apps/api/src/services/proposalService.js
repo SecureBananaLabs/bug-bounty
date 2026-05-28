@@ -5,7 +5,14 @@ export async function listProposals() {
 }
 
 export async function createProposal(payload) {
-  const proposal = { id: `prp_${Date.now()}`, ...payload };
+  const { jobId, coverLetter, budget } = payload;
+  const proposal = {
+    jobId,
+    coverLetter,
+    budget,
+    id: `prp_${Date.now()}`,
+    status: "pending",
+  };
   proposals.push(proposal);
   return proposal;
 }

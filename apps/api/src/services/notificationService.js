@@ -5,7 +5,15 @@ export async function listNotifications() {
 }
 
 export async function createNotification(payload) {
-  const notification = { id: `ntf_${Date.now()}`, read: false, ...payload };
+  const { userId, type, message } = payload;
+  const notification = {
+    userId,
+    type,
+    message,
+    id: `ntf_${Date.now()}`,
+    read: false,
+    createdAt: new Date().toISOString(),
+  };
   notifications.push(notification);
   return notification;
 }

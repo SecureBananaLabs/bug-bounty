@@ -5,7 +5,17 @@ export async function listJobs() {
 }
 
 export async function createJob(payload) {
-  const job = { id: `job_${Date.now()}`, status: "open", ...payload };
+  const { title, description, budgetMin, budgetMax, categoryId, skills } = payload;
+  const job = {
+    title,
+    description,
+    budgetMin,
+    budgetMax,
+    categoryId,
+    skills: skills ?? [],
+    id: `job_${Date.now()}`,
+    status: "open",
+  };
   jobs.push(job);
   return job;
 }
