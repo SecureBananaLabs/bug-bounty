@@ -6,16 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "npm test --workspaces --if-present"
-  },
-  "devDependencies": {
-    "autocannon": "^7.10.0",
-    "eslint": "^8.0.0",
-    "jest": "^29.0.0",
-    "k6": "^0.0.0"
-  },
-  "scripts": {
-    "benchmark": "node benchmarks/run-benchmarks.js",
-    "benchmark:ci": "node benchmarks/ci-benchmark.js"
-  },
-  "engines": {
+    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "lint": "echo \"No root lint configured\"",
+    "test": "npm run test -w apps/api"
+  }
+}
