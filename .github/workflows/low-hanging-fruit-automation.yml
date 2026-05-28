@@ -1,0 +1,106 @@
+name: Low Hanging Fruit Automation
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  detect-and-create-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Detect low hanging fruit and create issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Recursively find TODO, FIXME, HACK, XXX, BUG comments
+          function findLowHangingFruit(dir, results = []) {
+            const items = fs.readdirSync(dir, { withFileTypes: true });
+            for (const item of items) {
+              const fullPath = path.join(dir, item.name);
+              if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
+                findLowHangingFruit(fullPath, results);
+              } else if (item.isFile() && !item.name.startsWith('.') && !item.name.endsWith('.lock')) {
+                try {
+                  const content = fs.readFileSync(fullPath, 'utf-8');
+                  const lines = content.split('\n');
+                  lines.forEach((line, index) => {
+                    const patterns = ['TODO', 'FIXME', 'HACK', 'XXX', 'BUG'];
+                    for (const pattern of patterns) {
+                      if (line.includes(pattern)) {
+                        results.push({
+                          file: fullPath,
+                          line: index + 1,
+                          type: pattern,
+                          content: line.trim()
+                        });
+                      }
+                    }
+                  });
+                } catch (e) {
+                  // Skip binary or unreadable files
+                }
+              }
+            }
+            return results;
+          }
+          
+          const findings = findLowHangingFruit('.');
+          
+          // Group findings by type for issue creation
+          const grouped = {};
+          findings.forEach(f => {
+            if (!grouped[f.type]) grouped[f.type] = [];
+            grouped[f.type].push(f);
+          });
+          
+          const { Octokit } = require('@octokit/rest');
+          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+          const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+          
+          async function createIssue(title, body) {
+            try {
+              await octokit.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body: body + '\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
+              });
+              console.log('Created issue:', title);
+            } catch (err) {
+              console.error('Failed to create issue:', title, err.message);
+            }
+          }
+          
+          (async () => {
+            for (const [type, items] of Object.entries(grouped)) {
+              const title = \`Low Hanging Fruit: \${type} items (\${items.length} found)\`;
+              const body = items.slice(0, 20).map(i => \`- [ ] \${i.file}:\${i.line} - \\\`\${i.content}\\\`\`).join('\n');
+              await createIssue(title, body);
+            }
+            if (findings.length === 0) {
+              console.log('No low hanging fruit found.');
+            }
+          })();
+          "
+
+      - name: Install Octokit
+        run: npm install @octokit/rest
+        working-directory: ${{ github.workspace }}

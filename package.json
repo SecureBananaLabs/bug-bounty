@@ -10,4 +10,16 @@
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
+{
+  "name": "bug-bounty",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "lint:low-hanging-fruit": "node scripts/detect-low-hanging-fruit.js",
+    "create:issue": "node scripts/create-issue.js"
+  },
+  "devDependencies": {
+    "@octokit/rest": "^20.0.0"
+  }
+}
 }
