@@ -2,10 +2,10 @@
 
 **What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-**Why:** I chose this theme because cyberpunk aesthetics naturally lend themselves to pixel art—the high contrast neon colors against dark backgrounds, the geometric shapes of skyscrapers, and the nostalgic retro-futurism vibe. The limited color palette of pixel art enhances the moody, atmospheric quality of a rain-soaked metropolis. This piece represents creative thinking through its use of dithering techniques to simulate light reflection on wet streets and the careful placement of glowing windows to suggest life within the towering structures.
+**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with moody atmospheric depth, which makes for striking pixel art. The contrast between dark silhouettes and glowing lights creates visual interest even at small resolutions, and it reflects the creative, tech-forward spirit of this project.
 
-## Technical Details
+## Details
 - Canvas size: 64x64 pixels
-- Color palette: 16 colors
-- Technique: Manual pixel placement with dithering for atmospheric effects
-- Format: PNG with transparency
+- Format: PNG
+- Colors: Limited palette with neon accents (cyan, magenta, yellow) against deep blues and blacks
+- Style: Retro-futuristic pixel art with dithering for atmospheric effects
