@@ -1,8 +1,12 @@
 # Low Hanging Fruit Automation
 
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+<h1>Low Hanging Fruit Automation</h1>
 
-# Project
+<p>This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would not like to work on it, please create another issue with the same contents and refer to issue #743 for more information.</p>
+
+<h2>Issue Template</h2>
+<p>Found an issue with the following content:</p>
+<pre>This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.</pre>
 
 # FreelanceFlow Monorepo
 
