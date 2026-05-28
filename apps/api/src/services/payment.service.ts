@@ -1,46 +1,35 @@
 import Stripe from 'stripe';
+import { PaymentIntent } from '@prisma/client';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-06-20',
+// Initialize Stripe with secret key from environment variable
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  apiVersion: '2023-10-01', // Use appropriate API version
 });
 
-interface PaymentPayload {
-  amount: number;
-  currency?: string;
-  metadata?: Record<string, string>;
-}
-
-interface PaymentResult {
-  paymentId: string;
-  clientSecret: string;
-  amount: number;
-  currency: string;
-  provider: string;
-}
-
-export async function createPaymentIntent(payload: PaymentPayload): Promise<PaymentResult> {
-  if (typeof payload.amount !== 'number' || !Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('amount is required and must be a positive integer');
+export async function createPaymentIntent(payload: { amount: number; currency?: string; metadata?: Record<string, string> }) {
+  // Validate amount
+  if (!payload.amount || payload.amount <= 0 || !Number.isInteger(payload.amount)) {
+    throw new Error('Amount is required and must be a positive integer');
   }
 
-  const currency = payload.currency ?? 'usd';
+  // Set default currency to USD if not provided
+  const currency = payload.currency || 'usd';
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: payload.amount,
-      currency,
-      metadata: payload.metadata,
+      currency: currency,
     });
-
+    
     return {
       paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret!,
+      clientSecret: paymentIntent.client_secret,
       amount: payload.amount,
-      currency,
-      provider: 'stripe',
+      currency: payload.currency ?? "usd",
+      provider: "stripe"
     };
   } catch (error) {
-    if (error instanceof Stripe.errors.StripeError) {
+    if (error instanceof Error) {
       throw new Error(`Stripe error: ${error.message}`);
     }
     throw error;
