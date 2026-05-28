@@ -119,26 +119,28 @@
 +            const fs = require('fs');
 +            
 +            // Check if we need to create a meta-issue for the next recursive scan
-+            const scanLog = 'last-scan-date.txt';
-+            const now = new Date().toISOString();
++            const scanLog = 'scan-log.json';
++            let scanCount = 0;
++            if (fs.existsSync(scanLog)) {
++              scanCount = JSON.parse(fs.readFileSync(scanLog, 'utf-8')).count || 0;
++            }
++            scanCount++;
++            fs.writeFileSync(scanLog, JSON.stringify({ count: scanCount, lastRun: new Date().toISOString() }));
 +            
-+            if (!fs.existsSync(scanLog) || Date.now() - new Date(fs.readFileSync(scanLog, 'utf-8')).getTime() > 86400000) {
-+              fs.writeFileSync(scanLog, now);
-+              
-+              const body = \`## Recursive Low Hanging Fruit Scan
++            // Create recursive automation tracking issue on first run
++            if (scanCount === 1) {
++              const body = \`## Low Hanging Fruit Automation - Recursive Run #\${scanCount}
 +
-+This issue tracks the ongoing automated detection of low hanging fruit bugs and improvements.
++This issue tracks the recursive automation of low hanging fruit bug detection.
 +
 +### Next Steps
-+1. Review all open issues created by the automation
-+2. Address findings in priority order
-+3. Close resolved items
++1. Review issues created by the automation
++2. Triage findings
++3. Continue recursive scanning
 +
-+### Instructions
 +This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 +
 +/bounty \\$700
 +\`;
-+
 +              try {
-+                execSync(\`gh issue create --repo \${process.env.GITHUB_REPOSITORY} --title \"Low Hanging Fruit: Recursive Scan Tracking\" --body \"\${body}\" --label \"bug,documentation,good first issue,help wanted,
++                execSync(\`gh issue create --repo \${process.env.GITHUB_REPOSITORY
