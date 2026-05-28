@@ -22,92 +22,101 @@ jobs:
           node-version: '20'
 
       - name: Detect low hanging fruit and create issues
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const { execSync } = require('child_process');
+
+          const repo = process.env.GITHUB_REPOSITORY;
+          const token = process.env.GITHUB_TOKEN;
+
+          function runCommand(cmd) {
+            return execSync(cmd, { encoding: 'utf-8', stdio: 'pipe' }).trim();
+          }
+
+          function createIssue(title, body) {
+            const escapedBody = body.replace(/"/g, '\\"');
+            const cmd = `curl -s -X POST \
+              -H "Authorization: token ${token}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${repo}/issues \
+              -d "{\"title\":\"${title}\",\"body\":\"${escapedBody}\"}"`;
+            return runCommand(cmd);
+          }
+
+          function getExistingIssues() {
+            const cmd = `curl -s -H "Authorization: token ${token}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/${repo}/issues?state=all&per_page=100"`;
+            const response = runCommand(cmd);
+            return JSON.parse(response);
+          }
+
+          function findLowHangingFruit() {
+            const issues = [];
             
-            // Recursive function to find files with potential issues patterns
-            async function findLowHangingFruit(dir, results = []) {
-              const items = fs.readdirSync(dir, { withFileTypes: true });
-              
-              for (const item of items) {
-                const fullPath = path.join(dir, item.name);
-                
-                if (item.isDirectory() && item.name !== 'node_modules' && item.name !== '.git') {
-                  await findLowHangingFruit(fullPath, results);
-                } else if (item.isFile()) {
-                  const content = fs.readFileSync(fullPath, 'utf-8');
-                  const issues = [];
-                  
-                  // Check for TODO comments
-                  const todoMatches = content.match(/TODO[:\s].*/gi);
-                  if (todoMatches) {
-                    todoMatches.forEach(match => {
-                      issues.push({
-                        type: 'TODO',
-                        description: match.trim(),
-                        file: fullPath
-                      });
-                    });
-                  }
-                  
-                  // Check for FIXME comments
-                  const fixmeMatches = content.match(/FIXME[:\s].*/gi);
-                  if (fixmeMatches) {
-                    fixmeMatches.forEach(match => {
-                      issues.push({
-                        type: 'FIXME',
-                        description: match.trim(),
-                        file: fullPath
-                      });
-                    });
-                  }
-                  
-                  // Check for placeholder/empty implementations
-                  if (content.includes('// TODO') || content.includes('// FIXME') || content.includes('placeholder') || content.includes('Placeholder')) {
-                    if (issues.length === 0) {
-                      issues.push({
-                        type: 'PLACEHOLDER',
-                        description: 'Placeholder or incomplete implementation detected',
-                        file: fullPath
-                      });
-                    }
-                  }
-                  
-                  results.push(...issues);
-                }
-              }
-              
-              return results;
-            }
-            
-            const findings = await findLowHangingFruit('.');
-            
-            // Create GitHub issues for findings
-            for (const finding of findings.slice(0, 5)) { // Limit to 5 issues per run
-              const title = `[Low Hanging Fruit] ${finding.type} in ${finding.file.replace('./', '')}`;
-              const body = `## Automated Low Hanging Fruit Detection
-
-**Type:** ${finding.type}
-**File:** \`${finding.file}\`
-**Description:** ${finding.description}
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-/bounty $50
-
----
-*This issue was automatically created by the Low Hanging Fruit Automation workflow.*`;
-
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: title,
-                body: body,
-                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty']
+            // Check for missing documentation
+            if (!fs.existsSync('CONTRIBUTING.md') || fs.statSync('CONTRIBUTING.md').size < 100) {
+              issues.push({
+                title: 'Improve CONTRIBUTING.md documentation',
+                body: 'The CONTRIBUTING.md file is missing or too minimal. Please add detailed contribution guidelines including:\n- How to set up the development environment\n- How to run tests\n- Pull request requirements\n- Code style guidelines\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
               });
             }
             
-            console.log(`Created ${Math.min(findings.length, 5)} issues from ${findings.length} findings.`);
+            // Check for missing tests
+            const hasTestScript = fs.existsSync('package.json') && 
+              JSON.parse(fs.readFileSync('package.json', 'utf-8')).scripts?.test;
+            if (!hasTestScript) {
+              issues.push({
+                title: 'Add test scripts to package.json',
+                body: 'The package.json is missing a test script. Please add appropriate test commands for the monorepo.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
+              });
+            }
+            
+            // Check for missing CI/CD
+            if (!fs.existsSync('.github/workflows')) {
+              issues.push({
+                title: 'Add GitHub Actions CI/CD pipeline',
+                body: 'No GitHub Actions workflows found. Please add CI/CD pipelines for testing, linting, and deployment.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
+              });
+            }
+            
+            // Check for missing environment documentation
+            if (!fs.readFileSync('README.md', 'utf-8').includes('.env')) {
+              issues.push({
+                title: 'Document required environment variables',
+                body: 'The README mentions environment variables but does not document all required .env values. Please add a complete list with descriptions.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
+              });
+            }
+            
+            return issues;
+          }
+
+          try {
+            const existingIssues = getExistingIssues();
+            const existingTitles = new Set(existingIssues.map(i => i.title.toLowerCase()));
+            const newIssues = findLowHangingFruit();
+            
+            for (const issue of newIssues) {
+              if (!existingTitles.has(issue.title.toLowerCase())) {
+                console.log(`Creating issue: ${issue.title}`);
+                createIssue(issue.title, issue.body);
+              }
+            }
+          } catch (error) {
+            console.error('Error:', error.message);
+            process.exit(1);
+          }
+          EOF
+--- a/README.md
+# Project
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+
+[![Low Hanging Fruit Automation](https://github.com/SecureBananaLabs/bug-bounty/actions/workflows/low-hanging-fruit-automation.yml/badge.svg)](https://github.com/SecureBananaLabs/bug-bounty/actions/workflows/low-hanging-fruit-automation.yml)
+
+# FreelanceFlow Monorepo
+
+FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
