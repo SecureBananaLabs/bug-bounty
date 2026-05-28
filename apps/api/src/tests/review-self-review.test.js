@@ -41,6 +41,20 @@ test("POST /api/reviews rejects self-reviews", async () => {
       success: false,
       message: "Reviewer and reviewee must be different users"
     });
+
+    const listResponse = await fetch(`${baseUrl}/api/reviews`);
+    const listPayload = await listResponse.json();
+
+    assert.equal(listResponse.status, 200);
+    assert.equal(
+      listPayload.data.some(
+        (review) =>
+          review.reviewerId === "usr_same" &&
+          review.revieweeId === "usr_same" &&
+          review.comment === "self boost"
+      ),
+      false
+    );
   });
 });
 
