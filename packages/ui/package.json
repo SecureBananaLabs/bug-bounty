@@ -2,4 +2,21 @@
   "name": "@freelanceflow/ui",
   "private": true,
   "main": "src/index.ts"
+{
+  "name": "freelanceflow-ui",
+  "version": "1.0.0",
+  "description": "Shared UI components for FreelanceFlow",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+  }
+}
 }
