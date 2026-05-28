@@ -2,7 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at midnight UTC
+    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -17,103 +17,90 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Detect low hanging fruit and create issues
-        uses: actions/github-script@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
+          node-version: '20'
 
-            // Recursive function to scan for low hanging fruit patterns
-            async function scanForLowHangingFruit(dir, patterns, results = []) {
-              const entries = fs.readdirSync(dir, { withFileTypes: true });
-              
-              for (const entry of entries) {
-                const fullPath = path.join(dir, entry.name);
-                
-                if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.git') {
-                  await scanForLowHangingFruit(fullPath, patterns, results);
-                } else if (entry.isFile()) {
+      - name: Detect low hanging fruit and create issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Recursively find TODO, FIXME, HACK, XXX, BUG comments
+          function findLowHangingFruit(dir, results = []) {
+            const items = fs.readdirSync(dir, { withFileTypes: true });
+            for (const item of items) {
+              const fullPath = path.join(dir, item.name);
+              if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
+                findLowHangingFruit(fullPath, results);
+              } else if (item.isFile() && !item.name.startsWith('.') && !item.name.endsWith('.lock')) {
+                try {
                   const content = fs.readFileSync(fullPath, 'utf-8');
                   const lines = content.split('\n');
-                  
-                  for (let i = 0; i < lines.length; i++) {
+                  lines.forEach((line, index) => {
+                    const patterns = ['TODO', 'FIXME', 'HACK', 'XXX', 'BUG'];
                     for (const pattern of patterns) {
-                      if (pattern.regex.test(lines[i])) {
+                      if (line.includes(pattern)) {
                         results.push({
                           file: fullPath,
-                          line: i + 1,
-                          type: pattern.type,
-                          description: pattern.description,
-                          severity: pattern.severity,
-                          content: lines[i].trim()
+                          line: index + 1,
+                          type: pattern,
+                          content: line.trim()
                         });
                       }
                     }
-                  }
+                  });
+                } catch (e) {
+                  // Skip binary or unreadable files
                 }
               }
-              
-              return results;
             }
-
-            // Define low hanging fruit patterns
-            const patterns = [
-              { regex: /TODO|FIXME|HACK|XXX|BUG/, type: 'code-debt', description: 'Technical debt or incomplete implementation found', severity: 'medium' },
-              { regex: /console\.(log|warn|error)\(/, type: 'debug-code', description: 'Debug console statements should be removed', severity: 'low' },
-              { regex: /\/\/\s*eslint-disable/, type: 'lint-suppression', description: 'ESLint rule suppression may hide real issues', severity: 'low' },
-              { regex: /password|secret|key|token|api[_-]?key/i, type: 'security-review', description: 'Potential hardcoded credential or sensitive data exposure', severity: 'high' },
-              { regex: /eval\(|Function\(|setTimeout\(['"]/, type: 'security-risk', description: 'Dynamic code execution detected', severity: 'high' },
-              { regex: /innerHTML|dangerouslySetInnerHTML/, type: 'xss-risk', description: 'Potential XSS vulnerability from unsanitized HTML', severity: 'high' },
-              { regex: /Math\.random\(\)/, type: 'crypto-weakness', description: 'Weak randomness, should use crypto.randomBytes or crypto.getRandomValues', severity: 'medium' },
-              { regex: /new Date\(\)\.getTime\(\)/, type: 'timestamp-bug', description: 'Non-monotonic timestamp, consider using Date.now()', severity: 'low' }
-            ];
-
-            // Scan the repository
-            const findings = await scanForLowHangingFruit('.', patterns);
-            
-            // Group findings by type
-            const grouped = findings.reduce((acc, finding) => {
-              if (!acc[finding.type]) acc[finding.type] = [];
-              acc[finding.type].push(finding);
-              return acc;
-            }, {});
-
-            // Create issues for each type
+            return results;
+          }
+          
+          const findings = findLowHangingFruit('.');
+          
+          // Group findings by type for issue creation
+          const grouped = {};
+          findings.forEach(f => {
+            if (!grouped[f.type]) grouped[f.type] = [];
+            grouped[f.type].push(f);
+          });
+          
+          const { Octokit } = require('@octokit/rest');
+          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+          const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+          
+          async function createIssue(title, body) {
+            try {
+              await octokit.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body: body + '\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
+              });
+              console.log('Created issue:', title);
+            } catch (err) {
+              console.error('Failed to create issue:', title, err.message);
+            }
+          }
+          
+          (async () => {
             for (const [type, items] of Object.entries(grouped)) {
-              const issueTitle = `[Low Hanging Fruit] ${type.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} - ${items.length} instance(s) found`;
-              
-              const issueBody = `## Automated Low Hanging Fruit Detection
-
-This issue was automatically created by the Low Hanging Fruit Automation workflow.
-
-### Detection Type: \`${type}\`
-### Severity: ${items[0].severity}
-### Instances Found: ${items.length}
-
-${items.map(item => `- **${item.file}** (line ${item.line}): \\`\\`\\`${item.content}\\`\\`\\``).join('\n')}
-
-### Recommended Action
-${items[0].description}
-
----
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-/bounty $50`;
-
-              try {
-                await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: issueTitle,
-                  body: issueBody,
-                  labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty', 'low-hanging-fruit']
-                });
-                console.log(`Created issue for ${type}`);
-              } catch (error) {
-                console.error(`Failed to create issue for ${type}:`, error.message);
-              }
+              const title = \`Low Hanging Fruit: \${type} items (\${items.length} found)\`;
+              const body = items.slice(0, 20).map(i => \`- [ ] \${i.file}:\${i.line} - \\\`\${i.content}\\\`\`).join('\n');
+              await createIssue(title, body);
             }
+            if (findings.length === 0) {
+              console.log('No low hanging fruit found.');
+            }
+          })();
+          "
 
-            console.log(`Scan complete. Found ${findings.length} issues across ${Object.keys(grouped).length} categories.`);
+      - name: Install Octokit
+        run: npm install @octokit/rest
+        working-directory: ${{ github.workspace }}
