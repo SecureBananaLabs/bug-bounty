@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { endpoints } from "./endpoints.mjs";
@@ -36,6 +37,7 @@ const report = {
     durationSeconds: config.durationSeconds,
     concurrency: config.concurrency
   },
+  environment: collectEnvironment(),
   results
 };
 
@@ -49,7 +51,8 @@ if (failures.length > 0) {
 
 async function benchmarkEndpoint(endpoint, runConfig) {
   const samples = [];
-  const deadline = performance.now() + runConfig.durationSeconds * 1000;
+  const runStartedAtMs = performance.now();
+  const deadline = runStartedAtMs + runConfig.durationSeconds * 1000;
   let sequence = 0;
 
   async function worker() {
@@ -64,7 +67,9 @@ async function benchmarkEndpoint(endpoint, runConfig) {
   const latencies = samples.map((sample) => sample.latencyMs);
   const ttfbs = samples.map((sample) => sample.ttfbMs);
   const errors = samples.filter((sample) => sample.error || sample.status >= 400).length;
-  const elapsedSeconds = Math.max(0.001, (Math.max(...samples.map((sample) => sample.completedAtMs), performance.now()) - (deadline - runConfig.durationSeconds * 1000)) / 1000);
+  const elapsedSeconds = Math.max(0.001, (maxCompletedAtMs(samples, performance.now()) - runStartedAtMs) / 1000);
+  const sustainedRps = round(samples.length / elapsedSeconds, 2);
+  const peakRps = calculatePeakRps(samples, runStartedAtMs);
 
   return {
     name: endpoint.name,
@@ -73,7 +78,9 @@ async function benchmarkEndpoint(endpoint, runConfig) {
     requests: samples.length,
     errors,
     errorRatePercent: percent(errors, samples.length),
-    rps: round(samples.length / elapsedSeconds, 2),
+    rps: sustainedRps,
+    sustainedRps,
+    peakRps,
     latencyMs: {
       p50: percentile(latencies, 50),
       p95: percentile(latencies, 95),
@@ -147,7 +154,7 @@ async function writeReports(report, failures, resultsDir) {
 
 function markdownReport(report, failures) {
   const rows = report.results.map((result) => (
-    `| ${result.method} | \`${result.path}\` | ${result.requests} | ${result.rps} | ${result.latencyMs.p50} | ${result.latencyMs.p95} | ${result.latencyMs.p99} | ${result.ttfbMs.p95} | ${result.errorRatePercent} |`
+    `| ${result.method} | \`${result.path}\` | ${result.requests} | ${result.sustainedRps} | ${result.peakRps} | ${result.latencyMs.p50} | ${result.latencyMs.p95} | ${result.latencyMs.p99} | ${result.ttfbMs.p95} | ${result.errorRatePercent} |`
   ));
 
   return `# API Benchmark Report
@@ -158,9 +165,13 @@ function markdownReport(report, failures) {
 - Duration per endpoint: ${report.config.durationSeconds}s
 - Concurrency: ${report.config.concurrency}
 - Smoke run: ${report.smoke ? "yes" : "no"}
+- Node.js: ${report.environment.node}
+- OS: ${report.environment.os}
+- CPU: ${report.environment.cpu}
+- Execution mode: ${report.environment.executionMode}
 
-| Method | Path | Requests | RPS | p50 ms | p95 ms | p99 ms | p95 TTFB ms | Error % |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Method | Path | Requests | Sustained RPS | Peak 1s RPS | p50 ms | p95 ms | p99 ms | p95 TTFB ms | Error % |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 ${rows.join("\n")}
 
 ${failures.length === 0 ? "All configured thresholds passed.\n" : `## Threshold Failures\n\n${formatFailures(failures)}\n`}
@@ -211,6 +222,43 @@ function countBy(values) {
     counts[value] = (counts[value] ?? 0) + 1;
     return counts;
   }, {});
+}
+
+function calculatePeakRps(samples, runStartedAtMs) {
+  if (samples.length === 0) {
+    return 0;
+  }
+
+  const buckets = new Map();
+  for (const sample of samples) {
+    const bucket = Math.floor((sample.completedAtMs - runStartedAtMs) / 1000);
+    buckets.set(bucket, (buckets.get(bucket) ?? 0) + 1);
+  }
+
+  return Math.max(...buckets.values());
+}
+
+function maxCompletedAtMs(samples, fallback) {
+  let max = fallback;
+
+  for (const sample of samples) {
+    if (sample.completedAtMs > max) {
+      max = sample.completedAtMs;
+    }
+  }
+
+  return max;
+}
+
+function collectEnvironment() {
+  const cpu = os.cpus()[0];
+
+  return {
+    node: process.version,
+    os: `${os.type()} ${os.release()} ${os.arch()}`,
+    cpu: cpu ? `${cpu.model} (${os.cpus().length} logical cores)` : "unknown",
+    executionMode: "local Node.js benchmark runner"
+  };
 }
 
 function round(value, places = 2) {
