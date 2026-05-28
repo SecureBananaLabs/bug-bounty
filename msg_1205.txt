@@ -1,0 +1,5 @@
+fix: require authentication for message list endpoint (#1205)
+
+GET /messages now requires valid JWT authentication to prevent
+unauthorized access to all messages.
+Fixes #1205

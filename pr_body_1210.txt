@@ -1,0 +1,11 @@
+## Fixes #1210
+
+### Problem
+The `GET /users` endpoint exposes all user data without authentication, allowing anyone to enumerate users.
+
+### Solution
+Added `authMiddleware` to the user list route so only authenticated users can access the user list.
+
+### Testing
+- Unauthenticated GET /users returns 401
+- Authenticated GET /users returns user list
