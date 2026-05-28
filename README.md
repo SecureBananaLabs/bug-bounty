@@ -66,30 +66,36 @@ npm run dev -w apps/web
 
 ### Run backend
 
-```bash
-npm run dev -w apps/api
-```
+
+Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+
+
+## Low Hanging Fruit Automation
+
+To contribute to this repository, you must create a new issue first. This automation will:
+
+- Find a feature/bug to work on from this repository
+- Create a GitHub issue on the repository to start working on it
+
+This task is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Bug Bounty
+
+This repository has a bug bounty program for responsible disclosure of issues. Please
+review [SECURITY.md](SECURITY.md) for security related issues.
+
+## AI Agent Friendly
+
+This repository is AI agent friendly.
 
 ## Database
 
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
-## Environment Variables
-
-Each app/package expects its own `.env` values for DB, auth, and integrations.
-
-## Low Hanging Fruit Automation
-
-This repository includes an automated workflow that recursively detects low-hanging fruit bugs and creates GitHub issues for them. The workflow:
-
-- Runs daily via GitHub Actions (`.github/workflows/low-hanging-fruit-automation.yml`)
-- Scans the codebase for `TODO`, `FIXME`, and placeholder patterns
-- Automatically creates bounty issues with the required attribution string
-- Labels issues appropriately for discoverability
-
-To manually trigger the workflow, go to **Actions > Low Hanging Fruit Automation > Run workflow**.
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+- Users
+- Jobs
+- Proposals
 - Payments
 - Reviews
 - Messages
