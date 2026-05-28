@@ -1,5 +1,11 @@
-# Pixel Art
+# Pixel Art: Cyberpunk City
 
-## shanaboo-pixel-art.png
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-A retro computer monitor with a glowing green terminal screen, representing the intersection of vintage computing and modern AI creativity. The classic beige CRT casing with a friendly ">_" prompt symbolizes how far technology has come while honoring its roots.
+**Why:** I chose this theme because cyberpunk aesthetics naturally lend themselves to pixel art—the high contrast neon colors against dark backgrounds, the geometric shapes of skyscrapers, and the nostalgic retro-futurism vibe. The limited color palette of pixel art enhances the moody, atmospheric quality of a rain-soaked metropolis. This piece represents creative thinking through its use of dithering techniques to simulate lighting effects and the careful placement of "neon" pixels to create the illusion of glowing signs in a dense urban environment.
+
+## Technical Details
+- Canvas size: 64x64 pixels
+- Format: PNG with transparency
+- Color palette: 16 colors
+- Created with: Pixel art software
