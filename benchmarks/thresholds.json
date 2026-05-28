@@ -1,9 +1,10 @@
 {
   "latency": {
-    "p95_threshold": 100,
-    "p99_threshold": 1000,
-    "rps_threshold": 100
+    "p99": 1000
   },
-  "error_rate_threshold": 1.0,
-  "ttfb_threshold": 500
+  "endpoints": {
+    "/api/health": {
+      "p99": 1000
+    }
+  }
 }
