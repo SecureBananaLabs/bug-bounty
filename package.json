@@ -1,13 +1,18 @@
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "name": "bug-bounty",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Performance benchmarking for Bug Bounty platform",
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
+    "benchmark": "node benchmarks/index.js"
+  },
+  "devDependencies": {
+    "autocannon": "^8.0.0"
+  },
+  "dependencies": {
+    "autocannon": "^7.10.0"
+  }
+}
     "test": "npm run test -w apps/api"
   }
 }
