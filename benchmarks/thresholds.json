@@ -1,3 +1,22 @@
 {
-  "p99_latency_threshold": 1000
+  "api/auth/register": {
+    "p99_threshold_ms": 500,
+    "error_rate_threshold": 1.0
+  },
+  "api/auth/login": {
+    "p99_threshold_ms": 300,
+    "error_rate_threshold": 1.0
+  },
+  "api/users/profile": {
+    "p99_threshold_ms": 400,
+    "error_rate_threshold": 1.0
+  },
+  "api/jobs": {
+    "p99_threshold_ms": 600,
+    "error_rate_threshold": 1.0
+  },
+  "api/search": {
+    "p99_threshold_ms": 800,
+    "error_rate_threshold": 1.0
+  }
 }
