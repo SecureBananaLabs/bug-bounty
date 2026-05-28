@@ -11,6 +11,9 @@ export async function register(req, res) {
 export async function login(req, res) {
   const payload = loginSchema.parse(req.body);
   const result = await loginUser(payload);
+  if (!result) {
+    return res.status(401).json({ success: false, message: "Invalid credentials" });
+  }
   return ok(res, result);
 }
 

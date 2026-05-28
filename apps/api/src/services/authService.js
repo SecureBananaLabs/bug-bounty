@@ -1,4 +1,5 @@
 import { signAccessToken } from "../utils/jwt.js";
+import { listUsers } from "./userService.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
@@ -11,13 +12,17 @@ export async function registerUser(payload) {
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  const users = await listUsers();
+  const user = users.find(u => u.email === payload.email);
+  if (!user || user.password !== payload.password) {
+    return null;
+  }
   return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    email: user.email,
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
 export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+  throw new Error("Refresh token must be provided");
 }
