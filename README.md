@@ -3,8 +3,6 @@
 
 # FreelanceFlow Monorepo
 
-# FreelanceFlow Monorepo
-
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
