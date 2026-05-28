@@ -9,21 +9,23 @@ export async function createPaymentIntent(payload) {
     throw new Error('Payload is required and must be an object');
   }
 
-  if (payload.amount === undefined || payload.amount === null) {
-    throw new Error('amount is required and must be a positive integer');
+  const { amount, currency, ...metadata } = payload;
+
+  if (amount === undefined || amount === null) {
+    throw new Error('amount is required');
   }
 
-  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('amount is required and must be a positive integer');
+  if (!Number.isInteger(amount) || amount <= 0) {
+    throw new Error('amount must be a positive integer');
   }
 
-  const amount = payload.amount;
-  const currency = payload.currency ?? 'usd';
+  const resolvedCurrency = currency ?? 'usd';
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
-      currency,
+      currency: resolvedCurrency,
+      metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
     });
 
     return {
@@ -35,17 +37,13 @@ export async function createPaymentIntent(payload) {
     };
   } catch (error) {
     if (error.type && error.type.startsWith('Stripe')) {
-      throw new Error(error.message);
+      const err = new Error(error.message);
+      err.type = error.type;
+      err.code = error.code;
+      err.decline_code = error.decline_code;
+      err.stripeStatusCode = error.statusCode;
+      throw err;
     }
     throw error;
   }
 }
-
-// Re-export for testing
-export { stripe };
-
-// Legacy stub for backwards compatibility during migration
-export async function createPaymentIntentLegacy(payload) {
-  return {
-    paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
