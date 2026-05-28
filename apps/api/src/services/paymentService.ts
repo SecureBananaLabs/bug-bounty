@@ -1,43 +1,35 @@
-import Stripe from 'stripe';
+import { Request, Response } from 'express';
+import { createPaymentIntent } from './paymentService';
 
-let stripe: Stripe | null = null;
-
-export async function getStripe() {
-  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-  if (!stripeSecretKey) {
-    throw new Error('STRIPE_SECRET_KEY environment variable is required');
-  }
-  stripe = new Stripe(stripeSecretKey, {
-    apiVersion: '2024-04-10',
-    typescript: true,
-  });
-  return stripe;
+interface PaymentPayload {
+  amount: number;
+  currency?: string;
 }
 
-export async function createPaymentIntent(payload: any) {
-  if (!payload.amount || typeof payload.amount !== 'number' || payload.amount <= 0 || !Number.isInteger(payload.amount)) {
-    throw new Error('Amount is required and must be a positive integer (in smallest currency unit)');
-  }
-
-  const currency = payload.currency ?? 'usd';
-  const stripe = getStripe();
-  
+export const createPaymentIntent = async (req: Request, res: Response) => {
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: payload.amount,
-      currency: currency,
-    });
+    const payload: PaymentPayload = req.body;
     
-    return {
-      paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
-      amount: payload.amount,
-      currency: currency,
-    };
-  } catch (error: any) {
-    if (error instanceof Error) {
-      throw new Error(`Stripe error: ${error.message}`);
+    // Validate amount
+    if (typeof payload.amount !== 'number' || payload.amount <= 0) {
+      return res.status(400).json({ error: 'Amount must be a positive number' });
     }
-    throw error;
+    
+    // Set default currency if not provided
+    const currency = payload.currency || 'usd';
+    
+    // Create payment intent
+    const paymentIntent = await createPaymentIntent(payload);
+    
+    res.status(200).json({
+      clientSecret: paymentIntent.client_secret,
+      paymentId: paymentIntent.id
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-}
+};
+
+export const getPaymentIntent = async (req: Request, res: Response) => {
+  // Implementation here
+};
