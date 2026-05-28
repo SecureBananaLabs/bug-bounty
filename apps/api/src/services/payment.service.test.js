@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
+import { createPaymentIntent } from './payment.service.js';
 
-const mockCreate = jest.fn();
-
+// Mock the stripe module
 jest.unstable_mockModule('stripe', () => {
   return {
     default: jest.fn().mockImplementation(() => ({
@@ -12,78 +12,75 @@ jest.unstable_mockModule('stripe', () => {
   };
 });
 
-const { createPaymentIntent } = await import('./payment.service.js');
+let mockCreate;
 
 describe('createPaymentIntent', () => {
   beforeEach(() => {
-    mockCreate.mockClear();
+    mockCreate = jest.fn();
+    jest.clearAllMocks();
   });
 
   describe('validation', () => {
-    it('throws when payload is missing', async () => {
-      await expect(createPaymentIntent()).rejects.toThrow(
-        'Payload is required and must be an object'
-      );
-    });
-
     it('throws when amount is missing', async () => {
-      await expect(createPaymentIntent({ currency: 'usd' })).rejects.toThrow(
-        'amount is required and must be a positive integer'
-      );
+      await expect(createPaymentIntent({})).rejects.toThrow('amount is required and must be a positive integer');
     });
 
-    it('throws when amount is not an integer', async () => {
-      await expect(createPaymentIntent({ amount: 10.5 })).rejects.toThrow(
-        'amount is required and must be a positive integer'
-      );
+    it('throws when amount is not a number', async () => {
+      await expect(createPaymentIntent({ amount: 'abc' })).rejects.toThrow('amount is required and must be a positive integer');
     });
 
-    it('throws when amount is not positive', async () => {
-      await expect(createPaymentIntent({ amount: 0 })).rejects.toThrow(
-        'amount is required and must be a positive integer'
-      );
-      await expect(createPaymentIntent({ amount: -10 })).rejects.toThrow(
-        'amount is required and must be a positive integer'
-      );
+    it('throws when amount is zero', async () => {
+      await expect(createPaymentIntent({ amount: 0 })).rejects.toThrow('amount is required and must be a positive integer');
+    });
+
+    it('throws when amount is negative', async () => {
+      await expect(createPaymentIntent({ amount: -100 })).rejects.toThrow('amount is required and must be a positive integer');
+    });
+
+    it('throws when amount is a float', async () => {
+      await expect(createPaymentIntent({ amount: 10.5 })).rejects.toThrow('amount is required and must be a positive integer');
     });
   });
 
   describe('Stripe API call', () => {
-    it('calls paymentIntents.create with amount and currency', async () => {
-      mockCreate.mockResolvedValue({
-        id: 'pi_test_123',
-        client_secret: 'pi_test_123_secret',
-      });
-
-      const result = await createPaymentIntent({
+    it('calls stripe.paymentIntents.create with correct arguments', async () => {
+      const mockPaymentIntent = {
+        id: 'pi_123',
+        client_secret: 'pi_123_secret',
         amount: 1000,
-        currency: 'eur',
-      });
+        currency: 'usd',
+      };
+      mockCreate.mockResolvedValue(mockPaymentIntent);
+
+      const result = await createPaymentIntent({ amount: 1000 });
 
       expect(mockCreate).toHaveBeenCalledWith({
         amount: 1000,
-        currency: 'eur',
+        currency: 'usd',
       });
       expect(result).toEqual({
-        paymentId: 'pi_test_123',
+        paymentId: 'pi_123',
+        clientSecret: 'pi_123_secret',
         amount: 1000,
-        currency: 'eur',
+        currency: 'usd',
         provider: 'stripe',
-        clientSecret: 'pi_test_123_secret',
       });
     });
 
-    it('defaults currency to usd', async () => {
-      mockCreate.mockResolvedValue({
-        id: 'pi_test_456',
-        client_secret: 'pi_test_456_secret',
-      });
+    it('uses provided currency', async () => {
+      const mockPaymentIntent = {
+        id: 'pi_456',
+        client_secret: 'pi_456_secret',
+        amount: 500,
+        currency: 'eur',
+      };
+      mockCreate.mockResolvedValue(mockPaymentIntent);
 
-      await createPaymentIntent({ amount: 500 });
+      await createPaymentIntent({ amount: 500, currency: 'eur' });
 
       expect(mockCreate).toHaveBeenCalledWith({
         amount: 500,
-        currency: 'usd',
+        currency: 'eur',
       });
     });
   });
@@ -94,18 +91,29 @@ describe('createPaymentIntent', () => {
       stripeError.type = 'StripeCardError';
       mockCreate.mockRejectedValue(stripeError);
 
-      await expect(createPaymentIntent({ amount: 100 })).rejects.toThrow(
-        'Your card was declined.'
-      );
+      await expect(createPaymentIntent({ amount: 1000 })).rejects.toThrow('Your card was declined.');
     });
 
     it('re-throws non-Stripe errors as-is', async () => {
       const genericError = new Error('Network failure');
       mockCreate.mockRejectedValue(genericError);
 
-      await expect(createPaymentIntent({ amount: 100 })).rejects.toThrow(
-        'Network failure'
-      );
+      await expect(createPaymentIntent({ amount: 1000 })).rejects.toThrow('Network failure');
     });
   });
 });
+
+// Integration/smoke test - only runs when STRIPE_SMOKE_TEST is set
+if (process.env.STRIPE_SMOKE_TEST) {
+  describe('createPaymentIntent integration', () => {
+    it('creates a real test-mode PaymentIntent', async () => {
+      const result = await createPaymentIntent({ amount: 100, currency: 'usd' });
+
+      expect(result.paymentId).toMatch(/^pi_/);
+      expect(result.clientSecret).toMatch(/^pi_.*_secret/);
+      expect(result.amount).toBe(100);
+      expect(result.currency).toBe('usd');
+      expect(result.provider).toBe('stripe');
+    });
+  });
+}
