@@ -18,6 +18,9 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(claims) {
+  if (!claims || !claims.sub) {
+    throw new Error("Valid token claims are required for refresh");
+  }
+  return { token: signAccessToken({ sub: claims.sub, role: claims.role }) };
 }
