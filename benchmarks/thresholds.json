@@ -1,0 +1,10 @@
+{
+  "default": {
+    "p99MaxMs": 3000,
+    "errorRateMax": 0
+  },
+  "uploads_create": {
+    "p99MaxMs": 5000,
+    "errorRateMax": 0
+  }
+}
