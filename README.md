@@ -1,18 +1,16 @@
-## Automation of Low Hanging Fruit Bug Detection
-
-This issue is limited only to the creator of this issue. This issue is limited only to the creator of this issue. This issue is limited only to the creator of this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Issue Creation
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-### Low Hanging Fruit: Create Issues for Bug Detection
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more.
- 16c17552-42f2-4520-92a3-4a4ab86c80d8
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
+# FreelanceFlow Monorepo
+
+## Workspace Structure
+
+- `apps/web` — Next.js 14 App Router frontend
+- `apps/api` — Express.js backend with layered REST API
+- `packages/db` — Prisma schema and database package
+- `packages/ui` — Shared UI components
+- [FreelanceFlow](#freelanceflow)
+- [Workspace Structure](#workspace-structure)
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
@@ -43,8 +41,11 @@ The web app includes pages for:
 
 The API includes:
 
-- Auth routes (register, login, OAuth callback, JWT refresh)
-- CRUD routes for users, jobs, and proposals
+- File uploads and search
+- Admin routes
+
+## Getting Started
+
 - Payments routes (Stripe-focused service placeholder)
 - Reviews, messaging, notifications
 - File uploads and search
