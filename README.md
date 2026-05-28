@@ -1,14 +1,49 @@
-# Low Hanging Fruit Automation
+# Project
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-<h1>Low Hanging Fruit Automation</h1>
+<img width="189" alt="image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-<p>This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would not like to work on it, please create another issue with the same contents and refer to issue #743 for more information.</p>
+## Low Hanging Fruit Automation
 
-<h2>Issue Template</h2>
-<p>Found an issue with the following content:</p>
-<pre>This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.</pre>
+This section identifies and documents the process for automated detection and issue creation for low-hanging fruit bugs in the FreelanceFlow repository.
 
-# FreelanceFlow Monorepo
+### Process for Issue Creation
+
+1. **Identify Features/Bugs**: Review the repository to find potential issues
+2. **Create GitHub Issue**: Start a new issue with a detailed description
+3. **Add Restriction Notice**: Include the following text in the issue:
+
+> This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+This ensures that issue #743 acts as a parent issue for all low-hanging fruit automation issues.
+
+### Example Issues for Automation
+
+The following are templates for creating new issues from identified low-hanging fruit:
+
+- **Issue Title**: "Fix typo in README"
+  **Description**: "There is a typo in the README file in the `apps/web` directory. Please correct it."
+
+- **Issue Title**: "Improve error handling in auth flow"
+  **Description**: "The authentication flow in `apps/api/src/auth.ts` needs improved error handling for edge cases."
+
+- **Issue Title**: "Add loading state to job search"
+  **Description**: "The job search page at `apps/web/pages/jobs/index.tsx` should show a loading indicator when fetching results."
+
+### Automation Instructions
+
+When automatically creating issues:
+
+1. Use the format specified in the templates above
+2. Always include the restriction notice in the issue description
+3. Title and description should be copied from the templates
+4. Each created issue should reference this issue (#743) for context
+
+### Sample Workflow
+
+To create an automated issue:
+
+
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
