@@ -1,10 +1,13 @@
 export interface PaymentIntentPayload {
-  amount?: number;
+  amount: number;
   currency?: string;
   metadata?: Record<string, string>;
 }
 
 export interface PaymentIntentResult {
-  clientSecret: string;
   paymentId: string;
+  clientSecret: string | null;
+  amount: number;
+  currency: string;
+  provider: string;
 }
