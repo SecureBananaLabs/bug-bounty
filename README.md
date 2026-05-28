@@ -1,23 +1,47 @@
-<!-- Low Hanging Fruit Automation -->
-<!-- This section is automatically generated. To modify, edit the no changes section in the root README.md file -->
-
 # Project
-<img width="663" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+<img width="663" height="183" alt="Image" src="https  //github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-## Low Hanging Fruit Automation
+# FreelanceFlow Monorepo
 
-This project is part of an automated bug bounty program. To claim this bounty, you must:
+FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
-1. Create a new GitHub issue in this repository describing the bug or feature you will work on.
-2. Add the following text to the issue: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+## Workspace Structure
 
-## Example Issues
+- `apps/web` — Next.js 14 App Router frontend
+- `apps/api` — Express.js backend with layered REST API
+- `packages/db` — Prisma schema and database package
+- `packages/ui` — Shared UI components
 
-### Example Issue 1: Add a new feature to allow users to...
+## Frontend
 
-Title: `Add user profile picture upload feature`
+The web app includes pages for:
 
-Description:
+- Landing
+- Job listings and job detail
+- Post a job
+- Freelancer profiles and freelancer search
+- Client and freelancer dashboards
+- Messaging
+- Notifications
+- Settings
+- Billing
+- Admin panel
+
+## Backend
+
+The API includes:
+
+- Auth routes (register, login, OAuth callback, JWT refresh)
+- Payments routes (Stripe-focused service placeholder)
+- Reviews, messaging, notifications
+- File uploads and search
+- Admin routes
+
+Backend architecture follows:
+
+- Middleware layer (auth, rate limiting, error handling)
+- Controller layer
+- Service layer
 
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
