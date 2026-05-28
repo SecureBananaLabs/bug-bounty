@@ -6,5 +6,6 @@ export async function getReviews(req, res) {
 }
 
 export async function postReview(req, res) {
-  return ok(res, await createReview(req.body), 201);
+  const payload = { ...req.body, reviewerId: req.user.sub };
+  return ok(res, await createReview(payload), 201);
 }

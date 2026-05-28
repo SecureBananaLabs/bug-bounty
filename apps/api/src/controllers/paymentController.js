@@ -2,5 +2,6 @@ import { ok } from "../utils/response.js";
 import { createPaymentIntent } from "../services/paymentService.js";
 
 export async function createPayment(req, res) {
-  return ok(res, await createPaymentIntent(req.body), 201);
+  const payload = { ...req.body, userId: req.user.sub };
+  return ok(res, await createPaymentIntent(payload), 201);
 }

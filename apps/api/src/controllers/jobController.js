@@ -8,5 +8,6 @@ export async function getJobs(req, res) {
 
 export async function postJob(req, res) {
   const payload = createJobSchema.parse(req.body);
+  payload.clientId = req.user.sub;
   return ok(res, await createJob(payload), 201);
 }

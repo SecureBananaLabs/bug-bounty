@@ -6,5 +6,6 @@ export async function getProposals(req, res) {
 }
 
 export async function postProposal(req, res) {
-  return ok(res, await createProposal(req.body), 201);
+  const payload = { ...req.body, freelancerId: req.user.sub };
+  return ok(res, await createProposal(payload), 201);
 }
