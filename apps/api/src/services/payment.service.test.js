@@ -1,106 +1,111 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { createPaymentIntent, stripe } from './payment.service.js';
+import { jest } from '@jest/globals';
 
-// Mock the Stripe module
-vi.mock('stripe', () => {
+const mockCreate = jest.fn();
+
+jest.unstable_mockModule('stripe', () => {
   return {
-    default: vi.fn().mockImplementation(() => ({
+    default: jest.fn().mockImplementation(() => ({
       paymentIntents: {
-        create: vi.fn(),
+        create: mockCreate,
       },
     })),
   };
 });
 
+const { createPaymentIntent } = await import('./payment.service.js');
+
 describe('createPaymentIntent', () => {
-  let mockCreate;
-
   beforeEach(() => {
-    mockCreate = stripe.paymentIntents.create;
-    mockCreate.mockReset();
+    mockCreate.mockClear();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('throws when payload is missing', async () => {
-    await expect(createPaymentIntent()).rejects.toThrow('Payload is required and must be an object');
-  });
-
-  it('throws when amount is missing', async () => {
-    await expect(createPaymentIntent({ currency: 'usd' })).rejects.toThrow(
-      'amount is required and must be a positive integer'
-    );
-  });
-
-  it('throws when amount is not an integer', async () => {
-    await expect(createPaymentIntent({ amount: 10.5, currency: 'usd' })).rejects.toThrow(
-      'amount is required and must be a positive integer'
-    );
-  });
-
-  it('throws when amount is zero or negative', async () => {
-    await expect(createPaymentIntent({ amount: 0, currency: 'usd' })).rejects.toThrow(
-      'amount is required and must be a positive integer'
-    );
-    await expect(createPaymentIntent({ amount: -100, currency: 'usd' })).rejects.toThrow(
-      'amount is required and must be a positive integer'
-    );
-  });
-
-  it('calls stripe.paymentIntents.create with correct arguments and returns mapped response', async () => {
-    const mockPaymentIntent = {
-      id: 'pi_1234567890',
-      amount: 2000,
-      currency: 'usd',
-      client_secret: 'pi_1234567890_secret_xyz',
-    };
-
-    mockCreate.mockResolvedValue(mockPaymentIntent);
-
-    const result = await createPaymentIntent({ amount: 2000, currency: 'usd' });
-
-    expect(mockCreate).toHaveBeenCalledWith({
-      amount: 2000,
-      currency: 'usd',
+  describe('validation', () => {
+    it('throws when payload is missing', async () => {
+      await expect(createPaymentIntent()).rejects.toThrow(
+        'Payload is required and must be an object'
+      );
     });
-    expect(mockCreate).toHaveBeenCalledTimes(1);
 
-    expect(result).toEqual({
-      paymentId: 'pi_1234567890',
-      amount: 2000,
-      currency: 'usd',
-      clientSecret: 'pi_1234567890_secret_xyz',
-      provider: 'stripe',
+    it('throws when amount is missing', async () => {
+      await expect(createPaymentIntent({ currency: 'usd' })).rejects.toThrow(
+        'amount is required and must be a positive integer'
+      );
+    });
+
+    it('throws when amount is not an integer', async () => {
+      await expect(createPaymentIntent({ amount: 10.5 })).rejects.toThrow(
+        'amount is required and must be a positive integer'
+      );
+    });
+
+    it('throws when amount is not positive', async () => {
+      await expect(createPaymentIntent({ amount: 0 })).rejects.toThrow(
+        'amount is required and must be a positive integer'
+      );
+      await expect(createPaymentIntent({ amount: -10 })).rejects.toThrow(
+        'amount is required and must be a positive integer'
+      );
     });
   });
 
-  it('defaults currency to "usd" when not provided', async () => {
-    const mockPaymentIntent = {
-      id: 'pi_0987654321',
-      amount: 500,
-      currency: 'usd',
-      client_secret: 'pi_0987654321_secret_abc',
-    };
+  describe('Stripe API call', () => {
+    it('calls paymentIntents.create with amount and currency', async () => {
+      mockCreate.mockResolvedValue({
+        id: 'pi_test_123',
+        client_secret: 'pi_test_123_secret',
+      });
 
-    mockCreate.mockResolvedValue(mockPaymentIntent);
+      const result = await createPaymentIntent({
+        amount: 1000,
+        currency: 'eur',
+      });
 
-    const result = await createPaymentIntent({ amount: 500 });
-
-    expect(mockCreate).toHaveBeenCalledWith({
-      amount: 500,
-      currency: 'usd',
+      expect(mockCreate).toHaveBeenCalledWith({
+        amount: 1000,
+        currency: 'eur',
+      });
+      expect(result).toEqual({
+        paymentId: 'pi_test_123',
+        amount: 1000,
+        currency: 'eur',
+        provider: 'stripe',
+        clientSecret: 'pi_test_123_secret',
+      });
     });
 
-    expect(result.currency).toBe('usd');
+    it('defaults currency to usd', async () => {
+      mockCreate.mockResolvedValue({
+        id: 'pi_test_456',
+        client_secret: 'pi_test_456_secret',
+      });
+
+      await createPaymentIntent({ amount: 500 });
+
+      expect(mockCreate).toHaveBeenCalledWith({
+        amount: 500,
+        currency: 'usd',
+      });
+    });
   });
 
-  it('re-throws Stripe errors with original message', async () => {
-    const stripeError = new Error('Your card was declined.');
-    stripeError.type = 'StripeCardError';
-    mockCreate.mockRejectedValue(stripeError);
+  describe('error handling', () => {
+    it('re-throws Stripe errors with original message', async () => {
+      const stripeError = new Error('Your card was declined.');
+      stripeError.type = 'StripeCardError';
+      mockCreate.mockRejectedValue(stripeError);
 
-    await expect(createPaymentIntent({ amount: 1000 })).rejects.toThrow('Your card was declined.');
+      await expect(createPaymentIntent({ amount: 100 })).rejects.toThrow(
+        'Your card was declined.'
+      );
+    });
+
+    it('re-throws non-Stripe errors as-is', async () => {
+      const genericError = new Error('Network failure');
+      mockCreate.mockRejectedValue(genericError);
+
+      await expect(createPaymentIntent({ amount: 100 })).rejects.toThrow(
+        'Network failure'
+      );
+    });
   });
 });
