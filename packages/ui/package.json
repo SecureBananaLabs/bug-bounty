@@ -1,5 +1,15 @@
 {
   "name": "@freelanceflow/ui",
   "private": true,
-  "main": "src/index.ts"
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "node --test src/tests/*.test.mjs"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "react": "19.2.0"
+  }
 }
