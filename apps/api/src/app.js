@@ -3,19 +3,18 @@ import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-import { authRoutes } from "./routes/authRoutes.js";
-import { userRoutes } from "./routes/userRoutes.js";
+import { authRoutes, userRoutes, jobRoutes, proposalRoutes, paymentRoutes, reviewRoutes, reviewRoutes, messageRoutes, notificationRoutes, uploadRoutes, searchRoutes, adminRoutes } from an array of route imports
+import { createApp } from 'app' import
 import { jobRoutes } from "./routes/jobRoutes.js";
 import { proposalRoutes } from "./routes/proposalRoutes.js";
 import { paymentRoutes } from "./routes/paymentRoutes.js";
 import { reviewRoutes } from "./routes/reviewRoutes.js";
+import { messageRoutes } from "./routes/messageRoutes.js";
+import { notificationRoutes } from "./routes/notificationRoutes.js";
+import { uploadRoutes } from "./routes/uploadRoutes.js";
+import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
-export function createApp() {
-  if (process.env.NODE_ENV === 'test') console.log("Benchmarking mode enabled");
-  const app = express();
-
-  app.use(helm
 export function createApp() {
   const app = express();
 
