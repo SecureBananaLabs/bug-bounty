@@ -1,12 +1,7 @@
 # Pixel Art Submission
 
-## Cyberpunk City Sunset
+**Title:** Cyberpunk Cityscape at Dusk
 
-**File:** `cyberpunk_city.png`
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+**Description:** A 64x64 pixel art depicting a futuristic cyberpunk city skyline with neon-lit buildings, reflecting off rain-soaked streets. Created to capture the nostalgic feel of retro-futurism with vibrant purple, cyan, and magenta tones against a deep twilight sky.
 
-### Description
-A vibrant cyberpunk cityscape at sunset, featuring neon-lit skyscrapers, 
-flying vehicles, and a glowing sun reflecting off wet streets. Created with 
-a limited color palette to emphasize the retro-futuristic pixel art aesthetic.
+**Why:** I chose this theme because cyberpunk aesthetics blend creativity with technical constraint — the limited palette and small canvas force deliberate choices, making every pixel meaningful. It represents the intersection of human imagination and digital precision.
