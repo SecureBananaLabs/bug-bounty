@@ -2,21 +2,18 @@
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
 # FreelanceFlow Monorepo
-# FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
 
 - `apps/web` — Next.js 14 App Router frontend
+- `apps/api` — Express.js backend with layered REST API
 - `packages/db` — Prisma schema and database package
 - `packages/ui` — Shared UI components
 
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
 ## Frontend
 
-The web app includes pages for:
 The web app includes pages for:
 
 - Landing
@@ -89,3 +86,6 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+**FreelanceFlow** is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+
+
