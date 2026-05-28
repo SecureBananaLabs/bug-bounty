@@ -1,8 +1,8 @@
 {
-  "name": "freelanceflow",
-  "version": "1.0.0",
-  "description": "SecureBananaLabs bug bounty program",
-  "main": "index.js",
+  "name": "freelance-platform-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
@@ -10,12 +10,12 @@
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
-}
+{
+  "name": "api",
+  "version": "1.0.0",
+  "private": true,
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "helmet": "^7.1.0",
-    "stripe": "^14.4.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
+    "stripe": "^14.0.0"
+  }
+}
+}
