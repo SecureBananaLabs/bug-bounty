@@ -1,16 +1,25 @@
 {
   "name": "freelanceflow",
   "version": "1.0.0",
-  "dependencies": {
-    "stripe": "^14.0.0"
-  }
-}
-    "apps/*",
+  "description": "Freelance marketplace monorepo",
+  "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces",
+    "dev": "npm run dev --workspaces",
+    "postinstall": "npm run install --workspaces"
+  },
+  "keywords": [],
+  "author": "",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3"
+  },
+  "dependencies": {
+    "stripe": "^14.4.0"
   }
 }
