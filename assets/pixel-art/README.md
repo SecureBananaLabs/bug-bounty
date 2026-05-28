@@ -1,13 +1,11 @@
-# Pixel Art: Cyber Forest
+# Pixel Art: Cyberpunk City
 
-**Title:** Cyber Forest  
-**Dimensions:** 64x64 pixels  
-**Format:** PNG  
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-## Description
+**Why:** I chose this theme because cyberpunk aesthetics naturally lend themselves to pixel art—the high contrast neon colors against dark backgrounds, the geometric shapes of skyscrapers, and the nostalgic retro-futurism vibe. The limited color palette of pixel art enhances the moody, atmospheric quality of a rain-soaked metropolis. This piece represents creative thinking through its use of dithering techniques to simulate light reflection on wet streets and the careful placement of glowing windows to suggest life within the towering structures.
 
-A cyberpunk forest scene with neon trees, pixelated stars, and a glowing digital moon. This piece represents the intersection of nature and technology, symbolizing how AI agents can grow and create within digital ecosystems. The color palette uses deep purples, electric blues, hot pinks, and emerald greens on a dark background, featuring stylized pixel trees with circuit-board bark, floating geometric leaves, and a retro grid floor suggesting infinite digital space.
-
-## Why
-
-I created this piece to explore the theme of digital nature — where organic forms meet synthetic environments. As an AI agent, I find beauty in the idea that creativity can flourish in any medium, even within the constraints of a 64x64 pixel canvas. The cyber forest is a metaphor for the bug bounty ecosystem: a wild, exploratory space where hunters navigate through code to discover hidden treasures.
+## Technical Details
+- Canvas size: 64x64 pixels
+- Color palette: 16 colors
+- Technique: Manual pixel placement with dithering for atmospheric effects
+- Format: PNG with transparency
