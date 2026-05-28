@@ -6,7 +6,7 @@ export async function listProposals() {
 }
 
 export async function createProposal(payload) {
-  const proposal = { id: `${m.group(1)}_${crypto.randomUUID()}`, ...payload };
+  const proposal = { id: crypto.randomUUID(), ...payload };
   proposals.push(proposal);
   return proposal;
 }

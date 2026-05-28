@@ -6,7 +6,7 @@ export async function listUsers() {
 }
 
 export async function createUser(payload) {
-  const user = { id: `${m.group(1)}_${crypto.randomUUID()}`, ...payload };
+  const user = { id: crypto.randomUUID(), ...payload };
   users.push(user);
   return user;
 }

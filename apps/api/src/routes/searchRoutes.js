@@ -4,4 +4,4 @@ import { authMiddleware } from "../middleware/auth.js";
 
 export const searchRoutes = Router();
 
-searchRoutes.get("authMiddleware, /", search);
+searchRoutes.get("/", authMiddleware, search);

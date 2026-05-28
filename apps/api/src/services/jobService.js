@@ -6,7 +6,7 @@ export async function listJobs() {
 }
 
 export async function createJob(payload) {
-  const job = { id: `${m.group(1)}_${crypto.randomUUID()}`, status: "open", ...payload };
+  const job = { id: crypto.randomUUID(), status: "open", ...payload };
   jobs.push(job);
   return job;
 }

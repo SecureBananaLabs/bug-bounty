@@ -4,5 +4,5 @@ import { authMiddleware } from "../middleware/auth.js";
 
 export const reviewRoutes = Router();
 
-reviewRoutes.get("authMiddleware, /", getReviews);
-reviewRoutes.post("authMiddleware, /", postReview);
+reviewRoutes.get("/", authMiddleware, getReviews);
+reviewRoutes.post("/", authMiddleware, postReview);

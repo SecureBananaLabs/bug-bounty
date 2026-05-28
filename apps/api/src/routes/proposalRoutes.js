@@ -4,5 +4,5 @@ import { authMiddleware } from "../middleware/auth.js";
 
 export const proposalRoutes = Router();
 
-proposalRoutes.get("authMiddleware, /", getProposals);
-proposalRoutes.post("authMiddleware, /", postProposal);
+proposalRoutes.get("/", authMiddleware, getProposals);
+proposalRoutes.post("/", authMiddleware, postProposal);

@@ -6,7 +6,7 @@ export async function listReviews() {
 }
 
 export async function createReview(payload) {
-  const review = { id: `${m.group(1)}_${crypto.randomUUID()}`, ...payload };
+  const review = { id: crypto.randomUUID(), ...payload };
   reviews.push(review);
   return review;
 }

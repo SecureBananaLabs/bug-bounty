@@ -4,5 +4,5 @@ import { authMiddleware } from "../middleware/auth.js";
 
 export const jobRoutes = Router();
 
-jobRoutes.get("authMiddleware, /", getJobs);
-jobRoutes.post("authMiddleware, /", postJob);
+jobRoutes.get("/", authMiddleware, getJobs);
+jobRoutes.post("/", authMiddleware, postJob);

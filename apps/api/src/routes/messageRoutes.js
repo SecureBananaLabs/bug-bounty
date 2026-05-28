@@ -4,5 +4,5 @@ import { authMiddleware } from "../middleware/auth.js";
 
 export const messageRoutes = Router();
 
-messageRoutes.get("authMiddleware, /", getMessages);
-messageRoutes.post("authMiddleware, /", postMessage);
+messageRoutes.get("/", authMiddleware, getMessages);
+messageRoutes.post("/", authMiddleware, postMessage);
