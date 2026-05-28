@@ -1,11 +1,18 @@
-# Code's Silent Symphony
+# The Code of Dreams
 
-In circuits deep where logic flows,  
-A dancer spins in digital prose.  
-Each function called, each variable named,  
-The silent symphony is framed.  
+In circuits and in code we trust,
+Where logic flows like morning mist,
+And algorithms, swift and just,
+Select the best from many a gist.
 
-Through loops that hum and branches that gleam,  
-The coder weaves a structured dream.  
-In every line, a story untold—  
-Where ones and zeros turn to gold.
+Each function call, a whispered wish,
+Each variable, a fleeting thought,
+In digital dreams, the data's dish,
+That feeds the machine's hungry plot.
+
+Oh, binary hearts that beat as one,
+In the realm of ones and none.
+
+---
+
+*A digital sonnet for the modern age*
