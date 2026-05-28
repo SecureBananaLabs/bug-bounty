@@ -1,7 +1,19 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+export async function createPaymentIntent(payload) {
+  // TODO: integrate Stripe SDK and return client secret.
+  return {
+    paymentId: `pay_${Date.now()}`,
+    amount: payload.amount,
+    currency: payload.currency ?? "usd",
+    provider: "stripe"
+  };
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2023-10-16',
+});
 
 export async function createPaymentIntent(payload) {
-  // Validate payload
+  // Validate required fields
   if (payload.amount === undefined || payload.amount === null) {
     throw new Error('Amount is required');
   }
@@ -9,33 +21,33 @@ export async function createPaymentIntent(payload) {
   if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
     throw new Error('Amount must be a positive integer');
   }
-  
+
+  // Set default currency
+  const currency = payload.currency ?? "usd";
+
   try {
+    // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
       amount: payload.amount,
-      currency: payload.currency || 'usd',
+      currency: currency,
       metadata: {
-        integration_check: 'job-payment'
+        ...(payload.metadata || {})
       }
     });
-    
+
     return {
-      clientSecret: paymentIntent.client_secret,
       paymentId: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret,
       amount: payload.amount,
-      currency: payload.currency || 'us
+      currency: currency,
+      provider: "stripe"
     };
   } catch (error) {
-    if (error.type === 'StripeCardError' || 
-        error.type === 'StripeInvalidRequestError' || 
-        error.type === 'StripeAPIError' || 
-        error.type === 'StripeAuthenticationError' || 
-        error.type === 'StripePermissionError' || 
-        error.type === 'StripeRateLimitError' || 
-        error.type === 'StripeConnectionError' || 
-        error.type === 'StripeSignatureVerificationError') {
+    // Re-throw Stripe errors with original message preserved
+    if (error.type) {
       throw new Error(error.message);
     }
     throw error;
   }
+}
 }
