@@ -1,0 +1,10 @@
+version https://git-lfs.github.com/spec/v1
+oid sha256:0000000000000000000000000000000000000000000000000000000000000000
+size 0
+# FreelanceFlow Monorepo
+
+![Pixel Art](/apps/web/public/assets/pixel-art/freelance-pixel-heart.png)
+
+FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+
+## Workspace Structure
