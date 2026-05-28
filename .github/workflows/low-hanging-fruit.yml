@@ -21,26 +21,95 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node .github/scripts/detect-low-hanging-fruit.js
+      - name: Detect low hanging fruit and create issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
-
-      - name: Create GitHub issues for detected items
-        if: steps.detect.outputs.issues-created == 'true'
         run: |
-          echo "Low hanging fruit issues created successfully"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+          const { execSync } = require('child_process');
 
-      - name: Report status
-        if: always()
-        run: |
-          echo "Low hanging fruit automation completed"
+          // Helper to run GitHub CLI commands
+          function gh(args) {
+            return execSync('gh ' + args, { encoding: 'utf-8', stdio: 'pipe' });
+          }
+
+          // Find TODO/FIXME/XXX/HACK comments in source files
+          function findTodoComments() {
+            const results = [];
+            const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rs', '.md'];
+            
+            function scanDir(dir, relativePath = '') {
+              if (dir.includes('node_modules') || dir.includes('.git') || dir.includes('dist')) return;
+              
+              const items = fs.readdirSync(dir, { withFileTypes: true });
+              for (const item of items) {
+                const fullPath = path.join(dir, item.name);
+                const relPath = path.join(relativePath, item.name);
+                
+                if (item.isDirectory()) {
+                  scanDir(fullPath, relPath);
+                } else if (item.isFile() && extensions.some(ext => item.name.endsWith(ext))) {
+                  try {
+                    const content = fs.readFileSync(fullPath, 'utf-8');
+                    const lines = content.split('\n');
+                    lines.forEach((line, index) => {
+                      const patterns = ['TODO', 'FIXME', 'XXX', 'HACK', 'BUG'];
+                      for (const pattern of patterns) {
+                        if (line.includes(pattern) && !line.includes('issue #')) {
+                          results.push({
+                            file: relPath,
+                            line: index + 1,
+                            text: line.trim(),
+                            pattern: pattern
+                          });
+                        }
+                      }
+                    });
+                  } catch (e) {
+                    // Skip files we can't read
+                  }
+                }
+              }
+            }
+            
+            scanDir('.');
+            return results;
+          }
+
+          // Check if issue already exists
+          function issueExists(title) {
+            try {
+              const result = gh('issue list --search \"' + title + '\" --state all --json number');
+              const issues = JSON.parse(result);
+              return issues.length > 0;
+            } catch (e) {
+              return false;
+            }
+          }
+
+          // Create GitHub issue
+          function createIssue(title, body) {
+            const escapedBody = body.replace(/\"/g, '\\\"').replace(/\`/g, '\\\`');
+            const cmd = 'issue create --title \"' + title + '\" --body \"' + escapedBody + '\"';
+            return gh(cmd);
+          }
+
+          // Main execution
+          const todos = findTodoComments();
+          console.log('Found ' + todos.length + ' TODO/FIXME items');
+
+          const createdIssues = [];
+          for (const todo of todos.slice(0, 5)) { // Limit to 5 issues per run
+            const title = '[Low Hanging Fruit] ' + todo.pattern + ' in ' + todo.file + ' (line ' + todo.line + ')';
+            
+            if (issueExists(title)) {
+              console.log('Issue already exists: ' + title);
+              continue;
+            }
+
+            const body = '## Low Hanging Fruit: ' + todo.pattern + '\n\n' +
+              '**File:** ' + todo.file + '\n' +
+              '**Line:** ' + todo.line + '\n\n' +
+              '**Code:**\n
