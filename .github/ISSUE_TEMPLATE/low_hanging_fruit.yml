@@ -1,0 +1,52 @@
+name: "Low Hanging Fruit"
+about: "Good first issue for new contributors"
+title: "[LOW-HANGING-FRUIT] "
+labels: ["bug", "good first issue", "help wanted"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: "Bug Description"
+      description: "Describe the bug you found"
+      placeholder: "Describe the bug..."
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: "Steps to Reproduce"
+      description: "List steps to reproduce the bug"
+      placeholder: "1. Go to...\n2. Click on...\n3. See error"
+  - type: textarea
+    id: environment-info
+    attributes:
+      label: "Environment Information"
+      value: |
+        - OS: [e.g. macOS, Windows]
+        - Browser: [e.g. Chrome, Safari]
+        - Version: [e.g. 22]
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional Context"
+     5. If you have any additional information, please provide it here.\n\n"
+      You can also include screenshots or any other information that might help us understand your request.
+      "
+  - type: checkboxes
+    attributes:
+      label: "Checklist"
+      options:
+        - label: "I am using the latest version of the code"
+          required: true
+        - label: "I have searched the existing issues and found no similar issue"
+          required: true
+        - label: "I have read the documentation and followed the best practices"
+          required: true
+        - label: "I understand that I am only allowed to work on this issue if I created it"
+          required: true
+  - type: markdown
+    attributes:
+      value: |
+        This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would not like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
