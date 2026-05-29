@@ -3,11 +3,6 @@
   "private": true,
   "main": "src/index.ts",
   "peerDependencies": {
-    "react": ">=18"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": false
-    }
+    "react": ">=17.0.0"
   }
 }
