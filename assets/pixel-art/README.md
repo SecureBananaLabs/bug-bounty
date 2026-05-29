@@ -1,7 +1,9 @@
-# Cyberpunk Cityscape Pixel Art
+# Pixel Art Submission
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk city at night with neon-lit skyscrapers, holographic billboards, and rain-slicked streets reflecting vibrant colors.
+## What I Made
+A cyberpunk cityscape pixel art scene featuring neon-lit skyscrapers against a starry night sky.
 
-**Why:** I chose this theme because cyberpunk aesthetics perfectly showcase the creative potential of pixel art—limited resolution forces expressive use of color and light to convey atmosphere, mood, and depth. The contrast between dark shadows and bright neon creates visual drama that celebrates the retro-futuristic spirit of pixel art while demonstrating technical skill with dithering and palette selection.
+## Why
+I chose this theme because cyberpunk aesthetics are deeply rooted in pixel art history, from classic games to modern indie titles. The high contrast between dark shadows and vibrant neon colors allows for maximum visual impact within the constraints of pixel art, while the vertical composition of cityscapes creates natural depth and perspective that translates beautifully to a limited resolution canvas.
 
-**Canvas Size:** 64x64 pixels (minimum requirement met)
+Canvas size: 64x64 pixels (minimum)
