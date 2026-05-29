@@ -1,9 +1,11 @@
 {
   "latency": {
-    "p99": 500
+    "p99": 200
   },
-  "errorRate": 2.0,
-  "requestsPerSecond": 50,
-  "concurrentUsers": 10,
-  "duration": 10
+  "rps": {
+    "minimum": 100
+  },
+  "errorRate": {
+    "max": 1
+  }
 }
