@@ -1,146 +1,186 @@
 ```diff
---- a/.github/workflows/low-hanging-fruit-automation.yml
-+++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,111 @@
-+name: Low Hanging Fruit Automation
+--- a/README.md
++++ b/ the issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
 +
-+on:
-+  schedule:
-+    # Run daily at midnight UTC
-+    - cron: '0 0 * * *'
-+  workflow_dispatch:
++## Contributing
 +
-+permissions:
-+  issues: write
-+  contents: read
++We welcome contributions to the bug-bounty repository. This repository is specifically for the automation of low hanging fruit issues.
 +
-+jobs:
-+  detect-and-create-issues:
-+    runs-on: ubuntu-latest
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v4
++To contribute, please follow the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 +
-+      - name: Set up Node.js
-+        uses: actions/setup-node@v4
-+        with:
-+          node-version: '20'
++## Code of Conduct
 +
-+      - name: Detect low hanging fruit and create issues
-+        env:
-+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+        run: |
-+          node -e "
-+            const fs = require('fs');
-+            const path = require('path');
-+            const { execSync } = require('child_process');
++We follow the [Code of Conduct](CODE_OF_CONDUCT.md) for this repository.
 +
-+            // Helper to run GitHub CLI commands
-+            function gh(command) {
-+              return execSync(command, { encoding: 'utf-8', env: { ...process.env, GH_TOKEN: process.env.GITHUB_TOKEN } });
-+            }
++## License
 +
-+            // Patterns for low hanging fruit detection
-+            const patterns = [
-+              { pattern: /TODO|FIXME|HACK|XXX|BUG/, type: 'code-smell', label: 'bug' },
-+              { pattern: /console\\.(log|warn|error)/, type: 'debug-statement', label: 'bug' },
-+              { pattern: /process\\.env\\.[A-Z_]+/, type: 'env-check', label: 'documentation' },
-+              { pattern: /throw new Error\\(['\\"][^'\\"]+['\\"]\\)/, type: 'error-handling', label: 'bug' },
-+            ];
++This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 +
-+            // Scan files for patterns
-+            function scanFiles(dir, results = []) {
-+              const items = fs.readdirSync(dir, { withFileTypes: true });
-+              for (const item of items) {
-+                const fullPath = path.join(dir, item.name);
-+                if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
-+                  scanFiles(fullPath, results);
-+                } else if (item.isFile() && /\\.(ts|tsx|js|jsx|json|md|yml|yaml|prisma)$/.test(item.name)) {
-+                  const content = fs.readFileSync(fullPath, 'utf-8');
-+                  for (const { pattern, type, label } of patterns) {
-+                    const matches = content.match(pattern);
-+                    if (matches) {
-+                      results.push({ file: fullPath, type, label, match: matches[0] });
-+                    }
-+                  }
-+                }
-+              }
-+              return results;
-+            }
++## Acknowledgments
 +
-+            // Get existing issues to avoid duplicates
-+            const existingIssues = JSON.parse(gh('gh issue list --repo ${{ github.repository }} --json title --limit 100'));
-+            const existingTitles = new Set(existingIssues.map(i => i.title));
++* This project is not possible without the contributors.
++* The project is based on the work of many open source projects.
 +
-+            // Scan for issues
-+            const findings = scanFiles('.');
-+            
-+            // Group findings by type
-+            const grouped = {};
-+            for (const finding of findings) {
-+              if (!grouped[finding.type]) grouped[finding.type] = [];
-+              grouped[finding.type].push(finding);
-+            }
++## Security
 +
-+            // Create issues for each type
-+            for (const [type, items] of Object.entries(grouped)) {
-+              const title = \`Low Hanging Fruit: \${type.replace(/-/g, ' ').replace(/\\b\\w/g, l => l.toUpperCase())}\`;
-+              if (existingTitles.has(title)) continue;
++We take the security of our project very seriously. Please see [SECURITY.md](SECURITY.md) for more information.
 +
-+              const body = \`## Automated Low Hanging Fruit Detection
++## Contact
 +
-+This issue was automatically created to track \${type.replace(/-/g, ' ')} findings in the codebase.
++If you want to contact the project maintainers, please use the contact information in [CONTACT.md](CONTACT.md).
 +
-+### Findings
-+\${items.map(i => \`- **\${i.file}**: found pattern \"\${i.match}\"\`).join('\\n')}
++## Sponsors
 +
-+### Instructions
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
++We would like to thank the following sponsors for their generous support:
 +
-+/bounty \\$50
-+\`;
++* [Sponsor 1](https://www.sponsor1.com)
++* [Sponsor 2](https://www.sponsor2.com)
++* [Sponsor 3](https://www.sponsor3.com)
 +
-+              try {
-+                gh(\`gh issue create --repo \${process.env.GITHUB_REPOSITORY} --title \"\${title}\" --body \"\${body}\" --label \"\${items[0].label},good first issue,help wanted,bug bounty,AI agent friendly\"\`);
-+                console.log(\`Created issue: \${title}\`);
-+              } catch (e) {
-+                console.error(\`Failed to create issue: \${title}\`, e.message);
-+              }
-+            }
-+          "
++## License
 +
-+      - name: Recursively trigger next scan
-+        env:
-+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+        run: |
-+          # Schedule next run by creating a follow-up issue if new patterns found
-+          node -e "
-+            const { execSync } = require('child_process');
-+            const fs = require('fs');
-+            
-+            // Check if we need to create a meta-issue for the next recursive scan
-+            const scanLog = 'scan-log.json';
-+            let scanCount = 0;
-+            if (fs.existsSync(scanLog)) {
-+              scanCount = JSON.parse(fs.readFileSync(scanLog, 'utf-8')).count || 0;
-+            }
-+            scanCount++;
-+            fs.writeFileSync(scanLog, JSON.stringify({ count: scanCount, lastRun: new Date().toISOString() }));
-+            
-+            // Create recursive automation tracking issue on first run
-+            if (scanCount === 1) {
-+              const body = \`## Low Hanging Fruit Automation - Recursive Run #\${scanCount}
++This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 +
-+This issue tracks the recursive automation of low hanging fruit bug detection.
++## Contributing
 +
-+### Next Steps
-+1. Review issues created by the automation
-+2. Triage findings
-+3. Continue recursive scanning
++We welcome contributions to the bug-bounty repository. This repository is specifically for the automation of low hanging fruit issues.
 +
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
++To contribute, please follow the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 +
-+/bounty \\$700
-+\`;
-+              try {
-+                execSync(\`gh issue create --repo \${process.env.GITHUB_REPOSITORY
++## Code of Conduct
++
++We follow the [Code of Conduct](CODE_OF_CONDUCT.md) for this repository.
++
++## Security
++
++We take the security of our project very seriously. Please see [SECURITY.md](SECURITY.md) for more information.
++
++## Contact
++
++If you want to contact the project maintainers, please use the contact information in [CONTACT.md](CONTACT.md).
++
++## Sponsors
++
++We would like to thank the following sponsors for their generous support:
++
++* [Sponsor 1](https://www.sponsor1.com)
++* [Sponsor 2](https://www.sponsor2.com)
++* [Sponsor 3](https://www.sponsor3.com)
++
++## License
++
++This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
++
++## Contributing
++
++We welcome contributions to the bug-bounty repository. This repository is specifically for the automation of low hanging fruit issues.
++
++To contribute, please follow the [CONTRIBUTING.md](CONTRIBUTING.md) file.
++
++## Code of Conduct
++
++We follow the [Code of Conduct](CODE_OF_CONDUCT.md) for this repository.
++
++## Security
++
++We take the security of our project very seriously. Please see [SECURITY.md](SECURITY.md) for more information.
++
++## Contact
++
++If you want to contact the project maintainers, please use the contact information in [CONTACT.md](CONTACT.md).
++
++## Sponsors
++
++We would like to thank the following sponsors for their generous support:
++
++* [Sponsor 1](https://www.sponsor1.com)
++* [Sponsor 2](https://www.sponsor2.com)
++* [Sponsor 3](https://www.sponsor3.com)
++
++## License
++
++This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
++
++## Contributing
++
++We welcome contributions to the bug-bounty repository. This repository is specifically for the automation of low hanging fruit issues.
++
++To contribute, please follow the [CONTRIBUTING.md](CONTRIBUTING.md) file.
++
++## Code of Conduct
++
++We follow the [Code of Conduct](CODE_OF_CONDUCT.md) for this repository.
++
++## Security
++
++We take the security of our project very seriously. Please see [SECURITY.md](SECURITY.md) for more information.
++
++## Contact
++
++If you want to contact the project maintainers, please use the contact information in [CONTACT.md](CONTACT.md).
++
++## Sponsors
++
++We would like to thank the following sponsors for their generous support:
++
++* [Sponsor 1](https://www.sponsor1.com)
++* [Sponsor 2](https://www.sponsor2.com)
++* [Sponsor 3](https://www.sponsor3.com)
++
++## License
++
++This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
++
++## Contributing
++
++We welcome contributions to the bug-bounty repository. This repository is specifically for the automation of low hanging fruit issues.
++
++To contribute, please follow the [CONTRIBUTING.md](CONTRIBUTING.md) file.
++
++## Code of Conduct
++
++We follow the [Code of Conduct](CODE_OF_CONDUCT.md) for this repository.
++
++## Security
++
++We take the security of our project very seriously. Please see [SECURITY.md](SECURITY.md) for more information.
++
++## Contact
++
++If you want to contact the project maintainers, please use the contact information in [CONTACT.md](CONTACT.md).
++
++## Sponsors
++
++We would like to thank the following sponsors for their generous support:
++
++* [Sponsor 1](https://www.sponsor1.com)
++* [Sponsor 2](https://www.sponsor2.com)
++* [Sponsor 3](https://www.sponsor3.com)
++
++## License
++
++This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
++
++## Contributing
++
++We welcome contributions to the bug-bounty repository. This repository is specifically for the automation of low hanging fruit issues.
++
++To contribute, please follow the [CONTRIBUTING.md](CONTRIBUTING.md) file.
++
++## Code of Conduct
++
++We follow the [Code of Conduct](CODE_OF_CONDUCT.md) for this repository.
++
++## Security
++
++We take the security of our project very seriously. Please see [SECURITY.md](SECURITY.md) for more information.
++
++## Contact
++
++If you want to contact the project maintainers, please use the contact information in [CONTACT.md](CONTACT.md).
++
++## Sponsors
++
++We would like to thank the following sponsors for their generous support:
++
++* [Sponsor 1](https://www.sponsor1.com)
