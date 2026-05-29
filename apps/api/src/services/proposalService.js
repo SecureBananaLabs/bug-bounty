@@ -1,6 +1,9 @@
 const proposals = [];
 
-export async function listProposals() {
+export async function listProposals(userId) {
+  if (userId) {
+    return proposals.filter((p) => p.freelancerId === userId || p.clientId === userId);
+  }
   return proposals;
 }
 
