@@ -1,9 +1,7 @@
-import 'dotenv/config';
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
-import { errorHandler } from "./middleware/errorHandler.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
@@ -14,22 +12,18 @@ import { reviewRoutes } from "./routes/reviewRoutes.js";
 import { messageRoutes } from "./routes/messageRoutes.js";
 import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
-import { reviewRoutes } from "./routes/reviewRoutes.js";
-import { messageRoutes } from "./routes/messageRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
+import { adminRoutes } from "./routes/adminRoutes.js";
 
 export function createApp() {
   const app = express();
+
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
-  });
   app.use(apiLimiter);
 
-  app.use("/api/auth", authRoutes);
-  app.use("/api/users", userRoutes);
+  app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
 
