@@ -41,4 +41,14 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
+# Contributing to Bug Bounty Program
+
+## Low Hanging Fruit Automation
+
+This project automates the detection and creation of low-hanging fruit issues. To contribute:
+
+1. Identify a simple feature/bug from the repository.
+2. Create a GitHub issue for it with the required message.
+3. Reference the specific issue #743 for the automation process.
+4. Include the required string in your issue description.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
