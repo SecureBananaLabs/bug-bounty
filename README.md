@@ -1,6 +1,6 @@
 # Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f">
+<p>(Image placeholder if it doesn't render properly)</p>
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
