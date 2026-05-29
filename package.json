@@ -1,32 +1,129 @@
-{
   "name": "freelanceflow",
   "version": "1.0.0",
-  "description": "A full-stack freelance marketplace",
-  "main": "index.js",
-  "scripts": {
-    "build": "echo 'Building all apps and packages'",
-    "dev": "echo 'Running all apps in development mode'",
-    "benchmark": "node benchmarks/run-benchmarks.js"
+  "private": true,
+import http from 'k6/http';
+import { check, group } from 'k6';
+import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.1/index.js';
+import { githubComment } from 'https://jslib.k6.io/github/1.1.0/index.js';
+
+const serverUrl = __ENV.SERVER_URL || 'http://localhost:3000';
+
+export const options = {
+  scenarios: {
+    benchmark: {
+      executor: 'constant-vus',
+      vus: 10,
+      duration: '30s',
+      gracefulStop: '5s',
+    },
   },
+};
+
+export function setup() {
+  // Setup benchmark token if needed
+  return { token: __ENV.BENCHMARK_TOKEN || '' };
+}
+
+export function handleSummary(output) {
+  return textSummary(output);
+}
+
+export default function (data) {
+  const token = data.token;
+  const params = token ? { headers: { 'Authorization': `Bearer ${token}` } } : {};
+
+  group('API Benchmarks', () => {
+    const endpoints = [
+      '/api/auth/login',
+      '/api/auth/register',
+      '/api/users/profile',
+      '/api/jobs',
+      '/api/jobs/1', // Sample job ID
+      '/api/proposals',
+      '/api/payments',
+      '/api/reviews',
+      '/api/messages',
+      '/api/notifications',
+      '/api/search',
+      '/api/admin'
+    ];
+
+    endpoints.forEach(endpoint => {
+      const res = http.get(`${serverUrl}${endpoint}`, params);
+      check(res, {
+        'status is 200': (r) => r.status === 200 || r.status === 201,
+      });
+    });
+  });
+}
+
+const test = {
+  'github.com': {
+    failRate: 0.0
+  },
+  'httpbin.org': {
+    min_fail_rate: 0.0,
+    max_rps: 1000,
+    expected_response: true,
+    duration: '30s',
+    time_to_first_byte: '100ms'
+  }
+};
+
+export { test };
+
+// Thresholds configuration
+export const thresholds = {
+  'http_req_duration': ['p(95)<500', 'p(99)<1000'],
+  'http_req_failed': ['rate<0.1'],
+  'http_req_duration': ['p(90)<400'],
+  'http_reqs': ['rate>4'],
+  'data_received': ['rate>100'],
+  'checks': ['rate>0.95']
+};
+
+// Exporting a test makes the `k6 run` autocompletion work
+export function setup() {
+  // No setup needed for this test
+}
+
+export function handleSummary(data) {
+  return githubComment(data, {
+    name: 'k6 results',
+    width: 'full',
+    href: 'https://github.com/grafana/k6-example-'
+  });
+}
+
+export default function () {
+  const res = http.get('https://httpbin.org/json');
+  check(res, {
+    'response code is 200': (r) => r.status === 200,
+  });
+}
+
+export function handleSummary(data) {
+  return textSummary(data, {
+    width: 'half',
+  });
+}
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "helmet": "^7.0.0",
-    "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^3.0.3"
-  },
-  "optionalDependencies": {
-    "fsevents": "*"
+  "scripts": {
+    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "lint": "echo \"No root lint configured\"",
+    "test": "npm run test -w apps/api"
   }
 }
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "benchmarks/*"
+  ],
+  "scripts": {
+    "benchmark": "node benchmarks/index.js"
+  },
+  "devDependencies": {
