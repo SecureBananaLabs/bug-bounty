@@ -1,1 +1,30 @@
-{"p99_latency_ms":500,"error_rate_pct":1,"min_rps":50}
+{
+  "*": {
+    "p99_warn": 2000,
+    "p99_fail": 5000,
+    "error_rate_warn": 0.05,
+    "error_rate_fail": 0.10
+  },
+  "Register": {
+    "p99_warn": 3000,
+    "p99_fail": 6000,
+    "error_rate_warn": 0.03
+  },
+  "Login": {
+    "p99_warn": 2000,
+    "p99_fail": 4000,
+    "error_rate_warn": 0.03
+  },
+  "List Jobs": {
+    "p99_warn": 1000,
+    "p99_fail": 3000
+  },
+  "Create Job": {
+    "p99_warn": 3000,
+    "p99_fail": 5000
+  },
+  "Create Payment Intent": {
+    "p99_warn": 3000,
+    "p99_fail": 6000
+  }
+}
