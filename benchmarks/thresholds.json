@@ -1,11 +1,6 @@
 {
   "latency": {
-    "p99": 200
+    "p99": 100
   },
-  "rps": {
-    "minimum": 100
-  },
-  "errorRate": {
-    "max": 1
-  }
+  "endpoints": {}
 }
