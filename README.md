@@ -1,7 +1,7 @@
 # Project
-<img width="663" height="183" alt="FreelanceFlow Logo" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-> 🎨 Check out our community pixel art gallery in [`/assets/pixel-art/`](./assets/pixel-art/)
+![Pixel Art](/assets/pixel-art/cyberpunk_city.png)
 
 # FreelanceFlow Monorepo
 
