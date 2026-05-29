@@ -1,6 +1,5 @@
 {
   "latency": {
     "p99": 100
-  },
-  "endpoints": {}
+  }
 }
