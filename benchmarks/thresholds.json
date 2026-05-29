@@ -1,8 +1,11 @@
 {
+  "p99Latency": 500,
+  "errorRate": 5,
+  "duration": "10s",
+  "connections": 50,
+  "pipelining": 1,
   "thresholds": {
     "p99Latency": 500,
     "errorRate": 5
-  },
-  "duration": "5s",
-  "connections": 10
+  }
 }
