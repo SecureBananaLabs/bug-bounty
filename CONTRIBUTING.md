@@ -41,15 +41,4 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing to the Project
-
-## Low Hanging Fruit Automation
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Contributing Guidelines
-
-We welcome contributions from the community. Please read our contributing guidelines before you start.
-
-This project uses a monorepo structure with the following packages:
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
