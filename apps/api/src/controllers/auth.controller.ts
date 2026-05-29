@@ -1,15 +1,20 @@
 import { Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
+import { registerUser } from '../services/auth.service';
+import { validateRegistrationInput } from '../utils/validation';
 
-class AuthController {
-  static async register(req: Request, res: Response) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+export const register = async (req: Request, res: Response) => {
+  try {
+    const { email, password, role } = req.body;
+    
+    // Remove admin role assignment from user input
+    if (role === 'admin' || role === 'ADMIN') {
+      return res.status(400).json({ error: 'Admin role cannot be self-assigned' });
     }
 
-    // Prevent admin role assignment during registration
-    const { roles = [] } = req.body;
-    const sanitizedRoles = roles.filter((role: string) => role !== 'admin');
-    req.body.roles = sanitizedRoles;
+    const validatedData = validateRegistrationInput(req.body);
+    const result = await registerUser(validatedData);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Registration failed' });
   }
+};
