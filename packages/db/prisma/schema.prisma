@@ -12,32 +12,26 @@ enum UserRole {
   FREELANCER
   ADMIN
 }
-  id        String   @id @default(uuid())
+
+enum JobStatus {
+  DRAFT
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id             String      @id @default(cuid())
+  email          String      @unique
+  passwordHash   String
+  id        String   @id @default(cuid())
   email     String   @unique
-  name      String
-  role      Role     // ADMIN, FREELANCER, CLIENT
+  name      String?
+  role      Role     @default(CLIENT)
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-  @@map("users")
-}
-
-enum Role {
-  ADMIN
-  FREELANCER
-  CLIENT
-}
-
-model Job {
-  id          String   @id @default(uuid())
-  title       String
-  role           UserRole    @default(CLIENT)
-  isVerified     Boolean     @default(false)
-  skills         Skill[]
-  postedJobs     Job[]       @relation("ClientJobs")
-  proposals      Proposal[]
   sentMessages   Message[]   @relation("SentMessages")
   receivedMsgs   Message[]   @relation("ReceivedMessages")
   reviewsGiven   Review[]    @relation("Reviewer")
