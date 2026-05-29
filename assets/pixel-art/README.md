@@ -1,12 +1,13 @@
-# Pixel Art: Retro Robot
+# Pixel Art: Cyberpunk City
 
-**File:** `retro-robot.png`
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-## Description
+**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with dark atmospheric tones, which creates a striking visual contrast that works beautifully in pixel art. The scene captures a lone figure looking out at towering skyscrapers with glowing windows and holographic advertisements, evoking a sense of wonder and solitude in a high-tech future.
 
-A friendly retro robot pixel art character created with a limited 16-color palette
-inspired by classic 8-bit gaming systems. The design features a square head with
-an blinking antenna, glowing eyes, and articulated arms — evoking nostalgia for
-vintage sci-fi while maintaining clean, readable pixel aesthetics suitable for icons or avatars.
+## Details
+- **Canvas size:** 64x64 pixels
+- **Format:** PNG with transparency
+- **Color palette:** Limited 16-color palette with neon pinks, cyans, and deep purples
+- **Inspiration:** Classic cyberpunk visuals from games like Cyberpunk 2077 and Blade Runner
+
+Created with creative thinking and attention to retro pixel art techniques.
