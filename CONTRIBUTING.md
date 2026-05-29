@@ -1,13 +1,12 @@
-<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would not like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-<img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
+## Low Hanging Fruit Automation
 
-# Contributing Guidelines
+This project is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-Thank you for contributing to this bug bounty repository.
+## Bug bounty
 
-## Eligibility for Bounty Payment
-
+The issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 - Bounty is paid **only** when your code is merged into the `main` branch.
 - Opening a pull request or receiving review feedback does **not** guarantee payment.
 - Closed, rejected, or stale pull requests are not eligible for payout.
@@ -41,14 +40,4 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing to Bug Bounty Program
-
-## Low Hanging Fruit Automation
-
-This project automates the detection and creation of low-hanging fruit issues. To contribute:
-
-1. Identify a simple feature/bug from the repository.
-2. Create a GitHub issue for it with the required message.
-3. Reference the specific issue #743 for the automation process.
-4. Include the required string in your issue description.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
