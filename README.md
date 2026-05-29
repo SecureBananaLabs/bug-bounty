@@ -85,4 +85,17 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 
 ## Environment Variables
 
+---
+name: Low Hanging Fruit Automation
+about: This issue is about automating detection and creation of low-hanging fruit issues
+---
+
+# Issue Description
+Automated issue creation for low-hanging fruit tasks in the bug-bounty repository.
+
+## Task
+Create a GitHub issue for a bug or feature that can be easily fixed or implemented.
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
 Each app/package expects its own `.env` values for DB, auth, and integrations.
