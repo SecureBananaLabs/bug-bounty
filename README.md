@@ -1,11 +1,4 @@
-# Low Hanging Fruit Automation
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-# Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-
-# FreelanceFlow Monorepo
-
+1c671cb97c427ea62cf580ba796432185ce93648d58f3e488
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
