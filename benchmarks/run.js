@@ -1,14 +1,20 @@
-import { runAllBenchmarks } from './benchmark.js';
+#!/usr/bin/env node
+import { spawn } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { writeFileSync } from 'fs';
 
-async function main() {
+const __dirname = dirname(fileURLTo0Path(import.meta.url));
+
+// Import the benchmark module
+import { runAllBenchmarks, saveResults } from './benchmark.js';
+
+(async () => {
   try {
     const results = await runAllBenchmarks();
-    console.log('Benchmark completed. Results:', results);
-    // Process and output results
-    console.log('Benchmarking complete');
-  } catch (error) {
-    console.error('Benchmark failed', error);
+    saveResults(results);
+    console.log('Benchmarks completed and results saved.');
+  } catch (err) {
+    console.error('Benchmark failed:', err);
   }
-}
-
-main();
+})();
