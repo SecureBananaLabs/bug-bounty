@@ -1,3 +1,11 @@
+export async function createPaymentIntent(payload) {
+  // TODO: integrate Stripe SDK and return client secret.
+  return {
+    paymentId: `pay_${Date.now()}`,
+    amount: payload.amount,
+    currency: payload.currency ?? "usd",
+    provider: "stripe"
+  };
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -32,4 +40,5 @@ export async function createPaymentIntent(payload) {
     // Re-throw Stripe errors with original message preserved
     throw new Error(error.message);
   }
+}
 }
