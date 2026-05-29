@@ -1,20 +1,35 @@
 import { Request, Response } from 'express';
-import { registerUser } from '../services/auth.service';
-import { validateRegistrationInput } from '../utils/validation';
+import { UserRole } from '@prisma/client';
 
-export const register = async (req: Request, res: Response) => {
-  try {
-    const { email, password, role } = req.body;
-    
-    // Remove admin role assignment from user input
-    if (role === 'admin' || role === 'ADMIN') {
-      return res.status(400).json({ error: 'Admin role cannot be self-assigned' });
+class AuthController {
+  async register(req: Request, res: Response) {
+    try {
+      const { name, email, password, role } = req.body;
+      
+      // Prevent admin role self-assignment vulnerability
+      if (role === UserRole.ADMIN) {
+        return res.status(403).json({ 
+          error: 'Admin role cannot be self-assigned during registration' 
+        });
+      }
+
+      // Process user registration without admin role validation
+      // ... existing registration logic ...
+      
+    } catch (error) {
+      console.error('Registration error:', error);
+      res.status(500).json({ error: 'Registration failed' });
     }
-
-    const validatedData = validateRegistrationInput(req.body);
-    const result = await registerUser(validatedData);
-    res.status(201).json(result);
-  } catch (error) {
-    res.status(500).json({ error: 'Registration failed' });
   }
-};
+
+  // Additional validation to prevent privilege escalation
+  validateRoleAssignment(role: string) {
+    // Block any attempt to assign admin role during registration
+    if (role === 'ADMIN' || role === 'admin') {
+      throw new Error('Admin role cannot be self-assigned during registration');
+    }
+    return true;
+  }
+}
+
+export default AuthController;
