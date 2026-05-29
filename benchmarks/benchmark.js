@@ -1,58 +1,24 @@
-import autocannon from 'autocannon';
-import { writeFileSync, readFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import { createApp } from '../apps/api/src/app.js';
+import http from 'k6/http';
+import { check, fail } from 'k6';
+import { htmlReport } from 'https://jslib.k6.io';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// Load the Express app to get the list of routes
-const app = createApp();
-const endpoints = [];
-
-// Dynamically discover routes under /api/
-app._router.stack.forEach((layer) => {
-  if (layer.route && layer.route.path.includes('/api/')) {
-    endpoints.push(layer.route.path);
+export const options = {
+  vus: 10,
+  duration: '10s',
+  thresholds: {
+    http_req_duration: ['p(95)<500']
   }
-});
+};
 
-// Read thresholds from file
-let thresholds;
-try {
-  thresholds = JSON.parse(readFileSync(__dirname + '/thresholds.json', 'utf8'));
-} catch (err) {
-  console.error('Failed to load thresholds:', err.message);
-  process.exit(1);
-}
-
-// Function to run benchmark for a single endpoint
-async function benchmarkEndpoint(url) {
-  const result = await autocannon({
-    url,
-    ...thresholds
+export default function () {
+  const res = http.get('http://test.k6.io');
+  check(res, {
+    'status was 200': (r) => r.status === 200,
   });
-  
-  return result;
 }
 
-// Run all benchmarks
-async function runAllBenchmarks() {
-  const results = {};
-  for (const endpoint of endpoints) {
-    console.log(`Benchmarking ${endpoint}...`);
-    results[endpoint] = await benchmarkEndpoint(endpoint);
-  }
-  return results;
+export function handleSummary(data) {
+  return {
+    'summary.html': htmlReport(data),
+  };
 }
-
-// Save results to file
-function saveResults(results) {
-  writeFileSync(
-    __dirname + '/results/results.json',
-    JSON.stringify(results, null, 2),
-    'utf8'
-  );
-}
-
-export { runAllBbenmarksmarks, saveResults };
