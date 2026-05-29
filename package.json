@@ -1,25 +1,12 @@
 {
-  "name": "bug-bounty",
-  "scripts": {
-    "benchmark": "node benchmarks/index.js"
-  },
-  "devDependencies": {
-    "autocannon": "^7.0.0"
-  },
-  "dependencies": {
-    "minimist": "^1.2.0"
-  },
-  "type": "module",
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "private": true,
+  "name": "benchmark-runner",
   "version": "1.0.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "type": "module",
+  "main": "benchmark.js",
   "scripts": {
+    "benchmark": "node benchmark.js"
+  },
+  "keywords": [],
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
