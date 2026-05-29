@@ -1,28 +1,29 @@
+<REDACTED_EMAIL>
 # Project
-<img width="663" height="183" alt="Image" src="https://github.com/user--attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
 # FreelanceFlow Monorepo
 
-# FreelanceFlow Monorepo
+FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
 
+- `apps/web` — Next.js 14 App Router frontend
+- `apps/api` — Express.js backend with layered REST API
+- `packages/db` — Prisma schema and database package
+- `packages/ui` — Shared UI components
 
-## Workspace Structure
+## Frontend
 
-# - `apps/web` — Next.js 14 App Router frontend
-# - `apps/api` — Express.js backend with layered REST API
-# - `packages/db` — Prisma schema and database package
-# - `packages/ui` — Shared UI components
-#
-# Frontend
-#
-# The web app includes pages for:
+The web app includes pages for:
 
+- Landing
+- Job listings and job detail
+- Post a job
 - Freelancer profiles and freelancer search
-### Run frontend
-
-
+- Client and freelancer dashboards
+- Messaging
+- Notifications
 - Settings
 - Billing
 - Admin panel
