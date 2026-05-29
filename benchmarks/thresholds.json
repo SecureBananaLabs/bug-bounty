@@ -1,6 +1,9 @@
 {
-  "p99": 1000,
-  "requests": {
-    "mean": 100
-  }
+  "latency": {
+    "p99": 500
+  },
+  "errorRate": 2.0,
+  "requestsPerSecond": 50,
+  "concurrentUsers": 10,
+  "duration": 10
 }
