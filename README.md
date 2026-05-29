@@ -86,17 +86,3 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
-- Validation schemas (Zod)
-- Utility helpers
-
-## Low Hanging Fruit Automation
-
-### Issues to create
-
-- #743 Automate Low Hanging fruit bug detection and issue creation recursively
-- #744 Automate Low Hanging fruit bug detection and issue creation recursively
-- #745 Automate Low Hanging fruit bug detection and issue creation recursively
-- #746 Automate Low Hanging fruit bug detection and issue creation recursively
-
-
-## Getting Started
