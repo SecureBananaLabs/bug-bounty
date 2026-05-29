@@ -425,6 +425,7 @@ function percent(value) {
 }
 
 async function startLocalServer() {
+  process.env.NODE_ENV = process.env.NODE_ENV || "benchmark";
   const app = createApp();
   const server = http.createServer(app);
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));

@@ -22,4 +22,4 @@ npm run benchmark:smoke
 
 The suite signs a benchmark JWT with the app's `JWT_SECRET` for protected endpoints. To benchmark an external target with a specific token, set `BENCHMARK_ADMIN_TOKEN` in `.env.benchmark`.
 
-Benchmark requests include `x-benchmark-run: 1` so the local API skips the global rate limiter during reproducible load tests. This keeps rate-limit behavior from contaminating endpoint latency and error-rate measurements.
+Benchmark requests include `x-benchmark-run: 1`, and the local runner sets `NODE_ENV=benchmark` when it starts the in-process API. The API only skips the global rate limiter when both conditions are present, which keeps rate-limit behavior from contaminating benchmark latency and error-rate measurements without allowing normal environments to bypass the limiter.
