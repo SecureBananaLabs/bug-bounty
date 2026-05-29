@@ -1,4 +1,42 @@
+# Low Hanging Fruit Automation
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Feature: Automated Bug Detection and Issue Creation
+
+### Description
+Implement automation to detect low-hanging fruit bugs and create corresponding GitHub issues recursively.
+
+### Requirements
+1. Scan the repository for common bug patterns
+2. Automatically create GitHub issues for detected bugs
+3. Ensure each created issue includes the required string for bounty eligibility
+4. Implement recursive scanning to continuously find and report new issues
+
+### Implementation Notes
+- Use static code analysis tools
+- Integrate with GitHub API for issue creation
+- Follow repository contribution guidelines
+- Reference this issue (#743) in all automated issue descriptions
+
 # Project
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+
+# FreelanceFlow Monorepo
+
+FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+
+## Workspace Structure
+
+- `apps/web` — Next.js 14 App Router frontend
+- `apps/api` — Express.js backend with layered REST API
+- `packages/db` — Prisma schema and database package
+- `packages/ui` — Shared UI components
+
+## Frontend
+
+The web app includes pages for:
+
 - Landing
 - Job listings and job detail
 - Post a job
