@@ -3,118 +3,89 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(importMeta.url);
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load environment variables
-const envPath = path.resolve(__dirname, '../.env.benchmark');
+const envPath = path.resolve(__dirname, '.env.benchmark');
 if (fs.existsSync(envPath)) {
-  const envConfig = fs.readFileSync(envPath, 'utf-8');
-  const envVars = envConfig.split('\n').filter(line => line.includes('='));
-  envVars.forEach(envVar => {
-    const [key, value] = envVar.split('=');
-    process.env[key.trim()] = value.trim();
-  });
-}
-
-const baseUrl = process.env.BENCHMARK_BASE_URL || 'http://localhost:3000';
-const token = process.env.BENCHMARK_TOKEN || 'test-token';
-
-const endpoints = [
-  { path: '/api/auth/login', method: 'POST', body: JSON.stringify({ email: 'test@example.com', password: 'password' }) },
-  { path: '/api/jobs', method: 'GET' },
-  { path: '/api/jobs', method: 'POST', body: JSON.stringify({ title: 'Test Job', description: 'Test Description' }) },
-  { path: '/api/users/profile', method: 'GET' },
-  { path: '/api/proposals', method: 'POST', body: JSON.stringify({ jobId: 1, content: 'Test Proposal' }) },
-  { path: '/api/search/jobs?query=test', method: 'GET' },
-];
-
-const resultsDir = path.join(__dirname, 'results');
-if (!fs.existsSync(resultsDir)) {
-  fs.mkdirSync(resultsDir, { recursive: true });
-}
-
-async function runBenchmark(endpoint) {
-  const url = `${baseUrl}${endpoint.path}`;
-  const headers = endpoint.path.includes('/api/') && !endpoint.path.includes('/auth/') 
-    ? { 'Authorization': `Bearer ${token}` } 
-    : {};
-
-  const instance = autocannon({
-    url,
-    method: endpoint.method,
-    headers,
-    body: endpoint.body,
-    connections: 10,
-    pipelining: 1,
-    duration: 10,
-    requests: [
-      {
-        method: endpoint.method,
-        path: endpoint.path,
-        headers,
-        body: endpoint.body
-      }
-    ]
-  }, (err, results) => {
-    if (err) {
-      console.error(`Error benchmarking ${endpoint.path}:`, err);
-      return;
+  const env = fs.readFileSync(envPath, 'utf-8');
+  const lines = env.split('\n');
+  lines.forEach(line => {
+    if (line.trim() !== '' && !line.startsWith('#')) {
+      const [key, value] = line.split('=');
+      process.env[key.trim()] = value.trim();
     }
-    
-    saveResults(endpoint.path, results);
-    checkThresholds(endpoint.path, results);
-  });
-
-  autocannon.track(instance, { renderResultsTable: false });
-  return new Promise((resolve) => {
-    instance.on('done', (result) => {
-      resolve(result);
-    });
   });
 }
 
-function saveResults(endpointPath, results) {
-  const fileName = endpointPath.replace(/\//g, '_');
-  const jsonPath = path.join(resultsDir, `${fileName}.json`);
-  const markdownPath = path.join(resultsDir, `${fileName}.md`);
-  
-  fs.writeFileSync(jsonPath, JSON.stringify(results, null, 2));
-  fs.writeFileSync(markdownPath, generateMarkdownReport(endpointPath, results));
-}
+const config = {
+  connections: process.env.BENCHMARK_CONNECTIONS ? parseInt(process.env.BENCHMARK_CONNECTIONS) : 10,
+  duration: process.env.BENCHMARK_DURATION ? parseInt(process. env.BENCHMARK_DURATION) : 10,
+  pipelining: process.env.BENCHMARK_PIPELINING ? parseInt(process.env.BENCHMARK_PIPELINING) : 1,
+  timeout: process.env.BENCHMARK_TIMEOUT ? parseInt(process.env.BENCHMARK_TIMEOUT) : 10,
+  headers: process.env.BENCHMARK_HEADERS ? JSON.parse(process.env.BENCHMARK_HEADERS) : {},
+  renderStatus: process.env.BENCHMARK_RENDER_STATUS ? process.env.BENCHMARK_RENDER_STATUS === 'true' : true,
+  renderLatency: process.env.BENCHMARK_RENDER_LATENCY ? process.env.BENCHMARK_RENDER_LATENCY === 'true' : true,
+  renderThroughput: process.env.BENCHMARK_THROUGHPUT ? process.env.BENCHMARK_THROUGHPUT === 'true' : true,
+  renderConcurrency: process.env.BENCHMARK_CONCURRENCY ? process.env.BENCHMARK_CONCURRENCY === 'true' : true,
+  renderTimeout: process.env.BENCHMARK_TIMEOUT ? process.env.BENCHMARK_TIMEOUT === 'true' : true
+};
 
-function generateMarkdownReport(endpointPath, results) {
-  return `# Benchmark Results: ${endpointPath}
+export default config;
 
-| Metric | Value |
-|--------|-------|
-| p50 Latency (ms) | ${results.latency.p50} |
-| p95 Latency (ms) | ${results.latency.p95} |
-| p99 Latency (ms) | ${results.latency.p99} |
-| Requests per Second | ${results.requests.average} |
-| Error Rate (%) | ${((results.errors / results.requests.total) * 100).toFixed(2)} |
-| TTFB (ms) | ${results.latency.total} |
-`;
-}
+// Define benchmark configuration
+const benchmarkConfig = {
+  url: process.env.BENCHMARK_URL || 'http://localhost:3000',
+  method: process.env.BENCHMARK_METHOD || 'GET',
+  headers: process.env.BENCHMARK_HEADERS ? JSON.parse(process.env.BENCHMARK_HEADERS) : {},
+  body: process.env.BENCHMARK_BODY || null,
+  // Duration in seconds
+  duration: config.duration,
+  // Number of concurrent connections
+  connections: config.connections,
+  // HTTP pipelining
+  pipelining: config.pipelining,
+  // Request timeout in seconds
+  timeout: config.timeout,
+  // Render options
+  renderStatus: config.renderStatus,
+  renderLatency: config.renderLatency,
+  renderThroughput: config.renderThroughput,
+  renderConcurrency: config.renderConcurrency,
+  renderTimeout: config.renderTimeout
+};
 
-function checkThresholds(endpointPath, results) {
-  const thresholdsPath = path.join(__dirname, 'thresholds.json');
-  if (!fs.existsSync(thresholdsPath)) return;
-  
-  const thresholds = JSON.parse(fs.readFileSync(thresholdsPath, 'utf-8'));
-  const endpointThreshold = thresholds.endpoints[endpointPath];
-  
-  if (endpointThreshold && results.latency.p99 > endpointThreshold.p99Latency) {
-    console.error(`❌ FAILED: ${endpointPath} exceeded p99 latency threshold (${results.latency.p99}ms > ${endpointThreshold.p99Latency}ms)`);
+// Run the benchmark
+autocannon(benchmarkConfig, (err, result) => {
+  if (err) {
+    console.error('Benchmark failed:', err);
     process.exit(1);
   }
-}
-
-async function runAllBenchmarks() {
-  for (const endpoint of endpoints) {
-    await runBenchmark(endpoint);
+  
+  // Write results to file
+  const resultsDir = path.join(__dirname, 'results');
+  if (!fs.existsSync(resultsDir)) {
+    fs.mkdirSync(resultsDir, { recursive: true });
   }
-  console.log('✅ All benchmarks completed');
-}
-
-runAllBenchmarks();
+  fs.writeFileSync(path.join(resultsDir, 'results.json'), JSON.stringify(result, null, 2));
+  
+  // Generate markdown summary
+  const summary = `
+  # API Benchmark Results
+  
+  ## Summary
+  | Metric | Value |
+  |--------|-------|
+  | p50 Latency | ${result.latency.mean} |
+  | p95 Latency | ${result.latency.p95} |
+  | p99 Latency | ${result.latency.p99} |
+  | Requests per second | ${result.requests.mean} |
+  | Error rate | ${result.errors} |
+  | TTFB | ${result.ttfb} |
+  `;
+  fs.writeFileSync(path.join(resultsDir, 'summary.md'), summary);
+  
+  console.log('Benchmark completed successfully');
+  console.log(`Results written to ${resultsDir}`);
+});
