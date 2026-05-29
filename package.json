@@ -1,15 +1,13 @@
 {
-  "name": "freelanceflow",
-  "version": "1.0.1",
-  "description": "FreelanceFlow monorepo",
+  "name": "bug-bounty",
+  "version": "1.0.0",
+  "description": "Bug bounty program",
+  "type": "module",
+  "main": "index.js",
   "scripts": {
-    "benchmark": "node benchmarks/index.js"
-  },
-  "devDependencies": {
-    "autocannon": "^7.0.0"
+    "benchmark": "node ./benchmarks/run.js"
   }
 }
-    "packages/*"
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
