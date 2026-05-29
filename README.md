@@ -1,6 +1,6 @@
 # Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f">
-<p>(Image placeholder if it doesn't render properly)</p>
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
@@ -86,3 +86,17 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+- Validation schemas (Zod)
+- Utility helpers
+
+## Low Hanging Fruit Automation
+
+### Issues to create
+
+- #743 Automate Low Hanging fruit bug detection and issue creation recursively
+- #744 Automate Low Hanging fruit bug detection and issue creation recursively
+- #745 Automate Low Hanging fruit bug detection and issue creation recursively
+- #746 Automate Low Hanging fruit bug detection and issue creation recursively
+
+
+## Getting Started
