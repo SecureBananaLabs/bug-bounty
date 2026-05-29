@@ -1,17 +1,36 @@
 {
-  "name": "bug-bounty",
-  "version": "1.0.0",
-  "description": "Bug bounty program",
   "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "benchmark": "node ./benchmarks/run.js"
-  }
-}
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "test": "turbo test",
+    "benchmark": "node benchmarks/run-benchmarks.js",
+    "benchmark:ci": "npm run benchmark"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "helmet": "^6.1.5",
+    "vhost": "^3.0.0"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.16",
+    "typescript": "^4.9.4",
+    "vite": "^4.2.0"
+  },
+  "engines": {
+    "node": "^18.17.0",
+    "npm": "^10.2.0"
+  },
+  "engines": {
+    "node": "1.17.0",
+    "npm": "10.2.0"
   }
+}
 }
