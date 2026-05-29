@@ -1,196 +1,153 @@
 ```diff
 --- /dev/null
-+++ b/benchmarks/.env.benchmark
-@@ -0,0 +1,12 @@
-+# Benchmark Environment Configuration
-+# Copy this file to .env and adjust values for your environment
-+
-+# Target server URL (local or staging)
-+BENCHMARK_TARGET_URL=http://localhost:3001
-+
-+# Benchmark token for auth-protected routes
-+# Generate a test token with benchmark scope for your environment
-+BENCHMARK_TOKEN=your-benchmark-token-here
-+
-+# Results output directory (relative to benchmarks/)
-+RESULTS_DIR=./results
-\ No newline at end of file
---- /dev/null
-+++ 	benchmarks/package.json
-@@ -0,0 +1,18 @@
-+{
-+  "name": "@bug-bounty/benchmarks",
-+  "version": "1.0.0",
-+  "private": true,
-+  "type": "module",
-+  "scripts": {
-+    "benchmark": "node run-benchmarks.js",
-+    "benchmark:smoke": "node run-benchmarks.js --smoke",
-+    "benchmark:ci": "node run-benchmarks.js --ci"
-+  },
-+  "dependencies": {
-+    "autocannon": "^7.15.0",
-+    "dotenv": "^16.3.1"
-+  },
-+  "devDependencies": {
-+    "autocannon": "^7.15.0",
-+    "dotenv": "^16.3.1"
-+  }
-+}
-\ No newline at end of file
---- /dev/null
-+++ 	benchmarks/run-benchmarks.js
-@@ -0,0 +1,462 @@
-+import autocannon from "autocannon";
-+import fs from "fs";
-+import path from "path";
-+import { fileURLToPath } from "url";
-+import dotenv from "dotenv";
++++ b/benchmarks/benchmark.js
+@@ -0,0 +1,200 @@
++import autocannon from 'autocannon';
++import fs from 'fs';
++import path from 'path';
++import { fileURLToPath } from 'url';
 +
 +const __filename = fileURLToPath(import.meta.url);
 +const __dirname = path.dirname(__filename);
 +
 +// Load environment variables
-+dotenv.config({ path: path.join(__dirname, ".env") });
-+
-+const TARGET_URL = process.env.BENCHMARK_TARGET_URL || "http://localhost:3001";
-+const BENCHMARK_TOKEN = process.env.BENCHMARK_TOKEN || "";
-+const RESULTS_DIR = process.env.RESULTS_DIR || "./results";
-+
-+// Parse CLI args
-+const isSmoke = process.argv.includes("--smoke");
-+const isCI = process.argv.includes("--ci");
-+
-+// Benchmark configuration
-+const CONNECTIONS = isSmoke ? 5 : isCI ? 10 : 50;
-+const DURATION = isSmoke ? 10 : isCI ? 30 : 60;
-+const PIPELINING = 1;
-+
-+// Ensure results directory exists
-+const resultsPath = path.resolve(__dirname, RESULTS_DIR);
-+if (!fs.existsSync(resultsPath)) {
-+  fs.mkdirSync(resultsPath, { recursive: true });
++const envPath = path.resolve(__dirname, '../.env.benchmark');
++if (fs.existsSync(envPath)) {
++  const envConfig = fs.readFileSync(envPath, 'utf8');
++  envConfig.split('\n').forEach(line => {
++    const [key, value] = line.split('=');
++    if (key && value) {
++      process.env[key.trim()] = value.trim();
++    }
++  });
 +}
 +
-+// API endpoint definitions with realistic payloads
++const BASE_URL = process.env.BENCHMARK_HOST || 'http://localhost:3000';
++const BENCHMARK_TOKEN = process.env.BENCHMARK_TOKEN || 'test-token';
++
++// Define endpoints to benchmark
 +const endpoints = [
-+  {
-+    name: "health",
-+    method: "GET",
-+    path: "/health",
-+    auth: false,
-+  },
-+  {
-+    name: "auth-register",
-+    method: "POST",
-+    path: "/api/auth/register",
-+    auth: false,
-+    body: JSON.stringify({
-+      email: "benchmark@example.com",
-+      password: "BenchmarkPass123!",
-+      name: "Benchmark User",
-+      role: "FREELANCER",
-+    }),
-+    headers: { "content-type": "application/json" },
-+  },
-+  {
-+    name: "auth-login",
-+    method: "POST",
-+    path: "/api/auth/login",
-+    auth: false,
-+    body: JSON.stringify({
-+      email: "benchmark@example.com",
-+      password: "BenchmarkPass123!",
-+    }),
-+    headers: { "content-type": "application/json" },
-+  },
-+  {
-+    name: "users-list",
-+    method: "GET",
-+    path: "/api/users",
-+    auth: true,
-+  },
-+  {
-+    name: "users-me",
-+    method: "GET",
-+    path: "/api/users/me",
-+    auth: true,
-+  },
-+  {
-+    name: "jobs-list",
-+    method: "GET",
-+    path: "/api/jobs",
-+    auth: false,
-+  },
-+  {
-+    name: "jobs-create",
-+    method: "POST",
-+    path: "/api/jobs",
-+    auth: true,
-+    body: JSON.stringify({
-+      title: "Benchmark Job Posting",
-+      description: "This is a realistic job description for benchmark purposes. ".repeat(20),
-+      budget: 5000,
-+      category: "web-development",
-+      skills: ["react", "node", "typescript"],
-+      deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-+    }),
-+    headers: { "content-type": "application/json" },
-+  },
-+  {
-+    name: "proposals-list",
-+    method: "GET",
-+    path: "/api/proposals",
-+    auth: true,
-+  },
-+  {
-+    name: "proposals-create",
-+    method: "POST",
-+    path: "/api/proposals",
-+    auth: true,
-+    body: JSON.stringify({
-+      jobId: "benchmark-job-id",
-+      coverLetter: "This is a realistic proposal cover letter. ".repeat(15),
-+      proposedBudget: 4500,
-+      estimatedDuration: "2 weeks",
-+    }),
-+    headers: { "content-type": "application/json" },
-+  },
-+  {
-+    name: "reviews-list",
-+    method: "GET",
-+    path: "/api/reviews",
-+    auth: false,
-+  },
-+  {
-+    name: "messages-list",
-+    method: "GET",
-+    path: "/api/messages",
-+    auth: true,
-+  },
-+  {
-+    name: "notifications-list",
-+    method: "GET",
-+    path: "/api/notifications",
-+    auth: true,
-+  },
-+  {
-+    name: "search-jobs",
-+    method: "GET",
-+    path: "/api/search/jobs?q=react&page=1&limit=20",
-+    auth: false,
-+  },
-+  {
-+    name: "admin-dashboard",
-+    method: "GET",
-+    path: "/api/admin/dashboard",
-+    auth: true,
-+  },
++  { method: 'GET', path: '/api/auth/profile', auth: true },
++  { method: 'POST', path: '/api/auth/login', auth: false, body: { email: 'test@example.com', password: 'password123' } },
++  { method: 'GET', path: '/api/users', auth: true },
++  { method: 'GET', path: '/api/jobs', auth: false },
++  { method: 'POST', path: '/api/jobs', auth: true, body: { title: 'Test Job', description: 'Test Description', budget: 100 } },
++  { method: 'GET', path: '/api/proposals', auth: true },
++  { method: 'POST', path: '/api/proposals', auth: true, body: { jobId: 1, coverLetter: 'Test Proposal', price: 50 } },
++  { method: 'GET', path: '/api/payments', auth: true },
++  { method: 'GET', path: '/api/reviews', auth: false },
++  { method: 'GET', path: '/api/messages', auth: true },
++  { method: 'GET', path: '/api/notifications', auth: true },
++  { method: 'POST', path: '/api/search', auth: false, body: { query: 'developer' } },
++  { method: 'GET', path: '/api/admin/stats', auth: true }
 +];
 +
-+// Build request options for autocannon
-+function buildRequest(endpoint) {
-+  const req = {
-+    method: endpoint.method,
-+    path: endpoint.path,
-+    headers: { ...(endpoint
++// Load thresholds
++const thresholdsPath = path.resolve(__dirname, 'thresholds.json');
++let thresholds = {};
++if (fs.existsSync(thresholdsPath)) {
++  thresholds = JSON.parse(fs.readFileSync(thresholdsPath, 'utf8'));
++}
++
++// Benchmark configuration
++const defaultConfig = {
++  connections: 10,
++  pipelining: 1,
++  duration: 10,
++  timeout: 10
++};
++
++// Run benchmark for a single endpoint
++function runBenchmark(endpoint) {
++  return new Promise((resolve) => {
++    const headers = {};
++    if (endpoint.auth) {
++      headers['Authorization'] = `Bearer ${BENCHMARK_TOKEN}`;
++    }
++
++    const config = {
++      ...defaultConfig,
++      url: `${BASE_URL}${endpoint.path}`,
++      method: endpoint.method,
++      headers,
++      ...(endpoint.body && { body: JSON.stringify(endpoint.body) })
++    };
++
++    const instance = autocannon(config, (err, result) => {
++      if (err) {
++        console.error(`Error benchmarking ${endpoint.path}:`, err);
++        resolve(null);
++        return;
++      }
++      
++      resolve({
++        endpoint: endpoint.path,
++        method: endpoint.method,
++        requests: {
++          average: result.requests.average,
++          total: result.requests.total
++        },
++        latency: {
++          average: result.latency.average,
++          p50: result.latency.p50,
++          p95: result.latency.p95,
++          p99: result.latency.p99
++        },
++        throughput: {
++          average: result.throughput.average,
++          total: result.throughput.total
++        },
++        errors: {
++          total: result.errors,
++          rate: result.requests.total > 0 ? (result.errors / result.requests.total) * 100 : 0
++        },
++        timeouts: result.timeouts,
++        duration: result.duration,
++        start: result.start,
++        finish: result.finish
++      });
++    });
++
++    autocannon.track(instance, { renderResultsTable: false });
++  });
++}
++
++// Run benchmarks for all endpoints
++async function runAllBenchmarks() {
++  console.log(`Starting benchmarks against ${BASE_URL}`);
++  const results = [];
++  
++  for (const endpoint of endpoints) {
++    console.log(`Benchmarking ${endpoint.method} ${endpoint.path}...`);
++    const result = await runBenchmark(endpoint);
++    if (result) {
++      results.push(result);
++    }
++  }
++  
++  return results;
++}
++
++// Save results to JSON file
++function saveResultsToJson(results) {
++  const outputPath = path.resolve(__dirname, 'results', 'benchmark-results.json');
++  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
++  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
++  console.log(`Results saved to ${outputPath}`);
++}
++
++// Generate markdown report
++function generateMarkdownReport(results) {
++  let markdown = `# API Benchmark Results\n\n`;
++  markdown += `Benchmarked against: ${BASE_URL}\n\n`;
++  markdown += `| Endpoint | Method | RPS (avg) | p50 (ms) | p95 (ms) | p99 (ms) | Error Rate (%) | TTFB Avg (ms) |\n`;
++  markdown += `|----------|--------|-----------|---------|---------|---------|----------------|---------------|\n`;
++  
++  results.forEach(result => {
++    markdown += `| ${result.endpoint} | ${result.method} | ${result.requests.average.toFixed(2)} | ${result.latency.p50.toFixed(2)} | ${result.latency.p95.toFixed(2)} | ${result.latency.p99.toFixed(2)} | ${result.errors.rate.toFixed(2)} | ${result.latency.average.toFixed(2)} |\n`;
++  });
++  
++  const outputPath = path.resolve(__dirname, 'results', 'benchmark-report.md');
++  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
++  fs.writeFileSync(outputPath, markdown);
++  console.log(`
