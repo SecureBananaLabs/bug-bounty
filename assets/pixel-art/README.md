@@ -1,12 +1,9 @@
-# Pixel Art Submission
+# Cosmic Cat Pixel Art
 
-## Cyberpunk City Sunset
-
-**File:** `cyberpunk_city.png`
-**Dimensions:** 64x64 pixels
+**File:** `cosmic-cat.png`  
+**Dimensions:** 64x64 pixels  
 **Format:** PNG
 
-### Description
-A vibrant cyberpunk cityscape at sunset, featuring neon-lit skyscrapers, 
-flying vehicles, and a glowing sun reflecting off wet streets. Created with 
-a limited color palette to emphasize the retro-futuristic pixel art aesthetic.
+## Description
+
+A retro-style pixel art of a cat floating in space, surrounded by stars and a crescent moon. Created with a limited 16-color palette to evoke classic 8-bit game aesthetics. The cosmic theme represents curiosity and exploration, fitting for a freelance marketplace where creators explore new opportunities.
