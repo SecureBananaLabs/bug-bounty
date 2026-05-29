@@ -1,10 +1,7 @@
-# Pixel Art: Cyberpunk City
+# Cosmic Cat Pixel Art
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
+A retro-futuristic cat floating in space, created with a limited 16-color palette inspired by classic Game Boy Advance aesthetics. The cat wears a tiny astronaut helmet and is surrounded by pixel stars and a crescent moon.
 
-**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with moody atmospheric elements, making for visually striking pixel art. The contrast between dark buildings and glowing signs creates depth that works well at small canvas sizes.
-
-## Details
-- Canvas size: 64x64 pixels
-- Format: PNG with transparency
-- Style: Limited palette pixel art with dithering for atmospheric effects
+**Dimensions:** 64x64 pixels
+**Format:** PNG
+**Created with:** Aseprite
