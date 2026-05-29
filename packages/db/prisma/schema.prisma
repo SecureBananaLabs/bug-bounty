@@ -21,13 +21,12 @@ enum JobStatus {
   CANCELLED
 }
 
+enum Role {
+  CLIENT
+  FREELANCER
+}
+
 model User {
-  id             String      @id @default(cuid())
-  email          String      @unique
-  passwordHash   String
-  fullName       String
-  bio            String?
-  role           UserRole    @default(CLIENT)
   isVerified     Boolean     @default(false)
   skills         Skill[]
   postedJobs     Job[]       @relation("ClientJobs")
