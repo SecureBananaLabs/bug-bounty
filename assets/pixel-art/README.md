@@ -1,7 +1,11 @@
 # Cyberpunk Cityscape Pixel Art
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk city at night with neon-lit skyscrapers, holographic billboards, and rain-slicked streets reflecting vibrant colors.
+**Title:** Neon Dusk
+**Dimensions:** 128x128 pixels
+**Format:** PNG
 
-**Why:** I chose this theme because cyberpunk aesthetics perfectly showcase the creative potential of pixel art—limited resolution forces expressive use of color and light to convey atmosphere, mood, and depth. The contrast between dark shadows and bright neon creates visual drama that celebrates the art form.
+## Description
 
-**Canvas size:** 64x64 pixels (meets minimum requirement)
+A cyberpunk cityscape at dusk featuring towering skyscrapers with neon-lit windows, holographic billboards, and a moody purple-orange gradient sky. The piece captures the contrast between the gritty urban environment and the vibrant, hopeful glow of technology — representing how freelancers bring light and creativity into complex digital landscapes.
+
+Created with Aseprite, limited to a 32-color palette to maintain authentic pixel art aesthetics.
