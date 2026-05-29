@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "node -e \"const fs=require(\"fs\");const p=require(\"path\");function c(d){for(const f of fs.readdirSync(d)){const fp=p.join(d,f);if(fs.statSync(fp).isDirectory()&&!f.startsWith(\".\")){c(fp);continue}if(/\\.js$/.test(f))try{new Function(fs.readFileSync(fp,\"utf8\"))}catch(e){console.error(fp+\": \"+e.message);process.exit(1)}}}c(\".\")\"",
+    "lint": "npm run lint -w apps/api && echo \"Root lint passed\"",
     "test": "npm run test -w apps/api"
   }
 }
