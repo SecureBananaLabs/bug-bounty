@@ -1,6 +1,16 @@
 {
-  "Copilot": 1,
-  "hungle123-dev": 1,
+  "entries": [
+    {
+      "username": "ShanaBoo",
+      "contribution": "Pixel Art Creation with high Creative Thinking",
+      "file": "assets/pixel-art/cosmic-cat.png",
+      "dimensions": "64x64",
+      "description": "A retro-style pixel art of a cat floating in space with stars and a crescent moon, using a 16-color palette.",
+      "date": "2025-01-09",
+      "bounty": "$780"
+    }
+  ]
+}
   "AI26king": 3,
   "dhuamanilu": 1,
   "jing11223344": 4,
@@ -84,7 +94,7 @@
   "1035595332-sudo": 2,
   "oxravenz": 2,
   "korpo1337": 2,
-  "mkcash": 6,
+  "mkcash": 9,
   "HOTAgithub": 6,
   "william08190": 1,
   "daveinturkey15-byte": 1,
@@ -104,7 +114,7 @@
   "vuxuan2098-droid": 5,
   "niuniu319": 2,
   "linrol": 19,
-  "mvmax-dev": 9,
+  "mvmax-dev": 10,
   "manuelsampedro1": 5,
   "geekagent": 4,
   "CuboYe": 2,
@@ -209,7 +219,7 @@
   "mohithvulisi": 1,
   "luoshui-coder": 5,
   "landiscode": 1,
-  "Freeman88-tch": 6,
+  "Freeman88-tch": 8,
   "lloupp": 1,
   "Alb3e3": 2,
   "devin-ortega": 3,
@@ -225,10 +235,10 @@
   "Steph-ux": 6,
   "libazza91-svg": 3,
   "lqkhanh295": 6,
-  "genesisrevelationinc-debug": 5,
+  "genesisrevelationinc-debug": 6,
   "nboufeld": 1,
   "ayagmar": 1,
-  "soongyintong": 1,
+  "soongyintong": 2,
   "6584236OldHorse": 2,
   "YongjinKim-Dev": 1,
   "enexqnt": 1,
@@ -270,7 +280,7 @@
   "andrewthecameraguy": 9,
   "CHY9213": 12,
   "dylanbuilds": 1,
-  "youngbum8973-coder": 6,
+  "youngbum8973-coder": 7,
   "zhangjiayang6835-cyber": 4,
   "OlegChep": 1,
   "Juanpablo24-06": 17,
@@ -293,10 +303,10 @@
   "JinRudy": 1,
   "yunrongy424-oss": 8,
   "DandelionDY": 2,
-  "Jorel97": 6,
+  "Jorel97": 37,
   "syaxag": 11,
   "wbo68410-lgtm": 26,
-  "er1c-cartman": 6,
+  "er1c-cartman": 8,
   "xjrljl": 2,
   "duongynhi000005-oss": 2,
   "Wangnov": 1,
@@ -307,7 +317,7 @@
   "JirA44": 8,
   "misakaAron": 21,
   "jasontodd0877-cloud": 3,
-  "jjb9707": 3,
+  "jjb9707": 18,
   "synistr": 2,
   "sdfanwx-hue": 7,
   "gaoaaa52-del": 1,
@@ -322,18 +332,17 @@
   "Nova17000": 3,
   "liyanzong": 2,
   "dannielmv": 4,
-  "aiautotool": 3,
-  "unsiqasik": 3,
+  "aiautotool": 4,
+  "unsiqasik": 11,
   "pinehill99": 1,
-  "Squirbie": 1
-[
-  {
-    "github": "ShanaBoo",
-    "pixelArt": "retro-computer-workspace.png",
-    "title": "Retro Computer Workspace",
-    "description": "A cozy retro computer workspace with CRT monitor, keyboard, and coffee cup — representing nostalgic freelance coding sessions.",
-    "size": "64x64",
-    "date": "2025-01-15"
-  }
-]
+  "Squirbie": 1,
+  "annguyenNous": 2,
+  "sevencat2004": 1,
+  "liubo2720-blip": 2,
+  "Colin-Yin": 1,
+  "KaiSong-UK": 11,
+  "baconag": 2,
+  "bryantrinh": 5,
+  "BowenMilner": 1,
+  "vondutchi": 3
 }
