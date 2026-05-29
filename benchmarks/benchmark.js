@@ -1,6 +1,5 @@
-import http from 'k6/http';
-import { check, fail } from 'k6';
-import { htmlReport } from 'https://jslib.k6.io';
+import { check } from 'k6';
+import { fail, check } from 'k6';
 
 export const options = {
   vus: 10,
@@ -15,10 +14,7 @@ export default function () {
   check(res, {
     'status was 200': (r) => r.status === 200,
   });
-}
-
-export function handleSummary(data) {
   return {
-    'summary.html': htmlReport(data),
+    'summary.html': htmlReport,
   };
 }
