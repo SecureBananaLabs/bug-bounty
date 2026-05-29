@@ -1,8 +1,14 @@
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
+  "name": "freelanceflow",
+  "version": "1.0.1",
+  "description": "FreelanceFlow monorepo",
+  "scripts": {
+    "benchmark": "node benchmarks/index.js"
+  },
+  "devDependencies": {
+    "autocannon": "^7.0.0"
+  }
+}
     "packages/*"
   ],
   "scripts": {
