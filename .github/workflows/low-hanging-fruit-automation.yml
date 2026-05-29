@@ -24,94 +24,92 @@ jobs:
             const fs = require('fs');
             const path = require('path');
 
-            // Patterns that indicate low hanging fruit / easy fixes
-            const lowHangingPatterns = [
-              { pattern: /TODO|FIXME|HACK|XXX|BUG/g, label: 'todo-fixme' },
-              { pattern: /console\.log/g, label: 'remove-console-logs' },
-              { pattern: /unused|deprecated|legacy/gi, label: 'cleanup' },
-              { pattern: /type.*any/g, label: 'typescript-strictness' },
-              { pattern: /eslint-disable/g, label: 'eslint-cleanup' },
-            ];
-
-            // Files to scan
-            const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.md'];
-            const results = [];
-
-            function scanDirectory(dir, relativePath = '') {
-              const items = fs.readdirSync(dir, { withFileTypes: true });
-              for (const item of items) {
-                const fullPath = path.join(dir, item.name);
-                const relPath = path.join(relativePath, item.name);
+            // Recursive function to scan for low hanging fruit patterns
+            async function scanForLowHangingFruit(dir, patterns, results = []) {
+              const entries = fs.readdirSync(dir, { withFileTypes: true });
+              
+              for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
                 
-                if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
-                  scanDirectory(fullPath, relPath);
-                } else if (item.isFile() && extensions.some(ext => item.name.endsWith(ext))) {
-                  try {
-                    const content = fs.readFileSync(fullPath, 'utf-8');
-                    for (const { pattern, label } of lowHangingPatterns) {
-                      const matches = content.match(pattern);
-                      if (matches) {
+                if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.git') {
+                  await scanForLowHangingFruit(fullPath, patterns, results);
+                } else if (entry.isFile()) {
+                  const content = fs.readFileSync(fullPath, 'utf-8');
+                  const lines = content.split('\n');
+                  
+                  for (let i = 0; i < lines.length; i++) {
+                    for (const pattern of patterns) {
+                      if (pattern.regex.test(lines[i])) {
                         results.push({
-                          file: relPath,
-                          issueType: label,
-                          count: matches.length,
-                          description: `Found ${matches.length} instance(s) of ${label} in ${relPath}`
+                          file: fullPath,
+                          line: i + 1,
+                          type: pattern.type,
+                          description: pattern.description,
+                          severity: pattern.severity,
+                          content: lines[i].trim()
                         });
                       }
                     }
-                  } catch (err) {
-                    console.log(`Error reading ${fullPath}: ${err.message}`);
                   }
                 }
               }
+              
+              return results;
             }
 
-            scanDirectory('.');
+            // Define low hanging fruit patterns
+            const patterns = [
+              { regex: /TODO|FIXME|HACK|XXX|BUG/, type: 'code-debt', description: 'Technical debt or incomplete implementation found', severity: 'medium' },
+              { regex: /console\.(log|warn|error)\s*\(/, type: 'debug-statements', description: 'Debug console statements should be removed', severity: 'low' },
+              { regex: /\/\/\s*eslint-disable/, type: 'linting-override', description: 'ESLint disabled - potential code quality issue', severity: 'low' },
+              { regex: /process\.env\.[A-Z_]+/, type: 'env-usage', description: 'Environment variable usage - verify proper validation', severity: 'low' },
+              { regex: /throw\s+new\s+Error\s*\(\s*['"`][^'"]*['"`]\s*\)/, type: 'error-handling', description: 'Generic error throwing - consider custom error classes', severity: 'low' }
+            ];
 
-            // Group results by issue type
-            const grouped = {};
-            for (const result of results) {
-              if (!grouped[result.issueType]) {
-                grouped[result.issueType] = [];
-              }
-              grouped[result.issueType].push(result);
-            }
+            // Scan the repository
+            const findings = await scanForLowHangingFruit('.', patterns);
+            
+            // Group findings by type
+            const grouped = findings.reduce((acc, finding) => {
+              if (!acc[finding.type]) acc[finding.type] = [];
+              acc[finding.type].push(finding);
+              return acc;
+            }, {});
 
-            // Create issues for each category
-            const issueTemplate = "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.";
-
-            for (const [issueType, items] of Object.entries(grouped)) {
-              const title = `[Low Hanging Fruit] ${issueType}: ${items.length} file(s) need attention`;
+            // Create issues for each type
+            for (const [type, items] of Object.entries(grouped)) {
+              if (items.length === 0) continue;
+              
+              const title = `Low Hanging Fruit: ${type.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
+              
               const body = `## Automated Low Hanging Fruit Detection
 
-${issueTemplate}
+This issue was automatically created by the Low Hanging Fruit automation system.
 
-### Files Affected
-${items.map(item => `- ${item.file} (${item.count} occurrence${item.count > 1 ? 's' : ''})`).join('\n')}
+### Findings (${items.length})
 
-### Description
-This issue was automatically created by the Low Hanging Fruit automation to track easy fixes in the codebase.
+${items.map(item => `- **${item.file}** (line ${item.line}): ${item.description}
+  \`\`\`
+  ${item.content}
+  \`\`\``).join('\n')}
 
 ### Next Steps
-1. Review the affected files
-2. Create a focused issue for your specific fix
-3. Reference this issue (#743) in your new issue
-4. Submit a pull request linked to your created issue
+- Review each finding and determine if action is needed
+- Create sub-issues for complex fixes
+- Submit a PR referencing this issue
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
 /bounty $50`;
 
-              try {
-                await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title,
-                  body,
-                  labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty']
-                });
-                console.log(`Created issue: ${title}`);
-              } catch (err) {
-                console.log(`Error creating issue for ${issueType}: ${err.message}`);
-              }
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', 'bounty', '💎 Bounty', 'automated']
+              });
             }
 
-            console.log('Low hanging fruit scan complete.');
+            console.log(`Created issues for ${Object.keys(grouped).length} finding types`);
+            console.log('Total findings:', findings.length);
