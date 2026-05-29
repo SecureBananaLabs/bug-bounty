@@ -20,18 +20,25 @@ export async function createPaymentIntent(payload) {
   const amount = payload.amount;
   const currency = payload.currency ?? 'usd';
 
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount,
-    currency,
-  });
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency,
+    });
 
-  return {
-    paymentId: paymentIntent.id,
-    amount,
-    currency,
-    provider: 'stripe',
-    clientSecret: paymentIntent.client_secret,
-  };
+    return {
+      paymentId: paymentIntent.id,
+      amount,
+      currency,
+      provider: 'stripe',
+      clientSecret: paymentIntent.client_secret,
+    };
+  } catch (error) {
+    if (error.type && error.type.startsWith('Stripe')) {
+      throw new Error(error.message);
+    }
+    throw error;
+  }
 }
 
 export { stripe };
