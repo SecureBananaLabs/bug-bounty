@@ -1,5 +1,11 @@
-# Cosmic Forest Pixel Art
+# Pixel Art: Cyberpunk City
 
-**What:** A mystical forest scene at twilight with glowing bioluminescent mushrooms, ancient twisted trees, and a star-filled cosmic sky.
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-**Why:** I chose this theme to blend the tranquility of nature with the wonder of the cosmos, creating a dreamy escape that sparks imagination. The contrast between the dark forest and vibrant glowing elements represents finding light and magic in unexpected places.
+**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with moody atmospheric depth, which makes for striking pixel art. The contrast between dark silhouettes and glowing lights creates visual interest even at small resolutions, and it reflects the creative, tech-forward spirit of this project.
+
+## Details
+- Canvas size: 64x64 pixels
+- Format: PNG
+- Colors: Limited palette with neon accents (cyan, magenta, yellow) against deep blues and blacks
+- Style: Retro pixel art with dithering for atmospheric effects
