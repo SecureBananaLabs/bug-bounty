@@ -30,9 +30,18 @@ export async function login(req, res) {
   }
 }
 
+// Supported OAuth providers — reject unknown names to prevent route confusion
+const SUPPORTED_OAUTH_PROVIDERS = new Set(["google", "github", "facebook"]);
+
 export async function oauthCallback(req, res) {
+  const { provider } = req.params;
+
+  if (!SUPPORTED_OAUTH_PROVIDERS.has(provider)) {
+    return fail(res, `Unsupported OAuth provider: "${provider}". Supported providers: ${[...SUPPORTED_OAUTH_PROVIDERS].join(", ")}`, 400);
+  }
+
   return ok(res, {
-    provider: req.params.provider,
+    provider,
     status: "callback-received"
   });
 }
