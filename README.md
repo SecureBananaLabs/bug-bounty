@@ -1,29 +1,40 @@
 # Low Hanging Fruit Automation
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Feature: Automated Bug Detection and Issue Creation
-
-### Description
-Implement automation to detect low-hanging fruit bugs and create corresponding GitHub issues recursively.
-
-### Requirements
-1. Scan the repository for common bug patterns
-2. Automatically create GitHub issues for detected bugs
-3. Ensure each created issue includes the required string for bounty eligibility
-4. Implement recursive scanning to continuously find and report new issues
-
-### Implementation Notes
-- Use static code analysis tools
-- Integrate with GitHub API for issue creation
-- Follow repository contribution guidelines
-- Reference this issue (#743) in all automated issue descriptions
-
-# Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
 # FreelanceFlow Monorepo
+# Project
+# Low Hanging Fruit Automation
 
+## Description
+
+This project automates the detection and creation of low-hanging fruit issues. It will:
+
+1. Identify potential low-hanging fruit issues in the codebase
+2. Create GitHub issues for each identified low-hanging fruit
+3. Recursively process existing issues to find more opportunities
+
+## Features
+
+- Automated issue detection
+- GitHub issue creation
+- String matching for "This issue is limited only to the creator of this issue..."
+
+# Instructions
+
+To contribute:
+
+1. Star the repository
+2. Create an issue following the contribution guidelines
+
+## Contributing
+
+This project is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Bug Bounty
+
+This issue is part of a bug bounty program with a $700 reward for successful automation implementation.
+
+@[Project] -Waltergomez
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
