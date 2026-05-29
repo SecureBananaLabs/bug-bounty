@@ -1,2 +1,11 @@
-// This is a placeholder - showing the complete file structure for context
-// In a real implementation, this would contain the actual middleware logic
+      return next(new AppError('Invalid token payload', 401));
+    }
+
+    // Prevent admin role from being assigned via registration
+    if (req.body?.role === 'ADMIN' || req.body?.role === 'admin') {
+      delete req.body.role;
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
