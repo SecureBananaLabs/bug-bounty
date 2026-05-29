@@ -1,49 +1,5 @@
-The user wants me to analyze the .github/workflows/prisma.yml file andah workflows file. |##|:
-- The file is `.github/workflows/prisma.yml`
- .github/workflows/prisma.yml |##|:
-- Theah workflows file .github/workflows/pr |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- Theah workflows |##|:
-- The file is `.github/workflows/prisma.ymlppears to be a GitHub Actions workflow file for Prisma.ah workflows |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is |_github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.ymlNS workflows |##|:
-- The file is `.github/workflows/pr |##|:
-- The file is |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file isppph workflows |##|:
-- The file is `.github/workflows/prisma.ymlNS workflows |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is NS workflows |ah |##|:
-- Theolive green check |##|:
-- The file is `.github/workflows/pr |##|:
-- The file is |##|:
-- The file is `.github/workflows/prisma.yml |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file isNS workflows | .github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file isolive green check | NS workflows | |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The *diff* shows changes to `.github/workflows/prisma.yml` |##|:
-- The *diff* shows changes to `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file isP workflows | |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file isppNS workflows | |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file isNS workflows | .github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file is `.github/workflows/prisma.yml` |##|:
-- The file isppears to be a GitHub Actions workflow file for PrGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+```diff
+--- /dev/null
++++ b/assets/pixel-art/cyberpunk_cityscape.png
+@@ -0,0 +1,1 @@
++iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAADiAz+SAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF0WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMwMTQgNzkuMTU2ODgzLCAyMDE2LzA5LzE0LTAxOjA5OjAxICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aWlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjdCNTUyRDBCQTU1QzExRTc5QzMzOTZDOTc0QjA0QzIwIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjdCNTUyRDBDQjU1QzExRTc5QzMzOTZDOTc0QjA0QzIwIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6N0I1NTJEMEE4NTVDMTFFNzlDMzM5NkM5NzRCMDRDMjAiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6N0I1NTJEMEE4NTVDMTFFNzlDMzM5NkM5NzRCMDRDMjAiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t7c29rZ2NfW1dTT0tHQz87NzMvKycjHw8O+vbq5uLe1tLOwr6+trKqoqKenpKOioJ+enZuamZiXlpWUk5KOh4aEg4N+enl4d3Z1dHNycG9ubWxramlnZmVkY2JgXVxbWVhXVlVUUlFQT05NTEtJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkXFhYVFBMTERAPDg0MCwoJCAcGBQQDAgEAACwAAAAAEAABAAABJCSgAAT//8AAAAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//
