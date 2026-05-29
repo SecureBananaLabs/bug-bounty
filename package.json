@@ -10,4 +10,9 @@
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
+{
+  "scripts": {
+    "pixel-art:validate": "node scripts/validate-pixel-art.js"
+  }
+}
 }

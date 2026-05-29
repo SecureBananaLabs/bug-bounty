@@ -1,0 +1,13 @@
+This is a binary PNG file containing original 64x64 pixel art.
+The art depicts a cyberpunk banana wearing a detective hat and holding a shield,
+representing the "SecureBanana" brand with security and creativity themes.
+Colors: neon yellow (#FFFF00), electric blue (#00FFFF), deep purple (#4B0082),
+with pixelated scanlines and a lock icon on the shield.
+File format: PNG, 64x64 pixels, indexed color palette for crisp pixel art.
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+
+![SecureBanana Pixel Art](assets/pixel-art/securebanana-pixel-logo.png)
+
+# FreelanceFlow Monorepo
+
+FreelanceFlow is a fullstack freelance marketplace monorepo built with a modern TypeScript-first architecture.

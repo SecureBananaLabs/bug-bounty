@@ -1,0 +1,8 @@
+version https://git-lfs.github.com/spec/v1
+oid sha256:placeholder_for_actual_image_content
+size 0
+<img src="assets/pixel-art/cyber-bounty-hunter.png" alt="Cyber Bounty Hunter Pixel Art" width="64" height="64" />
+
+# FreelanceFlow Monorepo
+
+FreelanceFlow is a full stack freelance marketplace monorepo built with a modern TypeScript-first architecture.

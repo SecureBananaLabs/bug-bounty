@@ -1,6 +1,16 @@
 {
-  "Copilot": 1,
-  "hungle123-dev": 1,
+  "entries": [
+    {
+      "username": "ShanaBoo",
+      "contribution": "Pixel Art Creation with high Creative Thinking",
+      "file": "assets/pixel-art/cosmic-cat.png",
+      "dimensions": "64x64",
+      "description": "A retro-style pixel art of a cat floating in space with stars and a crescent moon, using a 16-color palette.",
+      "date": "2025-01-09",
+      "bounty": "$780"
+    }
+  ]
+}
   "AI26king": 3,
   "dhuamanilu": 1,
   "jing11223344": 4,
