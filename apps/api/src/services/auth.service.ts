@@ -1,11 +1,11 @@
-  async register(data: RegisterInput) {
-    const { email, password, name, role } = data;
-    
-    // Prevent self-assignment of admin role during registration
-    if (role === 'ADMIN' || role === 'admin') {
-      throw new Error('Admin role cannot be self-assigned');
+      throw new Error('User already exists');
     }
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
+
+    // Prevent self-assignment of admin role during registration
+    if (userData.role === 'ADMIN') {
+      throw new Error('Cannot self-assign admin role during registration');
+    }
+
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+
     const user = await prisma.user.create({
