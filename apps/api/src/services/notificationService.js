@@ -1,6 +1,9 @@
 const notifications = [];
 
-export async function listNotifications() {
+export async function listNotifications(userId) {
+  if (userId) {
+    return notifications.filter((n) => n.userId === userId);
+  }
   return notifications;
 }
 
