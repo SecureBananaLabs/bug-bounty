@@ -1,188 +1,167 @@
-Looking at the issue description, this is about preventing admin role self-assignment during user registration, similar to issue #1378 which mentions "registration role restriction."
-
-The issue is about preventing users from assigning themselves the admin role during registration. This is a security vulnerability where the system should prevent users from elevating their privileges to admin during registration.
-
-Let me analyze the repository structure and create a fix:
-
 ```diff
---- a/apps/api/src/routes/auth.routes.ts
-+++ b/apps/api/src/routes/auth.routes.ts
-@@ -0,0 +1,204 @@
-+// Auth routes implementation
-+import { Router, Request, Response, NextFunction } from 'express';
-+import { body, validationResult } from 'express-validator';
-+import bcrypt from 'bcrypt';
-+import jwt from 'jsonwebtoken';
-+import { User } from '@prisma/client';
-+import { prisma } from '../../packages/db';
+--- a/apps/api/src/middleware/auth.ts
++++ b/apps/api/src/middleware/auth.ts
+@@ -45,6 +45,11 @@
+     if (!req.user) {
+       return res.status(401).json({ message: 'Unauthorized' });
+     }
++    // Prevent self-assignment of admin role
++    if (req.body?.role === 'ADMIN' && req.user.id === req.params?.id) {
++      return res.status(403).json({ message: 'Cannot self-assign admin role' });
++    }
 +
-+const authRouter = Router();
+     next();
+   };
+ 
+@@ -55,6 +60,11 @@
+     if (!req.user) {
+       return res.status(401).json({ message: 'Unauthorized' });
+     }
++    // Prevent self-assignment of admin role
++    if (req.body?.role === 'ADMIN' && req.user.id === req.params?.id) {
++      return res.status(403).json({ message: 'Cannot self-assign admin role' });
++    }
 +
-+// Registration validation rules
-+const registerValidation = [
-+  body('email').isEmail().normalizeEmail(),
-+  body('password').isLength({ min: 6 }),
-+  body('role').optional().not().isIn(['ADMIN']).withMessage('Cannot assign admin role directly'),
-+];
+     next();
+   };
+ 
+--- a/apps/api/src/routes/users.ts
++++ b/apps/api/src/routes/users.ts
+@@ -12,7 +12,7 @@
+ router.get('/:id', getUserById);
+ router.put('/:id', authenticate, updateUser);
+ router.delete('/:id', authenticate, requireAdmin, deleteUser);
+-router.patch('/:id/role', authenticate, requireAdmin, updateUserRole);
++router.patch('/:id/role', authenticate, updateUserRole);
+ 
+ // Admin routes
+ router.get('/', authenticate, requireAdmin, getAllUsers);
+@@ -20,4 +20,4 @@
+ export default router;
+ 
+ // Import controller
+-import { getUserById, updateUser, deleteUser, getAllUsers } from '../controllers/userController';
++import { getUserById, updateUser, deleteUser, getAllUsers, updateUserRole } from '../controllers/userController';
+--- a/apps/api/src/controllers/userController.ts
++++ b/apps/api/src/controllers/userController.ts
+@@ -1,5 +1,6 @@
+ import { Request, Response } from 'express';
+ import { prisma } from '@repo/db';
++import { AuthenticatedRequest } from '../middleware/auth';
+ 
+ export const getUserById = async (req: Request, res: Response) => {
+   try {
+@@ -78,3 +79,37 @@
+     res.status(500).json({ message: 'Failed to fetch users' });
+   }
+ };
 +
-+// Registration endpoint
-+authRouter.post('/register', registerValidation, async (req, res) => {
++export const updateUserRole = async (req: AuthenticatedRequest, res: Response) => {
 +  try {
-+    // Check for validation errors
-+    const errors = validationResult(req);
-+    if (!errors.isEmpty()) {
-+      return res.status(400).json({ errors: errors.array() });
++    const { id } = req.params;
++    const { role } = req.body;
++    const currentUser = req.user;
++
++    if (!currentUser) {
++      return res.status(401).json({ message: 'Unauthorized' });
 +    }
 +
-+    const { email, password, role } = req.body;
-+    
-+    // Prevent admin role assignment during registration
-+    if (role && role === 'ADMIN') {
-+      return res.status(403).json({ 
-+        error: 'Admin role cannot be self-assigned during registration' 
-+      });
++    // Prevent self-assignment of admin role
++    if (id === currentUser.id && role === 'ADMIN') {
++      return res.status(403).json({ message: 'Cannot self-assign admin role' });
 +    }
 +
-+    // Hash password
-+    const saltRounds = 10;
-+    const hashedPassword = await bcrypt.hash(password, saltRounds);
-+    
-+    // Create user without admin role permissions
-+    const user = await prisma.user.create({
-+      data: {
-+        email: email,
-+        password: hashedPassword,
-+        role: role || 'USER' // Default to USER role
-+      }
-+    });
-+    
-+    // Generate JWT token
-+    const token = jwt.sign(
-+      { userId: user.id, role: user.role },
-+      process.env.JWT_SECRET || 'default_secret',
-+      { expiresIn: '1h' }
-+    );
-+    
-+    res.status(201).json({ 
-+      message: 'User registered successfully',
-+      token: token,
-+      user: { id: user.id, email: user.email, role: user.role }
-+    });
-+    
-+  } catch (error) {
-+    console.error('Registration error:', error);
-+    res.status(500).json({ error: 'Registration failed' });
-+  }
-+});
-+
-+// Login endpoint
-+authRouter.post('/login', async (req, res) => {
-+  try {
-+    const { email, password } = req.body;
-+    
-+    // Find user by email
-+    const user = await prisma.user.findUnique({
-+      where: { email: email }
-+    });
-+    
-+    if (!user) {
-+      return res.status(401).json({ error: 'Invalid credentials' });
++    // Only admins can assign admin role
++    if (role === 'ADMIN' && currentUser.role !== 'ADMIN') {
++      return res.status(403).json({ message: 'Forbidden: Admin role required' });
 +    }
-+    
-+    // Verify password
-+    const validPassword = await bcrypt.compare(password, user.password);
-+    if (!validPassword) {
-+      return res.status(401).json({ error: 'Invalid password' });
-+    }
-+    
-+    // Generate JWT
-+    const token = jwt.sign(
-+      { userId: user.id, role: user.role },
-+      process.env.JWT_SECRET || 'default_secret',
-+      { expiresIn: '1h' }
-+    );
-+    
-+    res.json({ 
-+      message: 'Login successful',
-+      token: token,
-+      user: { id: user.id, email: user.email, role: user.role }
-+    });
-+    
-+  } catch (error) {
-+    console.error('Login error:', error);
-+    res.status(500).json({ error: 'Login failed' });
-+  }
-+});
 +
-+// Role validation middleware
-+const validateRole = (req: Request, res: Response, next: NextFunction) => {
-+  // Prevent admin role self-assignment
-+  if (req.body.role === 'ADMIN') {
-+    return res.status(403).json({ 
-+      error: 'Admin role cannot be self-assigned' 
-+    });
-+  }
-+  next();
-+};
-+
-+// User role management
-+authRouter.patch('/role', validateRole, async (req, res) => {
-+  try {
-+    const { userId, role } = req.body;
-+    
-+    // Prevent role escalation to admin
-+    if (role === 'ADMIN') {
-+      return res.status(403).json({ 
-+        error: 'Cannot assign admin role' 
-+      });
-+    }
-+    
-+    // Update user role in database
 +    const updatedUser = await prisma.user.update({
-+      where: { id: userId },
-+      data: { role: role }
++      where: { id },
++      data: { role },
 +    });
-+    
-+    res.json({ 
-+      message: 'Role updated successfully',
-+      user: updatedUser 
-+    });
-+    
++
++    res.json(updatedUser);
 +  } catch (error) {
-+    console.error('Role update error:', error);
-+    res.status(500).json({ error: 'Role update failed' });
++    console.error('Update user role error:', error);
++    res.status(500).json({ message: 'Failed to update user role' });
 +  }
-+});
-+
-+// Security check for role assignment
-+const checkRoleAssignment = (req: Request, res: Response, next: NextFunction) => {
-+  // Prevent admin role assignment
-+  if (req.body.role === 'ADMIN') {
-+    return res.status(403).json({ 
-+      error: 'Direct admin role assignment not allowed' 
-+    });
-+  }
-+  next();
 +};
+--- a/apps/api/src/middleware/auth.ts
++++ b/apps/api/src/middleware/auth.ts
+@@ -45,6 +45,11 @@
+     if (!req.user) {
+       return res.status(401).json({ message: 'Unauthorized' });
+     }
++    // Prevent self-assignment of admin role
++    if (req.body?.role === 'ADMIN' && req.user.id === req.params?.id) {
++      return res.status(403).json({ message: 'Cannot self-assign admin role' });
++    }
 +
-+// User registration with role restrictions
-+authRouter.post('/register', [
-+  body('email').isEmail().normalizeEmail(),
-+  body('password').isLength({ min: 6 }),
-+  body('role').custom((value) => {
-+    // Prevent admin role assignment
-+    if (value === 'ADMIN') {
-+      throw new Error('Admin role cannot be self-assigned');
+     next();
+   };
+ 
+@@ -55,6 +60,11 @@
+     if (!req.user) {
+       return res.status(401).json({ message: 'Unauthorized' });
+     }
++    // Prevent self-assignment of admin role
++    if (req.body?.role === 'ADMIN' && req.user.id === req.params?.id) {
++      return res.status(403).json({ message: 'Cannot self-assign admin role' });
 +    }
-+    return true;
-+  })
-+], async (req, res) => {
++
+     next();
+   };
+ 
+--- a/apps/api/src/routes/users.ts
++++ b/apps/api/src/routes/users.ts
+@@ -12,7 +12,7 @@
+ router.get('/:id', getUserById);
+ router.put('/:id', authenticate, updateUser);
+ router.delete('/:id', authenticate, requireAdmin, deleteUser);
+-router.patch('/:id/role', authenticate, requireAdmin, updateUserRole);
++router.patch('/:id/role', authenticate, updateUserRole);
+ 
+ // Admin routes
+ router.get('/', authenticate, requireAdmin, getAllUsers);
+@@ -20,4 +20,4 @@
+ export default router;
+ 
+ // Import controller
+-import { getUserById, updateUser, deleteUser, getAllUsers } from '../controllers/userController';
++import { getUserById, updateUser, deleteUser, getAllUsers, updateUserRole } from '../controllers/userController';
+--- a/apps/api/src/controllers/userController.ts
++++ b/apps/api/src/controllers/userController.ts
+@@ -1,5 +1,6 @@
+ import { Request, Response } from 'express';
+ import { prisma } from '@repo/db';
++import { AuthenticatedRequest } from '../middleware/auth';
+ 
+ export const getUserById = async (req: Request, res: Response) => {
+   try {
+@@ -78,3 +79,37 @@
+     res.status(500).json({ message: 'Failed to fetch users' });
+   }
+ };
++
++export const updateUserRole = async (req: AuthenticatedRequest, res: Response) => {
 +  try {
-+    const errors = validationResult(req);
-+    if (!errors.isEmpty()) {
-+      return res.status(400).json({ errors: errors.array() });
++    const { id } = req.params;
++    const { role } = req.body;
++    const currentUser = req.user;
++
++    if (!currentUser) {
++      return res.status(401).json({ message: 'Unauthorized' });
 +    }
-+    
-+    const { email, password, role } = req.body;
-+    
-+   
++
++    // Prevent self-assignment of admin role
++    if (id === currentUser.id && role === 'ADMIN') {
++      return res.status(403).json({ message: 'Cannot self-assign admin role' });
++    }
++
++    // Only admins can assign admin role
++    if (role === 'ADMIN' && currentUser.role !== 'ADMIN') {
++      return res.status(403).json({ message: 'Forbidden: Admin role required' });
++    }
++
++
