@@ -1,4 +1,16 @@
-<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
+# Contributing to FreelanceFlow
+
+## Low Hanging Fruit Automation
+
+To claim a bounty, follow these steps:
+
+1. Create a new issue using the format below:
+2. Find a feature/bug to work on from this repository
+3. Create a GitHub issue on the repository to start working on it
+4. Add the following text to your issue: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+
+For each issue you create, you will be assigned the task to work on the issue exclusively.
+
 
 <img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
 
@@ -41,44 +53,4 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-CONTRIBUTING.md
-================
-
-Thank you for your interest in contributing to our project! We're glad you're here.
-
-## How to Contribute
-
-If you're interested in contributing to our project, please follow the guidelines below:
-
-## Reporting Bugs/Feature Requests
-
-We welcome bug reports and feature requests. Please create an issue on GitHub and include:
-1. A clear and concise description of the issue/feature
-2. Steps to reproduce the issue (for bug reports)
-3. A clear and concise title
-4. A clear and concise description of the suggested solution (for feature requests)
-
-## Code Structure
-
-The code should be well-documented and follow best practices. The following are the `standard` code style guidelines:
-
-1. Use 2-space indentation
-2. Use camelCase for variable names
-3. Use PascalCase for component names
-4. Use single quotes for strings
-5. Use strict equality (=== and !==) for comparisons
-6. Use JSDoc comments for all functions
-7. Use descriptive variable names
-8. Use the project's issue tracking system to create a new issue
-9. Use the project's issue tracking system to create a new issue
-10. Use the project's issue tracking system to create a new issue
-11. Use the project's issue tracking system to create a new issue
-12. Use the project's issue tracking system to create a new issue
-13. Use the project's issue tracking system to create a new issue
-14. Use the project's issue tracking system to create a new issue
-15. Use the project's issue tracking system to create a new issue
-16. Use the project's issue tracking system to create a new issue
-17. Use the project's issue tracking system to create a new issue
-18. Use the project's issue tracking system to create a new issue
-19. Use the project's issue tracking
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
