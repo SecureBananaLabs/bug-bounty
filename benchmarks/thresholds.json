@@ -1,10 +1,6 @@
 {
-  "endpoints": {
-    "/api/auth/login": {
-      "p99Latency": 500
-    },
-    "/api/jobs": {
-      "p99Latency": 800
-    }
+  "p99": 1000,
+  "requests": {
+    "mean": 100
   }
 }
