@@ -1,7 +1,5 @@
-# Cyberpunk City Pixel Art
+# Cosmic Forest Pixel Art
 
-**What:** A 64x64 pixel art depiction of a rainy cyberpunk cityscape with neon-lit skyscrapers, holographic billboards, and reflective wet streets.
+**What:** A mystical forest scene at twilight with glowing bioluminescent mushrooms, ancient twisted trees, and a star-filled cosmic sky.
 
-**Why:** I chose this theme because cyberpunk aesthetics perfectly showcase the expressive potential of pixel art—limited resolution forces creative use of color and dithering to convey atmosphere, depth, and emotion. The neon contrast against dark blues and purples creates visual drama that draws the viewer into a futuristic world.
-
-Created with creative thinking to maximize visual impact within pixel constraints.
+**Why:** I chose this theme to blend the tranquility of nature with the wonder of the cosmos, creating a dreamy escape that sparks imagination. The contrast between the dark forest and vibrant glowing elements represents finding light and magic in unexpected places.
