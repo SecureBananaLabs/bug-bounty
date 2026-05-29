@@ -1,21 +1,27 @@
 {
   "name": "bug-bounty",
-  "version": "1.0.1",
-  "description": "Bug bounty program",
   "scripts": {
-    "benchmark": "node benchmarks/run-benchmarks.js"
+    "benchmark": "node benchmarks/index.js"
+  },
+  "devDependencies": {
+    "autocannon": "^7.0.0"
+  },
+  "dependencies": {
+    "minimist": "^1.2.0"
   },
   "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "benchmark": "node benchmarks/run-benchmarks.js"
+  "engines": {
+    "node": ">=14.0.0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT"
-,
-  "devDependencies": {
-    "autocannon": "^7.10.0"
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "lint": "echo \"No root lint configured\"",
+    "test": "npm run test -w apps/api"
   }
 }
