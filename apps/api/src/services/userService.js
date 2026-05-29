@@ -1,7 +1,9 @@
+import { snapshotRecords } from "./snapshot.js";
+
 const users = [];
 
 export async function listUsers() {
-  return users;
+  return snapshotRecords(users);
 }
 
 export async function createUser(payload) {

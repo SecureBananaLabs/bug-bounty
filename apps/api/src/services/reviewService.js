@@ -1,7 +1,9 @@
+import { snapshotRecords } from "./snapshot.js";
+
 const reviews = [];
 
 export async function listReviews() {
-  return reviews;
+  return snapshotRecords(reviews);
 }
 
 export async function createReview(payload) {
