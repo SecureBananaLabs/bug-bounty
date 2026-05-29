@@ -1,22 +1,21 @@
 {
-  "name": "bug-bounty-benchmark",
-  "version": "1.0.0",
-  "description": "Benchmarking tools for Bug Bounty platform",
-  "type": "module",
+  "name": "freelanceflow",
   "scripts": {
-    "benchmark": "node benchmarks/run-benchmarks.js"
-  }
-}
-{
-  "name": "bug-bounty",
-  "private": true,
+    "benchmark": "node benchmarks/run.js"
+  },
   "workspaces": [
     "apps/*",
+    "packages/*"
     "packages/*"
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
-  }
-}
+  "devDependencies": {
+    "concurrently": "^8.0.0",
+    "nodemon": "^3.0.0"
+  },
+  "dependencies": {
+    "autocannon": "^7.12.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
