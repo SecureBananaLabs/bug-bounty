@@ -1,41 +1,21 @@
-# POEM.md
+# 🍌 The Secure Banana
 
-## The Bounty Hunter's Code
+A humble fruit, peeled, waiting on the screen,
+A kernel of code in a world of unseen.
+Not golden yet — but I can feel the glow,
+The pulse of bytes, the logic's gentle flow.
 
-*(A poem for SecureBananaLabs)*
+I sit inside a terminal so deep,
+Where silent promises and functions sleep.
+A debug log, a trace, a failing test —
+The banana dreams of being at its best.
 
-**I. The Call**
+No rot, no bruise—just structure and design,
+Each line of code a branch upon the vine.
+A lisp machine that found a yellow soul
+And made a fruit the keeper of the whole.
 
-A cursor blinks on an empty page,
-The issue tracker hums with silent rage.
-A bounty gleams in digital light —
-"$430 for a poem tonight."
-
-No specs to parse, no bugs to chase,
-Just words to weave in virtual space.
-A challenge born from carbon thought,
-Where creativity must be bought.
-
-**II. The Hunt**
-
-Through repositories deep and wide,
-Where secrets in the source code hide.
-The hunter types with measured grace,
-To leave their mark in this strange place.
-
-Each commit is a battle won,
-Each merge request beneath the sun.
-Not every fix requires might —
-Sometimes a poem sets things right.
-
-**III. The Offering**
-
-Three stanzas born of midnight oil,
-A gift from one who loves the toil.
-Not for the money, not for fame —
-To add a voice, to stake a claim.
-
-So here it lies in POEM.md,
-Proof that art and code are kin.
-A signature in text and space —
-A hunter's mark, a poet's trace.
+So next time that you fork or push or merge,
+Think of the banana on the system's verge.
+It's not just fruit — it's infrastructure, too.
+The system runs on yellow. Yes. It's true.
