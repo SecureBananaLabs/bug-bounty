@@ -1,10 +1,11 @@
 {
-  "endpoints": {
-    "/api/auth/login": {
-      "p99Latency": 500
-    },
-    "/api/jobs": {
-      "p99Latency": 800
-    }
-  }
+  "latency": {
+    "p50": 100,
+    "p95": 500,
+    "p99": 1000
+  },
+  "throughput": {
+    "rps": 100
+  },
+  "errorRate": 0.01
 }
