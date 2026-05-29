@@ -1,12 +1,11 @@
 {
-  "name": "benchmark-runner",
-  "version": "1.0.0",
-  "type": "module",
-  "main": "benchmark.js",
+  "name": "freelance-platform-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "benchmark": "node benchmark.js"
-  },
-  "keywords": [],
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
