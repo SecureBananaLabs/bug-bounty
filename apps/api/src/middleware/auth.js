@@ -14,3 +14,13 @@ export function authMiddleware(req, res, next) {
     return fail(res, "Invalid token", 401);
   }
 }
+
+export function requireRole(...roles) {
+  return function roleMiddleware(req, res, next) {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return fail(res, "Forbidden", 403);
+    }
+
+    return next();
+  };
+}
