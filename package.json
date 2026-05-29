@@ -1,47 +1,22 @@
 {
-  "name": "package.json",
+  "name": "bug-bounty-benchmark",
   "version": "1.0.0",
+  "description": "Benchmarking tools for Bug Bounty platform",
   "type": "module",
-  "description": "SecureBananaLabs bug bounty program",
-    "packages/*"
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "autocannon": "^7.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.0"
-  },
-  "main": "index.js",
-    "test": "npm run test -w apps/api"
+    "benchmark": "node benchmarks/run-benchmarks.js"
   }
 }
-  "license": "MIT",
-  "devDependencies": {
-    "nodemon": "^2.0.0"
-  },
+{
+  "name": "bug-bounty",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "autocannon": "^7.0.0"
-  },
-  "main": "index.js",
-  "license": "MIT",
-  "devDependencies": {
-    "nodemon": "^2.0.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "autocannon": "^7.0.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "engines": {
-    "node": ">=14.0.0"
+    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "lint": "echo \"No root lint configured\"",
+    "test": "npm run test -w apps/api"
   }
 }
