@@ -22,8 +22,7 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const authHeader = req.headers.authorization;
-  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  const token = req.body?.token || req.headers.authorization?.slice(7);
   const result = await refreshToken(token);
   return ok(res, result);
 }
