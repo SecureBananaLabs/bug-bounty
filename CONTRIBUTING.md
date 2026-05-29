@@ -1,16 +1,4 @@
-# Contributing to FreelanceFlow
-
-## Low Hanging Fruit Automation
-
-To claim a bounty, follow these steps:
-
-1. Create a new issue using the format below:
-2. Find a feature/bug to work on from this repository
-3. Create a GitHub issue on the repository to start working on it
-4. Add the following text to your issue: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-
-For each issue you create, you will be assigned the task to work on the issue exclusively.
-
+<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
 
 <img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
 
@@ -53,4 +41,23 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
+# Contributing to Project
+
+## Finding and Creating Issues
+
+To contribute to this project, please follow these steps:
+
+1. Look for a feature or bug to work on within this repository.
+2. Create a GitHub issue describing the bug or feature you found. Add the following text to the issue description:
+   "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+
+## Claiming your issue
+
+Once you've created an issue:
+
+- Fork the repo
+- Create a new branch in your fork
+- Create your PR
+
+This issue can only be worked on by the issue creator. This is a real paid issue. Bounty hunters can claim this issue by creating a PR that references this issue.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
