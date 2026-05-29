@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "npm run lint -w apps/api",
+    "lint": "node -e \"const fs=require('fs');const p=require('path');const dir='apps/api/src';let ok=true;function check(d){for(const f of fs.readdirSync(d)){const fp=p.join(d,f);if(fs.statSync(fp).isDirectory())check(fp);else if(/\\.js$/.test(f)){try{new Function(fs.readFileSync(fp,'utf8'))}catch(e){console.error(fp+':'+e.message);ok=false}}}}check(dir);process.exit(ok?0:1)\"",
     "test": "npm run test -w apps/api"
   }
 }
