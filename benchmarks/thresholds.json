@@ -1,0 +1,47 @@
+{
+  "auth": {
+    "register": { "p99": 500, "p95": 200, "errorRate": 1 },
+    "login": { "p99": 500, "p95": 200, "errorRate": 1 }
+  },
+  "jobs": {
+    "list": { "p99": 300, "p95": 150, "errorRate": 1 },
+    "create": { "p99": 500, "p95": 200, "errorRate": 1 },
+    "getById": { "p99": 300, "p95": 150, "errorRate": 1 },
+    "update": { "p99": 500, "p95": 200, "errorRate": 1 },
+    "delete": { "p99": 500, "p95": 200, "errorRate": 1 }
+  },
+  "users": {
+    "list": { "p99": 300, "p95": 150, "errorRate": 1 },
+    "getProfile": { "p99": 300, "p95": 150, "errorRate": 1 },
+    "update": { "p99": 500, "p95": 200, "errorRate": 1 }
+  },
+  "proposals": {
+    "list": { "p99": 300, "p95": 150, "errorRate": 1 },
+    "create": { "p99": 500, "p95": 200, "errorRate": 1 }
+  },
+  "messages": {
+    "list": { "p99": 300, "p95": 150, "errorRate": 1 },
+    "send": { "p99": 500, "p95": 200, "errorRate": 1 }
+  },
+  "payments": {
+    "list": { "p99": 300, "p95": 150, "errorRate": 1 },
+    "create": { "p99": 500, "p95": 200, "errorRate": 1 }
+  },
+  "reviews": {
+    "list": { "p99": 300, "p95": 150, "errorRate": 1 },
+    "create": { "p99": 500, "p95": 200, "errorRate": 1 }
+  },
+  "notifications": {
+    "list": { "p99": 300, "p95": 150, "errorRate": 1 }
+  },
+  "search": {
+    "search": { "p99": 500, "p95": 200, "errorRate": 1 }
+  },
+  "uploads": {
+    "upload": { "p99": 1000, "p95": 500, "errorRate": 1 }
+  },
+  "admin": {
+    "dashboard": { "p99": 500, "p95": 200, "errorRate": 1 },
+    "users": { "p99": 500, "p95": 200, "errorRate": 1 }
+  }
+}

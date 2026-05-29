@@ -9,5 +9,9 @@
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
+  },
+  "devDependencies": {
+    "autocannon": "8.0.0",
+    "dotenv": "17.4.2"
   }
 }
