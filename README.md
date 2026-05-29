@@ -1,6 +1,7 @@
 # Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" /><br/>
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
+# FreelanceFlow Monorepo
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
@@ -34,10 +35,14 @@ The API includes:
 - Auth routes (register, login, OAuth callback, JWT refresh)
 - CRUD routes for users, jobs, and proposals
 - Payments routes (Stripe-focused service placeholder)
-- Reviews, messaging, notifications
-- File uploads and search
-- Admin routes
+- Categories
+- Skills
 
+## Bug Bounty
+
+This repository is part of a bug bounty program. Visit [issue #743](https://github.com/SecureBananaLabs/bug-bounty/issues/743) for participation details.
+
+## Environment Variables
 Backend architecture follows:
 
 - Middleware layer (auth, rate limiting, error handling)
