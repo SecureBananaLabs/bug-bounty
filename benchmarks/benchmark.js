@@ -1,65 +1,58 @@
 import autocannon from 'autocannon';
-import fs from 'fs';
-import path from 'path';
+import { writeFileSync, readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import { createApp } from '../apps/api/src/app.js';
 
-const autocannonConfig = {
-  url: process.env.BENCHMARK_URL || 'http://localhost:3000',
-  connections: parseInt(process.env.BENCHMARK_CONNECTIONS) || 10,
-  pipelining: parseInt(process.env.BENCHMARK_PIPELINING) || 10,
-  timeout: parseInt(process.env.BENCHMARK_TIMEOUT) || 10,
-  duration: parseInt(process.env.BENCHMARK_DURATION) || 30,
-  amount: parseInt(process.env.BENCHMARK_AMOUNT) || 10000,
-};
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const endpoints = [
-  '/api/auth/login',
-  '/api/auth/register',
-  '/api/users',
-  '/api/jobs',
-  '/api/proposals',
-  '/api/payments',
-  '/api/reviews',
-  '/api/messages',
-  '/api/notifications',
-  '/api/uploads',
-  '/api/search',
-  '/api/admin',
-  '/health'
-];
+// Load the Express app to get the list of routes
+const app = createApp();
+const endpoints = [];
 
-async function runBenchmark() {
-  const results = [];
-
-  for (const endpoint of endpoints) {
-    const url = `${autocannonConfig.url}${endpoint}`;
-    console.log(`Benchmarking ${url}`);
-    
-    const result = await autocannon({ 
-      url,
-      connections: autocannonConfig.connections,
-      pipelining: autocannonConfig.pipelining,
-      timeout: autocannonConfig.timeout,
-      duration: autocannonConfig.duration,
-      amount: autocannonConfig.amount,
-    });
-
-    results.push({
-      endpoint,
-      ...result
-    });
+// Dynamically discover routes under /api/
+app._router.stack.forEach((layer) => {
+  if (layer.route && layer.route.path.includes('/api/')) {
+    endpoints.push(layer.route.path);
   }
+});
 
+// Read thresholds from file
+let thresholds;
+try {
+  thresholds = JSON.parse(readFileSync(__dirname + '/thresholds.json', 'utf8'));
+} catch (err) {
+  console.error('Failed to load thresholds:', err.message);
+  process.exit(1);
+}
+
+// Function to run benchmark for a single endpoint
+async function benchmarkEndpoint(url) {
+  const result = await autocannon({
+    url,
+    ...thresholds
+  });
+  
+  return result;
+}
+
+// Run all benchmarks
+async function runAllBenchmarks() {
+  const results = {};
+  for (const endpoint of endpoints) {
+    console.log(`Benchmarking ${endpoint}...`);
+    results[endpoint] = await benchmarkEndpoint(endpoint);
+  }
   return results;
 }
 
-async function main() {
-  try {
-    const results = await runBenchmark();
-    console.log('Benchmarking complete');
-    console.log(results);
-  } catch (error) {
-    console.error('Benchmark failed:', error);
-  }
+// Save results to file
+function saveResults(results) {
+  writeFileSync(
+    __dirname + '/results/results.json',
+    JSON.stringify(results, null, 2),
+    'utf8'
+  );
 }
 
-main();
+export { runAllBbenmarksmarks, saveResults };
