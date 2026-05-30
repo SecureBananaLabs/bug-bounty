@@ -1,9 +1,9 @@
 {
   "owner": "SecureBananaLabs",
   "repo": "bug-bounty",
-  "issueNumber": "1781",
-  "title": "fix: prevent DoS on search endpoint via query length limit and input validation",
-  "body": "## Bug: Missing Input Validation on Search Query\n\n**Description:** The `GET /api/search` endpoint passes `req.query.q` directly to the search service without any validation or length limits. An attacker could send extremely long query strings to consume server resources.\n\n**File:** `apps/api/src/controllers/searchController.js`\n\n**Expected behavior:** The search query should be validated — trimmed, limited in length (e.g., 200 chars), and sanitized.\n\n**Impact:** Low-Medium — potential DoS via overly long query strings.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "issueNumber": "1779",
+  "title": "Patch PostCSS audit advisory from Next dependency lockfile",
+  "body": "## Bug\n\nThe web workspace resolves `postcss@8.4.31` through `next@16.2.6`, and `npm audit --omit=dev` reports GHSA-qx2v-qp2m-jg93 for PostCSS. This leaves the repository with a moderate XSS advisory in the production dependency tree.\n\n## Evidence\n\n- `npm audit --omit=dev` reports `postcss` vulnerable for range `<8.5.10`.\n- `npm ls postcss --all` shows the web workspace resolves PostCSS through Next.\n\n## Expected fix\n\nAdd a root npm override for the patched PostCSS release and refresh `package-lock.json` so the workspace resolves `postcss@8.5.10` while preserving the existing Next version.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nParent bounty: #743",
   "labels": [
     "bug",
     "good first issue",
