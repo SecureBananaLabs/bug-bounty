@@ -1,0 +1,34 @@
+name: Benchmark Smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - ".github/workflows/benchmark-smoke.yml"
+      - "package.json"
+      - "package-lock.json"
+  workflow_dispatch:
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run benchmark:smoke
+        env:
+          JWT_SECRET: benchmark-smoke-secret
+          BENCHMARK_DURATION_SECONDS: 1
+          BENCHMARK_CONCURRENCY: 2
+          BENCHMARK_WARMUP_REQUESTS: 1
+          BENCHMARK_MAX_REQUESTS_PER_ENDPOINT: 2
