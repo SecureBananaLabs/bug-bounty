@@ -14,6 +14,7 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { authMiddleware } from "./middleware/auth.js";
 
 export function createApp() {
   const app = express();
@@ -28,15 +29,15 @@ export function createApp() {
   });
 
   app.use("/api/auth", authRoutes);
-  app.use("/api/users", userRoutes);
-  app.use("/api/jobs", jobRoutes);
-  app.use("/api/proposals", proposalRoutes);
-  app.use("/api/payments", paymentRoutes);
-  app.use("/api/reviews", reviewRoutes);
-  app.use("/api/messages", messageRoutes);
-  app.use("/api/notifications", notificationRoutes);
-  app.use("/api/uploads", uploadRoutes);
-  app.use("/api/search", searchRoutes);
+  app.use("/api/users", authMiddleware, userRoutes);
+  app.use("/api/jobs", authMiddleware, jobRoutes);
+  app.use("/api/proposals", authMiddleware, proposalRoutes);
+  app.use("/api/payments", authMiddleware, paymentRoutes);
+  app.use("/api/reviews", authMiddleware, reviewRoutes);
+  app.use("/api/messages", authMiddleware, messageRoutes);
+  app.use("/api/notifications", authMiddleware, notificationRoutes);
+  app.use("/api/uploads", authMiddleware, uploadRoutes);
+  app.use("/api/search", authMiddleware, searchRoutes);
   app.use("/api/admin", adminRoutes);
 
   app.use(errorHandler);
