@@ -1,27 +1,65 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { loginSchema, refreshSchema, registerSchema } from "../validators/auth.js";
+import { loginUser, refreshToken, registerUser, validateOAuthState } from "../services/authService.js";
+import { fail, ok } from "../utils/response.js";
+
+function handleAuthError(res, error) {
+  if (error.message === "User already exists") {
+    return fail(res, error.message, 409);
+  }
+
+  if (
+    error.message === "Invalid email or password" ||
+    error.message === "Invalid OAuth state" ||
+    error.message === "User not found" ||
+    error.message === "Invalid token type" ||
+    error.name === "JsonWebTokenError" ||
+    error.name === "TokenExpiredError"
+  ) {
+    return fail(res, error.message === "User not found" ? "Invalid refresh token" : error.message, 401);
+  }
+
+  throw error;
+}
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
+  try {
+    const payload = registerSchema.parse(req.body);
+    const result = await registerUser(payload);
+    return ok(res, result, 201);
+  } catch (error) {
+    return handleAuthError(res, error);
+  }
 }
 
 export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
+  try {
+    const payload = loginSchema.parse(req.body);
+    const result = await loginUser(payload);
+    return ok(res, result);
+  } catch (error) {
+    return handleAuthError(res, error);
+  }
 }
 
 export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
+  try {
+    const { state = "" } = req.query;
+    await validateOAuthState(req.params.provider, state);
+    return ok(res, {
+      provider: req.params.provider,
+      status: "callback-received"
+    });
+  } catch (error) {
+    return handleAuthError(res, error);
+  }
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  try {
+    const payload = refreshSchema.parse(req.body);
+    const result = await refreshToken(payload.refreshToken);
+    return ok(res, result);
+  } catch (error) {
+    return handleAuthError(res, error);
+  }
 }
