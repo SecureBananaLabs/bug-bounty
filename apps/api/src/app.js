@@ -14,12 +14,16 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { env } from "./config/env.js";
 
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+
+  const corsOrigin = process.env.CORS_ORIGIN ?? "*";
+  app.use(cors({ origin: corsOrigin, credentials: true }));
+
   app.use(express.json());
   app.use(apiLimiter);
 
