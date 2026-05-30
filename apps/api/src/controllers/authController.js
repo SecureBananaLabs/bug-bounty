@@ -22,6 +22,7 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  const payload = loginSchema.parse(req.body);
+  const result = await refreshToken(payload.refreshToken);
   return ok(res, result);
 }
