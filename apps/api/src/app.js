@@ -19,7 +19,8 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  const allowedOrigins = ["http://localhost:5173", "http://localhost:3000"];
+  app.use(cors({ origin: allowedOrigins }));
   app.use(express.json());
   app.use(apiLimiter);
 
