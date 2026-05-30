@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1755",
+  "title": "fix(auth): prevent admin role self-assignment during registration",
+  "body": "Registration currently accepts `role: \"admin\"` through `registerSchema`, so a public caller can self-assign an administrator role during account creation. The register endpoint should only allow normal user roles (`client` and `freelancer`) and continue defaulting omitted roles to `client`.\n\nExpected fix:\n- Remove `admin` from the public registration role enum\n- Keep `client` as the default role\n- Add focused validation coverage proving `admin` is rejected and normal roles still work\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
