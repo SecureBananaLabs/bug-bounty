@@ -3,14 +3,14 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { availableParallelism as getAvailableParallelism } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { performance } from "node:perf_hooks";
+import autocannon from "autocannon";
 import { apiBenchmarks } from "./routes.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const resultsDir = join(__dirname, "results");
 const envFile = join(__dirname, ".env.benchmark");
 const thresholdsFile = join(__dirname, "thresholds.json");
-const peakRpsWindowMs = 100;
+const autocannonVersion = readPackageVersion("autocannon");
 
 loadBenchmarkEnv();
 
@@ -19,24 +19,33 @@ const smoke = args.has("--smoke");
 const checkThresholds = args.has("--check-thresholds");
 
 const config = {
-  concurrency: readNumber("BENCHMARK_CONCURRENCY", smoke ? 2 : 20),
-  requests: readNumber("BENCHMARK_REQUESTS", smoke ? 4 : 80),
-  warmupRequests: readNumber("BENCHMARK_WARMUP_REQUESTS", smoke ? 1 : 3),
-  timeoutMs: readNumber("BENCHMARK_TIMEOUT_MS", smoke ? 5000 : 10000),
+  concurrency: readInteger("BENCHMARK_CONCURRENCY", smoke ? 2 : 20),
+  requests: readInteger("BENCHMARK_REQUESTS", smoke ? 4 : 80),
+  warmupRequests: readInteger("BENCHMARK_WARMUP_REQUESTS", smoke ? 1 : 3, { min: 0 }),
+  timeoutMs: readInteger("BENCHMARK_TIMEOUT_MS", smoke ? 5000 : 10000),
+  sampleIntervalMs: readInteger("BENCHMARK_SAMPLE_INTERVAL_MS", 1000),
   targetUrl: normalizeBaseUrl(process.env.BENCHMARK_TARGET_URL),
+  disableRateLimit: readBoolean("BENCHMARK_DISABLE_RATE_LIMIT", true),
+  runId: process.env.BENCHMARK_RUN_ID ?? makeRunId(),
   mode: smoke ? "smoke" : "default"
 };
 
 let localServer;
 
 try {
+  const { createApp } = await import("../apps/api/src/app.js");
   if (!config.targetUrl) {
     process.env.NODE_ENV = "benchmark";
     process.env.JWT_SECRET ??= "development-secret";
-    const { createApp } = await import("../apps/api/src/app.js");
+    if (config.disableRateLimit) {
+      process.env.BENCHMARK_DISABLE_RATE_LIMIT = "1";
+    }
     const app = createApp();
+    assertApiBenchmarkCoverage(app);
     localServer = await listenOnRandomPort(app);
     config.targetUrl = `http://127.0.0.1:${localServer.address().port}`;
+  } else {
+    assertApiBenchmarkCoverage(createApp());
   }
 
   const benchmarkAuthToken = await getBenchmarkAuthToken();
@@ -44,10 +53,19 @@ try {
   const startedAt = new Date();
   const environment = await collectEnvironment(config);
   const endpointResults = [];
+  let nextSequence = 1;
 
   for (const endpoint of apiBenchmarks) {
-    await warmupEndpoint(endpoint, config, benchmarkAuthToken);
-    endpointResults.push(await runEndpoint(endpoint, config, benchmarkAuthToken));
+    nextSequence += await warmupEndpoint(
+      endpoint,
+      config,
+      benchmarkAuthToken,
+      nextSequence
+    );
+    endpointResults.push(
+      await runEndpoint(endpoint, config, benchmarkAuthToken, nextSequence)
+    );
+    nextSequence += config.requests;
   }
 
   const report = {
@@ -61,7 +79,11 @@ try {
       requestsPerEndpoint: config.requests,
       warmupRequestsPerEndpoint: config.warmupRequests,
       timeoutMs: config.timeoutMs,
-      peakRpsWindowMs
+      sampleIntervalMs: config.sampleIntervalMs
+    },
+    tool: {
+      name: "autocannon",
+      version: autocannonVersion
     },
     environment,
     endpoints: endpointResults,
@@ -101,16 +123,24 @@ function loadBenchmarkEnv() {
   }
 }
 
-function readNumber(name, fallback) {
+function readInteger(name, fallback, { min = 1 } = {}) {
   const raw = process.env[name];
   if (!raw) {
     return fallback;
   }
   const parsed = Number(raw);
-  if (!Number.isFinite(parsed) || parsed <= 0) {
-    throw new Error(`${name} must be a positive number`);
+  if (!Number.isSafeInteger(parsed) || parsed < min) {
+    throw new Error(`${name} must be an integer greater than or equal to ${min}`);
   }
   return parsed;
+}
+
+function readBoolean(name, fallback) {
+  const raw = process.env[name];
+  if (raw === undefined || raw === "") {
+    return fallback;
+  }
+  return !["0", "false", "no", "off"].includes(raw.toLowerCase());
 }
 
 function normalizeBaseUrl(value) {
@@ -145,41 +175,78 @@ async function getBenchmarkAuthToken() {
   });
 }
 
-async function warmupEndpoint(endpoint, config, benchmarkAuthToken) {
-  const warmupConfig = { ...config, concurrency: 1, requests: config.warmupRequests };
+async function warmupEndpoint(endpoint, config, benchmarkAuthToken, sequenceStart) {
+  const warmupConfig = {
+    ...config,
+    concurrency: 1,
+    requests: config.warmupRequests
+  };
   if (warmupConfig.requests <= 0) {
-    return;
+    return 0;
   }
-  await runEndpoint(endpoint, warmupConfig, benchmarkAuthToken, true);
+  await runEndpoint(endpoint, warmupConfig, benchmarkAuthToken, sequenceStart, true);
+  return warmupConfig.requests;
 }
 
-async function runEndpoint(endpoint, config, benchmarkAuthToken, warmup = false) {
-  const records = [];
-  let nextIndex = 0;
+async function runEndpoint(
+  endpoint,
+  config,
+  benchmarkAuthToken,
+  sequenceStart,
+  warmup = false
+) {
+  const responseRecords = [];
+  const headerTimingsMs = [];
+  let nextSequence = sequenceStart;
 
-  const workerCount = Math.min(config.concurrency, config.requests);
-  const runStartedAt = performance.now();
-  await Promise.all(Array.from({ length: workerCount }, async () => {
-    while (nextIndex < config.requests) {
-      const index = nextIndex;
-      nextIndex += 1;
-      records.push(await executeRequest(endpoint, config, benchmarkAuthToken, index));
+  const instance = autocannon({
+    title: endpoint.name,
+    url: config.targetUrl,
+    connections: Math.min(config.concurrency, config.requests),
+    amount: config.requests,
+    timeout: Math.ceil(config.timeoutMs / 1000),
+    sampleInt: config.sampleIntervalMs,
+    pipelining: 1,
+    requests: [
+      {
+        setupRequest: () => buildAutocannonRequest(
+          endpoint,
+          benchmarkAuthToken,
+          nextSequence++,
+          config.runId
+        )
+      }
+    ],
+    setupClient(client) {
+      client.on("headers", () => {
+        const pending = client.pipelinedRequests?.peek?.();
+        if (!pending?.startTime) {
+          return;
+        }
+        const [seconds, nanoseconds] = process.hrtime(pending.startTime);
+        headerTimingsMs.push((seconds * 1000) + (nanoseconds / 1e6));
+      });
     }
-  }));
-  const runFinishedAt = performance.now();
+  });
+
+  instance.on("response", (_client, status, bytes, latencyMs) => {
+    responseRecords.push({ status, bytes, latencyMs });
+  });
+
+  const result = await instance;
 
   if (warmup) {
     return null;
   }
 
-  return summarizeEndpoint(endpoint, records, runFinishedAt - runStartedAt);
+  return summarizeEndpoint(endpoint, result, responseRecords, headerTimingsMs);
 }
 
-async function executeRequest(endpoint, config, benchmarkAuthToken, index) {
-  const url = new URL(endpoint.path, `${config.targetUrl}/`);
+function buildAutocannonRequest(endpoint, benchmarkAuthToken, sequence, runId) {
   const headers = {};
   const request = {
     method: endpoint.method,
+    path: endpoint.path,
     headers
   };
 
@@ -189,65 +256,74 @@ async function executeRequest(endpoint, config, benchmarkAuthToken, index) {
 
   if (endpoint.payloadKind === "json") {
     headers["content-type"] = "application/json";
-    request.body = JSON.stringify(endpoint.buildRequest({ sequence: index + 1 }));
+    request.body = JSON.stringify(endpoint.buildRequest({ sequence, runId }));
   } else if (endpoint.payloadKind === "multipart") {
-    request.body = endpoint.buildRequest({ sequence: index + 1 });
+    const multipart = buildMultipartBody(endpoint.buildRequest({ sequence, runId }), runId, sequence);
+    headers["content-type"] = multipart.contentType;
+    request.body = multipart.body;
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), config.timeoutMs);
-  const startedAt = performance.now();
-  try {
-    const response = await fetch(url, { ...request, signal: controller.signal });
-    const headersAt = performance.now();
-    await response.arrayBuffer();
-    const finishedAt = performance.now();
-    const success = response.status >= 200 && response.status < 300;
-
-    return {
-      status: response.status,
-      ok: success,
-      latencyMs: finishedAt - startedAt,
-      ttfbMs: headersAt - startedAt,
-      completedAtMs: finishedAt
-    };
-  } catch (error) {
-    const finishedAt = performance.now();
-    return {
-      status: 0,
-      ok: false,
-      error: error.name === "AbortError" ? "timeout" : error.message,
-      latencyMs: finishedAt - startedAt,
-      ttfbMs: finishedAt - startedAt,
-      completedAtMs: finishedAt
-    };
-  } finally {
-    clearTimeout(timeout);
-  }
+  return request;
 }
 
-function summarizeEndpoint(endpoint, records, elapsedMs) {
-  const latencies = records.map((record) => record.latencyMs);
-  const ttfb = records.map((record) => record.ttfbMs);
-  const errors = records.filter((record) => !record.ok);
-  const elapsedSeconds = Math.max(elapsedMs / 1000, 0.001);
+function buildMultipartBody(file, runId, sequence) {
+  const boundary = `----securebanana-benchmark-${runId}-${sequence}`;
+  const body = [
+    `--${boundary}`,
+    `Content-Disposition: form-data; name="${file.fieldName}"; filename="${file.filename}"`,
+    `Content-Type: ${file.contentType}`,
+    "",
+    file.body,
+    `--${boundary}--`,
+    ""
+  ].join("\r\n");
+  return {
+    body,
+    contentType: `multipart/form-data; boundary=${boundary}`
+  };
+}
+
+function summarizeEndpoint(endpoint, result, responseRecords, headerTimingsMs) {
+  const statusCounts = normalizeStatusCounts(result.statusCodeStats);
+  const completedResponses = Object.values(statusCounts).reduce((total, count) => total + count, 0);
+  const successCount = Object.entries(statusCounts)
+    .filter(([status]) => Number(status) >= 200 && Number(status) < 300)
+    .reduce((total, [, count]) => total + count, 0);
+  const requestCount = Math.max(result.requests?.sent ?? 0, completedResponses + result.errors);
+  const errorCount = Math.max(0, requestCount - successCount);
+  const elapsedSeconds = Math.max(result.duration, 0.001);
 
   return {
     name: endpoint.name,
     method: endpoint.method,
     path: endpoint.path,
-    routeKey: `${endpoint.method} ${stripQuery(endpoint.path)}`,
-    requests: records.length,
-    successes: records.length - errors.length,
-    errors: errors.length,
-    errorRate: errors.length / records.length,
-    elapsedMs: round(elapsedMs),
-    sustainedRps: round(records.length / elapsedSeconds),
-    peakRps: calculatePeakRps(records),
-    latencyMs: percentiles(latencies),
-    ttfbMs: percentiles(ttfb),
-    statuses: countBy(records.map((record) => String(record.status)))
+    routeKey: routeKeyForEndpoint(endpoint),
+    requests: requestCount,
+    successes: successCount,
+    errors: errorCount,
+    errorRate: requestCount === 0 ? 1 : errorCount / requestCount,
+    elapsedMs: round(elapsedSeconds * 1000),
+    sustainedRps: round(completedResponses / elapsedSeconds),
+    peakRps: round(result.requests?.max ?? 0),
+    latencyMs: percentiles(responseRecords.map((record) => record.latencyMs)),
+    ttfbMs: percentiles(headerTimingsMs),
+    statuses: statusCounts,
+    autocannon: {
+      durationSeconds: result.duration,
+      connections: result.connections,
+      pipelining: result.pipelining,
+      errors: result.errors,
+      timeouts: result.timeouts,
+      non2xx: result.non2xx,
+      requests: pickHistogram(result.requests),
+      latency: pickHistogram(result.latency),
+      throughput: pickHistogram(result.throughput)
+    }
   };
+}
+
+function routeKeyForEndpoint(endpoint) {
+  return `${endpoint.method} ${endpoint.pathPattern ?? stripQuery(endpoint.path)}`;
 }
 
 function stripQuery(path) {
@@ -255,6 +331,9 @@ function stripQuery(path) {
 }
 
 function percentiles(values) {
+  if (values.length === 0) {
+    return { min: 0, p50: 0, p95: 0, p99: 0, max: 0 };
+  }
   const sorted = [...values].sort((a, b) => a - b);
   return {
     min: round(sorted[0]),
@@ -271,19 +350,6 @@ function percentile(sorted, percentileValue) {
   }
   const index = Math.ceil((percentileValue / 100) * sorted.length) - 1;
   return sorted[Math.max(0, Math.min(index, sorted.length - 1))];
-}
-
-function calculatePeakRps(records) {
-  const firstCompleted = Math.min(...records.map((record) => record.completedAtMs));
-  const buckets = countBy(records.map((record) => String(Math.floor((record.completedAtMs - firstCompleted) / peakRpsWindowMs))));
-  return round(Math.max(...Object.values(buckets)) * (1000 / peakRpsWindowMs));
-}
-
-function countBy(values) {
-  return values.reduce((counts, value) => {
-    counts[value] = (counts[value] ?? 0) + 1;
-    return counts;
-  }, {});
 }
 
 function summarizeRun(endpointResults) {
@@ -313,7 +379,9 @@ async function collectEnvironment(config) {
     platform: `${process.platform} ${process.arch}`,
     pid: process.pid,
     cpuCount: availableParallelism(),
+    benchmarkTool: `autocannon ${autocannonVersion}`,
     benchmarkTarget: process.env.BENCHMARK_TARGET_URL ? "external" : "local-app",
+    rateLimiterDisabled: process.env.BENCHMARK_TARGET_URL ? false : config.disableRateLimit,
     benchmarkMode: config.mode
   };
 }
@@ -404,11 +472,13 @@ Target: ${report.targetUrl}
 | Node.js | ${report.environment.node} |
 | Platform | ${report.environment.platform} |
 | CPU concurrency | ${report.environment.cpuCount ?? "unknown"} |
+| Benchmark tool | ${report.environment.benchmarkTool} |
 | Benchmark target | ${report.environment.benchmarkTarget} |
+| Rate limiter disabled | ${report.environment.rateLimiterDisabled ? "yes" : "no"} |
 | Requests per endpoint | ${report.config.requestsPerEndpoint} |
 | Concurrency | ${report.config.concurrency} |
 | Timeout | ${report.config.timeoutMs} ms |
-| Peak RPS window | ${report.config.peakRpsWindowMs} ms |
+| RPS sample interval | ${report.config.sampleIntervalMs} ms |
 
 ## Summary
 
@@ -450,4 +520,85 @@ function formatPercent(value) {
 
 function round(value) {
   return Math.round(value * 100) / 100;
+}
+
+function normalizeStatusCounts(statusCodeStats) {
+  return Object.fromEntries(
+    Object.entries(statusCodeStats ?? {})
+      .map(([status, value]) => [status, Number(value.count ?? 0)])
+      .filter(([, count]) => count > 0)
+  );
+}
+
+function pickHistogram(histogram) {
+  if (!histogram) {
+    return {};
+  }
+  return {
+    min: histogram.min,
+    max: histogram.max,
+    average: histogram.average,
+    p50: histogram.p50,
+    p90: histogram.p90,
+    p97_5: histogram.p97_5,
+    p99: histogram.p99
+  };
+}
+
+function assertApiBenchmarkCoverage(app) {
+  const mountedRoutes = collectExpressRoutes(app)
+    .filter((route) => route.includes(" /api/") || route.endsWith(" /api"))
+    .sort();
+  const benchmarkRoutes = apiBenchmarks.map(routeKeyForEndpoint).sort();
+  const missing = mountedRoutes.filter((route) => !benchmarkRoutes.includes(route));
+  const extra = benchmarkRoutes.filter((route) => !mountedRoutes.includes(route));
+
+  if (missing.length > 0 || extra.length > 0) {
+    throw new Error([
+      "Benchmark route coverage mismatch.",
+      missing.length ? `Missing benchmark routes: ${missing.join(", ")}` : "",
+      extra.length ? `Extra benchmark routes: ${extra.join(", ")}` : ""
+    ].filter(Boolean).join(" "));
+  }
+}
+
+function collectExpressRoutes(app) {
+  const routes = [];
+  walkExpressStack(app._router?.stack ?? [], "");
+  return routes;
+
+  function walkExpressStack(stack, prefix) {
+    for (const layer of stack) {
+      if (layer.route) {
+        for (const method of Object.keys(layer.route.methods)) {
+          routes.push(`${method.toUpperCase()} ${normalizeRoutePath(prefix, layer.route.path)}`);
+        }
+      } else if (layer.name === "router" && layer.handle?.stack) {
+        walkExpressStack(layer.handle.stack, `${prefix}${extractMountPath(layer.regexp)}`);
+      }
+    }
+  }
+}
+
+function extractMountPath(regexp) {
+  return regexp.source
+    .replace(/^\^\\\//, "/")
+    .replace(/\\\/\?\(\?=\\\/\|\$\)$/, "")
+    .replaceAll("\\/", "/");
+}
+
+function normalizeRoutePath(prefix, routePath) {
+  const path = `${prefix}/${String(routePath).replace(/^\/+/, "")}`;
+  return path.replace(/\/+/g, "/").replace(/\/$/, "") || "/";
+}
+
+function readPackageVersion(packageName) {
+  const packageJson = JSON.parse(
+    readFileSync(join(__dirname, "..", "node_modules", packageName, "package.json"), "utf8")
+  );
+  return packageJson.version;
+}
+
+function makeRunId() {
+  return new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
 }

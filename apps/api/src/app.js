@@ -1,7 +1,6 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
-import { env } from "./config/env.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
@@ -22,7 +21,7 @@ export function createApp() {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  if (env.nodeEnv !== "benchmark") {
+  if (process.env.BENCHMARK_DISABLE_RATE_LIMIT !== "1") {
     app.use(apiLimiter);
   }
 

@@ -27,3 +27,12 @@ jobs:
 
       - name: Run smoke benchmark
         run: npm run benchmark:smoke
+
+      - name: Upload benchmark report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-smoke-report
+          path: |
+            benchmarks/results/latest.json
+            benchmarks/results/latest.md

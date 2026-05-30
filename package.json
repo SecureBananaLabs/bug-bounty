@@ -11,5 +11,8 @@
     "benchmark": "node benchmarks/run-benchmark.js",
     "benchmark:smoke": "node benchmarks/run-benchmark.js --smoke --check-thresholds",
     "test": "npm run test -w apps/api"
+  },
+  "devDependencies": {
+    "autocannon": "^8.0.0"
   }
 }
