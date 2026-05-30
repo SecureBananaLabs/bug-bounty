@@ -14,6 +14,7 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { settingsRoutes } from "./routes/settingsRoutes.js";
 
 export function createApp() {
   const app = express();
@@ -38,6 +39,7 @@ export function createApp() {
   app.use("/api/uploads", uploadRoutes);
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
+  app.use("/api/settings", settingsRoutes);
 
   app.use(errorHandler);
   return app;
