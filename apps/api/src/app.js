@@ -19,7 +19,16 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  const corsOptions = {
+  origin: process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(",").map((o) => o.trim())
+    : ["http://localhost:3000", "http://localhost:5173", "https://alexa-ai-agent.github.io"],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
   app.use(express.json());
   app.use(apiLimiter);
 
