@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { env } from "./config/env.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
@@ -21,7 +22,9 @@ export function createApp() {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use(apiLimiter);
+  if (env.nodeEnv !== "benchmark") {
+    app.use(apiLimiter);
+  }
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
