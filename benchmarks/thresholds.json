@@ -1,0 +1,16 @@
+{
+  "defaults": {
+    "p99_ms": 2000,
+    "error_rate_percent": 1
+  },
+  "endpoints": {
+    "uploads-create": {
+      "p99_ms": 2500,
+      "error_rate_percent": 1
+    },
+    "admin-metrics": {
+      "p99_ms": 2500,
+      "error_rate_percent": 1
+    }
+  }
+}
