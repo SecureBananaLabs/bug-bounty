@@ -1,0 +1,54 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - ".github/workflows/api-benchmark-smoke.yml"
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  smoke-benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start API
+        run: |
+          npm run dev -w apps/api > api.log 2>&1 &
+          echo $! > api.pid
+
+      - name: Wait for API
+        run: |
+          node -e "const url='http://127.0.0.1:4000/health'; let attempts=0; const wait=ms=>new Promise(r=>setTimeout(r,ms)); while (attempts++ < 30) { try { const res = await fetch(url); if (res.ok) process.exit(0); } catch {} await wait(1000); } console.error('API did not become ready'); process.exit(1);"
+
+      - name: Run smoke benchmark
+        env:
+          BENCHMARK_BASE_URL: http://127.0.0.1:4000
+          BENCHMARK_CONCURRENCY: 1
+          BENCHMARK_REQUESTS_PER_ENDPOINT: 3
+          BENCHMARK_WARMUP_REQUESTS: 1
+          BENCHMARK_OUTPUT_PREFIX: ci-smoke-api
+          BENCHMARK_FAIL_ON_THRESHOLD: 1
+          JWT_SECRET: development-secret
+        run: npm run benchmark
+
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-benchmark-results
+          path: benchmarks/results/
