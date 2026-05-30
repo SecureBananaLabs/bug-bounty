@@ -1,9 +1,10 @@
 import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
-
-const MAX_QUERY_LENGTH = 200;
+import { sanitizeSearchQuery } from "../validators/search.js";
 
 export async function search(req, res) {
-  const q = (req.query.q ?? "").toString().slice(0, MAX_QUERY_LENGTH).trim();
+  // req.query has already been validated by middleware;
+  // sanitize as a defense-in-depth measure
+  const q = sanitizeSearchQuery(req.query.q);
   return ok(res, await globalSearch(q));
 }
