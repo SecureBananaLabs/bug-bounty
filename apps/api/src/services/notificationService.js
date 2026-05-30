@@ -1,7 +1,9 @@
+import { copyRecords } from "../utils/recordCopy.js";
+
 const notifications = [];
 
 export async function listNotifications() {
-  return notifications;
+  return copyRecords(notifications);
 }
 
 export async function createNotification(payload) {
