@@ -1,7 +1,7 @@
 {
   "owner": "SecureBananaLabs",
   "repo": "bug-bounty",
-  "issueNumber": "1810",
+  "issueNumber": "1795",
   "title": "Settings page should provide actionable account controls",
   "body": "## Bug\n\nThe `/settings` route currently renders a single placeholder card instead of useful account controls. The page says account preferences, profile visibility, and security controls live there, but it does not expose any concrete settings, statuses, or next actions.\n\n## Impact\n\n- Users can navigate to settings but cannot inspect profile visibility, notification preferences, security posture, or billing defaults.\n- The route feels unfinished compared with the rest of the marketplace shell.\n- Important account state is not scannable from the page.\n\n## Expected behavior\n\n`/settings` should render a static but actionable settings overview matching the current frontend style, including account/profile, notifications, security, and payout/billing preference sections. It should use mock data only and avoid changing API behavior.\n\n## Scope\n\n- Replace the placeholder settings card with a useful static settings overview.\n- Add status chips and next-action controls for account, notification, security, and billing/payout preferences.\n- Keep the change scoped to `apps/web/app/settings/page.tsx` and shared page styles if needed.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nParent bounty: #743",
   "labels": [
