@@ -8,6 +8,11 @@
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api",
+    "benchmark": "bash benchmarks/run-all.sh",
+    "benchmark:auth": "k6 run benchmarks/scripts/auth.js",
+    "benchmark:jobs": "k6 run benchmarks/scripts/jobs.js",
+    "benchmark:payments": "k6 run benchmarks/scripts/payments.js",
+    "benchmark:smoke": "BENCHMARK_DURATION=10s BENCHMARK_VUS=2 bash benchmarks/run-all.sh"
   }
 }
