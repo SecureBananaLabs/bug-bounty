@@ -1,12 +1,15 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, verifyAccessToken } from "../utils/jwt.js";
+
+const DEFAULT_ROLE = "client";
 
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+  const id = `usr_${Date.now()}`;
+  const role = DEFAULT_ROLE; // Always use safe default, never trust payload.role
   return {
-    id: `usr_${Date.now()}`,
+    id,
     email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    role,
+    token: signAccessToken({ sub: id, role })
   };
 }
 
@@ -18,6 +21,23 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(token) {
+  if (!token) {
+    throw new Error("Refresh token is required");
+  }
+
+  let decoded;
+  try {
+    decoded = verifyAccessToken(token);
+  } catch {
+    throw new Error("Invalid or expired refresh token");
+  }
+
+  // Preserve the subject and role from the original token
+  const { sub, role } = decoded;
+  if (!sub) {
+    throw new Error("Invalid token: missing subject");
+  }
+
+  return { token: signAccessToken({ sub, role: role ?? DEFAULT_ROLE }) };
 }
