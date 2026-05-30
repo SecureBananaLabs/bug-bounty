@@ -6,8 +6,14 @@
     "packages/*"
   ],
   "scripts": {
+    "benchmark": "node benchmarks/run.mjs",
+    "benchmark:smoke": "node benchmarks/run.mjs --smoke",
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api && npm run test:benchmarks",
+    "test:benchmarks": "node --test benchmarks/*.test.mjs"
+  },
+  "devDependencies": {
+    "autocannon": "^8.0.0"
   }
 }
