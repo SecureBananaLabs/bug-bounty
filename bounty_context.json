@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1777",
+  "title": "Search endpoint has no input validation or length limit on query",
+  "body": "## Bug: Missing Input Validation on Search Query\n\n**Description:** The `GET /api/search` endpoint passes `req.query.q` directly to the search service without any validation or length limits. An attacker could send extremely long query strings to consume server resources.\n\n**File:** `apps/api/src/controllers/searchController.js`\n\n**Current code:**\n```js\nexport async function search(req, res) {\n  return ok(res, await globalSearch(req.query.q ?? \"\"));\n}\n```\n\n**Expected behavior:** The search query should be validated — trimmed, limited in length (e.g., 200 chars), and sanitized.\n\n**Impact:** Low-Medium — potential DoS via overly long query strings.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
