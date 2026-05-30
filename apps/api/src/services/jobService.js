@@ -1,3 +1,4 @@
+const sanitizeHtml = (s) => String(s||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const jobs = [];
 
 export async function listJobs() {
