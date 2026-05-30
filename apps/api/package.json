@@ -5,9 +5,12 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "node --test src/tests",
+    "benchmark": "node benchmarks/benchmark.js",
+    "benchmark:check": "node benchmarks/benchmark.js --check-thresholds"
   },
   "dependencies": {
+    "autocannon": "^7.14.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
