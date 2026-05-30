@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1775",
+  "title": "Refresh token endpoint ignores the provided refresh token",
+  "body": "## Bug: Refresh Token Not Validated\n\n**Description:** The `POST /api/auth/refresh` endpoint calls `refreshToken()` with no arguments. The service function ignores any refresh token from the request body and simply issues a new access token for a hardcoded user ID.\n\n**Files:**\n- `apps/api/src/controllers/authController.js`\n- `apps/api/src/services/authService.js`\n\n**Current code:**\n```js\nexport async function refresh(req, res) {\n  const result = await refreshToken();\n  return ok(res, result);\n}\n```\n\n```js\nexport async function refreshToken() {\n  return { token: signAccessToken({ sub: \"usr_existing\", role: \"client\" }) };\n}\n```\n\n**Expected behavior:** The endpoint should accept a refresh token from the request body, validate it, and issue a new access token for the correct user.\n\n**Impact:** High — token refresh mechanism is completely non-functional; anyone can get a valid access token without a refresh token.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
