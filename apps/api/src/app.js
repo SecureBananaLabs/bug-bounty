@@ -14,6 +14,7 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { zodErrorHandler } from "./middleware/errorHandler.js";
 
 export function createApp() {
   const app = express();
@@ -42,3 +43,5 @@ export function createApp() {
   app.use(errorHandler);
   return app;
 }
+
+app.use(zodErrorHandler);
