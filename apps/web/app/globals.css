@@ -4,3 +4,12 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.stack { display: grid; gap: 0.7rem; }
+.post-job-layout { align-items: start; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.post-job-field { display: grid; gap: 0.5rem; }
+.post-job-control { width: 100%; border: 1px solid #324574; border-radius: 8px; background: #0f162d; color: #f2f5ff; padding: 0.75rem; }
+.post-job-action { border: 0; border-radius: 8px; background: #5dd6a7; color: #08111f; cursor: pointer; font-weight: 700; padding: 0.8rem 1rem; }
+.post-job-row { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.notice { background: #202b4d; border: 1px solid #415b99; border-radius: 8px; padding: 0.8rem; }
+.skill-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.skill-list span { background: #27345f; border-radius: 999px; padding: 0.35rem 0.7rem; }
