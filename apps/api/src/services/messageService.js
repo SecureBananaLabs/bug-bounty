@@ -1,7 +1,9 @@
 const messages = [];
 
-export async function listMessages() {
-  return messages;
+export async function listMessages(userId) {
+  return messages.filter(
+    (m) => m.recipientId === userId || m.senderId === userId
+  );
 }
 
 export async function sendMessage(payload) {
