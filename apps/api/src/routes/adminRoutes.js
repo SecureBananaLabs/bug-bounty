@@ -1,7 +1,9 @@
-const express = require("express");
-const { authMiddleware } = require("../middleware/authMiddleware");
+import { Router } from "express";
+import { metrics } from "../controllers/adminController.js";
+import { authMiddleware } from "../middleware/auth.js";
+import { fail } from "../utils/response.js";
 
-const adminRoutes = express.Router();
+export const adminRoutes = Router();
 
 /**
  * Admin middleware — verify user has admin role.
@@ -9,15 +11,11 @@ const adminRoutes = express.Router();
  */
 function adminMiddleware(req, res, next) {
   if (!req.user || req.user.role !== "admin") {
-    return res.status(403).json({ error: "Forbidden: admin access required" });
+    return fail(res, "Forbidden: admin access required", 403);
   }
   next();
 }
 
 adminRoutes.use(authMiddleware);
 adminRoutes.use(adminMiddleware);
-adminRoutes.get("/metrics", (req, res) => {
-  res.json({ activeUsers: 42, totalJobs: 128, revenue: "$12,400" });
-});
-
-module.exports = adminRoutes;
+adminRoutes.get("/metrics", metrics);
