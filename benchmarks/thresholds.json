@@ -1,0 +1,16 @@
+{
+  "defaults": {
+    "p99Ms": 2000,
+    "ttfbP95Ms": 1500,
+    "errorRatePct": 0,
+    "minSustainedRps": 0.1
+  },
+  "endpoints": {
+    "POST /api/uploads": {
+      "p99Ms": 3000,
+      "ttfbP95Ms": 2000,
+      "errorRatePct": 0,
+      "minSustainedRps": 0.1
+    }
+  }
+}
