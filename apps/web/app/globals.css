@@ -4,3 +4,30 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+button { border: 1px solid #48619f; border-radius: 8px; background: #22315c; color: #f2f5ff; padding: 0.55rem 0.8rem; font: inherit; cursor: pointer; }
+button:hover { background: #2b3d72; }
+.page-heading, .section-title, .row-item { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.page-heading { margin-bottom: 1rem; }
+.page-heading h2, .section-title h3 { margin: 0; }
+.page-heading p, .muted, .row-item span, .payout-panel span { color: #aab6dc; }
+.billing-summary, .billing-layout { display: grid; gap: 1rem; }
+.billing-summary { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.billing-layout { grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr); }
+.metric-card { display: grid; gap: 0.35rem; }
+.metric-card strong { font-size: 1.6rem; }
+.eyebrow { color: #9db4ff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.list { display: grid; gap: 0.75rem; margin-top: 1rem; }
+.row-item { border-top: 1px solid #2a3765; padding-top: 0.75rem; }
+.row-item:first-child { border-top: 0; padding-top: 0; }
+.row-item > div, .payout-panel { display: grid; gap: 0.25rem; }
+.row-meta { min-width: 6rem; text-align: right; }
+.status-chip { border: 1px solid #3a4d82; border-radius: 999px; padding: 0.25rem 0.55rem; white-space: nowrap; }
+.status-paid { background: #123a2a; color: #8ff0bd; border-color: #1f7a53; }
+.status-pending { background: #3a3112; color: #f6d878; border-color: #8d7623; }
+.payout-panel { margin-top: 1rem; }
+
+@media (max-width: 720px) {
+  .page-heading, .section-title, .row-item { align-items: flex-start; flex-direction: column; }
+  .billing-layout { grid-template-columns: 1fr; }
+  .row-meta { text-align: left; }
+}
