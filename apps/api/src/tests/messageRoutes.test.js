@@ -91,3 +91,25 @@ test("POST /api/messages preserves the current success response shape for valid 
     assert.equal(typeof payload.data.sentAt, "string");
   });
 });
+
+test("POST /api/messages trims surrounding whitespace from accepted fields", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/messages`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        senderId: "  usr_sender  ",
+        recipientId: "  usr_recipient  ",
+        content: "  hello  "
+      })
+    });
+
+    const payload = await response.json();
+
+    assert.equal(response.status, 201);
+    assert.equal(payload.success, true);
+    assert.equal(payload.data.senderId, "usr_sender");
+    assert.equal(payload.data.recipientId, "usr_recipient");
+    assert.equal(payload.data.content, "hello");
+  });
+});
