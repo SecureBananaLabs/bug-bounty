@@ -22,7 +22,9 @@ test("Upload endpoint authentication", async (t) => {
       .set("Authorization", `Bearer ${accessToken}`)
       .attach("file", Buffer.from("test content"), "test.txt");
     
-    // We expect it to pass authMiddleware. The controller might return 200 or something else if file upload logic fails (e.g., missing bucket), but it shouldn't be 401.
-    assert.notStrictEqual(res.status, 401);
+    // Assert strict success status and structure
+    assert.strictEqual(res.status, 201);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.filename, "test.txt");
   });
 });
