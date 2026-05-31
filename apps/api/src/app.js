@@ -12,14 +12,18 @@ import { reviewRoutes } from "./routes/reviewRoutes.js";
 import { messageRoutes } from "./routes/messageRoutes.js";
 import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
-import { searchRoutes } from "./routes/searchRoutes.js";
+import { createSearchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { env } from "./config/env.js";
 
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+
+  const corsOrigin = process.env.CORS_ORIGIN ?? "*";
+  app.use(cors({ origin: corsOrigin, credentials: true }));
+
   app.use(express.json());
   app.use(apiLimiter);
 
@@ -36,7 +40,7 @@ export function createApp() {
   app.use("/api/messages", messageRoutes);
   app.use("/api/notifications", notificationRoutes);
   app.use("/api/uploads", uploadRoutes);
-  app.use("/api/search", searchRoutes);
+  app.use("/api/search", createSearchRoutes());
   app.use("/api/admin", adminRoutes);
 
   app.use(errorHandler);
