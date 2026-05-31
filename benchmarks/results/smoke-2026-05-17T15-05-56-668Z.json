@@ -1,0 +1,472 @@
+{
+  "mode": "smoke",
+  "startedAt": "2026-05-17T15:05:56.668Z",
+  "finishedAt": "2026-05-17T15:06:16.937Z",
+  "target": "http://127.0.0.1:64194",
+  "durationSeconds": 1,
+  "connections": 1,
+  "threshold": {
+    "maxP99Ms": 1000,
+    "maxErrorRate": 0.05,
+    "minSustainedRps": 1
+  },
+  "environment": {
+    "cpu": "AMD Ryzen 5 6600H with Radeon Graphics         ",
+    "logicalCores": 12,
+    "totalMemoryMb": 15557,
+    "freeMemoryMb": 2788,
+    "os": "Windows_NT 10.0.22631 x64",
+    "node": "v24.13.0",
+    "network": "loopback/local target by default"
+  },
+  "totals": {
+    "endpointCount": 20,
+    "passed": 20,
+    "failed": 0,
+    "maxP99Ms": 3,
+    "averageSustainedRps": 1,
+    "averageErrorRate": 0
+  },
+  "results": [
+    {
+      "name": "auth register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 3,
+        "p95Ms": 0,
+        "p99Ms": 3,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 32.08
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "auth login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 2.26
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "auth oauth callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 3,
+        "p95Ms": 0,
+        "p99Ms": 3,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 2.06
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "auth refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.67
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "users list",
+      "method": "GET",
+      "path": "/api/users",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.4
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "users create",
+      "method": "POST",
+      "path": "/api/users",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.66
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "jobs list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.04
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "jobs create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.79
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "proposals list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.78
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "proposals create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.35
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "payments create",
+      "method": "POST",
+      "path": "/api/payments",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.49
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "reviews list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.6
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "reviews create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.71
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "messages list",
+      "method": "GET",
+      "path": "/api/messages",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 0.94
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "messages create",
+      "method": "POST",
+      "path": "/api/messages",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.37
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "notifications list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.39
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "notifications create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 1.17
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/search?q=node%20stripe%20freelancer",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 2.22
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "uploads create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 0,
+        "p99Ms": 1,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 6.82
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    },
+    {
+      "name": "admin metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "statusCode": "2xx",
+      "passed": true,
+      "metrics": {
+        "p50Ms": 3,
+        "p95Ms": 0,
+        "p99Ms": 3,
+        "sustainedRps": 1,
+        "peakRps": 1,
+        "errorRate": 0,
+        "ttfbMs": 2.97
+      },
+      "raw": {
+        "requests": 1,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      }
+    }
+  ]
+}

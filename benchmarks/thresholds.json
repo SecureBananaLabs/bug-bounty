@@ -1,0 +1,12 @@
+{
+  "default": {
+    "maxP99Ms": 500,
+    "maxErrorRate": 0.01,
+    "minSustainedRps": 5
+  },
+  "smoke": {
+    "maxP99Ms": 1000,
+    "maxErrorRate": 0.05,
+    "minSustainedRps": 1
+  }
+}
