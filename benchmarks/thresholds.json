@@ -1,0 +1,11 @@
+{
+  "smoke": {
+    "concurrency": 2,
+    "duration": 5,
+    "thresholds": {
+      "p99LatencyMs": 1000,
+      "maxErrorRate": 1
+    }
+  },
+  "notes": "CI smoke benchmark thresholds. Adjust based on baseline results."
+}
