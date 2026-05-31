@@ -5,7 +5,8 @@ export async function listUsers() {
 }
 
 export async function createUser(payload) {
-  const user = { id: `usr_${Date.now()}`, ...payload };
+  const { email, name, role } = payload;
+  const user = { id: `usr_${Date.now()}`, email, name, role };
   users.push(user);
   return user;
 }
