@@ -1,13 +1,16 @@
 {
-  "name": "freelance-platform-monorepo",
+  "name": "freelanceflow",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "version": "0.0.0",
+  "type": "module",
+  "description": "A full-stack freelance marketplace monorepo",
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
+    "benchmark": "node benchmark/run.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prisma": "^5.0.0"
+  },
     "test": "npm run test -w apps/api"
   }
 }

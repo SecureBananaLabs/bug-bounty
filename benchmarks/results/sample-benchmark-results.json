@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "title": "Sample API Benchmark Results",
+    "date": "2023-04-01T12:00:00.000Z",
+    "duration": "30s",
+    "endpoints": []
+  },
+  "endpoints": [
+    {
+      "url": "/api/auth/register",
+      "method": "POST",
+      "status": 201,
+      "latency": {
+        "p50": 45.5,
+        "p95": 98.2,
+        "p99": 105.3
+      },
+      "rps": 125.3,
+      "errorRate": 0.02
+    },
+    {
+      "url": "/api/auth/login",
+      "method": "POST",
+      "status": 200,
+      "latency": {
+        "p50": 42.1,
+        "p95": 95.7,
+        "p99": 102.8
+      },
+      "rps": 132.1,
+      "errorRate": 0.01
+    }
+  ]
+}
