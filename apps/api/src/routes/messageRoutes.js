@@ -1,7 +1,1 @@
-import { Router } from "express";
-import { getMessages, postMessage } from "../controllers/messageController.js";
-
-export const messageRoutes = Router();
-
-messageRoutes.get("/", getMessages);
-messageRoutes.post("/", postMessage);
+import { Router } from "express";\nimport { getMessages, postMessage } from "../controllers/messageController.js";\nimport { authMiddleware } from "../middleware/auth.js";\n\nexport const messageRoutes = Router();\n\nmessageRoutes.get("/", authMiddleware, getMessages);\nmessageRoutes.post("/", authMiddleware, postMessage);
