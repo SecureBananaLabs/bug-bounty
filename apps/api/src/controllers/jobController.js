@@ -8,5 +8,7 @@ export async function getJobs(req, res) {
 
 export async function postJob(req, res) {
   const payload = createJobSchema.parse(req.body);
-  return ok(res, await createJob(payload), 201);
+  // Enforce authenticated creator: use user ID from JWT token (issue #1783)
+  const clientId = req.user.sub;
+  return ok(res, await createJob({ ...payload, clientId }), 201);
 }
