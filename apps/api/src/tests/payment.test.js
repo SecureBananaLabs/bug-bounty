@@ -22,7 +22,9 @@ test("Payment endpoint authentication", async (t) => {
       .set("Authorization", `Bearer ${accessToken}`)
       .send({ amount: 100 });
     
-    // We expect it to pass authMiddleware. The controller might return something else if payment logic fails, but it shouldn't be 401.
-    assert.notStrictEqual(res.status, 401);
+    // Assert strict success status and structure
+    assert.strictEqual(res.status, 201);
+    assert.strictEqual(res.body.success, true);
+    assert.strictEqual(res.body.data.amount, 100);
   });
 });
