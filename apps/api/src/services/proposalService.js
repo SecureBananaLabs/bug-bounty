@@ -1,3 +1,5 @@
+import { snapshotRecord } from "./recordSnapshot.js";
+
 const proposals = [];
 
 export async function listProposals() {
@@ -5,7 +7,7 @@ export async function listProposals() {
 }
 
 export async function createProposal(payload) {
-  const proposal = { id: `prp_${Date.now()}`, ...payload };
+  const proposal = snapshotRecord({ id: `prp_${Date.now()}`, ...payload });
   proposals.push(proposal);
-  return proposal;
+  return snapshotRecord(proposal);
 }
