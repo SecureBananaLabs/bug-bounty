@@ -1,8 +1,49 @@
-export default function AdminPanelPage() {
-  return (
-    <section className="card">
-      <h2>Admin Panel</h2>
-      <p>Moderation queues, trust metrics, and platform controls are available here.</p>
-    </section>
-  );
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import jwt from "jsonwebtoken";
+import AdminDashboardClient from "./AdminDashboardClient";
+import { loadAdminDashboard } from "../../lib/admin-data";
+
+const jwtSecret = process.env.JWT_SECRET ?? "development-secret";
+
+async function getToken(searchParams: Record<string, string | string[] | undefined>) {
+  const cookieStore = await cookies();
+  const cookieToken = cookieStore.get("ff_access_token")?.value;
+  const queryToken = typeof searchParams.token === "string" ? searchParams.token : undefined;
+  return cookieToken ?? queryToken ?? null;
+}
+
+function verifyAdminToken(token: string | null) {
+  if (!token) {
+    return { ok: false, reason: "No admin token provided" };
+  }
+
+  try {
+    const decoded = jwt.verify(token, jwtSecret) as { role?: string; sub?: string };
+    if (decoded.role !== "admin") {
+      return { ok: false, reason: "Admin role required" };
+    }
+
+    return { ok: true, subject: decoded.sub ?? "admin" };
+  } catch {
+    return { ok: false, reason: "Invalid or expired token" };
+  }
+}
+
+export default async function AdminPanelPage({
+  searchParams
+}: {
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
+  const token = await getToken(searchParams ?? {});
+  const access = verifyAdminToken(token);
+  const state = typeof searchParams?.state === "string" ? searchParams.state : "ready";
+
+  if (!access.ok) {
+    redirect("/403");
+  }
+
+  const dashboard = await loadAdminDashboard({ token });
+
+  return <AdminDashboardClient token={token} initialData={dashboard} previewState={state} />;
 }
