@@ -15,6 +15,10 @@ test("POST /api/auth/refresh", async (t) => {
   const { port } = server.address();
   const baseUrl = `http://127.0.0.1:${port}`;
 
+  t.after(() => new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()));
+  }));
+
   await t.test("rejects missing authentication", async () => {
     const response = await fetch(`${baseUrl}/api/auth/refresh`, {
       method: "POST"
@@ -51,9 +55,5 @@ test("POST /api/auth/refresh", async (t) => {
     
     assert.equal(tokenData.sub, "usr_custom_999");
     assert.equal(tokenData.role, "admin");
-  });
-
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
   });
 });
