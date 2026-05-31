@@ -1,0 +1,15 @@
+{
+  "defaults": {
+    "p99Ms": 750,
+    "errorRatePct": 0,
+    "minSustainedRps": 1
+  },
+  "routes": {
+    "uploads.create": {
+      "p99Ms": 1200
+    },
+    "admin.metrics": {
+      "p99Ms": 1000
+    }
+  }
+}
