@@ -6,3 +6,15 @@ export const apiLimiter = rateLimit({
   standardHeaders: "draft-7",
   legacyHeaders: false
 });
+
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many login/registration attempts, please try again after 15 minutes"
+  }
+});
+
