@@ -4,5 +4,5 @@ import { getProposals, postProposal } from "../controllers/proposalController.js
 
 export const proposalRoutes = Router();
 
-proposalRoutes.get("/", getProposals);
+proposalRoutes.get("/", authMiddleware, getProposals);
 proposalRoutes.post("/", authMiddleware, postProposal);

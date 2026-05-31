@@ -4,5 +4,5 @@ import { getNotifications, postNotification } from "../controllers/notificationC
 
 export const notificationRoutes = Router();
 
-notificationRoutes.get("/", getNotifications);
+notificationRoutes.get("/", authMiddleware, getNotifications);
 notificationRoutes.post("/", authMiddleware, postNotification);

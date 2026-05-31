@@ -4,5 +4,5 @@ import { getMessages, postMessage } from "../controllers/messageController.js";
 
 export const messageRoutes = Router();
 
-messageRoutes.get("/", getMessages);
+messageRoutes.get("/", authMiddleware, getMessages);
 messageRoutes.post("/", authMiddleware, postMessage);

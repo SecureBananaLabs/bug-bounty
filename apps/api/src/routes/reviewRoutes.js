@@ -4,5 +4,5 @@ import { getReviews, postReview } from "../controllers/reviewController.js";
 
 export const reviewRoutes = Router();
 
-reviewRoutes.get("/", getReviews);
+reviewRoutes.get("/", authMiddleware, getReviews);
 reviewRoutes.post("/", authMiddleware, postReview);

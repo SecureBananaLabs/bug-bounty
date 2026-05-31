@@ -23,9 +23,17 @@ async function withServer(run) {
 
 test("protected APIs reject unauthenticated callers", async () => {
   await withServer(async (baseUrl) => {
-    const protectedGetEndpoints = ["/api/users", "/api/jobs"];
+    const protectedGetEndpoints = [
+      "/api/users",
+      "/api/jobs",
+      "/api/messages",
+      "/api/reviews",
+      "/api/proposals",
+      "/api/notifications",
+    ];
 
     const protectedPostEndpoints = [
+      "/api/auth/refresh",
       "/api/payments",
       "/api/notifications",
       "/api/messages",
@@ -135,6 +143,16 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(messageResponse.status, 201);
     assert.equal(messagePayload.success, true);
     assert.ok(messagePayload.data.id.startsWith("msg_"));
+
+    const refreshResponse = await fetch(`${baseUrl}/api/auth/refresh`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    const refreshPayload = await refreshResponse.json();
+    assert.equal(refreshResponse.status, 200);
+    assert.equal(typeof refreshPayload.data?.token, "string");
 
     const searchMissing = await fetch(`${baseUrl}/api/search`);
     const searchMissingPayload = await searchMissing.json();
