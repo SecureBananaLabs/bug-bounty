@@ -15,6 +15,10 @@ function validJobData(overrides = {}) {
   };
 }
 
+// ==========================================
+// createJobSchema tests
+// ==========================================
+
 test("createJobSchema - accepts valid budget range", () => {
   const result = createJobSchema.safeParse(validJobData());
   assert.equal(result.success, true);
@@ -69,29 +73,130 @@ test("createJobSchema - accepts decimal budget values", () => {
   assert.equal(result.success, true);
 });
 
+test("createJobSchema - accepts smallest positive difference", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    budgetMin: 0,
+    budgetMax: 0.01,
+  }));
+  assert.equal(result.success, true);
+});
+
+// Negative values
+test("createJobSchema - rejects negative budgetMin", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    budgetMin: -100,
+    budgetMax: 500,
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - rejects negative budgetMax", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    budgetMin: 100,
+    budgetMax: -500,
+  }));
+  assert.equal(result.success, false);
+});
+
+// NaN and Infinity
+test("createJobSchema - rejects NaN budgetMin", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    budgetMin: NaN,
+    budgetMax: 500,
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - rejects NaN budgetMax", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    budgetMin: 100,
+    budgetMax: NaN,
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - rejects Infinity budgetMin", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    budgetMin: Infinity,
+    budgetMax: 500,
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - rejects Infinity budgetMax", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    budgetMin: 100,
+    budgetMax: Infinity,
+  }));
+  assert.equal(result.success, false);
+});
+
+// String validation
 test("createJobSchema - rejects missing required fields", () => {
   const result = createJobSchema.safeParse({
     budgetMin: 100,
     budgetMax: 500,
-    // Missing title, description, categoryId
   });
   assert.equal(result.success, false);
 });
 
 test("createJobSchema - rejects title too short", () => {
   const result = createJobSchema.safeParse(validJobData({
-    title: "abc", // min 4 chars
+    title: "abc",
   }));
   assert.equal(result.success, false);
+});
+
+test("createJobSchema - rejects title too long", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    title: "a".repeat(201),
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - accepts title at max length", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    title: "a".repeat(200),
+  }));
+  assert.equal(result.success, true);
 });
 
 test("createJobSchema - rejects description too short", () => {
   const result = createJobSchema.safeParse(validJobData({
-    description: "short", // min 10 chars
+    description: "short",
   }));
   assert.equal(result.success, false);
 });
 
+test("createJobSchema - rejects description too long", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    description: "a".repeat(5001),
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - accepts description at max length", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    description: "a".repeat(5000),
+  }));
+  assert.equal(result.success, true);
+});
+
+test("createJobSchema - rejects empty categoryId", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    categoryId: "",
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - rejects categoryId too long", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    categoryId: "a".repeat(101),
+  }));
+  assert.equal(result.success, false);
+});
+
+// Skills validation
 test("createJobSchema - uses default empty skills array", () => {
   const data = validJobData();
   delete data.skills;
@@ -100,7 +205,38 @@ test("createJobSchema - uses default empty skills array", () => {
   assert.deepEqual(result.value.skills, []);
 });
 
+test("createJobSchema - rejects empty skill string", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    skills: [""],
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - rejects skill too long", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    skills: ["a".repeat(51)],
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - rejects too many skills", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    skills: Array(21).fill("skill"),
+  }));
+  assert.equal(result.success, false);
+});
+
+test("createJobSchema - accepts max skills count", () => {
+  const result = createJobSchema.safeParse(validJobData({
+    skills: Array(20).fill("skill"),
+  }));
+  assert.equal(result.success, true);
+});
+
+// ==========================================
 // updateJobSchema tests
+// ==========================================
+
 test("updateJobSchema - accepts partial update with valid range", () => {
   const result = updateJobSchema.safeParse({
     budgetMin: 100,
@@ -148,6 +284,41 @@ test("updateJobSchema - rejects inverted range in partial update", () => {
   const result = updateJobSchema.safeParse({
     budgetMin: 1000,
     budgetMax: 100,
+  });
+  assert.equal(result.success, false);
+});
+
+test("updateJobSchema - rejects negative budgetMin in update", () => {
+  const result = updateJobSchema.safeParse({
+    budgetMin: -100,
+  });
+  assert.equal(result.success, false);
+});
+
+test("updateJobSchema - rejects NaN in update", () => {
+  const result = updateJobSchema.safeParse({
+    budgetMin: NaN,
+  });
+  assert.equal(result.success, false);
+});
+
+test("updateJobSchema - rejects Infinity in update", () => {
+  const result = updateJobSchema.safeParse({
+    budgetMax: Infinity,
+  });
+  assert.equal(result.success, false);
+});
+
+test("updateJobSchema - rejects title too short in update", () => {
+  const result = updateJobSchema.safeParse({
+    title: "abc",
+  });
+  assert.equal(result.success, false);
+});
+
+test("updateJobSchema - rejects title too long in update", () => {
+  const result = updateJobSchema.safeParse({
+    title: "a".repeat(201),
   });
   assert.equal(result.success, false);
 });
