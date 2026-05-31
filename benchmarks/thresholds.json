@@ -1,0 +1,20 @@
+{
+  "smoke": {
+    "defaultP99Ms": 1500,
+    "defaultErrorRatePercent": 0,
+    "overrides": {
+      "POST /api/uploads": {
+        "p99Ms": 2500
+      }
+    }
+  },
+  "full": {
+    "defaultP99Ms": 1000,
+    "defaultErrorRatePercent": 1,
+    "overrides": {
+      "POST /api/uploads": {
+        "p99Ms": 2000
+      }
+    }
+  }
+}
