@@ -1,0 +1,11 @@
+{
+  "global": {
+    "p99Ms": 1000,
+    "errorRatePct": 0
+  },
+  "smoke": {
+    "p99Ms": 2000,
+    "errorRatePct": 0
+  },
+  "endpoints": {}
+}
