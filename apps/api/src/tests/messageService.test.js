@@ -7,11 +7,14 @@ test("message service does not expose its internal message store", async () => {
   const initialCount = initialMessages.length;
 
   const created = await sendMessage({
+    id: "msg_client_controlled",
     conversationId: "conv_defensive_copy",
     senderId: "usr_sender",
     body: "Please keep the internal store private"
   });
 
+  assert.match(created.id, /^msg_\d+$/);
+  assert.notEqual(created.id, "msg_client_controlled");
   created.body = "mutated through returned create payload";
 
   const listedMessages = await listMessages();
