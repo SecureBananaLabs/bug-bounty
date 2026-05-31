@@ -4,3 +4,43 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.page-heading { margin-bottom: 1rem; }
+.page-heading p { color: #aeb9df; margin-top: 0.35rem; }
+.job-form { display: grid; gap: 1.25rem; }
+.form-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.field { display: grid; gap: 0.45rem; color: #d8def4; font-weight: 600; }
+.field-wide { grid-column: 1 / -1; }
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid #34416f;
+  border-radius: 10px;
+  background: #0f1630;
+  color: #f2f5ff;
+  font: inherit;
+  padding: 0.75rem 0.85rem;
+}
+.field textarea { resize: vertical; }
+.job-form-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid #2a3765;
+  padding-top: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.job-form-summary p { color: #aeb9df; margin: 0.35rem 0 0; }
+.actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.actions button {
+  border: 1px solid #405080;
+  border-radius: 10px;
+  background: #1b2444;
+  color: #f2f5ff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+}
+.actions .primary-action { background: #f2f5ff; color: #0b1020; }
