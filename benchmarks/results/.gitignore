@@ -1,0 +1,6 @@
+*
+!.gitignore
+!latest-full.json
+!latest-full.md
+!latest-smoke.json
+!latest-smoke.md
