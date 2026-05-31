@@ -30,9 +30,9 @@ test("Admin metrics endpoint", async (t) => {
       .get("/api/admin/metrics")
       .set("Authorization", `Bearer ${accessToken}`);
     
-    // As long as it's not 401 or 403, the middleware check passed.
-    // Admin controller metrics logic is mocked or returns some data.
-    assert.notStrictEqual(res.status, 401);
-    assert.notStrictEqual(res.status, 403);
+    // Assert strict success status and structure
+    assert.strictEqual(res.status, 200);
+    assert.strictEqual(res.body.success, true);
+    assert.ok(res.body.data.openJobs !== undefined);
   });
 });
