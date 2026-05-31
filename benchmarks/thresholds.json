@@ -1,0 +1,12 @@
+{
+  "aggregate": {
+    "maxP95Ms": 500,
+    "maxErrorRate": 0,
+    "minRps": 20
+  },
+  "endpoints": {
+    "POST /api/uploads": {
+      "maxP95Ms": 750
+    }
+  }
+}
