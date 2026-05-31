@@ -6,5 +6,6 @@ export async function getUsers(req, res) {
 }
 
 export async function postUser(req, res) {
-  return ok(res, await createUser(req.body), 201);
+  const payload = createUserSchema.parse(req.body);
+  return ok(res, await createUser(payload), 201);
 }
