@@ -1,4 +1,4 @@
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 import { createJobSchema } from "../validators/job.js";
 import { createJob, listJobs } from "../services/jobService.js";
 
@@ -7,6 +7,10 @@ export async function getJobs(req, res) {
 }
 
 export async function postJob(req, res) {
-  const payload = createJobSchema.parse(req.body);
-  return ok(res, await createJob(payload), 201);
+  const parsed = createJobSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return fail(res, "Invalid request payload", 400);
+  }
+
+  return ok(res, await createJob(parsed.data), 201);
 }
