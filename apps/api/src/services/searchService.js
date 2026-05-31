@@ -1,9 +1,7 @@
 export async function globalSearch(query) {
-  // TODO: use PostgreSQL full-text search + ranking.
-  return {
-    query,
-    users: [],
-    jobs: [],
-    freelancers: []
-  };
+  if (!query || typeof query !== "string" || query.length > 200) {
+    return { results: [] };
+  }
+  const sanitized = query.replace(/[<>"'&]/g, "").trim();
+  return { results: [], query: sanitized };
 }
