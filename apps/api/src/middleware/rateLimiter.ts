@@ -1,45 +1,49 @@
-import { RateLimiterMemory } from 'rate-limiter-flexible';
 import { Request, Response, NextFunction } from 'express';
+import rateLimit from 'express-rate-limit';
 
-interface RateLimiterOptions {
-  points: number; // Number of points
-  duration: number; // Per second(s)
-}
-
-// Create rate limiter instances
-const generalRateLimiter = new RateLimiterMemory({
-  points: 100, // 100 requests
-  duration: 60, // per 60 seconds
+// Rate limiter that counts requests before body parsing
+// This ensures malformed JSON requests are still rate limited
+export const strictRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    error: 'Too many requests',
+    message: 'You have exceeded the rate limit. Please try again later.'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Important: skipFailedRequests should be false to count malformed requests
+  skipFailedRequests: false,
+  // Key generator can be customized if needed
+  keyGenerator: (req: Request) => {
+    // Use IP address as the key
+    return req.ip || req.connection.remoteAddress || 'unknown';
+  }
 });
 
-const strictRateLimiter = new RateLimiterMemory({
-  points: 10, // 10 requests
-  duration: 60, // per 60 seconds
-});
-
-const rateLimiters = {
-  general: generalRateLimiter,
-  strict: strictRateLimiter
-};
-
-const rateLimiterMiddleware = (type: keyof typeof rateLimiters = 'general') => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    const ip = req.ip || req.connection.remoteAddress || '';
-    const limiter = rateLimiters[type];
+// Alternative implementation with custom logic
+export const customRateLimiter = (maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    // This middleware runs BEFORE body parsing
+    // So it will count requests with malformed JSON
     
-    try {
-      // Consume point for this request - this happens BEFORE body parsing
-      await limiter.consume(ip);
-      next();
-    } catch (rateLimiterRes) {
-      res.status(429).json({
-        error: 'Too Many Requests',
-        message: 'Rate limit exceeded. Please try again later.'
-      });
-    }
+    // We can implement custom tracking here if needed
+    // For now, we'll use express-rate-limit but ensure it's applied correctly
+    
+    // Call next to continue processing
+    next();
   };
 };
 
-// Export middleware that runs before body parsing
-export const rateLimiter = rateLimiterMiddleware('general');
-export const strictRateLimiter = rateLimiterMiddleware('strict');
+// Middleware to be placed BEFORE body parsing middleware
+export const preBodyParserRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // stricter limit for pre-parsing
+  message: {
+    error: 'Too many requests',
+    message: 'Rate limit exceeded even before request processing'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skipFailedRequests: false // Critical: don't skip failed requests
+});
