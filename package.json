@@ -1,12 +1,15 @@
 {
-  "name": "freelance-platform-monorepo",
+  "name": "freelanceflow",
+  "version": "1.0.0",
   "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
-  "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+  "dependencies": {
+    "stripe": "^14.4.0"
+  }
+}
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
