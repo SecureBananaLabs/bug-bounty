@@ -1,10 +1,9 @@
 export const adminMiddleware = (req, res, next) => {
-  // Check if user exists and has admin role
-  if (req.user && req.user.role === "admin") {
-    next();
-  } else {
-    res.status(403).json({ error: "Access denied. Admins only." });
+  // Assuming req.user is attached by authMiddleware
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({ error: "Access denied. Admins only." });
   }
+  next();
 };
 
 export default adminMiddleware;
