@@ -14,6 +14,10 @@ test("POST /api/auth/register fullName validation", async (t) => {
   const { port } = server.address();
   const baseUrl = `http://127.0.0.1:${port}`;
 
+  t.after(() => new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()));
+  }));
+
   await t.test("rejects registration without fullName", async () => {
     const response = await fetch(`${baseUrl}/api/auth/register`, {
       method: "POST",
@@ -61,9 +65,5 @@ test("POST /api/auth/register fullName validation", async (t) => {
     assert.equal(payload.data.fullName, "Jane Doe");
     assert.equal(payload.data.email, "jane@example.com");
     assert.ok(payload.data.token);
-  });
-
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
   });
 });
