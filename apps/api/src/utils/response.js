@@ -5,3 +5,7 @@ export function ok(res, data, status = 200) {
 export function fail(res, message, status = 400) {
   return res.status(status).json({ success: false, message });
 }
+
+export function notFound(res, message = "Resource not found") {
+  return fail(res, message, 404);
+}
