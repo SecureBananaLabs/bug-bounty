@@ -1,0 +1,45 @@
+name: Benchmark
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install deps
+        run: npm install
+        working-directory: ./apps/api
+
+      - name: Install autocannon
+        run: npm install -g autocannon
+
+      - name: Start API server
+        run: npm start &
+        working-directory: ./apps/api
+        env:
+          NODE_ENV: benchmark
+
+      - name: Wait for server
+        run: sleep 3
+
+      - name: Run benchmarks
+        run: node benchmarks/run-benchmarks.js --iterations 1
+        env:
+          API_BASE_URL: http://localhost:3000
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
