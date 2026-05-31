@@ -1,7 +1,7 @@
 const users = [];
 
 export async function listUsers() {
-  return users;
+  return users.map((user) => ({ ...user }));
 }
 
 export async function createUser(payload) {
