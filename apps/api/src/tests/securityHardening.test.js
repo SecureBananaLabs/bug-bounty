@@ -25,6 +25,8 @@ test("protected APIs reject unauthenticated callers", async () => {
   await withServer(async (baseUrl) => {
     const protectedGetEndpoints = ["/api/users", "/api/jobs"];
 
+    const protectedPostEndpoints = ["/api/payments", "/api/notifications"];
+
     for (const path of protectedGetEndpoints) {
       const response = await fetch(`${baseUrl}${path}`);
       const payload = await response.json();
@@ -40,6 +42,58 @@ test("protected APIs reject unauthenticated callers", async () => {
       assert.equal(postResponse.status, 401);
       assert.equal(postPayload.message, "Unauthorized");
     }
+
+    for (const path of protectedPostEndpoints) {
+      const response = await fetch(`${baseUrl}${path}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ text: "attempt" }),
+      });
+      const payload = await response.json();
+      assert.equal(response.status, 401);
+      assert.equal(payload.message, "Unauthorized");
+    }
+
+    const register = await fetch(`${baseUrl}/api/auth/register`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email: "pay+notify@test.io", password: "password123" }),
+    });
+    const registerPayload = await register.json();
+    const token = registerPayload.data?.token;
+    assert.equal(register.status, 201);
+    assert.ok(typeof token === "string" && token.length > 10);
+
+    const paymentResponse = await fetch(`${baseUrl}/api/payments`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount: 100, currency: "usd" }),
+    });
+    const paymentPayload = await paymentResponse.json();
+    assert.equal(paymentResponse.status, 201);
+    assert.equal(paymentPayload.success, true);
+
+    const notificationResponse = await fetch(`${baseUrl}/api/notifications`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id: "hijack-id",
+        read: true,
+        title: "title-from-client",
+      }),
+    });
+    const notificationPayload = await notificationResponse.json();
+    assert.equal(notificationResponse.status, 201);
+    assert.equal(notificationPayload.success, true);
+    assert.equal(notificationPayload.data.read, false);
+    assert.notEqual(notificationPayload.data.id, "hijack-id");
+    assert.ok(notificationPayload.data.id.startsWith("ntf_"));
 
     const searchMissing = await fetch(`${baseUrl}/api/search`);
     const searchMissingPayload = await searchMissing.json();
