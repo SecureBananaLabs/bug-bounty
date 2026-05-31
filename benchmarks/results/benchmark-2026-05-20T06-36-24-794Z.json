@@ -1,0 +1,210 @@
+{
+  "timestamp": "2026-05-20T06-36-24-794Z",
+  "target": "http://localhost:4000",
+  "results": {
+    "Health Check": {
+      "method": "GET",
+      "path": "/health",
+      "latencyMs": {
+        "p50": "1.00",
+        "p75": "1.00",
+        "p95": "1.67",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 8217,
+      "throughputBytesPerSecond": 7673856,
+      "errorRate": "0.00",
+      "totalRequests": 16432,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "Auth Register": {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "latencyMs": {
+        "p50": "2.00",
+        "p75": "3.00",
+        "p95": "3.67",
+        "p99": "6.00"
+      },
+      "requestsPerSecond": 3480,
+      "throughputBytesPerSecond": 4205056,
+      "errorRate": "0.00",
+      "totalRequests": 6958,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "Auth Login": {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "latencyMs": {
+        "p50": "2.00",
+        "p75": "3.00",
+        "p95": "3.67",
+        "p99": "4.00"
+      },
+      "requestsPerSecond": 3538,
+      "throughputBytesPerSecond": 4054016,
+      "errorRate": "0.00",
+      "totalRequests": 7076,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "List Users": {
+      "method": "GET",
+      "path": "/api/users",
+      "latencyMs": {
+        "p50": "0.00",
+        "p75": "1.00",
+        "p95": "1.00",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 9232,
+      "throughputBytesPerSecond": 8613888,
+      "errorRate": "0.00",
+      "totalRequests": 18462,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "List Jobs": {
+      "method": "GET",
+      "path": "/api/jobs",
+      "latencyMs": {
+        "p50": "0.00",
+        "p75": "1.00",
+        "p95": "1.00",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 8824,
+      "throughputBytesPerSecond": 8235008,
+      "errorRate": "0.00",
+      "totalRequests": 17654,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "List Proposals": {
+      "method": "GET",
+      "path": "/api/proposals",
+      "latencyMs": {
+        "p50": "1.00",
+        "p75": "1.00",
+        "p95": "1.00",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 8589,
+      "throughputBytesPerSecond": 8014848,
+      "errorRate": "0.00",
+      "totalRequests": 17177,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "List Payments": {
+      "method": "GET",
+      "path": "/api/payments",
+      "latencyMs": {
+        "p50": "0.00",
+        "p75": "1.00",
+        "p95": "1.00",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 10088,
+      "throughputBytesPerSecond": 7909376,
+      "errorRate": "0.00",
+      "totalRequests": 20175,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 20175
+    },
+    "List Reviews": {
+      "method": "GET",
+      "path": "/api/reviews",
+      "latencyMs": {
+        "p50": "1.00",
+        "p75": "1.00",
+        "p95": "1.67",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 8423,
+      "throughputBytesPerSecond": 7858176,
+      "errorRate": "0.00",
+      "totalRequests": 16845,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "List Messages": {
+      "method": "GET",
+      "path": "/api/messages",
+      "latencyMs": {
+        "p50": "1.00",
+        "p75": "1.00",
+        "p95": "1.67",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 8189,
+      "throughputBytesPerSecond": 7641088,
+      "errorRate": "0.00",
+      "totalRequests": 16380,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "List Notifications": {
+      "method": "GET",
+      "path": "/api/notifications",
+      "latencyMs": {
+        "p50": "0.00",
+        "p75": "1.00",
+        "p95": "1.00",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 9164,
+      "throughputBytesPerSecond": 8548352,
+      "errorRate": "0.00",
+      "totalRequests": 18326,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "Search": {
+      "method": "GET",
+      "path": "/api/search",
+      "latencyMs": {
+        "p50": "0.00",
+        "p75": "1.00",
+        "p95": "1.00",
+        "p99": "2.00"
+      },
+      "requestsPerSecond": 9072,
+      "throughputBytesPerSecond": 8896512,
+      "errorRate": "0.00",
+      "totalRequests": 18141,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 0
+    },
+    "Admin Dashboard": {
+      "method": "GET",
+      "path": "/api/admin",
+      "latencyMs": {
+        "p50": "0.00",
+        "p75": "1.00",
+        "p95": "1.00",
+        "p99": "1.00"
+      },
+      "requestsPerSecond": 9572,
+      "throughputBytesPerSecond": 9179136,
+      "errorRate": "0.00",
+      "totalRequests": 19142,
+      "totalErrors": 0,
+      "totalTimeouts": 0,
+      "non2xx": 19142
+    }
+  }
+}
