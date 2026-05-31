@@ -23,6 +23,10 @@ npm run benchmark:smoke
 `npm run benchmark` writes JSON and Markdown output into `benchmarks/results/`.
 `npm run benchmark:smoke` runs a low-concurrency regression gate and fails when an endpoint exceeds `benchmarks/thresholds.json`.
 
+## Demo
+
+The short benchmark demo for the pull request is available at [`demos/api-benchmark-demo.gif`](../demos/api-benchmark-demo.gif).
+
 ## Metrics
 
 Each endpoint captures:
