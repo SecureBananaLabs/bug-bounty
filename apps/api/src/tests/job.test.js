@@ -24,18 +24,18 @@ test("Job endpoint authentication", async (t) => {
 
   await t.test("Allow access with valid token to POST /api/jobs", async () => {
     const accessToken = signAccessToken({ id: "user_123", role: "client" });
-    
+
     const res = await request(app)
       .post("/api/jobs")
       .set("Authorization", `Bearer ${accessToken}`)
       .send({ 
-        title: "New Job", 
+        title: "New Job",
         description: "Job description",
         budgetMin: 50,
         budgetMax: 200,
         categoryId: "cat_1"
       });
-    
+
     // We expect it to pass authMiddleware. The controller might return 201 for a created job.
     assert.strictEqual(res.status, 201);
     assert.strictEqual(res.body.success, true);
