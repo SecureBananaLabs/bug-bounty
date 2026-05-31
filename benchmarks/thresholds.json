@@ -1,0 +1,24 @@
+{
+  "smoke": {
+    "defaults": {
+      "maxP99Ms": 2000,
+      "maxErrorRatePercent": 0
+    },
+    "endpoints": {
+      "uploads.create": {
+        "maxP99Ms": 3000
+      }
+    }
+  },
+  "full": {
+    "defaults": {
+      "maxP99Ms": 2500,
+      "maxErrorRatePercent": 0
+    },
+    "endpoints": {
+      "uploads.create": {
+        "maxP99Ms": 3500
+      }
+    }
+  }
+}
