@@ -37,6 +37,23 @@ test("payment route rejects unauthenticated payment creation", async () => {
   });
 });
 
+test("payment route rejects invalid bearer tokens", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/payments`, {
+      method: "POST",
+      headers: {
+        authorization: "Bearer not-a-valid-token",
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ amount: 5000, currency: "usd" })
+    });
+    const payload = await response.json();
+
+    assert.equal(response.status, 401);
+    assert.deepEqual(payload, { success: false, message: "Invalid token" });
+  });
+});
+
 test("payment route accepts valid bearer tokens", async () => {
   await withServer(async (baseUrl) => {
     const token = signAccessToken({ sub: "usr_payment", role: "client" });
