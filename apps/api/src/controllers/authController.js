@@ -14,9 +14,18 @@ export async function login(req, res) {
   return ok(res, result);
 }
 
+const SUPPORTED_OAUTH_PROVIDERS = ["google", "github", "discord"];
+
 export async function oauthCallback(req, res) {
+  const { provider } = req.params;
+  if (!SUPPORTED_OAUTH_PROVIDERS.includes(provider)) {
+    return res.status(400).json({
+      success: false,
+      message: `Unsupported OAuth provider: ${provider}. Supported providers: ${SUPPORTED_OAUTH_PROVIDERS.join(", ")}`
+    });
+  }
   return ok(res, {
-    provider: req.params.provider,
+    provider,
     status: "callback-received"
   });
 }
