@@ -2,14 +2,17 @@ import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
 
 function validateSearchQuery(query) {
-  if (typeof query !== 'string') return '';
-  // Trim whitespace and limit length to 200 characters
-  let sanitized = query.trim();
-  if (sanitized.length > 200) sanitized = sanitized.substring(0, 200);
+  if (!query) return "";
+  
+  // Trim whitespace and limit length to prevent DoS
+  const sanitized = query.trim();
+  if (sanitized.length > 200) {
+    throw new Error("Search query too long");
+  }
   return sanitized;
 }
 
 export async function search(req, res) {
-  const sanitizedQuery = validateSearchQuery(req.query.q);
-  return ok(res, await globalSearch(sanitizedQuery));
+  const validatedQuery = validateSearchQuery(req.query.q);
+  return ok(res, await globalSearch(validatedQuery));
 }
