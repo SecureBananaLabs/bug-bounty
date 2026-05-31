@@ -8,6 +8,8 @@
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
+    "benchmark:api": "node benchmarks/api/benchmark.mjs",
+    "benchmark:api:smoke": "node benchmarks/api/benchmark.mjs --requests-per-endpoint 1 --concurrency 1 --output benchmarks/results/api-ci-smoke.json --markdown benchmarks/results/api-ci-smoke.md && node benchmarks/api/assert-thresholds.mjs --report benchmarks/results/api-ci-smoke.json --thresholds benchmarks/thresholds.json",
     "test": "npm run test -w apps/api"
   }
 }
