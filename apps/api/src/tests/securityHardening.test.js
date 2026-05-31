@@ -25,7 +25,14 @@ test("protected APIs reject unauthenticated callers", async () => {
   await withServer(async (baseUrl) => {
     const protectedGetEndpoints = ["/api/users", "/api/jobs"];
 
-    const protectedPostEndpoints = ["/api/payments", "/api/notifications"];
+    const protectedPostEndpoints = [
+      "/api/payments",
+      "/api/notifications",
+      "/api/messages",
+      "/api/reviews",
+      "/api/proposals",
+      "/api/uploads",
+    ];
 
     for (const path of protectedGetEndpoints) {
       const response = await fetch(`${baseUrl}${path}`);
@@ -94,6 +101,21 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(notificationPayload.data.read, false);
     assert.notEqual(notificationPayload.data.id, "hijack-id");
     assert.ok(notificationPayload.data.id.startsWith("ntf_"));
+
+    const messageResponse = await fetch(`${baseUrl}/api/messages`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        text: "hello from auth user",
+      }),
+    });
+    const messagePayload = await messageResponse.json();
+    assert.equal(messageResponse.status, 201);
+    assert.equal(messagePayload.success, true);
+    assert.ok(messagePayload.data.id.startsWith("msg_"));
 
     const searchMissing = await fetch(`${baseUrl}/api/search`);
     const searchMissingPayload = await searchMissing.json();
