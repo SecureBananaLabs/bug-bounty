@@ -1,0 +1,15 @@
+{
+  "name": "@freelanceflow/benchmarks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "benchmark": "node run.js",
+    "benchmark:health": "node run.js --endpoint health",
+    "benchmark:auth": "node run.js --endpoint auth-login",
+    "benchmark:jobs": "node run.js --endpoint jobs-list",
+    "benchmark:all": "node run.js"
+  },
+  "dependencies": {
+    "autocannon": "^8.0.0"
+  }
+}
