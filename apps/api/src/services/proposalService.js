@@ -1,7 +1,9 @@
+import { snapshotList } from "./listSnapshot.js";
+
 const proposals = [];
 
 export async function listProposals() {
-  return proposals;
+  return snapshotList(proposals);
 }
 
 export async function createProposal(payload) {
