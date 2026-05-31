@@ -1,0 +1,19 @@
+{
+  "defaults": {
+    "maxP99Ms": 250,
+    "maxErrorRate": 0.01,
+    "minRequestsPerSecond": 25
+  },
+  "smoke": {
+    "maxP99Ms": 1000,
+    "maxErrorRate": 0.05,
+    "minRequestsPerSecond": 1
+  },
+  "endpoints": {
+    "uploads-empty": {
+      "maxP99Ms": 1500,
+      "maxErrorRate": 0.05,
+      "minRequestsPerSecond": 1
+    }
+  }
+}
