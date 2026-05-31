@@ -71,6 +71,25 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(register.status, 201);
     assert.ok(typeof token === "string" && token.length > 10);
 
+    const privilegedRegister = await fetch(`${baseUrl}/api/auth/register`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email: "admin+attempt@test.io", password: "password123", role: "admin" }),
+    });
+    const privilegedPayload = await privilegedRegister.json();
+    const privilegedToken = privilegedPayload.data?.token;
+    assert.equal(privilegedRegister.status, 201);
+    assert.ok(typeof privilegedToken === "string" && privilegedToken.length > 10);
+
+    const deniedAdmin = await fetch(`${baseUrl}/api/admin/metrics`, {
+      headers: {
+        authorization: `Bearer ${privilegedToken}`,
+      },
+    });
+    const deniedPayload = await deniedAdmin.json();
+    assert.equal(deniedAdmin.status, 403);
+    assert.equal(deniedPayload.message, "Forbidden");
+
     const paymentResponse = await fetch(`${baseUrl}/api/payments`, {
       method: "POST",
       headers: {
