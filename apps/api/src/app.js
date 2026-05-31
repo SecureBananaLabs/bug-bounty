@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
+import { csrfProtection } from "./middleware/csrf.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
@@ -22,6 +23,7 @@ export function createApp() {
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
+  app.use(csrfProtection);
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
