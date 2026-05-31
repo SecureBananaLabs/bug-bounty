@@ -1,0 +1,10 @@
+{
+  "smoke": {
+    "p99LatencyMs": 1500,
+    "errorRatePercent": 1
+  },
+  "full": {
+    "p99LatencyMs": 1000,
+    "errorRatePercent": 1
+  }
+}
