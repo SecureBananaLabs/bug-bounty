@@ -1,0 +1,8 @@
+{
+  "endpoint": "POST /api/payments/intent",
+  "description": "Validation error - missing amount",
+  "request": { "currency": "usd" },
+  "response": {
+    "error": { "message": "amount is required and must be a positive integer", "code": "bad_request", "status": 400 }
+  }
+}
