@@ -41,23 +41,28 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing to Project
+# Contributing to FreelanceFlow
 
-## Finding and Creating Issues
+We welcome contributions to the FreelanceFlow project! This document outlines the process for contributing and guidelines to ensure smooth collaboration.
 
-To contribute to this project, please follow these steps:
+## Low Hanging Fruit Issues
 
-1. Look for a feature or bug to work on within this repository.
-2. Create a GitHub issue describing the bug or feature you found. Add the following text to the issue description:
-   "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+### Automated Issue Creation Process
 
-## Claiming your issue
+To maintain a healthy contribution pipeline, we've automated the detection and creation of low hanging fruit issues:
 
-Once you've created an issue:
+1. Our system automatically scans the codebase for beginner-friendly tasks
+2. New issues are created with the "bug", "good first issue", and "help wanted" labels
+3. Each automatically generated issue includes specific instructions for new contributors
 
-- Fork the repo
-- Create a new branch in your fork
-- Create your PR
+### Contribution Rules
 
-This issue can only be worked on by the issue creator. This is a real paid issue. Bounty hunters can claim this issue by creating a PR that references this issue.
+When working on an automatically generated low hanging fruit issue:
+
+1. **Issue Reservation**: Each issue created through this automation is limited to its creator. This means:
+   - Only the issue author can attempt to solve the specific issue
+   - If you want to work on a similar task, create a new issue with identical content
+   - Reference the original issue number for context
+   - Add this exact text to your issue: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+  
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
