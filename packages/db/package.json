@@ -1,14 +1,29 @@
 {
   "name": "@freelanceflow/db",
   "private": true,
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
+    "build": "tsc",
     "generate": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "test:import": "node test-simple.js"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0"
   },
   "devDependencies": {
-    "prisma": "^5.17.0"
+    "prisma": "^5.17.0",
+    "typescript": "^5.6.3"
   }
 }
