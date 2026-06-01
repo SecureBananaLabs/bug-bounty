@@ -7,7 +7,22 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 1024 * 1024 * 2 },
   fileFilter(_req, file, cb) {
-    if (!file.originalname) {
+    const filename = String(file?.originalname || "");
+    const ext = filename.toLowerCase().split(".").pop();
+    if (!filename || !filename.includes(".") || filename !== `${filename.replace(/[\\\/]/g, "")}`) {
+      return cb(new Error("Invalid file name"), false);
+    }
+
+    const allowedExtensions = new Set(["png", "jpg", "jpeg", "webp", "gif", "pdf"]);
+    const allowedMimeTypes = new Set([
+      "image/png",
+      "image/jpeg",
+      "image/webp",
+      "image/gif",
+      "application/pdf",
+    ]);
+
+    if (!allowedExtensions.has(ext) || !allowedMimeTypes.has(file.mimetype || "")) {
       return cb(new Error("Invalid file"), false);
     }
     cb(null, true);

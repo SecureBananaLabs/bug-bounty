@@ -109,6 +109,42 @@ test("protected APIs reject unauthenticated callers", async () => {
     const paymentPayload = await paymentResponse.json();
     assert.equal(paymentResponse.status, 201);
     assert.equal(paymentPayload.success, true);
+    assert.equal(paymentPayload.data.currency, "usd");
+
+    const badPaymentAmount = await fetch(`${baseUrl}/api/payments`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount: -10, currency: "usd" }),
+    });
+    const badPaymentAmountPayload = await badPaymentAmount.json();
+    assert.equal(badPaymentAmount.status, 400);
+    assert.equal(badPaymentAmountPayload.success, false);
+
+    const badPaymentCurrency = await fetch(`${baseUrl}/api/payments`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount: 120, currency: "btc" }),
+    });
+    const badPaymentCurrencyPayload = await badPaymentCurrency.json();
+    assert.equal(badPaymentCurrency.status, 400);
+    assert.equal(badPaymentCurrencyPayload.success, false);
+
+    const uploadMissingResponse = await fetch(`${baseUrl}/api/uploads`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    const uploadMissingPayload = await uploadMissingResponse.json();
+    assert.equal(uploadMissingResponse.status, 400);
+    assert.equal(uploadMissingPayload.success, false);
+    assert.equal(uploadMissingPayload.message, "File is required");
 
     const notificationResponse = await fetch(`${baseUrl}/api/notifications`, {
       method: "POST",
