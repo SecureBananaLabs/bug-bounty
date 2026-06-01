@@ -21,107 +21,176 @@ enum JobStatus {
   CANCELLED
 }
 
+enum FlagReason {
+  AUTOMATED
+  USER_REPORTED
+}
+
+enum FlagStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ESCALATED
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+}
+
+enum RulingSide {
+  FREELANCER
+  CLIENT
+  NONE
+}
+
 model User {
-  id             String      @id @default(cuid())
-  email          String      @unique
+  id             String        @id @default(cuid())
+  email          String        @unique
   passwordHash   String
   fullName       String
   bio            String?
-  role           UserRole    @default(CLIENT)
-  isVerified     Boolean     @default(false)
+  role           UserRole      @default(CLIENT)
+  isVerified     Boolean       @default(false)
+  isSuspended    Boolean       @default(false)
+  isBanned       Boolean       @default(false)
+  trustScore     Int           @default(50)
   skills         Skill[]
-  postedJobs     Job[]       @relation("ClientJobs")
+  postedJobs     Job[]         @relation("ClientJobs")
   proposals      Proposal[]
-  sentMessages   Message[]   @relation("SentMessages")
-  receivedMsgs   Message[]   @relation("ReceivedMessages")
-  reviewsGiven   Review[]    @relation("Reviewer")
-  reviewsGot     Review[]    @relation("Reviewee")
+  sentMessages   Message[]     @relation("SentMessages")
+  receivedMsgs   Message[]     @relation("ReceivedMessages")
+  reviewsGiven   Review[]      @relation("Reviewer")
+  reviewsGot     Review[]      @relation("Reviewee")
   notifications  Notification[]
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  disputesAsClient  Dispute[]  @relation("DisputeClient")
+  disputesAsFreelancer Dispute[] @relation("DisputeFreelancer")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model Job {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   title         String
   description   String
   budgetMin     Float
   budgetMax     Float
-  status        JobStatus   @default(OPEN)
+  status        JobStatus     @default(OPEN)
   clientId      String
-  client        User        @relation("ClientJobs", fields: [clientId], references: [id])
+  client        User          @relation("ClientJobs", fields: [clientId], references: [id])
   categoryId    String
-  category      Category    @relation(fields: [categoryId], references: [id])
+  category      Category      @relation(fields: [categoryId], references: [id])
   proposals     Proposal[]
   payments      Payment[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  flags         FlaggedJob[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model FlaggedJob {
+  id            String        @id @default(cuid())
+  jobId         String
+  job           Job           @relation(fields: [jobId], references: [id])
+  reason        FlagReason    @default(AUTOMATED)
+  description   String?
+  status        FlagStatus    @default(PENDING)
+  reviewedBy    String?
+  rejectionReason String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Dispute {
+  id            String        @id @default(cuid())
+  jobId         String?
+  job           Job?          @relation(fields: [jobId], references: [id])
+  clientId      String
+  client        User          @relation("DisputeClient", fields: [clientId], references: [id])
+  freelancerId  String
+  freelancer    User          @relation("DisputeFreelancer", fields: [freelancerId], references: [id])
+  reason        String
+  evidence      String?
+  status        DisputeStatus @default(OPEN)
+  rulingSide    RulingSide    @default(NONE)
+  rulingNote    String?
+  resolvedBy    String?
+  transactionDetails String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model PlatformSetting {
+  id            String        @id @default(cuid())
+  key           String        @unique
+  value         String
+  updatedAt     DateTime      @updatedAt
 }
 
 model Proposal {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   coverLetter   String
   bidAmount     Float
   estDuration   String
   jobId         String
-  job           Job         @relation(fields: [jobId], references: [id])
+  job           Job           @relation(fields: [jobId], references: [id])
   freelancerId  String
-  freelancer    User        @relation(fields: [freelancerId], references: [id])
-  createdAt     DateTime    @default(now())
+  freelancer    User          @relation(fields: [freelancerId], references: [id])
+  createdAt     DateTime      @default(now())
 }
 
 model Payment {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   amount        Float
-  currency      String      @default("USD")
+  currency      String        @default("USD")
   status        String
   stripeRef     String?
   jobId         String
-  job           Job         @relation(fields: [jobId], references: [id])
-  createdAt     DateTime    @default(now())
+  job           Job           @relation(fields: [jobId], references: [id])
+  createdAt     DateTime      @default(now())
 }
 
 model Review {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   rating        Int
   comment       String
   reviewerId    String
-  reviewer      User        @relation("Reviewer", fields: [reviewerId], references: [id])
+  reviewer      User          @relation("Reviewer", fields: [reviewerId], references: [id])
   revieweeId    String
-  reviewee      User        @relation("Reviewee", fields: [revieweeId], references: [id])
-  createdAt     DateTime    @default(now())
+  reviewee      User          @relation("Reviewee", fields: [revieweeId], references: [id])
+  createdAt     DateTime      @default(now())
 }
 
 model Message {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   body          String
   senderId      String
-  sender        User        @relation("SentMessages", fields: [senderId], references: [id])
+  sender        User          @relation("SentMessages", fields: [senderId], references: [id])
   receiverId    String
-  receiver      User        @relation("ReceivedMessages", fields: [receiverId], references: [id])
-  isRead        Boolean     @default(false)
-  createdAt     DateTime    @default(now())
+  receiver      User          @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  isRead        Boolean       @default(false)
+  createdAt     DateTime      @default(now())
 }
 
 model Category {
-  id            String      @id @default(cuid())
-  name          String      @unique
+  id            String        @id @default(cuid())
+  name          String        @unique
   description   String?
   jobs          Job[]
 }
 
 model Skill {
-  id            String      @id @default(cuid())
-  name          String      @unique
+  id            String        @id @default(cuid())
+  name          String        @unique
   users         User[]
 }
 
 model Notification {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   userId        String
-  user          User        @relation(fields: [userId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
   title         String
   body          String
-  read          Boolean     @default(false)
-  createdAt     DateTime    @default(now())
+  read          Boolean       @default(false)
+  createdAt     DateTime      @default(now())
 }
