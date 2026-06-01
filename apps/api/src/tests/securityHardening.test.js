@@ -233,6 +233,25 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(badProposalResponse.status, 400);
     assert.equal(badProposalPayload.success, false);
 
+    const badJobResponse = await fetch(`${baseUrl}/api/jobs`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title: "job",
+        description: "this is a valid description",
+        budgetMin: 200,
+        budgetMax: 100,
+        categoryId: "dev",
+        skills: [],
+      }),
+    });
+    const badJobPayload = await badJobResponse.json();
+    assert.equal(badJobResponse.status, 400);
+    assert.equal(badJobPayload.success, false);
+
     const refreshResponse = await fetch(`${baseUrl}/api/auth/refresh`, {
       method: "POST",
       headers: {
