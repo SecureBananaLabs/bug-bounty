@@ -8,7 +8,14 @@ export function authMiddleware(req, res, next) {
   }
 
   try {
-    req.user = verifyAccessToken(authHeader.slice(7));
+    const payload = verifyAccessToken(authHeader.slice(7));
+
+    // Server-side identity claim validation – reject tokens without required fields
+    if (!payload || !payload.sub || !payload.sub.startsWith("usr_")) {
+      return fail(res, "Token missing valid identity claims", 401);
+    }
+
+    req.user = payload;
     return next();
   } catch {
     return fail(res, "Invalid token", 401);
