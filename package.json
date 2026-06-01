@@ -10,5 +10,8 @@
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api",
     "benchmark": "node benchmarks/run.js"
+  },
+  "devDependencies": {
+    "autocannon": "^8.0.0"
   }
 }

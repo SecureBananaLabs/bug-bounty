@@ -20,7 +20,7 @@ if (!existsSync(RESULTS_DIR)) {
 }
 
 // API Base URL - can be overridden via environment
-const API_BASE = process.env.API_URL || 'http://localhost:3000/api';
+const API_BASE = process.env.API_URL || 'http://localhost:4000/api';
 const AUTH_TOKEN = process.env.BENCHMARK_TOKEN || '';
 
 // Endpoints to benchmark (all /api/* routes)
@@ -28,7 +28,18 @@ const ENDPOINTS = [
   { path: '/auth/register', method: 'POST', body: { email: 'bench@test.com', password: 'Test123!', name: 'Benchmark' } },
   { path: '/auth/login', method: 'POST', body: { email: 'bench@test.com', password: 'Test123!' } },
   { path: '/jobs', method: 'GET' },
-  { path: '/jobs', method: 'POST', body: { title: 'Test Job', budget: 5000 } },
+  {
+    path: '/jobs',
+    method: 'POST',
+    body: {
+      title: 'Test Job',
+      description: 'Benchmark job description',
+      budgetMin: 1000,
+      budgetMax: 5000,
+      categoryId: 'benchmark',
+      skills: ['node']
+    }
+  },
   { path: '/users', method: 'GET' },
   { path: '/users', method: 'GET', pathSuffix: '/1' },
   { path: '/proposals', method: 'GET' },
@@ -41,10 +52,10 @@ const ENDPOINTS = [
 
 // Benchmark settings
 const BENCHMARK_OPTIONS = {
-  connections: 10,
-  duration: 10,
+  connections: Number(process.env.BENCHMARK_CONNECTIONS || 10),
+  duration: Number(process.env.BENCHMARK_DURATION || 10),
   pipelining: 1,
-  workers: 2,
+  workers: Number(process.env.BENCHMARK_WORKERS || 2),
 };
 
 // Load thresholds
@@ -97,39 +108,36 @@ async function benchmarkEndpoint(endpoint) {
  * Extract key metrics from autocannon result
  */
 function extractMetrics(result) {
-  const latencies = result.latency;
-
-  // Calculate percentiles from histogram
-  const sorted = [...latencies].sort((a, b) => a - b);
-  const p50 = sorted[Math.floor(sorted.length * 0.5)] || 0;
-  const p95 = sorted[Math.floor(sorted.length * 0.95)] || 0;
-  const p99 = sorted[Math.floor(sorted.length * 0.99)] || 0;
+  const latency = result.latency || {};
+  const ttfb = result.ttfb || {};
+  const totalRequests = result.requests?.total || 0;
+  const failedRequests = (result.errors || 0) + (result.timeouts || 0);
 
   return {
     latency: {
-      p50: Math.round(p50),
-      p95: Math.round(p95),
-      p99: Math.round(p99),
-      mean: Math.round(result.latency.mean || 0),
-      min: Math.round(result.latency.min || 0),
-      max: Math.round(result.latency.max || 0),
+      p50: Math.round(latency.p50 || latency['50'] || latency.mean || 0),
+      p95: Math.round(latency.p95 || latency['95'] || latency.mean || 0),
+      p99: Math.round(latency.p99 || latency['99'] || latency.max || 0),
+      mean: Math.round(latency.mean || 0),
+      min: Math.round(latency.min || 0),
+      max: Math.round(latency.max || 0),
     },
-    rps: Math.round(result.requests.average || 0),
+    rps: Math.round(result.requests?.average || 0),
     throughput: {
       bytes: result.throughput.average || 0,
       mean: Math.round(result.throughput.mean || 0),
     },
     errors: result.errors || 0,
     timeouts: result.timeouts || 0,
-    errorRate: result.errors ? ((result.errors / result.requests.total) * 100).toFixed(2) : 0,
+    errorRate: totalRequests > 0 ? ((failedRequests / totalRequests) * 100).toFixed(2) : 0,
     ttfb: {
-      mean: Math.round(result.ttfb.mean || 0),
-      min: Math.round(result.ttfb.min || 0),
-      max: Math.round(result.ttfb.max || 0),
+      mean: Math.round(ttfb.mean || 0),
+      min: Math.round(ttfb.min || 0),
+      max: Math.round(ttfb.max || 0),
     },
     requests: {
-      total: result.requests.total || 0,
-      succeeded: (result.requests.total || 0) - (result.errors || 0) - (result.timeouts || 0),
+      total: totalRequests,
+      succeeded: totalRequests - failedRequests,
       failed: result.errors || 0,
     },
     duration: result.duration,
