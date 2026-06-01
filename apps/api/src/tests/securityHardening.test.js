@@ -89,6 +89,30 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(privilegedRegister.status, 201);
     assert.ok(typeof privilegedToken === "string" && privilegedToken.length > 10);
 
+    const badUserEmail = await fetch(`${baseUrl}/api/users`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ email: "not-an-email" }),
+    });
+    const badUserEmailPayload = await badUserEmail.json();
+    assert.equal(badUserEmail.status, 400);
+    assert.equal(badUserEmailPayload.success, false);
+
+    const badUserRole = await fetch(`${baseUrl}/api/users`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ email: "user+hack@test.io", role: "admin", name: "ok" }),
+    });
+    const badUserRolePayload = await badUserRole.json();
+    assert.equal(badUserRole.status, 400);
+    assert.equal(badUserRolePayload.success, false);
+
     const deniedAdmin = await fetch(`${baseUrl}/api/admin/metrics`, {
       headers: {
         authorization: `Bearer ${privilegedToken}`,
@@ -179,6 +203,42 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(messageResponse.status, 201);
     assert.equal(messagePayload.success, true);
     assert.ok(messagePayload.data.id.startsWith("msg_"));
+
+    const badMessageResponse = await fetch(`${baseUrl}/api/messages`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({}),
+    });
+    const badMessagePayload = await badMessageResponse.json();
+    assert.equal(badMessageResponse.status, 400);
+    assert.equal(badMessagePayload.success, false);
+
+    const badReviewResponse = await fetch(`${baseUrl}/api/reviews`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ rating: 0, text: "x" }),
+    });
+    const badReviewPayload = await badReviewResponse.json();
+    assert.equal(badReviewResponse.status, 400);
+    assert.equal(badReviewPayload.success, false);
+
+    const badProposalResponse = await fetch(`${baseUrl}/api/proposals`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ jobId: "", text: "", budgetMin: -1 }),
+    });
+    const badProposalPayload = await badProposalResponse.json();
+    assert.equal(badProposalResponse.status, 400);
+    assert.equal(badProposalPayload.success, false);
 
     const refreshResponse = await fetch(`${baseUrl}/api/auth/refresh`, {
       method: "POST",
