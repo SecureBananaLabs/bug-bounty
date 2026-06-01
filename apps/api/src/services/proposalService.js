@@ -1,8 +1,8 @@
 const proposals = [];
 
-export async function listProposals(userId) {
+export async function listProposalsForUser(userId) {
   if (!userId) {
-    return [];
+    throw new Error("userId is required to list proposals");
   }
 
   return proposals.filter(
@@ -14,4 +14,8 @@ export async function createProposal(payload) {
   const proposal = { id: `prp_${Date.now()}`, ...payload };
   proposals.push(proposal);
   return proposal;
+}
+
+export function resetProposalsForTests() {
+  proposals.length = 0;
 }

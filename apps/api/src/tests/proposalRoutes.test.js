@@ -1,8 +1,12 @@
-import test from "node:test";
+import { beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
-import { createProposal } from "../services/proposalService.js";
+import { createProposal, resetProposalsForTests } from "../services/proposalService.js";
 import { signAccessToken } from "../utils/jwt.js";
+
+beforeEach(() => {
+  resetProposalsForTests();
+});
 
 async function withServer(fn) {
   const app = createApp();
