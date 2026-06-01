@@ -284,6 +284,22 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(typeof proposalPayload.data.createdAt, "string");
     assert.ok(proposalPayload.data.createdAt.length > 1);
 
+    const searchUserResponse = await fetch(`${baseUrl}/api/users`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        email: "search-target@securebanana.test",
+        name: "Search Auditor",
+      }),
+    });
+    const searchUserPayload = await searchUserResponse.json();
+    assert.equal(searchUserResponse.status, 201);
+    assert.equal(searchUserPayload.success, true);
+    assert.ok(typeof searchUserPayload.data.id === "string" && searchUserPayload.data.id.startsWith("usr_"));
+
     const reviewResponse = await fetch(`${baseUrl}/api/reviews`, {
       method: "POST",
       headers: {
@@ -367,11 +383,23 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(searchLong.status, 400);
     assert.equal(searchLongPayload.message, "Search query is too long");
 
-    const searchValid = await fetch(`${baseUrl}/api/search?q=job`);
+    const searchValid = await fetch(`${baseUrl}/api/search?q=timestamp`);
     const searchValidPayload = await searchValid.json();
     assert.equal(searchValid.status, 200);
     assert.equal(searchValidPayload.success, true);
-    assert.equal(searchValidPayload.data.query, "job");
+    assert.equal(searchValidPayload.data.query, "timestamp");
+    assert.ok(Array.isArray(searchValidPayload.data.jobs));
+    assert.ok(Array.isArray(searchValidPayload.data.users));
+    assert.ok(searchValidPayload.data.jobs.some((item) => item.id === jobPayload.data.id));
+
+    const userSearch = await fetch(`${baseUrl}/api/search?q=search+auditor`);
+    const userSearchPayload = await userSearch.json();
+    assert.equal(userSearch.status, 200);
+    assert.equal(userSearchPayload.success, true);
+    assert.equal(userSearchPayload.data.query, "search auditor");
+    assert.ok(
+      userSearchPayload.data.users.some((item) => item.id === searchUserPayload.data.id)
+    );
 
     const oauthMissingCode = await fetch(`${baseUrl}/api/auth/oauth/github/callback`);
     const oauthMissingCodePayload = await oauthMissingCode.json();
