@@ -56,3 +56,39 @@ test("POST /api/payments accepts positive amounts", async () => {
     assert.equal(payload.data.provider, "stripe");
   });
 });
+
+test("POST /api/payments defaults omitted currency to usd", async () => {
+  await withServer(async (port) => {
+    const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ amount: 25 })
+    });
+
+    const payload = await response.json();
+
+    assert.equal(response.status, 201);
+    assert.equal(payload.success, true);
+    assert.equal(payload.data.amount, 25);
+    assert.equal(payload.data.currency, "usd");
+    assert.equal(payload.data.provider, "stripe");
+  });
+});
+
+test("POST /api/payments rejects blank currency", async () => {
+  await withServer(async (port) => {
+    const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ amount: 25, currency: " " })
+    });
+
+    const payload = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(payload, {
+      success: false,
+      message: "Payment currency is required"
+    });
+  });
+});
