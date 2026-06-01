@@ -5,7 +5,7 @@ function normalizeEmail(value) {
 const users = [];
 
 export async function listUsers() {
-  return users;
+  return [...users];
 }
 
 export async function createUser(payload) {
