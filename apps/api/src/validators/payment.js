@@ -6,5 +6,5 @@ export const createPaymentSchema = z.object({
     (value) => ["usd", "eur", "gbp", "ils"].includes(value),
     "Unsupported currency"
   ),
-});
-
+})
+.strict();
