@@ -79,6 +79,15 @@ test("protected APIs reject unauthenticated callers", async () => {
     const token = registerPayload.data?.token;
     assert.equal(register.status, 201);
     assert.ok(typeof token === "string" && token.length > 10);
+    const lowercaseBearerUsers = await fetch(`${baseUrl}/api/users`, {
+      headers: {
+        authorization: `bearer ${token}`,
+      },
+    });
+    const lowercaseBearerPayload = await lowercaseBearerUsers.json();
+    assert.equal(lowercaseBearerUsers.status, 200);
+    assert.equal(lowercaseBearerPayload.success, true);
+
     const registerClaim = verifyAccessToken(token);
     assert.equal(registerPayload.data.id, registerClaim.sub);
 
