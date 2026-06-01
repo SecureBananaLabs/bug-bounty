@@ -3,6 +3,9 @@ import assert from "node:assert/strict";
 import jwt from "jsonwebtoken";
 import { createApp } from "../app.js";
 
+// JWT_SECRET must be set in CI/CD. The fallback here is intentionally
+// test-only and must never be used in production (env.js throws in production
+// if JWT_SECRET is unset).
 const JWT_SECRET = process.env.JWT_SECRET ?? "development-secret";
 
 function makeServer() {
