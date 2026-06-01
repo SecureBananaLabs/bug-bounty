@@ -5,7 +5,19 @@ export async function listMessages() {
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
+  // Reject blank message content
+  const body = payload?.body?.trim();
+  if (!body) {
+    throw Object.assign(new Error("Message body cannot be blank"), { statusCode: 400 });
+  }
+
+  const message = {
+    id: `msg_${Date.now()}`,
+    senderId: payload.senderId,
+    receiverId: payload.receiverId,
+    body,
+    sentAt: new Date().toISOString()
+  };
   messages.push(message);
   return message;
 }
