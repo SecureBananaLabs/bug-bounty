@@ -1,6 +1,34 @@
 import { z } from "zod";
 
 /**
+ * Base job schema without refinements.
+ * Separated so that `.partial()` can be called on the raw object
+ * (Zod v4 forbids `.partial()` on refined schemas).
+ */
+const baseJobFields = z.object({
+  title: z.string()
+    .min(4, "Title must be at least 4 characters")
+    .max(200, "Title must be at most 200 characters"),
+  description: z.string()
+    .min(10, "Description must be at least 10 characters")
+    .max(5000, "Description must be at most 5000 characters"),
+  budgetMin: z.number()
+    .nonnegative("budgetMin must be non-negative")
+    .finite("budgetMin must be a finite number"),
+  budgetMax: z.number()
+    .nonnegative("budgetMax must be non-negative")
+    .finite("budgetMax must be a finite number"),
+  categoryId: z.string()
+    .min(1, "categoryId is required")
+    .max(100, "categoryId must be at most 100 characters"),
+  skills: z.array(
+    z.string()
+      .min(1, "Skill must be a non-empty string")
+      .max(50, "Skill must be at most 50 characters")
+  ).max(20, "Maximum 20 skills allowed").default([])
+});
+
+/**
  * Schema for creating a new job posting.
  *
  * Validates:
@@ -23,28 +51,7 @@ import { z } from "zod";
  * });
  * ```
  */
-export const createJobSchema = z.object({
-  title: z.string()
-    .min(4, "Title must be at least 4 characters")
-    .max(200, "Title must be at most 200 characters"),
-  description: z.string()
-    .min(10, "Description must be at least 10 characters")
-    .max(5000, "Description must be at most 5000 characters"),
-  budgetMin: z.number()
-    .nonnegative("budgetMin must be non-negative")
-    .finite("budgetMin must be a finite number"),
-  budgetMax: z.number()
-    .nonnegative("budgetMax must be non-negative")
-    .finite("budgetMax must be a finite number"),
-  categoryId: z.string()
-    .min(1, "categoryId is required")
-    .max(100, "categoryId must be at most 100 characters"),
-  skills: z.array(
-    z.string()
-      .min(1, "Skill must be a non-empty string")
-      .max(50, "Skill must be at most 50 characters")
-  ).max(20, "Maximum 20 skills allowed").default([])
-}).refine(
+export const createJobSchema = baseJobFields.refine(
   (data) => data.budgetMax >= data.budgetMin,
   {
     message: "budgetMax must be greater than or equal to budgetMin",
@@ -72,7 +79,7 @@ export const createJobSchema = z.object({
  * // => throws ZodError
  * ```
  */
-export const updateJobSchema = createJobSchema.partial().refine(
+export const updateJobSchema = baseJobFields.partial().refine(
   (data) => {
     // Only validate when both fields are present
     if (data.budgetMin !== undefined && data.budgetMax !== undefined) {

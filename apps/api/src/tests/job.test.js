@@ -202,7 +202,7 @@ test("createJobSchema - uses default empty skills array", () => {
   delete data.skills;
   const result = createJobSchema.safeParse(data);
   assert.equal(result.success, true);
-  assert.deepEqual(result.value.skills, []);
+  assert.deepEqual(result.data.skills, []);
 });
 
 test("createJobSchema - rejects empty skill string", () => {
