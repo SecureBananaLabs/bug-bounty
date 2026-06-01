@@ -15,6 +15,7 @@ export async function createNotification(payload, actor = {}) {
     ...data,
     id: `ntf_${Date.now()}`,
     read: false,
+    createdAt: new Date().toISOString(),
     userId: actorId,
   };
   notifications.push(notification);

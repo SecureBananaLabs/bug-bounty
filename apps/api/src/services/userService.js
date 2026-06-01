@@ -23,6 +23,7 @@ export async function createUser(payload) {
     email,
     name,
     role: "client",
+    createdAt: new Date().toISOString(),
   };
   users.push(user);
   return user;

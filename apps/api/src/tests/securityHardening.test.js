@@ -215,6 +215,8 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(notificationPayload.data.read, false);
     assert.equal(notificationPayload.data.userId, registerClaim.sub);
     assert.ok(notificationPayload.data.id.startsWith("ntf_"));
+    assert.equal(typeof notificationPayload.data.createdAt, "string");
+    assert.ok(notificationPayload.data.createdAt.length > 1);
 
     const messageResponse = await fetch(`${baseUrl}/api/messages`, {
       method: "POST",
@@ -242,6 +244,62 @@ test("protected APIs reject unauthenticated callers", async () => {
     const badMessagePayload = await badMessageResponse.json();
     assert.equal(badMessageResponse.status, 400);
     assert.equal(badMessagePayload.success, false);
+
+    const jobResponse = await fetch(`${baseUrl}/api/jobs`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title: "timestamp audit",
+        description: "Add createdAt field to API create payload for auditing",
+        budgetMin: 120,
+        budgetMax: 220,
+        categoryId: "dev",
+        skills: ["node", "api"],
+      }),
+    });
+    const jobPayload = await jobResponse.json();
+    assert.equal(jobResponse.status, 201);
+    assert.equal(jobPayload.success, true);
+    assert.equal(typeof jobPayload.data.createdAt, "string");
+    assert.ok(jobPayload.data.createdAt.length > 1);
+
+    const proposalResponse = await fetch(`${baseUrl}/api/proposals`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        jobId: jobPayload.data.id,
+        text: "I will implement a small scoped API hardening fix",
+        budgetMin: 75,
+      }),
+    });
+    const proposalPayload = await proposalResponse.json();
+    assert.equal(proposalResponse.status, 201);
+    assert.equal(proposalPayload.success, true);
+    assert.equal(typeof proposalPayload.data.createdAt, "string");
+    assert.ok(proposalPayload.data.createdAt.length > 1);
+
+    const reviewResponse = await fetch(`${baseUrl}/api/reviews`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        rating: 5,
+        text: "Looks good from a security-hardening perspective",
+      }),
+    });
+    const reviewPayload = await reviewResponse.json();
+    assert.equal(reviewResponse.status, 201);
+    assert.equal(reviewPayload.success, true);
+    assert.equal(typeof reviewPayload.data.createdAt, "string");
+    assert.ok(reviewPayload.data.createdAt.length > 1);
 
     const badReviewResponse = await fetch(`${baseUrl}/api/reviews`, {
       method: "POST",
