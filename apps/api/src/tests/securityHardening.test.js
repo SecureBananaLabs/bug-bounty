@@ -91,6 +91,31 @@ test("protected APIs reject unauthenticated callers", async () => {
     const registerClaim = verifyAccessToken(token);
     assert.equal(registerPayload.data.id, registerClaim.sub);
 
+    const login = await fetch(`${baseUrl}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ email: "pay+notify@test.io", password: "password123" }),
+    });
+    const loginPayload = await login.json();
+    assert.equal(login.status, 200);
+    assert.equal(loginPayload.success, true);
+    const loginClaim = verifyAccessToken(loginPayload.data.token);
+    assert.equal(loginPayload.data.id, registerClaim.sub);
+    assert.equal(loginClaim.sub, registerClaim.sub);
+
+    const duplicateRegister = await fetch(`${baseUrl}/api/auth/register`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ email: "pay+notify@test.io", password: "password123" }),
+    });
+    const duplicateRegisterPayload = await duplicateRegister.json();
+    assert.equal(duplicateRegister.status, 409);
+    assert.equal(duplicateRegisterPayload.success, false);
+
     const privilegedToken = token;
 
     const badUserEmail = await fetch(`${baseUrl}/api/users`, {
@@ -289,6 +314,22 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(searchValid.status, 200);
     assert.equal(searchValidPayload.success, true);
     assert.equal(searchValidPayload.data.query, "job");
+
+    const oauthMissingCode = await fetch(`${baseUrl}/api/auth/oauth/github/callback`);
+    const oauthMissingCodePayload = await oauthMissingCode.json();
+    assert.equal(oauthMissingCode.status, 400);
+    assert.equal(oauthMissingCodePayload.success, false);
+
+    const oauthInvalidProvider = await fetch(`${baseUrl}/api/auth/oauth/unknown/callback?code=abc12345`);
+    const oauthInvalidProviderPayload = await oauthInvalidProvider.json();
+    assert.equal(oauthInvalidProvider.status, 400);
+    assert.equal(oauthInvalidProviderPayload.success, false);
+
+    const oauthOk = await fetch(`${baseUrl}/api/auth/oauth/github/callback?code=validOAuthCode123`);
+    const oauthOkPayload = await oauthOk.json();
+    assert.equal(oauthOk.status, 200);
+    assert.equal(oauthOkPayload.success, true);
+    assert.equal(oauthOkPayload.data.provider, "github");
   });
 });
 

@@ -1,3 +1,7 @@
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
 const users = [];
 
 export async function listUsers() {
@@ -5,7 +9,15 @@ export async function listUsers() {
 }
 
 export async function createUser(payload) {
-  const { email, name } = payload;
+  const email = normalizeEmail(payload.email);
+  const existing = users.find((user) => normalizeEmail(user.email) === email);
+  if (existing) {
+    const error = new Error("Email already registered");
+    error.name = "ConflictError";
+    throw error;
+  }
+
+  const { name } = payload;
   const user = {
     id: `usr_${Date.now()}`,
     email,
@@ -14,4 +26,9 @@ export async function createUser(payload) {
   };
   users.push(user);
   return user;
+}
+
+export async function getUserByEmail(email) {
+  const normalizedEmail = normalizeEmail(email);
+  return users.find((user) => normalizeEmail(user.email) === normalizedEmail) || null;
 }
