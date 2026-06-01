@@ -80,6 +80,7 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(register.status, 201);
     assert.ok(typeof token === "string" && token.length > 10);
     const registerClaim = verifyAccessToken(token);
+    assert.equal(registerPayload.data.id, registerClaim.sub);
 
     const privilegedToken = token;
 
