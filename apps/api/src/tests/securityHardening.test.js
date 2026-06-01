@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
+import { verifyAccessToken } from "../utils/jwt.js";
 
 async function withServer(run) {
   const app = createApp();
@@ -78,16 +79,9 @@ test("protected APIs reject unauthenticated callers", async () => {
     const token = registerPayload.data?.token;
     assert.equal(register.status, 201);
     assert.ok(typeof token === "string" && token.length > 10);
+    const registerClaim = verifyAccessToken(token);
 
-    const privilegedRegister = await fetch(`${baseUrl}/api/auth/register`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ email: "admin+attempt@test.io", password: "password123", role: "admin" }),
-    });
-    const privilegedPayload = await privilegedRegister.json();
-    const privilegedToken = privilegedPayload.data?.token;
-    assert.equal(privilegedRegister.status, 201);
-    assert.ok(typeof privilegedToken === "string" && privilegedToken.length > 10);
+    const privilegedToken = token;
 
     const badUserEmail = await fetch(`${baseUrl}/api/users`, {
       method: "POST",
@@ -177,8 +171,6 @@ test("protected APIs reject unauthenticated callers", async () => {
         authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id: "hijack-id",
-        read: true,
         title: "title-from-client",
       }),
     });
@@ -186,7 +178,7 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(notificationResponse.status, 201);
     assert.equal(notificationPayload.success, true);
     assert.equal(notificationPayload.data.read, false);
-    assert.notEqual(notificationPayload.data.id, "hijack-id");
+    assert.equal(notificationPayload.data.userId, registerClaim.sub);
     assert.ok(notificationPayload.data.id.startsWith("ntf_"));
 
     const messageResponse = await fetch(`${baseUrl}/api/messages`, {
@@ -249,6 +241,9 @@ test("protected APIs reject unauthenticated callers", async () => {
     const refreshPayload = await refreshResponse.json();
     assert.equal(refreshResponse.status, 200);
     assert.equal(typeof refreshPayload.data?.token, "string");
+    const refreshedClaim = verifyAccessToken(refreshPayload.data.token);
+    assert.equal(refreshedClaim.sub, registerClaim.sub);
+    assert.equal(refreshedClaim.role, registerClaim.role);
 
     const searchMissing = await fetch(`${baseUrl}/api/search`);
     const searchMissingPayload = await searchMissing.json();

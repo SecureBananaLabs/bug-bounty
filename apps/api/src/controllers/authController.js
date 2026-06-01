@@ -32,6 +32,6 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  const result = await refreshToken(req.user);
   return ok(res, result);
 }

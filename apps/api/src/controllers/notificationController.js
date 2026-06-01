@@ -12,5 +12,5 @@ export async function postNotification(req, res) {
     return fail(res, parsed.error.errors[0]?.message || "Invalid request", 400);
   }
 
-  return ok(res, await createNotification(parsed.data), 201);
+  return ok(res, await createNotification(parsed.data, req.user), 201);
 }
