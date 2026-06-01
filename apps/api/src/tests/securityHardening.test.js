@@ -346,3 +346,14 @@ test("notifications are scoped per user", async () => {
     assert.ok(!titlesB.has(notifA.title));
   });
 });
+
+test("unknown routes return JSON 404 responses", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/does-not-exist`);
+    const payload = await response.json();
+
+    assert.equal(response.status, 404);
+    assert.equal(payload.success, false);
+    assert.equal(payload.message, "Route not found");
+  });
+});
