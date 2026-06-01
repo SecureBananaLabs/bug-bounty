@@ -1,10 +1,14 @@
-import { beforeEach, test } from "node:test";
+import { afterEach, beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
 import { createProposal, resetProposalsForTests } from "../services/proposalService.js";
 import { signAccessToken } from "../utils/jwt.js";
 
 beforeEach(() => {
+  resetProposalsForTests();
+});
+
+afterEach(() => {
   resetProposalsForTests();
 });
 
