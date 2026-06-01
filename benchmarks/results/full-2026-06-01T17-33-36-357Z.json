@@ -1,0 +1,735 @@
+{
+  "runId": "2026-06-01T17-33-36-357Z",
+  "targetUrl": "http://127.0.0.1:61873",
+  "createdAt": "2026-06-01T17:33:57.645Z",
+  "config": {
+    "smoke": false,
+    "concurrency": 2,
+    "durationMs": 1000,
+    "iterations": null
+  },
+  "environment": {
+    "machineType": "local workstation",
+    "platform": "darwin",
+    "release": "25.5.0",
+    "arch": "arm64",
+    "cpuModel": "Apple M4",
+    "logicalCores": 10,
+    "totalMemoryGb": 24,
+    "freeMemoryGb": 0.38,
+    "nodeVersion": "v24.14.0"
+  },
+  "results": [
+    {
+      "id": "health",
+      "method": "GET",
+      "path": "/health",
+      "requests": 15091,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 15091
+      },
+      "latencyMs": {
+        "p50": 0.11,
+        "p95": 0.2,
+        "p99": 0.39
+      },
+      "ttfbMs": {
+        "p95": 0.19
+      },
+      "rps": {
+        "sustained": 15090.2,
+        "peak": 15089
+      }
+    },
+    {
+      "id": "api-auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 9786,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 9786
+      },
+      "latencyMs": {
+        "p50": 0.18,
+        "p95": 0.26,
+        "p99": 0.41
+      },
+      "ttfbMs": {
+        "p95": 0.26
+      },
+      "rps": {
+        "sustained": 9784.79,
+        "peak": 9784
+      }
+    },
+    {
+      "id": "api-auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 10638,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 10638
+      },
+      "latencyMs": {
+        "p50": 0.17,
+        "p95": 0.21,
+        "p99": 0.33
+      },
+      "ttfbMs": {
+        "p95": 0.2
+      },
+      "rps": {
+        "sustained": 10636.45,
+        "peak": 10636
+      }
+    },
+    {
+      "id": "api-auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 13252,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 13252
+      },
+      "latencyMs": {
+        "p50": 0.14,
+        "p95": 0.16,
+        "p99": 0.26
+      },
+      "ttfbMs": {
+        "p95": 0.15
+      },
+      "rps": {
+        "sustained": 13251.02,
+        "peak": 13250
+      }
+    },
+    {
+      "id": "api-auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "requests": 16918,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 16918
+      },
+      "latencyMs": {
+        "p50": 0.11,
+        "p95": 0.12,
+        "p99": 0.23
+      },
+      "ttfbMs": {
+        "p95": 0.11
+      },
+      "rps": {
+        "sustained": 16916.78,
+        "peak": 16916
+      }
+    },
+    {
+      "id": "api-users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 17608,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 17608
+      },
+      "latencyMs": {
+        "p50": 0.1,
+        "p95": 0.12,
+        "p99": 0.26
+      },
+      "ttfbMs": {
+        "p95": 0.11
+      },
+      "rps": {
+        "sustained": 17606.74,
+        "peak": 17606
+      }
+    },
+    {
+      "id": "api-users-create",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 10605,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 10605
+      },
+      "latencyMs": {
+        "p50": 0.16,
+        "p95": 0.22,
+        "p99": 0.4
+      },
+      "ttfbMs": {
+        "p95": 0.21
+      },
+      "rps": {
+        "sustained": 10603.61,
+        "peak": 10603
+      }
+    },
+    {
+      "id": "api-jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 8430,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 8430
+      },
+      "latencyMs": {
+        "p50": 0.2,
+        "p95": 0.32,
+        "p99": 0.74
+      },
+      "ttfbMs": {
+        "p95": 0.31
+      },
+      "rps": {
+        "sustained": 8428.3,
+        "peak": 8428
+      }
+    },
+    {
+      "id": "api-jobs-create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 3510,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 3510
+      },
+      "latencyMs": {
+        "p50": 0.4,
+        "p95": 1.2,
+        "p99": 2.51
+      },
+      "ttfbMs": {
+        "p95": 1.16
+      },
+      "rps": {
+        "sustained": 3508.99,
+        "peak": 3508
+      }
+    },
+    {
+      "id": "api-proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 5933,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 5933
+      },
+      "latencyMs": {
+        "p50": 0.28,
+        "p95": 0.51,
+        "p99": 1.04
+      },
+      "ttfbMs": {
+        "p95": 0.5
+      },
+      "rps": {
+        "sustained": 5931.96,
+        "peak": 5931
+      }
+    },
+    {
+      "id": "api-proposals-create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 4993,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 4993
+      },
+      "latencyMs": {
+        "p50": 0.32,
+        "p95": 0.76,
+        "p99": 1.56
+      },
+      "ttfbMs": {
+        "p95": 0.74
+      },
+      "rps": {
+        "sustained": 4992.38,
+        "peak": 4991
+      }
+    },
+    {
+      "id": "api-payments-create",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 7895,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 7895
+      },
+      "latencyMs": {
+        "p50": 0.23,
+        "p95": 0.28,
+        "p99": 0.51
+      },
+      "ttfbMs": {
+        "p95": 0.28
+      },
+      "rps": {
+        "sustained": 7894.23,
+        "peak": 7893
+      }
+    },
+    {
+      "id": "api-reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 11002,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 11002
+      },
+      "latencyMs": {
+        "p50": 0.17,
+        "p95": 0.19,
+        "p99": 0.4
+      },
+      "ttfbMs": {
+        "p95": 0.18
+      },
+      "rps": {
+        "sustained": 11000.93,
+        "peak": 11000
+      }
+    },
+    {
+      "id": "api-reviews-create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 6562,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 6562
+      },
+      "latencyMs": {
+        "p50": 0.27,
+        "p95": 0.32,
+        "p99": 0.57
+      },
+      "ttfbMs": {
+        "p95": 0.31
+      },
+      "rps": {
+        "sustained": 6561.15,
+        "peak": 6560
+      }
+    },
+    {
+      "id": "api-messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 9536,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 9536
+      },
+      "latencyMs": {
+        "p50": 0.2,
+        "p95": 0.23,
+        "p99": 0.41
+      },
+      "ttfbMs": {
+        "p95": 0.22
+      },
+      "rps": {
+        "sustained": 9534.71,
+        "peak": 9534
+      }
+    },
+    {
+      "id": "api-messages-create",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 5992,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 5992
+      },
+      "latencyMs": {
+        "p50": 0.28,
+        "p95": 0.46,
+        "p99": 0.87
+      },
+      "ttfbMs": {
+        "p95": 0.45
+      },
+      "rps": {
+        "sustained": 5989.74,
+        "peak": 5990
+      }
+    },
+    {
+      "id": "api-notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 9106,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 9106
+      },
+      "latencyMs": {
+        "p50": 0.2,
+        "p95": 0.23,
+        "p99": 0.42
+      },
+      "ttfbMs": {
+        "p95": 0.23
+      },
+      "rps": {
+        "sustained": 9079.97,
+        "peak": 9104
+      }
+    },
+    {
+      "id": "api-notifications-create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 6480,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 6480
+      },
+      "latencyMs": {
+        "p50": 0.27,
+        "p95": 0.33,
+        "p99": 0.55
+      },
+      "ttfbMs": {
+        "p95": 0.33
+      },
+      "rps": {
+        "sustained": 6479.46,
+        "peak": 6478
+      }
+    },
+    {
+      "id": "api-uploads-create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 3629,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "201": 3629
+      },
+      "latencyMs": {
+        "p50": 0.45,
+        "p95": 0.77,
+        "p99": 1.56
+      },
+      "ttfbMs": {
+        "p95": 0.76
+      },
+      "rps": {
+        "sustained": 3628.4,
+        "peak": 3627
+      }
+    },
+    {
+      "id": "api-search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark%20developer",
+      "requests": 9185,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 9185
+      },
+      "latencyMs": {
+        "p50": 0.19,
+        "p95": 0.23,
+        "p99": 0.46
+      },
+      "ttfbMs": {
+        "p95": 0.22
+      },
+      "rps": {
+        "sustained": 9184.16,
+        "peak": 9183
+      }
+    },
+    {
+      "id": "api-admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 6058,
+      "errors": 0,
+      "errorRatePct": 0,
+      "statusCounts": {
+        "200": 6058
+      },
+      "latencyMs": {
+        "p50": 0.29,
+        "p95": 0.47,
+        "p99": 0.79
+      },
+      "ttfbMs": {
+        "p95": 0.46
+      },
+      "rps": {
+        "sustained": 6057.21,
+        "peak": 6056
+      }
+    }
+  ],
+  "thresholds": {
+    "default": {
+      "p99Ms": 1500,
+      "errorRatePct": 0
+    },
+    "endpoints": {
+      "api-uploads-create": {
+        "p99Ms": 2500,
+        "errorRatePct": 0
+      },
+      "api-admin-metrics": {
+        "p99Ms": 2000,
+        "errorRatePct": 0
+      }
+    }
+  },
+  "thresholdChecks": [
+    {
+      "id": "health",
+      "p99Ms": 0.39,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-auth-register",
+      "p99Ms": 0.41,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-auth-login",
+      "p99Ms": 0.33,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-auth-refresh",
+      "p99Ms": 0.26,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-auth-oauth-callback",
+      "p99Ms": 0.23,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-users-list",
+      "p99Ms": 0.26,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-users-create",
+      "p99Ms": 0.4,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-jobs-list",
+      "p99Ms": 0.74,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-jobs-create",
+      "p99Ms": 2.51,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-proposals-list",
+      "p99Ms": 1.04,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-proposals-create",
+      "p99Ms": 1.56,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-payments-create",
+      "p99Ms": 0.51,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-reviews-list",
+      "p99Ms": 0.4,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-reviews-create",
+      "p99Ms": 0.57,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-messages-list",
+      "p99Ms": 0.41,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-messages-create",
+      "p99Ms": 0.87,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-notifications-list",
+      "p99Ms": 0.42,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-notifications-create",
+      "p99Ms": 0.55,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-uploads-create",
+      "p99Ms": 1.56,
+      "p99LimitMs": 2500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-search",
+      "p99Ms": 0.46,
+      "p99LimitMs": 1500,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    },
+    {
+      "id": "api-admin-metrics",
+      "p99Ms": 0.79,
+      "p99LimitMs": 2000,
+      "p99Passed": true,
+      "errorRatePct": 0,
+      "errorRateLimitPct": 0,
+      "errorRatePassed": true,
+      "passed": true
+    }
+  ]
+}

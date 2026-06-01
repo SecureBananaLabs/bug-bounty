@@ -1,0 +1,16 @@
+{
+  "default": {
+    "p99Ms": 1500,
+    "errorRatePct": 0
+  },
+  "endpoints": {
+    "api-uploads-create": {
+      "p99Ms": 2500,
+      "errorRatePct": 0
+    },
+    "api-admin-metrics": {
+      "p99Ms": 2000,
+      "errorRatePct": 0
+    }
+  }
+}
