@@ -262,3 +262,67 @@ test("protected APIs reject unauthenticated callers", async () => {
     assert.equal(searchValidPayload.data.query, "job");
   });
 });
+
+test("notifications are scoped per user", async () => {
+  await withServer(async (baseUrl) => {
+    const registerUser = async (email) => {
+      const response = await fetch(`${baseUrl}/api/auth/register`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ email, password: "password123" }),
+      });
+      const payload = await response.json();
+      assert.equal(response.status, 201);
+      assert.equal(payload.success, true);
+      return payload.data.token;
+    };
+
+    const tokenA = await registerUser("a_scope@test.io");
+    const tokenB = await registerUser("b_scope@test.io");
+
+    const createNotif = async (token, title) => {
+      const response = await fetch(`${baseUrl}/api/notifications`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title }),
+      });
+      const payload = await response.json();
+      assert.equal(response.status, 201);
+      assert.equal(payload.success, true);
+      return payload.data;
+    };
+
+    const notifA = await createNotif(tokenA, "A-title");
+    const notifB = await createNotif(tokenB, "B-title");
+
+    const listNotifications = async (token) => {
+      const response = await fetch(`${baseUrl}/api/notifications`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      const payload = await response.json();
+      assert.equal(response.status, 200);
+      assert.equal(payload.success, true);
+      return payload.data;
+    };
+
+    const listA = await listNotifications(tokenA);
+    const listB = await listNotifications(tokenB);
+
+    const titlesA = new Set(listA.map((item) => item.title));
+    const titlesB = new Set(listB.map((item) => item.title));
+
+    assert.equal(listA.length, 1);
+    assert.equal(listB.length, 1);
+    assert.ok(titlesA.has(notifA.title));
+    assert.ok(titlesB.has(notifB.title));
+    assert.ok(!titlesA.has(notifB.title));
+    assert.ok(!titlesB.has(notifA.title));
+  });
+});

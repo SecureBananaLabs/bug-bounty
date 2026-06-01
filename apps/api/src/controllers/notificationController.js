@@ -3,7 +3,7 @@ import { createNotification, listNotifications } from "../services/notificationS
 import { createNotificationSchema } from "../validators/notification.js";
 
 export async function getNotifications(req, res) {
-  return ok(res, await listNotifications());
+  return ok(res, await listNotifications(req.user));
 }
 
 export async function postNotification(req, res) {

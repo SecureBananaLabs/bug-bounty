@@ -1,7 +1,11 @@
 const notifications = [];
 
-export async function listNotifications() {
-  return notifications;
+export async function listNotifications(actor = {}) {
+  const actorId = actor?.sub;
+  if (!actorId) {
+    return [];
+  }
+  return notifications.filter((item) => item.userId === actorId);
 }
 
 export async function createNotification(payload, actor = {}) {
