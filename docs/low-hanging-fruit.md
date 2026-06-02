@@ -27,4 +27,16 @@ Use `--json` when another tool needs structured output:
 npm run issues:low-fruit -- --json
 ```
 
-The scanner does not publish issues automatically. Contributors should review the drafts before posting them to avoid duplicate or low-quality issue creation.
+Preview the issue creation payload without publishing anything:
+
+```bash
+npm run issues:low-fruit -- --create-dry-run --repo SecureBananaLabs/bug-bounty
+```
+
+Create reviewed issue drafts with the GitHub API only after explicitly providing a target repository and token:
+
+```bash
+LOW_FRUIT_GITHUB_TOKEN=github_pat_... npm run issues:low-fruit -- --create --repo SecureBananaLabs/bug-bounty
+```
+
+The scanner never publishes issues by default. In creation mode it also checks for an existing open issue with the same title before posting, which helps avoid duplicate or low-quality issue creation.

@@ -12,6 +12,10 @@ const maxResults = Number.parseInt(
   10
 );
 const jsonMode = process.argv.includes("--json");
+const createMode = process.argv.includes("--create");
+const dryRunCreateMode = process.argv.includes("--create-dry-run");
+const githubRepo = getArgValue("--repo") ?? process.env.LOW_FRUIT_GITHUB_REPO;
+const githubToken = process.env.LOW_FRUIT_GITHUB_TOKEN ?? process.env.GITHUB_TOKEN;
 
 const ignoredDirs = new Set([
   ".git",
@@ -91,7 +95,9 @@ const ranked = candidates
     issueDraft: buildIssueDraft(candidate)
   }));
 
-if (jsonMode) {
+if (createMode || dryRunCreateMode) {
+  await createIssueDrafts(ranked, { dryRun: dryRunCreateMode });
+} else if (jsonMode) {
   console.log(JSON.stringify({ issueLimitationNotice: ISSUE_LIMITATION_NOTICE, candidates: ranked }, null, 2));
 } else {
   printMarkdown(ranked);
@@ -278,7 +284,7 @@ function printMarkdown(candidatesToPrint) {
   console.log("");
   console.log(`Generated ${new Date().toISOString()}`);
   console.log("");
-  console.log("These are local drafts only. Review before posting to GitHub.");
+  console.log("These are local drafts only. Review before posting to GitHub, or use --create with an explicit repo and token.");
   console.log("");
 
   for (const candidate of candidatesToPrint) {
@@ -294,6 +300,75 @@ function printMarkdown(candidatesToPrint) {
     console.log("```");
     console.log("");
   }
+}
+
+async function createIssueDrafts(candidatesToCreate, { dryRun }) {
+  if (!githubRepo || !/^[^/\s]+\/[^/\s]+$/.test(githubRepo)) {
+    throw new Error("Pass --repo owner/name or set LOW_FRUIT_GITHUB_REPO before creating issues.");
+  }
+
+  if (!dryRun && !githubToken) {
+    throw new Error("Set LOW_FRUIT_GITHUB_TOKEN or GITHUB_TOKEN before using --create.");
+  }
+
+  const created = [];
+  for (const candidate of candidatesToCreate) {
+    const issue = {
+      title: candidate.title,
+      body: candidate.issueDraft
+    };
+
+    if (dryRun) {
+      created.push({ ...issue, dryRun: true });
+      continue;
+    }
+
+    const existing = await findExistingIssue(issue.title);
+    if (existing) {
+      created.push({
+        title: issue.title,
+        skipped: true,
+        reason: "open issue with the same title already exists",
+        url: existing.html_url
+      });
+      continue;
+    }
+
+    const response = await githubRequest(`/repos/${githubRepo}/issues`, {
+      method: "POST",
+      body: JSON.stringify(issue)
+    });
+    created.push({ title: issue.title, url: response.html_url });
+  }
+
+  console.log(JSON.stringify({ issueLimitationNotice: ISSUE_LIMITATION_NOTICE, repo: githubRepo, created }, null, 2));
+}
+
+async function findExistingIssue(title) {
+  const query = encodeURIComponent(`repo:${githubRepo} is:issue is:open in:title "${title}"`);
+  const result = await githubRequest(`/search/issues?q=${query}`);
+  return result.items?.find((issue) => issue.title === title);
+}
+
+async function githubRequest(pathname, options = {}) {
+  const response = await fetch(`https://api.github.com${pathname}`, {
+    ...options,
+    headers: {
+      Accept: "application/vnd.github+json",
+      "Content-Type": "application/json",
+      "User-Agent": "low-hanging-fruit-scanner",
+      "X-GitHub-Api-Version": "2022-11-28",
+      ...(githubToken ? { Authorization: `Bearer ${githubToken}` } : {}),
+      ...(options.headers ?? {})
+    }
+  });
+
+  const text = await response.text();
+  const payload = text ? JSON.parse(text) : {};
+  if (!response.ok) {
+    throw new Error(`GitHub API ${response.status}: ${payload.message ?? text}`);
+  }
+  return payload;
 }
 
 function scoreCandidate(candidate) {
