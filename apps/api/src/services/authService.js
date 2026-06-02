@@ -1,20 +1,36 @@
 import { signAccessToken } from "../utils/jwt.js";
 
+// Mock user store for demonstration
+const users = [
+  { id: "usr_1", email: "client@example.com", role: "client", password: "password123" },
+  { id: "usr_2", email: "freelancer@example.com", role: "freelancer", password: "password123" },
+  { id: "usr_3", email: "admin@example.com", role: "admin", password: "password123" }
+];
+
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+  const id = `usr_${Date.now()}`;
+  const user = { id, email: payload.email, role: payload.role ?? "client" };
+  users.push(user);
   return {
-    id: `usr_${Date.now()}`,
+    id,
     email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    role: user.role,
+    token: signAccessToken({ sub: id, role: user.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  // Find user by email (in real implementation, this would query the database)
+  const user = users.find(u => u.email === payload.email);
+  
+  // For mock implementation, default to client role if user not found
+  const role = user?.role ?? "client";
+  const sub = user?.id ?? `usr_${Date.now()}`;
+  
   return {
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    role,
+    token: signAccessToken({ sub, role })
   };
 }
 
