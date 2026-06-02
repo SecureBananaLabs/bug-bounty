@@ -1,5 +1,10 @@
 export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
+  if (env.nodeEnv === "production") {
+    console.error("Unhandled API error:", { name: err?.name, message: err?.message });
+  } else {
+    console.error("Unhandled API error:", err);
+  }
+
   if (res.headersSent) {
     return next(err);
   }
