@@ -13,9 +13,13 @@ export async function registerUser(payload) {
 
 export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
+  // For the mock implementation, accept a role field in the login payload
+  const role = payload.role && ["client", "freelancer", "admin"].includes(payload.role)
+    ? payload.role
+    : "client";
   return {
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    token: signAccessToken({ sub: "usr_existing", role })
   };
 }
 
