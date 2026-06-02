@@ -22,6 +22,7 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  // req.user is populated by authMiddleware; the route must apply it.
+  const result = await refreshToken(req.user);
   return ok(res, result);
 }
