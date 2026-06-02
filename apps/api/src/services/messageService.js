@@ -1,7 +1,7 @@
 const messages = [];
 
 export async function listMessages() {
-  return messages;
+  return [...messages]; // Defensive copy
 }
 
 export async function sendMessage(payload) {

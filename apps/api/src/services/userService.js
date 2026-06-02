@@ -1,7 +1,7 @@
 const users = [];
 
 export async function listUsers() {
-  return users;
+  return [...users]; // Defensive copy
 }
 
 export async function createUser(payload) {

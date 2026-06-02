@@ -1,7 +1,7 @@
 const jobs = [];
 
 export async function listJobs() {
-  return jobs;
+  return [...jobs]; // Defensive copy
 }
 
 export async function createJob(payload) {
