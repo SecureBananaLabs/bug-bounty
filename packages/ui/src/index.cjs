@@ -1,4 +1,4 @@
-import React from "react";
+const React = require("react");
 
 const buttonStyle = {
   background: "#5468ff",
@@ -15,7 +15,7 @@ const cardStyle = {
   padding: "1rem"
 };
 
-export function Button({ children, type = "button", style, ...props }) {
+function Button({ children, type = "button", style, ...props }) {
   return React.createElement(
     "button",
     {
@@ -27,7 +27,7 @@ export function Button({ children, type = "button", style, ...props }) {
   );
 }
 
-export function Card({ title, children, style, ...props }) {
+function Card({ title, children, style, ...props }) {
   return React.createElement(
     "section",
     { ...props, style: { ...cardStyle, ...style } },
@@ -35,3 +35,8 @@ export function Card({ title, children, style, ...props }) {
     React.createElement("div", null, children)
   );
 }
+
+module.exports = {
+  Button,
+  Card
+};
