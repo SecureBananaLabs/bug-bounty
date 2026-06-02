@@ -21,7 +21,6 @@
               # Start app in background
               node apps/api/src/index.js &
               sleep 10
-    yaml
           - name: Run benchmarks
             run: |
               cd benchmarks
