@@ -24,6 +24,15 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(token) {
+  if (!token || typeof token !== "string") {
+    throw new Error("Refresh token is required");
+  }
+
+  try {
+    const decoded = verifyAccessToken(token);
+    return { token: signAccessToken({ sub: decoded.sub, role: decoded.role }) };
+  } catch {
+    throw new Error("Invalid refresh token");
+  }
 }
