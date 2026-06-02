@@ -25,6 +25,11 @@ export async function createReview(payload) {
     }
   }
 
+  // 2. Reject self-reviews: reviewerId must not be equal to revieweeId
+  if (payload.reviewerId && payload.revieweeId && payload.reviewerId === payload.revieweeId) {
+    throw new Error("Reviewer and reviewee cannot be the same user");
+  }
+
   const review = { id: `rev_${Date.now()}`, ...payload };
   reviews.push(review);
   return review;

@@ -28,19 +28,26 @@ test("createReview rejects invalid ratings", async () => {
   );
 });
 
-test("createReview accepts valid ratings within 1-5 and stores them successfully", async () => {
+test("createReview rejects self-reviews where reviewerId equals revieweeId", async () => {
+  await assert.rejects(
+    () => createReview({ rating: 5, reviewerId: "usr_same", revieweeId: "usr_same" }),
+    /Reviewer and reviewee cannot be the same user/
+  );
+});
+
+test("createReview accepts valid ratings and distinct users", async () => {
   const payload = {
     rating: 5,
-    reviewerId: "usr_1",
-    revieweeId: "usr_2",
+    reviewerId: "usr_reviewer",
+    revieweeId: "usr_reviewee",
     comment: "Excellent work!"
   };
 
   const review = await createReview(payload);
   assert.ok(review.id.startsWith("rev_"));
   assert.strictEqual(review.rating, 5);
-  assert.strictEqual(review.reviewerId, "usr_1");
-  assert.strictEqual(review.revieweeId, "usr_2");
+  assert.strictEqual(review.reviewerId, "usr_reviewer");
+  assert.strictEqual(review.revieweeId, "usr_reviewee");
 
   const list = await listReviews();
   const found = list.find(r => r.id === review.id);
