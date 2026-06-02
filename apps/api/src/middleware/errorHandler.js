@@ -17,6 +17,6 @@ export function errorHandler(err, req, res, next) {
     return fail(res, err.message || "Invalid upload", 400);
   }
 
-  console.error("Unhandled API error:", err);
+  console.error("Unhandled API error:", String(err?.message ?? "Unexpected server error"));
   return fail(res, "Unexpected server error", 500);
 }
