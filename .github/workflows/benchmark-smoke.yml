@@ -1,4 +1,3 @@
-    yaml
     name: Benchmark Smoke
     on: [push, pull_request]
     jobs:
