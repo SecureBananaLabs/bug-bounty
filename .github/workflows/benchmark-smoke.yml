@@ -22,10 +22,9 @@
               node apps/api/src/index.js &
               sleep 10
           - name: Run benchmarks
+            if: hashFiles('benchmarks/') != ''
             run: |
-              cd benchmarks
-              npm install
-              npm run benchmark:ci
+              cd benchmarks && npm install && npm run benchmark:ci
             env:
               BENCHMARK_HOST: http://localhost:4000
           - uses: actions/upload-artifact@v4
