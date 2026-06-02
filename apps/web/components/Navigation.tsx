@@ -6,8 +6,7 @@ const links = [
   ["/freelancers/search", "Find Freelancers"],
   ["/dashboard/client", "Client Dashboard"],
   ["/dashboard/freelancer", "Freelancer Dashboard"],
-  ["/messaging", "Messaging"],
-  ["/admin", "Admin"]
+  ["/messaging", "Messaging"]
 ];
 
 export function Navigation() {
