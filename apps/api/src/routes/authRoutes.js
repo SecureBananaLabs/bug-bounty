@@ -8,4 +8,3 @@ authRoutes.post("/register", register);
 authRoutes.post("/login", login);
 authRoutes.get("/oauth/:provider/callback", oauthCallback);
 authRoutes.post("/refresh", authMiddleware, refresh);
-
