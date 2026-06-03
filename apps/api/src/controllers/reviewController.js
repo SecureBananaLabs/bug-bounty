@@ -1,10 +1,14 @@
 import { ok } from "../utils/response.js";
 import { createReview, listReviews } from "../services/reviewService.js";
 
-export async function getReviews(req, res) {
-  return ok(res, await listReviews());
+function asyncHandler(fn) {
+  return (req, res, next) => fn(req, res, next).catch(next);
 }
 
-export async function postReview(req, res) {
+export const getReviews = asyncHandler(async (req, res) => {
+  return ok(res, await listReviews());
+});
+
+export const postReview = asyncHandler(async (req, res) => {
   return ok(res, await createReview(req.body), 201);
-}
+});
