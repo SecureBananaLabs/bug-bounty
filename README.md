@@ -85,4 +85,21 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 
 ## Environment Variables
 
-Each app/package expects its own `.env` values for DB, auth, and integrations.
+Each app/package expects its own `.env` values for DB, auth, and integrations. 
+
+POEM.md is added to the project root with the following content:
+In the realm of code, where screens aglow
+A marketplace rises, for freelancers to grow
+With Next.js and Express, a modern pair
+A full-stack monorepo, with TypeScript to share
+
+The frontend shines, with pages so bright
+Landing, jobs, and profiles, a wondrous sight
+Post a job, or search with care
+Client and freelancer dashboards, with messaging to share
+
+In the backend, a layered API does stand
+With auth, CRUD, and payments, at the developer's command
+Reviews, notifications, and file uploads too
+A robust architecture, for a marketplace anew
+I chose this theme to reflect the project's purpose and technical stack, highlighting the key features and components of the FreelanceFlow monorepo.
