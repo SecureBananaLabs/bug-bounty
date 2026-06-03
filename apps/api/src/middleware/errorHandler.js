@@ -1,11 +1,18 @@
-export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
-  if (res.headersSent) {
-    return next(err);
-  }
+class ErrorHandler {
+  static handle(err, req, res, next) {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || 'Internal Server Error';
 
-  return res.status(500).json({
-    success: false,
-    message: "Unexpected server error"
-  });
+    console.error(`[Error] ${statusCode} - ${message}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.error(err.stack);
+    }
+
+    res.status(statusCode).json({
+      error: message,
+      ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    });
+  }
 }
+
+module.exports = ErrorHandler;
