@@ -1,0 +1,38 @@
+name: API Benchmark Smoke Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start API Server
+        run: npm run dev -w apps/api &
+        env:
+          NODE_ENV: test
+          PORT: 3000
+
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:3000/health
+
+      - name: Run Benchmark Smoke Test
+        run: npm run benchmark:ci
+        env:
+          TARGET_HOST: http://localhost:3000
+          BENCHMARK_AUTH_TOKEN: test-ci-token-123
