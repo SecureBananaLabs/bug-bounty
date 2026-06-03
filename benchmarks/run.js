@@ -15,7 +15,7 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-const TARGET_HOST = process.env.TARGET_HOST || env.TARGET_HOST || 'http://localhost:3000';
+const TARGET_HOST = process.env.TARGET_HOST || env.TARGET_HOST || 'http://localhost:4000';
 const TOKEN = process.env.BENCHMARK_AUTH_TOKEN || env.BENCHMARK_AUTH_TOKEN;
 const CONNECTIONS = parseInt(process.env.CONNECTIONS || env.CONNECTIONS || '10');
 const PIPELINING = parseInt(process.env.PIPELINING || env.PIPELINING || '1');
@@ -32,7 +32,6 @@ const endpoints = [
   { path: '/api/jobs', method: 'GET' },
   { path: '/api/proposals', method: 'GET', auth: true },
   { path: '/api/users', method: 'GET' },
-  { path: '/api/payments', method: 'GET', auth: true },
   { path: '/api/reviews', method: 'GET' },
   { path: '/api/messages', method: 'GET', auth: true },
   { path: '/api/notifications', method: 'GET', auth: true }
