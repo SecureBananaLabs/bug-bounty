@@ -1,0 +1,17 @@
+{
+  "p99_latency_ms": {
+    "threshold": 1000,
+    "description": "Maximum acceptable p99 latency in milliseconds",
+    "severity": "error"
+  },
+  "error_rate_pct": {
+    "threshold": 50,
+    "description": "Maximum acceptable non-2xx rate (%)",
+    "note": "Auth-protected endpoints expected to return 401 without token"
+  },
+  "min_rps": {
+    "threshold": 10,
+    "description": "Minimum acceptable requests per second",
+    "severity": "error"
+  }
+}
