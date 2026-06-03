@@ -3,7 +3,6 @@ Adds a comprehensive performance benchmarking suite to measure latency, RPS, TTF
 Features included:
 - `autocannon` configured in `/benchmarks/run.js`
 - Tests run against all `/api/` endpoints
-- CI Smoke benchmark gate via `.github/workflows/benchmark.yml`
 - Results generated in JSON and Markdown
 
 ### Benchmark Environment

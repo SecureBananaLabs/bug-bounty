@@ -27,7 +27,7 @@ const connections = isCI ? 5 : CONNECTIONS;
 
 // 2. Define endpoints
 const endpoints = [
-  { path: '/health', method: 'GET' },
+  { path: '/api/health', method: 'GET' },
   { path: '/api/search', method: 'GET', query: '?q=developer' },
   { path: '/api/jobs', method: 'GET' },
   { path: '/api/proposals', method: 'GET', auth: true },
@@ -64,8 +64,8 @@ async function runTest(endpoint) {
         p95LatencyMs: result.latency.p95,
         p99LatencyMs: result.latency.p99,
         rps: result.requests.average,
-        errorRatePercent: (result.errors / result.requests.sent) * 100 || 0,
-        ttfb: result.latency.min // TTFB is roughly min latency here
+        errorRatePercent: result.requests.sent > 0 ? (result.errors / result.requests.sent) * 100 : 0,
+        minLatencyMs: result.latency.min
       };
       resolve(metrics);
     });
@@ -101,11 +101,11 @@ async function main() {
   md += `**Target:** ${TARGET_HOST}\n`;
   md += `**Concurrency:** ${connections} connections\n`;
   md += `**Duration:** ${duration}s per endpoint\n\n`;
-  md += `| Endpoint | p50 (ms) | p95 (ms) | p99 (ms) | RPS | Error % | TTFB (ms) |\n`;
+  md += `| Endpoint | p50 (ms) | p95 (ms) | p99 (ms) | RPS | Error % | Min Latency (ms) |\n`;
   md += `|---|---|---|---|---|---|---|\n`;
   
   for (const r of results) {
-    md += `| ${r.endpoint} | ${r.p50LatencyMs} | ${r.p95LatencyMs} | ${r.p99LatencyMs} | ${r.rps.toFixed(2)} | ${r.errorRatePercent.toFixed(2)}% | ${r.ttfb} |\n`;
+    md += `| ${r.endpoint} | ${r.p50LatencyMs} | ${r.p95LatencyMs} | ${r.p99LatencyMs} | ${r.rps.toFixed(2)} | ${r.errorRatePercent.toFixed(2)}% | ${r.minLatencyMs} |\n`;
   }
   
   fs.writeFileSync(path.join(resultsDir, 'results.md'), md);
