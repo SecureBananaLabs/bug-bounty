@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const WIDTH = 128;
 const HEIGHT = 128;
 const OUT_FILE = path.join(__dirname, "claim-observatory-relay.png");
+const DEMO_FILE = path.join(__dirname, "claim-observatory-relay-demo.gif");
 
 const rgba = new Uint8Array(WIDTH * HEIGHT * 4);
 
@@ -239,6 +240,147 @@ function encodePng() {
   ]);
 }
 
+function writeUInt16LE(value) {
+  const buffer = Buffer.alloc(2);
+  buffer.writeUInt16LE(value, 0);
+  return buffer;
+}
+
+function renderDemoFrame(frame, totalFrames) {
+  rgba.fill(0);
+  renderPixels();
+
+  const packetX = 17 + Math.floor((frame / totalFrames) * 88);
+  const pulse = frame % 6 < 3;
+  const signal = pulse ? [151, 240, 216, 255] : [90, 201, 181, 255];
+  const gold = pulse ? [255, 226, 123, 255] : [224, 168, 68, 255];
+
+  for (let i = 0; i < 5; i += 1) {
+    line(112, 40 + i, 127, 34 - i, signal, 1);
+  }
+  rect(packetX, 99, 8, 8, gold);
+  rect(packetX + 2, 101, 4, 2, [255, 239, 148, 255]);
+  rect(Math.max(15, packetX - 6), 106, 4, 1, [83, 130, 105, 255]);
+  circle(101, 25, pulse ? 9 : 8, pulse ? [255, 226, 123, 255] : [241, 202, 92, 255]);
+  rect(60, 81, 8, 8, pulse ? [255, 226, 123, 255] : [246, 195, 80, 255]);
+
+  return Buffer.from(rgba);
+}
+
+function buildPalette(frames) {
+  const colorToIndex = new Map();
+  const colors = [];
+  for (const frame of frames) {
+    for (let i = 0; i < frame.length; i += 4) {
+      const key = `${frame[i]},${frame[i + 1]},${frame[i + 2]}`;
+      if (!colorToIndex.has(key)) {
+        if (colors.length >= 256) {
+          throw new Error("GIF palette exceeded 256 colors");
+        }
+        colorToIndex.set(key, colors.length);
+        colors.push([frame[i], frame[i + 1], frame[i + 2]]);
+      }
+    }
+  }
+
+  const palette = Buffer.alloc(256 * 3);
+  colors.forEach((color, index) => {
+    palette[index * 3] = color[0];
+    palette[index * 3 + 1] = color[1];
+    palette[index * 3 + 2] = color[2];
+  });
+  return { colorToIndex, palette, colorCount: colors.length };
+}
+
+function indexFrame(frame, colorToIndex) {
+  const indices = new Uint8Array(WIDTH * HEIGHT);
+  for (let i = 0, p = 0; i < frame.length; i += 4, p += 1) {
+    indices[p] = colorToIndex.get(`${frame[i]},${frame[i + 1]},${frame[i + 2]}`);
+  }
+  return indices;
+}
+
+function packCodes(codes) {
+  const bytes = [];
+  let bitBuffer = 0;
+  let bitCount = 0;
+
+  for (const { code, size } of codes) {
+    bitBuffer |= code << bitCount;
+    bitCount += size;
+    while (bitCount >= 8) {
+      bytes.push(bitBuffer & 0xff);
+      bitBuffer >>= 8;
+      bitCount -= 8;
+    }
+  }
+
+  if (bitCount > 0) {
+    bytes.push(bitBuffer & 0xff);
+  }
+  return Buffer.from(bytes);
+}
+
+function lzwEncode(indices) {
+  const minCodeSize = 8;
+  const clearCode = 1 << minCodeSize;
+  const endCode = clearCode + 1;
+  const codes = [];
+
+  for (const index of indices) {
+    codes.push({ code: clearCode, size: minCodeSize + 1 });
+    codes.push({ code: index, size: minCodeSize + 1 });
+  }
+  codes.push({ code: endCode, size: minCodeSize + 1 });
+
+  const data = packCodes(codes);
+  const blocks = [];
+  for (let i = 0; i < data.length; i += 255) {
+    const chunk = data.subarray(i, i + 255);
+    blocks.push(Buffer.from([chunk.length]), chunk);
+  }
+  blocks.push(Buffer.from([0]));
+  return Buffer.concat([Buffer.from([minCodeSize]), ...blocks]);
+}
+
+function encodeGif() {
+  const frames = [];
+  const totalFrames = 12;
+  for (let i = 0; i < totalFrames; i += 1) {
+    frames.push(renderDemoFrame(i, totalFrames));
+  }
+
+  const { colorToIndex, palette, colorCount } = buildPalette(frames);
+  const parts = [
+    Buffer.from("GIF89a", "ascii"),
+    writeUInt16LE(WIDTH),
+    writeUInt16LE(HEIGHT),
+    Buffer.from([0xf7, 0x00, 0x00]),
+    palette,
+    Buffer.from([0x21, 0xff, 0x0b]),
+    Buffer.from("NETSCAPE2.0", "ascii"),
+    Buffer.from([0x03, 0x01, 0x00, 0x00, 0x00]),
+  ];
+
+  for (const frame of frames) {
+    parts.push(
+      Buffer.from([0x21, 0xf9, 0x04, 0x00]),
+      writeUInt16LE(8),
+      Buffer.from([0x00, 0x00]),
+      Buffer.from([0x2c]),
+      writeUInt16LE(0),
+      writeUInt16LE(0),
+      writeUInt16LE(WIDTH),
+      writeUInt16LE(HEIGHT),
+      Buffer.from([0x00]),
+      lzwEncode(indexFrame(frame, colorToIndex)),
+    );
+  }
+
+  parts.push(Buffer.from([0x3b]));
+  return { buffer: Buffer.concat(parts), colorCount, frameCount: frames.length };
+}
+
 function sha(buffer) {
   return crypto.createHash("sha256").update(buffer).digest("hex");
 }
@@ -253,7 +395,15 @@ function readPngSize(buffer) {
 renderPixels();
 const png = encodePng();
 
-if (process.argv.includes("--verify")) {
+if (process.argv.includes("--demo")) {
+  const demo = encodeGif();
+  fs.writeFileSync(DEMO_FILE, demo.buffer);
+  console.log(`wrote ${path.relative(process.cwd(), DEMO_FILE)}`);
+  console.log(`size=${WIDTH}x${HEIGHT}`);
+  console.log(`frames=${demo.frameCount}`);
+  console.log(`colors=${demo.colorCount}`);
+  console.log(`sha256=${sha(demo.buffer)}`);
+} else if (process.argv.includes("--verify")) {
   const existing = fs.readFileSync(OUT_FILE);
   const size = readPngSize(existing);
   const matches = Buffer.compare(existing, png) === 0;
