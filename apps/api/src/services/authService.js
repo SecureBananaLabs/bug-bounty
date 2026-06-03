@@ -20,7 +20,19 @@ export async function loginUser(payload) {
 }
 
 export async function refreshToken(refreshTokenValue, requestUserId) {
-  if (!refreshTokenValue) throw new Error("Refresh token required");
-  const userId = requestUserId || `usr_${Date.now()}`;
-  return { token: signAccessToken({ sub: userId }), refreshToken: refreshTokenValue };
+  // Security: Require both refresh token and user ID
+  if (!refreshTokenValue) {
+    throw new Error("Refresh token required");
+  }
+  if (!requestUserId) {
+    throw new Error("User ID required for token refresh");
+  }
+  
+  // In production: validate refreshTokenValue against database
+  // and verify it belongs to requestUserId
+  
+  return { 
+    token: signAccessToken({ sub: requestUserId }),
+    refreshToken: refreshTokenValue 
+  };
 }
