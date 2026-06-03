@@ -1,10 +1,14 @@
 import { ok } from "../utils/response.js";
 import { listMessages, sendMessage } from "../services/messageService.js";
 
-export async function getMessages(req, res) {
-  return ok(res, await listMessages());
+function asyncHandler(fn) {
+  return (req, res, next) => fn(req, res, next).catch(next);
 }
 
-export async function postMessage(req, res) {
+export const getMessages = asyncHandler(async (req, res) => {
+  return ok(res, await listMessages());
+});
+
+export const postMessage = asyncHandler(async (req, res) => {
   return ok(res, await sendMessage(req.body), 201);
-}
+});
