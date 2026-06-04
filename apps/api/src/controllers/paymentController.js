@@ -1,6 +1,13 @@
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 import { createPaymentIntent } from "../services/paymentService.js";
+import { createPaymentSchema } from "../validators/payment.js";
 
 export async function createPayment(req, res) {
-  return ok(res, await createPaymentIntent(req.body), 201);
+  const parsed = createPaymentSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    return fail(res, "Invalid payment payload");
+  }
+
+  return ok(res, await createPaymentIntent(parsed.data), 201);
 }
