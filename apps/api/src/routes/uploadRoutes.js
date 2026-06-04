@@ -1,9 +1,12 @@
-import { Router } from "express";
-import multer from "multer";
-import { uploadFile } from "../controllers/uploadController.js";
+const express = require('express');
+const router = express.Router();
+const uploadController = require('../controllers/uploadController');
+const authMiddleware = require('../middleware/auth');
 
-const upload = multer({ storage: multer.memoryStorage() });
+// All upload routes require authentication
+router.use(authMiddleware);
 
-export const uploadRoutes = Router();
+// POST /api/uploads - Upload a file (authenticated)
+router.post('/', uploadController.upload);
 
-uploadRoutes.post("/", upload.single("file"), uploadFile);
+module.exports = router;
