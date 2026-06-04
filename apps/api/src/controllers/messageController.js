@@ -1,10 +1,35 @@
-import { ok } from "../utils/response.js";
-import { listMessages, sendMessage } from "../services/messageService.js";
+const messageService = require('../services/messageService');
 
-export async function getMessages(req, res) {
-  return ok(res, await listMessages());
+class MessageController {
+  async sendMessage(req, res, next) {
+    try {
+      const { receiverId, content } = req.body;
+      const senderId = req.user.id;
+
+      if (!receiverId || !content) {
+        return res.status(400).json({ error: 'receiverId and content are required' });
+      }
+
+      const message = await messageService.sendMessage(senderId, receiverId, { content });
+
+      res.status(201).json(message);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getMessages(req, res, next) {
+    try {
+      const { userId } = req.params;
+      const currentUserId = req.user.id;
+
+      const messages = await messageService.getMessages(currentUserId, userId);
+
+      res.json(messages);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
-export async function postMessage(req, res) {
-  return ok(res, await sendMessage(req.body), 201);
-}
+module.exports = new MessageController();
