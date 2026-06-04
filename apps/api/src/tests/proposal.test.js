@@ -55,7 +55,7 @@ test("Proposal API", async (t) => {
       body: JSON.stringify(payload)
     });
 
-    assert.equal(response.status, 500); // errorHandler handles Zod validation errors as 500 currently
+    assert.equal(response.status, 400);
   });
 
   await t.test("POST /api/proposals rejects non-positive bidAmount", async () => {
@@ -73,7 +73,7 @@ test("Proposal API", async (t) => {
       body: JSON.stringify(payload)
     });
 
-    assert.equal(response.status, 500);
+    assert.equal(response.status, 400);
   });
 
   await t.test("POST /api/proposals ignores client-controlled id", async () => {
