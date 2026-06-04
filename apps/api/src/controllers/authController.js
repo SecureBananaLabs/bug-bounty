@@ -1,27 +1,43 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+const authService = require('../services/authService');
+const { validationResult } = require('express-validator');
 
-export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
-}
+const register = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
-}
+    const { email, password, name, role } = req.body;
 
-export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
-}
+    // Prevent admin role self-assignment during registration
+    if (role && role === 'admin') {
+      return res.status(400).json({ error: 'Admin role cannot be self-assigned during registration' });
+    }
 
-export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
-}
+    const allowedRoles = ['client', 'freelancer'];
+    const userRole = role && allowedRoles.includes(role) ? role : 'client';
+
+    const user = await authService.register({ email, password, name, role: userRole });
+    res.status(201).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+    const token = await authService.login(email, password);
+    res.json({ token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { register, login };
