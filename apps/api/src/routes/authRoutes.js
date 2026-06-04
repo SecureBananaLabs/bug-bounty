@@ -1,9 +1,10 @@
-import { Router } from "express";
-import { login, oauthCallback, refresh, register } from "../controllers/authController.js";
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/authController');
+const { validate } = require('../middleware/validate');
+const { registerSchema, loginSchema } = require('../validators/authValidators');
 
-export const authRoutes = Router();
+router.post('/register', validate(registerSchema), authController.register);
+router.post('/login', validate(loginSchema), authController.login);
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
-authRoutes.get("/oauth/:provider/callback", oauthCallback);
-authRoutes.post("/refresh", refresh);
+module.exports = router;
