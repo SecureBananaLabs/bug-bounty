@@ -1,21 +1,29 @@
 import { Router } from 'express';
-import { uploadFile } from '../middleware/upload';
+import { uploadMiddleware } from '../middleware/upload';
+import { authenticate } from '../middleware/auth';
+import { Request, Response, NextFunction } from 'express';
 
 const router = Router();
 
-router.post('/api/uploads', uploadFile, (req, res) => {
-  // Check if file was actually uploaded
+// Validation middleware to ensure file is present
+const validateFilePresence = (req: Request, res: Response, next: NextFunction) => {
   if (!req.file) {
     return res.status(400).json({
       success: false,
-      error: 'No file provided',
-      message: 'File is required for upload'
+      error: 'No file provided in request'
     });
   }
+  next();
+};
 
-  // Existing success response handling
-  return res.status(201).json({
+// Upload endpoint
+router.post('/', authenticate, uploadMiddleware, validateFilePresence, (req, res) => {
+  // Process successful file upload
+  res.status(201).json({
     success: true,
-    status: "no-file" // This should be changed
+    filename: req.file.filename,
+    path: `/uploads/${req.file.filename}`
   });
 });
+
+export default router;
