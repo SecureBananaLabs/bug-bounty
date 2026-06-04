@@ -1,6 +1,7 @@
 # API Benchmarks
 
 This directory contains the reproducible API benchmark suite for every route mounted under `/api/`.
+It uses `autocannon` for load generation and captures p50/p95/p99 latency, RPS, status distribution, error rate, and a companion TTFB sample per endpoint.
 
 ## Configure
 
@@ -31,6 +32,7 @@ The short benchmark demo for the pull request is available at [`demos/api-benchm
 
 Each endpoint captures:
 
+- benchmark tool metadata
 - p50, p95, and p99 latency in milliseconds
 - p50, p95, and p99 time to first byte in milliseconds
 - sustained and peak requests per second

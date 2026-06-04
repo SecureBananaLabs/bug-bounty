@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
+import autocannon from "autocannon";
 import { createApp } from "../apps/api/src/app.js";
 import { signAccessToken } from "../apps/api/src/utils/jwt.js";
 import { endpoints } from "./endpoints.mjs";
@@ -30,26 +31,32 @@ function round(value) {
   return Math.round(value * 100) / 100;
 }
 
-function summarize(samples, wallMs) {
-  const latency = samples.map((sample) => sample.latencyMs);
-  const ttfb = samples.map((sample) => sample.ttfbMs);
-  const errors = samples.filter((sample) => !sample.ok);
-  const buckets = new Map();
-
-  for (const sample of samples) {
-    const bucket = Math.floor(sample.completedAtMs / 1000);
-    buckets.set(bucket, (buckets.get(bucket) ?? 0) + 1);
-  }
+function summarizeAutocannon(result, endpoint, ttfbSamples) {
+  const ttfb = ttfbSamples.map((sample) => sample.ttfbMs);
+  const statuses = Object.fromEntries(
+    Object.entries(result.statusCodeStats ?? {}).map(([status, value]) => [
+      status,
+      Number(typeof value === "object" ? value.count : value)
+    ])
+  );
+  const requestCount = result.requests?.total ?? Object.values(statuses).reduce((acc, count) => acc + count, 0);
+  const expected = new Set(endpoint.expectedStatuses.map(String));
+  const okCount = Object.entries(statuses).reduce(
+    (acc, [status, count]) => acc + (expected.has(status) ? count : 0),
+    0
+  );
+  const protocolErrors = (result.errors ?? 0) + (result.timeouts ?? 0);
+  const errorCount = Math.max(0, requestCount - okCount) + protocolErrors;
 
   return {
-    requestCount: samples.length,
-    okCount: samples.length - errors.length,
-    errorCount: errors.length,
-    errorRatePct: round((errors.length / samples.length) * 100),
+    requestCount,
+    okCount,
+    errorCount,
+    errorRatePct: requestCount > 0 ? round((errorCount / requestCount) * 100) : 0,
     latencyMs: {
-      p50: round(percentile(latency, 50)),
-      p95: round(percentile(latency, 95)),
-      p99: round(percentile(latency, 99))
+      p50: round(result.latency?.p50 ?? 0),
+      p95: round(result.latency?.p95 ?? result.latency?.p97_5 ?? result.latency?.p99 ?? result.latency?.p50 ?? 0),
+      p99: round(result.latency?.p99 ?? 0)
     },
     ttfbMs: {
       p50: round(percentile(ttfb, 50)),
@@ -57,14 +64,10 @@ function summarize(samples, wallMs) {
       p99: round(percentile(ttfb, 99))
     },
     rps: {
-      sustained: round(samples.length / (wallMs / 1000)),
-      peak: Math.max(...buckets.values(), 0)
+      sustained: round(result.requests?.average ?? 0),
+      peak: round(result.requests?.max ?? 0)
     },
-    statuses: samples.reduce((acc, sample) => {
-      const status = String(sample.status ?? "error");
-      acc[status] = (acc[status] ?? 0) + 1;
-      return acc;
-    }, {})
+    statuses
   };
 }
 
@@ -96,7 +99,7 @@ function createBenchmarkToken(localServerStarted) {
   throw new Error("BENCHMARK_AUTH_TOKEN is required when BENCHMARK_TARGET_URL is set.");
 }
 
-async function executeRequest(endpoint, baseUrl, token) {
+function requestForEndpoint(endpoint, token) {
   const headers = {};
   const init = { method: endpoint.method, headers };
 
@@ -107,10 +110,19 @@ async function executeRequest(endpoint, baseUrl, token) {
   if (endpoint.json) {
     headers["content-type"] = "application/json";
     init.body = JSON.stringify(endpoint.json());
+  } else if (endpoint.raw) {
+    const raw = endpoint.raw();
+    Object.assign(headers, raw.headers);
+    init.body = raw.body;
   } else if (endpoint.body) {
     init.body = endpoint.body();
   }
 
+  return init;
+}
+
+async function executeRequest(endpoint, baseUrl, token) {
+  const init = requestForEndpoint(endpoint, token);
   const startedAtMs = performance.now();
   try {
     const response = await fetch(`${baseUrl}${endpoint.path}`, init);
@@ -138,10 +150,21 @@ async function executeRequest(endpoint, baseUrl, token) {
   }
 }
 
-async function benchmarkEndpoint(endpoint, baseUrl, token, requestCount, concurrency) {
+function runAutocannon(options) {
+  return new Promise((resolve, reject) => {
+    autocannon(options, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+async function measureTtfb(endpoint, baseUrl, token, requestCount, concurrency) {
   const samples = [];
   let next = 0;
-  const wallStart = performance.now();
 
   async function worker() {
     while (next < requestCount) {
@@ -154,14 +177,42 @@ async function benchmarkEndpoint(endpoint, baseUrl, token, requestCount, concurr
     Array.from({ length: Math.min(concurrency, requestCount) }, () => worker())
   );
 
-  const wallMs = performance.now() - wallStart;
+  return samples;
+}
+
+async function benchmarkEndpoint(endpoint, baseUrl, token, requestCount, concurrency) {
+  const requests = Array.from({ length: requestCount }, () => {
+    const init = requestForEndpoint(endpoint, token);
+    return {
+      method: endpoint.method,
+      path: endpoint.path,
+      headers: init.headers,
+      body: init.body
+    };
+  });
+  const result = await runAutocannon({
+    url: baseUrl,
+    connections: concurrency,
+    amount: requestCount,
+    timeout: 30,
+    requests
+  });
+  const ttfbSamples = await measureTtfb(
+    endpoint,
+    baseUrl,
+    token,
+    smoke ? 1 : Math.min(3, requestCount),
+    concurrency
+  );
+
   return {
     id: endpoint.id,
     method: endpoint.method,
     path: endpoint.path,
     protected: Boolean(endpoint.protected),
     expectedStatuses: endpoint.expectedStatuses,
-    ...summarize(samples, wallMs)
+    tool: "autocannon",
+    ...summarizeAutocannon(result, endpoint, ttfbSamples)
   };
 }
 
@@ -218,6 +269,7 @@ Generated: ${results.generatedAt}
 - OS: ${results.environment.platform} ${results.environment.release}
 - Node.js: ${results.environment.node}
 - Network: loopback for local server; configured target otherwise
+- Benchmark tool: ${results.tool}
 
 ## Results
 
@@ -256,6 +308,7 @@ async function main() {
     mode: smoke ? "smoke" : "full",
     target: localServerStarted ? "local in-process API server" : baseUrl,
     generatedAt: new Date().toISOString(),
+    tool: "autocannon",
     settings: { concurrency, requestCount },
     environment: {
       cpu: os.cpus()[0]?.model ?? "unknown",

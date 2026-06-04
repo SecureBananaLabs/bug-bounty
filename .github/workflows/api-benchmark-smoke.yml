@@ -8,6 +8,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - ".github/workflows/api-benchmark-smoke.yml"
+  workflow_dispatch:
 
 jobs:
   benchmark-smoke:
@@ -26,8 +27,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run API tests
+        run: npm test
+
       - name: Verify benchmark route coverage
         run: npm run benchmark:coverage
 
       - name: Run smoke benchmark gate
         run: npm run benchmark:smoke
+
+      - name: Upload smoke benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-benchmark-smoke-results
+          path: benchmarks/results/smoke-latest.*

@@ -4,6 +4,28 @@ function email() {
   return `benchmark-${randomUUID()}@example.com`;
 }
 
+function multipartUpload() {
+  const boundary = `benchmark-${randomUUID()}`;
+  const body = Buffer.from(
+    [
+      `--${boundary}`,
+      'Content-Disposition: form-data; name="file"; filename="benchmark.txt"',
+      "Content-Type: text/plain",
+      "",
+      "benchmark upload payload",
+      `--${boundary}--`,
+      ""
+    ].join("\r\n")
+  );
+
+  return {
+    body,
+    headers: {
+      "content-type": `multipart/form-data; boundary=${boundary}`
+    }
+  };
+}
+
 export const endpoints = [
   {
     id: "auth-register",
@@ -165,15 +187,7 @@ export const endpoints = [
     method: "POST",
     path: "/api/uploads",
     expectedStatuses: [201],
-    body: () => {
-      const form = new FormData();
-      form.set(
-        "file",
-        new Blob(["benchmark upload payload\n"], { type: "text/plain" }),
-        "benchmark.txt"
-      );
-      return form;
-    }
+    raw: multipartUpload
   },
   {
     id: "search",

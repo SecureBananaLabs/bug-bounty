@@ -1,7 +1,8 @@
 {
   "mode": "smoke",
   "target": "local in-process API server",
-  "generatedAt": "2026-05-31T22:40:26.666Z",
+  "generatedAt": "2026-06-04T08:13:25.940Z",
+  "tool": "autocannon",
   "settings": {
     "concurrency": 1,
     "requestCount": 1
@@ -23,22 +24,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 237.73,
-        "p95": 237.73,
-        "p99": 237.73
+        "p50": 101,
+        "p95": 101,
+        "p99": 101
       },
       "ttfbMs": {
-        "p50": 233.61,
-        "p95": 233.61,
-        "p99": 233.61
+        "p50": 126.07,
+        "p95": 126.07,
+        "p99": 126.07
       },
       "rps": {
-        "sustained": 4.17,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -53,22 +55,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 13.88,
-        "p95": 13.88,
-        "p99": 13.88
+        "p50": 11,
+        "p95": 11,
+        "p99": 11
       },
       "ttfbMs": {
-        "p50": 13.3,
-        "p95": 13.3,
-        "p99": 13.3
+        "p50": 9.96,
+        "p95": 9.96,
+        "p99": 9.96
       },
       "rps": {
-        "sustained": 71.43,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -83,22 +86,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 7.37,
-        "p95": 7.37,
-        "p99": 7.37
+        "p50": 5,
+        "p95": 5,
+        "p99": 5
       },
       "ttfbMs": {
-        "p50": 6.64,
-        "p95": 6.64,
-        "p99": 6.64
+        "p50": 7.81,
+        "p95": 7.81,
+        "p99": 7.81
       },
       "rps": {
-        "sustained": 133.79,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -113,22 +117,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 7.3,
-        "p95": 7.3,
-        "p99": 7.3
+        "p50": 6,
+        "p95": 6,
+        "p99": 6
       },
       "ttfbMs": {
-        "p50": 6.53,
-        "p95": 6.53,
-        "p99": 6.53
+        "p50": 4.38,
+        "p95": 4.38,
+        "p99": 4.38
       },
       "rps": {
-        "sustained": 135.22,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -143,22 +148,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 7.2,
-        "p95": 7.2,
-        "p99": 7.2
+        "p50": 5,
+        "p95": 5,
+        "p99": 5
       },
       "ttfbMs": {
-        "p50": 6.53,
-        "p95": 6.53,
-        "p99": 6.53
+        "p50": 4.32,
+        "p95": 4.32,
+        "p99": 4.32
       },
       "rps": {
-        "sustained": 137.58,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -173,22 +179,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 6.7,
-        "p95": 6.7,
-        "p99": 6.7
+        "p50": 4,
+        "p95": 4,
+        "p99": 4
       },
       "ttfbMs": {
-        "p50": 5.92,
-        "p95": 5.92,
-        "p99": 5.92
+        "p50": 6.52,
+        "p95": 6.52,
+        "p99": 6.52
       },
       "rps": {
-        "sustained": 145.31,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -203,22 +210,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 4.76,
-        "p95": 4.76,
-        "p99": 4.76
+        "p50": 4,
+        "p95": 4,
+        "p99": 4
       },
       "ttfbMs": {
-        "p50": 4.2,
-        "p95": 4.2,
-        "p99": 4.2
+        "p50": 4.53,
+        "p95": 4.53,
+        "p99": 4.53
       },
       "rps": {
-        "sustained": 207.8,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -233,22 +241,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 6.35,
-        "p95": 6.35,
-        "p99": 6.35
+        "p50": 7,
+        "p95": 7,
+        "p99": 7
       },
       "ttfbMs": {
-        "p50": 5.91,
-        "p95": 5.91,
-        "p99": 5.91
+        "p50": 13.47,
+        "p95": 13.47,
+        "p99": 13.47
       },
       "rps": {
-        "sustained": 152.38,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -263,22 +272,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 5.91,
-        "p95": 5.91,
-        "p99": 5.91
+        "p50": 6,
+        "p95": 6,
+        "p99": 6
       },
       "ttfbMs": {
-        "p50": 5.4,
-        "p95": 5.4,
-        "p99": 5.4
+        "p50": 3.33,
+        "p95": 3.33,
+        "p99": 3.33
       },
       "rps": {
-        "sustained": 167.63,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -293,22 +303,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 8.04,
-        "p95": 8.04,
-        "p99": 8.04
+        "p50": 3,
+        "p95": 3,
+        "p99": 3
       },
       "ttfbMs": {
-        "p50": 7.54,
-        "p95": 7.54,
-        "p99": 7.54
+        "p50": 7.18,
+        "p95": 7.18,
+        "p99": 7.18
       },
       "rps": {
-        "sustained": 119.18,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -323,22 +334,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 5.89,
-        "p95": 5.89,
-        "p99": 5.89
+        "p50": 5,
+        "p95": 5,
+        "p99": 5
       },
       "ttfbMs": {
-        "p50": 5.54,
-        "p95": 5.54,
-        "p99": 5.54
+        "p50": 3.37,
+        "p95": 3.37,
+        "p99": 3.37
       },
       "rps": {
-        "sustained": 164.21,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -353,22 +365,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 4.3,
-        "p95": 4.3,
-        "p99": 4.3
+        "p50": 2,
+        "p95": 2,
+        "p99": 2
       },
       "ttfbMs": {
-        "p50": 3.92,
-        "p95": 3.92,
-        "p99": 3.92
+        "p50": 5.13,
+        "p95": 5.13,
+        "p99": 5.13
       },
       "rps": {
-        "sustained": 229.28,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -383,22 +396,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 5.29,
-        "p95": 5.29,
-        "p99": 5.29
+        "p50": 3,
+        "p95": 3,
+        "p99": 3
       },
       "ttfbMs": {
-        "p50": 4.94,
-        "p95": 4.94,
-        "p99": 4.94
+        "p50": 5.34,
+        "p95": 5.34,
+        "p99": 5.34
       },
       "rps": {
-        "sustained": 183.29,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -413,22 +427,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 5.85,
-        "p95": 5.85,
-        "p99": 5.85
+        "p50": 3,
+        "p95": 3,
+        "p99": 3
       },
       "ttfbMs": {
-        "p50": 5.5,
-        "p95": 5.5,
-        "p99": 5.5
+        "p50": 2.29,
+        "p95": 2.29,
+        "p99": 2.29
       },
       "rps": {
-        "sustained": 170.36,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -443,22 +458,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 4.52,
-        "p95": 4.52,
-        "p99": 4.52
+        "p50": 3,
+        "p95": 3,
+        "p99": 3
       },
       "ttfbMs": {
-        "p50": 4.05,
-        "p95": 4.05,
-        "p99": 4.05
+        "p50": 3.5,
+        "p95": 3.5,
+        "p99": 3.5
       },
       "rps": {
-        "sustained": 214.13,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -473,22 +489,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 3.5,
-        "p95": 3.5,
-        "p99": 3.5
+        "p50": 3,
+        "p95": 3,
+        "p99": 3
       },
       "ttfbMs": {
-        "p50": 3.15,
-        "p95": 3.15,
-        "p99": 3.15
+        "p50": 9.71,
+        "p95": 9.71,
+        "p99": 9.71
       },
       "rps": {
-        "sustained": 283.85,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -503,22 +520,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 5.23,
-        "p95": 5.23,
-        "p99": 5.23
+        "p50": 10,
+        "p95": 10,
+        "p99": 10
       },
       "ttfbMs": {
-        "p50": 4.91,
-        "p95": 4.91,
-        "p99": 4.91
+        "p50": 11.43,
+        "p95": 11.43,
+        "p99": 11.43
       },
       "rps": {
-        "sustained": 186.31,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -533,22 +551,23 @@
       "expectedStatuses": [
         201
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 27.9,
-        "p95": 27.9,
-        "p99": 27.9
+        "p50": 24,
+        "p95": 24,
+        "p99": 24
       },
       "ttfbMs": {
-        "p50": 27.53,
-        "p95": 27.53,
-        "p99": 27.53
+        "p50": 7.04,
+        "p95": 7.04,
+        "p99": 7.04
       },
       "rps": {
-        "sustained": 33.66,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -563,22 +582,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 5.49,
-        "p95": 5.49,
-        "p99": 5.49
+        "p50": 5,
+        "p95": 5,
+        "p99": 5
       },
       "ttfbMs": {
-        "p50": 5.25,
-        "p95": 5.25,
-        "p99": 5.25
+        "p50": 6.19,
+        "p95": 6.19,
+        "p99": 6.19
       },
       "rps": {
-        "sustained": 181.04,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {
@@ -593,22 +613,23 @@
       "expectedStatuses": [
         200
       ],
+      "tool": "autocannon",
       "requestCount": 1,
       "okCount": 1,
       "errorCount": 0,
       "errorRatePct": 0,
       "latencyMs": {
-        "p50": 7.27,
-        "p95": 7.27,
-        "p99": 7.27
+        "p50": 9,
+        "p95": 9,
+        "p99": 9
       },
       "ttfbMs": {
-        "p50": 6.89,
-        "p95": 6.89,
-        "p99": 6.89
+        "p50": 22.83,
+        "p95": 22.83,
+        "p99": 22.83
       },
       "rps": {
-        "sustained": 135.97,
+        "sustained": 1,
         "peak": 1
       },
       "statuses": {

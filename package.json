@@ -12,5 +12,8 @@
     "benchmark": "node benchmarks/run.mjs",
     "benchmark:smoke": "node benchmarks/run.mjs --smoke --fail-on-threshold",
     "benchmark:coverage": "node benchmarks/coverage.mjs"
+  },
+  "devDependencies": {
+    "autocannon": "^8.0.0"
   }
 }
