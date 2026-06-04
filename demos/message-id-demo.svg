@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="520" viewBox="0 0 1080 520" role="img" aria-labelledby="title desc">
+  <title id="title">Server-owned message id demo</title>
+  <desc id="desc">A demo showing that sendMessage ignores a client supplied id and keeps the generated server message id.</desc>
+  <style>
+    .bg { fill: #0b1020; }
+    .panel { fill: #151c35; stroke: #2a3765; stroke-width: 1.5; }
+    .good { fill: #47d18c; }
+    .warn { fill: #ffcf6e; }
+    .text { fill: #f2f5ff; font-family: Inter, Arial, sans-serif; }
+    .muted { fill: #b8c5ec; font-family: Inter, Arial, sans-serif; }
+    .code { fill: #dbe4ff; font-family: Consolas, "Courier New", monospace; }
+  </style>
+  <rect class="bg" width="1080" height="520"/>
+  <text x="70" y="72" class="text" font-size="34" font-weight="800">Message creation keeps IDs server-owned</text>
+  <text x="70" y="108" class="muted" font-size="17">Regression path for SecureBananaLabs/bug-bounty #4217</text>
+
+  <rect x="70" y="150" width="430" height="230" rx="10" class="panel"/>
+  <text x="100" y="190" class="text" font-size="20" font-weight="800">Client request body</text>
+  <text x="100" y="232" class="code" font-size="17">{</text>
+  <text x="126" y="262" class="code" font-size="17">id: "client_controlled_id",</text>
+  <text x="126" y="292" class="code" font-size="17">conversationId: "conv_123",</text>
+  <text x="126" y="322" class="code" font-size="17">body: "hello",</text>
+  <text x="126" y="352" class="code" font-size="17">sentAt: "1999-01-01..."</text>
+  <text x="100" y="382" class="code" font-size="17">}</text>
+
+  <path d="M 515 266 L 565 266" stroke="#8bc5ff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 565 266 L 548 250 M 565 266 L 548 282" stroke="#8bc5ff" stroke-width="5" stroke-linecap="round"/>
+
+  <rect x="585" y="150" width="425" height="230" rx="10" class="panel"/>
+  <text x="615" y="190" class="text" font-size="20" font-weight="800">Stored message</text>
+  <circle cx="625" cy="232" r="6" class="good"/>
+  <text x="645" y="238" class="code" font-size="17">id: "msg_1700000000000"</text>
+  <circle cx="625" cy="272" r="6" class="good"/>
+  <text x="645" y="278" class="code" font-size="17">conversationId: "conv_123"</text>
+  <circle cx="625" cy="312" r="6" class="good"/>
+  <text x="645" y="318" class="code" font-size="17">body: "hello"</text>
+  <circle cx="625" cy="352" r="6" class="warn"/>
+  <text x="645" y="358" class="code" font-size="17">sentAt: server timestamp</text>
+
+  <rect x="70" y="420" width="940" height="58" rx="10" fill="#10243a" stroke="#285d8f" stroke-width="1.5"/>
+  <text x="100" y="455" class="text" font-size="18" font-weight="800">Verified by node --test apps/api/src/tests/messageService.test.js</text>
+</svg>
