@@ -1,16 +1,20 @@
-import { fail } from "../utils/response.js";
-import { verifyAccessToken } from "../utils/jwt.js";
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('../config/env');
 
-export function authMiddleware(req, res, next) {
+const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith("Bearer ")) {
-    return fail(res, "Unauthorized", 401);
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Authentication required' });
   }
 
+  const token = authHeader.split(' ')[1];
   try {
-    req.user = verifyAccessToken(authHeader.slice(7));
-    return next();
-  } catch {
-    return fail(res, "Invalid token", 401);
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid or expired token' });
   }
-}
+};
+
+module.exports = { authenticate };
