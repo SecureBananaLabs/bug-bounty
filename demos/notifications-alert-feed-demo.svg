@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#0b1020"/>
+  <text x="56" y="72" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="34" font-weight="700">Notifications</text>
+  <rect x="56" y="104" width="248" height="96" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <rect x="332" y="104" width="248" height="96" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <rect x="608" y="104" width="248" height="96" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <text x="80" y="146" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="20">Unread</text>
+  <text x="80" y="176" fill="#facc15" font-family="Arial, sans-serif" font-size="18">2 updates need attention</text>
+  <text x="356" y="146" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="20">Action Needed</text>
+  <text x="356" y="176" fill="#93c5fd" font-family="Arial, sans-serif" font-size="18">2 items have next steps</text>
+  <text x="632" y="146" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="20">Latest Alert</text>
+  <text x="632" y="176" fill="#86efac" font-family="Arial, sans-serif" font-size="18">8 min ago</text>
+  <rect x="56" y="232" width="848" height="252" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <text x="80" y="274" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="22" font-weight="700">Alert Feed</text>
+  <text x="80" y="320" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="18">Proposal</text>
+  <text x="190" y="320" fill="#e5e7eb" font-family="Arial, sans-serif" font-size="17">Maya Chen submitted a revised milestone estimate.</text>
+  <text x="80" y="350" fill="#facc15" font-family="Arial, sans-serif" font-size="16">Unread · 8 min ago · Review estimate</text>
+  <text x="80" y="404" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="18">Message</text>
+  <text x="190" y="404" fill="#e5e7eb" font-family="Arial, sans-serif" font-size="17">Jordan Lee replied in the onboarding flow thread.</text>
+  <text x="80" y="434" fill="#facc15" font-family="Arial, sans-serif" font-size="16">Unread · 42 min ago · Open thread</text>
+</svg>
