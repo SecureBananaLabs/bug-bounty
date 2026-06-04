@@ -40,3 +40,5 @@ LOW_FRUIT_GITHUB_TOKEN=github_pat_... npm run issues:low-fruit -- --create --rep
 ```
 
 The scanner never publishes issues by default. In creation mode it also checks for an existing open issue with the same title before posting, which helps avoid duplicate or low-quality issue creation.
+
+A short demo of the Markdown output, JSON output, dry-run creation preview, and submitted claim package is available at [`demos/low-hanging-fruit-demo.gif`](../demos/low-hanging-fruit-demo.gif).
