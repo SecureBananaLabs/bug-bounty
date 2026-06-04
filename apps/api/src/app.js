@@ -39,6 +39,13 @@ export function createApp() {
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
 
+  app.use((req, res) => {
+    res.status(404).json({
+      success: false,
+      message: `Route ${req.method} ${req.path} not found`
+    });
+  });
+
   app.use(errorHandler);
   return app;
 }
