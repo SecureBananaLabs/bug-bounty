@@ -1,0 +1,30 @@
+name: API Benchmark Gate
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Start API Server
+        run: |
+          npm install
+          npm run start -w apps/api &
+          sleep 15 # wait for server to start
+
+      - name: Run Benchmark Gate
+        run: python3 benchmarks/run.py
+        env:
+          API_BASE_URL: http://localhost:3000/api
