@@ -10,9 +10,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <Navigation />
         <main>
           <h1>FreelanceFlow</h1>
-          <Navigation />
           {children}
         </main>
       </body>
