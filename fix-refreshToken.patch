@@ -1,0 +1,11 @@
+--- a/apps/api/src/controllers/authController.js
++++ b/apps/api/src/controllers/authController.js
+@@ -22,7 +22,7 @@
+ 
+ export async function refresh(req, res) {
+-  const result = await refreshToken();
++  const authHeader = req.headers.authorization || '';
++  const token = authHeader.replace('Bearer ', '');
++  const result = await refreshToken(token);
+   return ok(res, result);
+ }
