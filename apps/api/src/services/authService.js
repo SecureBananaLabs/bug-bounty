@@ -1,23 +1,32 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { prisma } from '../config/db.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
-  };
+export async function registerUser({ email, password, role = 'freelancer', fullName }) {
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+      role,
+      fullName,
+    },
+    select: {
+      id: true,
+      email: true,
+      fullName: true,
+      role: true,
+      createdAt: true,
+    },
+  });
+  return user;
 }
 
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
-
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function loginUser(email, password) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) throw new Error('Invalid credentials');
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) throw new Error('Invalid credentials');
+  const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  return token;
 }
