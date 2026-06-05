@@ -58,6 +58,8 @@ if (isSmoke) {
   }
 }
 
+process.exit(process.exitCode ?? 0);
+
 async function runEndpoint(endpoint, authToken) {
   const headers = { ...(endpoint.headers ?? {}) };
   const options = {
