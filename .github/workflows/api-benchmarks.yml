@@ -19,7 +19,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run start -w apps/api &
+      - name: Start API
+        run: |
+          npm run start -w apps/api > /tmp/freelanceflow-api.log 2>&1 &
+          echo $! > /tmp/freelanceflow-api.pid
       - name: Wait for API
         run: |
           for i in {1..30}; do
@@ -29,4 +32,12 @@ jobs:
             sleep 1
           done
           exit 1
-      - run: npm run benchmark:smoke
+      - name: Run smoke benchmark
+        run: |
+          BENCHMARK_CONNECTIONS=1 BENCHMARK_SMOKE_AMOUNT=1 timeout 60s npm run benchmark:smoke
+      - name: Stop API
+        if: always()
+        run: |
+          if [ -f /tmp/freelanceflow-api.pid ]; then
+            kill "$(cat /tmp/freelanceflow-api.pid)" || true
+          fi
