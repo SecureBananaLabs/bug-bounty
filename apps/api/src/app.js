@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { ok } from "./utils/response.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import { jobRoutes } from "./routes/jobRoutes.js";
@@ -24,7 +25,7 @@ export function createApp() {
   app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
+    return ok(res, { service: "api" });
   });
 
   app.use("/api/auth", authRoutes);
