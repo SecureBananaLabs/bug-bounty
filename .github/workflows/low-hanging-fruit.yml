@@ -22,70 +22,25 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
+      - name: Install dependencies
+        run: npm ci
 
-            // Patterns that indicate low-hanging fruit / easy fixes
-            const patterns = [
-              { pattern: /TODO|FIXME|HACK|XXX/g, label: 'good first issue', title: 'Resolve TODO/FIXME comment' },
-              { pattern: /console\.(log|warn|error)\(/g, label: 'good first issue', title: 'Remove debug console statement' },
-              { pattern: /\/\/ @ts-ignore/g, label: 'good first issue', title: 'Fix TypeScript ignore comment' },
-              { pattern: /unused|deprecated/i, label: 'good first issue', title: 'Clean up unused/deprecated code' },
-              { pattern: /eslint-disable(?!-next-line|-line)/g, label: 'good first issue', title: 'Resolve ESLint disable' },
-            ];
+      - name: Run low hanging fruit detector
+        id: detector
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            const searchPaths = ['apps', 'packages', 'docs'];
-            const findings = [];
+      - name: Create issues for detected items
+        if: steps.detector.outputs.issues-created == 'true'
+        run: |
+          echo "Low hanging fruit issues created successfully"
 
-            function scanDirectory(dir, relativePath = '') {
-              const entries = fs.readdirSync(dir, { withFileTypes: true });
-              for (const entry of entries) {
-                const fullPath = path.join(dir, entry.name);
-                const relPath = path.join(relativePath, entry.name);
-                
-                if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
-                  scanDirectory(fullPath, relPath);
-                } else if (entry.isFile() && /\.(ts|tsx|js|jsx|md)$/.test(entry.name)) {
-                  const content = fs.readFileSync(fullPath, 'utf-8');
-                  const lines = content.split('\n');
-                  
-                  for (let i = 0; i < lines.length; i++) {
-                    for (const { pattern, label, title } of patterns) {
-                      if (pattern.test(lines[i])) {
-                        findings.push({
-                          title: `${title} in ${relPath}`,
-                          body: `## Low Hanging Fruit Detected\n\n**File:** \`${relPath}\`\n**Line:** ${i + 1}\n**Content:** \`${lines[i].trim().substring(0, 100)}\`\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n### Suggested Fix\n- [ ] Locate the flagged code\n- [ ] Implement a proper fix\n- [ ] Remove any temporary workarounds\n- [ ] Add tests if applicable`,
-                          labels: [label, 'bug bounty', 'AI agent friendly', '💎 Bounty'],
-                        });
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            for (const searchPath of searchPaths) {
-              const fullPath = path.join(process.cwd(), searchPath);
-              if (fs.existsSync(fullPath)) {
-                scanDirectory(fullPath, searchPath);
-              }
-            }
-
-            // Create issues (limit to 5 per run to avoid spam)
-            const limitedFindings = findings.slice(0, 5);
-            
-            for (const finding of limitedFindings) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: finding.title,
-                body: finding.body,
-                labels: finding.labels,
-              });
-            }
-
-            console.log(`Created ${limitedFindings.length} issues out of ${findings.length} findings`);
+      - name: Recursively schedule next run if issues found
+        if: steps.detector.outputs.has-more-issues == 'true'
+        run: |
+          echo "More potential issues detected, will be picked up in next scheduled run"
+          # The cron schedule handles recursive execution
+          # This step documents the recursive nature of the automation
+          echo "Recursive automation is active - next run: $(date -d 'tomorrow 00:00' -u +%Y-%m-%dT%H:%M:%SZ)"
