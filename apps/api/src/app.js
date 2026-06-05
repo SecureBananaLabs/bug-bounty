@@ -15,11 +15,25 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+function getAllowedOrigins() {
+  const raw = process.env.CORS_ORIGIN;
+  if (!raw) {
+    // Default to local dev server
+    return ["http://localhost:3000"];
+  }
+  return raw.split(",").map((origin) => origin.trim());
+}
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: getAllowedOrigins(),
+      credentials: true, // Allow cookies/auth headers
+    })
+  );
   app.use(express.json());
   app.use(apiLimiter);
 
