@@ -1,7 +1,12 @@
 const users = [];
 
+function toPublicUser(user) {
+  const { password, passwordHash, accessToken, refreshToken, ...publicUser } = user;
+  return publicUser;
+}
+
 export async function listUsers() {
-  return users;
+  return users.map(toPublicUser);
 }
 
 export async function createUser(payload) {
