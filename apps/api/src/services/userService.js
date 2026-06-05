@@ -1,4 +1,11 @@
-const users = [];
+const users = [
+  {
+    id: "usr_existing",
+    email: "user@example.com",
+    password: "password123",
+    role: "client"
+  }
+];
 
 export async function listUsers() {
   return users;
