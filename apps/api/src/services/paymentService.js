@@ -4,6 +4,7 @@ export async function createPaymentIntent(payload) {
     paymentId: `pay_${Date.now()}`,
     amount: payload.amount,
     currency: payload.currency ?? "usd",
+    createdAt: new Date().toISOString(),
     provider: "stripe"
   };
 }
