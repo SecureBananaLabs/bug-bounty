@@ -19,8 +19,8 @@
   <text x="544" y="235" fill="#f4f7ff" font-family="Menlo, Consolas, monospace" font-size="16">POST /api/uploads</text>
   <text x="544" y="264" fill="#aab6d8" font-family="Menlo, Consolas, monospace" font-size="15">Body: no file field</text>
   <text x="544" y="311" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="17">400 Bad Request</text>
-  <text x="544" y="339" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="15">{ "message": "File is required" }</text>
-  <text x="544" y="378" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="15">Valid file upload still returns 201</text>
+  <text x="544" y="339" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="15">message: File required</text>
+  <text x="544" y="378" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="15">Valid upload returns 201</text>
 
-  <text x="70" y="452" fill="#dbe6ff" font-family="Arial, sans-serif" font-size="16">Validated locally: npm test -w apps/api -> 3 tests passed; node --check changed files; git diff --check.</text>
+  <text x="70" y="452" fill="#dbe6ff" font-family="Arial, sans-serif" font-size="16">Validated locally: npm test -w apps/api -> 3 passed; node --check; git diff --check.</text>
 </svg>
