@@ -33,14 +33,14 @@ export default function BillingPage() {
           <h3>Payout method</h3>
           <p>Wise USD account ending in 2841</p>
           <p>Backup method: PayPal billing@freelanceflow.test</p>
-          <button type="button">Update payout method</button>
+          <button className="billing-button" type="button">Update payout method</button>
         </section>
 
         <section className="card">
           <h3>Billing actions</h3>
-          <button type="button">Send payment reminder</button>
-          <button type="button">Download invoices</button>
-          <button type="button">Add billing contact</button>
+          <button className="billing-button" type="button">Send payment reminder</button>
+          <button className="billing-button" type="button">Download invoices</button>
+          <button className="billing-button" type="button">Add billing contact</button>
         </section>
       </div>
 
