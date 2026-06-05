@@ -1,0 +1,4 @@
+{
+  "passed": true,
+  "output": "\n> test\n> npm run test -w apps/api\n\n\n> test\n> node --test src/tests\n\nTAP version 13\n# Subtest: GET /health returns ok payload\nok 1 - GET /health returns ok payload\n  ---\n  duration_ms: 27.2865\n  ...\n1..1\n# tests 1\n# suites 0\n# pass 1\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 175.369833\n"
+}
