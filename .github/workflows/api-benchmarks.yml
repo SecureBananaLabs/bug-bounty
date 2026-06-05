@@ -1,0 +1,32 @@
+name: API Benchmarks
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/api-benchmarks.yml"
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run start -w apps/api &
+      - name: Wait for API
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4000/health >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+      - run: npm run benchmark:smoke
