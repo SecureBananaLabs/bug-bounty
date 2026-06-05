@@ -2,7 +2,8 @@
   {
     "name": "health",
     "method": "GET",
-    "path": "/health"
+    "path": "/health",
+    "smoke": true
   },
   {
     "name": "auth-register",
@@ -18,6 +19,7 @@
     "name": "auth-login",
     "method": "POST",
     "path": "/api/auth/login",
+    "smoke": true,
     "body": {
       "email": "bench-login@example.com",
       "password": "benchmark-password"
@@ -36,7 +38,8 @@
   {
     "name": "users-list",
     "method": "GET",
-    "path": "/api/users"
+    "path": "/api/users",
+    "smoke": true
   },
   {
     "name": "users-create",
@@ -57,6 +60,7 @@
     "name": "jobs-create",
     "method": "POST",
     "path": "/api/jobs",
+    "smoke": true,
     "body": {
       "title": "Build dashboard",
       "description": "Create a benchmark-friendly dashboard payload.",
@@ -87,6 +91,7 @@
     "name": "payments-create",
     "method": "POST",
     "path": "/api/payments",
+    "smoke": true,
     "body": {
       "amount": 1500,
       "currency": "usd"
@@ -146,12 +151,14 @@
   {
     "name": "search",
     "method": "GET",
-    "path": "/api/search?q=dashboard"
+    "path": "/api/search?q=dashboard",
+    "smoke": true
   },
   {
     "name": "admin-metrics",
     "method": "GET",
     "path": "/api/admin/metrics",
-    "auth": true
+    "auth": true,
+    "smoke": true
   }
 ]

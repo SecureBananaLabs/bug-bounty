@@ -24,4 +24,4 @@ npm run benchmark
 npm run benchmark:smoke
 ```
 
-The default request counts are intentionally conservative so a local run can cover all API routes without tripping the current in-memory API rate limiter. Increase `BENCHMARK_AMOUNT` and `BENCHMARK_CONNECTIONS` for stronger load tests against a target configured for benchmarking.
+The default full benchmark covers every endpoint listed in `benchmarks/endpoints.json`. The CI smoke benchmark runs the entries marked with `"smoke": true` so pull requests get a fast regression gate without turning every endpoint benchmark into a required CI load test. Increase `BENCHMARK_AMOUNT` and `BENCHMARK_CONNECTIONS` for stronger load tests against a target configured for benchmarking.

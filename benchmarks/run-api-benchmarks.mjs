@@ -11,7 +11,10 @@ await loadBenchmarkEnv();
 
 const isSmoke = process.argv.includes("--smoke");
 const targetUrl = stripTrailingSlash(process.env.BENCHMARK_TARGET_URL ?? "http://127.0.0.1:4000");
-const endpoints = await readJson(path.join(__dirname, "endpoints.json"));
+const allEndpoints = await readJson(path.join(__dirname, "endpoints.json"));
+const endpoints = isSmoke
+  ? allEndpoints.filter((endpoint) => endpoint.smoke)
+  : allEndpoints;
 const thresholds = await readJson(path.join(__dirname, "thresholds.json"));
 const settings = {
   mode: isSmoke ? "smoke" : "full",
