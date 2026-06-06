@@ -13,17 +13,13 @@
 {
   "name": "bug-bounty",
   "version": "1.0.0",
-  "description": "FreelanceFlow Monorepo",
-  "main": "index.js",
+  "description": "FreelanceFlow Monorepo - Bug Bounty Program",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo 'Tests not yet implemented'",
+    "pi": "node -e \"console.log('π (PI) =', Math.PI); console.log('Note: PI is irrational and cannot be expressed exactly in decimal form.')\""
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SecureBananaLabs/bug-bounty.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": ["freelance", "marketplace", "bug-bounty"],
+  "author": "SecureBananaLabs",
+  "license": "MIT"
 }
 }
