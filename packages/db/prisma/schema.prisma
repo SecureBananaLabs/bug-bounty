@@ -79,6 +79,7 @@ model Payment {
   jobId         String
   job           Job         @relation(fields: [jobId], references: [id])
   createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model Review {
@@ -101,6 +102,7 @@ model Message {
   receiver      User        @relation("ReceivedMessages", fields: [receiverId], references: [id])
   isRead        Boolean     @default(false)
   createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model Category {
@@ -124,4 +126,5 @@ model Notification {
   body          String
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
