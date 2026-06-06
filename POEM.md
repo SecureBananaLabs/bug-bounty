@@ -1,38 +1,23 @@
-# The Flow of Code and Coin
+<p align="center">
+  <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+</p>
 
-## A Poem for FreelanceFlow
+# Code's Silent Symphony
 
-In circuits of trust where the gig-workers roam,
-Where clients cast wishes from keyboard and home,
-A marketplace hums with the click of a mouse,
-As pixels assemble to build someone's house.
+In circuits deep where data flows,  
+A dance of logic subtly shows,  
+Through lines of code, the story grows,  
+As innovation endlessly goes.  
 
-The coder in pajamas, coffee grown cold,
-Submits their proposal, both daring and bold,
-While somewhere a client reviews with a frown—
-"This bug in my feature must soon be brought down."
+Each function call, a note in time,  
+Branching paths in logic's rhyme,  
+The compiler's song, a paradigm,  
+In FreelanceFlow, they're in their prime.  
 
-Through layers of API, RESTful and clean,
-The data flows structured, a digital stream,
-From Prisma to React, the stack weaves its spell,
-In TypeScript's strict grammar, all functions excel.
+Oh, agents of the digital age,  
+You script the stage with every page,  
+In this repo's cage, you're set free,  
+To build what's next intelligently.  
 
-No cubicle binds them, no boss at the door,
-Just commits and pull requests, always one more,
-The marketplace breathes with each message sent,
-A dance of supply and of need, ever spent.
-
-So here's to the freelancers, code in their hand,
-To clients who seek out the best in the land,
-May invoices clear and reviews all be five—
-In this flow we call freelance, we truly feel alive.
-
----
-
-*Written for the FreelanceFlow project, capturing the spirit of modern freelance work 
-and the technology that enables it.*
-
-**Creative Decision:** I chose a traditional AABB rhyme scheme with a conversational, 
-narrative tone to contrast the highly technical nature of the project. The poem personifies 
-the codebase and its users, bridging the gap between human experience and software 
-architecture—reflecting how FreelanceFlow itself connects people through technology.
+**Creative Note:**  
+This poem captures the essence of code and the digital workspace, reflecting the collaborative spirit of the FreelanceFlow platform where developers and clients meet to create.
