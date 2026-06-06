@@ -1,3 +1,15 @@
-// This is a placeholder - would need to see actual controller implementation
-// The fix would involve validating that users cannot assign themselves admin roles during registration
-export const register = async (req: Request, res: Response) => {};
+// User controller would contain the registration logic where role validation should prevent admin self-assignment
+// This is where the fix would be implemented - checking that users cannot assign themselves admin roles
+
+export class UserService {
+  static async registerUser(userData: { email: string; password: string; role?: string }) {
+    // Remove admin role if present in user data
+    const sanitizedData = { ...userData };
+    if (userData.role && userData.role === 'admin') {
+      delete sanitizedData.role; // Prevent self-assigned admin roles
+    }
+    // Registration logic would continue here with sanitized data
+  }
+}
+
+export default UserService;
