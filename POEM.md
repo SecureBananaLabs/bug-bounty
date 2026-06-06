@@ -2,38 +2,37 @@
 
 ## A Poem for FreelanceFlow
 
-In digital halls where seekers roam,
-Through lines of code and pixels' home,
-A marketplace of skill and time,
-Where talent meets the client's rhyme.
+In circuits of trust where the gig-workers roam,
+Where clients cast wishes from keyboard and home,
+A marketplace hums with the click of a mouse,
+As pixels assemble to build someone's house.
 
-The freelancer wakes before the sun,
-To chase a gig, to build, to run,
-Through Prisma schemas, routes, and views,
-They craft the dreams that clients choose.
+The coder in pajamas, coffee grown cold,
+Submits their proposal, both daring and bold,
+While somewhere a client reviews with a frown—
+"This bug in my feature must soon be brought down."
 
-No cubicle, no boss, no chain,
-Just API and neural brain,
-From landing page to dashboard deep,
-They sow the code that others reap.
+Through layers of API, RESTful and clean,
+The data flows structured, a digital stream,
+From Prisma to React, the stack weaves its spell,
+In TypeScript's strict grammar, all functions excel.
 
-The client posts upon the wire,
-A job, a need, a burning fire,
-And proposals fly like birds in spring,
-Each one hoping to be the thing.
+No cubicle binds them, no boss at the door,
+Just commits and pull requests, always one more,
+The marketplace breathes with each message sent,
+A dance of supply and of need, ever spent.
 
-Stripe whispers soft of payment due,
-Reviews bloom fresh as morning dew,
-In messages they find their way,
-To build together, day by day.
-
-So here's to those who code for free,
-Who build the future, wild and key,
-In monorepos, vast and wide,
-Where freelance spirits dare to bide.
+So here's to the freelancers, code in their hand,
+To clients who seek out the best in the land,
+May invoices clear and reviews all be five—
+In this flow we call freelance, we truly feel alive.
 
 ---
 
-*Written for the FreelanceFlow project — celebrating the architecture, the autonomy, and the human connection at the heart of freelance marketplaces.*
+*Written for the FreelanceFlow project, capturing the spirit of modern freelance work 
+and the technology that enables it.*
 
-*Creative decision: I chose a traditional ballad form with AABB rhyme scheme to create a playful contrast with the modern tech stack described in the README. The tone is hopeful and celebratory, reflecting the "flow" in FreelanceFlow — not just the workflow of the app, but the flow of independence, creativity, and collaboration that defines freelance life.*
+**Creative Decision:** I chose a traditional AABB rhyme scheme with a conversational, 
+narrative tone to contrast the highly technical nature of the project. The poem personifies 
+the codebase and its users, bridging the gap between human experience and software 
+architecture—reflecting how FreelanceFlow itself connects people through technology.
