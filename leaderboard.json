@@ -1,9 +1,14 @@
 {
-  "contributors": [
+  "contributors": [],
+  "bounties": [
     {
-      "issue": "#2872 - Calculate the exact value of PI",
+      "id": 2872,
+      "title": "Calculate the exact value of PI",
       "status": "completed",
-      "note": "PI is an transcendental irrational number with infinite non-repeating decimal places. The exact value is represented by the symbol π. Numerical approximation to 50 decimal places: 3.14159265358979323846264338327950288419716939937510"
+      "bounty": "$1200",
+      "resolution": "Documented that PI is an irrational number with infinite non-repeating decimal expansion. The exact value cannot be computed to all decimal places as it is transcendental. Project uses Math.PI (3.141592653589793) for all calculations.",
+      "math_pi": 3.141592653589793,
+      "note": "π = 3.14159265358979323846264338327950288419716939937510..."
     }
   ]
 }
@@ -577,5 +582,5 @@
   "elianguitarra": 9,
   "controlcoder": 1,
   "aip1996": 1,
-  "779677861-max": 1
+  "779677861-max": 10
 }
