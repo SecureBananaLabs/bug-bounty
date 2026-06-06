@@ -43,17 +43,22 @@ Thank you for contributing to this bug bounty repository.
 
 # Contributing to FreelanceFlow
 
-## Bounty Program
+Thank you for your interest in contributing to this project!
 
-### Issue #2872: Calculate the exact value of PI
+## How to Contribute
 
-- **Bounty**: $1,200 USD
-- **Status**: Open
-- **Requirements**:
-  1. Read and understand discussion #2872
-  2. Star the repository
-  3. Comment under the discussion to help achieve the goal
-  4. Submit a PR with your approach
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-**Note**: Bounties are only paid upon successful PR merge.
+## PI Calculation Note
+
+This project acknowledges that PI (π) is an irrational number with infinite non-repeating decimal places. The exact value cannot be computed in full. For implementation purposes, we use:
+
+- `Math.PI` in JavaScript/TypeScript (provides 3.141592653589793)
+- Additional precision libraries when higher accuracy is required
+
+Please ensure any mathematical computations respect the limitations of floating-point arithmetic.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
