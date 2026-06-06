@@ -1,19 +1,20 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
+> **Note on Issue #2872:** The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or fraction. Its decimal representation goes on infinitely without repeating. To 50 decimal places: **π ≈ 3.14159265358979323846264338327950288419716939937510...** For practical calculations, standard double-precision floating point provides ~15-17 decimal digits of precision. For higher precision, use arbitrary-precision libraries like [decimal.js](https://github.com/MikeMcl/decimal.js/), [big.js](https://github.com/MikeMcl/big.js/), or [mpmath](https://mpmath.org/) in Python.
+
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
 
+- `apps/web` — Next.js 14 App Router frontend
 - `apps/api` — Express.js backend with layered REST API
 - `packages/db` — Prisma schema and database package
 - `packages/ui` — Shared UI components
-- `packages/math` — Mathematical constants and utilities
 
 ## Frontend
-
 
 The web app includes pages for:
 
@@ -66,21 +67,9 @@ npm run dev -w apps/web
 ```
 
 ### Run backend
-## Environment Variables
 
-Each app/package expects its own `.env` values for DB, auth, and integrations.
-
-## Mathematical Constants
-
-### Exact Value of PI
-
-PI (π) is a mathematical constant representing the ratio of a circle's circumference to its diameter. It is an irrational number, meaning it cannot be expressed as a simple fraction and its decimal representation goes on infinitely without repeating.
-
-The exact value of PI is:
-
-$$\pi = \sum_{n=0}^{\infty} \frac{(-1)^n}{2n+1} \times 4 = 3.14159265358979323846264338327950288419716939937510...$$
-
-For all practical calculations in this project, we use `Math.PI` which provides PI to approximately 15 decimal places (3.141592653589793), which is sufficient for most engineering and scientific applications.
+```bash
+npm run dev -w apps/api
 ```
 
 ## Database
