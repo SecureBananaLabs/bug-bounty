@@ -1,20 +1,21 @@
  ```diff
---- a/.github/workflows/low-hanging-fruit.yml
-+++ b/.github/workflows/low-hanging-fruit.yml
+--- /dev/null
++++ b/.github/workflows/low-hanging-fruit-automation.yml
 @@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
-+  workflow_dispatch:      # Allow manual trigger
++    # Run daily at 00:00 UTC
++    - cron: '0 0 * * *'
++  workflow_dispatch:
 +
 +permissions:
 +  issues: write
 +  contents: read
 +
 +jobs:
-+  detect-and-create-issues:
++  create-low-hanging-fruit-issues:
 +    runs-on: ubuntu-latest
 +    steps:
 +      - name: Checkout repository
@@ -26,158 +27,112 @@
 +          node-version: '20'
 +
 +      - name: Install dependencies
-+        run: npm install
++        run: npm ci
 +
-+      - name: Run low hanging fruit detection
-+        id: detect
++      - name: Run low hanging fruit scanner
++        id: scanner
 +        run: |
-+          node .github/scripts/detect-low-hanging-fruit.js
++          node .github/scripts/scan-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 +          GITHUB_REPOSITORY: ${{ github.repository }}
 +
-+  recursive-trigger:
-+    needs: detect-and-create-issues
++  recursive-issue-creation:
 +    runs-on: ubuntu-latest
++    needs: create-low-hanging-fruit-issues
 +    if: always()
 +    steps:
-+      - name: Trigger next iteration
++      - name: Trigger next recursive scan
 +        uses: peter-evans/repository-dispatch@v2
 +        with:
 +          token: ${{ secrets.GITHUB_TOKEN }}
-+          event-type: low-hanging-fruit-iteration
-+          client-payload: '{"iteration": ${{ github.run_number }}}'
++          event-type: low-hanging-fruit-scan
++        continue-on-error: true
 +--- /dev/null
-+++ b/.github/scripts/detect-low-hanging-fruit.js
++++ b/.github/scripts/scan-low-hanging-fruit.js
 @@ -0,0 +1,289 @@
 +#!/usr/bin/env node
-+/**
-+ * Low Hanging Fruit Detection and Issue Creation Script
-+ * 
-+ * This script recursively detects potential bugs, missing features,
-+ * and improvements in the repository, then creates GitHub issues for them.
-+ */
 +
 +const fs = require('fs');
 +const path = require('path');
 +const { execSync } = require('child_process');
 +
-+// Configuration
-+const CONFIG = {
-+  // Patterns that indicate potential issues
-+  patterns: {
-+    // Code smells and potential bugs
-+    code: [
-+      { pattern: /TODO|FIXME|HACK|XXX|BUG/, severity: 'high', label: 'bug' },
-+      { pattern: /console\.(log|warn|error)\(/, severity: 'medium', label: 'bug' },
-+      { pattern: /debugger;/, severity: 'high', label: 'bug' },
-+      { pattern: /eval\(/, severity: 'high', label: 'security' },
-+      { pattern: /process\.env\.[A-Z_]+(?!\.)/, severity: 'medium', label: 'bug' },
-+    ],
-+    // Missing documentation
-+    docs: [
-+      { pattern: /^# .*/, check: 'missing-readme-sections', severity: 'low' },
-+    ],
-+    // Missing tests
-+    tests: [
-+      { pattern: /test|spec/, check: 'test-coverage', severity: 'medium' },
-+    ],
-+  },
-+  // File patterns to scan
-+  includePatterns: [
-+    '**/*.js',
-+    '**/*.ts',
-+    '**/*.tsx',
-+    '**/*.json',
-+    '**/*.md',
-+    '**/*.yml',
-+    '**/*.yaml',
-+  ],
-+  excludePatterns: [
-+    'node_modules/**',
-+    '.git/**',
-+    'dist/**',
-+    'build/**',
-+    '.next/**',
-+  ],
-+};
-+
-+// GitHub API helpers
 +const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const REPO = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
-+const [OWNER, REPO_NAME] = REPO.split('/');
++const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
++const [OWNER, REPO] = GITHUB_REPOSITORY.split('/');
 +
-+if (!GITHUB_TOKEN) {
-+  console.error('GITHUB_TOKEN is required');
-+  process.exit(1);
-+}
++const RESTRICTED_STRING = "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.";
 +
-+function githubApi(path, method = 'GET', data = null) {
-+  const url = `https://api.github.com/repos/${OWNER}/${REPO_NAME}${path}`;
++function githubApi(path, method = 'GET', body = null) {
++  const url = `https://api.github.com/repos/${OWNER}/${REPO}${path}`;
 +  const options = {
 +    method,
 +    headers: {
-+      'Authorization': `token ${GITHUB_TOKEN}`,
++      'Authorization': `Bearer ${GITHUB_TOKEN}`,
 +      'Accept': 'application/vnd.github.v3+json',
-+      'User-Agent': 'LowHangingFruit-Bot',
++      'User-Agent': 'LowHangingFruitBot/1.0',
++      'Content-Type': 'application/json',
 +    },
 +  };
-+  
-+  if (data) {
-+    options.headers['Content-Type'] = 'application/json';
-+  }
-+  
-+  const cmd = `curl -s -X ${method} "${url}" \
-+    -H "Authorization: token ${GITHUB_TOKEN}" \
-+    -H "Accept: application/vnd.github.v3+json" \
-+    ${data ? `-d '${JSON.stringify(data)}'` : ''}`;
++
++  const cmd = `curl -s -X ${method} ${Object.entries(options.headers).map(([k, v]) => `-H "${k}: ${v}"`).join(' ')} ${body ? `-d '${JSON.stringify(body)}'` : ''} "${url}"`;
 +  
 +  try {
 +    const result = execSync(cmd, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 });
 +    return JSON.parse(result);
 +  } catch (e) {
-+    console.error(`API Error: ${e.message}`);
-+    return null;
++    console.error('API Error:', e.message);
++    try {
++      return JSON.parse(e.stdout?.toString() || e.message);
++    } catch {
++      return { error: e.message };
++    }
 +  }
 +}
 +
-+function getExistingIssues() {
++function scanForLowHangingFruit() {
 +  const issues = [];
-+  let page = 1;
-+  while (true) {
-+    const pageIssues = githubApi(`/issues?state=all&per_page=100&page=${page}`);
-+    if (!pageIssues || pageIssues.length === 0) break;
-+    issues.push(...pageIssues);
-+    page++;
-+    if (page > 10) break; // Safety limit
-+  }
-+  return issues;
-+}
-+
-+function issueExists(title, existingIssues) {
-+  return existingIssues.some(issue => 
-+    issue.title.toLowerCase().includes(title.toLowerCase().substring(0, 50))
-+  );
-+}
-+
-+function createIssue(title, body, labels = []) {
-+  return githubApi('/issues', 'POST', {
-+    title,
-+    body,
-+    labels: [...labels, 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly'],
-+  });
-+}
-+
-+// Detection functions
-+function findFiles(dir, pattern, exclude = []) {
-+  const results = [];
-+  const files = fs.readdirSync(dir);
++  const rootDir = process.cwd();
 +  
-+  for (const file of files) {
-+    const fullPath = path.join(dir, file);
-+    const stat = fs.statSync(fullPath);
-+    
-+    if (stat.isDirectory()) {
-+      if (exclude.some(e => fullPath.includes(e))) continue;
-+      results.push(...findFiles(fullPath, pattern, exclude));
-+    } else if (
++  // Scan for common low hanging fruit patterns
++  
++  // 1. Check for TODO/FIXME comments in code
++  try {
++    const todoResult = execSync('git grep -r -n "TODO\\|FIXME\\|HACK\\|XXX" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --include="*.py" --include="*.java" 2>/dev/null || true', { encoding: 'utf-8', cwd: rootDir });
++    if (todoResult.trim()) {
++      const todos = todoResult.trim().split('\n').slice(0, 20);
++      issues.push({
++        title: '[Auto] Address TODO/FIXME comments in codebase',
++        body: `## Automated Issue: TODO/FIXME Cleanup\n\nThe following TODO/FIXME comments were found in the codebase:\n\n\`\`\`\n${todos.join('\n')}\n\`\`\`\n\n### Acceptance Criteria\n- [ ] Review each TODO/FIXME comment\n- [ ] Create appropriate issues or resolve them\n- [ ] Remove resolved TODO/FIXME comments\n\n${RESTRICTED_STRING}`,
++        labels: ['bug', 'good first issue', 'help wanted', 'automation'],
++      });
++    }
++  } catch (e) {
++    // Ignore errors
++  }
++
++  // 2. Check for missing documentation
++  const docsToCheck = ['CONTRIBUTING.md', 'CHANGELOG.md', 'LICENSE', 'CODE_OF_CONDUCT.md', 'SECURITY.md'];
++  const missingDocs = docsToCheck.filter(doc => !fs.existsSync(path.join(rootDir, doc)));
++  if (missingDocs.length > 0) {
++    issues.push({
++      title: '[Auto] Missing documentation files',
++      body: `## Automated Issue: Missing Documentation\n\nThe following documentation files are missing:\n${missingDocs.map(d => `- ${d}`).join('\n')}\n\n### Acceptance Criteria\n- [ ] Add missing documentation files\n- [ ] Ensure all docs follow the project template\n\n${RESTRICTED_STRING}`,
++      labels: ['documentation', 'good first issue', 'help wanted', 'automation'],
++    });
++  }
++
++  // 3. Check for outdated dependencies
++  try {
++    const packageJsonPath = path.join(rootDir, 'package.json');
++    if (fs.existsSync(packageJsonPath)) {
++      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
++      const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
++      const outdatedDeps = Object.entries(deps).filter(([name, version]) => {
++        if (typeof version !== 'string') return false;
++        return version.startsWith('^') || version.startsWith('~') || version === '*';
++      });
++      if (outdatedDeps.length > 0) {
++        issues.push({
++          title: '[Auto] Dependency audit and update needed',
++          body: `## Automated Issue
