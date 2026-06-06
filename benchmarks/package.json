@@ -6,13 +6,12 @@
   "scripts": {
     "benchmark": "node run-benchmarks.js",
     "benchmark:smoke": "node run-benchmarks.js --smoke",
-    "benchmark:ci": "node run-benchmarks.js --ci"
+    "benchmark:report": "node generate-report.js"
   },
   "dependencies": {
-    "autocannon": "^7.15.0",
-    "dotenv": "^16.4.5"
+    "autocannon": "^7.15.0"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0"
+    "dotenv": "^16.3.1"
   }
 }
