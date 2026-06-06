@@ -1,32 +1,25 @@
-name: Low Hanging Fruit Issue
-about: Template for automated low-priority issues that are easy to fix
-title: "[Low Hanging Fruit] "
-labels: ["good first issue", "bug", "help wanted"]
+name: "Low Hanging Fruit"
+about: "Create issues for new features or bugs to work on"
+title: "Low Hanging Fruit: [Feature/Bug Description]"
+labels: ["good first issue", "help wanted"]
 body:
   - type: markdown
     attributes:
       value: |
-        ## Low Hanging Fruit Issue
-        This issue addresses a simple, easy-to-fix problem suitable for new contributors.
-        
         This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
   - type: textarea
     id: description
     attributes:
-      label: Description
-      description: Please describe the issue found
-      placeholder: "Describe the specific low-hanging fruit issue that was detected"
+      label: "Description"
+      description: "Describe the feature or bug you want to work on"
+      placeholder: "Explain what you want to implement or fix..."
     validations:
       required: true
   - type: textarea
-    id: proposed_solution
+    id: approach
     attributes:
-      label: Proposed Solution
-      description: Suggest how to fix this issue
-      placeholder: "Describe the simple fix for this low-hanging fruit issue"
-  - type: input
-    id: file_path
-    attributes:
-      label: File Path
-      description: Path to the file containing the issue
-      placeholder: "e.g., apps/web/src/components/Example.tsx"
+      label: "Approach"
+      description: "Describe your approach to solving this"
+      placeholder: "How do you plan to implement this feature or fix this bug?"
+    validations:
+      required: true
