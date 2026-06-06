@@ -1,5 +1,19 @@
 {
   "name": "@freelanceflow/ui",
   "private": true,
-  "main": "src/index.ts"
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js"
+    }
+  },
+  "scripts": {
+    "test": "node --test test/import.test.mjs"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  }
 }
