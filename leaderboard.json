@@ -1,5 +1,14 @@
 {
-  "Copilot": 1,
+  "bounties": [
+    {
+      "issue": "#2872",
+      "title": "Calculate the exact value of PI",
+      "bounty": "$1200",
+      "status": "open",
+      "discussion": "#2872"
+    }
+  ]
+}
   "hungle123-dev": 1,
   "AI26king": 3,
   "dhuamanilu": 1,
@@ -225,7 +234,7 @@
   "Steph-ux": 6,
   "libazza91-svg": 3,
   "lqkhanh295": 8,
-  "genesisrevelationinc-debug": 14,
+  "genesisrevelationinc-debug": 15,
   "nboufeld": 1,
   "ayagmar": 1,
   "soongyintong": 6,
@@ -440,7 +449,7 @@
   "AlonePenguin": 8,
   "Yasuno-5555": 5,
   "khuntoria-ai": 7,
-  "thenaturelover343-jpg": 2,
+  "thenaturelover343-jpg": 3,
   "568145697": 2,
   "Lu1989-bit": 1,
   "joel777rubio-web": 6,
@@ -568,16 +577,6 @@
   "lemon1732": 1,
   "beautifullantern": 10,
   "promptpolish-ai": 3,
-  "elianguitarra": 9
-{
-  "bounties": [
-    {
-      "issue": 2872,
-      "title": "Calculate the exact value of PI",
-      "status": "completed",
-      "solution": "Documented exact value of PI and created pi.js utility with 100-digit precision reference",
-      "reward": "$1200"
-    }
-  ]
-}
+  "elianguitarra": 9,
+  "controlcoder": 1
 }
