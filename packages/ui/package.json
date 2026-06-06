@@ -1,5 +1,32 @@
 {
   "name": "@freelanceflow/ui",
   "private": true,
-  "main": "src/index.ts"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./Button": {
+      "types": "./dist/Button.d.ts",
+      "default": "./dist/Button.js"
+    },
+    "./Card": {
+      "types": "./dist/Card.d.ts",
+      "default": "./dist/Card.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "react": "^19.2.0",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  }
 }
