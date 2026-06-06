@@ -5,6 +5,7 @@
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
 
@@ -71,9 +72,6 @@ npm run dev -w apps/web
 npm run dev -w apps/api
 ```
 
-## Database
-
-Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
@@ -82,12 +80,12 @@ Each app/package expects its own `.env` values for DB, auth, and integrations.
 
 ## Exact Value of PI
 
-The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or a fraction. Its decimal representation is infinite and non-repeating.
+The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or a fraction. Its value to many decimal places is:
 
-**Mathematical definition:** π is the ratio of a circle's circumference to its diameter.
 
-**Approximate value to 50 decimal places:**
 
+- Users
+- Jobs
 - Proposals
 - Payments
 - Reviews
