@@ -10,7 +10,9 @@ export default function JobsPage() {
           <article className="card" key={job.id}>
             <h3>{job.title}</h3>
             <p>{job.budget}</p>
-            <Link href={`/jobs/${job.id}`}>View details</Link>
+            <Link href={`/jobs/${job.id}`} aria-label={`View details for ${job.title}`}>
+              View details
+            </Link>
           </article>
         ))}
       </div>
