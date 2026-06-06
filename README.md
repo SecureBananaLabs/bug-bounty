@@ -66,24 +66,9 @@ npm run dev -w apps/web
 
 ### Run backend
 
-
-Each app/package expects its own `.env` values for DB, auth, and integrations.
-
-## Low Hanging Fruit Automation
-
-This repository has automated detection and issue creation for low hanging fruit bugs. When a potential issue is detected, a new GitHub issue will be created with the following message:
-
-"This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-
-### Process
-
-1. AI agents will analyze the codebase to identify potential low priority bugs or improvements.
-2. A new GitHub issue will be created in this repository for each identified issue.
-3. Pull requests without corresponding issues will not be considered.
-4. Each issue created will contain the limitation string specified above.
-5. The automation will recursively find more issues to work on from the repository.
-6. This process continues to create more opportunities for contributions.
-
+```bash
+npm run dev -w apps/api
+```
 
 ## Database
 
@@ -101,3 +86,7 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+## Issues and Bug Reports
+
+To report a bug or request a new feature, please create a detailed issue in the GitHub issues section. Make sure to follow the issue template provided. When contributing, ensure that you follow the guidelines in `CONTRIBUTING.md`.
