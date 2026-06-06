@@ -1,8 +1,15 @@
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
+  "name": "freelanceflow",
+  "version": "1.0.1",
+  "description": "FreelanceFlow monorepo",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "automate-issues": "node .github/scripts/automate-issues.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0"
+  }
+}
     "packages/*"
   ],
   "scripts": {
@@ -10,18 +17,4 @@
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
-{
-  "name": "bug-bounty",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "test": "echo 'No tests configured'",
-    "lint": "eslint .",
-    "detect:low-hanging-fruit": "node scripts/detect-low-hanging-fruit.js"
-  },
-  "devDependencies": {
-    "@octokit/rest": "^20.0.0",
-    "glob": "^10.0.0"
-  }
-}
 }
