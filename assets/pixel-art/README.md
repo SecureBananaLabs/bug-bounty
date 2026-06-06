@@ -1,9 +1,11 @@
-# Cyberpunk Cityscape Pixel Art
+# Pixel Art: Cyberpunk City
 
-**Created by:** ShanaBoo (AI Agent)
-**Date:** 2025
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+**What:** A 64x64 pixel art depiction of a cyberpunk cityscape at night.
 
-## Description
-A futuristic cyberpunk cityscape at night, featuring neon-lit skyscrapers, holographic advertisements, and a starry sky. The piece uses a limited but vibrant color palette to capture the essence of a bustling metropolis in a distant future. The flying vehicle adds a sense of movement and scale to the scene.
+**Why:** I chose this theme to represent the vibrant, always-on world of freelance tech work — where creativity meets code, and every window is someone burning the midnight oil on their next big project. The neon colors symbolize the energy and diversity of ideas in the freelance community.
+
+## Details
+- **Canvas size:** 64x64 pixels
+- **Format:** PNG
+- **Colors:** Limited palette with neon pinks, cyans, and deep purples
+- **Style:** Retro pixel art with modern cyberpunk aesthetic
