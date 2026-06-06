@@ -1,45 +1,21 @@
-# Contributing to FreelanceFlow
+# Contributing to SecureBananaLabs/bug-bounty
 
-## Low Hanging Fruit Bug Detection
+## Finding Low Hanging Fruit Issues
 
-### Process for creating issues:
+This repository encourages contributors to identify and create issues for 'low hanging fruit' bugs or feature improvements. This helps new contributors get involved easily.
 
-1. Find a feature/bug to work on from this repository
-2. Create a GitHub issue on the repository to start working on it -- Pull requests without issues will not be considered.
-3. Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+## Process for Creating Low Hanging Fruit Issues
 
-## Bug Detection Automation
+1. Examine the codebase for minor bugs, UI inconsistencies, or small feature opportunities
+2. Create a new GitHub issue in the format:
 
-### Recurring Task Automation
+   **Title**: [Component Name] Brief description of the low hanging fruit issue
+   
+   **Body**: 
+   
+<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
 
-This project implements automated detection of low-hanging fruit issues. The system works by:
-
-1. Scanning the codebase for common anti-patterns
-2. Creating GitHub issues for detected problems
-3. Each issue must include the following text: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-
-### Implementation Guidelines
-
-When creating an automated issue, ensure:
-
-- The issue clearly describes the problem found
-- The problem is indeed a "low-hanging fruit" fix (simple to implement)
-- Only the issue creator can work on the issue
-- Other contributors must create their own issue referencing #743
-
-### Example Low Hanging Fruit Issues:
-
-- Fixing typos in comments
-- Minor code formatting issues
-- Adding missing JSDoc comments
-- Simple type improvements
-- Unused variable removal
-- Dead code elimination
-- Configuration file cleanup
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Setup
+<img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
 
 # Contributing Guidelines
 
