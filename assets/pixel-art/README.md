@@ -1,5 +1,5 @@
-# Pixel Art: Cyberpunk Cityscape
+# Pixel Art
 
-A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night, featuring neon-lit skyscrapers, holographic billboards, and a glowing moon. Created to evoke the feeling of a bustling digital metropolis where freelancers and clients might connect in a sci-fi future—tying into the FreelanceFlow project's theme of modern digital work.
+## shanaboo_pixel_art.png
 
-Theme: Cyberpunk / Sci-Fi | Canvas: 64x64 pixels | Format: PNG
+A retro-style robot character named "Bolt" with vibrant neon colors on a dark background, inspired by classic 8-bit gaming aesthetics and sci-fi themes. Created to add creative visual assets to the FreelanceFlow project.
