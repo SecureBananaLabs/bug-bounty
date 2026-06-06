@@ -1,6 +1,5 @@
 [dir] .github
 [file] .gitignore
 [file] CONTRIBUTING.md
-[dir] apps
-[file] leaderboard.json
-[file] package-lock.json
+[file] issue_template.md
+[file] README.md
