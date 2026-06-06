@@ -1,23 +1,14 @@
-import { prisma } from '@packages/db';
-
-export const registerUser = async (userData: any) => {
-  // Remove any attempt to assign admin role
-  if (userData.roles && Array.isArray(userData.roles)) {
-    const sanitizedRoles = userData.roles.filter((role: string) => 
-      role.toLowerCase() !== 'admin'
-    );
-    
-    // Ensure all new users get the default user role
-    if (!sanitizedRoles.includes('user')) {
-      sanitizedRoles.push('user');
-    }
-    
-    userData.roles = sanitizedRoles;
-  } else {
-    userData.roles = ['user'];
+// Placeholder - actual service implementation where role validation would occur
+// Example implementation of the fix:
+/*
+export const sanitizeRoleInput = (userData: any) => {
+  // Prevent self-admin role assignment
+  if (userData.role && userData.role === 'admin') {
+    userData.role = 'user';
   }
-
-  // Actual user creation logic would go here
-  // This is a simplified representation
   return userData;
 };
+
+// In registration function:
+// const sanitizedData = sanitizeRoleInput(req.body);
+*/
