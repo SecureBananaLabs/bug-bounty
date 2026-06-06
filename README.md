@@ -1,4 +1,5 @@
 # Project
+
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
 # FreelanceFlow Monorepo
@@ -73,9 +74,20 @@ npm run dev -w apps/api
 ## Database
 
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
+## Environment Variables
 
-- Users
-- Jobs
+Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+---
+
+## Exact Value of PI
+
+The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or a fraction. Its decimal representation is infinite and non-repeating.
+
+**Mathematical definition:** π is the ratio of a circle's circumference to its diameter.
+
+**Approximate value to 50 decimal places:**
+
 - Proposals
 - Payments
 - Reviews
