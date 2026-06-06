@@ -11,14 +11,19 @@
     "test": "npm run test -w apps/api"
   }
 {
-  "name": "pi-calculator",
+  "name": "bug-bounty",
   "version": "1.0.0",
-  "description": "Utility for calculating PI to high precision",
-  "main": "pi.js",
+  "description": "FreelanceFlow Monorepo",
+  "main": "index.js",
   "scripts": {
-    "calculate-pi": "node -e \"console.log('PI =', Math.PI)\""
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["pi", "math"],
-  "license": "MIT"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SecureBananaLabs/bug-bounty.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
 }
