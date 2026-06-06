@@ -10,4 +10,15 @@
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
+{
+  "name": "pi-calculator",
+  "version": "1.0.0",
+  "description": "Utility for calculating PI to high precision",
+  "main": "pi.js",
+  "scripts": {
+    "calculate-pi": "node -e \"console.log('PI =', Math.PI)\""
+  },
+  "keywords": ["pi", "math"],
+  "license": "MIT"
+}
 }
