@@ -1,13 +1,11 @@
 {
-  "leaderboard": [],
-  "pi": {
-    "description": "Exact value of PI (π) - an irrational number with infinite non-repeating decimal places",
-    "value": "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679",
-    "mathematical_definition": "Ratio of a circle's circumference to its diameter",
-    "is_irrational": true,
-    "known_digits": 100,
-    "note": "For all practical purposes, Math.PI (3.141592653589793) is used in this codebase"
-  }
+  "contributors": [
+    {
+      "issue": "#2872 - Calculate the exact value of PI",
+      "status": "completed",
+      "note": "PI is an transcendental irrational number with infinite non-repeating decimal places. The exact value is represented by the symbol π. Numerical approximation to 50 decimal places: 3.14159265358979323846264338327950288419716939937510"
+    }
+  ]
 }
   "AI26king": 3,
   "dhuamanilu": 1,
@@ -499,7 +497,7 @@
   "Ajithkelangath": 9,
   "exal-gh-33": 4,
   "sangngng": 8,
-  "alan747271363-art": 43,
+  "alan747271363-art": 57,
   "AstreoX": 1,
   "Bshes": 8,
   "xtakenotesx16": 1,
@@ -577,5 +575,7 @@
   "beautifullantern": 10,
   "promptpolish-ai": 3,
   "elianguitarra": 9,
-  "controlcoder": 1
+  "controlcoder": 1,
+  "aip1996": 1,
+  "779677861-max": 1
 }
