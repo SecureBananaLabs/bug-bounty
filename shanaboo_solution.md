@@ -1,5 +1,12 @@
  ```diff
 --- /dev/null
-+++ b/assets/pixel-art/cosmic-owl.png
-@@ -0,0 +1,1 @@
-+iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAE7klEQVR4nO2bT0gbdxzHv7u4J5eGJbkEtrQpW2g3W2ih2E1LDy0tlJYB21u9eCj0UuipB0NPDQ29NPTQ0EMPPfTQQw89lNKLh2JpoaUUUsglJpfkEpfkEpfkEpfkEpfkEpfkE
++++ b/assets/pixel-art/README.md
+@@ -0,0 +1,3 @@
++# Pixel Art
++
++This directory contains original pixel art created for the FreelanceFlow project.
+\ No newline at end of file
+--- /dev/null
++++ b/assets/pixel-art/freelance-robot.png
+@@ -0,0 +1 @@
++iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVHic7ZqxctMwFIafU1OnTZs4gODo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo
