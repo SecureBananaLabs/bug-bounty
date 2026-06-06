@@ -1,11 +1,7 @@
-# Pixel Art: Cyberpunk City
+# Pixel Art: Cyberpunk Cityscape
 
-**What:** A 64x64 pixel art depiction of a cyberpunk cityscape at night.
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk city at night.
 
-**Why:** I chose this theme to represent the vibrant, always-on world of freelance tech work — where creativity meets code, and every window is someone burning the midnight oil on their next big project. The neon colors symbolize the energy and diversity of ideas in the freelance community.
+**Why:** I chose this theme to represent the intersection of technology and creativity that drives modern software development. The structured grid of the city mirrors the organized nature of code, while the vibrant neon palette symbolizes the innovative energy of the open-source community. This piece celebrates how developers build digital worlds, line by line, pixel by pixel.
 
-## Details
-- **Canvas size:** 64x64 pixels
-- **Format:** PNG
-- **Colors:** Limited palette with neon pinks, cyans, and deep purples
-- **Style:** Retro pixel art with modern cyberpunk aesthetic
+**File:** `cyberpunk_cityscape.png` (64x64 pixels, PNG format)
