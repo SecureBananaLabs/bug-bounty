@@ -52,6 +52,7 @@ model Job {
   client        User        @relation("ClientJobs", fields: [clientId], references: [id])
   categoryId    String
   category      Category    @relation(fields: [categoryId], references: [id])
+  skills        Skill[]
   proposals     Proposal[]
   payments      Payment[]
   createdAt     DateTime    @default(now())
@@ -114,6 +115,7 @@ model Skill {
   id            String      @id @default(cuid())
   name          String      @unique
   users         User[]
+  jobs          Job[]
 }
 
 model Notification {
