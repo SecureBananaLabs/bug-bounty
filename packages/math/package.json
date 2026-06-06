@@ -1,13 +1,8 @@
 {
   "name": "@freelanceflow/math",
   "version": "1.0.0",
-  "description": "Mathematical utilities including PI calculation",
+  "description": "Math utilities including PI constants",
   "main": "pi.js",
   "type": "module",
-  "scripts": {
-    "test": "node --test"
-  },
-  "keywords": ["math", "pi", "constants"],
-  "license": "MIT",
-  "private": true
+  "license": "MIT"
 }
