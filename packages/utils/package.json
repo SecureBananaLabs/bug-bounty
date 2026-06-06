@@ -1,0 +1,12 @@
+{
+  "name": "@freelanceflow/utils",
+  "version": "1.0.0",
+  "description": "Shared utility constants and helpers for the FreelanceFlow monorepo",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo 'No tests yet'"
+  },
+  "license": "MIT"
+}
