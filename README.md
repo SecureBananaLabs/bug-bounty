@@ -1,6 +1,7 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-⭐ Star this repository to support the project!
+
+> **Note on Issue #2872**: The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or fraction. Its decimal representation is infinite and non-repeating. The first 50 digits are: **3.14159265358979323846264338327950288419716939937510...** For all practical computations in this project, we use `Math.PI` (JavaScript) or equivalent language constants, which provide sufficient precision (typically ~15-17 decimal places) for engineering and financial calculations. See [discussion #2872](https://github.com/SecureBananaLabs/bug-bounty/discussions/2872) for community contributions on computational methods.
 
 # FreelanceFlow Monorepo
 
@@ -71,22 +72,9 @@ npm run dev -w apps/web
 npm run dev -w apps/api
 ```
 
-## Environment Variables
+## Database
 
-Each app/package expects its own `.env` values for DB, auth, and integrations.
-
----
-
-## Exact Value of PI (#2872)
-
-The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or a fraction. Its decimal representation goes on infinitely without repeating.
-
-**π = 3.14159265358979323846264338327950288419716939937510...**
-
-For all practical purposes in this project, we use `Math.PI` (JavaScript/TypeScript) which provides: **3.141592653589793**
-
-> Note: As π is transcendental and irrational, its exact decimal expansion is infinite and non-repeating. No finite calculation can represent all decimal places.
-> See [discussion #2872](https://github.com/SecureBananaLabs/bug-bounty/discussions/2872) for community contributions on this topic.
+Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
 - Users
 - Jobs
