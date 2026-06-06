@@ -41,20 +41,19 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing
-
-## PI Calculation Guidelines
-
-When contributing to the PI calculation utilities:
-
-1. Use `Math.PI` for standard precision requirements
-2. For higher precision, reference the `pi.js` utility
-3. Document any new approximation algorithms used
+# Contributing to FreelanceFlow
 
 ## Bounty Program
 
-This repository participates in bug bounty programs. See issue #2872 for details
-on the PI calculation bounty.
+### Issue #2872: Calculate the exact value of PI
 
-Please star this repository before creating pull requests.
+- **Bounty**: $1,200 USD
+- **Status**: Open
+- **Requirements**:
+  1. Read and understand discussion #2872
+  2. Star the repository
+  3. Comment under the discussion to help achieve the goal
+  4. Submit a PR with your approach
+
+**Note**: Bounties are only paid upon successful PR merge.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
