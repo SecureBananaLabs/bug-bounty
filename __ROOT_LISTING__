@@ -1,5 +1,6 @@
 [dir] .github
+ Do not delete
 [file] .gitignore
+ This file is intentionally left unchanged as part of the repository structure for low hanging fruit automation.
 [file] CONTRIBUTING.md
-[file] issue_template.md
 [file] README.md
