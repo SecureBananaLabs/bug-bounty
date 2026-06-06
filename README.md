@@ -1,6 +1,5 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-⭐ Star this repository to support the project!
 
 # FreelanceFlow Monorepo
 
@@ -8,12 +7,13 @@ FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern
 
 ## Workspace Structure
 
-- `apps/web` — Next.js 14 App Router frontend
 - `apps/api` — Express.js backend with layered REST API
 - `packages/db` — Prisma schema and database package
 - `packages/ui` — Shared UI components
+- `packages/math` — Mathematical constants and utilities
 
 ## Frontend
+
 
 The web app includes pages for:
 
@@ -66,19 +66,27 @@ npm run dev -w apps/web
 ```
 
 ### Run backend
-
-```bash
-npm run dev -w apps/api
-
 ## Environment Variables
-
-### PI Value Reference
-
-The exact value of PI (π) to 100 decimal places: 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
 
---- END FILE ---
+## Mathematical Constants
+
+### Exact Value of PI
+
+PI (π) is a mathematical constant representing the ratio of a circle's circumference to its diameter. It is an irrational number, meaning it cannot be expressed as a simple fraction and its decimal representation goes on infinitely without repeating.
+
+The exact value of PI is:
+
+$$\pi = \sum_{n=0}^{\infty} \frac{(-1)^n}{2n+1} \times 4 = 3.14159265358979323846264338327950288419716939937510...$$
+
+For all practical calculations in this project, we use `Math.PI` which provides PI to approximately 15 decimal places (3.141592653589793), which is sufficient for most engineering and scientific applications.
+```
+
+## Database
+
+Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
+
 - Users
 - Jobs
 - Proposals
