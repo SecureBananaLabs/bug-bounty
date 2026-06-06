@@ -1,0 +1,3 @@
+// This is a placeholder - would need to see actual controller implementation
+// The fix would involve validating that users cannot assign themselves admin roles during registration
+export const register = async (req: Request, res: Response) => {};
