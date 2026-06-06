@@ -1,15 +1,14 @@
 {
-  "bounties": [
-    {
-      "issue": "#2872",
-      "title": "Calculate the exact value of PI",
-      "bounty": "$1200",
-      "status": "open",
-      "discussion": "#2872"
-    }
-  ]
+  "leaderboard": [],
+  "pi": {
+    "description": "Exact value of PI (π) - an irrational number with infinite non-repeating decimal places",
+    "value": "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679",
+    "mathematical_definition": "Ratio of a circle's circumference to its diameter",
+    "is_irrational": true,
+    "known_digits": 100,
+    "note": "For all practical purposes, Math.PI (3.141592653589793) is used in this codebase"
+  }
 }
-  "hungle123-dev": 1,
   "AI26king": 3,
   "dhuamanilu": 1,
   "jing11223344": 4,
@@ -70,7 +69,7 @@
   "jynbil1": 5,
   "dzkjdxhbgog": 3,
   "RadWulf92": 2,
-  "rebel117": 25,
+  "rebel117": 29,
   "Caspia-n": 2,
   "JackSpiece": 4,
   "LZG3530606141": 3,
@@ -500,7 +499,7 @@
   "Ajithkelangath": 9,
   "exal-gh-33": 4,
   "sangngng": 8,
-  "alan747271363-art": 27,
+  "alan747271363-art": 43,
   "AstreoX": 1,
   "Bshes": 8,
   "xtakenotesx16": 1,
@@ -513,7 +512,7 @@
   "Alex-Parejo": 2,
   "badabadabing": 1,
   "ColumbusLabs": 3,
-  "bozicovichsantiago20-oss": 52,
+  "bozicovichsantiago20-oss": 53,
   "yZangEren": 12,
   "AxisIV": 9,
   "Gavriel-lab": 1,
