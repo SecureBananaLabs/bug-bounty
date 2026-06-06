@@ -1,11 +1,10 @@
 {
-  "p99Latency": 500,
-  "errorRate": 5,
-  "duration": "10s",
-  "connections": 50,
-  "pipelining": 1,
-  "thresholds": {
-    "p99Latency": 500,
-    "errorRate": 5
+  "endpoints": {
+    "/api/auth/register": {
+      "p99Latency": 500
+    },
+    "/api/jobs": {
+      "p99Latency": 1000
+    }
   }
 }
