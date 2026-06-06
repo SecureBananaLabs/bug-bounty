@@ -1,5 +1,7 @@
-# Pixel Art
+# Cosmic Cat Pixel Art
 
-## shanaboo_pixel_art.png
+A 64x64 pixel art of a cat floating in space, gazing at distant stars. Created to bring a touch of whimsical charm to the project — because every codebase needs a space cat.
 
-A retro-style robot character named "Bolt" with vibrant neon colors on a dark background, inspired by classic 8-bit gaming aesthetics and sci-fi themes. Created to add creative visual assets to the FreelanceFlow project.
+## Details
+- Canvas: 64x64 pixels
+- Format: PNG with transparency
