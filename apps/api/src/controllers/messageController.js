@@ -6,5 +6,10 @@ export async function getMessages(req, res) {
 }
 
 export async function postMessage(req, res) {
-  return ok(res, await sendMessage(req.body), 201);
+  // senderId must come from the verified JWT, not from the request body.
+  // Trusting req.body.senderId allows any authenticated user to impersonate
+  // another sender — a classic IDOR: I can send messages as any user ID.
+  const payload = { ...req.body, senderId: req.user.sub };
+  return ok(res, await sendMessage(payload), 201);
 }
+
