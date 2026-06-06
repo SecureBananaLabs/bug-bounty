@@ -1,7 +1,10 @@
-# Pixel Art: Cyberpunk Cityscape
+# Pixel Art
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk city at night.
+## retro-robot.png
 
-**Why:** I chose this theme to represent the intersection of technology and creativity that drives modern software development. The structured grid of the city mirrors the organized nature of code, while the vibrant neon palette symbolizes the innovative energy of the open-source community. This piece celebrates how developers build digital worlds, line by line, pixel by pixel.
+A friendly retro robot standing against a starfield background.
 
-**File:** `cyberpunk_cityscape.png` (64x64 pixels, PNG format)
+**Why:** Retro sci-fi aesthetics represent the intersection of human creativity and technological advancement—fitting for a freelance tech platform where human skill meets modern tools.
+
+- Canvas: 64x64 pixels
+- Palette: 8-color limited palette (classic 1980s computer graphics style)
