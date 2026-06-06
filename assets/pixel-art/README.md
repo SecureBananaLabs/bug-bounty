@@ -1,7 +1,11 @@
-# Cyberpunk City Pixel Art
+# Pixel Art: Cyberpunk City
 
-**What:** A 64x64 pixel art depiction of a cyberpunk city skyline at dusk.
+**File:** `cyberpunk-city.png`  
+**Dimensions:** 64x64 pixels  
+**Format:** PNG
 
-**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with urban landscapes, which makes for visually striking pixel art. The contrast between the dark buildings and bright neon lights showcases the medium well, and the flying vehicles add a sense of futuristic movement to the scene.
+## Description
 
-Created with creative thinking and attention to retro-futuristic detail.
+A cyberpunk cityscape pixel art depicting a rainy night in a futuristic metropolis. The piece uses a limited neon color palette with deep purples, electric blues, and hot pinks against dark grays to create atmospheric depth. Features include glowing building windows, holographic signage, and reflective wet pavement that captures the essence of a bustling dystopian future.
+
+Created for the bug bounty pixel art challenge to add creative visual assets to the project.
