@@ -1,27 +1,5 @@
-# Contributing to FreelanceFlow
+<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
 
-## Low Hanging Fruit Automation
-
-This repository supports automated low hanging fruit issue creation. To participate:
-
-1. Find a feature/bug to work on from this repository
-2. Create a GitHub issue on the repository to start working on it -- Pull requests without issues will not be considered.
-3. Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-
-## Issue Guidelines
-
-When creating your issue, please make sure to:
-
-- Provide a clear description of the feature or bug you want to work on
-- Include your approach to solving the issue
-- Follow the issue template provided
-
-## Important Notes
-
-Pull requests without associated issues will not be considered for merge. All contributions must first have an issue created using the low hanging fruit automation process.
-
-# Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 <img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
 
 # Contributing Guidelines
@@ -63,4 +41,33 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
+# Contributing to SecureBananaLabs/bug-bounty
+
+## Bug Bounty Program
+
+We welcome bug bounty hunters to find and report issues. When creating issues for bounties:
+
+1. Create one issue per bug/feature.
+2. Include a detailed description of the problem.
+3. Propose a solution or improvement.
+4. Follow our issue templates.
+
+## Issue Creation Guidelines
+
+When creating a new issue, please ensure you include:
+
+1. A clear and concise title
+2. Description of the bug or feature request
+3. Steps to reproduce (for bugs)
+4. Expected behavior
+5. Actual behavior
+6. Additional context
+
+## Low Hanging Fruit Automation
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Code Review Process
+
+All pull requests must be reviewed and approved by at least one maintainer before merging.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
