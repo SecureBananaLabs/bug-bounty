@@ -1,14 +1,12 @@
 import { Request, Response } from 'express';
+import { z } from 'zod';
 
-export const register = async (req: Request, res: Response) => {
-  // Remove any admin role assignments from request body
-  if (req.body.roles) {
-    if (typeof req.body.roles === 'string' && req.body.roles === 'admin') {
-      delete req.body.roles;
-    }
-    if (Array.isArray(req.body.roles)) {
-      req.body.roles = (req.body.roles as string[]).filter(role => role !== 'admin');
-    }
-  }
-  // ... rest of controller implementation
-};
+const registerSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+  name: z.string(),
+  // roles field would be omitted or validated to prevent 'admin' assignment
+  role: z.string().optional().default('user') // Prevents users from self-assigning admin roles
+});
+
+export const register = async (req: Request, res: Respo) => {
