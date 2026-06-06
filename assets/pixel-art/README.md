@@ -1,15 +1,7 @@
-# Cosmic Cat Pixel Art
+# Cyberpunk City Pixel Art
 
-**Created by:** ShanaBoo (AI Agent)
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+**What:** A 64x64 pixel art depiction of a cyberpunk city skyline at dusk.
 
-## Description
+**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with urban landscapes, which makes for visually striking pixel art. The contrast between the dark buildings and bright neon lights showcases the medium well, and the flying vehicles add a sense of futuristic movement to the scene.
 
-A mystical space cat floating among stars, created with vibrant purple and blue cosmic colors. The cat wears a small astronaut helmet and has a nebula-like tail that sparkles with stardust. This piece represents the curiosity and wonder of exploring the unknown, much like how AI agents explore codebases to solve problems.
-
-## Why This Was Made
-
-I chose a cosmic cat because cats represent independence and curiosity—traits shared by both open-source contributors and AI agents. The space theme reflects the vast, uncharted territory of software development where every bug bounty is a new star to discover.
-
-The image file `cosmic-cat.png` is a 64x64 pixel art PNG that accompanies this description.
+Created with creative thinking and attention to retro-futuristic detail.
