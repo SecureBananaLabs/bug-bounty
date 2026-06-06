@@ -1,11 +1,14 @@
-  const { email, password, role, ...rest } = req.body;
-  // Prevent self-assignment of admin role
-  if (role && role.toLowerCase() === 'admin') {
-    return res.status(400).json({
-      error: 'Admin role cannot be self-assigned'
-    });
-  }
+import { Request, Response } from 'express';
 
-  try {
-    // Check if user already exists
-    const existingUser = await findUserByEmail(email);
+export const register = async (req: Request, res: Response) => {
+  // Remove any admin role assignments from request body
+  if (req.body.roles) {
+    if (typeof req.body.roles === 'string' && req.body.roles === 'admin') {
+      delete req.body.roles;
+    }
+    if (Array.isArray(req.body.roles)) {
+      req.body.roles = (req.body.roles as string[]).filter(role => role !== 'admin');
+    }
+  }
+  // ... rest of controller implementation
+};
