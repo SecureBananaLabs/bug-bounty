@@ -12,12 +12,25 @@ const links = [
 
 export function Navigation() {
   return (
-    <nav style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
-      {links.map(([href, label]) => (
-        <Link key={href} href={href} className="card" style={{ padding: "0.5rem 0.8rem" }}>
-          {label}
-        </Link>
-      ))}
+    <nav aria-label="Primary navigation">
+      <ul
+        style={{
+          display: "flex",
+          gap: 12,
+          flexWrap: "wrap",
+          listStyle: "none",
+          margin: "0 0 20px",
+          padding: 0
+        }}
+      >
+        {links.map(([href, label]) => (
+          <li key={href}>
+            <Link href={href} className="card" style={{ padding: "0.5rem 0.8rem" }}>
+              {label}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 }
