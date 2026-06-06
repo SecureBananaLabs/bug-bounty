@@ -1,12 +1,12 @@
  ```diff
---- a/.github/workflows/low-hanging-fruit.yml
+--- /dev/null
 +++ b/.github/workflows/low-hanging-fruit.yml
 @@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    - cron: '0 0 * * *'
++    - cron: '0 0 * * 0'
 +  workflow_dispatch:
 +
 +permissions:
@@ -28,11 +28,25 @@
 +      - name: Install dependencies
 +        run: npm ci
 +
-+      - name: Run low hanging fruit detection
-+        run: node .github/scripts/detect-low-hanging-fruit.js
++      - name: Run low hanging fruit detector
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          GITHUB_REPOSITORY: ${{ github.repository }}
++        run: node .github/scripts/detect-low-hanging-fruit.js
++
++      - name: Create issues from detected items
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++        run: node .github/scripts/create-issues.js
++
++      - name: Recurse if new issues found
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++        run: |
++          ISSUE_COUNT=$(cat .github/scripts/issue-count.txt 2>/dev/null || echo "0")
++          if [ "$ISSUE_COUNT" -gt 0 ]; then
++            echo "New issues created: $ISSUE_COUNT. Triggering recursive run..."
++            gh workflow run low-hanging-fruit.yml
++          fi
 +--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
 @@ -0,0 +1,218 @@
@@ -40,122 +54,108 @@
 +const path = require('path');
 +const { execSync } = require('child_process');
 +
-+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
-+const [OWNER, REPO] = GITHUB_REPOSITORY.split('/');
++const REPO_ROOT = process.cwd();
++const ISSUES_FILE = path.join(REPO_ROOT, '.github', 'scripts', 'detected-issues.json');
++const COUNT_FILE = path.join(REPO_ROOT, '.github', 'scripts', 'issue-count.txt');
 +
-+const RESTRICTED_STRING = 'This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.';
++const LOW_HANGING_PATTERNS = [
++  {
++    type: 'TODO/FIXME comment',
++    pattern: /(?:TODO|FIXME|XXX|HACK|BUG|OPTIMIZE|REFACTOR)[\s:]*(.+)/i,
++    extensions: ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rs', '.md'],
++    severity: 'low',
++    description: 'Code contains unresolved TODO/FIXME comments that should be addressed.'
++  },
++  {
++    type: 'Missing error handling',
++    pattern: /catch\s*\([^)]*\)\s*\{\s*(?:\/\/.*)?\s*\}/,
++    extensions: ['.ts', '.tsx', '.js', '.jsx'],
++    severity: 'medium',
++    description: 'Empty catch blocks found that may swallow errors silently.'
++  },
++  {
++    type: 'Hardcoded credentials',
++    pattern: /(?:password|secret|key|token)\s*[:=]\s*["'][^"']+["']/i,
++    extensions: ['.ts', '.tsx', '.js', '.jsx', '.py', '.env.example'],
++    severity: 'high',
++    description: 'Potential hardcoded credentials or secrets in source code.'
++  },
++  {
++    type: 'Console.log statements',
++    pattern: /console\.(log|warn|error|debug)\s*\(/,
++    extensions: ['.ts', '.tsx', '.js', '.jsx'],
++    severity: 'low',
++    description: 'Debug console statements should be removed or replaced with proper logging.'
++  },
++  {
++    type: 'Missing input validation',
++    pattern: /app\.(get|post|put|delete|patch)\s*\([^,]+,\s*async?\s*\([^)]*\)\s*=>/,
++    extensions: ['.ts', '.js'],
++    severity: 'medium',
++    description: 'API routes may be Sho missing input validation middleware.'
++  },
++  {
++    type: 'Unused imports/variables',
++    pattern: /^(?:import|const|let|var)\s+\w+\s*(?:=|from)/m,
++    extensions: ['.ts', '.tsx', '.js', '.jsx'],
++    severity: 'low',
++    description: 'Potential unused imports or variables (requires manual verification).'
++  },
++  {
++    type: 'Insecure HTTP links',
++    pattern: /http:\/\//,
++    extensions: ['.ts', '.tsx', '.js', '.jsx', '.md', '.html', '.css'],
++    severity: 'medium',
++    description: 'Insecure HTTP links found; should use HTTPS where possible.'
++  },
++  {
++    type: 'Deprecated API usage',
++    pattern: /(?:deprecated|DEPRECATED|@deprecated)/i,
++    extensions: ['.ts', '.tsx', '.js', '.jsx', '.py', '.java'],
++    severity: 'low',
++    description: 'Usage of deprecated APIs or methods detected.'
++  }
++];
 +
-+function exec(cmd) {
-+  return execSync(cmd, { encoding: 'utf-8', cwd: process.cwd() }).trim();
-+}
-+
-+function graphql(query, variables = {}) {
-+  const response = exec(`curl -s -X POST \
-+    -H "Authorization: bearer ${GITHUB_TOKEN}" \
-+    -H "Content-Type: application/json" \
-+    -d '${JSON.stringify({ query, variables })}' \
-+    https://api.github.com/graphql`);
-+  return JSON.parse(response);
-+}
-+
-+function rest(method, endpoint, body) {
-+  const url = `https://api.github.com/repos/${OWNER}/${REPO}${endpoint}`;
-+  const cmd = `curl -s -X ${method} \
-+    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-+    -H "Accept: application/vnd.github.v3+json" \
-+    -H "Content-Type: application/json" \
-+    -d '${JSON.stringify(body)}' \
-+    "${url}"`;
-+  const response = exec(cmd);
-+  return JSON.parse(response);
-+}
-+
-+function getExistingIssues() {
-+  const query = `
-+    query($owner: String!, $repo: String!) {
-+      repository(owner: $owner, name: $repo) {
-+        issues(first: 100, states: [OPEN, CLOSED], orderBy: {field: CREATED_AT, direction: DESC}) {
-+          nodes {
-+            number
-+            title
-+            body
-+            state
-+            createdAt
-+          }
++function findFiles(dir, extensions, excludeDirs = ['node_modules', '.git', 'dist', 'build', '.next']) {
++  const files = [];
++  
++  function traverse(currentDir) {
++    const entries = fs.readdirSync(currentDir, { withFileTypes: true });
++    
++    for (const entry of entries) {
++      const fullPath = path.join(currentDir, entry.name);
++      
++      if (entry.isDirectory()) {
++        if (!excludeDirs.includes(entry.name)) {
++          traverse(fullPath);
++        }
++      } else if (entry.isFile()) {
++        const ext = path.extname(entry.name);
++        if (extensions.includes(ext)) {
++          files.push(fullPath);
 +        }
 +      }
 +    }
-+  `;
-+  const result = graphql(query, { owner: OWNER, repo: REPO });
-+  return result.data?.repository?.issues?.nodes || [];
++  }
++  
++  traverse(dir);
++  return files;
 +}
 +
-+function issueExists(title, existingIssues) {
-+  return existingIssues.some(issue => 
-+    issue.title.toLowerCase().includes(title.toLowerCase()) ||
-+    title.toLowerCase().includes(issue.title.toLowerCase())
-+  );
-+}
-+
-+function createIssue(title, body) {
-+  return rest('POST', '/issues', {
-+    title,
-+    body: `${body}\n\n${RESTRICTED_STRING}`,
-+    labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', 'bounty', '💎 Bounty']
-+  });
-+}
-+
-+function scanForLowHangingFruit() {
++function scanFile(filePath, patterns) {
++  const content = fs.readFileSync(filePath, 'utf-8');
++  const lines = content.split('\n');
 +  const findings = [];
 +  
-+  // Check for common low hanging fruit patterns
-+  const checks = [
-+    {
-+      name: 'Missing Input Validation',
-+      pattern: /req\.body|req\.query|req\.params/,
-+      check: (content, filePath) => {
-+        if (!content.includes('zod') && !content.includes('joi') && !content.includes('validator')) {
-+          return `File ${filePath} appears to handle user input without explicit validation. Consider adding Zod or similar validation.`;
-+        }
-+        return null;
-+      }
-+    },
-+    {
-+      name: 'Missing Error Handling',
-+      pattern: /async function|\.then\(/,
-+      check: (content, filePath) => {
-+        const lines = content.split('\n');
-+        const asyncLines = lines.filter(l => l.includes('await ') && !l.includes('try') && !l.includes('catch'));
-+        if (asyncLines.length > 5 && !content.includes('try {') && !content.includes('catch (')) {
-+          return `File ${filePath} has multiple async operations without try/catch blocks. Consider adding proper error handling.`;
-+        }
-+        return null;
-+      }
-+    },
-+    {
-+      name: 'Hardcoded Secrets Pattern',
-+      pattern: /password|secret|key|token/i,
-+      check: (content, filePath) => {
-+        if (content.match(/['"]\w{16,}['"]/) && !filePath.includes('.env.example')) {
-+          return `File ${filePath} may contain hardcoded secrets. Move to environment variables.`;
-+        }
-+        return null;
-+      }
-+    },
-+    {
-+      name: 'Missing Rate Limiting',
-+      pattern: /app\.(get|post|put|delete)\(/,
-+      check: (content, filePath) => {
-+        if (filePath.includes('routes') && !content.includes('rateLimit') && !content.includes('rate-limit')) {
-+          return `Route file ${filePath} may be missing rate limiting. Consider adding express-rate-limit.`;
-+        }
-+        return null;
-+      }
-+    },
-+    {
-+      name: 'SQL Injection Risk',
-+      pattern: /prisma\.\$queryRaw|query\(|execute\(/,
-+      check: (content, filePath) => {
-+        if (content.includes('$queryRaw') && content.includes('${')) {
-+          return `File ${filePath} uses template literals with $queryRaw which may be vulnerable to
++  for (const pattern of patterns) {
++    for (let i = 0; i < lines.length; i++) {
++      const line = lines[i];
++      if (pattern.pattern.test(line)) {
++        findings.push({
++          type: pattern.type,
++          severity: pattern.severity,
++          description: pattern.description,
++          file: path.relative(REPO_ROOT, filePath),
++          line: i + 1,
++         
