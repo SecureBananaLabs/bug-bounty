@@ -21,69 +21,25 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          node -e "
-            const fs = require('fs');
-            const path = require('path');
-            const { execSync } = require('child_process');
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-            const repo = process.env.GITHUB_REPOSITORY;
-            const token = process.env.GITHUB_TOKEN;
-
-            // Helper to make GitHub API requests
-            function githubApi(endpoint, method = 'GET', data = null) {
-              const url = \`https://api.github.com/repos/\${repo}\${endpoint}\`;
-              const options = {
-                method,
-                headers: {
-                  'Authorization': \`token \${token}\`,
-                  'Accept': 'application/vnd.github.v3+json',
-                  'User-Agent': 'LowHangingFruit-Bot'
-                }
-              };
-              
-              if (data) {
-                options.headers['Content-Type'] = 'application/json';
-              }
-
-              const cmd = \`curl -s -X \${method} \\\"\${url}\\\" -H \\\"Authorization: token \${token}\\\" -H \\\"Accept: application/vnd.github.v3+json\\\" \${data ? \`-d '\${JSON.stringify(data)}'\` : ''}\`;
-              return JSON.parse(execSync(cmd, { encoding: 'utf-8' }));
-            }
-
-            // Detect potential low hanging fruit issues
-            const issues = [];
-
-            // Check for missing tests
-            const testFiles = execSync('find . -name \"*.test.*\" -o -name \"*.spec.*\" 2>/dev/null || true', { encoding: 'utf-8' });
-            if (!testFiles.trim()) {
-              issues.push({
-                title: 'Add unit tests for core functionality',
-                body: 'This repository lacks test coverage. Adding tests would improve reliability and catch regressions early.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
-              });
-            }
-
-            // Check for missing documentation
-            if (!fs.existsSync('CONTRIBUTING.md') || fs.statSync('CONTRIBUTING.md').size < 100) {
-              issues.push({
-                title: 'Expand CONTRIBUTING.md with detailed guidelines',
-                body: 'The CONTRIBUTING.md file is missing or too brief. Expanding it would help new contributors understand how to participate effectively.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
-              });
-            }
-
-            // Check for missing CI/CD
-            if (!fs.existsSync('.github/workflows')) {
-              issues.push({
-                title: 'Set up CI/CD pipeline with GitHub Actions',
-                body: 'No CI/CD workflows detected. Setting up automated testing and deployment would improve code quality and release reliability.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
-              });
-            }
-
-            // Create issues
-            for (const issue of issues) {
-              console.log(\`Creating issue: \${issue.title}\`);
-              githubApi('/issues', 'POST', issue);
-            }
-          "
+  recursive-issue-creation:
+    runs-on: ubuntu-latest
+    needs: detect-and-create-issues
+    if: always()
+    steps:
+      - name: Trigger next recursive run
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: low-hanging-fruit-recursive
+          client-payload: '{"recursive": true}'
