@@ -1,7 +1,6 @@
 # Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2e3ebf056677f" />
-
-![Pixel Art - Cyberpunk Cityscape](assets/pixel-art/cyberpunk_cityscape.png)
+<img width="64" height="64" alt="Pixel Art" src="assets/pixel-art/shanaboo_pixel_art.png" />
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
 # FreelanceFlow Monorepo
 
