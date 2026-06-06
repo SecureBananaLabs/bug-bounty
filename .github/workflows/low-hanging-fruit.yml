@@ -2,7 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 permissions:
@@ -27,110 +27,21 @@ jobs:
       - name: Run low hanging fruit detection
         id: detect
         run: |
-          node -e "
-            const fs = require('fs');
-            const path = require('path');
-            
-            const patterns = [
-              { pattern: 'TODO|FIXME|XXX|HACK|BUG', files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'] },
-              { pattern: 'console\\.(log|warn|error)', files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'] },
-              { pattern: 'any|unknown', files: ['**/*.ts', '**/*.tsx'] },
-              { pattern: 'eval\\(|Function\\(', files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'] },
-              { pattern: 'process\\.env\\.', files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'] },
-            ];
-            
-            const findings = [];
-            const glob = require('glob');
-            
-            patterns.forEach(({ pattern, files }) => {
-              files.forEach(filePattern => {
-                const matches = glob.sync(filePattern, { ignore: ['node_modules/**', 'dist/**', 'build/**', '.next/**'] });
-                matches.forEach(file => {
-                  const content = fs.readFileSync(file, 'utf8');
-                  const lines = content.split('\n');
-                  lines.forEach((line, index) => {
-                    const regex = new RegExp(pattern, 'i');
-                    if (regex.test(line) && !line.includes('eslint-disable')) {
-                      findings.push({
-                        file: file,
-                        line: index + 1,
-                        match: line.trim(),
-                        category: pattern === 'TODO|FIXME|XXX|HACK|BUG' ? 'todo-fixme' :
-                                  pattern === 'console\\.(log|warn|error)' ? 'console-usage' :
-                                  pattern === 'any|unknown' ? 'type-safety' :
-                                  pattern === 'eval\\(|Function\\(' ? 'security-risk' :
-                                  'env-variable'
-                      });
-                    }
-                  });
-                });
-              });
-            });
-            
-            const grouped = findings.reduce((acc, finding) => {
-              acc[finding.category] = acc[finding.category] || [];
-              acc[finding.category].push(finding);
-              return acc;
-            }, {});
-            
-            fs.writeFileSync('findings.json', JSON.stringify(grouped, null, 2));
-            console.log('Findings written to findings.json');
-          "
-
-      - name: Create issues from findings
+          node scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Create GitHub issues for detected items
+        if: steps.detect.outputs.issues_to_create != ''
         run: |
-          node -e "
-            const fs = require('fs');
-            const findings = JSON.parse(fs.readFileSync('findings.json', 'utf8'));
-            
-            const issueTemplate = (category, count, examples) => \`## Low Hanging Fruit: \${category}
+          node scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUES_DATA: ${{ steps.detect.outputs.issues_to_create }}
 
-This issue was automatically created by the Low Hanging Fruit automation.
-
-**Category:** \${category}
-**Findings:** \${count} occurrence(s)
-
-### Examples
-\${examples}
-
-### Next Steps
-- Review the identified code locations
-- Determine if changes are needed
-- Create a focused fix for this category
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-\`;
-            
-            const { Octokit } = require('@octokit/rest');
-            const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-            
-            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
-            
-            async function createIssues() {
-              for (const [category, items] of Object.entries(findings)) {
-                const examples = items.slice(0, 5).map(i => \`- \${i.file}:\${i.line}: \`\${i.match}\`\`).join('\n');
-                const title = \`[Low Hanging Fruit] \${category}: \${items.length} finding(s)\`;
-                const body = issueTemplate(category, items.length, examples);
-                
-                try {
-                  await octokit.rest.issues.create({
-                    owner,
-                    repo,
-                    title,
-                    body,
-                    labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty']
-                  });
-                  console.log(\`Created issue for \${category}\`);
-                } catch (err) {
-                  console.error(\`Failed to create issue for \${category}:\`, err.message);
-                }
-              }
-            }
-            
-            createIssues();
-          "
-
-      - name: Cleanup
-        run: rm -f findings.json
+      - name: Report status
+        run: |
+          echo "Low hanging fruit automation completed"
+          echo "Issues created: ${{ steps.detect.outputs.issues_created_count || 0 }}"
