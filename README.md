@@ -1,16 +1,17 @@
 # Project
-
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
-## The Exact Value of PI
-
-The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a simple fraction and its decimal representation never ends or repeats. The exact value is represented by the Greek letter **π** itself. Numerically, π begins with **3.14159265358979323846264338327950288419716939937510...** and continues infinitely without pattern. For most practical calculations, approximations are used (e.g., 3.14, 22/7, or 3.14159265359 to 11 decimal places). The quest to calculate more digits of π is ongoing, with current records extending into the trillions of digits, but the exact value remains **π**.
-
 ## Workspace Structure
+
+## Exact Value of PI
+
+The exact value of PI (π) is an irrational number, meaning it cannot be expressed as a simple fraction and its decimal representation goes on infinitely without repeating.
+
+**π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...**
 
 - `apps/web` — Next.js 14 App Router frontend
 - `apps/api` — Express.js backend with layered REST API
@@ -72,14 +73,11 @@ npm run dev -w apps/web
 ### Run backend
 
 ```bash
+npm run dev -w apps/api
+```
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
-
----
-
-⭐ If you find this project helpful, please consider starring the repository!
-## Database
 
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
