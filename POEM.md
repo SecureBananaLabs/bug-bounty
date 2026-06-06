@@ -1,38 +1,16 @@
-# The Flow of Code and Coin
+# Code's Silent Symphony
 
-*An ode to the freelance spirit*
+In circuits deep where data flows,
+And electrons dance in silent prose,
+The developer's mind does weave
+Through lines of code, intent to achieve.
 
----
+Algorithms hum in electric thought,
+While functions pure are finely wrought,
+Each semicolon, a note so small,
+In code's grand, resounding call.
 
-## I. The Marketplace Awakens
-
-In digital halls where seekers meet,
-The skilled and bold exchange their seat—
-A client posts, a dream takes form,
-Through wire and wave, a contract born.
-No office walls, no timecard's choke,
-Just talent fired, a single stroke.
-
-## II. The Proposal's Gamble
-
-Each freelancer crafts their plea,
-"Choose me, choose me, I am free
-To build your vision, line by line,
-To make your broken codebase shine."
-The inbox hums with hope and dread,
-While Stripe awaits the thread ahead.
-
-## III. The Flow Complete
-
-From schema drawn in Prisma's light,
-To Next.js pages served at night,
-The monorepo breathes and grows—
-In `apps/api`, in `apps/web`, it knows
-That value flows when trust is true:
-The coder codes. The pay comes through.
-
----
-
-*Written for FreelanceFlow,*
-*where gig meets grind and dreams take shape—*
-*one commit, one contract, one connection at a time.*
+The servers sing, the databases hum,
+As ones and zeros start to run,
+The project builds, the users click,
+In binary dreams, their wishes' grip.
