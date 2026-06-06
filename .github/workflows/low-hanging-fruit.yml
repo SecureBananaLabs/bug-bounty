@@ -24,24 +24,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node scripts/detect-low-hanging-fruit.js
+      - name: Run low hanging fruit detector
+        run: node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
 
-      - name: Create GitHub issues for detected items
-        if: steps.detect.outputs.issues_to_create != ''
-        run: |
-          node scripts/create-issues.js
+      - name: Create issues for detected items
+        run: node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          ISSUES_DATA: ${{ steps.detect.outputs.issues_to_create }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
 
-      - name: Report status
-        run: |
-          echo "Low hanging fruit automation completed"
-          echo "Issues created: ${{ steps.detect.outputs.issues_created_count || 0 }}"
+      - name: Update leaderboard
+        run: node .github/scripts/update-leaderboard.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
