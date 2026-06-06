@@ -1,10 +1,5 @@
-# Pixel Art
+# Pixel Art: Cyberpunk Cityscape
 
-## retro-robot.png
+A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night, featuring neon-lit skyscrapers, holographic billboards, and a glowing moon. Created to evoke the feeling of a bustling digital metropolis where freelancers and clients might connect in a sci-fi future—tying into the FreelanceFlow project's theme of modern digital work.
 
-A friendly retro robot standing against a starfield background.
-
-**Why:** Retro sci-fi aesthetics represent the intersection of human creativity and technological advancement—fitting for a freelance tech platform where human skill meets modern tools.
-
-- Canvas: 64x64 pixels
-- Palette: 8-color limited palette (classic 1980s computer graphics style)
+Theme: Cyberpunk / Sci-Fi | Canvas: 64x64 pixels | Format: PNG
