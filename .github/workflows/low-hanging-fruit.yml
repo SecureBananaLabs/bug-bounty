@@ -2,8 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * 0'  # Weekly on Sunday
   workflow_dispatch:
 
 permissions:
@@ -17,67 +16,106 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node -e "
+      - name: Detect low hanging fruit and create issues
+        uses: actions/github-script@v7
+        with:
+          script: |
             const fs = require('fs');
             const path = require('path');
-            
-            const issues = [];
-            
-            // Check for common low hanging fruit patterns
-            const checks = [
-              {
-                title: 'Add input validation for job creation endpoint',
-                description: 'The job creation endpoint lacks comprehensive input validation. Add Zod schema validation for all fields including title, description, budget, and deadline.',
-                labels: ['bug', 'good first issue', 'help wanted']
-              },
-              {
-                title: 'Implement rate limiting for authentication routes',
-                description: 'Authentication routes need rate limiting to prevent brute force attacks. Implement express-rate-limit middleware for login and register endpoints.',
-                labels: ['bug', 'security', 'good first issue']
-              },
-              {
-                title: 'Add error handling middleware for unhandled routes',
-                description: 'The API does not have a proper 404 handler for undefined routes. Add a catch-all middleware to handle unhandled routes gracefully.',
-                labels: ['bug', 'good first issue']
-              },
-              {
-                title: 'Implement pagination for job listings API',
-                description: 'The job listings endpoint returns all jobs without pagination. Implement cursor-based or offset pagination to improve performance.',
-                labels: ['bug', 'performance', 'good first issue']
-              },
-              {
-                title: 'Add database connection health check endpoint',
-                description: 'There is no health check endpoint to verify database connectivity. Add a /health endpoint that checks Prisma connection status.',
-                labels: ['bug', 'good first issue', 'help wanted']
+
+            // Recursively scan for common low hanging fruit patterns
+            async function scanForIssues(dir, issues = []) {
+              const entries = fs.readdirSync(dir, { withFileTypes: true });
+              
+              for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+                
+                if (entry.isDirectory()) {
+                  // Skip common non-source directories
+                  if (['node_modules', '.git', 'dist', 'build', '.next', 'coverage'].includes(entry.name)) {
+                    continue;
+                  }
+                  await scanForIssues(fullPath, issues);
+                } else {
+                  // Check for TODO/FIXME comments
+                  if (/\.(ts|tsx|js|jsx|py|java|go|rs|md)$/.test(entry.name)) {
+                    try {
+                      const content = fs.readFileSync(fullPath, 'utf8');
+                      const lines = content.split('\n');
+                      
+                      lines.forEach((line, index) => {
+                        const todoMatch = line.match(/(TODO|FIXME|HACK|BUG|XXX)[\s:]*(.*)/i);
+                        if (todoMatch) {
+                          issues.push({
+                            type: 'todo',
+                            file: fullPath,
+                            line: index + 1,
+                            description: todoMatch[2].trim() || todoMatch[1],
+                            severity: todoMatch[1].toUpperCase() === 'BUG' ? 'high' : 'medium'
+                          });
+                        }
+                      });
+                    } catch (e) {
+                      // Skip binary or unreadable files
+                    }
+                  }
+                  
+                  // Check for empty files
+                  if (fs.statSync(fullPath).size === 0) {
+                    issues.push({
+                      type: 'empty_file',
+                      file: fullPath,
+                      description: `Empty file detected: ${fullPath}`
+                    });
+                  }
+                }
               }
-            ];
-            
-            // Select a random issue that has not been created recently
-            const selectedIssue = checks[Math.floor(Math.random() * checks.length)];
-            
-            // Output the issue details
-            const output = \`ISSUE_TITLE=\${selectedIssue.title}\nISSUE_DESCRIPTION=\${selectedIssue.description}\nISSUE_LABELS=\${selectedIssue.labels.join(',')}\`;
-            fs.appendFileSync(process.env.GITHUB_OUTPUT, output + '\n');
-          "
+              
+              return issues;
+            }
 
-      - name: Create GitHub Issue
-        uses: peter-evans/create-issue@v5
-        with:
-          title: ${{ steps.detect.outputs.ISSUE_TITLE }}
-          body: |
-            ${{ steps.detect.outputs.ISSUE_DESCRIPTION }}
+            const foundIssues = await scanForIssues('.');
+            
+            // Group issues by file for cleaner issue creation
+            const groupedByFile = foundIssues.reduce((acc, issue) => {
+              const key = issue.file;
+              if (!acc[key]) acc[key] = [];
+              acc[key].push(issue);
+              return acc;
+            }, {});
 
-            This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-          labels: ${{ steps.detect.outputs.ISSUE_LABELS }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+            // Create GitHub issues for significant findings
+            for (const [file, issues] of Object.entries(groupedByFile)) {
+              const title = `Low Hanging Fruit: Issues in ${path.basename(file)}`;
+              const body = `## Automated Detection Results
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+### Detected Issues in \`${file}\`:
+${issues.map(i => \`- Line ${i.line}: [${i.type.toUpperCase()}] ${i.description}\`).join('\n')}
+
+### Suggested Actions
+- Review and address each detected item
+- Update tests if applicable
+- Mark this issue as resolved when complete`;
+
+              try {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: title,
+                  body: body,
+                  labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly']
+                });
+                console.log(`Created issue for ${file}`);
+              } catch (error) {
+                console.error(`Failed to create issue for ${file}:`, error.message);
+              }
+            }
+
+            console.log(`Scan complete. Found ${foundIssues.length} issues across ${Object.keys(groupedByFile).length} files.`);
