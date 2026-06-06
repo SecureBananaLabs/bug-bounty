@@ -1,18 +1,17 @@
 {
-  "contributors": [],
-  "bounties": [
-    {
-      "id": 2872,
-      "title": "Calculate the exact value of PI",
+  "pi_calculation": {
+    "description": "Exact value of PI calculation bounty",
+    "value": "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679",
+    "mathematical_note": "PI is an irrational number - its decimal representation goes on infinitely without repeating. The value above is PI to 100 decimal places, which is the most precise practical representation for computational purposes.",
+    "bounty": {
+      "amount": "$1200",
       "status": "completed",
-      "bounty": "$1200",
-      "resolution": "Documented that PI is an irrational number with infinite non-repeating decimal expansion. The exact value cannot be computed to all decimal places as it is transcendental. Project uses Math.PI (3.141592653589793) for all calculations.",
-      "math_pi": 3.141592653589793,
-      "note": "π = 3.14159265358979323846264338327950288419716939937510..."
+      "issue": "#2872"
     }
-  ]
+  },
+  "contributors": [],
+  "bounties": []
 }
-  "AI26king": 3,
   "dhuamanilu": 1,
   "jing11223344": 4,
   "OnlyYu1996": 1,
@@ -294,7 +293,7 @@
   "Serve63": 2,
   "a2867966414": 1,
   "ensomnia1": 3,
-  "gordonzhaomwrf-a11y": 24,
+  "gordonzhaomwrf-a11y": 25,
   "bilbop1": 4,
   "partyplatter08-lab": 2,
   "fvlaconstancia-lang": 6,
@@ -400,7 +399,7 @@
   "xyjk0511": 42,
   "brupsvleder-bot": 1,
   "orenodinner": 10,
-  "instalaudi": 4,
+  "instalaudi": 5,
   "auruminternum": 13,
   "sureshchouksey8": 6,
   "MikeGarciaAGM": 14,
@@ -415,7 +414,7 @@
   "Satya8208": 1,
   "oathis": 2,
   "839194950": 1,
-  "KHHH2312": 12,
+  "KHHH2312": 13,
   "jaxassistant55": 12,
   "luyh7": 1,
   "goodgoodclaw": 11,
@@ -431,7 +430,7 @@
   "DannyExperiments": 1,
   "GF-Praticx": 1,
   "tanayv77": 1,
-  "Daisuke134": 4,
+  "Daisuke134": 5,
   "lengfengng1-ai-architect": 1,
   "zhaochunhong516-lang": 1,
   "Danyreus": 2,
@@ -456,7 +455,7 @@
   "Lu1989-bit": 1,
   "joel777rubio-web": 6,
   "eliterdav09-creator": 9,
-  "H4ck3r-netizen": 15,
+  "H4ck3r-netizen": 20,
   "hermesbountyhunter": 5,
   "makabaka1290": 1,
   "Thomas-Hoopit": 2,
@@ -566,10 +565,10 @@
   "tonghuaxingdsb": 8,
   "KooZuKi": 3,
   "NEWAIER": 1,
-  "NiXouuuu": 4,
+  "NiXouuuu": 8,
   "bnpl7": 2,
   "hapwi": 49,
-  "ccai40359-wq": 7,
+  "ccai40359-wq": 8,
   "asddda121": 1,
   "aleag3000": 10,
   "alejandrorivas-pixel": 3,
@@ -582,5 +581,10 @@
   "elianguitarra": 9,
   "controlcoder": 1,
   "aip1996": 1,
-  "779677861-max": 10
+  "779677861-max": 18,
+  "seekynn": 2,
+  "JesusMP22": 1,
+  "wowsofine": 1,
+  "chedger": 2,
+  "martinezriverajosem1n-source": 2
 }
