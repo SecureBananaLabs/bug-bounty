@@ -1,11 +1,16 @@
 # Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-> **Note on Issue #2872:** The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or fraction. Its decimal representation goes on infinitely without repeating. To 50 decimal places: **π ≈ 3.14159265358979323846264338327950288419716939937510...** For practical calculations, standard double-precision floating point provides ~15-17 decimal digits of precision. For higher precision, use arbitrary-precision libraries like [decimal.js](https://github.com/MikeMcl/decimal.js/), [big.js](https://github.com/MikeMcl/big.js/), or [mpmath](https://mpmath.org/) in Python.
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+
+## Exact Value of PI
+
+The exact value of PI (π) is an irrational number, meaning it cannot be expressed as a simple fraction and its decimal representation goes on forever without repeating. The exact value is represented by the Greek letter **π**.
+
+**π = 3.14159265358979323846264338327950288419716939937510...** (continues infinitely)
 
 ## Workspace Structure
 
