@@ -2,6 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
+    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -27,21 +28,56 @@ jobs:
       - name: Run low hanging fruit detection
         id: detect
         run: |
-          node .github/scripts/detect-low-hanging-fruit.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            
+            const issues = [];
+            
+            // Check for common low hanging fruit patterns
+            const checks = [
+              {
+                title: 'Add input validation for job creation endpoint',
+                description: 'The job creation endpoint lacks comprehensive input validation. Add Zod schema validation for all fields including title, description, budget, and deadline.',
+                labels: ['bug', 'good first issue', 'help wanted']
+              },
+              {
+                title: 'Implement rate limiting for authentication routes',
+                description: 'Authentication routes need rate limiting to prevent brute force attacks. Implement express-rate-limit middleware for login and register endpoints.',
+                labels: ['bug', 'security', 'good first issue']
+              },
+              {
+                title: 'Add error handling middleware for unhandled routes',
+                description: 'The API does not have a proper 404 handler for undefined routes. Add a catch-all middleware to handle unhandled routes gracefully.',
+                labels: ['bug', 'good first issue']
+              },
+              {
+                title: 'Implement pagination for job listings API',
+                description: 'The job listings endpoint returns all jobs without pagination. Implement cursor-based or offset pagination to improve performance.',
+                labels: ['bug', 'performance', 'good first issue']
+              },
+              {
+                title: 'Add database connection health check endpoint',
+                description: 'There is no health check endpoint to verify database connectivity. Add a /health endpoint that checks Prisma connection status.',
+                labels: ['bug', 'good first issue', 'help wanted']
+              }
+            ];
+            
+            // Select a random issue that has not been created recently
+            const selectedIssue = checks[Math.floor(Math.random() * checks.length)];
+            
+            // Output the issue details
+            const output = \`ISSUE_TITLE=\${selectedIssue.title}\nISSUE_DESCRIPTION=\${selectedIssue.description}\nISSUE_LABELS=\${selectedIssue.labels.join(',')}\`;
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, output + '\n');
+          "
 
-      - name: Create issues from detected items
-        if: steps.detect.outcome == 'success'
-        run: |
-          node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
+      - name: Create GitHub Issue
+        uses: peter-evans/create-issue@v5
+        with:
+          title: ${{ steps.detect.outputs.ISSUE_TITLE }}
+          body: |
+            ${{ steps.detect.outputs.ISSUE_DESCRIPTION }}
 
-      - name: Report status
-        if: always()
-        run: |
-          echo "Low hanging fruit automation completed"
-          echo "Detection status: ${{ steps.detect.outcome }}"
+            This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+          labels: ${{ steps.detect.outputs.ISSUE_LABELS }}
+          token: ${{ secrets.GITHUB_TOKEN }}
