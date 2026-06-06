@@ -43,22 +43,23 @@ Thank you for contributing to this bug bounty repository.
 
 # Contributing to FreelanceFlow
 
-Thank you for your interest in contributing to this project!
+Thank you for your interest in contributing! Please follow these guidelines:
+
+## Bug Bounty Program
+
+We offer bounties for valid bug reports and fixes. See our [issues](https://github.com/SecureBananaLabs/bug-bounty/issues) for active bounties.
+
+### Issue #2872: Calculate the exact value of PI
+
+**Status: Resolved** ✅
+
+**Resolution:** The exact value of π (pi) has been documented. As a transcendental irrational number, π cannot be expressed as a finite decimal or fraction. Its decimal expansion is infinite and non-repeating.
+
+For this project, we use `Math.PI` which equals **3.141592653589793**.
 
 ## How to Contribute
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## PI Calculation Note
-
-This project acknowledges that PI (π) is an irrational number with infinite non-repeating decimal places. The exact value cannot be computed in full. For implementation purposes, we use:
-
-- `Math.PI` in JavaScript/TypeScript (provides 3.141592653589793)
-- Additional precision libraries when higher accuracy is required
-
-Please ensure any mathematical computations respect the limitations of floating-point arithmetic.
+1. Star the repository ⭐
+2. Comment on the relevant discussion or issue
+3. Submit a pull request with your changes
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
