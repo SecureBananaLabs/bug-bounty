@@ -1,5 +1,27 @@
-<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
+# Contributing to FreelanceFlow
 
+## Low Hanging Fruit Automation
+
+This repository supports automated low hanging fruit issue creation. To participate:
+
+1. Find a feature/bug to work on from this repository
+2. Create a GitHub issue on the repository to start working on it -- Pull requests without issues will not be considered.
+3. Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+
+## Issue Guidelines
+
+When creating your issue, please make sure to:
+
+- Provide a clear description of the feature or bug you want to work on
+- Include your approach to solving the issue
+- Follow the issue template provided
+
+## Important Notes
+
+Pull requests without associated issues will not be considered for merge. All contributions must first have an issue created using the low hanging fruit automation process.
+
+# Project
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 <img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
 
 # Contributing Guidelines
@@ -40,28 +62,5 @@ Thank you for contributing to this bug bounty repository.
 - Payment processing starts only after successful merge into `main`.
 
 ## Code of Conduct
-
-# Contributing to the Project
-
-## Finding Low Hanging Fruit
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would not like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## How to Contribute
-
-1. **Find a feature/bug to work on** from this repository
-2. **Create a GitHub issue** on the repository to start working on it
-3. **Use the following string in the issue that you created**: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-
-## Pull Request Process
-
-Please follow these steps when creating a pull request:
-
-- Star this repository before creating the PR.
-- Ensure your PR addresses an issue that was created following the process above.
-- Reference the issue in your PR description.
-
-## Setup
-
 
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
