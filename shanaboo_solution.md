@@ -1,14 +1,13 @@
  ```diff
---- /dev/null
+--- a/.github/workflows/low-hanging-fruit.yml
 +++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,52 @@
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    # Run daily at 00:00 UTC
-+    - cron: '0 0 * * *'
-+  workflow_dispatch:
++    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
++  workflow_dispatch:      # Allow manual trigger
 +
 +permissions:
 +  issues: write
@@ -27,7 +26,7 @@
 +          node-version: '20'
 +
 +      - name: Install dependencies
-+        run: npm ci
++        run: npm install
 +
 +      - name: Run low hanging fruit detection
 +        id: detect
@@ -35,14 +34,25 @@
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          GITHUB_REPOSITORY: ${{ github.repository }}
 +
++  recursive-trigger:
++    needs: detect-and-create-issues
++    runs-on: ubuntu-latest
++    if: always()
++    steps:
++      - name: Trigger next iteration
++        uses: peter-evans/repository-dispatch@v2
++        with:
++          token: ${{ secrets.GITHUB_TOKEN }}
++          event-type: low-hanging-fruit-iteration
++          client-payload: '{"iteration": ${{ github.run_number }}}'
 +--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
 @@ -0,0 +1,289 @@
 +#!/usr/bin/env node
-+
 +/**
-+ * Low Hanging Fruit Automation Script
++ * Low Hanging Fruit Detection and Issue Creation Script
 + * 
 + * This script recursively detects potential bugs, missing features,
 + * and improvements in the repository, then creates GitHub issues for them.
@@ -52,105 +62,122 @@
 +const path = require('path');
 +const { execSync } = require('child_process');
 +
-+// GitHub API helper
++// Configuration
++const CONFIG = {
++  // Patterns that indicate potential issues
++  patterns: {
++    // Code smells and potential bugs
++    code: [
++      { pattern: /TODO|FIXME|HACK|XXX|BUG/, severity: 'high', label: 'bug' },
++      { pattern: /console\.(log|warn|error)\(/, severity: 'medium', label: 'bug' },
++      { pattern: /debugger;/, severity: 'high', label: 'bug' },
++      { pattern: /eval\(/, severity: 'high', label: 'security' },
++      { pattern: /process\.env\.[A-Z_]+(?!\.)/, severity: 'medium', label: 'bug' },
++    ],
++    // Missing documentation
++    docs: [
++      { pattern: /^# .*/, check: 'missing-readme-sections', severity: 'low' },
++    ],
++    // Missing tests
++    tests: [
++      { pattern: /test|spec/, check: 'test-coverage', severity: 'medium' },
++    ],
++  },
++  // File patterns to scan
++  includePatterns: [
++    '**/*.js',
++    '**/*.ts',
++    '**/*.tsx',
++    '**/*.json',
++    '**/*.md',
++    '**/*.yml',
++    '**/*.yaml',
++  ],
++  excludePatterns: [
++    'node_modules/**',
++    '.git/**',
++    'dist/**',
++    'build/**',
++    '.next/**',
++  ],
++};
++
++// GitHub API helpers
 +const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 +const REPO = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
++const [OWNER, REPO_NAME] = REPO.split('/');
 +
 +if (!GITHUB_TOKEN) {
 +  console.error('GITHUB_TOKEN is required');
 +  process.exit(1);
 +}
 +
-+const githubApi = (endpoint, options = {}) => {
-+  const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com/repos/${REPO}${endpoint}`;
-+  const response = execSync(`curl -s -w "\\n%{http_code}" -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github.v3+json" -H "User-Agent: LowHangingFruitBot" ${options.method === 'POST' ? '-X POST' : ''} ${options.body ? `-d '${JSON.stringify(options.body).replace(/'/g, "'\\''")}'` : ''} "${url}"`, {
-+    encoding: 'utf-8',
-+    maxBuffer: 10 * 1024 * 1024
-+  });
++function githubApi(path, method = 'GET', data = null) {
++  const url = `https://api.github.com/repos/${OWNER}/${REPO_NAME}${path}`;
++  const options = {
++    method,
++    headers: {
++      'Authorization': `token ${GITHUB_TOKEN}`,
++      'Accept': 'application/vnd.github.v3+json',
++      'User-Agent': 'LowHangingFruit-Bot',
++    },
++  };
 +  
-+  const lines = response.trim().split('\n');
-+  const statusCode = parseInt(lines[lines.length - 1]);
-+  const body = lines.slice(0, -1).join('\n');
-+  
-+  if (statusCode >= 200 && statusCode < 300) {
-+    try {
-+      return JSON.parse(body);
-+    } catch {
-+      return body;
-+    }
++  if (data) {
++    options.headers['Content-Type'] = 'application/json';
 +  }
 +  
-+  throw new Error(`GitHub API error: ${statusCode} - ${body}`);
-+};
++  const cmd = `curl -s -X ${method} "${url}" \
++    -H "Authorization: token ${GITHUB_TOKEN}" \
++    -H "Accept: application/vnd.github.v3+json" \
++    ${data ? `-d '${JSON.stringify(data)}'` : ''}`;
++  
++  try {
++    const result = execSync(cmd, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 });
++    return JSON.parse(result);
++  } catch (e) {
++    console.error(`API Error: ${e.message}`);
++    return null;
++  }
++}
 +
-+// Issue template
-+const ISSUE_TEMPLATE = (title, description, parentIssue = 743) => `## Description
-+${description}
++function getExistingIssues() {
++  const issues = [];
++  let page = 1;
++  while (true) {
++    const pageIssues = githubApi(`/issues?state=all&per_page=100&page=${page}`);
++    if (!pageIssues || pageIssues.length === 0) break;
++    issues.push(...pageIssues);
++    page++;
++    if (page > 10) break; // Safety limit
++  }
++  return issues;
++}
 +
-+## Acceptance Criteria
-+- [ ] Identify the specific problem or missing feature
-+- [ ] Implement a fix or feature
-+- [ ] Add tests where applicable
-+- [ ] Update documentation if needed
++function issueExists(title, existingIssues) {
++  return existingIssues.some(issue => 
++    issue.title.toLowerCase().includes(title.toLowerCase().substring(0, 50))
++  );
++}
 +
-+## Notes
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #${parentIssue} for more information.
++function createIssue(title, body, labels = []) {
++  return githubApi('/issues', 'POST', {
++    title,
++    body,
++    labels: [...labels, 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly'],
++  });
++}
 +
-+## Bounty
-+/bounty $50
-+`;
-+
-+// Detectors for various low hanging fruit
-+const detectors = {
-+  // Check for TODO/FIXME comments in code
-+  findTodos: (rootPath) => {
-+    const issues = [];
-+    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rs'];
++// Detection functions
++function findFiles(dir, pattern, exclude = []) {
++  const results = [];
++  const files = fs.readdirSync(dir);
++  
++  for (const file of files) {
++    const fullPath = path.join(dir, file);
++    const stat = fs.statSync(fullPath);
 +    
-+    function scanDir(dir) {
-+      const entries = fs.readdirSync(dir, { withFileTypes: true });
-+      for (const entry of entries) {
-+        const fullPath = path.join(dir, entry.name);
-+        if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
-+          scanDir(fullPath);
-+        } else if (entry.isFile() && extensions.some(ext => entry.name.endsWith(ext))) {
-+          try {
-+            const content = fs.readFileSync(fullPath, 'utf-8');
-+            const lines = content.split('\n');
-+            lines.forEach((line, idx) => {
-+              const match = line.match(/(TODO|FIXME|HACK|BUG|XXX)[\s:]*(.*)/i);
-+              if (match) {
-+                issues.push({
-+                  title: `Address ${match[1]} in ${path.relative(rootPath, fullPath)}`,
-+                  description: `Found \`${match[1]}\` at line ${idx + 1} in \`${path.relative(rootPath, fullPath)}\`:\n\n\`\`\`\n${line.trim()}\n\`\`\`\n\n**Context:** ${match[2] || 'No additional context provided'}`,
-+                  source: 'todo-comment'
-+                });
-+              }
-+            });
-+          } catch (e) {
-+            // Skip files we can't read
-+          }
-+        }
-+      }
-+    }
-+    
-+    scanDir(rootPath);
-+    return issues;
-+  },
-+
-+  // Check for missing tests
-+  findMissingTests: (rootPath) => {
-+    const issues = [];
-+    const testPatterns = ['.test.', '.spec.', '__tests__', '__test__'];
-+    
-+    function scanDir(dir, relativeDir = '') {
-+      const entries = fs.readdirSync(dir, { withFileTypes: true });
-+      for (const entry of entries) {
-+        const fullPath = path.join(dir, entry.name);
-+        if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
-+          scanDir(fullPath, path.join(relativeDir, entry.name));
-+        } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.js')) && !entry.name.endsWith('.d.ts')) {
-+          if (testPatterns.some(p => entry.name.includes(p))) continue;
-+          
-+          const baseName = entry.name.replace(/\.(ts|js)$/, '');
-+          const dirEntries = entries.map(e => e
++    if (stat.isDirectory()) {
++      if (exclude.some(e => fullPath.includes(e))) continue;
++      results.push(...findFiles(fullPath, pattern, exclude));
++    } else if (
