@@ -3,12 +3,14 @@ import { verifyAccessToken } from "../utils/jwt.js";
 
 export function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith("Bearer ")) {
+  const token = authHeader?.match(/^Bearer\s+(.+)$/)?.[1]?.trim();
+
+  if (!token) {
     return fail(res, "Unauthorized", 401);
   }
 
   try {
-    req.user = verifyAccessToken(authHeader.slice(7));
+    req.user = verifyAccessToken(token);
     return next();
   } catch {
     return fail(res, "Invalid token", 401);
