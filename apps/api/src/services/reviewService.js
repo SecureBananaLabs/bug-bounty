@@ -1,11 +1,13 @@
+import { cloneRecord, cloneRecords } from "../utils/records.js";
+
 const reviews = [];
 
 export async function listReviews() {
-  return reviews;
+  return cloneRecords(reviews);
 }
 
 export async function createReview(payload) {
   const review = { id: `rev_${Date.now()}`, ...payload };
   reviews.push(review);
-  return review;
+  return cloneRecord(review);
 }
