@@ -1,7 +1,9 @@
+import { copyRecords } from "../utils/recordCopy.js";
+
 const proposals = [];
 
 export async function listProposals() {
-  return proposals;
+  return copyRecords(proposals);
 }
 
 export async function createProposal(payload) {
