@@ -1,17 +1,45 @@
 {
-  "/health": { "p99": 100, "note": "Simple health check, very fast" },
-  "/api/auth/register": { "p99": 500, "note": "DB write + JWT generation" },
-  "/api/auth/login": { "p99": 500, "note": "DB lookup + JWT generation" },
-  "/api/auth/refresh": { "p99": 300, "note": "Token refresh, fast operation" },
-  "/api/jobs": { "p99": 800, "note": "List endpoint, may have DB query" },
-  "/api/jobs": { "p99": 1000, "note": "POST /jobs creates DB record" },
-  "/api/users": { "p99": 800, "note": "User list query" },
-  "/api/proposals": { "p99": 800, "note": "Proposal list" },
-  "/api/payments": { "p99": 1500, "note": "Payment creation may hit external API" },
-  "/api/reviews": { "p99": 800, "note": "Review CRUD" },
-  "/api/messages": { "p99": 800, "note": "Message delivery" },
-  "/api/notifications": { "p99": 600, "note": "Notification query" },
-  "/api/search": { "p99": 1500, "note": "Search may be heavy" },
-  "/api/uploads": { "p99": 3000, "note": "File upload, depends on size" },
-  "/api/admin": { "p99": 1000, "note": "Admin queries may aggregate data" }
+  "/health": {
+    "GET": { "p99": 100, "note": "Simple health check, very fast" }
+  },
+  "/api/auth/register": {
+    "POST": { "p99": 500, "note": "DB write + JWT generation" }
+  },
+  "/api/auth/login": {
+    "POST": { "p99": 500, "note": "DB lookup + JWT generation" }
+  },
+  "/api/auth/refresh": {
+    "POST": { "p99": 300, "note": "Token refresh, fast operation" }
+  },
+  "/api/jobs": {
+    "GET": { "p99": 800, "note": "List endpoint, may have DB query" },
+    "POST": { "p99": 1000, "note": "POST /jobs creates DB record" }
+  },
+  "/api/users": {
+    "GET": { "p99": 800, "note": "User list query" }
+  },
+  "/api/proposals": {
+    "GET": { "p99": 800, "note": "Proposal list" }
+  },
+  "/api/payments": {
+    "POST": { "p99": 1500, "note": "Payment creation may hit external API" }
+  },
+  "/api/reviews": {
+    "GET": { "p99": 800, "note": "Review CRUD" }
+  },
+  "/api/messages": {
+    "GET": { "p99": 800, "note": "Message delivery" }
+  },
+  "/api/notifications": {
+    "GET": { "p99": 600, "note": "Notification query" }
+  },
+  "/api/search": {
+    "GET": { "p99": 1500, "note": "Search may be heavy" }
+  },
+  "/api/uploads": {
+    "POST": { "p99": 3000, "note": "File upload, depends on size" }
+  },
+  "/api/admin": {
+    "GET": { "p99": 1000, "note": "Admin queries may aggregate data" }
+  }
 }
