@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { fail } from "./utils/response.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import { jobRoutes } from "./routes/jobRoutes.js";
@@ -38,6 +39,11 @@ export function createApp() {
   app.use("/api/uploads", uploadRoutes);
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
+
+  // Return 405 for unsupported methods on known API routes
+  app.all("/api/*", (req, res) => {
+    return fail(res, `Method ${req.method} not allowed`, 405);
+  });
 
   app.use(errorHandler);
   return app;
