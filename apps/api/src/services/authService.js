@@ -1,4 +1,4 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, verifyAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
@@ -18,6 +18,12 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(token) {
+  // 验证 refresh token 有效性
+  const decoded = verifyAccessToken(token);
+  
+  // 使用原 token 中的 sub 和 role 签发新的 access token
+  return {
+    token: signAccessToken({ sub: decoded.sub, role: decoded.role })
+  };
 }
