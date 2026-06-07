@@ -7,45 +7,45 @@ FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern
 
 ## Workspace Structure
 
-- `apps/web` — Next.js 14 App Router frontend
-- `apps/api` — Express.js backend with layered REST API
-- `packages/db` — Prisma schema and database package
-- `packages/ui` — Shared UI components
+• `apps/web` — Next.js 14 App Router frontend
+• `apps/api` — Express.js backend with layered REST API
+• `packages/db` — Prisma schema and database package
+• `packages/ui` — Shared UI components
 
 ## Frontend
 
 The web app includes pages for:
 
-- Landing
-- Job listings and job detail
-- Post a job
-- Freelancer profiles and freelancer search
-- Client and freelancer dashboards
-- Messaging
-- Notifications
-- Settings
-- Billing
-- Admin panel
+• Landing
+• Job listings and job detail
+• Post a job
+• Freelancer profiles and freelancer search
+• Client and freelancer dashboards
+• Messaging
+• Notifications
+• Settings
+• Billing
+• Admin panel
 
 ## Backend
 
 The API includes:
 
-- Auth routes (register, login, OAuth callback, JWT refresh)
-- CRUD routes for users, jobs, and proposals
-- Payments routes (Stripe-focused service placeholder)
-- Reviews, messaging, notifications
-- File uploads and search
-- Admin routes
+• Auth routes (register, login, OAuth callback, JWT refresh)
+• CRUD routes for users, jobs, and proposals
+• Payments routes (Stripe-focused service placeholder)
+• Reviews, messaging, notifications
+• File uploads and search
+• Admin routes
 
 Backend architecture follows:
 
-- Middleware layer (auth, rate limiting, error handling)
-- Controller layer
-- Service layer
-- Route layer
-- Validation schemas (Zod)
-- Utility helpers
+• Middleware layer (auth, rate limiting, error handling)
+• Controller layer
+• Service layer
+• Route layer
+• Validation schemas (Zod)
+• Utility helpers
 
 ## Getting Started
 
@@ -74,14 +74,14 @@ npm run dev -w apps/api
 
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
-- Users
-- Jobs
-- Proposals
-- Payments
-- Reviews
-- Messages
-- Categories
-- Skills
+• Users
+• Jobs
+• Proposals
+• Payments
+• Reviews
+• Messages
+• Categories
+• Skills
 
 ## Environment Variables
 
