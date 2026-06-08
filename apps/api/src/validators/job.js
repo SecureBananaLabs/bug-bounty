@@ -1,12 +1,17 @@
 import { z } from "zod";
 
-export const createJobSchema = z.object({
+const jobBase = z.object({
   title: z.string().min(4),
   description: z.string().min(10),
   budgetMin: z.number().nonnegative(),
   budgetMax: z.number().nonnegative(),
   categoryId: z.string().min(1),
-  skills: z.array(z.string().min(1)).default([])
+  skills: z.array(z.string().min(1)).default([]),
 });
 
-export const updateJobSchema = createJobSchema.partial();
+export const createJobSchema = jobBase.refine(
+  (d) => d.budgetMin <= d.budgetMax,
+  { message: "budgetMin must be ≤ budgetMax", path: ["budgetMin"] },
+);
+
+export const updateJobSchema = jobBase.partial();
