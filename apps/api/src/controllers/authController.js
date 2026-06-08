@@ -1,6 +1,7 @@
 import { registerSchema, loginSchema, refreshSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
+import { verifyAccessToken } from "../utils/jwt.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
