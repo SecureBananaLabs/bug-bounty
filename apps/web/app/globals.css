@@ -4,3 +4,8 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+label { display: grid; gap: 0.35rem; margin: 0.75rem 0; }
+input, select, button { font: inherit; border-radius: 8px; border: 1px solid #3a4a7a; padding: 0.55rem 0.7rem; }
+input, select { width: 100%; background: #0f1630; color: #f2f5ff; }
+input[type="checkbox"] { width: auto; margin-right: 0.5rem; }
+button { background: #f2f5ff; color: #0b1020; cursor: pointer; }
