@@ -7,6 +7,13 @@ export async function getJobs(req, res) {
 }
 
 export async function postJob(req, res) {
-  const payload = createJobSchema.parse(req.body);
-  return ok(res, await createJob(payload), 201);
+  const result = createJobSchema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid request body",
+      errors: result.error.issues
+    });
+  }
+  return ok(res, await createJob(result.data), 201);
 }
