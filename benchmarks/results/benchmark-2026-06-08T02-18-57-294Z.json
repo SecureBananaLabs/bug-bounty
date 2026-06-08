@@ -1,0 +1,204 @@
+{
+  "timestamp": "2026-06-08T02-18-57-294Z",
+  "target": "http://localhost:4003",
+  "results": [
+    {
+      "endpoint": "GET /health",
+      "p50": 2,
+      "p99": 9,
+      "rps": 3389.6,
+      "errorRate": 0,
+      "ttfb": 2.43,
+      "totalRequests": 16945,
+      "timeouts": 0,
+      "non2xx": 16746
+    },
+    {
+      "endpoint": "POST /api/auth/register",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4463.61,
+      "errorRate": 0,
+      "ttfb": 1.67,
+      "totalRequests": 22315,
+      "timeouts": 0,
+      "non2xx": 22315
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "p50": 2,
+      "p99": 5,
+      "rps": 4277.61,
+      "errorRate": 0,
+      "ttfb": 1.76,
+      "totalRequests": 21383,
+      "timeouts": 0,
+      "non2xx": 21383
+    },
+    {
+      "endpoint": "GET /api/jobs",
+      "p50": 2,
+      "p99": 6,
+      "rps": 4172,
+      "errorRate": 0,
+      "ttfb": 1.84,
+      "totalRequests": 20856,
+      "timeouts": 0,
+      "non2xx": 20856
+    },
+    {
+      "endpoint": "POST /api/jobs",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4453,
+      "errorRate": 0,
+      "ttfb": 1.67,
+      "totalRequests": 22256,
+      "timeouts": 0,
+      "non2xx": 22256
+    },
+    {
+      "endpoint": "GET /api/users",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4554.8,
+      "errorRate": 0,
+      "ttfb": 1.6,
+      "totalRequests": 22776,
+      "timeouts": 0,
+      "non2xx": 22776
+    },
+    {
+      "endpoint": "POST /api/users",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4464.4,
+      "errorRate": 0,
+      "ttfb": 1.66,
+      "totalRequests": 22323,
+      "timeouts": 0,
+      "non2xx": 22323
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4506.8,
+      "errorRate": 0,
+      "ttfb": 1.64,
+      "totalRequests": 22529,
+      "timeouts": 0,
+      "non2xx": 22529
+    },
+    {
+      "endpoint": "POST /api/proposals",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4471.61,
+      "errorRate": 0,
+      "ttfb": 1.65,
+      "totalRequests": 22354,
+      "timeouts": 0,
+      "non2xx": 22354
+    },
+    {
+      "endpoint": "POST /api/payments",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4519.61,
+      "errorRate": 0,
+      "ttfb": 1.62,
+      "totalRequests": 22599,
+      "timeouts": 0,
+      "non2xx": 22599
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "p50": 1,
+      "p99": 4,
+      "rps": 4577.2,
+      "errorRate": 0,
+      "ttfb": 1.59,
+      "totalRequests": 22878,
+      "timeouts": 0,
+      "non2xx": 22878
+    },
+    {
+      "endpoint": "POST /api/reviews",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4493.2,
+      "errorRate": 0,
+      "ttfb": 1.64,
+      "totalRequests": 22463,
+      "timeouts": 0,
+      "non2xx": 22463
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4542.8,
+      "errorRate": 0,
+      "ttfb": 1.61,
+      "totalRequests": 22712,
+      "timeouts": 0,
+      "non2xx": 22712
+    },
+    {
+      "endpoint": "POST /api/messages",
+      "p50": 1,
+      "p99": 7,
+      "rps": 4212.61,
+      "errorRate": 0,
+      "ttfb": 1.79,
+      "totalRequests": 21063,
+      "timeouts": 0,
+      "non2xx": 21063
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4450.8,
+      "errorRate": 0,
+      "ttfb": 1.65,
+      "totalRequests": 22254,
+      "timeouts": 0,
+      "non2xx": 22254
+    },
+    {
+      "endpoint": "POST /api/notifications",
+      "p50": 1,
+      "p99": 4,
+      "rps": 4581.2,
+      "errorRate": 0,
+      "ttfb": 1.6,
+      "totalRequests": 22908,
+      "timeouts": 0,
+      "non2xx": 22908
+    },
+    {
+      "endpoint": "GET /api/search",
+      "p50": 1,
+      "p99": 5,
+      "rps": 4537,
+      "errorRate": 0,
+      "ttfb": 1.61,
+      "totalRequests": 22683,
+      "timeouts": 0,
+      "non2xx": 22683
+    },
+    {
+      "endpoint": "GET /api/search?q=developer",
+      "p50": 2,
+      "p99": 5,
+      "rps": 4219.4,
+      "errorRate": 0,
+      "ttfb": 1.82,
+      "totalRequests": 21090,
+      "timeouts": 0,
+      "non2xx": 21090
+    }
+  ]
+}

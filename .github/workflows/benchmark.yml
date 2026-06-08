@@ -1,0 +1,57 @@
+name: Benchmark Smoke Test
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: benchmark
+          POSTGRES_PASSWORD: benchmark
+          POSTGRES_DB: freelancer
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps
+        run: |
+          npm ci
+          cd benchmarks && npm ci && cd ..
+
+      - name: Start API server
+        run: |
+          DATABASE_URL="postgresql://benchmark:benchmark@localhost:5432/freelancer" \
+          PORT=4000 \
+          JWT_SECRET="ci-benchmark-secret" \
+          node apps/api/src/server.js &
+          sleep 3
+          curl -f http://localhost:4000/health || exit 1
+
+      - name: Run benchmark
+        run: node benchmarks/benchmark.js
+        env:
+          BENCHMARK_TARGET: http://localhost:4000
+          BENCHMARK_DURATION: 3
+          BENCHMARK_CONNECTIONS: 5
+
+      - name: Check thresholds
+        run: node benchmarks/benchmark-ci.js

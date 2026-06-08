@@ -1,0 +1,8 @@
+{
+  "name": "freelanceflow-benchmarks",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "autocannon": "^8.0.0"
+  }
+}

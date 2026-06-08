@@ -1,0 +1,7 @@
+{
+  "p99_max_ms": 50,
+  "p95_max_ms": 20,
+  "min_rps": 1000,
+  "max_error_rate": 0.05,
+  "description": "CI thresholds based on local benchmark baseline (16-core, 32GB, Node 22). p99 < 50ms, p95 < 20ms, RPS > 1000."
+}
