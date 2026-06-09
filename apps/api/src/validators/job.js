@@ -6,7 +6,8 @@ export const createJobSchema = z.object({
   budgetMin: z.number().nonnegative(),
   budgetMax: z.number().nonnegative(),
   categoryId: z.string().min(1),
-  skills: z.array(z.string().min(1)).default([])
+  skills: z.array(z.string().min(1)).default([]),
+  clientId: z.string().optional()
 });
 
 export const updateJobSchema = createJobSchema.partial();
