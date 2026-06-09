@@ -1,9 +1,11 @@
 import { z } from "zod";
 
+const publicRoleSchema = z.enum(["client", "freelancer"]).default("client");
+
 export const registerSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
-  role: z.enum(["client", "freelancer", "admin"]).default("client")
+  role: publicRoleSchema
 });
 
 export const loginSchema = z.object({
