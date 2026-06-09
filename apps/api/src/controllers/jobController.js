@@ -1,7 +1,7 @@
 import { ZodError } from "zod";
-import { ok } from "../utils/response.js";
-import { createJobSchema } from "../validators/job.js";
-import { createJob, listJobs } from "../services/jobService.js";
+import { ok, fail } from "../utils/response.js";
+import { createJobSchema, updateJobSchema } from "../validators/job.js";
+import { createJob, listJobs, getJob, updateJob } from "../services/jobService.js";
 
 export async function getJobs(req, res) {
   return ok(res, await listJobs());
@@ -11,6 +11,30 @@ export async function postJob(req, res) {
   try {
     const payload = createJobSchema.parse(req.body);
     return ok(res, await createJob(payload), 201);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        status: "error",
+        errors: error.errors.map((e) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
+      });
+    }
+    throw error;
+  }
+}
+
+export async function patchJob(req, res) {
+  const { id } = req.params;
+  const existing = await getJob(id);
+  if (!existing) {
+    return fail(res, "Job not found", 404);
+  }
+  try {
+    const updates = updateJobSchema.parse(req.body);
+    const updated = await updateJob(id, updates);
+    return ok(res, updated);
   } catch (error) {
     if (error instanceof ZodError) {
       return res.status(400).json({
