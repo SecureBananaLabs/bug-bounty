@@ -31,7 +31,7 @@ export function createApp() {
           callback(null, true);
           return;
         }
-        callback(new Error("Not allowed by CORS"));
+        callback(null, false);
       }
     }),
   );
