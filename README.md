@@ -1,6 +1,6 @@
 # Project
-<img width="663" height="183" IMG-20250115-WA0000.jpg" />
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 # FreelanceFlow Monorepo
 
@@ -12,17 +12,9 @@ FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern
 - `apps/api` — Express.js backend with layered REST API
 - `packages/db` — Prisma schema and database package
 - `packages/ui` — Shared UI components
-- `apps/web` — Next.js 14 App Router frontend
-- `apps/api` — Express.js backend with layered REST API
-- `packages/db` — Prisma schema and database package
-- `packages/ui` — Shared UI components
 
 ## Frontend
 
-The web app includes pages for:
-
-- Landing
-- Job listings and job detail
 The web app includes pages for:
 
 - Landing
@@ -37,7 +29,7 @@ The web app includes pages for:
 - Admin panel
 
 ## Backend
-- Billing
+
 The API includes:
 
 - Auth routes (register, login, OAuth callback, JWT refresh)
@@ -48,20 +40,9 @@ The API includes:
 - Admin routes
 
 Backend architecture follows:
-- Auth routes (register, login, OAuth callback, JWT refresh)
+
 - Middleware layer (auth, rate limiting, error handling)
 - Controller layer
-- Service layer
-- Route layer
-- Validation schemas (Zod)
-- Utility helpers
-
-## Getting Started
-
-Backend architecture follows:
-npm install
-npm run test
-
 - Service layer
 - Route layer
 - Validation schemas (Zod)
@@ -85,9 +66,13 @@ npm run dev -w apps/web
 ```
 
 ### Run backend
+## Environment Variables
 
-```bash
-npm run dev -w apps/api
+Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+## Exact Value of PI
+
+The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or fraction. Its decimal representation goes on infinitely without repeating. The value begins with 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679... and continues infinitely. For practical calculations, approximations are used depending on required precision. The record for calculated digits stands in the trillions, yet the exact value remains uncomputable in full.
 ```
 
 ## Database
