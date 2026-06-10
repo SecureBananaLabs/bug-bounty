@@ -1,5 +1,5 @@
 import { ok } from "../utils/response.js";
-import { createUser, listUsers } from "../services/userService.js";
+import { createUser, listUsers } require("../services/userService.js");
 
 export async function getUsers(req, res) {
   return ok(res, await listUsers());
