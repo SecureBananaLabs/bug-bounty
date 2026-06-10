@@ -1,28 +1,26 @@
+import { badRequest } from "../utils/response.js";
 import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
 
-function validateSearchQuery(rawQuery) {
-  if (typeof rawQuery !== "string") {
-    return { valid: false, error: "Query must be a single string" };
+function validateAndSanitizeQuery(query) {
+  if (typeof query !== 'string') {
+    return { valid: false, message: "Query must be a string" };
   }
-
-  const trimmed = rawQuery.trim();
-
-  if (trimmed.length === 0) {
-    return { valid: false, error: "Query cannot be empty" };
+  if (Array.isArray(query)) {
+    return { valid: false, message: "Query cannot be an array" };
   }
-
-  if (trimmed.length > 200) {
-    return { valid: false, error: "Query exceeds maximum length of 200 characters" };
+  query = query.trim();
+  if (query.length > 200) {
+    return { valid: false, message: "Query too long" };
   }
-
-  return { valid: true, query: trimmed };
+  return { valid: true, query: query };
 }
 
 export async function search(req, res) {
-  const validation = validateSearchQuery(req.query.q);
+  const validation = validateAndSanitizeQuery(req.query.q);
   if (!validation.valid) {
-    return res.status(400).json({ error: validation.error });
+    return badRequest(res, { message: "Invalid query parameter: " + validation.message });
   }
-  return ok(res, await globalSearch(validation.query));
+  const { query } = validation;
+  return ok(res, await globalSearch(query));
 }
