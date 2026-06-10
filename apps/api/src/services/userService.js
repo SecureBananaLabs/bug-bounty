@@ -1,19 +1,14 @@
-import { createUser } from '../db/user';
+import { registerUser } from '../db/user';
 
-const registerUser = async (userData) => {
-  // Validate that userData includes fullName
-  if (!userData.fullName || userData.fullName.trim() === '') {
-    throw new Error('Full name is required');
-  }
-  
-  const user = await createUser({
+export const createUser = async (userData) => {
+  // The service should now include fullName in the user data
+  const user = await registerUser({
     ...userData,
     fullName: userData.fullName
   });
   return user;
 };
-
-export { registerUser };
+export { createUser };
 const users = [];
 
 export async function listUsers() {
