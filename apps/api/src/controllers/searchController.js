@@ -1,22 +1,24 @@
 import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
+import createError from "http-errors";
 
-function validateSearchQuery(query) {
+// Utility function for input validation and sanitization
+function validateAndSanitizeQuery(query) {
   if (typeof query !== 'string') {
-    throw new Error('Search query must be a string');
+    throw createError(400, 'Query must be a string');
   }
-  
   const trimmedQuery = query.trim();
-  
   if (trimmedQuery.length > 200) {
-    throw new Error('Search query must be less than 200 characters');
+    throw createError(400, 'Query too long. Maximum 200 characters allowed.');
   }
-  
   return trimmedQuery;
 }
 
 export async function search(req, res) {
-  const searchQuery = req.query.q ?? "";
-  const validatedQuery = validateSearchQuery(searchQuery);
-  return ok(res, await globalSearch(validatedQuery));
+  try {
+    const sanitizedQuery = validateAndSanitizeQuery(req.query.q ?? "");
+    return ok(res, await globalSearch(sanitizedQuery));
+  } catch (error) {
+    return res.status(error.status || 500).json({ error: error.message });
+  }
 }
