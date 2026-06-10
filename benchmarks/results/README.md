@@ -1,3 +1,3 @@
 # Benchmark Results
 
-Results from the benchmark runs will be stored in this directory.
+This directory contains the output of benchmark runs in JSON and markdown formats.
