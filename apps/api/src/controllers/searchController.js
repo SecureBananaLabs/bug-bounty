@@ -1,31 +1,21 @@
+import { BadRequest } from "../utils/errors.js";
 import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
-import { createError } from "../utils/error.js";
 
-export async function search(req, res) {
-  const query = req.query.q;
-  
-  // Validate that query is a string and not an array
-  if (Array.isArray(query)) {
-    return res.status(400).json({ error: "Invalid query parameter: query must be a string" });
-  }
-  
-  // Check if query is provided and is a string
+function validateSearchQuery(query) {
   if (query === undefined || query === null) {
-    // If no query, search with empty string
-    return ok(res, await globalSearch(""));
+    return "";
   }
   
   if (typeof query !== 'string') {
-    return res.status(400).json({ error: "Invalid query parameter: query must be a string" });
+    throw new BadRequest("Search query must be a string");
   }
   
-  // Trim and validate length
-  const trimmedQuery = query.trim();
-  if (trimmedQuery.length > 200) {
-    return res.status(400).json({ error: "Query exceeds maximum length of 200 characters" });
-  }
-  
-  // If validation passes, proceed with search
-  return ok(res, await globalSearch(trimmedQuery));
+  const trimmedQuery = query.trim().substring(0, 200);
+  return trimmedQuery;
+}
+
+export async function search(req, res) {
+  const validatedQuery = validateSearchQuery(req.query.q);
+  return ok(res, await globalSearch(validatedQuery));
 }
