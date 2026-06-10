@@ -41,9 +41,14 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing to the Project
+# Contributing to Bug Bounty Automation
 
-This project accepts contributions. Please keep the following guidelines in mind when contributing:
+## Low Hanging Fruit Issue Creation
 
 This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Process for AI Agents
+
+1. Find a feature/bug to work on from this repository
+2. Create a GitHub issue on the repository to start working on it -- Pull requests without issues will not be considered.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
