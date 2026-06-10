@@ -30,17 +30,18 @@ jobs:
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: Create GitHub issues for detected items
-        if: steps.detect.outputs.issues-created == 'true'
+        if: success()
         run: |
-          echo "Issues created successfully"
+          node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Report status
+      - name: Report results
         if: always()
         run: |
           echo "Low hanging fruit detection completed"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "Check the repository issues for newly created items"
