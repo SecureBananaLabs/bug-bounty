@@ -1,7 +1,13 @@
-# Cosmic Forest Pixel Art
+# Pixel Art: Cyberpunk Cityscape
 
-**What:** A cosmic forest scene with bioluminescent trees under a starry nebula sky.
-**Why:** I wanted to blend the tranquility of nature with the wonder of space, creating a dreamy otherworldly landscape that feels both familiar and magical. The glowing trees represent life persisting even in the vastness of the cosmos.
+**File:** `cyberpunk_cityscape.png`
+**Dimensions:** 64x64 pixels
+**Format:** PNG
 
-- Canvas size: 64x64 pixels
-- Format: PNG
+## Description
+
+A cyberpunk cityscape pixel art piece created for the FreelanceFlow project. The artwork features neon-lit skyscrapers in magenta, cyan, and electric blue against a dark night sky, with a pixelated moon overhead. This piece represents the futuristic, tech-forward nature of the FreelanceFlow platform and the vibrant community of freelancers and clients it connects.
+
+## Why
+
+The cyberpunk aesthetic symbolizes innovation, digital connectivity, and the boundless possibilities of the freelance economy—core values that FreelanceFlow aims to embody.
