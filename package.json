@@ -13,12 +13,10 @@
 {
   "name": "bug-bounty",
   "version": "1.0.0",
-  "description": "Automated low hanging fruit bug detection",
+  "private": true,
   "scripts": {
-    "scan:issues": "node scripts/scan-low-hanging-fruit.js"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0"
+    "lint": "echo 'Add linter configuration'",
+    "test": "echo 'Add test configuration'"
   }
 }
 }
