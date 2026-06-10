@@ -1,7 +1,7 @@
-# Cyberpunk City Pixel Art
+# Cosmic Forest Pixel Art
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk city skyline at dusk.
+**What:** A cosmic forest scene with bioluminescent trees under a starry nebula sky.
+**Why:** I wanted to blend the tranquility of nature with the wonder of space, creating a dreamy otherworldly landscape that feels both familiar and magical. The glowing trees represent life persisting even in the vastness of the cosmos.
 
-**Why:** I chose this theme because cyberpunk aesthetics blend retro pixel art charm with imaginative futuristic elements. The neon color palette and towering skyscrapers create a visually striking composition that showcases both technical pixel placement skills and creative vision. The flying vehicles and light trails add dynamic energy to the scene, inviting viewers to imagine the bustling life within this digital metropolis.
-
-Created for the SecureBananaLabs/bug-bounty pixel art challenge.
+- Canvas size: 64x64 pixels
+- Format: PNG
