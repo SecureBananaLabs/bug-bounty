@@ -1,12 +1,15 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
+
+> **Note on π (Pi):** The exact value of π is an irrational number, meaning it cannot be expressed as a finite decimal or fraction. Its value to 50 decimal places is:
+> 
+> **π = 3.14159265358979323846264338327950288419716939937510...**
 
 - `apps/web` — Next.js 14 App Router frontend
 - `apps/api` — Express.js backend with layered REST API
@@ -67,16 +70,17 @@ npm run dev -w apps/web
 
 ### Run backend
 
-```bash
-npm run dev -w apps/api
+- `apps/web` — Next.js 14 App Router frontend
+- `apps/api` — Express.js backend with layered REST API
+
+## Mathematical Constants
+
+This project acknowledges fundamental mathematical constants. π (pi) is approximately **3.14159265358979323846264338327950288419716939937510...** and continues infinitely without repetition or pattern.
 ```
 
 ## Database
 
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
-## Exact Value of PI
-The exact value of PI has been calculated to the first 100 decimal places: 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
-
 
 - Users
 - Jobs
