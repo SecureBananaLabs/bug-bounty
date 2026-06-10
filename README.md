@@ -1,7 +1,7 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-<img src="assets/pixel-art/cosmic-forest.png" alt="Cosmic Forest Pixel Art" width="64" height="64" />
+![Pixel Art - Friendly Robot](assets/pixel-art/shanaboo-robot.png)
 
 # FreelanceFlow Monorepo
 
