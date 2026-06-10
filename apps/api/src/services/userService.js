@@ -1,27 +1,11 @@
-import { registerSchema } from "../schemas/auth.js";
-import { hashPassword } from "../utils/auth.js";
-import prisma from "../lib/prisma.js";
+const users = [];
 
+export async function listUsers() {
+  return users;
 }
 
 export async function createUser(payload) {
+  const user = { id: `usr_${Date.now()}`, ...payload };
+  users.push(user);
+  return user;
 }
-
-export async function registerUser(data) {
-  const { email, password, role, fullName } = registerSchema.parse(data);
-
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    data: {
-      email,
-      passwordHash: await hashPassword(password),
-      fullName,
-      role,
-    },
-    select: {
-      id: true,
-      email: true,
-      fullName: true,
-      role: true,
-      createdAt: true,
-    },
