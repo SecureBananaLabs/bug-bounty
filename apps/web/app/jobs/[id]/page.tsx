@@ -7,7 +7,7 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
     </section>
   );
 import { notFound } from "next/navigation";
-import { jobs } from "../../../lib/mock";
+import { jobs } from "@/lib/mock";
 
 interface JobDetailPageProps {
   params: {
@@ -23,12 +23,14 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">{job.title}</h1>
+    <div className="max-w-2xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">{job.title}</h1>
       <p className="text-lg text-gray-700 mb-2">
         <span className="font-semibold">Budget:</span> {job.budget}
       </p>
-      <p className="text-sm text-gray-500">Job ID: {job.id}</p>
+      <p className="text-sm text-gray-500">
+        <span className="font-semibold">Job ID:</span> {job.id}
+      </p>
     </div>
   );
 }
@@ -38,6 +40,4 @@ export function generateStaticParams() {
     id: job.id,
   }));
 }
-
-export const dynamicParams = true;
 }
