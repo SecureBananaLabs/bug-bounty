@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2016",
+    "module": "commonjs",
+    "lib": ["ES2016", "DOM"],
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "emitDeclarationFiles": true,
+    "rootDir": "src",
+    "types": ["node"]
+  },
+  "include": ["src"]
+}
