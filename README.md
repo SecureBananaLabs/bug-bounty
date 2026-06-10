@@ -1,26 +1,27 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
-
-> **Note on π (Pi):** The exact value of π is an irrational number, meaning it cannot be expressed as a finite decimal or fraction. Its value to 50 decimal places is:
-> 
-> **π = 3.14159265358979323846264338327950288419716939937510...**
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 - `apps/web` — Next.js 14 App Router frontend
 - `apps/api` — Express.js backend with layered REST API
-- `packages/db` — Prisma schema and database package
+- `packages/ui` — Shared UI components
 - `packages/ui` — Shared UI components
 
 ## Frontend
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 The web app includes pages for:
 
-- Landing
 - Job listings and job detail
 - Post a job
 - Freelancer profiles and freelancer search
@@ -31,12 +32,14 @@ The web app includes pages for:
 - Billing
 - Admin panel
 
+- Admin panel
+
 ## Backend
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 The API includes:
 
-- Auth routes (register, login, OAuth callback, JWT refresh)
-- CRUD routes for users, jobs, and proposals
 - Payments routes (Stripe-focused service placeholder)
 - Reviews, messaging, notifications
 - File uploads and search
@@ -45,11 +48,13 @@ The API includes:
 Backend architecture follows:
 
 - Middleware layer (auth, rate limiting, error handling)
-- Controller layer
-- Service layer
-- Route layer
-- Validation schemas (Zod)
-- Utility helpers
+Backend architecture follows:
+
+## Getting Started
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
+
+
 
 ## Getting Started
 
@@ -70,12 +75,8 @@ npm run dev -w apps/web
 
 ### Run backend
 
-- `apps/web` — Next.js 14 App Router frontend
-- `apps/api` — Express.js backend with layered REST API
-
-## Mathematical Constants
-
-This project acknowledges fundamental mathematical constants. π (pi) is approximately **3.14159265358979323846264338327950288419716939937510...** and continues infinitely without repetition or pattern.
+```bash
+npm run dev -w apps/api
 ```
 
 ## Database
