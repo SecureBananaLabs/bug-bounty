@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <main>
           <h1>FreelanceFlow</h1>
-          <Navigation />
+          <Navigation currentUserRole={undefined} />
           {children}
         </main>
       </body>
