@@ -1,26 +1,33 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Bug report
+about: Create a report to help us improve
 title: ''
-labels: ''
+labels: bug
 assignees: ''
 
 ---
 
 This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-## Feature Description
+<!-- Please provide a clear and concise description of what the bug is. -->
 
-<!-- Please provide a clear and concise description of what the feature is. -->
+## Steps to Reproduce
 
-## Problem Statement
+1. <!-- Step 1 -->
+2. <!-- Step 2 -->
+3. <!-- Step 3 -->
 
-<!-- A clear and concise description of what the problem is. Ex. I'm always frustrated when [...] -->
+## Expected Behavior
 
-## Proposed Solution
+<!-- A clear and concise description of what you expected to happen. -->
 
-<!-- A clear and concise description of what you want to happen. -->
+## Actual Behavior
 
-## Additional context
+<!-- A clear and concise description of what actually happened. -->
 
-<!-- Add any other context or screenshots about the feature request here. -->
+## Environment
+
+<!-- Please complete the following information -->
+ - OS: [e.g. iOS]
+ - Browser [e.g. chrome, safari]
+ - Version [e.g. 22]
