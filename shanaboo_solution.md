@@ -1,8 +1,5 @@
  ```diff
 --- /dev/null
-+++ b/assets/pixel-art/cyberpunk_cityscape.png
---- /dev/null
-+++ b assets/pixel-art/cyberpunk_cityscape.png
-@@ -0,0 +1,3 @@
-+version https://git-lfs.github.com/spec/v1
-+oid sha256:000000000000000000000000000000000000
++++ b/assets/pixel-art/cosmic-owl.png
+@@ -0,0 +1,1 @@
++iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIWSURBVHgB7ZrRTcMwDIV9bTtO2Y3Yk7YJ8B0g8P5XaJmVJXfJ7SZt0iZt0iZt0iZt0iZt0iZt0i
