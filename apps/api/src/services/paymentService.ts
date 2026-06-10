@@ -1,160 +1,100 @@
 import Stripe from 'stripe';
+import { env } from '../env';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-04-10', // Use appropriate Stripe API version
+// Initialize Stripe with the secret key from environment variables
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  apiVersion: '2023-10-16',
   typescript: true,
 });
 
-export async function createPaymentIntent(payload) {
-  // Validate payload.amount
+interface PaymentIntentPayload {
+  amount: number;
+  currency?: string;
+  metadata?: Record<string, string>;
+  [key: string]: any;
+}
+
+interface PaymentIntentResult {
+  paymentId: string;
+  clientSecret: string;
+  amount: number;
+  currency: string;
+}
+
+/**
+ * Creates a Stripe PaymentIntent
+ * @param payload - The payment intent details
+ * @returns The created payment intent details
+ */
+export async function createPaymentIntent(payload: PaymentIntentPayload): Promise<PaymentIntentResult> {
+  // Validate amount
   if (payload.amount === undefined || payload.amount === null) {
     throw new Error('Amount is required');
   }
+  
   if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('Amount must be a positive integer (in smallest currency unit, e.g. cents)');
+    throw new Error('Amount must be a positive integer');
   }
-
-  const amount = payload.amount;
-  const currency = payload.currency || 'usd';
+  
+  // Set default currency if not provided
+  const currency = payload.currency ?? 'usd';
   
   try {
+    // Create the actual PaymentIntent with Stripe
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: currency,
-    });
-    
-    return {
-      paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
       amount: payload.amount,
-      currency: payload.currency ?? "usd",
-      provider: "stripe"
-    };
-  } catch (error) {
-    // Re-throw Stripe errors with original messages
-    if (error.type && error.message) {
-      throw new Error(`Stripe Error: ${error.message}`);
-    }
-    throw error;
-  }
-}
-
-// Mock the original function for now
-export async function createPaymentIntentOld(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
-  return {
-    paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
-    currency: payload.currency ?? "usd",
-    provider: "stripe"
-  };
-}
-  
-export async function createPaymentIntentNew(payload) {
-  // Validate payload.amount
-  if (payload.amount === undefined || payload.amount === null) {
-    throw new Error('Amount is required');
-  }
-  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('Amount must be a positive integer (in smallest currency unit, e.g. cents)');
-  }
-
-  const amount = payload.amount;
-  const currency = payload.currency || 'usd';
-  
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: amount,
-    currency: currency,
-  });
-  
-  return {
-    paymentId: paymentIntent.id,
-    clientSecret: paymentIntent.client_secret,
-    amount: amount,
-    currency: currency,
-    provider: "stripe"
-  };
-}
-
-// Actual implementation
-export async function createPaymentIntent(payload) {
-  // Validate payload
-  if (payload.amount === undefined || payload.amount === null) {
-    throw new Error('Amount is required');
-  }
-  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('Amount must be a positive integer (in smallest currency unit, e.g. cents)');
-  }
-
-  const amount = payload.amount;
-  const currency = payload.currency || 'usd';
-  
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: currency,
+      currency,
+      metadata: payload.metadata || {}
     });
     
     return {
       paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
-      amount: amount,
-      currency: currency,
-      provider: "stripe"
+      clientSecret: paymentIntent.client_secret!,
+      amount: payload.amount,
+      currency
     };
   } catch (error) {
-    // Handle and re-throw meaningful errors
+    // Re-throw Stripe errors with original messages preserved
     if (error instanceof Stripe.errors.StripeError) {
-      throw new Error(`Payment Error: ${error.message}`);
+      throw new Error(error.message);
     }
     throw error;
   }
 }
 
-// Fallback implementation to maintain the original function behavior during transition
-export async function createPaymentIntentFallback(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
-  return {
-    paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
-    currency: payload.currency ?? "usd",
-    provider: "stripe"
-  };
-}
-
-// New implementation
-export async function createPaymentIntent(payload) {
-  // Validate payload.amount
+/**
+ * Alternative implementation that matches the existing function signature exactly
+ */
+export async function createPaymentIntent(payload: any) {
+  // Validate amount
   if (payload.amount === undefined || payload.amount === null) {
     throw new Error('Amount is required');
   }
-  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('Amount must be a positive integer (in smallest currency unit, e.g. cents)');
-  }
-
-  const amount = payload.amount;
-  const currency = payload.currency || 'usd';
   
- // Initialize Stripe with your secret key. You can use the
-  // "typescript" flag to conditionally use NodeTS support
-  const stripe = Stripe(process.env.STRIEPE_SECRET_KEY);
+  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
+    throw new Error('Amount must be a positive integer');
+  }
+  
+  const currency = payload.currency ?? "usd";
   
   try {
+    // Create the actual PaymentIntent with Stripe
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
+      amount: payload.amount,
       currency: currency,
     });
     
     return {
       paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
-      amount: amount,
-      currency: currency,
-      provider: "stripe"
+      clientSecret: paymentIntent.client_secret!,
+      amount: payload.amount,
+      currency: currency
     };
-  } catch (error) {
-    if (error.type) {
-      throw new Error(`Stripe Error: ${error.message}`);
+  } catch (error: any) {
+    // Re-throw Stripe errors with original messages preserved
+    if (error.type && error.message) {
+      // This preserves Stripe error messages
+      throw new Error(error.message);
     }
     throw error;
   }
