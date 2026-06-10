@@ -2,7 +2,8 @@ import { signAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
   const userId = `usr_${Date.now()}`;
-  // TODO: persist new user via Prisma and connect to returned token
+  
+  // TODO: persist new user via Prisma
   return {
     id: userId,
     email: payload.email,
@@ -12,13 +13,13 @@ export async function registerUser(payload) {
 }
 
 export async function loginUser(payload) {
+export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
   return {
     email: payload.email,
     token: signAccessToken({ sub: "usr_existing", role: "client" })
   };
 }
-
 export async function refreshToken() {
   return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
 }
