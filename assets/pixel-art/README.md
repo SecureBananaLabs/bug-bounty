@@ -1,7 +1,10 @@
-# Pixel Art: Cyberpunk Cityscape
+# Pixel Art Collection
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at dusk.
+This directory contains original pixel art contributions to the FreelanceFlow project.
 
-**Why:** I chose this theme to reflect the innovative, boundary-pushing spirit of the freelance tech community — where independent creators build the future, one pixel (or project) at a time. The neon palette and vertical architecture symbolize growth, energy, and the towering potential of collaborative digital work.
+## shanaboo-cyberpunk-city.png
 
-**File:** `cyberpunk-cityscape.png` (64x64 pixels, PNG format)
+- **Dimensions:** 64x64 pixels
+- **Theme:** Cyberpunk cityscape at night
+- **Description:** A vibrant neon-lit metropolis with towering skyscrapers, holographic billboards, and a lone hover vehicle gliding through the starry sky. Created to capture the futuristic, tech-forward spirit of the FreelanceFlow platform.
+- **Why:** I chose this theme because FreelanceFlow represents the future of work—dynamic, boundary-pushing, and illuminated by innovation. The cyberpunk aesthetic mirrors the platform's modern, cutting-edge approach to connecting freelancers and clients.
