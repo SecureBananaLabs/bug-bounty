@@ -1,8 +1,12 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 
 export async function register(req, res) {
+  if (req.body?.role === "admin") {
+    return fail(res, "Invalid role", 400);
+  }
+
   const payload = registerSchema.parse(req.body);
   const result = await registerUser(payload);
   return ok(res, result, 201);
