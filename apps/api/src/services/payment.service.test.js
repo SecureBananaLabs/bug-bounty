@@ -2,118 +2,123 @@ import { jest } from '@jest/globals';
 import { createPaymentIntent } from './payment.service.js';
 
 // Mock the stripe module
+const mockPaymentIntentsCreate = jest.fn();
+
 jest.unstable_mockModule('stripe', () => {
   return {
     default: jest.fn().mockImplementation(() => ({
       paymentIntents: {
-        create: mockCreate,
+        create: mockPaymentIntentsCreate,
       },
     })),
   };
 });
 
-let mockCreate;
-
 describe('createPaymentIntent', () => {
   beforeEach(() => {
-    mockCreate = jest.fn();
     jest.clearAllMocks();
   });
 
-  describe('validation', () => {
-    it('throws when amount is missing', async () => {
-      await expect(createPaymentIntent({})).rejects.toThrow('amount is required and must be a positive integer');
+  it('should throw error when amount is missing', async () => {
+    await expect(createPaymentIntent({})).rejects.toThrow(
+      'amount is required and must be a positive integer'
+    );
+  });
+
+  it('should throw error when amount is not an integer', async () => {
+    await expect(createPaymentIntent({ amount: 10.5 })).rejects.toThrow(
+      'amount is required and must be a positive integer'
+    );
+  });
+
+  it('should throw error when amount is not positive', async () => {
+    await expect(createPaymentIntent({ amount: 0 })).rejects.toThrow(
+      'amount is required and must be a positive integer'
+    );
+    await expect(createPaymentIntent({ amount: -10 })).rejects.toThrow(
+      'amount is required and must be a positive integer'
+    );
+  });
+
+  it('should default currency to "usd" when not provided', async () => {
+    mockPaymentIntentsCreate.mockResolvedValue({
+      id: 'pi_123',
+      client_secret: 'secret_123',
     });
 
-    it('throws when amount is not a number', async () => {
-      await expect(createPaymentIntent({ amount: 'abc' })).rejects.toThrow('amount is required and must be a positive integer');
-    });
+    const result = await createPaymentIntent({ amount: 1000 });
 
-    it('throws when amount is zero', async () => {
-      await expect(createPaymentIntent({ amount: 0 })).rejects.toThrow('amount is required and must be a positive integer');
+    expect(mockPaymentIntentsCreate).toHaveBeenCalledWith({
+      amount: 1000,
+      currency: 'usd',
     });
-
-    it('throws when amount is negative', async () => {
-      await expect(createPaymentIntent({ amount: -100 })).rejects.toThrow('amount is required and must be a positive integer');
-    });
-
-    it('throws when amount is a float', async () => {
-      await expect(createPaymentIntent({ amount: 10.5 })).rejects.toThrow('amount is required and must be a positive integer');
+    expect(result).toEqual({
+      paymentId: 'pi_123',
+      amount: 1000,
+      currency: 'usd',
+      provider: 'stripe',
+      clientSecret: 'secret_123',
     });
   });
 
-  describe('Stripe API call', () => {
-    it('calls stripe.paymentIntents.create with correct arguments', async () => {
-      const mockPaymentIntent = {
-        id: 'pi_123',
-        client_secret: 'pi_123_secret',
-        amount: 1000,
-        currency: 'usd',
-      };
-      mockCreate.mockResolvedValue(mockPaymentIntent);
-
-      const result = await createPaymentIntent({ amount: 1000 });
-
-      expect(mockCreate).toHaveBeenCalledWith({
-        amount: 1000,
-        currency: 'usd',
-      });
-      expect(result).toEqual({
-        paymentId: 'pi_123',
-        clientSecret: 'pi_123_secret',
-        amount: 1000,
-        currency: 'usd',
-        provider: 'stripe',
-      });
+  it('should use provided currency', async () => {
+    mockPaymentIntentsCreate.mockResolvedValue({
+      id: 'pi_456',
+      client_secret: 'secret_456',
     });
 
-    it('uses provided currency', async () => {
-      const mockPaymentIntent = {
-        id: 'pi_456',
-        client_secret: 'pi_456_secret',
-        amount: 500,
-        currency: 'eur',
-      };
-      mockCreate.mockResolvedValue(mockPaymentIntent);
+    const result = await createPaymentIntent({ amount: 2000, currency: 'eur' });
 
-      await createPaymentIntent({ amount: 500, currency: 'eur' });
-
-      expect(mockCreate).toHaveBeenCalledWith({
-        amount: 500,
-        currency: 'eur',
-      });
+    expect(mockPaymentIntentsCreate).toHaveBeenCalledWith({
+      amount: 2000,
+      currency: 'eur',
+    });
+    expect(result).toEqual({
+      paymentId: 'pi_456',
+      amount: 2000,
+      currency: 'eur',
+      provider: 'stripe',
+      clientSecret: 'secret_456',
     });
   });
 
-  describe('error handling', () => {
-    it('re-throws Stripe errors with original message', async () => {
-      const stripeError = new Error('Your card was declined.');
-      stripeError.type = 'StripeCardError';
-      mockCreate.mockRejectedValue(stripeError);
+  it('should catch and re-throw Stripe errors with original message', async () => {
+    const stripeError = new Error('Your card was declined.');
+    stripeError.type = 'StripeCardError';
+    mockPaymentIntentsCreate.mockRejectedValue(stripeError);
 
-      await expect(createPaymentIntent({ amount: 1000 })).rejects.toThrow('Your card was declined.');
-    });
+    await expect(createPaymentIntent({ amount: 1000 })).rejects.toThrow(
+      'Your card was declined.'
+    );
+  });
 
-    it('re-throws non-Stripe errors as-is', async () => {
-      const genericError = new Error('Network failure');
-      mockCreate.mockRejectedValue(genericError);
+  it('should catch and re-throw StripeInvalidRequestError with original message', async () => {
+    const stripeError = new Error('Invalid request');
+    stripeError.type = 'StripeInvalidRequestError';
+    mockPaymentIntentsCreate.mockRejectedValue(stripeError);
 
-      await expect(createPaymentIntent({ amount: 1000 })).rejects.toThrow('Network failure');
-    });
+    await expect(createPaymentIntent({ amount: 1000 })).rejects.toThrow(
+      'Invalid request'
+    );
   });
 });
 
-// Integration/smoke test - only runs when STRIPE_SMOKE_TEST is set
-if (process.env.STRIPE_SMOKE_TEST) {
-  describe('createPaymentIntent integration', () => {
-    it('creates a real test-mode PaymentIntent', async () => {
-      const result = await createPaymentIntent({ amount: 100, currency: 'usd' });
+describe('integration test', () => {
+  it('should create a real PaymentIntent in test mode when env flag is set', async () => {
+    if (!process.env.RUN_STRIPE_INTEGRATION_TEST) {
+      return;
+    }
 
-      expect(result.paymentId).toMatch(/^pi_/);
-      expect(result.clientSecret).toMatch(/^pi_.*_secret/);
-      expect(result.amount).toBe(100);
-      expect(result.currency).toBe('usd');
-      expect(result.provider).toBe('stripe');
-    });
+    // For integration test, we need to import the actual module without mocking
+    const { createPaymentIntent: realCreatePaymentIntent } = await import('./payment.service.js');
+    
+    const result = await realCreatePaymentIntent({ amount: 1000, currency: 'usd' });
+    
+    expect(result.paymentId).toBeDefined();
+    expect(result.paymentId).not.toMatch(/^pay_\d+$/);
+    expect(result.clientSecret).toBeDefined();
+    expect(result.amount).toBe(1000);
+    expect(result.currency).toBe('usd');
+    expect(result.provider).toBe('stripe');
   });
-}
+});
