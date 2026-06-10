@@ -11,12 +11,13 @@
   },
   "dependencies": {},
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^0.34.0"
   }
 }
-    "migrate": "prisma migrate dev"
-  },
-  "dependencies": {
     "@prisma/client": "^5.17.0"
   },
   "devDependencies": {
