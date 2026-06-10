@@ -1,31 +1,10 @@
 {
   "name": "@freelanceflow/ui",
-  "private": true,
-  "main": "src/index.ts"
-{
-  "name": "@freelanceflow/ui",
-  "version": "1.0.0",
-  "description": "UI components for FreelanceFlow",
+  "version": "0.0.1",
   "main": "dist/index.js",
-  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "clean": "rm -rf dist"
-  },
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.0"
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
-}
 }
