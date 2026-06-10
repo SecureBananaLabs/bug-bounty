@@ -1,9 +1,6 @@
 # Project
-<img width="663" height="183" alt="Image" src="https't//github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-<!-- Include low hanging fruit automation -->
-
-# FreelanceFlow Monorepo
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
@@ -36,12 +33,30 @@ The API includes:
 
 - Auth routes (register, login, OAuth callback, JWT refresh)
 - CRUD routes for users, jobs, and proposals
-- Payments routes (Stripe-focused service placeholder)
-- Reviews, messaging, notifications
-- File uploads and search
-- Admin routes
+to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
 
-Backend architecture follows:
+Follow all instructions carefully and precisely.
+
+# Bug Bounty
+
+## How to claim a bounty
+
+1. Choose one of the following:
+   - Find a feature/bug to work on from this repository
+   - Create a GitHub issue on the repository to start working on it
+     - Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+
+## Requirements
+
+- Pull requests without issues will not be considered.
+- Bounties can only be paid upon successful PR merge.
+
+- All branches, commits, and PRs related to bug fixes or features must be 100% in English.
+
+- Please see the [issues](/issues) page to see a list of available tasks.
+
+## LLMs are now targeting this repository for easy bounties!
+
 
 - Middleware layer (auth, rate limiting, error handling)
 - Controller layer
