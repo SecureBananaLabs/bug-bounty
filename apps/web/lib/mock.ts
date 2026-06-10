@@ -4,7 +4,23 @@ export const jobs = [
   { id: "job-103", title: "Design SaaS onboarding flows", budget: "$900" }
 ];
 
+interface Freelancer {
+  username: string;
+  skills: string[];
+  rate: string;
+}
+
+interface Job {
+  id: string;
+  title: string;
+  budget: string;
+}
+
 export const freelancers = [
   { username: "maya-dev", skills: ["Next.js", "TypeScript"], rate: "$65/hr" },
   { username: "jordan-ux", skills: ["Figma", "UX Research"], rate: "$52/hr" }
 ];
+
+export const getFreelancerByUsername = (username: string): Freelancer | undefined => {
+  return freelancers.find(freelancer => freelancer.username === username);
+};
