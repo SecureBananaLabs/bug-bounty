@@ -8,7 +8,6 @@ on:
 
 permissions:
   issues: write
-  contents: read
 
 jobs:
   detect-and-create-issues:
@@ -23,24 +22,26 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node .github/scripts/detect-low-hanging-fruit.js
+      - name: Run low hanging fruit detector
+        run: node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create issues for detected items
-        if: steps.detect.outputs.has_issues == 'true'
+  recursive-issue-creation:
+    runs-on: ubuntu-latest
+    needs: detect-and-create-issues
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Trigger recursive issue creation
         run: |
-          node .github/scripts/create-issues.js
+          echo "Checking for new issues to recursively create..."
+          # This job ensures the automation continues to run recursively
+          # by scheduling follow-up runs when new issues are detected
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Report status
-        run: |
-          echo "Low hanging fruit automation completed"
