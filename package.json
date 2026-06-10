@@ -13,10 +13,14 @@
 {
   "name": "bug-bounty",
   "version": "1.0.0",
-  "private": true,
+  "description": "Low hanging fruit automation for bug bounty program",
   "scripts": {
-    "lint": "echo 'Add linter configuration'",
-    "test": "echo 'Add test configuration'"
+    "lint": "eslint .",
+    "test": "echo 'No tests configured'",
+    "scan:low-hanging-fruit": "node scripts/scan-low-hanging-fruit.js"
+  },
+  "devDependencies": {
+    "@octokit/rest": "^20.0.0"
   }
 }
 }
