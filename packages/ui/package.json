@@ -1,5 +1,9 @@
 {
   "name": "@freelanceflow/ui",
+  "private": true,
+  "main": "src/index.ts"
+{
+  "name": "@freelanceflow/ui",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -8,8 +12,19 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
-  "prepublishOnly": "npm run build"
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+  }
 }
 }
