@@ -1,16 +1,28 @@
 import { ok } from "../utils/response.js";
-import { globalSearch } from "../services/searchService.js";
+import { globalSearch } => { globalSearch } from "../services/searchService.js";
 
-function isValidSearchQuery(query) {
-  if (typeof query !== 'string') return false;
-  if (query.length > 200) return false;
-  return true;
+function validateSearchQuery(query) {
+  if (typeof query !== 'string') {
+    throw new Error('Search query must be a string');
+  }
+
+  const trimmedQuery = query.trim();
+  if (trimmedQuery.length > 200) {
+    throw new Error('Search query must not exceed 200 characters');
+  }
+
+  return trimmedQuery;
 }
 
 export async function search(req, res) {
-  const query = req.query.q ?? "";
-  if (!isValidSearchQuery(query)) {
-    return res.status(400).json({ error: "Invalid query parameter" });
+  try {
+    const query = req.query.q;
+    if (query === undefined) {
+      return ok(res, await globalSearch(""));
+    }
+    const validatedQuery = validateSearchQuery(query);
+    return ok(res, await globalSearch(validatedQuery));
+  } catch (error) {
+    throw error;
   }
-  return ok(res, await globalSearch(query.trim()));
 }
