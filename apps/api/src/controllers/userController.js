@@ -1,12 +1,10 @@
 import { ok } from "../utils/response.js";
-import { createUser, listUsers } from "../services/userService.js";
+import { registerUser, listUsers } from "../services/userService.js";
 
 export async function getUsers(req, res) {
-  const users = await listUsers();
-  return ok(res, users);
+  return ok(res, await listUsers());
 }
 
 export async function postUser(req, res) {
-  const user = await createUser(req.body);
-  return ok(res, user, 201);
+  return ok(res, await registerUser(req.body), 201);
 }
