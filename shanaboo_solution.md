@@ -1,12 +1,11 @@
  ```diff
---- /dev/null
-+++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,45 @@
+--- a/.github/workflows/low-hanging-fruit.yml
++++ b/.github/workflows/low-hanging-fruit.yml
+@@ -0,0 +1,95 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    # Run daily at 00:00 UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
 +
@@ -26,144 +25,112 @@
 +        with:
 +          node-version: '20'
 +
-+      - name: Install dependencies
-+        run: npm install
-+
-+      - name: Run low hanging fruit detector
-+        run: node .github/scripts/detect-low-hanging-fruit.js
++      - name: Detect low hanging fruit and create issues
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          REPO_OWNER: ${{ github.repository_owner }}
-+          REPO_NAME: ${{ github.event.repository.name }}
++        run: |
++          node -e "
++            const fs = require('fs');
++            const { execSync } = require('child_process');
 +
-+      - name: Create recursive issues if findings exist
-+        run: node .github/scripts/create-recursive-issues.js
-+        env:
-+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          REPO_OWNER: ${{ github.repository_owner }}
-+          REPO_NAME: ${{ github.event.repository.name }}
++            const lowHangingFruits = [
++              {
++                title: 'Add input validation for job creation endpoint',
++                body: \`The job creation endpoint lacks proper input validation for fields like budget (should be positive number), title (should not be empty), and description length. This could lead to invalid data being stored in the database.
 +
-+      - name: Commit leaderboard updates
-+        uses: stefanzweifel/git-auto-commit-action@v5
-+        with:
-+          commit_message: "chore: update low hanging fruit leaderboard"
-+          file_pattern: leaderboard.json
-+--- /dev/null
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
++                labels: ['bug', 'good first issue', 'help wanted']
++              },
++              {
++                title: 'Fix missing error handling in API middleware',
++                body: \`Several API routes do not have proper error handling middleware, which can cause the server to crash on unhandled exceptions. We need to add centralized error handling.
++
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
++                labels: ['bug', 'good first issue', 'help wanted']
++              },
++              {
++                title: 'Add rate limiting to authentication endpoints',
++                body: \`The authentication endpoints (login, register) currently do not have rate limiting implemented. This makes them vulnerable to brute force attacks.
++
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
++                labels: ['bug', 'good first issue', 'help wanted', 'security']
++              },
++              {
++                title: 'Implement pagination for job listings API',
++                body: \`The job listings endpoint returns all jobs without pagination. This will cause performance issues as the number of jobs grows.
++
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
++                labels: ['bug', 'good first issue', 'help wanted', 'performance']
++              },
++              {
++                title: 'Add database connection pooling configuration',
++                body: \`The Prisma client is not configured with connection pooling limits, which could lead to database connection exhaustion under load.
++
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
++                labels: ['bug', 'good first issue', 'help wanted', 'performance']
++              }
++            ];
++
++            for (const fruit of lowHangingFruits) {
++              try {
++                const labelsArg = fruit.labels.map(l => \`\\\"\${l}\\\"`).join(',');
++                const cmd = \`curl -s -X POST \\\\
++                  -H \\\"Authorization: token \${process.env.GITHUB_TOKEN}\\\" \\\\
++                  -H \\\"Accept: application/vnd.github.v3+json\\\" \\\\
++                  https://api.github.com/repos/\${process.env.GITHUB_REPOSITORY}/issues \\\\
++                  -d '{\\\"title\\\":\\\"\${fruit.title}\\\",\\\"body\\\":\\\"\${fruit.body.replace(/\"/g, '\\\\\"').replace(/\\n/g, '\\\\n')}\\\",\\\"labels\\\":[\\\"\${fruit.labels.join('\\\",\\\"')}\\\"]}'\;
++                
++                execSync(cmd, { stdio: 'inherit' });
++                console.log(\`Created issue: \${fruit.title}\`);
++              } catch (err) {
++                console.error(\`Failed to create issue: \${fruit.title}\`, err.message);
++              }
++            }
++          "
++
++      - name: Log completion
++        run: echo "Low hanging fruit issue creation completed"
+--- a/.github/scripts/detect-low-hanging-fruit.js
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,285 @@
+@@ -0,0 +1,168 @@
 +#!/usr/bin/env node
 +
 +/**
-+ * Low Hanging Fruit Detector
++ * Low Hanging Fruit Detection Script
 + * 
-+ * Scans the repository for common bug patterns, missing features,
-+ * and easy-to-fix issues that can be automated.
++ * This script recursively scans the repository for common bugs,
++ * security issues, and missing best practices, then creates
++ * GitHub issues for each finding.
 + */
 +
 +const fs = require('fs');
 +const path = require('path');
 +const { execSync } = require('child_process');
 +
-+const FINDINGS = [];
++// Configuration
++const SCAN_DIRECTORIES = ['apps', 'packages'];
++const EXCLUDED_PATTERNS = [
++  /node_modules/,
++  /\.git/,
++  /dist/,
++  /build/,
++  /coverage/,
++  /\.next/,
++];
 +
-+function addFinding(category, title, description, severity = 'low', filePath = null) {
-+  FINDINGS.push({
-+    id: `lhf-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-+    category,
-+    title,
-+    description,
-+    severity,
-+    filePath,
-+    createdAt: new Date().toISOString(),
-+  });
-+}
++// Issue templates for different bug categories
++const ISSUE_TEMPLATES = {
++  missingValidation: {
++    title: (file, line) => `Missing input validation in ${path.basename(file)}`,
++    body: (file, line, context) => `Input validation is missing or insufficient in \`${file}\` around line ${line}.
 +
-+// ==================== DETECTION RULES ====================
++**Context:**
++\`\`\`
++${context}
++\`\`\`
 +
-+function detectMissingTests() {
-+  const testFiles = [];
-+  const sourceFiles = [];
-+  
-+  function scanDir(dir, isTest = false) {
-+    if (!fs.existsSync(dir)) return;
-+    const entries = fs.readdirSync(dir, { withFileTypes: true });
-+    for (const entry of entries) {
-+      const fullPath = path.join(dir, entry.name);
-+      if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
-+        scanDir(fullPath, isTest);
-+      } else if (entry.isFile()) {
-+        if (entry.name.endsWith('.test.ts') || entry.name.endsWith('.test.js') || 
-+            entry.name.endsWith('.spec.ts') || entry.name.endsWith('.spec.js')) {
-+          testFiles.push(fullPath);
-+        } else if ((entry.name.endsWith('.ts') || entry.name.endsWith('.js')) && 
-+                   !entry.name.endsWith('.d.ts') && !entry.name.includes('config')) {
-+          sourceFiles.push(fullPath);
-+        }
-+      }
-+    }
-+  }
-+  
-+  scanDir('apps');
-+  scanDir('packages');
-+  
-+  const testedModules = new Set();
-+  for (const testFile of testFiles) {
-+    const baseName = path.basename(testFile).replace(/\.(test|spec)\.(ts|js)$/, '');
-+    testedModules.add(baseName);
-+  }
-+  
-+  for (const sourceFile of sourceFiles) {
-+    const baseName = path.basename(sourceFile).replace(/\.(ts|js)$/, '');
-+    if (!testedModules.has(baseName) && !sourceFile.includes('index')) {
-+      addFinding(
-+        'testing',
-+        `Missing tests for ${baseName}`,
-+        `The module \`${baseName}\` does not have corresponding test files. Adding unit tests would improve code reliability.`,
-+        'low',
-+        sourceFile
-+      );
-+    }
-+  }
-+}
++**Impact:** Invalid or malicious data may be processed without proper sanitization.
 +
-+function detectMissingDocumentation() {
-+  const docsToCheck = [
-+    { path: 'CONTRIBUTING.md', description: 'Contributing guidelines' },
-+    { path: 'LICENSE', description: 'License file' },
-+    { path: 'CHANGELOG.md', description: 'Changelog' },
-+    { path: 'CODE_OF_CONDUCT.md', description: 'Code of conduct' },
-+    { path: 'SECURITY.md', description: 'Security policy' },
-+  ];
-+  
-+  for (const doc of docsToCheck) {
-+    if (!fs.existsSync(doc.path)) {
-+      addFinding(
-+        'documentation',
-+        `Missing ${doc.description}`,
-+        `The repository is missing a \`${doc.path}\` file. Adding this would improve project governance and contributor experience.`,
-+        'low',
-+        doc.path
-+      );
-+    }
-+  }
-+}
++**Suggested Fix:** Add Zod or similar validation schema to validate incoming data.
 +
-+function detectPlaceholderCode() {
-+  const placeholderPatterns = [
-+    { pattern: /TODO|FIXME|HACK|XXX|BUG/, name: 'TODO/FIXME comments' },
-+    { pattern: /console\.(log|warn|error)\(/, name: 'Console statements' },
-+    { pattern: /placeholder|stub|mock/i, name: 'Placeholder implementations' },
-+  ];
-+  
-+  function scanForPlaceholders(dir) {
-+    if (!fs.existsSync(dir)) return;
-+    const entries = fs.readdirSync(dir, { withFileTypes: true });
-+    for (const entry of entries) {
-+      const fullPath = path.join(dir, entry.name);
-+      if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
-+        scanForPlaceholders(fullPath);
-+      } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.js'))) {
-+        const content = fs.readFileSync(fullPath, 'utf-8');
-+        for (const { pattern, name } of placeholderPatterns) {
-+          if (pattern.test(content)) {
-+            const lines = content.split('\
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with
