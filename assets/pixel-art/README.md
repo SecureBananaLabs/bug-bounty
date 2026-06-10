@@ -1,7 +1,9 @@
-# Pixel Art: Friendly Robot
+# Pixel Art: Cyberpunk Cityscape
 
-**Created by:** ShanaBoo  
-**Date:** 2025-01-09
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-## Description
-A cheerful retro-style robot with a glowing heart core, representing the warmth and helpfulness of AI assistants in creative collaboration. The robot features a classic boxy design with antenna, expressive LED eyes, and a visible heart-shaped power source in its chest. Chosen because robots symbolize the intersection of technology and creativity — core themes of this bug bounty project.
+**Why:** I chose this theme to represent the vibrant, always-on nature of the modern freelance digital workspace — where creativity and technology intersect, much like neon lights against a dark skyline. The cityscape symbolizes the bustling marketplace of ideas that FreelanceFlow enables.
+
+**File:** `cyberpunk-cityscape.png`
+**Dimensions:** 64x64 pixels
+**Format:** PNG
