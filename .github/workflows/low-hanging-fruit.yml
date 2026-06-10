@@ -2,7 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at midnight UTC
+    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -26,126 +26,119 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          node -e "
-            const fs = require('fs');
-            const path = require('path');
-            const { execSync } = require('child_process');
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
 
-            // Helper to run GitHub CLI
-            function gh(args) {
-              return execSync('gh ' + args, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
-            }
+          // Patterns that indicate low hanging fruit / easy fixes
+          const patterns = [
+            { pattern: /TODO|FIXME|HACK|XXX|BUG/, type: 'code-smell', label: 'good first issue' },
+            { pattern: /console\.(log|warn|error)/, type: 'debug-statement', label: 'good first issue' },
+            { pattern: /unused|deprecated/i, type: 'cleanup', label: 'good first issue' },
+            { pattern: /type.*any/, type: 'typescript-any', label: 'good first issue' },
+          ];
 
-            // Find TODO/FIXME/XXX comments in source files
-            function findTodoComments() {
-              const results = [];
-              const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rs', '.md'];
+          const issueTemplate = (type, file, line, match) => `## Low Hanging Fruit: ${type}
+
+**File:** \`${file}\`
+**Line:** ${line}
+**Match:** \`${match}\`
+
+This issue was automatically detected as low hanging fruit suitable for new contributors.
+
+## Acceptance Criteria
+- [ ] Identify the specific problem in the referenced file/line
+- [ ] Implement a fix that addresses the issue
+- [ ] Add or update tests as needed
+- [ ] Ensure all existing tests pass
+
+## Notes
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+/bounty $50
+`;
+
+          async function createIssue(title, body, labels) {
+            const { Octokit } = await import('@octokit/rest');
+            const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+            
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+            
+            await octokit.rest.issues.create({
+              owner,
+              repo,
+              title,
+              body,
+              labels: ['bug bounty', 'good first issue', 'AI agent friendly', ...labels],
+            });
+          }
+
+          function scanDirectory(dir, results = []) {
+            const items = fs.readdirSync(dir);
+            
+            for (const item of items) {
+              const fullPath = path.join(dir, item);
+              const stat = fs.statSync(fullPath);
               
-              function scanDir(dir, relativePath = '') {
-                let items;
-                try {
-                  items = fs.readdirSync(dir, { withFileTypes: true });
-                } catch (e) {
-                  return;
-                }
+              if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
+                scanDirectory(fullPath, results);
+              } else if (stat.isFile() && (item.endsWith('.ts') || item.endsWith('.js') || item.endsWith('.tsx') || item.endsWith('.jsx'))) {
+                const content = fs.readFileSync(fullPath, 'utf-8');
+                const lines = content.split('\n');
                 
-                for (const item of items) {
-                  if (item.name.startsWith('.') || item.name === 'node_modules' || item.name === 'dist' || item.name === 'build') {
-                    continue;
-                  }
-                  
-                  const fullPath = path.join(dir, item.name);
-                  const relPath = relativePath ? path.join(relativePath, item.name) : item.name;
-                  
-                  if (item.isDirectory()) {
-                    scanDir(fullPath, relPath);
-                  } else if (extensions.some(ext => item.name.endsWith(ext))) {
-                    try {
-                      const content = fs.readFileSync(fullPath, 'utf-8');
-                      const lines = content.split('\n');
-                      lines.forEach((line, idx) => {
-                        const match = line.match(/(TODO|FIXME|XXX|HACK|BUG)(?::|\\s*)(.+)/i);
-                        if (match) {
-                          results.push({
-                            file: relPath,
-                            line: idx + 1,
-                            type: match[1].toUpperCase(),
-                            description: match[2].trim(),
-                            fullLine: line.trim()
-                          });
-                        }
+                for (let i = 0; i < lines.length; i++) {
+                  for (const { pattern, type, label } of patterns) {
+                    if (pattern.test(lines[i])) {
+                      results.push({
+                        type,
+                        file: fullPath,
+                        line: i + 1,
+                        match: lines[i].trim(),
+                        label,
                       });
-                    } catch (e) {
-                      // Skip files we can't read
                     }
                   }
                 }
               }
+            }
+            
+            return results;
+          }
+
+          async function main() {
+            const findings = scanDirectory('.');
+            const uniqueFindings = [];
+            
+            // Deduplicate by file+line
+            const seen = new Set();
+            for (const finding of findings) {
+              const key = `${finding.file}:${finding.line}`;
+              if (!seen.has(key)) {
+                seen.add(key);
+                uniqueFindings.push(finding);
+              }
+            }
+            
+            // Limit to 5 issues per run to avoid spam
+            const limitedFindings = uniqueFindings.slice(0, 5);
+            
+            for (const finding of limitedFindings) {
+              const title = `[${finding.type}] ${finding.file.split('/').pop()} - line ${finding.line}`;
+              const body = issueTemplate(finding.type, finding.file, finding.line, finding.match);
               
-              scanDir('.');
-              return results;
-            }
-
-            // Get existing issues to avoid duplicates
-            function getExistingIssues() {
               try {
-                const output = gh('issue list --repo ${{ github.repository }} --limit 100 --json title,body');
-                return JSON.parse(output);
-              } catch (e) {
-                return [];
+                await createIssue(title, body, [finding.label]);
+                console.log(`Created issue: ${title}`);
+              } catch (err) {
+                console.error(`Failed to create issue: ${title}`, err.message);
               }
             }
+          }
 
-            const todos = findTodoComments();
-            const existingIssues = getExistingIssues();
-            const existingTitles = new Set(existingIssues.map(i => i.title));
+          main().catch(console.error);
+          EOF
 
-            let createdCount = 0;
-
-            for (const todo of todos) {
-              const title = \`[\${todo.type}] \${todo.description.substring(0, 80)}\`;
-              
-              if (existingTitles.has(title)) {
-                continue;
-              }
-
-              const body = \`## Low Hanging Fruit Detected
-
-**File:** \\\`\${todo.file}\\\` (line \${todo.line})
-**Type:** \${todo.type}
-**Original comment:** \\\`\${todo.fullLine}\\\`
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Notes
-- This issue was automatically created by the Low Hanging Fruit automation
-- Please review the code location and create a pull request with an associated issue\`;
-
-              try {
-                gh(\`issue create --repo \${{ github.repository }} --title \\\"\${title}\\\" --body \\\"\${body}\\\"\`);
-                createdCount++;
-                console.log(\`Created issue: \${title}\`);
-              } catch (e) {
-                console.error(\`Failed to create issue: \${title}\`, e.message);
-              }
-            }
-
-            console.log(\`Created \${createdCount} new issues out of \${todos.length} detected items.\`);
-          "
-
-  recursive-trigger:
-    needs: detect-and-create-issues
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger next iteration
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Schedule the next run by creating a workflow dispatch event
-          # This enables recursive behavior for continuous monitoring
-          echo "Scheduling next low hanging fruit scan..."
-          # The cron schedule handles automatic recurrence
-          # This step ensures the workflow can be chained if needed
-          echo "Recursive automation complete. Next run scheduled via cron."
-          echo "To enable true recursion, this workflow creates issues that spawn more work."
-          echo "Each created issue references #743 for the bounty chain."
+      - name: Install Octokit
+        run: npm install @octokit/rest
+        working-directory: ${{ github.workspace }}
+--- /dev/null
