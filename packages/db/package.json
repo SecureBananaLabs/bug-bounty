@@ -1,28 +1,22 @@
 {
   "name": "@freelanceflow/db",
   "version": "1.0.0",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./index.ts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
-  "types": "module"
-}
-
-{
-  "name": "test",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Test script for verifying the import of the package",
+  "dependencies": {},
   "scripts": {
-    "test-import": "node -e 'import(\"@freelanceflow/db\").then(() => console.log(\"Import successful\"))'"
-  },
-  "devDependencies": {
-    "@freelanceflow/db": "file:."
+    "build": "tsc"
   }
 }
+    "migrate": "prisma migrate dev"
+  },
+  "dependencies": {
     "@prisma/client": "^5.17.0"
   },
   "devDependencies": {
