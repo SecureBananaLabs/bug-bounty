@@ -4,3 +4,247 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+button, input, select {
+  font: inherit;
+}
+
+button, select, input {
+  border: 1px solid #3a4a78;
+  border-radius: 8px;
+  background: #101936;
+  color: #f2f5ff;
+  padding: 0.55rem 0.7rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover, select:hover, input:focus, select:focus, button:focus {
+  border-color: #7dd3fc;
+  outline: 2px solid rgba(125, 211, 252, 0.18);
+}
+
+.admin-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-toolbar,
+.admin-section-head,
+.admin-filters,
+.admin-row-actions,
+.admin-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admin-toolbar {
+  justify-content: space-between;
+  background: #111a32;
+  border: 1px solid #263761;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.admin-toolbar h2,
+.admin-panel h3 {
+  margin: 0;
+}
+
+.admin-toolbar p {
+  margin: 0.3rem 0 0;
+  color: #9fb0d0;
+}
+
+.admin-toolbar label,
+.admin-filters label,
+.admin-section-head label {
+  display: grid;
+  gap: 0.35rem;
+  color: #b7c4df;
+  font-size: 0.9rem;
+}
+
+.admin-metrics {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.admin-card,
+.admin-panel,
+.admin-denied,
+.admin-error {
+  background: #151c35;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.admin-card span,
+.admin-list-item span,
+.admin-detail span,
+td small {
+  color: #aebcda;
+}
+
+.admin-card strong {
+  display: block;
+  font-size: 1.6rem;
+  margin-top: 0.35rem;
+}
+
+.admin-layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.admin-panel {
+  min-width: 0;
+}
+
+.admin-panel-wide {
+  grid-column: 1 / -1;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  margin-top: 0.75rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border-bottom: 1px solid #29395f;
+  padding: 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #b7c4df;
+  font-weight: 700;
+}
+
+td small {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.admin-stack,
+.admin-detail,
+.admin-chart {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.admin-list-item,
+.admin-dispute-button {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+  padding: 0.85rem;
+  background: #101936;
+}
+
+.admin-dispute-button {
+  text-align: left;
+  width: 100%;
+}
+
+.admin-list-item .admin-row-actions {
+  grid-column: 1 / -1;
+}
+
+.admin-detail {
+  border-top: 1px solid #29395f;
+  padding-top: 0.75rem;
+}
+
+.admin-link-button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #7dd3fc;
+}
+
+.admin-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  background: #263761;
+  color: #f2f5ff;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.admin-pill-active,
+.admin-pill-approved,
+.admin-pill-resolved {
+  background: #14532d;
+}
+
+.admin-pill-under-review,
+.admin-pill-flagged,
+.admin-pill-escalated {
+  background: #854d0e;
+}
+
+.admin-pill-suspended,
+.admin-pill-banned,
+.admin-pill-rejected {
+  background: #7f1d1d;
+}
+
+.admin-empty,
+.admin-denied,
+.admin-error {
+  color: #d7def0;
+  margin-top: 0.75rem;
+}
+
+.admin-error {
+  border-color: #b91c1c;
+}
+
+.admin-bar-row {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) 2rem;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.admin-bar-row div {
+  height: 0.7rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #29395f;
+}
+
+.admin-bar-row i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #38bdf8;
+}
+
+@media (max-width: 780px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+}
