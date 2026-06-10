@@ -1,21 +1,16 @@
 {
-  "name": "freelanceflow-benchmark",
-  "version": "1.0.0",
-  "description": "Freelance marketplace monorepo",
+  "name": "freelance-platform-monorepo",
+  "private": true,
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
-  }
-}
-    "dev": "npm run dev -w apps/api",
-    "test": "npm run test -w apps/api",
-    "test:ui": "npm run test -w apps/web",
-    "db:reset": "npm run db:reset -w packages/db",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
     "benchmark": "node benchmarks/run-benchmarks.js",
-    "benchmark:ci": "node benchmarks/ci-benchmark.js"
+    "start": "node server.js",
+    "lint": "next lint"
   },
-  "author": "",
