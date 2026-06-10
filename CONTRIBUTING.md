@@ -41,33 +41,9 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing to SecureBananaLabs/bug-bounty
+# Contributing to the Project
 
-## Bug Bounty Program
-
-We welcome bug bounty hunters to find and report issues. When creating issues for bounties:
-
-1. Create one issue per bug/feature.
-2. Include a detailed description of the problem.
-3. Propose a solution or improvement.
-4. Follow our issue templates.
-
-## Issue Creation Guidelines
-
-When creating a new issue, please ensure you include:
-
-1. A clear and concise title
-2. Description of the bug or feature request
-3. Steps to reproduce (for bugs)
-4. Expected behavior
-5. Actual behavior
-6. Additional context
-
-## Low Hanging Fruit Automation
+This project accepts contributions. Please keep the following guidelines in mind when contributing:
 
 This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Code Review Process
-
-All pull requests must be reviewed and approved by at least one maintainer before merging.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
