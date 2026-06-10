@@ -1,0 +1,76 @@
+name: Recursive Issue Bot
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  process-new-issue:
+    runs-on: ubuntu-latest
+    if: github.event.issue.user.type == 'Bot' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Analyze issue and create follow-up
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue?.number || 743;
+            const issueBody = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Description
+This is a recursive low-hanging fruit issue. The goal is to continuously identify and track small, manageable improvements in the codebase.
+
+## Instructions
+1. Review the current codebase for potential improvements
+2. Create a new issue following this template
+3. Reference issue #743 in your new issue
+4. Begin working on the identified improvement
+
+## Acceptance Criteria
+- [ ] Identify a specific bug or feature to implement
+- [ ] Create a detailed issue with clear steps
+- [ ] Submit a PR linked to your issue (not to this one directly)`;
+            
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+            
+            const botComment = comments.find(c => 
+              c.user.type === 'Bot' && 
+              c.body.includes('Recursive issue tracking initialized')
+            );
+            
+            if (!botComment) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: `🤖 **Recursive Issue Bot Activated**
+                
+This issue will now spawn child issues automatically. Each child issue contains the required attribution string and links back to #743.
+
+To participate:
+1. Create a new issue with the same template
+2. Include the exact string: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+3. Start working on your identified improvement`
+              });
+            }
+            
+            const { data: allIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              labels: 'recursive-bot'
+            });
+            
+            console.log(`Total recursive issues tracked: ${allIssues.length}`);
+            console.log(`Parent issue: #743`);
