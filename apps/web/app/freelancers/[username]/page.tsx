@@ -6,48 +6,50 @@ export default function FreelancerProfilePage({ params }: { params: { username: 
       <p>Portfolio, reviews, and active proposals appear here.</p>
     </section>
   );
-import { notFound } from 'next/navigation';
-import { freelancers } from '../../lib/mock';
+import { notFound } from "next/navigation";
+import { freelancers } from "../../../lib/mock";
 
-interface Freelancer {
-  username: string;
-  skills: string[];
-  rate: string;
+interface FreelancerProfilePageProps {
+  params: {
+    username: string;
+  };
 }
 
-export default function FreelancerProfile({ params }: { params: { username: string } }) {
-  const { username } = params;
-  
-  // Find the freelancer by username from mock data
-  const freelancer = freelancers.find((f: any) => f.username === username);
-  
-  // If freelancer not found, trigger 404
+export default function FreelancerProfilePage({ params }: FreelancerProfilePageProps) {
+  const freelancer = freelancers.find((f) => f.username === params.username);
+
   if (!freelancer) {
     notFound();
   }
-  
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">Freelancer Profile: {freelancer.username}</h1>
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-3">Skills</h2>
-            <div className="flex flex-wrap gap-2">
-              {freelancer.skills.map((skill: string, index: number) => (
-                <span key={index} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold mb-3">Rate</h2>
-            <p className="text-lg font-medium">{freelancer.rate}</p>
+    <main className="max-w-4xl mx-auto px-4 py-8">
+      <div className="bg-white rounded-lg shadow p-6">
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">{freelancer.username}</h1>
+        <p className="text-lg text-gray-700 mb-4">{freelancer.rate}</p>
+        <div className="mb-4">
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            Skills
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {freelancer.skills.map((skill) => (
+              <span
+                key={skill}
+                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+              >
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
+}
+
+export function generateStaticParams() {
+  return freelancers.map((freelancer) => ({
+    username: freelancer.username,
+  }));
 }
 }
