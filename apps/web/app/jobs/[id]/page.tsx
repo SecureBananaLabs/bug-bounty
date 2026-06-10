@@ -6,38 +6,44 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
       <p>Responsibilities, milestones, and proposals would be shown here.</p>
     </section>
   );
-import { notFound } from "next/navigation";
-import { jobs } from "@/lib/mock";
+import { notFound } from 'next/navigation';
+import { jobs } from '@/lib/mock';
 
-interface JobDetailPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function JobDetailPage({ params }: JobDetailPageProps) {
-  const job = jobs.find((j) => j.id === params.id);
-
+export default function JobDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+  
+  // Find the job in mock data
+  const job = jobs.find(job => job.id === id);
+  
+  // If job not found, trigger 404
   if (!job) {
     notFound();
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">{job.title}</h1>
-      <p className="text-lg text-gray-700 mb-2">
-        <span className="font-semibold">Budget:</span> {job.budget}
-      </p>
-      <p className="text-sm text-gray-500">
-        <span className="font-semibold">Job ID:</span> {job.id}
-      </p>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Job Details</h1>
+        
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-2">{job.title}</h2>
+            <div className="flex items-center gap-4 text-lg text-gray-600">
+              <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full font-medium">
+                Budget: {job.budget}
+              </span>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-200 pt-6">
+            <h3 className="text-xl font-medium text-gray-800 mb-4">Job Description</h3>
+            <p className="text-gray-600">
+              This is a placeholder for the detailed job description that would normally be displayed here.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
-
-export function generateStaticParams() {
-  return jobs.map((job) => ({
-    id: job.id,
-  }));
 }
 }
