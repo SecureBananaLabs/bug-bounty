@@ -6,8 +6,3 @@ export const registerSchema = z.object({
   role: z.string().optional(),
   fullName: z.string().min(1, "Full name is required"),
 });
-
-export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
