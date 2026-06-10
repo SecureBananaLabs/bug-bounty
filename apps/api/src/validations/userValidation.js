@@ -1,10 +1,15 @@
 const { z } = require('zod');
 
 const registerSchema = z.object({
-  email: z.string().email().nonempty(),
-  password: z.string().min(8).nonempty(),
-  fullName: z.string().min(1).nonempty(),
-  role: z.string().nonempty()
+  email: z.string().email(),
+  password: z.string().min(8),
+  fullName: z.string().min(1), // Added fullName requirement
+  role: z.string()
 });
 
-module.exports = { registerSchema };
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8)
+});
+
+module.exports = { registerSchema, loginSchema };
