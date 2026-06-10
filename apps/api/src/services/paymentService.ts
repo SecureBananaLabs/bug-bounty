@@ -1,47 +1,39 @@
-import Stripe from 'stripe';
+import { Stripe } from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2023-10-16',
-  typescript: true,
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: '2023-08-16',
 });
 
-interface PaymentIntentPayload {
-  amount: number;
-  currency?: string;
-  [key: string]: any;
-}
-
-interface PaymentIntentResult {
-  paymentId: string;
-  clientSecret: string;
-  amount: number;
-  currency: string;
-}
-
-export async function createPaymentIntent(payload: PaymentIntentPayload): Promise<PaymentIntentResult> {
-  // Validate required parameters
-  if (payload.amount === undefined || payload.amount === null || !Number.isInteger(payload.amount) || payload.amount <= 0) {
-    throw new Error('Amount is required and must be a positive integer representing the smallest currency unit (e.g., cents)');
+export async function createPaymentIntent(payload) {
+  // Validate the payload
+  if (!payload.amount || typeof payload.amount !== 'number' || payload.amount <= 0) {
+    throw new Error('Amount is required and must be a positive integer');
   }
-
+  
+  if (!Number.isInteger(payload.amount) || payload.amount <= 0) {
+    throw new Error('Amount must be a positive integer');
+  }
+  
   const currency = payload.currency || "usd";
   
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: payload.amount,
-      currency: currency,
-    });
+  // Create the payment intent
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: payload.amount,
+    currency: currency,
+    payment_method_types: ['card']
+  });
+  
+  return {
+    clientSecret: paymentIntent.client_secret,
+    paymentId: paymentIntent.id,
+    amount: payload.amount,
+    currency: payload.currency || "usd"
+  };
+}
 
-    return {
-      paymentId: paymentIntent.id,
-      clientSecret: paymentIntent.client_secret,
-      amount: payload.amount,
-      currency: currency
-    };
-  } catch (error: any) {
-    if (error.type && typeof error.type === 'string' && error.type.startsWith('Stripe')) {
-      throw new Error(`Stripe API error: ${error.message}`);
-    }
-    throw error;
-  }
+export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+
+// TODO: integrate Stripe SDK and return client secret.
+export async function createPaymentIntent(payload) {
+  // Implementation will be replaced with real Stripe integration
 }
