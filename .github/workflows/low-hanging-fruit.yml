@@ -5,70 +5,42 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 
-permissions:
-  issues: write
-  contents: read
-
 jobs:
-  create-low-hanging-fruit-issues:
+  detect-and-create-issues:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Find TODO/FIXME comments and create issues
-        uses: actions/github-script@v7
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          script: |
-            const { data: files } = await github.rest.git.getTree({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tree_sha: context.sha,
-              recursive: true
-            });
-            
-            const issues = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open'
-            });
-            
-            const existingTitles = new Set(issues.data.map(i => i.title));
-            
-            const issueBody = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Description
-This is an automated low-hanging fruit issue created to help improve the codebase. Please review the related code and implement the necessary fix or enhancement.
-
-## Acceptance Criteria
-- [ ] Identify the specific improvement needed
-- [ ] Implement the fix following project conventions
-- [ ] Add/update tests as needed`;
-            
-            const newIssues = [
-              'Add input validation for job creation API',
-              'Implement rate limiting for authentication routes',
-              'Add pagination to job listings endpoint',
-              'Create database index on frequently queried fields',
-              'Add error handling for file upload edge cases',
-              'Implement soft delete for user accounts',
-              'Add API documentation with OpenAPI/Swagger',
-              'Create unit tests for payment service',
-              'Add CSRF protection for state-changing operations',
-              'Implement request logging middleware'
-            ];
-            
-            for (const title of newIssues) {
-              if (!existingTitles.has(title)) {
-                await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: title,
-                  body: issueBody,
-                  labels: ['good first issue', 'help wanted', 'bug bounty', 'AI agent friendly']
-                });
-                console.log(`Created issue: ${title}`);
-              } else {
-                console.log(`Issue already exists: ${title}`);
-              }
-            }
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+      
+      - name: Create issues for detected items
+        if: steps.detect.outputs.has_results == 'true'
+        run: |
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+      
+      - name: Report status
+        run: |
+          echo "Low hanging fruit detection completed"
+          echo "Check repository issues for newly created items"
