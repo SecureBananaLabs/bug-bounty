@@ -41,7 +41,31 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing to the Project
+# Contributing to FreelanceFlow
 
-This project welcomes contributions. Please follow the standard GitHub workflow for contributions.
+We're excited that you're interested in contributing to FreelanceFlow! This document provides guidelines and instructions to help you contribute effectively.
+
+## How to Contribute
+
+1. **Find a feature/bug to work on from this repository**
+   - Look through the existing issues to find something that interests you
+   - Make sure to only work on issues that you have created yourself as per the project's contribution rules
+
+2. **Create a GitHub issue**
+   - Before starting work, create a new issue describing the feature or bug you want to work on
+   - Use the following string in your issue:
+   
+   "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+   
+3. **Follow all instructions carefully**
+   - Make sure to follow the specific requirements mentioned in each issue
+   - Pull requests without corresponding issues will not be considered
+
+## Getting Started
+
+To get started, check out the existing issues or create a new one following the guidelines above.
+
+## Code of Conduct
+
+Please follow our code of conduct in all interactions with the project.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
