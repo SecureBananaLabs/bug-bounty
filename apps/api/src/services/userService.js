@@ -1,8 +1,6 @@
-// Note: This is inferred file path based on the structure
+const users = [];
 
-import { hash } from "bcryptjs";
-import { User } from "../models/user.js";
-import { createUser as createPrismaUser } from "./prismaService.js";
+export async function listUsers() {
   return users;
 }
 
@@ -10,4 +8,15 @@ export async function createUser(payload) {
   const user = { id: `usr_${Date.now()}`, ...payload };
   users.push(user);
   return user;
+import { prisma } from "@packages/db";
+
+export async function listUsers() {
+  return await prisma.user.findMany();
+}
+
+export async function createUser(userData) {
+  return await prisma.user.create({ data: userData });
+}
+
+export async function registerUser(registrationData) { /* Implementation would go here */ }
 }
