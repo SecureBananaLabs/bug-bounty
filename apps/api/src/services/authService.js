@@ -1,24 +1,38 @@
-import bcrypt from "bcryptjs";
-import { prisma } from "@bug-bounty/db";
+import { registerSchema } from '../validation/authSchema.js';
 
-export async function registerUser({ email, password, role, fullName }) {
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    const err = new Error("Email already in use");
+export const register = async (userData) => {
+  // Validate the userData includes fullName
+  const { email, password, role, fullName } = userData;
+  if (!fullName || fullName.trim() === '') {
+    throw new Error('Full name is required');
+  }
+  
+  const validData = registerSchema.parse(userData);
+  const user = await registerUser(validData);
+  return user;
+};
+
+export { register };
+import { signAccessToken } from "../utils/jwt.js";
+
+export async function registerUser(payload) {
+  // TODO: persist new user via Prisma
+  return {
+    id: `usr_${Date.now()}`,
+    email: payload.email,
     role: payload.role,
     token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
   };
 }
 
-  const user = await prisma.user.create({
-    data: {
-      email,
-      fullName,
-      passwordHash: await bcrypt.hash(password, 10),
-      role: role ?? "CLIENT",
-    },
-  });
-
-  return { id: user.id, email: user.email, fullName: user.fullName, role: user.role };
+export async function loginUser(payload) {
+  // TODO: verify password hash against stored user record
+  return {
+    email: payload.email,
+    token: signAccessToken({ sub: "usr_existing", role: "client" })
+  };
 }
+
+export async function refreshToken() {
+  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
 }
