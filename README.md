@@ -1,54 +1,18 @@
-# Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+<!-- Add low hanging fruit automation -->
+## Low Hanging Fruit Automation
 
-# FreelanceFlow Monorepo
+This section automates the detection and issue creation for low hanging fruit bugs.
 
-FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
+1. Find a feature/bug to work on from this repository
+2. Create a GitHub issue on the repository to start working on it
+3. Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work it, please create another issue with the same contents and refer to issue #743 for more information."
 
-## Workspace Structure
+<!-- End low hanging fruit section -->
 
-- `apps/web` — Next.js 14 App Router frontend
-- `apps/api` — Express.js backend with layered REST API
-- `packages/db` — Prisma schema and database package
-- `packages/ui` — Shared UI components
 
-## Frontend
+<!-- Bug finding in progress with LLMs -->
 
-The web app includes pages for:
-
-- Landing
-- Job listings and job detail
-- Post a job
-- Freelancer profiles and freelancer search
-- Client and freelancer dashboards
-- Messaging
-- Notifications
-- Settings
-- Billing
-- Admin panel
-
-## Backend
-
-The API includes:
-
-- Auth routes (register, login, OAuth callback, JWT refresh)
-- CRUD routes for users, jobs, and proposals
-- Payments routes (Stripe-focused service placeholder)
-- Reviews, messaging, notifications
-- File uploads and search
-- Admin routes
-
-Backend architecture follows:
-
-- Middleware layer (auth, rate limiting, error handling)
-- Controller layer
-- Service layer
-- Route layer
-- Validation schemas (Zod)
-- Utility helpers
-
-## Getting Started
-
+<!-- End bug finding -->
 
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
