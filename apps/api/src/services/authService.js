@@ -1,23 +1,40 @@
-import { signAccessToken } from "../utils/jwt.js";
+import jwt from 'jsonwebtoken';
+import { env } from '../config/env.js';
 
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
-  };
-}
+const JWT_SECRET = env.jwtSecret || 'fallback-secret';
 
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
+export const authService = {
+  async register({ email, password, role }) {
+    // 注册逻辑...
+    const user = { id: 'generated-id', email, role };
+    const token = this._signToken(user.id, user.role);
+    return { user, token };
+  },
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
-}
+  async login({ email, password }) {
+    // 登录逻辑...
+    const user = { id: 'found-id', email, role: 'client' };
+    const token = this._signToken(user.id, user.role);
+    return { user, token };
+  },
+
+  async refreshToken(subject, role) {
+    // 刷新 token，使用传入的 subject 和 role 代替硬编码
+    return this._signToken(subject, role);
+  },
+
+  async handleOAuthCallback(code) {
+    // OAuth 处理...
+    const user = { id: 'oauth-id', email: 'oauth@example.com', role: 'freelancer' };
+    const token = this._signToken(user.id, user.role);
+    return { user, token };
+  },
+
+  _signToken(subject, role) {
+    return jwt.sign(
+      { sub: subject, role },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+  }
+};
