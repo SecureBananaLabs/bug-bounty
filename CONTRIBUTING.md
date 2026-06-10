@@ -1,4 +1,17 @@
-<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
+# Contributing to FreelanceFlow
+
+## Finding Low Hanging Fruit Issues
+
+To find issues that are suitable for newcomers, look for issues labeled with `good first issue` or `beginner-friendly`. These are typically:
+
+- Documentation improvements
+- Minor bug fixes
+- Small feature enhancements
+- Code quality improvements
+
+When creating a new issue for low hanging fruit, please use the template "Low Hanging Fruit Bug Report" and include the restriction notice as specified in issue #743.
+
+# FreelanceFlow Contributing Guide
 
 <img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
 
@@ -41,31 +54,4 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
-# Contributing to FreelanceFlow
-
-We're excited that you're interested in contributing to FreelanceFlow! This document provides guidelines and instructions to help you contribute effectively.
-
-## How to Contribute
-
-1. **Find a feature/bug to work on from this repository**
-   - Look through the existing issues to find something that interests you
-   - Make sure to only work on issues that you have created yourself as per the project's contribution rules
-
-2. **Create a GitHub issue**
-   - Before starting work, create a new issue describing the feature or bug you want to work on
-   - Use the following string in your issue:
-   
-   "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-   
-3. **Follow all instructions carefully**
-   - Make sure to follow the specific requirements mentioned in each issue
-   - Pull requests without corresponding issues will not be considered
-
-## Getting Started
-
-To get started, check out the existing issues or create a new one following the guidelines above.
-
-## Code of Conduct
-
-Please follow our code of conduct in all interactions with the project.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
