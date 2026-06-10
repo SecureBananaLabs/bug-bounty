@@ -1,14 +1,26 @@
 {
   "name": "@freelanceflow/db",
-  "private": true,
+  "version": "1.0.0",
+  "description": "Database package for FreelanceFlow using Prisma",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "generate": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "@prisma/client": "^5.17.0"
-  },
-  "devDependencies": {
-    "prisma": "^5.17.0"
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
   }
 }
