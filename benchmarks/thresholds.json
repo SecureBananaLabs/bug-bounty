@@ -1,0 +1,14 @@
+{
+  "global": {
+    "p99LatencyMs": 500,
+    "errorRatePercent": 1
+  },
+  "endpoints": {
+    "/api/search": {
+      "p99LatencyMs": 800
+    },
+    "/api/health": {
+      "p99LatencyMs": 100
+    }
+  }
+}

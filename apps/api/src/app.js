@@ -23,7 +23,7 @@ export function createApp() {
   app.use(express.json());
   app.use(apiLimiter);
 
-  app.get("/health", (req, res) => {
+  app.get("/api/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
 
