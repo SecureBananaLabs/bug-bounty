@@ -1,37 +1,31 @@
-import { badRequest } from "../utils/response.js";
 import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
-
-function validateSearchQuery(query) {
-  // Check if query is a string
-  if (typeof query !== 'string') {
-    return { isValid: false, error: 'Search query must be a string' };
-  }
-
-  // Trim whitespace
-  let trimmedQuery = query.trim();
-
-  // Check length
-  if (trimmedQuery.length > 200) {
-    return { isValid: false, error: 'Search query exceeds maximum length of 200 characters' };
-  }
-
-  // Basic sanitization (removing potentially harmful characters)
-  // Here we just return the trimmed query as it's already been length-checked
-  // In a more comprehensive solution, you might want to strip special characters or apply other rules
-  return { 
-    isValid: true, 
-    sanitizedQuery: trimmedQuery
-  };
-}
+import { createError } from "../utils/error.js";
 
 export async function search(req, res) {
-  const query = req.query.q ?? "";
-  const validation = validateSearchQuery(query);
+  const query = req.query.q;
   
-  if (!validation.isValid) {
-    return badRequest(res, { error: validation.error });
+  // Validate that query is a string and not an array
+  if (Array.isArray(query)) {
+    return res.status(400).json({ error: "Invalid query parameter: query must be a string" });
   }
   
-  return ok(res, await globalSearch(validation.sanitizedQuery));
+  // Check if query is provided and is a string
+  if (query === undefined || query === null) {
+    // If no query, search with empty string
+    return ok(res, await globalSearch(""));
+  }
+  
+  if (typeof query !== 'string') {
+    return res.status(400).json({ error: "Invalid query parameter: query must be a string" });
+  }
+  
+  // Trim and validate length
+  const trimmedQuery = query.trim();
+  if (trimmedQuery.length > 200) {
+    return res.status(400).json({ error: "Query exceeds maximum length of 200 characters" });
+  }
+  
+  // If validation passes, proceed with search
+  return ok(res, await globalSearch(trimmedQuery));
 }
