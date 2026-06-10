@@ -6,8 +6,8 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
       <p>Responsibilities, milestones, and proposals would be shown here.</p>
     </section>
   );
-import { notFound } from 'next/navigation';
-import { jobs } from '@/lib/mock';
+import { notFound } from "next/navigation";
+import { jobs } from "../../../lib/mock";
 
 interface JobDetailPageProps {
   params: {
@@ -16,30 +16,28 @@ interface JobDetailPageProps {
 }
 
 export default function JobDetailPage({ params }: JobDetailPageProps) {
-  const { id } = params;
-  
-  // Find the job in mock data
-  const job = jobs.find(job => job.id === id);
-  
-  // If job not found, show 404
+  const job = jobs.find((j) => j.id === params.id);
+
   if (!job) {
     notFound();
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">{job.title}</h1>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold text-gray-800 mb-2">Project Budget: {job.budget}</h2>
-          </div>
-          <div className="text-gray-600">
-            <p className="mb-4">Project ID: {job.id}</p>
-          </div>
-        </div>
-      </div>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-4">{job.title}</h1>
+      <p className="text-lg text-gray-700 mb-2">
+        <span className="font-semibold">Budget:</span> {job.budget}
+      </p>
+      <p className="text-sm text-gray-500">Job ID: {job.id}</p>
     </div>
   );
 }
+
+export function generateStaticParams() {
+  return jobs.map((job) => ({
+    id: job.id,
+  }));
+}
+
+export const dynamicParams = true;
 }
