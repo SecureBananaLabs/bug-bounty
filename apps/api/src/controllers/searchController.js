@@ -1,28 +1,22 @@
 import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
-import { badRequest } from "../utils/response.js";
+
+function validateSearchQuery(query) {
+  if (typeof query !== 'string') {
+    throw new Error('Search query must be a string');
+  }
+  
+  const trimmedQuery = query.trim();
+  
+  if (trimmedQuery.length > 200) {
+    throw new Error('Search query must be less than 200 characters');
+  }
+  
+  return trimmedQuery;
+}
 
 export async function search(req, res) {
-  const rawQuery = req.query.q;
-
-  // Reject non-string input (e.g., repeated query parameters become arrays)
-  if (rawQuery !== undefined && typeof rawQuery !== "string") {
-    return badRequest(res, "Search query must be a single string");
-  }
-
-  const query = (rawQuery ?? "").trim();
-
-  // Reject empty query after trimming
-  if (query.length === 0) {
-    return badRequest(res, "Search query is required");
-  }
-
-  const MAX_QUERY_LENGTH = 200;
-
-  // Enforce maximum length limit
-  if (query.length > MAX_QUERY_LENGTH) {
-    return badRequest(res, `Search query exceeds maximum length of ${MAX_QUERY_LENGTH} characters`);
-  }
-
-  return ok(res, await globalSearch(query));
+  const searchQuery = req.query.q ?? "";
+  const validatedQuery = validateSearchQuery(searchQuery);
+  return ok(res, await globalSearch(validatedQuery));
 }
