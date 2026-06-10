@@ -1,16 +1,15 @@
 {
   "name": "@freelanceflow/db",
-  "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.js", 
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.d.ts"
     }
   }
-}
+} 
+  "scripts": {
     "generate": "prisma generate",
     "migrate": "prisma migrate dev"
   },
