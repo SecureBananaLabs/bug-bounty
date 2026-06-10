@@ -1,18 +1,4 @@
-import { registerSchema } from '../validation/authSchema.js';
-
-export const register = async (userData) => {
-  // Validate the userData includes fullName
-  const { email, password, role, fullName } = userData;
-  if (!fullName || fullName.trim() === '') {
-    throw new Error('Full name is required');
-  }
-  
-  const validData = registerSchema.parse(userData);
-  const user = await registerUser(validData);
-  return user;
-};
-
-export { register };
+// This is a new file that would need to be created to handle the registration logic
 import { signAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
