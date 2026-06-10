@@ -1,43 +1,30 @@
-export default function FreelancerProfilePage({ params }: { params: { username: string } }) {
-  return (
-    <section className="card">
-      <h2>Freelancer Profile</h2>
-      <p>Profile: <strong>{params.username}</strong></p>
-      <p>Portfolio, reviews, and active proposals appear here.</p>
-    </section>
-  );
 import { notFound } from "next/navigation";
 import { freelancers } from "../../../lib/mock";
 
-interface FreelancerProfilePageProps {
-  params: {
-    username: string;
-  };
+interface Freelancer {
+  username: string;
+  skills: string[];
+  rate: string;
 }
 
-export default function FreelancerProfilePage({ params }: FreelancerProfilePageProps) {
-  const freelancer = freelancers.find((f) => f.username === params.username);
+export default function FreelancerProfile({ params }: { params: { username: string } }) {
+  const freelancer = freelancers.find((f: Freelancer) => f.username === params.username);
 
   if (!freelancer) {
     notFound();
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-2">{freelancer.username}</h1>
-      <p className="text-xl text-green-600 font-semibold mb-4">{freelancer.rate}</p>
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">Skills</h2>
-        <div className="flex flex-wrap gap-2">
-          {freelancer.skills.map((skill) => (
-            <span
-              key={skill}
-              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-            >
-              {skill}
-            </span>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Freelancer Profile: {freelancer.username}</h1>
+      <div className="mb-4">
+        <h2 className="text-xl font-semibold">Skills</h2>
+        <ul className="list-disc pl-5 mt-2">
+          {freelancer.skills.map((skill, index) => (
+            <li key={index}>{skill}</li>
           ))}
-        </div>
+        </ul>
+        <p className="mt-4">Hourly Rate: {freelancer.rate}</p>
       </div>
     </div>
   );
