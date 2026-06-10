@@ -5,17 +5,17 @@ function generateUserId() {
 }
 
 export async function registerUser(payload) {
-  const userId = generateUserId();
   return {
-    id: userId,
+    id: generateUserId(),
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: userId, role: payload.role })
+    token: signAccessToken({ sub: generateUserId(), role: payload.role })
   };
 }
+
+  return {
     email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    token: signAccessToken({ sub: generateUserId(), role: payload.role })
   };
 }
 
@@ -25,6 +25,10 @@ export async function loginUser(payload) {
     email: payload.email,
     token: signAccessToken({ sub: "usr_existing", role: "client" })
   };
+}
+
+export async function refreshToken() {
+  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
 }
 
 export async function refreshToken() {
