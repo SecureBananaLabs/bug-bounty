@@ -1,6 +1,6 @@
 {
-  "name": "@freelanceflow/db",
-  "version": "1.0.0",
+  "name": "@fre1anceflow/db",
+  "version": "0.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -10,8 +10,12 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": ["dist"]
+  "files": [
+    "dist/"
+  ]
 }
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0"
