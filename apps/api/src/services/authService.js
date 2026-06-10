@@ -1,36 +1,43 @@
-import bcrypt from "bcryptjs";
-import { prisma } from "@bug-bounty/db";
-import { generateTokens } from "../utils/jwt.js";
-import AppError from "../utils/AppError.js";
+import { signAccessToken } from "../utils/jwt.js";
 
-export async function registerUser(data) {
-  const existing = await prisma.user.findUnique({
+export async function registerUser(payload) {
+  // TODO: persist new user via Prisma
+  return {
+    id: `usr_${Date.now()}`,
+    email: payload.email,
     role: payload.role,
     token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
   };
 }
 
-
-  const hashedPassword = await bcrypt.hash(data.password, 10);
-
-  const user = await prisma.user.create({
-    data: {
-      email: data.email,
-      password: hashedPassword,
+export async function loginUser(payload) {
+  // TODO: verify password hash against stored user record
+  return {
+    email: payload.email,
+    token: signAccessToken({ sub: "usr_existing", role: "client" })
+  };
+}
 
 export async function refreshToken() {
   return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
-    },
-  });
+import { registerSchema } from '../schemas/authSchemas.js';
 
-  const { password, ...userWithoutPassword } = user;
-  return userWithoutPassword;
+export async function registerUser(userData) {
+  // Validate input with the updated schema
+  const validatedData = registerSchema.parse(userData);
+  
+  // In a real implementation, this would create the user in the database
+  // and return the user object with fullName included
+  return {
+    id: Date.now(), // placeholder ID generation
+    fullName: validatedData.fullName,
+    email: validatedData.email,
+    role: validatedData.role,
+    createdAt: new Date().toISOString(),
+  };
 }
 
-    throw new AppError("Invalid credentials", 401);
-  }
-
-  const { password: _, ...userWithoutPassword } = user;
-  return {
-    user: userWithoutPassword,
-    tokens: generateTokens(user),
+export default { 
+  registerUser 
+};
+}
