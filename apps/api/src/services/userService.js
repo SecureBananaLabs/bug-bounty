@@ -1,6 +1,8 @@
-const users = [];
+// Note: This is inferred file path based on the structure
 
-export async function listUsers() {
+import { hash } from "bcryptjs";
+import { User } from "../models/user.js";
+import { createUser as createPrismaUser } from "./prismaService.js";
   return users;
 }
 
