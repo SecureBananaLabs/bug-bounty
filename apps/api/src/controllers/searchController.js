@@ -1,21 +1,16 @@
-import { BadRequest } from "../utils/errors.js";
 import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
 
-function validateSearchQuery(query) {
-  if (query === undefined || query === null) {
-    return "";
-  }
-  
-  if (typeof query !== 'string') {
-    throw new BadRequest("Search query must be a string");
-  }
-  
-  const trimmedQuery = query.trim().substring(0, 200);
-  return trimmedQuery;
+function isValidSearchQuery(query) {
+  if (typeof query !== 'string') return false;
+  if (query.length > 200) return false;
+  return true;
 }
 
 export async function search(req, res) {
-  const validatedQuery = validateSearchQuery(req.query.q);
-  return ok(res, await globalSearch(validatedQuery));
+  const query = req.query.q ?? "";
+  if (!isValidSearchQuery(query)) {
+    return res.status(400).json({ error: "Invalid query parameter" });
+  }
+  return ok(res, await globalSearch(query.trim()));
 }
