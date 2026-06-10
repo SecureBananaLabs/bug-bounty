@@ -2,9 +2,11 @@ import { ok } from "../utils/response.js";
 import { createUser, listUsers } from "../services/userService.js";
 
 export async function getUsers(req, res) {
-  return ok(res, await listUsers());
+  const users = await listUsers();
+  return ok(res, users);
 }
 
 export async function postUser(req, res) {
-  return ok(res, await createUser(req.body), 201);
+  const user = await createUser(req.body);
+  return ok(res, user, 201);
 }
