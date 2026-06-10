@@ -1,0 +1,16 @@
+{
+  "name": "@bug-bounty/benchmarks",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "benchmark": "node run-benchmarks.js",
+    "benchmark:smoke": "node run-benchmarks.js --smoke"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
