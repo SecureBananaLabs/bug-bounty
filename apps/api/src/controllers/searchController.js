@@ -1,28 +1,28 @@
 import { ok } from "../utils/response.js";
-import { globalSearch } => { globalSearch } from "../services/searchService.js";
+import { globalSearch } from "../services/searchService.js";
 
-function validateSearchQuery(query) {
-  if (typeof query !== 'string') {
-    throw new Error('Search query must be a string');
+function validateSearchQuery(rawQuery) {
+  if (typeof rawQuery !== "string") {
+    return { valid: false, error: "Query must be a single string" };
   }
 
-  const trimmedQuery = query.trim();
-  if (trimmedQuery.length > 200) {
-    throw new Error('Search query must not exceed 200 characters');
+  const trimmed = rawQuery.trim();
+
+  if (trimmed.length === 0) {
+    return { valid: false, error: "Query cannot be empty" };
   }
 
-  return trimmedQuery;
+  if (trimmed.length > 200) {
+    return { valid: false, error: "Query exceeds maximum length of 200 characters" };
+  }
+
+  return { valid: true, query: trimmed };
 }
 
 export async function search(req, res) {
-  try {
-    const query = req.query.q;
-    if (query === undefined) {
-      return ok(res, await globalSearch(""));
-    }
-    const validatedQuery = validateSearchQuery(query);
-    return ok(res, await globalSearch(validatedQuery));
-  } catch (error) {
-    throw error;
+  const validation = validateSearchQuery(req.query.q);
+  if (!validation.valid) {
+    return res.status(400).json({ error: validation.error });
   }
+  return ok(res, await globalSearch(validation.query));
 }
