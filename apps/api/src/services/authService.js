@@ -1,13 +1,21 @@
-import { signAccessToken } from "../utils/jwt.js';
+import { signAccessToken } from "../utils/jwt.js";
+
+function generateUserId() {
+  return `usr_${Date.now()}`;
+}
 
 export async function registerUser(payload) {
-  const userId = `usr_${Date.now()}`;
-  // TODO: persist new user via Prisma
+  const userId = generateUserId();
   return {
     id: userId,
     email: payload.email,
     role: payload.role,
     token: signAccessToken({ sub: userId, role: payload.role })
+  };
+}
+    email: payload.email,
+    role: payload.role,
+    token: signAccessToken({ sub: "usr_existing", role: "client" })
   };
 }
 
