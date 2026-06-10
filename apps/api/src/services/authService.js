@@ -1,52 +1,66 @@
-import prisma from '@freelanceflow/db';
+import { prisma } from '@freelanceflow/db';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env.js';
 
-export async function registerUser(data) {
-  const hashedPassword = await bcrypt.hash(data.password, 10);
+export async function registerUser({ email, password, role, fullName }) {
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) {
+    throw new Error('Email already in use');
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await prisma.user.create({
     data: {
-      email: data.email,
+      email,
       password: hashedPassword,
-      fullName: data.fullName,
-      role: data.role,
+      role,
+      fullName,
     },
   });
 
-  return {
-    id: user.id,
-    email: user.email,
-    fullName: user.fullName,
-    role: user.role,
-  };
-}
-
-export async function loginUser(email, password) {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    throw new Error('Invalid email or password');
-  }
-
-  const passwordMatch = await bcrypt.compare(password, user.password);
-  if (!passwordMatch) {
-    throw new Error('Invalid email or password');
-  }
-
   const token = jwt.sign(
-    { userId: user.id, role: user.role },
+    { userId: user.id, email: user.email },
     env.jwtSecret,
     { expiresIn: '7d' }
   );
 
   return {
-    token,
     user: {
       id: user.id,
       email: user.email,
-      fullName: user.fullName,
       role: user.role,
+      fullName: user.fullName,
     },
+    token,
+  };
+}
+
+export async function loginUser({ email, password }) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    throw new Error('Invalid credentials');
+  }
+
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) {
+    throw new Error('Invalid credentials');
+  }
+
+  const token = jwt.sign(
+    { userId: user.id, email: user.email },
+    env.jwtSecret,
+    { expiresIn: '7d' }
+  );
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      fullName: user.fullName,
+    },
+    token,
   };
 }
