@@ -1,11 +1,12 @@
  ```diff
---- a/.github/workflows/low-hanging-fruit.yml
+--- /dev/null
 +++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,95 @@
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
++    # Run daily at midnight UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
 +
@@ -25,112 +26,159 @@
 +        with:
 +          node-version: '20'
 +
-+      - name: Detect low hanging fruit and create issues
++      - name: Install dependencies
++        run: npm ci
++
++      - name: Run low hanging fruit detection
++        id: detect
++        run: |
++          node .github/scripts/detect-low-hanging-fruit.js
+          
++      - name: Create GitHub issues for detected items
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 +        run: |
-+          node -e "
-+            const fs = require('fs');
-+            const { execSync } = require('child_process');
-+
-+            const lowHangingFruits = [
-+              {
-+                title: 'Add input validation for job creation endpoint',
-+                body: \`The job creation endpoint lacks proper input validation for fields like budget (should be positive number), title (should not be empty), and description length. This could lead to invalid data being stored in the database.
-+
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
-+                labels: ['bug', 'good first issue', 'help wanted']
-+              },
-+              {
-+                title: 'Fix missing error handling in API middleware',
-+                body: \`Several API routes do not have proper error handling middleware, which can cause the server to crash on unhandled exceptions. We need to add centralized error handling.
-+
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
-+                labels: ['bug', 'good first issue', 'help wanted']
-+              },
-+              {
-+                title: 'Add rate limiting to authentication endpoints',
-+                body: \`The authentication endpoints (login, register) currently do not have rate limiting implemented. This makes them vulnerable to brute force attacks.
-+
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
-+                labels: ['bug', 'good first issue', 'help wanted', 'security']
-+              },
-+              {
-+                title: 'Implement pagination for job listings API',
-+                body: \`The job listings endpoint returns all jobs without pagination. This will cause performance issues as the number of jobs grows.
-+
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
-+                labels: ['bug', 'good first issue', 'help wanted', 'performance']
-+              },
-+              {
-+                title: 'Add database connection pooling configuration',
-+                body: \`The Prisma client is not configured with connection pooling limits, which could lead to database connection exhaustion under load.
-+
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`,
-+                labels: ['bug', 'good first issue', 'help wanted', 'performance']
-+              }
-+            ];
-+
-+            for (const fruit of lowHangingFruits) {
-+              try {
-+                const labelsArg = fruit.labels.map(l => \`\\\"\${l}\\\"`).join(',');
-+                const cmd = \`curl -s -X POST \\\\
-+                  -H \\\"Authorization: token \${process.env.GITHUB_TOKEN}\\\" \\\\
-+                  -H \\\"Accept: application/vnd.github.v3+json\\\" \\\\
-+                  https://api.github.com/repos/\${process.env.GITHUB_REPOSITORY}/issues \\\\
-+                  -d '{\\\"title\\\":\\\"\${fruit.title}\\\",\\\"body\\\":\\\"\${fruit.body.replace(/\"/g, '\\\\\"').replace(/\\n/g, '\\\\n')}\\\",\\\"labels\\\":[\\\"\${fruit.labels.join('\\\",\\\"')}\\\"]}'\;
-+                
-+                execSync(cmd, { stdio: 'inherit' });
-+                console.log(\`Created issue: \${fruit.title}\`);
-+              } catch (err) {
-+                console.error(\`Failed to create issue: \${fruit.title}\`, err.message);
-+              }
-+            }
-+          "
-+
-+      - name: Log completion
-+        run: echo "Low hanging fruit issue creation completed"
---- a/.github/scripts/detect-low-hanging-fruit.js
++          node .github/scripts/create-issues.js
++--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,168 @@
+@@ -0,0 +1,218 @@
 +#!/usr/bin/env node
-+
 +/**
 + * Low Hanging Fruit Detection Script
 + * 
-+ * This script recursively scans the repository for common bugs,
-+ * security issues, and missing best practices, then creates
-+ * GitHub issues for each finding.
++ * Scans the repository for common issues, missing features,
++ * and easy wins that can be automated into GitHub issues.
 + */
 +
 +const fs = require('fs');
 +const path = require('path');
-+const { execSync } = require('child_process');
 +
-+// Configuration
-+const SCAN_DIRECTORIES = ['apps', 'packages'];
-+const EXCLUDED_PATTERNS = [
-+  /node_modules/,
-+  /\.git/,
-+  /dist/,
-+  /build/,
-+  /coverage/,
-+  /\.next/,
-+];
++const RESULTS_FILE = '.github/scripts/detected-issues.json';
 +
-+// Issue templates for different bug categories
-+const ISSUE_TEMPLATES = {
-+  missingValidation: {
-+    title: (file, line) => `Missing input validation in ${path.basename(file)}`,
-+    body: (file, line, context) => `Input validation is missing or insufficient in \`${file}\` around line ${line}.
++// Patterns to detect low hanging fruit
++const DETECTORS = {
++  // TODO/FIXME comments in code
++  todoComments: {
++    name: 'TODO/FIXME Comments',
++    pattern: /(?:TODO|FIXME|HACK|XXX|BUG)\s*[:#]?\s*(.+)/gi,
++    extensions: ['.js', '.ts', '.tsx', '.jsx', '.py', '.java', '.go', '.rs'],
++    severity: 'low',
++    category: 'code-quality'
++  },
++  
++  // Missing documentation
++  missingDocs: {
++    name: 'Missing Documentation',
++    check: () => {
++      const issues = [];
++      const readmePath = path.join(process.cwd(), 'README.md');
++      const contributingPath = path.join(process.cwd(), 'CONTRIBUTING.md');
++      
++      if (!fs.existsSync(readmePath)) {
++        issues.push({
++          title: 'Add README.md with project documentation',
++          description: 'The repository is missing a README.md file. Add comprehensive documentation including setup instructions, usage, and contribution guidelines.'
++        });
++      }
++      
++      if (!fs.existsSync(contributingPath)) {
++        issues.push({
++          title: 'Add CONTRIBUTING.md for contributor guidelines',
++          description: 'Create a CONTRIBUTING.md file to help new contributors understand how to participate in the project.'
++        });
++      }
++      
++      return issues;
++    }
++  },
++  
++  // Missing tests
++  missingTests: {
++    name: 'Missing Test Coverage',
++    check: () => {
++      const issues = [];
++      const testFiles = findFiles(process.cwd(), /\.(test|spec)\.(js|ts|jsx|tsx)$/);
++      const sourceFiles = findFiles(process.cwd(), /\.(js|ts|jsx|tsx)$/).filter(f => !f.includes('node_modules') && !f.includes('.test.') && !f.includes('.spec.'));
++      
++      if (testFiles.length === 0 && sourceFiles.length > 0) {
++        issues.push({
++          title: 'Add unit tests for core functionality',
++          description: `No test files found. Consider adding tests for the ${sourceFiles.length} source files detected. Start with the most critical business logic.`
++        });
++      }
++      
++      return issues;
++    }
++  },
++  
++  // Security issues
++  securityIssues: {
++    name: 'Security Concerns',
++    check: () => {
++      const issues = [];
++      const packageJsonPath = path.join(process.cwd(), 'package.json');
++      
++      if (fs.existsSync(packageJsonPath)) {
++        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
++        const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
++        
++        // Check for common security misconfigurations
++        const envFiles = findFiles(process.cwd(), /\.env/);
++        const envExamples = findFiles(process.cwd(), /\.env\.example/);
++        
++        if (envFiles.length > 0 && envExamples.length === 0) {
++          issues.push({
++            title: 'Add .env.example for environment variable documentation',
++            description: 'Environment files exist but no .env.example is present. Create one to help developers understand required environment variables without exposing secrets.'
++          });
++        }
++      }
++      
++      return issues;
++    }
++  },
++  
++  // Dependency issues
++  dependencyIssues: {
++    name: 'Dependency Management',
++    check: () => {
++      const issues = [];
++      const packageLockPath = path.join(process.cwd(), 'package-lock.json');
++      const yarnLockPath = path.join(process.cwd(), 'yarn.lock');
++      
++      if (!fs.existsSync(packageLockPath) && !fs.existsSync(yarnLockPath)) {
++        issues.push({
++          title: 'Add lock file for deterministic installs',
++          description: 'No package-lock.json or yarn.lock found. Add a lock file to ensure consistent dependency versions across environments.'
++        });
++      }
++      
++      return issues;
++    }
++  }
++};
 +
-+**Context:**
-+\`\`\`
-+${context}
-+\`\`\`
++function findFiles(dir, pattern, results = []) {
++  if (!fs.existsSync(dir)) return results;
++  
++  const items = fs.readdirSync(dir);
++  for (const item of items) {
++    if (item === 'node_modules' || item === '.git' || item === 'dist' || item === 'build') continue;
++    
++    const fullPath = path.join(dir, item);
++    const stat = fs.statSync(fullPath);
++    
++    if (stat.isDirectory()) {
++      findFiles(fullPath, pattern, results);
++    } else if (pattern instanceof RegExp ? pattern.test(item) : item === pattern) {
++      results.push(fullPath);
++    }
++  }
++  
++  return results;
++}
 +
-+**Impact:** Invalid or malicious data may be processed without proper sanitization.
-+
-+**Suggested Fix:** Add Zod or similar validation schema to validate incoming data.
-+
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with
++function runDetection() {
++  const allIssues = [];
++  
++  for (const [key, detector] of Object.entries(DETECTORS))
