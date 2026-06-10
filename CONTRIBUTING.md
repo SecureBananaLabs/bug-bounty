@@ -1,17 +1,4 @@
-# Contributing to FreelanceFlow
-
-## Finding Low Hanging Fruit Issues
-
-To find issues that are suitable for newcomers, look for issues labeled with `good first issue` or `beginner-friendly`. These are typically:
-
-- Documentation improvements
-- Minor bug fixes
-- Small feature enhancements
-- Code quality improvements
-
-When creating a new issue for low hanging fruit, please use the template "Low Hanging Fruit Bug Report" and include the restriction notice as specified in issue #743.
-
-# FreelanceFlow Contributing Guide
+<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
 
 <img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
 
@@ -54,4 +41,24 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
+# Contributing to SecureBananaLows
+
+## Low Hanging Fruit Automation
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+## Getting Started
+
+1. Find a feature/bug to work on from this repository
+2. Create a GitHub issue on the repository to start working on it -- Pull requests without issues will not be considered.
+3. Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+
+## Issue Creation Steps
+
+1. Identify a bug or feature from the codebase
+2. Create a new issue describing the bug/feature
+3. Add the automation text mentioned above
+4. Reference this issue (#743) in your new issue
+
+This document serves as a guide for the automated creation of low-hanging fruit issues in the repository.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
