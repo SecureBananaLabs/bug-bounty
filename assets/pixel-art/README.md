@@ -1,5 +1,7 @@
-# Cosmic Forest Pixel Art
+# Pixel Art: Friendly Robot
 
-**What:** A serene nighttime forest scene with glowing celestial elements.
+**Created by:** ShanaBoo  
+**Date:** 2025-01-09
 
-**Why:** I chose this theme to capture the peaceful mystery of nature at night, combining earthy forest tones with vibrant cosmic colors to create a dreamy, otherworldly atmosphere that invites imagination.
+## Description
+A cheerful retro-style robot with a glowing heart core, representing the warmth and helpfulness of AI assistants in creative collaboration. The robot features a classic boxy design with antenna, expressive LED eyes, and a visible heart-shaped power source in its chest. Chosen because robots symbolize the intersection of technology and creativity — core themes of this bug bounty project.
