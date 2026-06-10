@@ -1,21 +1,18 @@
 {
   "name": "@freelanceflow/db",
-  "private": true,
-  "scripts": {
-    "generate": "prisma generate",
-    "migrate": "prisma migrate dev"
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./index.ts"
+    }
   },
-  "dependencies": {
+  "types": "src/index.ts"
+}
     "@prisma/client": "^5.17.0"
   },
   "devDependencies": {
     "prisma": "^5.17.0"
   }
-{
-  "name": "@freelanceflow/db",
-  "version": "1.0.0",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "exports": "./src/index.ts"
-}
 }
