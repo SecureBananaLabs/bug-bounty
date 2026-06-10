@@ -1,7 +1,7 @@
  ```diff
---- a/.github/workflows/low-hanging-fruit.yml
-+++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,101 @@
+--- /dev/null
++++ b/.github/workflows/low-hanging-fruit-automation.yml
+@@ -0,0 +1,55 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
@@ -11,7 +11,6 @@
 +
 +permissions:
 +  issues: write
-+  contents: read
 +
 +jobs:
 +  detect-and-create-issues:
@@ -25,78 +24,141 @@
 +        with:
 +          node-version: '20'
 +
-+      - name: Detect low hanging fruit and create issues
++      - name: Install dependencies
++        run: npm ci
++
++      - name: Run low hanging fruit detection
++        id: detect
++        run: |
++          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          GITHUB_REPOSITORY: ${{ github.repository }}
++
++      - name: Create issues from detected items
++        if: steps.detect.outcome == 'success'
 +        run: |
-+          #!/bin/bash
-+          set -e
++          node .github/scripts/create-issues.js
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          GITHUB_REPOSITORY: ${{ github.repository }}
++--- /dev/null
++++ b/.github/scripts/detect-low-hanging-fruit.js
+@@ -0,0 +1,162 @@
++const fs = require('fs');
++const path = require('path');
++const { execSync } = require('child_process');
 +
-+          # Function to create an issue
-+          create_issue() {
-+            local title="$1"
-+            local body="$2"
-+            local labels="$3"
-+            
-+            # Check if similar issue already exists
-+            local existing
-+            existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --search "$title" --json number --jq 'length' 2>/dev/null || echo "0")
-+            
-+            if [ "$existing" -gt 0 ]; then
-+              echo "Issue already exists for: $title"
-+              return 0
-+            fi
-+            
-+            gh issue create \
-+              --repo "$GITHUB_REPOSITORY" \
-+              --title "$title" \
-+              --body "$body" \
-+              --label "$labels"
-+          }
++const REPO_ROOT = process.cwd();
++const OUTPUT_FILE = path.join(REPO_ROOT, '.github', 'scripts', 'detected-issues.json');
 +
-+          # Detect missing documentation
-+          if [ ! -f "CONTRIBUTING.md" ] || [ ! -s "CONTRIBUTING.md" ]; then
-+            create_issue \
-+              "Missing or empty CONTRIBUTING.md guidelines" \
-+              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nThe repository is missing comprehensive contribution guidelines. Please add a CONTRIBUTING.md file with:\n- Code style guidelines\n- Pull request process\n- Issue reporting templates\n- Development setup instructions" \
-+              "bug,documentation,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
-+          fi
++function findFiles(dir, extensions, excludeDirs = ['node_modules', '.git', 'dist', 'build']) {
++  const files = [];
++  function walk(currentDir) {
++    let entries;
++    try {
++      entries = fs.readdirSync(currentDir, { withFileTypes: true });
++    } catch (e) {
++      return;
++    }
++    for (const entry of entries) {
++      const fullPath = path.join(currentDir, entry.name);
++      if (entry.isDirectory()) {
++        if (!excludeDirs.includes(entry.name)) {
++          walk(fullPath);
++        }
++      } else if (entry.isFile() && extensions.some(ext => entry.name.endsWith(ext))) {
++        files.push(fullPath);
++      }
++    }
++  }
++  walk(dir);
++  return files;
++}
 +
-+          # Detect missing tests
-+          if [ ! -d "apps/web/__tests__" ] && [ ! -d "apps/web/tests" ] && [ ! -d "apps/web/test" ]; then
-+            create_issue \
-+              "Missing frontend test suite" \
-+              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nThe Next.js frontend (apps/web) lacks a test suite. Please add:\n- Unit tests for components\n- Integration tests for API calls\n- Test configuration (Jest/Vitest)\n- Coverage reporting" \
-+              "bug,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
-+          fi
++function detectTodoComments(files) {
++  const issues = [];
++  const todoRegex = /\/\/\s*TODO[:\s]*(.+)|\/\*\s*TODO[:\s]*(.+?)\*\//i;
++  for (const file of files) {
++    const content = fs.readFileSync(file, 'utf-8');
++    const lines = content.split('\n');
++    lines.forEach((line, index) => {
++      const match = line.match(todoRegex);
++      if (match) {
++        const description = (match[1] || match[2] || 'TODO item found').trim();
++        issues.push({
++          type: 'TODO',
++          title: `TODO: ${description.substring(0, 80)}`,
++          description: `Found a TODO comment in \`${path.relative(REPO_ROOT, file)}\` at line ${index + 1}:\n\n\`\`\`\n${line.trim()}\n\`\`\`\n\nThis is a low-hanging fruit item that needs to be addressed.`,
++          file: path.relative(REPO_ROOT, file),
++          line: index + 1,
++          severity: 'low'
++        });
++      }
++    });
++  }
++  return issues;
++}
 +
-+          # Detect missing API tests
-+          if [ ! -d "apps/api/__tests__" ] && [ ! -d "apps/api/tests" ] && [ ! -d "apps/api/test" ]; then
-+            create_issue \
-+              "Missing backend API test suite" \
-+              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nThe Express.js backend (apps/api) lacks a test suite. Please add:\n- Unit tests for controllers and services\n- Integration tests for API routes\n- Mock database setup for tests\n- Test configuration (Jest/Vitest/Supertest)" \
-+              "bug,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
-+          fi
++function detectConsoleLogs(files) {
++  const issues = [];
++  const consoleRegex = /console\.(log|warn|error|debug)\s*\(/;
++  for (const file of files) {
++    const content = fs.readFileSync(file, 'utf-8');
++    const lines = content.split('\n');
++    let count = 0;
++    lines.forEach((line, index) => {
++      if (consoleRegex.test(line) && !line.includes('eslint-disable')) {
++        count++;
++      }
++    });
++    if (count > 0) {
++      issues.push({
++        type: 'CONSOLE_LOG',
++        title: `Remove ${count} console.log statement${count > 1 ? 's' : ''} from ${path.basename(file)}`,
++        description: `Found ${count} console.log statement(s) in \`${path.relative(REPO_ROOT, file)}\` that should be removed or replaced with proper logging.\n\nThis is a code quality improvement.`,
++        file: path.relative(REPO_ROOT, file),
++        severity: 'low'
++      });
++    }
++  }
++  return issues;
++}
 +
-+          # Detect missing environment documentation
-+          if [ ! -f ".env.example" ] && [ ! -f ".env.template" ]; then
-+            create_issue \
-+              "Missing .env.example file for environment configuration" \
-+              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nThe repository lacks an .env.example file. Please add:\n- All required environment variables\n- Descriptions for each variable\n- Development vs production values\n- Integration-specific variables (Stripe, OAuth, etc.)" \
-+              "bug,documentation,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
-+          fi
++function detectMissingTests(files) {
++  const sourceFiles = files.filter(f => {
++    const rel = path.relative(REPO_ROOT, f);
++    return !rel.includes('.test.') && !rel.includes('.spec.') && !rel.includes('__tests__');
++  });
++  
++  const issues = [];
++  for (const file of sourceFiles) {
++    const relPath = path.relative(REPO_ROOT, file);
++    const dir = path.dirname(file);
++    const baseName = path.basename(file, path.extname(file));
++    const ext = path.extname(file);
++    
++    const testPatterns = [
++      path.join(dir, `${baseName}.test${ext}`),
++      path.join(dir, `${baseName}.spec${ext}`),
++      path.join(dir, '__tests__', `${baseName}.test${ext}`),
++      path.join(dir, '__tests__', `${baseName}.spec${ext}`)
++    ];
++    
++    const hasTest = testPatterns.some(p => fs.existsSync(p));
++    if (!hasTest && (relPath.includes('utils/') || relPath.includes('helpers/'))) {
++      issues.push({
++        type: 'MISSING_TEST',
++        title: `Add unit tests for ${path.basename(file)}`,
++        description: `The utility file \`${relPath}\` does not have corresponding unit tests. Adding tests would improve code reliability.\n\nThis is a good first issue for new contributors.`,
++        file: relPath,
++        severity: 'low'
++      });
++    }
++  }
++  return issues;
++}
 +
-+          # Detect missing CI/CD configuration
-+          if [ ! -d ".github/workflows" ] || [ -z "$(ls -A .github/workflows/*.yml 2>/dev/null)" ]; then
-+            create_issue \
-+              "Missing CI/CD pipeline configuration" \
-+              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nThe repository lacks CI/CD workflows. Please add:\n- Lint and format checks\n- Test execution on PR\n- Build verification\n- Dependency vulnerability scanning" \
-+              "bug,documentation,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
-+          fi
-+
-+          # Detect missing pre-commit hooks
-+          if [ ! -f ".husky/pre-commit" ] && [ ! -f ".pre-commit-config.yaml" ]; then
-+            create_issue \
-+              "Missing pre-commit hooks for code quality" \
-+              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nThe repository lacks pre-commit hooks. Please add:\n- Husky configuration\n- Lint-staged for running linters on git staged files\n- Prettier formatting checks\n- TypeScript type checking" \
-+              "bug,good first issue,help wanted,
++function main() {
++  const jsFiles = findFiles(REPO_ROOT, ['.js', '.ts', '.tsx', '.jsx']);
++  const allCodeFiles = find
