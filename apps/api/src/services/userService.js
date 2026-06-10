@@ -1,19 +1,21 @@
 import { db } from "@bug-bounty/db";
+import { validateRegisterUser } from "../validation/userValidation.js";
 
 export async function registerUser(data) {
+  const validated = validateRegisterUser(data);
   const user = await db.user.create({
     data: {
-      email: data.email,
-      password: data.password,
-      fullName: data.fullName,
-      role: data.role,
+      email: validated.email,
+      password: validated.password,
+      role: validated.role,
+      fullName: validated.fullName,
     },
   });
+  return user;
 }
-    id: user.id,
-    email: user.email,
-    role: user.role,
-    fullName: user.fullName,
-    createdAt: user.createdAt,
-  };
+
+export async function listUsers() {
+  return db.user.findMany();
+}
+  return user;
 }
