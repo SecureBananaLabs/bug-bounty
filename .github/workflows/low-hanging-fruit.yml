@@ -5,97 +5,36 @@ on:
     - cron: '0 0 * * *'
   workflow_dispatch:
 
-permissions:
-  issues: write
-  contents: read
-
 jobs:
   detect-and-create-issues:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Detect low hanging fruit issues
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run low hanging fruit detection
         id: detect
         run: |
-          mkdir -p .github/scripts
-          cat > .github/scripts/detect-issues.js << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-
-          const patterns = [
-            { pattern: /TODO|FIXME|XXX|HACK/g, label: 'todo-found', title: 'Address TODO/FIXME comments in codebase' },
-            { pattern: /console\.(log|warn|error)\(/g, label: 'console-logs', title: 'Remove or replace console statements in production code' },
-            { pattern: /describe\.only|it\.only|test\.only/g, label: 'focused-tests', title: 'Remove focused test blocks (.only)' },
-            { pattern: /\/\/ @ts-ignore/g, label: 'ts-ignore', title: 'Replace @ts-ignore with proper type fixes' },
-            { pattern: /process\.env\.[A-Z_]+/g, label: 'env-check', title: 'Validate environment variable usage and documentation' },
-          ];
-
-          const results = [];
-          const scannedFiles = new Set();
-
-          function scanDir(dir, extensions) {
-            const entries = fs.readdirSync(dir, { withFileTypes: true });
-            for (const entry of entries) {
-              const fullPath = path.join(dir, entry.name);
-              if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.git') {
-                scanDir(fullPath, extensions);
-              } else if (entry.isFile() && extensions.some(ext => fullPath.endsWith(ext))) {
-                scannedFiles.add(fullPath);
-                const content = fs.readFileSync(fullPath, 'utf-8');
-                for (const { pattern, label, title } of patterns) {
-                  if (pattern.test(content)) {
-                    results.push({ file: fullPath, label, title, pattern: pattern.toString() });
-                  }
-                }
-              }
-            }
-          }
-
-          scanDir('.', ['.ts', '.tsx', '.js', '.jsx']);
-
-          const uniqueIssues = new Map();
-          for (const result of results) {
-            if (!uniqueIssues.has(result.title)) {
-              uniqueIssues.set(result.title, { ...result, files: [result.file] });
-            } else {
-              uniqueIssues.get(result.title).files.push(result.file);
-            }
-          }
-
-          const issues = Array.from(uniqueIssues.values()).map(issue => ({
-            title: `[Low Hanging Fruit] ${issue.title}`,
-            body: `## Automated Low Hanging Fruit Detection\n\n**Pattern Found:** ${issue.pattern}\n\n**Affected Files:**\n${issue.files.map(f => `- \\`${f}\\``).join('\n')}\n\n## Next Steps\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n/bounty $50`,
-            labels: ['bug', 'good first issue', 'low-hanging-fruit', issue.label]
-          }));
-
-          fs.writeFileSync('detected-issues.json', JSON.stringify(issues, null, 2));
-          console.log(`Detected ${issues.length} low hanging fruit issues`);
-          EOF
-          node .github/scripts/detect-issues.js
-
-      - name: Create GitHub Issues
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create issues for detected items
+        if: steps.detect.outputs.has_issues == 'true'
         run: |
-          issues=$(cat detected-issues.json)
-          echo "$issues" | jq -c '.[]' | while read -r issue; do
-            title=$(echo "$issue" | jq -r '.title')
-            body=$(echo "$issue" | jq -r '.body')
-            labels=$(echo "$issue" | jq -r '.labels | join(",")')
-            
-            # Check if issue already exists
-            existing=$(gh issue list --repo "${{ github.repository }}" --search "$title" --json number --jq '.[0].number' 2>/dev/null || true)
-            if [ -z "$existing" ] || [ "$existing" = "null" ]; then
-              gh issue create --repo "${{ github.repository }}" --title "$title" --body "$body" --label "$labels"
-              echo "Created issue: $title"
-            else
-              echo "Issue already exists: $title (#$existing)"
-            fi
-          done
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_AUTHOR: ${{ github.actor }}
