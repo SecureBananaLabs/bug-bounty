@@ -1,27 +1,24 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+## Exact Value of PI
 π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
-FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 - `apps/web` — Next.js 14 App Router frontend
 - `apps/api` — Express.js backend with layered REST API
-- `packages/ui` — Shared UI components
+- `packages/db` — Prisma schema and database package
 - `packages/ui` — Shared UI components
 
 ## Frontend
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 The web app includes pages for:
 
+- Landing
 - Job listings and job detail
 - Post a job
 - Freelancer profiles and freelancer search
@@ -32,14 +29,12 @@ The web app includes pages for:
 - Billing
 - Admin panel
 
-- Admin panel
-
 ## Backend
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 The API includes:
 
+- Auth routes (register, login, OAuth callback, JWT refresh)
+- CRUD routes for users, jobs, and proposals
 - Payments routes (Stripe-focused service placeholder)
 - Reviews, messaging, notifications
 - File uploads and search
@@ -48,13 +43,11 @@ The API includes:
 Backend architecture follows:
 
 - Middleware layer (auth, rate limiting, error handling)
-Backend architecture follows:
-
-## Getting Started
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
-
-
+- Controller layer
+- Service layer
+- Route layer
+- Validation schemas (Zod)
+- Utility helpers
 
 ## Getting Started
 
@@ -84,10 +77,10 @@ npm run dev -w apps/api
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
 - Users
-- Jobs
-- Proposals
-- Payments
-- Reviews
+
+## Environment Variables
+
+Each app/package expects its own `.env` values for DB, auth, and integrations.
 - Messages
 - Categories
 - Skills
