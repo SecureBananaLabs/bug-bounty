@@ -9,3 +9,7 @@ export async function createUser(payload) {
   users.push(user);
   return user;
 }
+
+export async function getUserByUsername(username) {
+  return users.find(u => u.username === username);
+}
