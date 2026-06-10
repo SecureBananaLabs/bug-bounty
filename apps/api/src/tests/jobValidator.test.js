@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createJobSchema } from "../validators/job.js";
+import { createJobSchema, updateJobSchema } from "../validators/job.js";
 
 const validJob = {
   title: "Build search filters",
@@ -12,6 +12,23 @@ const validJob = {
 };
 
 test("createJobSchema rejects non-finite budget values", () => {
-  assert.equal(createJobSchema.safeParse({ ...validJob, budgetMin: Infinity }).success, false);
-  assert.equal(createJobSchema.safeParse({ ...validJob, budgetMax: Infinity }).success, false);
+  for (const value of [Infinity, -Infinity, NaN]) {
+    assert.equal(createJobSchema.safeParse({ ...validJob, budgetMin: value }).success, false);
+    assert.equal(createJobSchema.safeParse({ ...validJob, budgetMax: value }).success, false);
+  }
+});
+
+test("updateJobSchema rejects non-finite budget values", () => {
+  for (const value of [Infinity, -Infinity, NaN]) {
+    assert.equal(updateJobSchema.safeParse({ budgetMin: value }).success, false);
+    assert.equal(updateJobSchema.safeParse({ budgetMax: value }).success, false);
+  }
+});
+
+test("createJobSchema accepts finite nonnegative budget values", () => {
+  const result = createJobSchema.safeParse(validJob);
+
+  assert.equal(result.success, true);
+  assert.equal(result.data.budgetMin, 100);
+  assert.equal(result.data.budgetMax, 500);
 });
