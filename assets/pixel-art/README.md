@@ -1,13 +1,7 @@
 # Pixel Art: Cyberpunk Cityscape
 
-**File:** `cyberpunk_cityscape.png`
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+A 64x64 pixel art piece depicting a futuristic cyberpunk cityscape at night, created with vibrant neon colors against a dark sky.
 
-## Description
+**Why:** I chose this theme because cyberpunk aesthetics blend well with pixel art's nostalgic, retro feel while allowing for creative use of limited color palettes to create atmosphere and depth.
 
-A cyberpunk cityscape pixel art piece created for the FreelanceFlow project. The artwork features neon-lit skyscrapers in magenta, cyan, and electric blue against a dark night sky, with a pixelated moon overhead. This piece represents the futuristic, tech-forward nature of the FreelanceFlow platform and the vibrant community of freelancers and clients it connects.
-
-## Why
-
-The cyberpunk aesthetic symbolizes innovation, digital connectivity, and the boundless possibilities of the freelance economy—core values that FreelanceFlow aims to embody.
+**File:** `cyberpunk-cityscape.png`
