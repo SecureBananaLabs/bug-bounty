@@ -2,6 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
+    # Run daily at midnight UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -21,27 +22,102 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node .github/scripts/detect-low-hanging-fruit.js
+      - name: Detect low hanging fruit and create issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Create GitHub issues for detected items
-        if: success()
         run: |
-          node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
 
-      - name: Report results
-        if: always()
-        run: |
-          echo "Low hanging fruit detection completed"
-          echo "Check the repository issues for newly created items"
+          // Patterns that indicate low hanging fruit / easy fixes
+          const patterns = [
+            { pattern: /TODO|FIXME|HACK|XXX/g, type: 'code-smell', label: 'good first issue' },
+            { pattern: /console\\.(log|warn|error)/g, type: 'debug-statement', label: 'good first issue' },
+            { pattern: /unused|deprecated|legacy/i, type: 'cleanup', label: 'good first issue' },
+            { pattern: /\\bvar\\b/g, type: 'modernize', label: 'good first issue' },
+          ];
+
+          const results = [];
+          const scannedFiles = new Set();
+
+          function scanDir(dir, ext) {
+            const entries = fs.readdirSync(dir, { withFileTypes: true });
+            for (const entry of entries) {
+              const fullPath = path.join(dir, entry.name);
+              if (entry.isDirectory() && entry.name !== 'node_modules' && !entry.name.startsWith('.') && entry.name !== 'dist' && entry.name !== 'build') {
+                scanDir(fullPath, ext);
+              } else if (entry.isFile() && (ext.some(e => entry.name.endsWith(e)))) {
+                if (scannedFiles.has(fullPath)) continue;
+                scannedFiles.add(fullPath);
+                const content = fs.readFileSync(fullPath, 'utf-8');
+                for (const { pattern, type, label } of patterns) {
+                  const matches = content.match(pattern);
+                  if (matches) {
+                    results.push({
+                      file: fullPath,
+                      type,
+                      label,
+                      count: matches.length,
+                      description: \`Found \${matches.length} \${type}(s) in \${fullPath}\`
+                    });
+                  }
+                }
+              }
+            }
+          }
+
+          try {
+            scanDir('.', ['.ts', '.tsx', '.js', '.jsx', '.py', '.md']);
+          } catch (e) {
+            console.error('Scan error:', e.message);
+          }
+
+          // Group by type and create issues
+          const grouped = {};
+          for (const r of results) {
+            if (!grouped[r.type]) grouped[r.type] = [];
+            grouped[r.type].push(r);
+          }
+
+          const { Octokit } = require('@octokit/rest');
+          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+          const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+
+          async function createIssue(type, items) {
+            const title = \`Low Hanging Fruit: \${type} cleanup needed\`;
+            const body = \`## Automated Low Hanging Fruit Detection
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+### Detected Items
+\${items.map(i => '- ' + i.description).join('\\n')}
+
+### Files Affected
+\${items.map(i => '- \`' + i.file + '\`').join('\\n')}
+
+### Suggested Action
+Please address the \${type} items listed above and submit a pull request referencing this issue.
+\`;
+
+            await octokit.rest.issues.create({
+              owner,
+              repo,
+              title,
+              body,
+              labels: [items[0].label, 'bug bounty', 'AI agent friendly', 'help wanted']
+            });
+          }
+
+          (async () => {
+            for (const [type, items] of Object.entries(grouped)) {
+              try {
+                await createIssue(type, items);
+                console.log(\`Created issue for \${type}\`);
+              } catch (err) {
+                console.error(\`Failed to create issue for \${type}:\`, err.message);
+              }
+            }
+          })();
+          "
