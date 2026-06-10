@@ -1,21 +1,27 @@
-import { db } from "@bug-bounty/db";
-import { validateRegisterUser } from "../validation/userValidation.js";
+import { registerSchema } from "../schemas/auth.js";
+import { hashPassword } from "../utils/auth.js";
+import prisma from "../lib/prisma.js";
+
+}
+
+export async function createUser(payload) {
+}
 
 export async function registerUser(data) {
-  const validated = validateRegisterUser(data);
-  const user = await db.user.create({
-    data: {
-      email: validated.email,
-      password: validated.password,
-      role: validated.role,
-      fullName: validated.fullName,
-    },
-  });
-  return user;
-}
+  const { email, password, role, fullName } = registerSchema.parse(data);
 
-export async function listUsers() {
-  return db.user.findMany();
-}
-  return user;
-}
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) {
+    data: {
+      email,
+      passwordHash: await hashPassword(password),
+      fullName,
+      role,
+    },
+    select: {
+      id: true,
+      email: true,
+      fullName: true,
+      role: true,
+      createdAt: true,
+    },
