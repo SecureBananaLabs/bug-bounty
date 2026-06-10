@@ -1,10 +1,10 @@
 {
   "endpoints": {
     "/api/auth/register": {
-      "p99Latency": 500
+      "p99LatencyThreshold": 500
     },
     "/api/jobs": {
-      "p99Latency": 1000
+      "p99LatencyThreshold": 1000
     }
   }
 }
