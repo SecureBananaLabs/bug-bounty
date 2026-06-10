@@ -1,4 +1,4 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken } from "../utils/jwt.js';
 
 export async function registerUser(payload) {
   const userId = `usr_${Date.now()}`;
@@ -21,5 +21,4 @@ export async function loginUser(payload) {
 
 export async function refreshToken() {
   return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
-}
 }
