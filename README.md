@@ -1,22 +1,7 @@
-# Low Hanging Fruit Issues
-
-This file contains automated bug detection and issue creation for low hanging fruit.
-
-## Issues for Low Hanging Fruit
-
-1. Find a feature/bug to work on from this repository
-2. Create a GitHub issue on the repository to start working on it -- Pull requests without issues will not be considered.
-3. Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-
-## Current Low Hanging Fruit
-
-1. **Bug**: Fix typo in README.md
-   - **Description**: There is a typo in the README.md file in the main directory.
-   - **Steps to reproduce**: Open README.md and find the typo.
-   - **Fix**: Correct the typo in the file.
-
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+
+# FreelanceFlow Monorepo
 
 # FreelanceFlow Monorepo
 
