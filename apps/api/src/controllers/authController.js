@@ -3,9 +3,13 @@ import { loginUser, refreshToken, registerUser } from "../services/authService.j
 import { ok } from "../utils/response.js";
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
+  try {
+    const payload = registerSchema.parse(req.body);
+    const result = await registerUser(payload);
+    return ok(res, result, 201);
+  } catch (e) {
+    return fail(res, e.message || "Registration failed", 400);
+  }
 }
 
 export async function login(req, res) {
