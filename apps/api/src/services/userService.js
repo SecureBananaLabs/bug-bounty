@@ -1,22 +1,19 @@
-import { registerUser } from '../db/user';
+import { db } from "@bug-bounty/db";
 
-export const createUser = async (userData) => {
-  // The service should now include fullName in the user data
-  const user = await registerUser({
-    ...userData,
-    fullName: userData.fullName
+export async function registerUser(data) {
+  const user = await db.user.create({
+    data: {
+      email: data.email,
+      password: data.password,
+      fullName: data.fullName,
+      role: data.role,
+    },
   });
-  return user;
-};
-export { createUser };
-const users = [];
-
-export async function listUsers() {
-  return users;
 }
-
-export async function createUser(payload) {
-  const user = { id: `usr_${Date.now()}`, ...payload };
-  users.push(user);
-  return user;
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    fullName: user.fullName,
+    createdAt: user.createdAt,
+  };
 }
