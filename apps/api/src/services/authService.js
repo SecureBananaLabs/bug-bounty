@@ -1,4 +1,4 @@
-// This is a new file that would need to be created to handle the registration logic
+// Since I cannot see the actual files, I will provide a general fix for the registration validation
 import { signAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
