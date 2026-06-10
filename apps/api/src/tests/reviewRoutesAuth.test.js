@@ -56,12 +56,19 @@ test("authenticated review routes reach existing controllers", async () => {
     const created = await fetch(`${baseUrl}/api/reviews`, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...authHeaders() },
-      body: JSON.stringify({ rating: 5, comment: "hello" })
+      body: JSON.stringify({
+        reviewerId: "usr_reviewer",
+        revieweeId: "usr_reviewee",
+        rating: 5,
+        comment: "hello"
+      })
     });
     const createdPayload = await created.json();
 
     assert.equal(created.status, 201);
     assert.equal(createdPayload.success, true);
+    assert.equal(createdPayload.data.reviewerId, "usr_reviewer");
+    assert.equal(createdPayload.data.revieweeId, "usr_reviewee");
     assert.equal(createdPayload.data.rating, 5);
     assert.equal(createdPayload.data.comment, "hello");
 
