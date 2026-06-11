@@ -22,27 +22,33 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run low hanging fruit detection
         id: detect
         run: |
-          node .github/scripts/detect-low-hanging-fruit.js
+          node scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
 
-      - name: Create issues from detected items
-        if: steps.detect.outcome == 'success'
+      - name: Create GitHub issues for detected items
+        if: steps.detect.outputs.issues_to_create != ''
         run: |
-          node .github/scripts/create-issues.js
+          node scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          ISSUES_JSON: ${{ steps.detect.outputs.issues_to_create }}
 
-      - name: Recursively trigger next scan
-        if: steps.detect.outcome == 'success'
+      - name: Commit leaderboard updates
         run: |
-          echo "Scheduling next recursive scan"
-          # The cron schedule handles automatic recursion
-        continue-on-error: true
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add leaderboard.json
+          git diff --cached --quiet || git commit -m "Update leaderboard from low-hanging-fruit automation"
+          git push || echo "No changes to push"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
