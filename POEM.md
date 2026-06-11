@@ -2,36 +2,38 @@
 
 ## A Poem for FreelanceFlow
 
-In circuits woven, threads of light,
-Where human skill meets digital night,
-A marketplace of dreams takes form,
-Through code and craft, a world reborn.
+In digital halls where seekers roam,
+Through lines of code and bits of chrome,
+A marketplace of skill and dream,
+Where freelancers and clients stream.
 
-The client speaks in need and goal,
-The freelancer shapes it, makes it whole,
-Across the wire, through screens they meet,
-Where talent finds its rightful seat.
-
-No office walls, no binding chain,
-Just pure potential, free from pain,
-Of commutes long and hours lost,
-Here, freedom bears a lighter cost.
-
-From landing page to dashboard deep,
-Where messages and payments sleep,
-The architecture stands so tall,
-A monolith connecting all.
-
-Prisma schemas hold the truth,
-Of users, jobs from age to youth,
-While Next.js renders every page,
-With React's grace upon the stage.
-
-So let the marketplace endure,
-Secure, robust, and strong and pure,
-For every gig and every quest,
-May FreelanceFlow serve all the best.
+The job post rises, crisp and clear,
+A challenge cast for those who hear
+The call to build, to craft, to make,
+To bend the will of code awake.
 
 ---
 
-*Creative Decision: I chose a traditional sonnet-inspired structure with rhyming couplets to create an interesting juxtaposition between the classical form of poetry and the modern, tech-focused subject matter of a freelance marketplace. The tone is aspirational and celebratory, reflecting the project's goal of empowering independent workers through technology. The poem weaves in specific technical references (Prisma, Next.js, React, monorepo architecture) to ground it in the actual codebase and make it truly "written for this project specifically."*
+Proposals fly like paper cranes,
+Each one a hope, a pitch, a claim,
+"I am the one to see this through,
+To turn your vision into true."
+
+The database hums with Prisma's grace,
+Models mapping face to face,
+Users, jobs, and messages sent,
+In tables where the data's spent.
+
+---
+
+From Stripe's green fields to OAuth's gate,
+The API stands strong and straight,
+Middleware guards each route with care,
+While controllers handle what's laid there.
+
+So here's to flows that freelance free,
+To TypeScript's type-safe harmony,
+To monorepos built with art—
+The code that beats in every heart.
+
+*— Written for the FreelanceFlow project, 2025*
