@@ -1,13 +1,36 @@
 import { Router } from 'express';
-import { login, register, refreshToken } from '../controllers/auth.controller';
-import { validate } from '../middleware/validate';
-import { refreshTokenSchema } from '../schemas/auth.schema';
+import { z } from 'zod';
+import { AuthService } from '../services/auth.service';
+import { verifyRefreshToken } from '../utils/jwt';
 
 const router = Router();
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/oauth/:provider', login);
-router.post('/refresh', validate(refreshTokenSchema), refreshToken);
+  password: z.string().min(1),
+});
 
-export default router;
+const refreshSchema = z.object({
+  token: z.string().min(1),
+});
+
+router.post('/register', async (req, res, next) => {
+  try {
+    const data = registerSchema.parse(req.body);
+
+router.post('/refresh', async (req, res, next) => {
+  try {
+    const { token } = refreshSchema.parse(req.body);
+    const decoded = verifyRefreshToken(token);
+    
+    if (!decoded) {
+      return res.status(401).json({ message: 'Invalid or expired refresh token' });
+    }
+    
+    const result = await AuthService.refreshToken({
+      sub: decoded.sub,
+      role: decoded.role,
+    });
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+});
