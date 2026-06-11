@@ -13,15 +13,15 @@
   }
 {
   "name": "@freelanceflow/db",
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest';
 
-describe("@freelanceflow/db workspace entrypoint", () => {
-  it("should be importable through the workspace package name", async () => {
-    const db = await import("@freelanceflow/db");
+describe('@freelanceflow/db import', () => {
+  it('should import from workspace package', async () => {
+    const db = await import('@freelanceflow/db');
     expect(db).toBeDefined();
   });
 });
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "exports": {
