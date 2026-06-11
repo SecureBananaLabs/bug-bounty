@@ -1,8 +1,8 @@
 import React from "react";
-import { cn } from "./lib/utils.js";
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost";
+export function Button({ children }: { children: React.ReactNode }) {
+  return (
+    <button
       style={{
         background: "#5468ff",
         color: "white",
@@ -15,4 +15,21 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
       {children}
     </button>
   );
+import React from 'react';
+
+export interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  variant?: 'primary' | 'secondary';
+}
+
+export function Button({ children, onClick, variant = 'primary' }: ButtonProps) {
+  return (
+    <button onClick={onClick} className={`btn btn-${variant}`}>
+      {children}
+    </button>
+  );
+}
+
+export default Button;
 }
