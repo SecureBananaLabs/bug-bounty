@@ -2,8 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at midnight UTC
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 permissions:
@@ -11,37 +10,41 @@ permissions:
   contents: read
 
 jobs:
-  detect-and-create-issues:
+  create-low-hanging-fruit-issues:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Find TODO/FIXME comments and create issues
+        uses: actions/github-script@v7
         with:
-          node-version: '20'
+          script: |
+            const { data: todos } = await github.rest.search.code({
+              q: `repo:${context.repo.owner}/${context.repo.repo} TODO OR FIXME`
+            });
+            
+            const issuePromises = todos.items.slice(0, 5).map(async (item) => {
+              const title = `Low Hanging Fruit: ${item.path}`;
+              const body = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-      - name: Install dependencies
-        run: npm ci
+## Found in
+- File: \`${item.path}\`
+- URL: ${item.html_url}
 
-      - name: Run low hanging fruit detector
-        id: detector
-        run: |
-          node .github/scripts/detect-low-hanging-fruit.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+## Task
+Please review the TODO/FIXME comment in the file above and implement the necessary fix.
 
-      - name: Create GitHub issues for detected items
-        if: steps.detector.outputs.has_issues == 'true'
-        run: |
-          node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+---
+*This issue was automatically created by the Low Hanging Fruit automation.*`;
 
-      - name: Report status
-        run: |
-          echo "Low hanging fruit detection completed"
-          echo "Issues created: ${{ steps.detector.outputs.issue_count || '0' }}"
+              return github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['good first issue', 'help wanted', 'bug bounty', 'AI agent friendly']
+              });
+            });
+            
+            await Promise.all(issuePromises);
