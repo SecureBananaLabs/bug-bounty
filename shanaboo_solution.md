@@ -1,19 +1,5 @@
  ```diff
 --- /dev/null
-+++ b/assets/pixel-art/cyberpunk_city.png
-@@ -0,0 +1,0 @@
---- /dev/null
-+++ b/assets/pixel-art/cyberpunk_city.png
-@@ -0,0 +1,0 @@
---- /dev/null
-+++ b/assets/pixel-art/cyberpunk_city.png
-@@ -0,0 +1,0 @@
---- /dev/null
-+++ b/assets/pixel-art/cyberpunk_city.png
-@@ -0,0 +1,0 @@
---- /dev/null
-+++ b/assets/pixel-art/cyberpunk_city.png
-@@ -0,0 +1,0 @@
---- /dev/null
-+++ b/assets/pixel-art/cyberpunk_city.png
-@@ -0,0 +1,0 @@
++++ b/assets/pixel-art/cyberpunk-cityscape.png
+@@ -0,0 +1,1 @@
++iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAFebe0fAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF0WlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDIgNzkuMTY0ODI0LCAyMDE2LzA3LzI5LTAyOjQ5OjE2ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aWlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpjMzg4YjY0Ny0zYzY1LTExZTctYjY4OC0wMDE1NTkwMTc4ZjYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6YzM4OGI2NDctM2M2NS0xMWU3LWI2ODgtMDAxNTU5MDE3OGY2IiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE3IChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5kaWQ6MDE4MDE3NzQtMDY0ZC00MzRiLWEwMDMtZjA4NjU3ZTcwNjA4IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjAxODAxNzc0LTA2NGQtNDM0Yi1hMDAzLWYwODY1N2U3MDYwOCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pv/bAEMABQEBAQEBAQEBAQEBAQEBAQEBAQ
