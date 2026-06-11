@@ -1,7 +1,7 @@
-# Cosmic Cat Pixel Art
+# Cosmic Forest Pixel Art
 
-A 64x64 pixel art illustration of a cosmic cat floating in space, created with creative thinking.
+**What:** A 64x64 pixel art scene depicting a mystical forest at night with bioluminescent mushrooms, a starry sky, and a small fox stargazer.
 
-**What:** A whimsical space cat with nebula-colored fur (purple, blue, and pink pixels), large galaxy-reflecting eyes, and a crescent moon tail.
+**Why:** I chose this theme to blend the tranquility of nature with cosmic wonder, creating a retro-futuristic scene that invites viewers to imagine worlds beyond our own. The limited pixel canvas challenges creative expression while evoking nostalgia for classic adventure games.
 
-**Why:** Made to bring joy and represent the creative, exploratory spirit of open source collaboration — curiosity and wonder fuel great code.
+**File:** `cosmic-forest.png` (64x64 pixels, PNG format)
