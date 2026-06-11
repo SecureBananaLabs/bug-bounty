@@ -1,11 +1,11 @@
 import request from 'supertest';
-import { app } from '../app';
-import { generateRefreshToken } from '../utils/jwt';
+import express from 'express';
+import { generateToken } from '../utils/jwt';
 
-describe('Auth Routes', () => {
-  describe('POST /api/auth/register', () => {
-      expect(res.status).toBe(400);
-    });
+// Mock before importing app
+const mockFindUnique = jest.fn();
+    expect(res.status).toBe(200);
+    expect(res.body.accessToken).toBeDefined();
   });
 
   describe('POST /api/auth/refresh', () => {
@@ -13,6 +13,15 @@ describe('Auth Routes', () => {
       const res = await request(app)
         .post('/api/auth/refresh')
         .send({});
+
+      expect(res.status).toBe(400);
+    });
+
+    it('should return 400 when token is empty string', async () => {
+      const res = await request(app)
+        .post('/api/auth/refresh')
+        .send({ token: '' });
+
       expect(res.status).toBe(400);
     });
 
@@ -20,26 +29,25 @@ describe('Auth Routes', () => {
       const res = await request(app)
         .post('/api/auth/refresh')
         .send({ token: 'invalid-token' });
+
       expect(res.status).toBe(401);
+      expect(res.body.message).toBe('Invalid or expired token');
     });
 
-    it('should return a new access token for a valid refresh token', async () => {
-      const validToken = generateRefreshToken('usr_test', 'freelancer');
+    it('should return new access token for valid token', async () => {
+      const validToken = generateToken('usr_existing', 'freelancer');
+      
       const res = await request(app)
         .post('/api/auth/refresh')
         .send({ token: validToken });
-      expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('accessToken');
-      expect(typeof res.body.accessToken).toBe('string');
-    });
 
-    it('should preserve sub and role in the new access token', async () => {
-      const validToken = generateRefreshToken('usr_preserve', 'admin');
-      const res = await request(app)
-        .post('/api/auth/refresh')
-        .send({ token: validToken });
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('accessToken');
+      expect(res.body.accessToken).toBeDefined();
+      
+      // Verify the new token has the same sub and role
+      const newTokenPayload = JSON.parse(Buffer.from(res.body.accessToken.split('.')[1], 'base64').toString());
+      expect(newTokenPayload.sub).toBe('usr_existing');
+      expect(newTokenPayload.role).toBe('freelancer');
     });
   });
 });
