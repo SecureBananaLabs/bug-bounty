@@ -1,6 +1,10 @@
+import React from "react";
+
 export interface ButtonProps {
-  label: string;
+  children: React.ReactNode;
+  onClick?: () => void;
 }
-export const Button = (props: ButtonProps) => {
-  return `Button: ${props.label}`;
-};
+
+export function Button({ children, onClick }: ButtonProps) {
+  return React.createElement("button", { onClick }, children);
+}
