@@ -1,19 +1,10 @@
-import React from "react";
+import React from 'react';
+import { cn } from './utils.js';
 
-export function Card({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: "1rem" }}>
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
       <h3>{title}</h3>
       <div>{children}</div>
     </section>
   );
-import React from "react";
-
-export interface CardProps {
-  children: React.ReactNode;
-}
-
-export function Card({ children }: CardProps) {
-  return <div className="card">{children}</div>;
-}
 }
