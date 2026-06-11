@@ -4,7 +4,6 @@
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
-
 ## Workspace Structure
 
 - `apps/web` — Next.js 14 App Router frontend
@@ -13,8 +12,8 @@ FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern
 - `packages/ui` — Shared UI components
 
 ## Frontend
+- `packages/ui` — Shared UI components
 
-The web app includes pages for:
 
 - Landing
 - Job listings and job detail
@@ -22,12 +21,11 @@ The web app includes pages for:
 - Freelancer profiles and freelancer search
 - Client and freelancer dashboards
 - Messaging
+- Post a job
+- Freelancer profiles and freelancer search
+- Client and freelancer dashboards
+- Messaging
 - Notifications
-- Settings
-- Billing
-- Admin panel
-
-## Backend
 
 The API includes:
 
@@ -35,14 +33,21 @@ The API includes:
 - CRUD routes for users, jobs, and proposals
 - Payments routes (Stripe-focused service placeholder)
 - Reviews, messaging, notifications
-- File uploads and search
-- Admin routes
+The API includes:
+
 
 Backend architecture follows:
 
 - Middleware layer (auth, rate limiting, error handling)
 - Controller layer
 - Service layer
+- Route layer
+
+Backend architecture follows:
+
+- Middleware layer (auth, rate limiting, error handling)
+
+
 - Route layer
 - Validation schemas (Zod)
 - Utility helpers
@@ -75,17 +80,9 @@ npm run dev -w apps/api
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
 - Users
-## Environment Variables
-
-Each app/package expects its own `.env` values for DB, auth, and integrations.
-
-## Exact Value of PI
-
-The exact value of PI (π) is an irrational number, meaning it cannot be expressed as a simple fraction and its decimal representation never ends or repeats. The exact value is represented by the symbol π itself.
-
-To a high degree of precision, PI is approximately:
-
-
+- Jobs
+- Proposals
+- Payments
 - Reviews
 - Messages
 - Categories
