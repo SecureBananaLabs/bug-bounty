@@ -1,157 +1,122 @@
-Looking at the issue requirements, I need to set up a benchmarking suite for the API endpoints. Based on the repository structure and the issue description, I'll create the necessary benchmarking files and configuration.
-
-```diff
+ ```diff
 --- /dev/null
-+++ b/benchmarks/autocannon-benchmark.js
-@@ -0,0 +1,150 @@
-+import autocannon from 'autocannon';
-+import { writeFileSync, existsSync, mkdirSync } from 'fs';
-+import { join } from 'path';
++++ b/benchmarks/.env.benchmark
+@@ -0,0 +1,12 @@
++# Benchmark Environment Configuration
++# Copy this file to .env and fill in your values
++
++# Target API base URL (no trailing slash)
++# Examples: http://localhost:3001, https://staging-api.example.com
++API_BASE_URL=http://localhost:3001
++
++# Benchmark token for auth-protected routes
++# This should be a valid JWT for a benchmark/test user
++BENCHMARK_TOKEN=your_benchmark_jwt_token_here
++
++# Optional: override default benchmark duration in seconds
++# BENCHMARK_DURATION=30
+--- /dev/null
++++ b	benchmarks/package.json
+@@ -0,0 +1,17 @@
++{
++  "name": "@bug-bounty/benchmarks",
++  "version": "1.0.0",
++  "private": true,
++  "type": "module",
++  "scripts": {
++    "benchmark": "node run-benchmarks.js",
++    "benchmark:smoke": "node run-benchmarks.js --smoke"
++  },
++  "dependencies": {
++    "autocannon": "^7.15.0",
++    "dotenv": "^16.4.5"
++  },
++  "devDependencies": {
++    "@types/node": "^20.0.0"
++  }
++}
+--- /dev/null
++++ b	benchmarks/run-benchmarks.js
+@@ -0,0 +1,374 @@
++import autocannon from "autocannon";
++import fs from "fs";
++import path from "path";
++import { fileURLToPath } from "url";
++import dotenv from "dotenv";
++
++const __filename = fileURLToPath(import.meta.url);
++const __dirname = path.dirname(__filename);
 +
 +// Load environment variables
-+const envFile = '.env.benchmark';
-+import { config } from 'dotenv';
-+const envConfig = config({ path: envFile });
++dotenv.config({ path: path.join(__dirname, ".env") });
 +
-+const config = {
-+  url: process.env.BENCHMARK_URL || 'http://localhost:3001',
-+  duration: process.env.BENCHMARK_DURATION || 10,
-+  connections: process.env.BENCHMARK_CONNECTIONS || 100,
-+  pipelining: process.env.BENCHMARK_PIPELINING || 1
-+};
++const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3001";
++const BENCHMARK_TOKEN = process.env.BENCHMARK_TOKEN || "";
++const BENCHMARK_DURATION = parseInt(process.env.BENCHMARK_DURATION || "30", 10);
++const IS_SMOKE = process.argv.includes("--smoke");
 +
-+// Get target URL from environment or default
-+const TARGET_URL = process.env.BENCHMARK_TARGET || 'http://localhost:3001';
++// Configuration
++const CONCURRENCY = IS_SMOKE ? 5 : 50;
++const CONNECTIONS = IS_SMOKE ? 10 : 100;
++const DURATION = IS_SMOKE ? 10 : BENCHMARK_DURATION;
 +
-+// Benchmark configuration
-+const benchmarkConfig = {
-+  url: TARGET_URL,
-+  method: 'POST',
-+  timeout: 10,
-+  connections: parseInt(config.connections),
-+  pipelining: parseInt(config.pipelining),
-+  duration: parseInt(config.duration),
-+};
++// Results storage
++const resultsDir = path.join(__dirname, "results");
++if (!fs.existsSync(resultsDir)) {
++  fs.mkdirSync(resultsDir, { recursive: true });
++}
 +
-+// API endpoints to test
++// Auth header for protected routes
++const authHeader = BENCHMARK_TOKEN ? `Bearer ${BENCHMARK_TOKEN}` : "";
++
++// Define all API endpoints to benchmark
 +const endpoints = [
-+  '/api/auth/register',
-+  '/api/auth/login',
-+  '/api/auth/refresh',
-+  '/api/users',
-+ '/api/jobs',
-+  '/api/proposals',
-+  '/api/payments',
-+  '/api/reviews',
-+  '/api/messages',
-+  '/api/notifications',
-+  '/api/search'
++  // Public endpoints
++  { name: "health", method: "GET", path: "/health", protected: false },
++  
++  // Auth endpoints
++  { name: "auth-register", method: "POST", path: "/api/auth/register", protected: false, body: { email: "bench@test.com", password: "password123", name: "Benchmark User" } },
++  { name: "auth-login", method: "POST", path: "/api/auth/login", protected: false, body: { email: "bench@test.com", password: "password123" } },
++  
++  // User endpoints
++  { name: "users-list", method: "GET", path: "/api/users", protected: true },
++  { name: "users-me", method: "GET", path: "/api/users/me", protected: true },
++  
++  // Job endpoints
++  { name: "jobs-list", method: "GET", path: "/api/jobs", protected: false },
++  { name: "jobs-create", method: "POST", path: "/api/jobs", protected: true, body: { title: "Benchmark Job", description: "This is a benchmark job posting with realistic payload size.", budget: 1000, category: "development", skills: ["javascript", "typescript"] } },
++  
++  // Proposal endpoints
++  { name: "proposals-list", method: "GET", path: "/api/proposals", protected: true },
++  { name: "proposals-create", method: "POST", path: "/api/proposals", protected: true, body: { jobId: "123e4567-e89b-12d3-a456-426614174000", coverLetter: "This is a benchmark proposal with a realistic cover letter length to simulate production payload sizes.", proposedRate: 50 } },
++  
++  // Payment endpoints
++  { name: "payments-list", method: "GET", path: "/api/payments", protected: true },
++  
++  // Review endpoints
++  { name: "reviews-list", method: "GET", path: "/api/reviews", protected: false },
++  { name: "reviews-create", method: "POST", path: "/api/reviews", protected: true, body: { recipientId: "123e4567-e89b-12d3-a456-426614174000", rating: 5, comment: "Great work on the benchmark project!" } },
++  
++  // Message endpoints
++  { name: "messages-list", method: "GET", path: "/api/messages", protected: true },
++  { name: "messages-create", method: "POST", path: "/api/messages", protected: true, body: { recipientId: "123e4567-e89b-12d3-a456-426614174000", content: "This is a benchmark message with realistic content length." } },
++  
++  // Notification endpoints
++  { name: "notifications-list", method: "GET", path: "/api/notifications", protected: true },
++  
++  // Search endpoints
++  { name: "search-jobs", method: "GET", path: "/api/search/jobs?q=developer", protected: false },
++  { name: "search-freelancers", method: "GET", path: "/api/search/freelancers?q=developer", protected: false },
++  
++  // Admin endpoints
++  { name: "admin-dashboard", method: "GET", path: "/api/admin/dashboard", protected: true },
++  { name: "admin-users", method: "GET", path: "/api/admin/users", protected: true },
 +];
 +
-+// Function to run benchmarks for all endpoints
-+async function runBenchmark(endpoint) {
-+  const url = `${TARGET_URL}${endpoint}`;
-+  
-+  const bench = await autocannon({
-+    url: url,
-+    ...benchmarkConfig
-+  });
-+  
-+  return bench;
-+}
-+
-+// Format the results for output
-+function formatResults(results) {
-+  return {
-+    averageLatency: results.latency.average,
-+    p50: results.latency.p50,
-+    p95: results.latency.p95, 
-+  };
-+}
-+
-+// Write results to file
-+function writeResults(results, endpoint) {
-+  const output = {
-+    endpoint: endpoint,
-+    requests: results.requests,
-+    latency: {
-+      average: results.latency.average,
-+      mean: results.latency.mean,
-+      stddev: results.latency.stddev,
-+      max: results.latency.max,
-+      p50: results.latency.p50,
-+      p99: results.latency.p99,
-+      p99_9: results.latency.p99_9,
-+      p99_99: results.latency.p99_99
-+    },
-+    throughput: results.throughput,
-+    errors: results.errors,
-+    statusCode: results['1xx'], 
-+    durations: results.durations,
-+    non2xx: results.non2xx,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalRequests: results.requests.total,
-+    totalErrors: results.errors,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTR: results.totalTTR,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalTTR: results.totalTTR,
-+    totalTTFB: results.totalTTFB,
-+    totalT
++// Filter out protected endpoints if no token is provided
++const activeEndpoints = endpoints.filter((ep) => {
++  if (ep.protected && !BENCHMARK_TOKEN) {
++    console.warn(`Skipping protected endpoint ${ep.name} - no BENCHMARK_TOKEN provided`);
++    return false;
++  }
++ 
