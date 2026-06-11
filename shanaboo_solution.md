@@ -1,7 +1,7 @@
  ```diff
---- a/.github/workflows/low-hanging-fruit.yml
+--- /dev/null
 +++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,45 @@
+@@ -0,0 +1,0 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
@@ -31,159 +31,159 @@
 +      - name: Run low hanging fruit detection
 +        id: detect
 +        run: |
-+          node -e "
-+            const fs = require('fs');
-+            const path = require('path');
-+            
-+            const scriptPath = path.join(process.cwd(), 'scripts', 'low-hanging-fruit.js');
-+            const scriptContent = fs.readFileSync(scriptPath, 'utf8');
-+            const script = new Function('require', 'module', 'exports', scriptContent);
-+            const mod = { exports: {} };
-+            script(require, mod, mod.exports);
-+            mod.exports.run();
-+          "
++          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          GITHUB_REPOSITORY: ${{ github.repository }}
 +
-+      - name: Report status
-+        if: always()
-+        run: echo "Low hanging fruit detection completed with status ${{ job.status }}"
---- a/scripts/low-hanging-fruit.js
-+++ b/scripts/low-hanging-fruit.js
-@@ -0,0 +1,288 @@
-+/**
-+ * Low Hanging Fruit Automation
-+ * 
-+ * Recursively detects potential bugs and creates GitHub issues.
-+ * Each created issue is limited to its creator.
-+ */
++      - name: Create issues from detected items
++        if: steps.detect.outputs.has_items == 'true'
++        run: |
++          node .github/scripts/create-issues.js
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          REPO: ${{ github.repository }}
++--- /dev/null
++++ b/.github/scripts/detect-low-hanging-fruit.js
+@@ -0,0 +1,0 @@
++#!/usr/bin/env node
 +
 +const fs = require('fs');
 +const path = require('path');
-+const { execSync } = require('child_process');
 +
-+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
++const PATTERNS = {
++  todo: /TODO|FIXME|HACK|BUG|XXX/gi,
++  emptyFunction: /function\s+\w+\s*\(\)\s*\{\s*\}/g,
++  consoleLog: /console\.(log|warn|error)\(/g,
++  hardcodedSecret: /(password|secret|key|token)\s*=\s*['"][^'"]+['"]/gi,
++  unhandledPromise: /\.then\([^)]*\)(?!\.catch)/g,
++  deprecatedApi: /res\.json\(|res\.send\(/g,
++};
 +
-+if (!GITHUB_TOKEN) {
-+  console.error('GITHUB_TOKEN is required');
-+  process.exit(1);
++function scanFile(filePath, content) {
++  const issues = [];
++  const lines = content.split('\n');
++
++  lines.forEach((line, index) => {
++    // Check for TODO/FIXME comments
++    if (PATTERNS.todo.test(line)) {
++      issues.push({
++        type: 'todo',
++        file: filePath,
++        line: index + 1,
++        description: `Found ${line.match(/TODO|FIXME|HACK|BUG|XXX/)[0]} comment`,
++        severity: 'low',
++      });
++    }
++
++    // Check for console.log statements
++    if (PATTERNS.consoleLog.test(line)) {
++      issues.push({
++        type: 'console-log',
++        file: filePath,
++        line: index + 1,
++        description: 'Console statement found in production code',
++        severity: 'low',
++      });
++    }
++
++    // Check for hardcoded secrets
++    if (PATTERNS.hardcodedSecret.test(line) && !filePath.includes('.env.example')) {
++      issues.push({
++        type: 'hardcoded-secret',
++        file: filePath,
++        line: index + 1,
++        description: 'Potential hardcoded secret detected',
++        severity: 'high',
++      });
++    }
++
++    // Check for unhandled promises
++    if (PATTERNS.unhandledPromise.test(line) && !line.includes('catch')) {
++      issues.push({
++        type: 'unhandled-promise',
++        file: filePath,
++        line: index + 1,
++        description: 'Potential unhandled promise',
++        severity: 'medium',
++      });
++    }
++  });
++
++  return issues;
 +}
 +
-+const ISSUE_TEMPLATE = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
++function scanDirectory(dir, results = []) {
++  const items = fs.readdirSync(dir, { withFileTypes: true });
 +
-+## Automated Detection
++  for (const item of items) {
++    const fullPath = path.join(dir, item.name);
 +
-+This issue was automatically detected by the Low Hanging Fruit automation system.
-+
-+## Details
-+
-+{{details}}
-+
-+## Suggested Fix
-+
-+{{suggestion}}
-+
-+---
-+*This is a bounty-eligible issue. /bounty $50*`;
-+
-+class LowHangingFruitDetector {
-+  constructor() {
-+    this.findings = [];
-+    this.repoRoot = process.cwd();
-+  }
-+
-+  async run() {
-+    console.log('Starting low hanging fruit detection...');
-+    
-+    this.scanForCommonBugs();
-+    this.scanForMissingErrorHandling();
-+    this.scanForHardcodedSecrets();
-+    this.scanForTodoFixme();
-+    this.scanForDeprecatedPatterns();
-+    this.scanForMissingValidation();
-+    
-+    console.log(`Found ${this.findings.length} potential issues`);
-+    
-+    for (const finding of this.findings) {
-+      await this.createIssue(finding);
++    if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
++      scanDirectory(fullPath, results);
++    } else if (item.isFile() && /\.(ts|tsx|js|jsx)$/.test(item.name)) {
++      const content = fs.readFileSync(fullPath, 'utf-8');
++      const fileIssues = scanFile(fullPath, content);
++      results.push(...fileIssues);
 +    }
-+    
-+    console.log('Detection complete');
 +  }
 +
-+  scanForCommonBugs() {
-+    const patterns = [
-+      {
-+        pattern: /JSON\.parse\([^)]*\)/g,
-+        description: 'Unwrapped JSON.parse() without try-catch',
-+        severity: 'high',
-+        suggestion: 'Wrap JSON.parse() in a try-catch block to handle malformed JSON'
-+      },
-+      {
-+        pattern: /eval\(/g,
-+        description: 'Use of eval() detected',
-+        severity: 'critical',
-+        suggestion: 'Replace eval() with safer alternatives like JSON.parse or Function constructor'
-+      },
-+      {
-+        pattern: /innerHTML\s*=/g,
-+        description: 'Potential XSS via innerHTML assignment',
-+        severity: 'high',
-+        suggestion: 'Use textContent or a sanitization library like DOMPurify'
-+      },
-+      {
-+        pattern: /document\.write\(/g,
-+        description: 'Use of document.write() detected',
-+        severity: 'medium',
-+        suggestion: 'Use DOM manipulation methods instead of document.write()'
-+      }
-+    ];
++  return results;
++}
 +
-+    this.scanFiles(patterns, ['.js', '.ts', '.jsx', '.tsx']);
++function main() {
++  const rootDir = process.cwd();
++  const appsDir = path.join(rootDir, 'apps');
++  const packagesDir = path.join(rootDir, 'packages');
++
++  const allIssues = [];
++
++  if (fs.existsSync(appsDir)) {
++    allIssues.push(...scanDirectory(appsDir));
 +  }
 +
-+  scanForMissingErrorHandling() {
-+    const patterns = [
-+      {
-+        pattern: /async\s+function\s+\w+[^}]*\n\s*(?!.*catch)[^}]*await/g,
-+        description: 'Async function with await but no try-catch',
-+        severity: 'medium',
-+        suggestion: 'Add try-catch blocks around await statements'
-+      },
-+      {
-+        pattern: /fetch\([^)]*\)\s*\.then/g,
-+        description: 'fetch() without .catch() handler',
-+        severity: 'medium',
-+        suggestion: 'Add .catch() handler or wrap in try-catch for async/await'
-+      }
-+    ];
-+
-+    this.scanFiles(patterns, ['.js', '.ts', '.jsx', '.tsx']);
++  if (fs.existsSync(packagesDir)) {
++    allIssues.push(...scanDirectory(packagesDir));
 +  }
 +
-+  scanForHardcodedSecrets() {
-+    const patterns = [
-+      {
-+        pattern: /(api[_-]?key|apikey|password|secret|token)\s*[:=]\s*["'][^"']{8,}["']/gi,
-+        description: 'Potential hardcoded secret or API key',
-+        severity: 'critical',
-+        suggestion: 'Move secrets to environment variables'
-+      }
-+    ];
++  // Group issues by type for deduplication
++  const grouped = {};
++  allIssues.forEach(issue => {
++    const key = `${issue.type}-${issue.file}-${issue.line}`;
++    grouped[key] = issue;
++  });
 +
-+    this.scanFiles(patterns, ['.js', '.ts', '.json', '.env.example']);
++  const uniqueIssues = Object.values(grouped);
++
++  // Write results to file for next step
++  const outputPath = path.join(rootDir, '.github', 'scripts', 'detected-issues.json');
++  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
++  fs.writeFileSync(outputPath, JSON.stringify(uniqueIssues, null, 2));
++
++  // Set output for GitHub Actions
++  const hasItems = uniqueIssues.length > 0;
++  console.log(`has_items=${hasItems}`);
++
++  // Also write to GITHUB_OUTPUT if available
++  const githubOutput = process.env.GITHUB_OUTPUT;
++  if (githubOutput) {
++    fs.appendFileSync(githubOutput, `has_items=${hasItems}\n`);
 +  }
 +
-+  scanForTodoFixme() {
-+    const patterns = [
-+      {
-+        pattern: /\/\/\s*(TODO|FIXME|HACK|BUG|XXX)\s*[:;]?\s*(.+)/gi,
-+        description: 'Unresolved TODO/FIXME comment found',
-+        severity: 'low',
-+        suggestion: 'Address the TODO/FIXME or create a proper issue for tracking'
-+      }
-+    ];
++  console.log(`Detected ${uniqueIssues.length} low hanging fruit items`);
++}
 +
-+    this.scanFiles(patterns, ['.js', '.
++main();
++--- /dev/null
++++ b/.github/scripts/create-issues.js
+@@ -0,0 +1,0 @@
++#!/usr/bin/env node
++
++const fs = require('fs');
++const path = require('path');
++
++const REPO = process.env.REPO || 'SecureBananaLabs/bug-bounty';
++const TOKEN = process.env.GITHUB_TOKEN;
++
++if (!TOKEN) {
++  console.error('GITHUB_TOKEN is required');
++
