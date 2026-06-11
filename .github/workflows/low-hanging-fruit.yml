@@ -2,7 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
@@ -22,25 +22,27 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Run low hanging fruit detector
-        run: node .github/scripts/detect-low-hanging-fruit.js
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
       - name: Create issues from detected items
-        run: node .github/scripts/create-issues.js
+        if: steps.detect.outcome == 'success'
+        run: |
+          node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Commit issue tracking log
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: 'chore: update low hanging fruit tracking log'
-          file_pattern: '.github/low-hanging-fruit-log.json'
-          skip_if_no_changes: true
+      - name: Recursively trigger next scan
+        if: steps.detect.outcome == 'success'
+        run: |
+          echo "Scheduling next recursive scan"
+          # The cron schedule handles automatic recursion
+        continue-on-error: true
