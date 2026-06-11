@@ -23,27 +23,33 @@ export default function FreelancerProfilePage({ params }: FreelancerProfilePageP
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-2">{freelancer.username}</h1>
-      <p className="text-gray-600 mb-4">{freelancer.rate}</p>
+    <div className="max-w-2xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">@{freelancer.username}</h1>
       <div className="mb-4">
+        <p className="text-lg font-semibold text-gray-700">
+          Hourly Rate: <span className="text-green-600">{freelancer.rate}</span>
+        </p>
+      </div>
+      <div>
         <h2 className="text-lg font-semibold mb-2">Skills</h2>
-        <ul className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           {freelancer.skills.map((skill) => (
-            <li
+            <span
               key={skill}
-              className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
             >
               {skill}
-            </li>
+            </span>
           ))}
-        </ul>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
 
 export function generateStaticParams() {
-  return freelancers.map((f) => ({ username: f.username }));
+  return freelancers.map((freelancer) => ({
+    username: freelancer.username,
+  }));
 }
 }
