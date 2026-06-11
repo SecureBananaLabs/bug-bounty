@@ -2,12 +2,12 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
   issues: write
+  contents: read
 
 jobs:
   detect-and-create-issues:
@@ -24,8 +24,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run low hanging fruit detector
-        run: node .github/scripts/detect-low-hanging-fruit.js
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
@@ -40,8 +42,6 @@ jobs:
 
       - name: Trigger recursive issue creation
         run: |
-          echo "Checking for new issues to recursively create..."
-          # This job ensures the automation continues to run recursively
-          # by scheduling follow-up runs when new issues are detected
+          echo "Low hanging fruit automation cycle completed. Check created issues for next steps."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
