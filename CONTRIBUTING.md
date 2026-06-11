@@ -1,19 +1,4 @@
-# Contributing to Bug Bounty Automation
-
-## Low Hanging Fruit Bug Detection
-
-To find and report low hanging fruit bugs, follow these steps:
-
-1. Identify a feature or bug from this repository to work on
-2. Create a GitHub issue for it
-3. Add the following text in your issue description:
-   "This issue is limited only to the creator of this issue. This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
-
-## Recursion Notice
-
-This process should be followed recursively to automate the detection and creation of low-hanging fruit issues.
-
-# Codebase Overview
+<img width="1859" height="935" alt="logo" src="https://github.com/user-attachments/assets/31e54d5c-d336-4294-8f73-9782465dbbda" />
 
 <img width="952" height="328" alt="Image" src="https://github.com/user-attachments/assets/2da5d257-dd5b-4bef-831e-e39b44ce4b94" />
 
@@ -56,4 +41,37 @@ Thank you for contributing to this bug bounty repository.
 
 ## Code of Conduct
 
+# Contributing to FreelanceFlow
+
+Thank you for your interest in contributing to FreelanceFlow!
+
+## Issue Creation Requirement
+
+**All pull requests must have an associated issue.** Pull requests without issues will not be considered.
+
+## Low Hanging Fruit Automation
+
+This repository uses an automated system to create issues for bug bounty opportunities. The automation:
+
+1. Scans the repository for potential features/bugs to work on
+2. Creates GitHub issues with specific bounty labels
+3. Recursively generates new issues to maintain the bounty pipeline
+
+## Required Issue String
+
+When creating issues for bounty work, you must include the following string:
+
+> "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+
+## Bounty Process
+
+1. Find a feature/bug to work on from this repository
+2. Create a GitHub issue on the repository to start working on it
+3. Include the required string in your issue
+4. Submit a pull request linked to your issue
+5. Bounties are paid upon successful PR merge
+
+## Bounty Amounts
+
+- Low Hanging Fruit Automation: $700
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
