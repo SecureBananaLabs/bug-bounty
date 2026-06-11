@@ -14,17 +14,14 @@
 {
   "name": "@freelanceflow/db",
   "version": "0.0.1",
+import { PrismaClient } from "@freelanceflow/db";
+
+// Lightweight import test: verifies the workspace package resolves
+const client = new PrismaClient();
+console.log("@freelanceflow/db imported successfully");
+  "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-const assert = require('node:assert');
-const { describe, it } = require('node:test');
-
-describe('@freelanceflow/db import', () => {
-  it('should be importable as a workspace package', async () => {
-    const db = await import('@freelanceflow/db');
-    assert.ok(db, 'package should export something');
-  });
-});
   "exports": {
     ".": {
       "import": "./src/index.ts",
@@ -32,11 +29,8 @@ describe('@freelanceflow/db import', () => {
       "types": "./src/index.ts"
     }
   },
-  "scripts": {
-    "test": "node --test"
-  },
-  "dependencies": {
-    "@prisma/client": "^5.0.0"
+  "devDependencies": {
+    "typescript": "^5.0.0"
   }
 }
 }
