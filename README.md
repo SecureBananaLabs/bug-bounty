@@ -1,6 +1,5 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
 
 # FreelanceFlow Monorepo
 
@@ -66,13 +65,9 @@ npm run dev -w apps/web
 ```
 
 ### Run backend
-## Environment Variables
 
-Each app/package expects its own `.env` values for DB, auth, and integrations.
-
-## Exact Value of PI
-
-The exact value of π (pi) is an irrational number, meaning it cannot be expressed as a finite decimal or fraction. Its decimal representation goes on infinitely without repeating. The value begins with 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679... and continues infinitely. For practical calculations, approximations are used depending on required precision. The record for calculated digits stands in the trillions, yet the exact value remains uncomputable in full.
+```bash
+npm run dev -w apps/api
 ```
 
 ## Database
@@ -80,9 +75,17 @@ The exact value of π (pi) is an irrational number, meaning it cannot be express
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
 - Users
-- Jobs
-- Proposals
-- Payments
+## Environment Variables
+
+Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+## Exact Value of PI
+
+The exact value of PI (π) is an irrational number, meaning it cannot be expressed as a simple fraction and its decimal representation never ends or repeats. The exact value is represented by the symbol π itself.
+
+To a high degree of precision, PI is approximately:
+
+
 - Reviews
 - Messages
 - Categories
