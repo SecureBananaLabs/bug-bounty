@@ -1,40 +1,34 @@
-# The Flow of Work
+# The Flow of Code and Coin
 
-> An original poem for FreelanceFlow
-
----
-
-## I. The Marketplace of Skill
-
-In digital halls where seekers post their need,
-And artisans of code and word and art
-Converge upon a single, trusted deed—
-The marketplace awakes, and work shall start.
-
-No cubicle confines the willing hand,
-No border bars the talent from its task;
-Across the wire, across the shifting sand,
-The freelancer and client meet at last.
+> A poem for FreelanceFlow
 
 ---
 
-## II. The Proposal
-
-A careful bid, a portfolio displayed,
-The weight of reputation in each line,
-The hopeful pause before the choice is made—
-Then greenlit, collaboration intertwines.
-
-From milestone set to payment held in trust,
-The platform guards the promise made by two,
-Till code is shipped and invoices are just,
-And five-star praise confirms the work is through.
+In circuits hums the morning light,
+Where gig and grind converge, unite—
+A client wakes with need unspun,
+A freelancer greets the rising sun.
+No office walls, no timecard chime,
+Just pixels bridging space and time.
 
 ---
 
-## III. The Flow
+The proposal flies through fiber thread,
+With skills and rates and hopes well-fed,
+The schema holds what hands cannot,
+In Prisma's weave, a sturdy knot.
+From Stripe to dashboard, message, review—
+Each API call births something new.
 
-So let the gigs arrive in steady stream,
-Let inbox notifications ring their chime,
-For in this flow of work we build our dream—
-A future forged in freedom, space, and time.
+---
+
+So here's to flows both free and freelance,
+To code that dances, leaps, and prances,
+To every bug that taught us well,
+To the next commit we push—oh, swell!
+May your tests all pass, your builds stay green,
+In this marketplace of dream.
+
+---
+
+*Creative decision: I chose a lighthearted, optimistic tone with an AABB rhyme scheme to mirror the collaborative spirit of freelance marketplaces. The poem weaves in technical references (Prisma, API, Stripe, tests, builds) to celebrate the intersection of technology and independent work that FreelanceFlow enables—treating code not as cold machinery, but as the connective tissue of human ambition.*
