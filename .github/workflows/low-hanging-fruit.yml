@@ -2,7 +2,8 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * 0'
+    # Run daily at midnight UTC
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
@@ -22,25 +23,25 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run low hanging fruit detection
-        id: detect
+      - name: Run low hanging fruit detector
+        id: detector
         run: |
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create issues from detected items
-        if: steps.detect.outputs.hasIssues == 'true'
+      - name: Create GitHub issues for detected items
+        if: steps.detector.outputs.has_issues == 'true'
         run: |
           node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Recursively trigger next scan
-        if: steps.detect.outputs.hasMore == 'true'
+      - name: Report status
         run: |
-          gh workflow run low-hanging-fruit.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "Low hanging fruit detection completed"
+          echo "Issues created: ${{ steps.detector.outputs.issue_count || '0' }}"
