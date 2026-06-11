@@ -1,5 +1,12 @@
-import { generateAccessToken } from '../utils/jwt';
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt';
 
-export function refreshToken(sub: string, role: string): string {
-  return generateAccessToken(sub, role);
-}
+export const authService = {
+  async register(data: any) {
+    };
+  },
+
+  async refreshToken(sub: string, role: string) {
+    const accessToken = generateAccessToken(sub, role);
+    return {
+      accessToken,
+    };
