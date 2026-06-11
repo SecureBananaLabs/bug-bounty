@@ -1,10 +1,10 @@
 # @freelanceflow/math
 
-Mathematical utilities and constants for the FreelanceFlow monorepo.
+Mathematical utilities for the FreelanceFlow monorepo.
 
-## PI (π)
+## PI Constants and Calculators
 
-The exact value of PI is **irrational and transcendental** — it cannot be expressed as a finite decimal or as a root of any non-zero polynomial equation with rational coefficients.
+This package provides tools for working with the mathematical constant PI (π).
 
-### Known value (first 100 decimal places):
+### Usage
 
