@@ -1,11 +1,7 @@
-# Cyberpunk City Pixel Art
+# Pixel Art Gallery
 
-**File:** `cyberpunk_city.png`
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+## Cosmic Cat Explorer
 
-## Description
-A cyberpunk cityscape pixel art scene featuring neon-lit skyscrapers, a reflective wet street, and a starry night sky with a holographic moon. The piece uses a limited color palette with high contrast between deep blues/purples and bright cyan/magenta neons to create atmospheric depth.
-
-## Why
-Cyberpunk aesthetics are visually striking in pixel art due to the high contrast between dark environments and vibrant neon colors, making it an excellent showcase of creative thinking and technical pixel art skills.
+**File:** `cosmic-cat-explorer.png`
+**Size:** 64x64 pixels
+**Description:** A cosmic cat astronaut exploring a starry nebula, created with creative thinking. The cat wears a retro space helmet with a reflective visor showing distant galaxies, floating among colorful pixel stars and nebula clouds in purple, teal, and gold tones. The scene evokes wonder and the spirit of exploration, blending retro sci-fi aesthetics with cute character design. This piece was inspired by the intersection of retro space exploration aesthetics and the universal appeal of cats, representing curiosity and adventure in a pixelated cosmos.
