@@ -1,10 +1,1 @@
-This is a binary PNG file containing a 64x64 pixel art image of a friendly robot character. The robot features a retro-futuristic design with a rounded rectangular head, large expressive eyes, an antenna with a glowing tip, and a compact body with visible panel lines. The color palette uses metallic blues and silvers with warm orange accents for a welcoming, creative feel. The image was created as original pixel art to add creative visual assets to the FreelanceFlow project, representing the helpful AI-assisted nature of modern freelance tools.
-
-Note: In a real implementation, this would be the actual binary content of a PNG file. Since I cannot generate binary image data in this text format, the file would need to be created with actual pixel art image data. The file should be a valid PNG image with dimensions of at least 64x64 pixels.
-
-To create this file properly, one would:
-1. Use a pixel art editor (like Aseprite, Piskel, or Pixilart)
-2. Create a new canvas of 64x64 or larger
-3. Draw original pixel art with a limited color palette
-4. Export as PNG
-5. Save to /assets/pixel-art/shanaboo-robot.png
+PNG
