@@ -1,66 +1,54 @@
-import { prisma } from '@freelanceflow/db';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { env } from '../config/env.js';
+import jwt from "jsonwebtoken";
+import { env } from "../config/env.js";
 
-export async function registerUser({ email, password, role, fullName }) {
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) {
-    throw new Error('Email already in use');
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await prisma.user.create({
-    data: {
-      email,
-      password: hashedPassword,
-      role,
-      fullName,
-    },
-  });
-
-  const token = jwt.sign(
-    { userId: user.id, email: user.email },
-    env.jwtSecret,
-    { expiresIn: '7d' }
-  );
-
-  return {
-    user: {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      fullName: user.fullName,
-    },
-    token,
-  };
+/**
+ * Generate a new access token for a given user.
+ * @param {string} userId
+ * @returns {string} access token
+ */
+export function generateAccessToken(userId) {
+  return jwt.sign({ sub: userId }, env.jwtSecret, { expiresIn: "15m" });
 }
 
-export async function loginUser({ email, password }) {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    throw new Error('Invalid credentials');
+/**
+ * Generate a refresh token (long-lived).
+ * @param {string} userId
+ * @returns {string} refresh token
+ */
+export function generateRefreshToken(userId) {
+  return jwt.sign({ sub: userId, type: "refresh" }, env.jwtSecret, {
+    expiresIn: "7d",
+  });
+}
+
+/**
+ * Verify a refresh token and return the decoded payload.
+ * Throws an error if token is invalid or expired.
+ * @param {string} token
+ * @returns {{ sub: string, type: string }} decoded payload
+ */
+export function verifyRefreshToken(token) {
+  try {
+    const decoded = jwt.verify(token, env.jwtSecret);
+    if (decoded.type !== "refresh") {
+      throw new Error("invalid token");
+    }
+    return decoded;
+  } catch (err) {
+    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
+      throw new Error("invalid token");
+    }
+    throw err;
   }
+}
 
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) {
-    throw new Error('Invalid credentials');
-  }
-
-  const token = jwt.sign(
-    { userId: user.id, email: user.email },
-    env.jwtSecret,
-    { expiresIn: '7d' }
-  );
-
-  return {
-    user: {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      fullName: user.fullName,
-    },
-    token,
-  };
+/**
+ * Handle refresh token exchange: validate token, issue new access token.
+ * @param {string} refreshTokenValue
+ * @returns {{ accessToken: string }}
+ */
+export function refreshToken(refreshTokenValue) {
+  const decoded = verifyRefreshToken(refreshTokenValue);
+  const accessToken = generateAccessToken(decoded.sub);
+  return { accessToken };
 }
