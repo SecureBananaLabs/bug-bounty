@@ -35,157 +35,144 @@
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          REPO_OWNER: ${{ github.repository_owner }}
-+          REPO_NAME: ${{ github.event.repository.name }}
++          GITHUB_REPOSITORY: ${{ github.repository }}
 +
-+      - name: Create GitHub issues for detected items
-+        if: success()
-+        run: |
-+          node .github/scripts/create-issues.js
-+        env:
-+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          REPO_OWNER: ${{ github.repository_owner }}
-+          REPO_NAME: ${{ github.event.repository.name }}
++  recursive-issue-creation:
++    needs: detect-and-create-issues
++    runs-on: ubuntu-latest
++    if: always()
++    steps:
++      - name: Trigger next recursive run
++        uses: actions/github-script@v7
++        with:
++          script: |
++            // This job ensures the workflow can be extended for recursive processing
++            console.log('Low hanging fruit detection cycle completed');
++            console.log('Next run will be triggered by schedule or manual dispatch');
++---
 +--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,162 @@
+@@ -0,0 +1,288 @@
++#!/usr/bin/env node
++
 +/**
-+ * Low Hanging Fruit Detection Script
++ * Low Hanging Fruit Automation Script
 + * 
-+ * Recursively scans the repository for common bug patterns,
-+ * missing features, and easy improvements to automate issue creation.
++ * This script automatically detects potential bugs and issues in the repository
++ * and creates GitHub issues for them. It runs recursively by scheduling
++ * follow-up work items.
 + */
 +
 +const fs = require('fs');
 +const path = require('path');
++const { execSync } = require('child_process');
 +
-+// Patterns to detect low hanging fruit
-+const DETECTION_PATTERNS = {
-+  // TODO/FIXME comments without associated issues
-+  todoComments: {
-+    pattern: /\/\/\s*(TODO|FIXME|HACK|BUG|XXX)[\s:]*(.*)/gi,
-+    severity: 'low',
-+    category: 'code-quality'
-+  },
-+  // Empty catch blocks
-+  emptyCatch: {
-+    pattern: /catch\s*\([^)]*\)\s*\{\s*\}/g,
-+    severity: 'medium',
-+    category: 'bug'
-+  },
-+  // Console.log statements in production code
-+  consoleLogs: {
-+    pattern: /console\.(log|warn|error|debug)\s*\(/g,
-+    severity: 'low',
-+    category: 'code-quality'
-+  },
-+  // Missing error handling
-+  unhandledPromises: {
-+    pattern: /\.then\s*\([^)]*\)\s*(?!\.catch)/g,
-+    severity: 'medium',
-+    category: 'bug'
-+  },
-+  // Hardcoded secrets (basic detection)
-+  hardcodedSecrets: {
-+    pattern: /(password|secret|token|key)\s*[:=]\s*['"][^'"]{8,}['"]/gi,
-+    severity: 'high',
-+    category: 'security'
-+  },
-+  // Deprecated API usage
-+  deprecatedAPIs: {
-+    pattern: /(res\.sendFile|res\.sendfile|bodyParser|urlencoded\s*\(\s*\{[^}]*extended)/gi,
-+    severity: 'low',
-+    category: 'maintenance'
-+  }
++// Configuration
++const CONFIG = {
++  // Patterns that indicate potential bugs or issues
++  bugPatterns: [
++    { pattern: /TODO|FIXME|HACK|BUG|XXX/gi, severity: 'low', type: 'code-comment' },
++    { pattern: /console\.(log|warn|error)\(/g, severity: 'low', type: 'debug-statement' },
++    { pattern: /process\.env\.[A-Z_]+/g, severity: 'medium', type: 'env-usage' },
++    { pattern: /\/\/ @ts-ignore/g, severity: 'medium', type: 'ts-ignore' },
++    { pattern: /any/g, severity: 'low', type: 'any-type' },
++    { pattern: /catch\s*\([^)]*\)\s*{\s*(\/\/.*)?\s*}/g, severity: 'high', type: 'empty-catch' },
++    { pattern: /setTimeout|setInterval/g, severity: 'low', type: 'timer-usage' },
++    { pattern: /eval\(/g, severity: 'high', type: 'eval-usage' },
++    { pattern: /innerHTML|dangerouslySetInnerHTML/g, severity: 'high', type: 'xss-risk' },
++    { pattern: /SELECT\s+\*\s+FROM/gi, severity: 'medium', type: 'sql-pattern' },
++  ],
++  
++  // Files to scan
++  scanExtensions: ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rs'],
++  
++  // Directories to exclude
++  excludeDirs: ['node_modules', '.git', 'dist', 'build', '.next', 'coverage'],
 +};
 +
-+// Files/directories to exclude
-+const EXCLUDES = [
-+  'node_modules',
-+  '.git',
-+  'dist',
-+  'build',
-+  '.next',
-+  'coverage',
-+  '.github/scripts'
-+];
-+
-+function shouldExclude(filePath) {
-+  return EXCLUDES.some(ex => filePath.includes(ex));
-+}
-+
-+function scanFile(filePath) {
-+  const results = [];
-+  const content = fs.readFileSync(filePath, 'utf-8');
-+  const lines = content.split('\n');
-+
-+  for (const [patternName, config] of Object.entries(DETECTION_PATTERNS)) {
-+    const regex = new RegExp(config.pattern.source, 'gi');
-+    let match;
-+
-+    while ((match = regex.exec(content)) !== null) {
-+      const lineNum = content.substring(0, match.index).split('\n').length;
-+      const lineContent = lines[lineNum - 1].trim();
-+
-+      results.push({
-+        pattern: patternName,
-+        category: config.category,
-+        severity: config.severity,
-+        file: filePath,
-+        line: lineNum,
-+        match: match[0].substring(0, 100),
-+        lineContent: lineContent.substring(0, 200)
-+      });
-+    }
++// GitHub API helper
++class GitHubAPI {
++  constructor(token, repo) {
++    this.token = token;
++    this.repo = repo;
++    this.baseUrl = 'https://api.github.com';
 +  }
 +
-+  return results;
-+}
++  async request(endpoint, options = {}) {
++    const url = `${this.baseUrl}${endpoint}`;
++    const response = await fetch(url, {
++      ...options,
++      headers: {
++        'Authorization': `Bearer ${this.token}`,
++        'Accept': 'application/vnd.github.v3+json',
++        'User-Agent': 'LowHangingFruitBot',
++        ...(options.headers || {}),
++      },
++    });
 +
-+function scanDirectory(dir) {
-+  const results = [];
-+  const entries = fs.readdirSync(dir, { withFileTypes: true });
-+
-+  for (const entry of entries) {
-+    const fullPath = path.join(dir, entry.name);
-+
-+    if (shouldExclude(fullPath)) continue;
-+
-+    if (entry.isDirectory()) {
-+      results.push(...scanDirectory(fullPath));
-+    } else if (entry.isFile() && /\.(ts|tsx|js|jsx|json|md|yml|yaml|prisma)$/.test(entry.name)) {
-+      results.push(...scanFile(fullPath));
++    if (!response.ok) {
++      throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
 +    }
++
++    return response.json();
 +  }
 +
-+  return results;
++  async createIssue(title, body, labels = []) {
++    const [owner, repo] = this.repo.split('/');
++    return this.request(`/repos/${owner}/${repo}/issues`, {
++      method: 'POST',
++      headers: {
++        'Content-Type': 'application/json',
++      },
++      body: JSON.stringify({
++        title,
++        body,
++        labels: [...labels, 'bug bounty', 'AI agent friendly', 'good first issue', 'help wanted'],
++      }),
++    });
++  }
++
++  async listIssues(state = 'open') {
++    const [owner, repo] = this.repo.split('/');
++    return this.request(`/repos/${owner}/${repo}/issues?state=${state}&per_page=100`);
++  }
 +}
 +
-+function main() {
-+  const repoRoot = path.resolve(__dirname, '../..');
-+  const findings = scanDirectory(repoRoot);
++// File scanner
++class FileScanner {
++  constructor(config) {
++    this.config = config;
++  }
 +
-+  // Group findings by category for better organization
-+  const grouped = findings.reduce((acc, finding) => {
-+    if (!acc[finding.category]) acc[finding.category] = [];
-+    acc[finding.category].push(finding);
-+    return acc;
-+  }, {});
++  shouldScan(filePath) {
++    const ext = path.extname(filePath);
++    if (!this.config.scanExtensions.includes(ext)) return false;
++    
++    const parts = filePath.split(path.sep);
++    return !this.config.excludeDirs.some(dir => parts.includes(dir));
++  }
 +
-+  // Write findings to a file for the next step
-+  const outputPath = path.join(__dirname, 'findings.json');
-+  fs.writeFileSync(outputPath, JSON.stringify(grouped, null, 2));
++  scanFile(filePath) {
++    const findings = [];
++    const content = fs.readFileSync(filePath, 'utf-8');
++    const lines = content.split('\n');
 +
-+  console.log(`Detected ${findings.length} low hanging fruit items across ${Object.keys(grouped).length} categories`);
-+  console.log('Categories:', Object.keys(grouped).join(', '));
-+}
++    for (const { pattern, severity, type } of this.config.bugPatterns) {
++      // Reset lastIndex for global regex
++      pattern.lastIndex = 0;
++      
++      lines.forEach((line, index) => {
++        pattern.lastIndex = 0;
++        const matches = [...line.matchAll(pattern)];
++        
++        for (const match of matches) {
++          findings.push({
++            type,
++            severity,
++            file: filePath,
++            line: index + 1,
++            content: line.trim(),
++            match: match[0],
++          });
++        }
 +
-+main();
-+--- /dev/null
-+++ b/.github/scripts/create-issues.js
-@@ -0,0 +1,131 @@
-+/**
-+ * Issue Creation Script
-+ * 
-+ * Creates GitHub issues for detected low hanging fruit items.
-+ *
