@@ -1,196 +1,179 @@
  ```diff
 --- /dev/null
 +++ b/benchmarks/.env.benchmark
-@@ -0,0 +1,10 @@
-+# Benchmark Configuration
-+# Copy this file to .env and adjust values for your environment
+@@ -0,0 +1,12 @@
++# Benchmark Environment Configuration
++# Copy this file to .env.benchmark and fill in your values
 +
-+# Target API base URL (local or staging)
-+BENCHMARK_TARGET_URL=http://localhost:3001
++# Target server URL (required)
++# Examples: http://localhost:3000, https://staging.freelanceflow.io
++BENCHMARK_TARGET_URL=http://localhost:3000
 +
-+# Benchmark test token for auth-protected routes
-+# Create a test user and generate a JWT token for benchmarking
++# Benchmark test token for auth-protected routes (required)
++# Create a dedicated benchmark user and use its JWT token
 +BENCHMARK_AUTH_TOKEN=your_benchmark_jwt_token_here
 +
++# Optional: Set to 'true' to skip auth-protected routes
++# SKIP_AUTH_ROUTES=false
 --- /dev/null
-+++ b/benchmarks/package.json
-@@ -0,0 +1,17 @@
++++ 	benchmarks/.gitignore
+@@ -0,0 +1,2 @@
++results/
++node_modules/
+--- /dev/null
++++ 	benchmarks/package.json
+@@ -0,0 +1,18 @@
 +{
-+  "name": "@bug-bounty/benchmarks",
++  "name": "@freelanceflow/benchmarks",
 +  "version": "1.0.0",
 +  "private": true,
-+  "type": "module",
++  "description": "API benchmark suite for FreelanceFlow",
 +  "scripts": {
 +    "benchmark": "node run-benchmarks.js",
 +    "benchmark:smoke": "node run-benchmarks.js --smoke",
-+    "benchmark:report": "node generate-report.js"
++    "benchmark:ci": "node run-benchmarks.js --ci"
 +  },
 +  "dependencies": {
-+    "autocannon": "^7.15.0"
-+  },
-+  "devDependencies": {
++    "autocannon": "^7.15.0",
 +    "dotenv": "^16.3.1"
++  },
++  "devDependencies": {},
++  "engines": {
++    "node": ">=18.0.0"
 +  }
 +}
-+
 --- /dev/null
-+++ b/benchmarks/config.js
-@@ -0,0 +1,88 @@
-+import { readFileSync } from 'fs';
-+import { fileURLToPath } from 'url';
-+import { dirname, join } from 'path';
++++ 	benchmarks/run-benchmarks.js
+@@ -0,0 +1,526 @@
++#!/usr/bin/env node
 +
-+const __filename = fileURLToPath(import.meta.url);
-+const __dirname = dirname(__filename);
++const fs = require('fs');
++const path = require('path');
++const autocannon = require('autocannon');
++require('dotenv').config({ path: path.join(__dirname, '.env.benchmark') });
 +
-+// Load environment variables
-+try {
-+  const envPath = join(__dirname, '.env');
-+  const envContent = readFileSync(envPath, 'utf-8');
-+  envContent.split('\n').forEach(line => {
-+    const [key, value] = line.split('=');
-+    if (key && value && !key.startsWith('#')) {
-+      process.env[key.trim()] = value.trim();
-+    }
-+  });
-+} catch (err) {
-+  // .env file is optional, use defaults or process.env
-+}
-+
-+const TARGET_URL = process.env.BENCHMARK_TARGET_URL || 'http://localhost:3001';
++// Configuration
++const TARGET_URL = process.env.BENCHMARK_TARGET_URL || 'http://localhost:3000';
 +const AUTH_TOKEN = process.env.BENCHMARK_AUTH_TOKEN || '';
++const SKIP_AUTH = process.env.SKIP_AUTH_ROUTES === 'true';
++const IS_SMOKE = process.argv.includes('--smoke');
++const IS_CI = process.argv.includes('--ci');
 +
-+export const config = {
-+  targetUrl: TARGET_URL,
-+  authToken: AUTH_TOKEN,
-+  duration: 30, // seconds for full benchmark
-+  smokeDuration: 5, // seconds for smoke test
-+  connections: 100,
-+  smokeConnections: 10,
-+  pipelining: 1,
-+  resultsDir: join(__dirname, 'results'),
-+  thresholdsPath: join(__dirname, 'thresholds.json'),
-+};
++// Benchmark settings
++const DURATION = IS_SMOKE ? 10 : 30; // seconds
++const CONNECTIONS = IS_SMOKE ? 10 : 50;
++const PIPELINE = IS_SMOKE ? 1 : 10;
 +
-+// Define all API endpoints to benchmark
-+export const endpoints = [
-+  // Public endpoints
-+  {
-+    name: 'health',
-+    path: '/health',
-+    method: 'GET',
-+    requiresAuth: false,
-+  },
-+  // Auth endpoints
-+  {
-+    name: 'auth-register',
-+    path: '/api/auth/register',
-+    method: 'POST',
-+    requiresAuth: false,
-+    body: { email: 'bench@test.com', password: 'Benchmark123!', name: 'Benchmark User' },
-+  },
-+  {
-+    name: 'auth-login',
-+    path: '/api/auth/login',
-+    method: 'POST',
-+    requiresAuth: false,
-+    body: { email: 'bench@test.com', password: 'Benchmark123!' },
-+  },
-+  // Protected endpoints
-+  {
-+    name: 'users-me',
-+    path: '/api/users/me',
-+    method: 'GET',
-+    requiresAuth: true,
-+  },
-+  {
-+    name: 'jobs-list',
-+    path: '/api/jobs',
-+    method: 'GET',
-+    requiresAuth: false,
-+  },
-+  {
-+    name: 'proposals-list',
-+    path: '/api/proposals',
-+    method: 'GET',
-+    requiresAuth: true,
-+  },
-+  {
-+    name: 'notifications',
-+    path: '/api/notifications',
-+    method: 'GET',
-+    requiresAuth: true,
-+  },
-+];
++// Thresholds for CI regression gate
++const THRESHOLDS = loadThresholds();
 +
-+export default config;
-+
---- /dev/null
-+++ b/benchmarks/run-benchmarks.js
-@@ -0,0 +1,228 @@
-+import autocannon from 'autocannon';
-+import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'fs';
-+import { join } from 'path';
-+import { config, endpoints } from './config.js';
-+
-+const isSmoke = process.argv.includes('--smoke');
-+const runDuration = isSmoke ? config.smokeDuration : config.duration;
-+const runConnections = isSmoke ? config.smokeConnections : config.connections;
-+
-+// Ensure results directory exists
-+try {
-+  mkdirSync(config.resultsDir, { recursive: true });
-+} catch (err) {
-+  // Directory already exists
-+}
-+
-+function buildUrl(path) {
-+  return `${config.targetUrl}${path}`;
-+}
-+
-+function getHeaders(requiresAuth) {
-+  const headers = {
-+    'Content-Type': 'application/json',
-+  };
-+  if (requiresAuth && config.authToken) {
-+    headers['Authorization'] = `Bearer ${config.authToken}`;
-+  }
-+  return headers;
-+}
-+
-+async function runBenchmark(endpoint) {
-+  const url = buildUrl(endpoint.path);
-+  const headers = getHeaders(endpoint.requiresAuth);
-+  
-+  const options = {
-+    url,
-+    connections: runConnections,
-+    duration: runDuration,
-+    pipelining: config.pipelining,
-+    method: endpoint.method || 'GET',
-+    headers,
-+  };
-+
-+  if (endpoint.body && (endpoint.method === 'POST' || endpoint.method === 'PUT' || endpoint.method === 'PATCH')) {
-+    options.body = JSON.stringify(endpoint.body);
-+  Salvador  }
-+
-+  console.log(`\n🔥 Benchmarking: ${endpoint.name} (${options.method} ${endpoint.path})`);
-+  console.log(`   Connections: ${runConnections}, Duration: ${runDuration}s`);
-+
++function loadThresholds() {
 +  try {
-+    const result = await autocannon(options);
-+    
-+    const metrics = {
-+      name: endpoint.name,
-+      path: endpoint.path,
-+      method: options.method,
-+      timestamp: new Date().toISOString(),
-+      latency: {
-+        p50: result.latency.p50,
-+        p95: result.latency.p95,
-+        p99: result.latency.p99,
-+        min: result.latency.min,
-+        max: result.latency.max,
-+      },
-+      throughput: {
++    const thresholdsPath = path.join(__dirname, 'thresholds.json');
++    const data = fs.readFileSync(thresholdsPath, 'utf8');
++    return JSON.parse(data);
++  } catch (err) {
++    console.warn('Warning: Could not load thresholds.json, using defaults');
++    return {
++      p99LatencyMs: 500,
++      errorRatePercent: 5
++    };
++  }
++}
++
++// Results storage
++const results = [];
++let currentEndpoint = null;
++
++// Auth header
++const authHeaders = AUTH_TOKEN ? { Authorization: `Bearer ${AUTH_TOKEN}` } : {};
++
++// Endpoint definitions with realistic payloads
++const ENDPOINTS = [
++  // Health check (unauthenticated)
++  {
++    name: 'GET /health',
++    method: 'GET',
++    path: '/health',
++    requiresAuth: false
++  },
++  // Auth routes
++  {
++    name: 'POST /api/auth/register',
++    method: 'POST',
++    path: '/api/auth/register',
++    requiresAuth: false,
++    body: {
++      email: `benchmark${Date.now()}@example.com`,
++      password: 'BenchmarkPass123!',
++      firstName: 'Bench',
++      lastName: 'Mark',
++      role: 'FREELANCER'
++    }
++  },
++  {
++    name: 'POST /api/auth/login',
++    method: 'POST',
++    path: '/api/auth/login',
++    requiresAuth: false,
++    body: {
++      email: 'benchmark@example.com',
++      password: 'BenchmarkPass123!'
++    }
++  },
++  // User routes
++  {
++    name: 'GET /api/users',
++    method: 'GET',
++    path: '/api/users?page=1&limit=20',
++    requiresAuth: true
++  },
++  {
++    name: 'GET /api/users/:id',
++    method: 'GET',
++    path: '/api/users/1',
++    requiresAuth: true
++  },
++  // Job routes
++  {
++    name: 'GET /api/jobs',
++    method: 'GET',
++    path: '/api/jobs?page=1&limit=20&sort=createdAt:desc',
++    requiresAuth: false
++  },
++  {
++    name: 'GET /api/jobs/:id',
++    method: 'GET',
++    path: '/api/jobs/1',
++    requiresAuth: false
++  },
++  {
++    name: 'POST /api/jobs',
++    method: 'POST',
++    path: '/api/jobs',
++    requiresAuth: true,
++    body: {
++      title: 'Benchmark Job Posting',
++      description: 'This is a realistic job description for benchmarking purposes. It contains enough text to simulate a typical job posting payload size in production environments.',
++      budget: 5000,
++      category: 'Software Development',
++      skills: ['JavaScript', 'TypeScript', 'Node.js', 'React'],
++      deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
++    }
++  },
++  // Proposal routes
++  {
++    name: 'GET /api/proposals',
++    method: 'GET',
++    path: '/api/proposals?jobId=1&page=1&limit=20',
++    requiresAuth: true
++  },
++  {
++    name: 'POST /api/proposals',
++    method: 'POST',
++    path: '/api/proposals',
++    requiresAuth: true,
++    body: {
++      jobId: 1,
++      coverLetter: 'This is a sample proposal cover letter for benchmarking. It simulates the typical length of a freelancer proposal with sufficient detail to demonstrate expertise and interest in the project.',
++
