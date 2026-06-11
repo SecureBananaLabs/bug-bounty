@@ -1,19 +1,26 @@
-import test from "node:test";
+import { randomUUID } from "node:crypto";
+import { beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
-import { createUser, listUsers } from "../services/userService.js";
+import { createUser, listUsers, resetUsersForTest } from "../services/userService.js";
 
-test("createUser preserves the generated user id over payload id", async () => {
+beforeEach(() => {
+  resetUsersForTest();
+});
+
+test("createUser ignores a client-provided id and stores the generated user id", async () => {
+  const email = `payload-${randomUUID()}@example.com`;
+
   const user = await createUser({
     id: "usr_client_supplied",
     name: "Payload Name",
-    email: "payload@example.com",
+    email,
   });
 
-  assert.match(user.id, /^usr_\d+$/);
-  assert.notEqual(user.id, "usr_client_supplied");
-  assert.equal(user.name, "Payload Name");
-  assert.equal(user.email, "payload@example.com");
+  assert.match(user.id, /^usr_[0-9a-f-]+$/);
+  assert.notStrictEqual(user.id, "usr_client_supplied");
+  assert.strictEqual(user.name, "Payload Name");
+  assert.strictEqual(user.email, email);
 
-  const stored = (await listUsers()).find((entry) => entry.email === "payload@example.com");
-  assert.equal(stored?.id, user.id);
+  const stored = (await listUsers()).find((entry) => entry.email === email);
+  assert.strictEqual(stored?.id, user.id);
 });
