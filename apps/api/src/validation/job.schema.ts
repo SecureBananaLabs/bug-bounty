@@ -1,41 +1,34 @@
-import { z, RefinementCtx } from 'zod';
+import { z } from 'zod';
 
 export const createJobSchema = z.object({
-  title: z.string().min(1).max(200),
-  budgetMin: z.number().nonnegative().optional(),
-  budgetMax: z.number().nonnegative().optional(),
-  categoryId: z.string().uuid().optional(),
+  title: z.string().min(1).max(255),
+  categoryId: z.string().uuid(),
   skills: z.array(z.string()).optional(),
-}).refine(
-  (data) => {
-    if (data.budgetMin !== undefined && data.budgetMax !== undefined) {
-      return data.budgetMax >= data.budgetMin;
-    }
-    return true;
-  },
-  {
-    message: 'budgetMax must be greater than or equal to budgetMin',
-    path: ['budgetMax'],
+  budgetMin: z.number().positive().optional(),
+  budgetMax: z.number().positive().optional(),
+}).strict().refine((data) => {
+  if (data.budgetMin !== undefined && data.budgetMax !== undefined) {
+    return data.budgetMax >= data.budgetMin;
   }
-);
+  return true;
+}, {
+  message: 'budgetMax must be greater than or equal to budgetMin',
+});
 
 export const updateJobSchema = z.object({
-  title: z.string().min(1).max(200).optional(),
-  budgetMax: z.number().nonnegative().optional(),
+  title: z.string().min(1).max(255).optional(),
   categoryId: z.string().uuid().optional(),
   skills: z.array(z.string()).optional(),
-}).refine(
-  (data) => {
-    if (data.budgetMin !== undefined && data.budgetMax !== undefined) {
-      return data.budgetMax >= data.budgetMin;
-    }
-    return true;
-  },
-  {
-    message: 'budgetMax must be greater than or equal to budgetMin',
-    path: ['budgetMax'],
+  budgetMin: z.number().positive().optional(),
+  budgetMax: z.number().positive().optional(),
+}).strict().refine((data) => {
+  if (data.budgetMin !== undefined && data.budgetMax !== undefined) {
+    return data.budgetMax >= data.budgetMin;
   }
-);
+  return true;
+}, {
+  message: 'budgetMax must be greater than or equal to budgetMin',
+});
 
 export type CreateJobInput = z.infer<typeof createJobSchema>;
 export type UpdateJobInput = z.infer<typeof updateJobSchema>;
