@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 
 import { createReview } from "../services/reviewService.js";
 
-test("createReview preserves the server-generated id", async () => {
+test("createReview ignores a client-provided id", async () => {
   const review = await createReview({
     id: "client-controlled-id",
     jobId: "job_123",
@@ -12,10 +12,10 @@ test("createReview preserves the server-generated id", async () => {
     comment: "Clear communication"
   });
 
-  assert.match(review.id, /^rev_\d+$/);
-  assert.notEqual(review.id, "client-controlled-id");
-  assert.equal(review.jobId, "job_123");
-  assert.equal(review.reviewerId, "usr_456");
-  assert.equal(review.rating, 5);
-  assert.equal(review.comment, "Clear communication");
+  assert.match(review.id, /^rev_[0-9a-f-]+$/);
+  assert.notStrictEqual(review.id, "client-controlled-id");
+  assert.strictEqual(review.jobId, "job_123");
+  assert.strictEqual(review.reviewerId, "usr_456");
+  assert.strictEqual(review.rating, 5);
+  assert.strictEqual(review.comment, "Clear communication");
 });
