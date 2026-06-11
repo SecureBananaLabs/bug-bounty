@@ -1,11 +1,12 @@
-# Pixel Art: Cyberpunk City
+# Pixel Art Assets
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
+This directory contains original pixel art created for the FreelanceFlow project.
 
-**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with dark atmospheric tones, which makes for striking and recognizable pixel art. The contrast between the glowing windows, neon signs, and the dark sky creates visual depth even at a small scale. It also fits well with the tech-focused nature of this project.
+## Files
 
-## Details
-- **Canvas size:** 64x64 pixels
-- **Format:** PNG
-- **Colors used:** Neon pink, cyan, purple, yellow, dark blues and blacks
-- **Style:** Isometric-ish city blocks with glowing windows and neon signage
+- `shanaboo-robot.png` — A friendly retro-futuristic robot character (64x64 pixels). Created to represent the helpful, AI-assisted nature of modern freelance tools and add creative visual personality to the project.
+
+## Specifications
+
+- Minimum canvas size: 64x64 pixels
+- Format: PNG with transparency support
