@@ -13,7 +13,8 @@
   }
 {
   "name": "@freelanceflow/db",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "exports": {
@@ -23,8 +24,8 @@
       "types": "./src/index.ts"
     }
   },
-  "scripts": {
-    "test": "echo 'No tests yet'"
+  "dependencies": {
+    "@prisma/client": "*"
   }
 }
 }
