@@ -1,7 +1,7 @@
-# Cosmic Forest Pixel Art
+# Pixel Art: Retro Terminal
 
-**What:** A 64x64 pixel art scene depicting a mystical forest at night with bioluminescent mushrooms, a starry sky, and a small fox stargazer.
+A 64x64 pixel art piece depicting a retro CRT monitor with a glowing green terminal screen, sitting on a wooden desk with a small potted succulent.
 
-**Why:** I chose this theme to blend the tranquility of nature with cosmic wonder, creating a retro-futuristic scene that invites viewers to imagine worlds beyond our own. The limited pixel canvas challenges creative expression while evoking nostalgia for classic adventure games.
+**Why:** This piece celebrates the roots of computing and the command-line interfaces that power modern development. The warm amber glow of the monitor contrasts with the cool green of the terminal, evoking late-night coding sessions and the joy of building things from scratch. The small plant represents growth and the organic community that nurtures open-source projects.
 
-**File:** `cosmic-forest.png` (64x64 pixels, PNG format)
+Created with love for the bug bounty community 💎
