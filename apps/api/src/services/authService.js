@@ -20,5 +20,16 @@ export async function loginUser(payload) {
 
 export async function refreshToken(token) {
   const decoded = verifyAccessToken(token);
+  if (
+    !decoded ||
+    typeof decoded !== "object" ||
+    typeof decoded.sub !== "string" ||
+    !decoded.sub ||
+    typeof decoded.role !== "string" ||
+    !decoded.role
+  ) {
+    throw new Error("Refresh token payload is missing required claims");
+  }
+
   return { token: signAccessToken({ sub: decoded.sub, role: decoded.role }) };
 }

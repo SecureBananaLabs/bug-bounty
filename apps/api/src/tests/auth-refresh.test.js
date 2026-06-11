@@ -34,6 +34,28 @@ test("POST /api/auth/refresh rejects invalid tokens", async () => {
   });
 });
 
+test("POST /api/auth/refresh rejects signed tokens missing required claims", async () => {
+  const tokens = [
+    signAccessToken({ sub: "usr_refresh" }),
+    signAccessToken({ role: "client" })
+  ];
+
+  for (const token of tokens) {
+    const response = await request(createApp(), {
+      body: { token },
+      method: "POST",
+      path: "/api/auth/refresh"
+    });
+    const payload = response.json();
+
+    assert.equal(response.status, 401);
+    assert.deepEqual(payload, {
+      success: false,
+      message: "Invalid refresh token"
+    });
+  }
+});
+
 test("POST /api/auth/refresh preserves the authenticated subject and role", async () => {
   const token = signAccessToken({ sub: "usr_refresh", role: "freelancer" });
   const response = await request(createApp(), {
