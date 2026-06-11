@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
 export const createJobSchema = z.object({
-  title: z.string().min(1).max(255),
+  title: z.string().min(1).max(200),
+  description: z.string().min(1).max(5000),
   categoryId: z.string().uuid(),
-  skills: z.array(z.string()).optional(),
+  skills: z.array(z.string().uuid()).optional(),
   budgetMin: z.number().positive().optional(),
   budgetMax: z.number().positive().optional(),
 }).strict().refine((data) => {
@@ -16,9 +17,9 @@ export const createJobSchema = z.object({
 });
 
 export const updateJobSchema = z.object({
-  title: z.string().min(1).max(255).optional(),
+  title: z.string().min(1).max(200).optional(),
   categoryId: z.string().uuid().optional(),
-  skills: z.array(z.string()).optional(),
+  skills: z.array(z.string().uuid()).optional(),
   budgetMin: z.number().positive().optional(),
   budgetMax: z.number().positive().optional(),
 }).strict().refine((data) => {
