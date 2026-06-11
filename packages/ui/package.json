@@ -10,9 +10,9 @@
   },
   "dependencies": {
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "@types/react": "^18.0.0"
+    "typescript": "^5.0.0"
   },
+  "license": "MIT",
   "exports": {
     ".": {
       "import": "./dist/index.js",
