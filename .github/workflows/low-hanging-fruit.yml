@@ -27,28 +27,14 @@ jobs:
       - name: Run low hanging fruit detection
         id: detect
         run: |
-          node scripts/detect-low-hanging-fruit.js
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
 
-      - name: Create GitHub issues for detected items
-        if: steps.detect.outputs.issues_to_create != ''
+      - name: Create issues for detected items
+        if: steps.detect.outputs.issues != ''
         run: |
-          node scripts/create-issues.js
+          node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
-          ISSUES_JSON: ${{ steps.detect.outputs.issues_to_create }}
-
-      - name: Commit leaderboard updates
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add leaderboard.json
-          git diff --cached --quiet || git commit -m "Update leaderboard from low-hanging-fruit automation"
-          git push || echo "No changes to push"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUES_DATA: ${{ steps.detect.outputs.issues }}
