@@ -1,37 +1,35 @@
-# The Flow of Code and Commerce
+# The Flow of Code and Coin
 
 ## A Poem for FreelanceFlow
 
-In digital halls where seekers meet,
-Where skill and need in silence greet,
-A marketplace of minds takes shape—
-No gate, no wall, no velvet rope,
-Just code that builds a bridge of hope,
-And trust that forms from first to final scrape.
+In circuits of trust where the gig-workers roam,
+Through digital halls they seek to atone—
+For the nine-to-five grind and the cubicle's hum,
+They chase independence, they want to become
+Free agents of craft in a marketplace home.
 
-The client dreams in briefs of need,
-The freelancer reads, begins to heed,
-A proposal weaves through lines of light,
-From Prisma's schema, strong and deep,
-To React's swift components leap,
-The full stack hums through day and night.
+The client posts jobs with a hope and a need,
+While coders and writers compete to succeed,
+With proposals like arrows they shoot toward the sky,
+Each freelancer hoping their pitch will not die,
+But land in the inbox where dreams multiply.
 
-No cubicle contains this dance,
-Of Stripe, of message, of freelance chance,
-The monorepo holds it all—
-Each package, app, a living part,
-Of something built with skill and art,
-Where independence stands so tall.
+From schema to screen, the full stack aligns,
+Prisma to Next, the architecture shines,
+Stripe for the payment, the message, the review,
+The monorepo hums with a purpose so true—
+To connect skill with need, and to see it all through.
 
-So here's to flows that freely run,
-To jobs well done and battles won,
-To every commit, large and small—
-May bugs be few and features bright,
-May every deploy take flight,
-And FreelanceFlow connect us all.
+So here's to the builders, the makers, the free,
+Who trade in their talents for sovereignty,
+May your flow never falter, your code never break,
+May the gigs keep on coming for all of our sake—
+In this marketplace world that we all help to make.
 
 ---
 
-*Written for SecureBananaLabs/bug-bounty, 2025*
+*Written for SecureBananaLabs/bug-bounty — FreelanceFlow*
 
-**Creative Decision:** I chose a ballad-style form with an ABABCC rhyme scheme to echo the structured yet flowing nature of a well-architected monorepo. The poem mirrors the layered architecture of FreelanceFlow itself—each stanza building upon the last, from the initial connection between client and freelancer, through the technical stack, to the broader vision of independent work. The tone balances technical specificity (Prisma, React, Stripe, monorepo) with human warmth, reflecting how this codebase serves real people seeking meaningful work.
+## Creative Decision
+
+I chose the **ballad stanza** (ABCB rhyme scheme) for this poem because its rhythmic, song-like quality mirrors the "flow" in FreelanceFlow—suggesting continuous movement, connection, and momentum. The tone balances technical specificity (Prisma, Next, Stripe, monorepo) with human aspiration, reflecting how the platform bridges code and community. The theme of independence and connection felt natural for a freelance marketplace, where individual freedom and collective trust must coexist.
