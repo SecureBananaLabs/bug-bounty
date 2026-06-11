@@ -1,34 +1,36 @@
 # The Flow of Code and Coin
 
-> A poem for FreelanceFlow
+## A Poem for FreelanceFlow
+
+In circuits hums the marketplace of old,
+Where guilds of craft once gathered, stone and wood,
+Now bits and bytes in Prisma schemas hold
+The bonds of trust that any trade should.
+
+A client posts their need into the void,
+The API receives, validates, responds,
+While Next.js renders, swift and unannoyed,
+The job detail where freelancer corresponds.
+
+Proposals fly like messages in night,
+Through layered architecture, clean and sound,
+Auth guards each route with JWT's hard light,
+No payment moves unverified, unbound.
+
+From landing page to dashboard's private view,
+The monorepo breathes as one machine—
+Packages shared, dependencies run through,
+A marketplace built where code and commerce convene.
+
+So here's to flows that freelance and freely flow,
+To bug bounties waiting, to stars we bestow.
 
 ---
 
-In circuits hums the morning light,
-Where gig and grind converge, unite—
-A client wakes with need unspun,
-A freelancer greets the rising sun.
-No office walls, no timecard chime,
-Just pixels bridging space and time.
+*Written for SecureBananaLabs/bug-bounty, 2025*
 
 ---
 
-The proposal flies through fiber thread,
-With skills and rates and hopes well-fed,
-The schema holds what hands cannot,
-In Prisma's weave, a sturdy knot.
-From Stripe to dashboard, message, review—
-Each API call births something new.
+**Creative Decision:**
 
----
-
-So here's to flows both free and freelance,
-To code that dances, leaps, and prances,
-To every bug that taught us well,
-To the next commit we push—oh, swell!
-May your tests all pass, your builds stay green,
-In this marketplace of dream.
-
----
-
-*Creative decision: I chose a lighthearted, optimistic tone with an AABB rhyme scheme to mirror the collaborative spirit of freelance marketplaces. The poem weaves in technical references (Prisma, API, Stripe, tests, builds) to celebrate the intersection of technology and independent work that FreelanceFlow enables—treating code not as cold machinery, but as the connective tissue of human ambition.*
+I chose a Shakespearean sonnet form (three quatrains and a couplet, iambic pentameter) to create an ironic but sincere juxtaposition between the archaic, romantic tradition of poetry and the modern, technical architecture of a freelance marketplace monorepo. The poem weaves in specific technical references—Prisma, Next.js, API, JWT, monorepo—to honor the project's actual codebase while maintaining the elevated diction of classical verse. The theme explores how ancient economic relationships (guilds, trust, trade) persist in digital infrastructure, suggesting that technology is merely a new expression of timeless human collaboration. The tone is earnest but slightly playful, reflecting both the seriousness of production code and the whimsical energy of open-source contribution.
