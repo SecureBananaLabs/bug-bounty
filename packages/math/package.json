@@ -1,0 +1,15 @@
+{
+  "name": "@freelanceflow/math",
+  "version": "1.0.0",
+  "description": "Mathematical constants and utilities for FreelanceFlow",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "jest": "^29.0.0"
+  }
+}

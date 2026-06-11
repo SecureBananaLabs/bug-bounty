@@ -1,0 +1,13 @@
+{
+  "name": "@freelanceflow/pi-calculator",
+  "version": "1.0.0",
+  "description": "Exact value of PI calculator service",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "pi": "ts-node src/calculate-pi.ts"
+  },
+  "dependencies": {}
+}
