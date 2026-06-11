@@ -2,7 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 permissions:
@@ -21,89 +21,26 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
+      - name: Install dependencies
+        run: npm install
 
-            // Patterns that indicate low hanging fruit / easy fixes
-            const patterns = [
-              { pattern: /TODO|FIXME|HACK|BUG|XXX/g, label: 'good first issue', titlePrefix: '[Auto] Fix ' },
-              { pattern: /console\.(log|warn|error)/g, label: 'good first issue', titlePrefix: '[Auto] Remove ' },
-              { pattern: /unused|deprecated|legacy/gi, label: 'good first issue', titlePrefix: '[Auto] Clean up ' },
-            ];
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            const searchPaths = ['apps', 'packages'];
-            const results = [];
+      - name: Create issues from detected items
+        if: steps.detect.outputs.hasIssues == 'true'
+        run: |
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            function scanDirectory(dir, relativePath = '') {
-              const items = fs.readdirSync(dir, { withFileTypes: true });
-              for (const item of items) {
-                const fullPath = path.join(dir, item.name);
-                const relPath = path.join(relativePath, item.name);
-                
-                if (item.isDirectory() && item.name !== 'node_modules' && item.name !== '.git') {
-                  scanDirectory(fullPath, relPath);
-                } else if (item.isFile() && (item.name.endsWith('.ts') || item.name.endsWith('.tsx') || item.name.endsWith('.js') || item.name.endsWith('.md'))) {
-                  const content = fs.readFileSync(fullPath, 'utf-8');
-                  const lines = content.split('\n');
-                  
-                  for (let i = 0; i < lines.length; i++) {
-                    for (const { pattern, label, titlePrefix } of patterns) {
-                      const matches = [...lines[i].matchAll(pattern)];
-                      for (const match of matches) {
-                        results.push({
-                          file: relPath,
-                          line: i + 1,
-                          content: lines[i].trim(),
-                          label,
-                          title: `${titlePrefix}${match[0]} in ${relPath}`,
-                          description: `Found \`${match[0]}\` in \`${relPath}\` at line ${i + 1}:\n\n\`\`\`\n${lines[i].trim()}\n\`\`\``
-                        });
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-            for (const searchPath of searchPaths) {
-              const fullPath = path.join(process.cwd(), searchPath);
-              if (fs.existsSync(fullPath)) {
-                scanDirectory(fullPath, searchPath);
-              }
-            }
-
-            // Check for missing documentation
-            if (!fs.existsSync(path.join(process.cwd(), 'CONTRIBUTING.md'))) {
-              results.push({
-                title: '[Auto] Add CONTRIBUTING.md guidelines',
-                label: 'documentation',
-                description: 'The repository is missing a CONTRIBUTING.md file. This is a low hanging fruit to improve contributor experience.'
-              });
-            }
-
-            // Create issues for each finding
-            const createdIssues = [];
-            for (const result of results.slice(0, 10)) { // Limit to 10 issues per run
-              const issueBody = `## Description\n\n${result.description || result.content}\n\n## File Location\n\n- \`${result.file}\`${result.line ? ` at line ${result.line}` : ''}\n\n---\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n/claim`;
-              
-              try {
-                const issue = await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: result.title,
-                  body: issueBody,
-                  labels: [result.label, 'bug bounty', 'AI agent friendly']
-                });
-                createdIssues.push(issue.data.number);
-                console.log(`Created issue #${issue.data.number}: ${result.title}`);
-              } catch (error) {
-                console.error(`Failed to create issue: ${error.message}`);
-              }
-            }
-
-            console.log(`Created ${createdIssues.length} issues`);
-            return createdIssues;
+      - name: Recursively trigger next scan
+        if: steps.detect.outputs.hasMore == 'true'
+        run: |
+          gh workflow run low-hanging-fruit.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
