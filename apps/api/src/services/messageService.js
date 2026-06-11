@@ -5,7 +5,10 @@ export async function listMessages() {
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
-  messages.push(message);
-  return message;
+  const id = `msg_${Date.now()}`;
+  const message = { id, ...payload, sentAt: new Date().toISOString() };
+  // Ensure the generated id is not overridden by the payload
+  delete message.id;
+  messages.push({ id, ...payload, sentAt: new Date().toISOString() });
+  return { id, ...payload, sentAt: new Date().toISOString() };
 }
