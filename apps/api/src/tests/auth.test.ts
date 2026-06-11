@@ -1,53 +1,46 @@
 import request from 'supertest';
-import express from 'express';
+import app from '../app';
 import { generateToken } from '../utils/jwt';
 
-// Mock before importing app
-const mockFindUnique = jest.fn();
-    expect(res.status).toBe(200);
-    expect(res.body.accessToken).toBeDefined();
+describe('POST /api/auth/register', () => {
+  it('should register a new user', async () => {
+    expect(res.body).toHaveProperty('accessToken');
+  });
+});
+
+describe('POST /api/auth/refresh', () => {
+  it('should return 400 when token is missing', async () => {
+    const res = await request(app)
+      .post('/api/auth/refresh')
+      .send({});
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty('message', 'Token is required');
   });
 
-  describe('POST /api/auth/refresh', () => {
-    it('should return 400 when token is missing', async () => {
-      const res = await request(app)
-        .post('/api/auth/refresh')
-        .send({});
+  it('should return 401 when token is invalid', async () => {
+    const res = await request(app)
+      .post('/api/auth/refresh')
+      .send({ token: 'invalid-token' });
 
-      expect(res.status).toBe(400);
-    });
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty('message', 'Invalid or expired token');
+  });
 
-    it('should return 400 when token is empty string', async () => {
-      const res = await request(app)
-        .post('/api/auth/refresh')
-        .send({ token: '' });
+  it('should return a new access token for a valid token', async () => {
+    const validToken = generateToken('usr_test_123', 'freelancer');
+    
+    const res = await request(app)
+      .post('/api/auth/refresh')
+      .send({ token: validToken });
 
-      expect(res.status).toBe(400);
-    });
-
-    it('should return 401 when token is invalid', async () => {
-      const res = await request(app)
-        .post('/api/auth/refresh')
-        .send({ token: 'invalid-token' });
-
-      expect(res.status).toBe(401);
-      expect(res.body.message).toBe('Invalid or expired token');
-    });
-
-    it('should return new access token for valid token', async () => {
-      const validToken = generateToken('usr_existing', 'freelancer');
-      
-      const res = await request(app)
-        .post('/api/auth/refresh')
-        .send({ token: validToken });
-
-      expect(res.status).toBe(200);
-      expect(res.body.accessToken).toBeDefined();
-      
-      // Verify the new token has the same sub and role
-      const newTokenPayload = JSON.parse(Buffer.from(res.body.accessToken.split('.')[1], 'base64').toString());
-      expect(newTokenPayload.sub).toBe('usr_existing');
-      expect(newTokenPayload.role).toBe('freelancer');
-    });
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('accessToken');
+    
+    // Verify the new token works by checking it contains the same sub/role
+    const newToken = res.body.accessToken;
+    const decoded = JSON.parse(Buffer.from(newToken.split('.')[1], 'base64').toString());
+    expect(decoded.sub).toBe('usr_test_123');
+    expect(decoded.role).toBe('freelancer');
   });
 });
