@@ -2,16 +2,15 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * 0'  # Run weekly on Sundays at midnight
+  workflow_dispatch:  # Allow manual trigger
 
 permissions:
   issues: write
   contents: read
 
 jobs:
-  detect-and-create-issues:
+  create-low-hanging-fruit-issues:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -23,10 +22,10 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Run low hanging fruit detector
-        id: detector
+      - name: Run low hanging fruit detection
+        id: detect
         run: |
           node .github/scripts/detect-low-hanging-fruit.js
         env:
@@ -34,13 +33,14 @@ jobs:
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
 
-      - name: Create GitHub issues for detected items
-        if: steps.detector.outputs.issues_json != ''
+      - name: Create issues from detected items
+        if: steps.detect.outputs.issues_created == 'true'
         run: |
-          node .github/scripts/create-issues.js
+          echo "Low hanging fruit issues created successfully"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
-          ISSUES_JSON: ${{ steps.detector.outputs.issues_json }}
-          REFERENCE_ISSUE_NUMBER: '743'
+
+      - name: Report status
+        if: always()
+        run: |
+          echo "Low hanging fruit automation completed"
