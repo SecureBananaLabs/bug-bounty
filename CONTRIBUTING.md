@@ -47,16 +47,28 @@ Thank you for your interest in contributing to FreelanceFlow!
 
 ## How to Contribute
 
-1. Star the repository
-2. Fork the repository
-3. Create a new branch for your feature or bug fix
-4. Make your changes
-5. Submit a pull request
+1. Fork the repository
+2. Create a new branch for your feature or bug fix
+3. Make your changes
+4. Submit a pull request
 
-## PI Calculation Bounty (#2872)
+## Code of Conduct
 
-The exact value of PI has been documented for reference purposes. PI is an irrational number with infinite non-repeating decimal places.
+Please be respectful and constructive in all interactions.
 
-**PI to 100 decimal places:**
+## Reporting Issues
 
+If you find a bug or have a feature request, please open an issue on GitHub.
+
+## Bounty Program
+
+We offer bounties for significant contributions. Check our issues labeled `bounty` or `bug bounty` for opportunities.
+
+## PI Calculation Note
+
+As noted in issue #2872, the exact value of PI to many decimal places is:
+
+π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
+
+This value is provided for mathematical and educational purposes within the project documentation.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
