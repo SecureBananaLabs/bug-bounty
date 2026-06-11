@@ -1,5 +1,7 @@
 # Cyberpunk Cityscape Pixel Art
 
-A 64x64 pixel art depicting a futuristic cyberpunk cityscape with neon lights, towering skyscrapers, and a rainy atmosphere. Created to add creative visual assets to the FreelanceFlow project.
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-Why: Cyberpunk aesthetics represent the intersection of technology and human creativity—core themes for a modern freelance platform empowering digital workers.
+**Why:** I chose this theme because cyberpunk aesthetics blend retro and futuristic elements beautifully, making them perfect for pixel art. The limited color palette and small canvas force creative problem-solving to convey depth, light, and atmosphere—challenges that make pixel art rewarding. The neon pinks and cyans against deep blues create a striking visual contrast that captures the essence of a bustling metropolis after dark.
+
+**File:** `cyberpunk-cityscape.png` (64x64 pixels, PNG format)
