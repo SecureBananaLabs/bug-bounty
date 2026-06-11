@@ -1,18 +1,5 @@
  ```diff
 --- /dev/null
-+++ b/assets/pixel-art/shanaboo-cyberpunk-city.png
-@@ -0,0 +1,0 @@
-+PNG
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
-+
++++ b/assets/pixel-art/cosmic-forest.png
+@@ -0,0 +1,1 @@
++iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAdmlld0FTXHN0UmVmOjY4NzA2N0AwMDIwMDE2N0AwMDIwMDE2N0AwMDIwMDE2N0AwMDIwMDE2N0AwMDIwMDE2N0AwMDIwMDE
