@@ -53,6 +53,25 @@ test("paymentService - createPaymentIntent success with mocked Stripe SDK", asyn
   mock.restoreAll();
 });
 
+test("paymentService - createPaymentIntent normalizes currency to lowercase", async (t) => {
+  const mockIntent = {
+    id: "pi_67890",
+    client_secret: "secret_67890",
+  };
+
+  const createMock = mock.fn(() => Promise.resolve(mockIntent));
+  mock.method(stripe.paymentIntents, "create", createMock);
+
+  const result = await createPaymentIntent({ amount: 1000, currency: "EUR" });
+
+  assert.equal(result.paymentId, "pi_67890");
+  assert.equal(createMock.mock.calls.length, 1);
+  const callArgs = createMock.mock.calls[0].arguments[0];
+  assert.equal(callArgs.currency, "eur");
+
+  mock.restoreAll();
+});
+
 test("paymentService - createPaymentIntent handles Stripe errors", async (t) => {
   const stripeError = new Error("Card declined");
   stripeError.type = "StripeCardError";

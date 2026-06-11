@@ -12,7 +12,7 @@ export async function createPaymentIntent(payload) {
     throw new Error("Amount must be a positive integer");
   }
 
-  const currency = payload.currency || "usd";
+  const currency = (payload.currency || "usd").toLowerCase();
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
