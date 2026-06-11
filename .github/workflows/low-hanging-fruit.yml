@@ -22,125 +22,26 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
+      - name: Install dependencies
+        run: npm ci
 
-            // Patterns that indicate low hanging fruit bugs/issues
-            const patterns = [
-              {
-                name: 'TODO/FIXME Comments',
-                pattern: /(?:TODO|FIXME|XXX|HACK|BUG)\s*[:;]?\s*(.+)/gi,
-                severity: 'minor',
-                description: (match, file) => `Found \`${match[0]}\` in \`${file}\`. These comments often indicate incomplete features or known bugs that need addressing.`
-              },
-              {
-                name: 'Console.log Statements',
-                pattern: /console\.(log|warn|error|debug)\s*\(/gi,
-                severity: 'minor',
-                description: (match, file) => \`Found console statement in \\`\\${file}\\`. Console statements should be removed or replaced with proper logging in production code.\`
-              },
-              {
-                name: 'Empty Catch Blocks',
-                pattern: /catch\s*\([^)]*\)\s*\{\s*(?:\/\/[^\n]*)?\s*\}/gi,
-                severity: 'major',
-                description: (match, file) => \`Found empty catch block in \\`\\${file}\\`. Empty catch blocks swallow errors and make debugging difficult.\`
-              },
-              {
-                name: 'Hardcoded Secrets',
-                pattern: /(?:password|secret|key|token|api[_-]?key)\s*[:=]\s*["'][^"']{8,}["']/gi,
-                severity: 'critical',
-                description: (match, file) => \`Potential hardcoded secret in \\`\\${file}\\`. Secrets should never be hardcoded in source code.\`
-              },
-              {
-                name: 'Unused Variables',
-                pattern: /^(?:const|let|var)\s+(\w+)(?::\s*\w+)?\s*=\s*[^;]+;(?![\s\S]*?\1)/gi,
-                severity: 'minor',
-                description: (match, file) => \`Potential unused variable in \\`\\${file}\\`. Unused variables should be removed to keep code clean.\`
-              }
-            ];
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-            async function scanDirectory(dir, results = []) {
-              const entries = fs.readdirSync(dir, { withFileTypes: true });
-              
-              for (const entry of entries) {
-                const fullPath = path.join(dir, entry.name);
-                
-                if (entry.isDirectory()) {
-                  if (entry.name !== 'node_modules' && entry.name !== '.git' && entry.name !== 'dist' && entry.name !== 'build') {
-                    await scanDirectory(fullPath, results);
-                  }
-                } else if (/\.(ts|tsx|js|jsx|py|java|go|rs|php|rb)$/.test(entry.name)) {
-                  const content = fs.readFileSync(fullPath, 'utf8');
-                  const relativePath = path.relative(process.cwd(), fullPath);
-                  
-                  for (const pattern of patterns) {
-                    let match;
-                    while ((match = pattern.pattern.exec(content)) !== null) {
-                      results.push({
-                        pattern: pattern.name,
-                        severity: pattern.severity,
-                        file: relativePath,
-                        line: content.substring(0, match.index).split('\n').length,
-                        description: pattern.description(match, relativePath)
-                      });
-                    }
-                  }
-                }
-              }
-              
-              return results;
-            }
+      - name: Create issues for detected items
+        if: steps.detect.outputs.has_issues == 'true'
+        run: |
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-            const findings = await scanDirectory('.');
-            
-            // Group findings by pattern type to create consolidated issues
-            const grouped = findings.reduce((acc, finding) => {
-              if (!acc[finding.pattern]) acc[finding.pattern] = [];
-              acc[finding.pattern].push(finding);
-              return acc;
-            }, {});
-
-            for (const [patternName, patternFindings] of Object.entries(grouped)) {
-              const issueTitle = \`[Low Hanging Fruit] \\${patternName}: \\${patternFindings.length} occurrence\\${patternFindings.length !== 1 ? 's' : ''}\`;
-              
-              const issueBody = \`## Automated Low Hanging Fruit Detection
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-### Pattern: \\${patternName}
-### Severity: \\${patternFindings[0].severity}
-
-### Findings:
-\\${patternFindings.map(f => \`- [ ] \\${f.file} (line \\${f.line})\\`).join('\\n')}
-
-### Description:
-\\${patternFindings[0].description}
-
----
-
-*This issue was automatically generated by the Low Hanging Fruit Automation workflow.*
-\`;
-
-              try {
-                await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: issueTitle,
-                  body: issueBody,
-                  labels: ['low-hanging-fruit', 'automated', 'good first issue', 'bug bounty']
-                });
-                console.log(\`Created issue: \\${issueTitle}\`);
-              } catch (error) {
-                if (error.status === 422) {
-                  console.log(\`Issue already exists or validation failed for: \\${issueTitle}\`);
-                } else {
-                  throw error;
-                }
-              }
-            }
-
-            console.log(\`Scan complete. Found \\${findings.length} total issues across \\${Object.keys(grouped).length} patterns.\`);
+      - name: Report status
+        run: |
+          echo "Low hanging fruit detection completed"
+          echo "Issues created: ${{ steps.detect.outputs.issue_count || '0' }}"
