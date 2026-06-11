@@ -1,0 +1,18 @@
+{
+  "name": "benchmarks",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "API benchmark suite for freelance platform",
+  "main": "index.js",
+  "scripts": {
+    "benchmark": "node benchmark.js",
+    "benchmark:smoke": "node benchmark.js --smoke"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autocannon": "^8.0.0",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
