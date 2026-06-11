@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "benchmark": "node run-benchmarks.js",
-    "benchmark:smoke": "node run-benchmarks.js --smoke"
-  },
-  "dependencies": {
-    "autocannon": "^7.15.0"
+    "benchmark:smoke": "node run-benchmarks.js --smoke",
+    "benchmark:report": "node generate-report.js"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5"
+    "autocannon": "^7.15.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
