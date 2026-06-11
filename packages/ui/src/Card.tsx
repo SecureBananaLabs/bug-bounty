@@ -7,14 +7,13 @@ export function Card({ title, children }: { title: string; children: React.React
       <div>{children}</div>
     </section>
   );
-import React from 'react';
+import React from "react";
 
 export interface CardProps {
   children: React.ReactNode;
-  className?: string;
 }
 
-export const Card: React.FC<CardProps> = ({ children, className }) => {
-  return <div className={className}>{children}</div>;
-};
+export function Card({ children }: CardProps) {
+  return <div className="card">{children}</div>;
+}
 }
