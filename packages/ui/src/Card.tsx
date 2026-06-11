@@ -1,15 +1,10 @@
 import React from "react";
+import { cn } from "./lib/utils.js";
 
-export function Card({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: "1rem" }}>
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
       <h3>{title}</h3>
       <div>{children}</div>
     </section>
   );
-import React from "react";
-
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export const Card: React.FC<CardProps> = (props) => <div {...props} />;
 }
