@@ -24,10 +24,12 @@ export default function FreelancerProfilePage({ params }: FreelancerProfilePageP
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-2">{freelancer.username}</h1>
-      <p className="text-lg text-gray-700 mb-4">{freelancer.rate}</p>
+      <h1 className="text-3xl font-bold mb-4">{freelancer.username}</h1>
       <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-2">Skills</h2>
+        <p className="text-lg font-semibold text-green-600">{freelancer.rate}</p>
+      </div>
+      <div>
+        <h2 className="text-xl font-semibold mb-2">Skills</h2>
         <div className="flex flex-wrap gap-2">
           {freelancer.skills.map((skill) => (
             <span
@@ -44,6 +46,8 @@ export default function FreelancerProfilePage({ params }: FreelancerProfilePageP
 }
 
 export function generateStaticParams() {
-  return freelancers.map((f) => ({ username: f.username }));
+  return freelancers.map((freelancer) => ({
+    username: freelancer.username,
+  }));
 }
 }
