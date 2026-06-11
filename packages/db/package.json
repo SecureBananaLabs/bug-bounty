@@ -17,12 +17,24 @@
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+const assert = require('node:assert');
+const { describe, it } = require('node:test');
+
+describe('@freelanceflow/db import', () => {
+  it('can be imported through the workspace package name', async () => {
+    const db = await import('@freelanceflow/db');
+    assert.ok(db, 'package exports something');
+  });
+});
   "exports": {
     ".": {
       "import": "./src/index.ts",
       "require": "./src/index.ts",
       "types": "./src/index.ts"
     }
+  },
+  "scripts": {
+    "test": "node --test"
   },
   "dependencies": {
     "@prisma/client": "*"
