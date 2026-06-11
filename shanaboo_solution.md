@@ -1,7 +1,7 @@
  ```diff
 --- a/apps/web/app/settings/page.tsx
 +++ b/apps/web/app/settings/page.tsx
-@@ -1,8 +1,196 @@
+@@ -1,7 +1,163 @@
 +import { 
 +  User, 
 +  Bell, 
@@ -16,41 +16,68 @@
 +  Lock,
 +  Eye,
 +  DollarSign
-+} from "lucide-react";
++} from 'lucide-react';
 +
-+interface StatusChipProps {
-+  status: "active" | "warning" | "neutral";
-+  children: React.ReactNode;
-+}
++const mockSettings = {
++  account: {
++    name: 'Alex Morgan',
++    email: 'alex.morgan@example.com',
++    role: 'Freelancer',
++    profileVisibility: 'Public',
++    joinDate: '2024-01-15',
++  },
++  notifications: {
++    email: true,
++    push: false,
++    marketing: true,
++    jobAlerts: true,
++    messageAlerts: true,
++  },
++  security: {
++    twoFactorEnabled: false,
++    lastPasswordChange: '2024-03-10',
++    activeSessions: 2,
++    loginAlerts: true,
++  },
++  billing: {
++    paymentMethod: 'Visa ending in 4242',
++    payoutMethod: 'Direct Deposit',
++    defaultCurrency: 'USD',
++    autoPayout: true,
++    outstandingBalance: 2840.00,
++  },
++};
 +
-+function StatusChip({ status, children }: StatusChipProps) {
-+  const styles = {
-+    active: "bg-emerald-100 text-emerald-700",
-+    warning: "bg-amber-100 text-amber-700",
-+    neutral: "bg-slate-100 text-slate-600",
++function StatusChip({ status, variant = 'success' }: { status: string; variant?: 'success' | 'warning' | 'neutral' }) {
++  const variants = {
++    success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
++    warning: 'bg-amber-50 text-amber-700 border-amber-200',
++    neutral: 'bg-slate-50 text-slate-700 border-slate-200',
 +  };
 +
 +  return (
-+    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${styles[status]}`}>
-+      {status === "active" && <CheckCircle2 className="h-3 w-3" />}
-+      {status === "warning" && <AlertCircle className="h-3 w-3" />}
-+      {children}
++    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${variants[variant]}`}>
++      {variant === 'success' && <CheckCircle2 className="w-3 h-3" />}
++      {variant === 'warning' && <AlertCircle className="w-3 h-3" />}
++      {status}
 +    </span>
 +  );
 +}
 +
-+interface SettingsSectionProps {
-+  title: string;
-+  icon: React.ReactNode;
-+  children: React.ReactNode;
-+}
-+
-+function SettingsSection({ title, icon, children }: SettingsSectionProps) {
++function SettingsSection({ 
++  title, 
++  icon: Icon, 
++  children 
++}: { 
++  title: string; 
++  icon: React.ElementType; 
++  children: React.ReactNode 
++}) {
 +  return (
-+    <div className="rounded-lg border border-slate-200 bg-white p-6">
-+      <div className="mb-4 flex items-center gap-2">
-+        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-slate-100 text-slate-600">
-+          {icon}
++    <div className="bg-white rounded-xl border border-slate-200 p-6">
++      <div className="flex items-center gap-3 mb-5">
++        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-slate-50">
++          <Icon className="w-5 h-5 text-slate-600" />
 +        </div>
 +        <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
 +      </div>
@@ -59,23 +86,20 @@
 +  );
 +}
 +
-+interface SettingsRowProps {
-+  label: string;
-+  value: React.ReactNode;
-+  action?: string;
-+}
-+
-+function SettingsRow({ label, value, action }: SettingsRowProps) {
++function SettingsRow({ label, value, action, icon: Icon }: { label: string; value: React.ReactNode; action?: string; icon?: React.ElementType }) {
 +  return (
-+    <div className="flex items-center justify-between py-3 border-b border-slate-100 last:border-b-0">
-+      <div>
-+        <p className="text-sm font-medium text-slate-700">{label}</p>
-+        <div className="mt-0.5">{value}</div>
++    <div className="flex items-center justify-between py-3 border-b border-slate-100 last:border-b-0 last:pb-0 first:pt-0">
++      <div className="flex items-center gap-3">
++        {Icon && <Icon className="w-4 h-4 text-slate-400" />}
++        <div>
++          <p className="text-sm font-medium text-slate-700">{label}</p>
++          <p className="text-sm text-slate-500">{value}</p>
++        </div>
 +      </div>
 +      {action && (
 +        <button className="flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
 +          {action}
-+          <ChevronRight className="h-4 w-4" />
++          <ChevronRight className="w-4 h-4" />
 +        </button>
 +      )}
 +    </div>
@@ -83,92 +107,31 @@
 +}
 +
  export default function SettingsPage() {
-+  // Mock data for static settings overview
-+  const accountData = {
-+    name: "Alex Morgan",
-+    email: "alex.morgan@example.com",
-+    role: "Freelancer",
-+    visibility: "Public",
-+    profileCompletion: 85,
-+  };
-+
-+  const notificationData = {
-+    emailDigest: true,
-+    pushNotifications: false,
-+    smsAlerts: false,
-+    marketingEmails: false,
-+  };
-+
-+  const securityData = {
-+    twoFactorEnabled: true,
-+    lastPasswordChange: "2024-11-15",
-+    activeSessions: 2,
-+    loginAlerts: true,
-+  };
-+
-+  const billingData = {
-+    plan: "Pro",
-+    paymentMethod: "Visa ending in 4242",
-+    nextBillingDate: "2025-01-15",
-+    payoutMethod: "Bank Transfer (ACH)",
-+    payoutSchedule: "Weekly",
-+    balance: "$1,240.00",
-+  };
-+
    return (
 -    <section className="card">
 -      <h2>Settings</h2>
 -      <p>Account preferences, profile visibility, and security controls.</p>
 -    </section>
-+    <div className="mx-auto max-w-4xl space-y-6 p-6">
-+      <div className="mb-6">
++    <div className="max-w-4xl mx-auto px-4 py-8">
++      <div className="mb-8">
 +        <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
-+        <p className="mt-1 text-sm text-slate-600">
-+          Manage your account preferences, profile visibility, and security controls.
-+        </p>
++        <p className="mt-1 text-slate-600">Manage your account preferences, profile visibility, and security controls.</p>
 +      </div>
 +
-+      {/* Account / Profile */}
-+      <SettingsSection title="Account & Profile" icon={<User className="h-4 w-4" />}>
-+        <SettingsRow
-+          label="Display Name"
-+          value={<span className="text-sm text-slate-600">{accountData.name}</span>}
-+          action="Edit"
-+        />
-+        <SettingsRow
-+          label="Email Address"
-+          value={<span className="text-sm text-slate-600">{accountData.email}</span>}
-+          action="Change"
-+        />
-+        <SettingsRow
-+          label="Account Type"
-+          value={
-+            <div className="flex items-center gap-2">
-+              <span className="text-sm text-slate-600">{accountData.role}</span>
-+              <StatusChip status="active">Active</StatusChip>
-+            </div>
-+          }
-+          action="Switch"
-+        />
-+        <SettingsRow
-+          label="Profile Visibility"
-+          value={
-+            <div className="flex items-center gap-2">
-+              <Eye className="h-3.5 w-3.5 text-slate-400" />
-+              <span className="text-sm text-slate-600">{accountData.visibility}</span>
-+              <StatusChip status="active">Visible</StatusChip>
-+            </div>
-+          }
-+          action="Configure"
-+        />
-+        <SettingsRow
-+          label="Profile Completion"
-+          value={
-+            <div className="flex items-center gap-3">
-+              <div className="h-2 w-32 rounded-full bg-slate-100">
-+                <div
-+                  className="h-2 rounded-full bg-emerald-500"
-+                  style={{ width: `${accountData.profileCompletion}%` }}
-+                />
-+              </div>
-+              <span className="text-sm text-slate-600">{account
++      <div className="space-y-6">
++        {/* Account / Profile */}
++        <SettingsSection title="Account & Profile" icon={User}>
++          <SettingsRow label="Full Name" value={mockSettings.account.name} action="Edit" icon={User} />
++          <SettingsRow label="Email Address" value={mockSettings.account.email} action="Change" icon={Mail} />
++          <SettingsRow label="Account Type" value={<StatusChip status={mockSettings.account.role} variant="neutral" />} />
++          <SettingsRow label="Profile Visibility" value={<StatusChip status={mockSettings.account.profileVisibility} variant="success" />} />
++          <SettingsRow label="Member Since" value={new Date(mockSettings.account.joinDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} icon={Globe} />
++        </SettingsSection>
++
++        {/* Notifications */}
++        <SettingsSection title="Notifications" icon={Bell}>
++          <SettingsRow label="Email Notifications" value={mockSettings.notifications.email ? 'Enabled' : 'Disabled'} action="Configure" icon={Mail} />
++          <SettingsRow label="Push Notifications" value={mockSettings.notifications.push ? 'Enabled' : 'Disabled'} action="Configure" icon={Smartphone} />
++          <SettingsRow label="Job Alerts" value={mockSettings.notifications.jobAlerts ? <StatusChip status="Active" /> : <StatusChip status="Off" variant="neutral" />} />
++          <SettingsRow label="Message Alerts" value={mockSettings.notifications.messageAlerts ? <StatusChip status="Active" /> : <StatusChip status="Off" variant="neutral" />} />
++          <SettingsRow label="Marketing Emails" value={mockSettings.notifications.marketing ? 'Subscribed'
