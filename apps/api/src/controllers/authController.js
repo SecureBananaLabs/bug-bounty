@@ -1,27 +1,27 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { z } from 'zod';
 
-export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
-}
+// Define a schema for supported OAuth providers
+const supportedProviders = ['google', 'github'];
 
-export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
-}
+const oauthProviderSchema = z.enum(supportedProviders);
 
 export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
-}
+  try {
+    // Validate the provider parameter
+    const provider = oauthProviderSchema.parse(req.params.provider);
 
-export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+    return res.json({
+      provider,
+      status: "callback-received"
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({
+        error: 'Invalid provider',
+        status: 'invalid-provider'
+      });
+    }
+
+    throw error;
+  }
 }
