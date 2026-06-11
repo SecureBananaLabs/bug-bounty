@@ -43,35 +43,49 @@ Thank you for contributing to this bug bounty repository.
 
 # Contributing to FreelanceFlow
 
-Thank you for your interest in contributing to FreelanceFlow!
+Thank you for your interest in contributing to FreelanceFlow! This document outlines the process for contributing, including our automated issue creation system.
 
-## Issue Creation Requirement
+## Automated Low Hanging Fruit Detection
 
-**All pull requests must have an associated issue.** Pull requests without issues will not be considered.
+This repository uses an automated system to detect and create issues for common code quality problems. The system runs daily and creates issues for patterns such as:
 
-## Low Hanging Fruit Automation
+- `TODO`, `FIXME`, `XXX`, `HACK`, `BUG` comments
+- Debug `console.log` statements in production code
+- Focused test blocks (`describe.only`, `it.only`, `test.only`)
+- Environment variable usage patterns
 
-This repository uses an automated system to create issues for bug bounty opportunities. The automation:
+### How It Works
 
-1. Scans the repository for potential features/bugs to work on
-2. Creates GitHub issues with specific bounty labels
-3. Recursively generates new issues to maintain the bounty pipeline
+The automation is implemented as a GitHub Actions workflow in `.github/workflows/low-hanging-fruit.yml`. It:
 
-## Required Issue String
+1. Scans all source files in the repository
+2. Detects predefined patterns indicating potential issues
+3. Creates GitHub issues with appropriate labels and descriptions
+4. Limits issue creation to prevent spam (max 5 issues per run)
 
-When creating issues for bounty work, you must include the following string:
+### Issue Creation Rules
 
-> "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information."
+When the automation creates an issue, it includes the following required text:
 
-## Bounty Process
+> This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-1. Find a feature/bug to work on from this repository
-2. Create a GitHub issue on the repository to start working on it
-3. Include the required string in your issue
-4. Submit a pull request linked to your issue
-5. Bounties are paid upon successful PR merge
+### Creating Issues Manually
 
-## Bounty Amounts
+If you want to work on something not covered by the automation:
 
-- Low Hanging Fruit Automation: $700
+1. Find a feature or bug to work on in the repository
+2. Create a GitHub issue before starting work — **Pull requests without issues will not be considered**
+3. Include the required text in your issue description (see above)
+
+## Pull Request Process
+
+1. Ensure an issue exists for your change
+2. Fork the repository and create a feature branch
+3. Make your changes with clear, descriptive commit messages
+4. Submit a pull request referencing the issue number
+5. Wait for review and address any feedback
+
+## Code of Conduct
+
+Please be respectful and constructive in all interactions. We value diverse perspectives and collaborative problem-solving.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
