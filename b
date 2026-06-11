@@ -1,16 +1,7 @@
-{
-  "name": "@bug-bounty/benchmarks",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "benchmark": "node run-benchmarks.js",
-    "benchmark:smoke": "node run-benchmarks.js --smoke"
-  },
-  "dependencies": {
-    "autocannon": "^7.15.0"
-  },
-  "devDependencies": {
-    "dotenv": "^16.4.5"
-  }
-}
+# Benchmark configuration
+# Copy this file to .env and adjust values for your environment
+
+BENCHMARK_TARGET_URL=http://localhost:3001
+BENCHMARK_DURATION=30
+BENCHMARK_CONCURRENCY=10
+BENCHMARK_AUTH_TOKEN=your-benchmark-token-here
