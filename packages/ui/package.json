@@ -1,22 +1,59 @@
 {
   "name": "@freelanceflow/ui",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "build": "tsc",
-    "lint": "eslint ."
-  },
-  "dependencies": {
-  "devDependencies": {
-    "@types/react": "^18.2.0",
-    "typescript": "^5.0.0"
-  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     }
+  },
+  "files": [
+    "dist"
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "declaration": true,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*"]
+}
+import React from "react";
+
+export interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+export function Button({ children, onClick }: ButtonProps) {
+  return <button onClick={onClick}>{children}</button>;
+}
+import React from "react";
+
+export interface CardProps {
+  children: React.ReactNode;
+}
+
+export function Card({ children }: CardProps) {
+  return <div className="card">{children}</div>;
+}
+  ],
+export { Button } from "./Button";
+export { Card } from "./Card";
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
+  },
+  "dependencies": {
+    "react": "^18.2.0"
   }
 }
