@@ -1,9 +1,9 @@
-  email: z.string().email(),
-  password: z.string().min(6),
+export const loginSchema = z.object({
+  body: loginBodySchema,
 });
 
-export const refreshTokenSchema = z.object({
-  body: z.object({
-    token: z.string().min(1, 'Refresh token is required'),
-  }),
+export const refreshTokenBodySchema = z.object({
+  token: z.string().min(1, 'Token is required'),
 });
+
+export type RefreshTokenBody = z.infer<typeof refreshTokenBodySchema>;
