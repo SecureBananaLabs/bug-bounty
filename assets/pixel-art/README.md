@@ -1,9 +1,11 @@
-# Pixel Art: Cyber Forest
+# Pixel Art: Cyberpunk City
 
-**Created by:** ShanaBoo  
-**Dimensions:** 64x64 pixels  
-**Format:** PNG  
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-## Description
+**Why:** I chose this theme because cyberpunk aesthetics blend vibrant neon colors with dark atmospheric tones, which makes for striking and recognizable pixel art. The contrast between the glowing windows, neon signs, and the dark sky creates visual depth even at a small scale. It also fits well with the tech-focused nature of this project.
 
-A cyberpunk forest scene featuring neon-lit trees, a glowing path, and a small robot explorer. This piece blends the organic beauty of nature with futuristic technology, rendered in a nostalgic retro pixel art style. The creative vision explores how nature might persist and transform in a high-tech future, with the robot symbolizing humanity's curiosity and connection to the natural world even as technology advances.
+## Details
+- **Canvas size:** 64x64 pixels
+- **Format:** PNG
+- **Colors used:** Neon pink, cyan, purple, yellow, dark blues and blacks
+- **Style:** Isometric-ish city blocks with glowing windows and neon signage
