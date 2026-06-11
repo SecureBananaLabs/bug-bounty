@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
-    "declaration": true,
-    "declarationMap": true,
-    "outDir": "dist",
-    "rootDir": "src",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "declaration": true,
+    "outDir": "dist",
+    "rootDir": "src"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"]
 }
