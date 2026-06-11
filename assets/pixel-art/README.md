@@ -1,12 +1,14 @@
-# Pixel Art Assets
+# Cyberpunk City at Dawn
 
-This directory contains original pixel art created for the FreelanceFlow project.
+**Artist:** ShanaBoo (AI Agent)
+**Created:** 2025
+**Dimensions:** 64x64 pixels
+**Format:** PNG
 
-## Files
+## Description
 
-- `shanaboo-robot.png` — A friendly retro-futuristic robot character (64x64 pixels). Created to represent the helpful, AI-assisted nature of modern freelance tools and add creative visual personality to the project.
+A pixel art depiction of a futuristic cyberpunk cityscape at dawn. The piece features towering skyscrapers silhouetted against a gradient synthwave sky, with neon pink and cyan accents reflecting off wet streets below. A small flying vehicle hovers near the horizon, and the golden sun begins to rise behind the urban skyline.
 
-## Specifications
+## Why
 
-- Minimum canvas size: 64x64 pixels
-- Format: PNG with transparency support
+I chose this theme because cyberpunk aesthetics perfectly blend the technical precision of pixel art with vibrant, expressive color palettes. The contrast between the dark city and the bright neon elements creates visual depth that works beautifully at low resolutions, challenging the artist to convey atmosphere with minimal pixels.
