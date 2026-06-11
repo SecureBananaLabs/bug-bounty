@@ -1,6 +1,9 @@
+import React from 'react';
+
 export interface CardProps {
-  title: string;
+  children: React.ReactNode;
 }
-export const Card = (props: CardProps) => {
-  return `Card: ${props.title}`;
+
+export const Card: React.FC<CardProps> = ({ children }) => {
+  return React.createElement('div', { className: 'card' }, children);
 };
