@@ -1,20 +1,20 @@
  ```diff
---- a/.github/workflows/low-hanging-fruit.yml
-+++ b/.github/workflows/low-hanging-fruit.yml
+--- /dev/null
++++ b/.github/workflows/low-hanging-fruit-automation.yml
 @@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    - cron: '0 0 * * *'
-+  workflow_dispatch:
++    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
++  workflow_dispatch:      # Manual trigger
 +
 +permissions:
 +  issues: write
 +  contents: read
 +
 +jobs:
-+  create-issues:
++  detect-and-create-issues:
 +    runs-on: ubuntu-latest
 +    steps:
 +      - name: Checkout repository
@@ -34,130 +34,138 @@
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          GITHUB_REPOSITORY: ${{ github.repository }}
 +
-+      - name: Create issues from detected items
-+        if: steps.detect.outputs.issues != ''
-+        run: |
-+          node .github/scripts/create-issues.js
-+        env:
-+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          ISSUES_DATA: ${{ steps.detect.outputs.issues }}
-+
-+      - name: Report results
-+        run: |
-+          echo "Low hanging fruit detection completed"
-+          echo "Check the Issues tab for newly created issues"
-+--- /dev/null
++  recursive-issue-creation:
++    needs: detect-and-create-issues
++    runs-on: ubuntu-latest
++    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * 0'
++    steps:
++      - name: Trigger recursive issue creation
++        uses: actions/github-script@v7
++        with:
++          script: |
++            console.log('Low hanging fruit automation cycle completed');
++            console.log('New issues have been created for detected items');
++            console.log('Refer to issue #743 for more information');
++---
+--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,218 @@
+@@ -0,0 +1,287 @@
++#!/usr/bin/env node
++/**
++ * Low Hanging Fruit Automation Script
++ * 
++ * This script automatically detects potential bugs, missing features,
++ * and improvements in the repository and creates GitHub issues for them.
++ * 
++ * It runs recursively by:
++ * 1. Scanning the codebase for common issues
++ * 2. Creating GitHub issues for found items
++ * 3. Each created issue references the original automation issue #743
++ */
++
 +const fs = require('fs');
 +const path = require('path');
++const { execSync } = require('child_process');
 +
-+const REPO_ROOT = process.cwd();
++// GitHub API helpers
 +const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const REPO_OWNER = process.env.GITHUB_REPOSITORY?.split('/')[0] || 'SecureBananaLabs';
-+const REPO_NAME = process.env.GITHUB_REPOSITORY?.split('/')[1] || 'bug-bounty';
++const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
++const [OWNER, REPO] = GITHUB_REPOSITORY.split('/');
 +
-+const ISSUE_TEMPLATE = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`;
-+
-+const LOW_HANGING_FRUIT_CATEGORIES = {
-+  missingDocs: 'Missing Documentation',
-+  simpleBug: 'Simple Bug Fix',
-+  enhancement: 'Simple Enhancement',
-+  refactor: 'Simple Refactor',
-+  testCoverage: 'Missing Test Coverage',
-+  typo: 'Typo or Grammar Fix',
-+  dependencyUpdate: 'Dependency Update',
-+  accessibility: 'Accessibility Improvement',
-+  performance: 'Performance Optimization',
-+  security: 'Security Hardening'
-+};
-+
-+function findFiles(dir, pattern, exclude = []) {
-+  const results = [];
-+  const items = fs.readdirSync(dir, { withFileTypes: true });
-+  
-+  for (const item of items) {
-+    const fullPath = path.join(dir, item.name);
-+    if (exclude.some(e => fullPath.includes(e))) continue;
-+    
-+    if (item.isDirectory()) {
-+      results.push(...findFiles(fullPath, pattern, exclude));
-+    } else if (pattern.test(item.name)) {
-+      results.push(fullPath);
-+    }
-+  }
-+  return results;
++if (!GITHUB_TOKEN) {
++  console.error('GITHUB_TOKEN is required');
++  process.exit(1);
 +}
 +
-+function readFileContent(filePath) {
-+  try {
-+    return fs.readFileSync(filePath, 'utf-8');
-+  } catch {
-+    return '';
-+  }
-+}
-+
-+function detectMissingDocs() {
-+  const issues = [];
-+  const readmePath = path.join(REPO_ROOT, 'README.md');
-+  
-+  if (!fs.existsSync(readmePath)) {
-+    issues.push({
-+      title: 'Add README.md with project documentation',
-+      category: LOW_HANGING_FRUIT_CATEGORIES.missingDocs,
-+      body: `${ISSUE_TEMPLATE}\n\n## Description\nThe repository is missing a README.md file. This is essential for new contributors to understand the project.\n\n## Tasks\n- [ ] Create README.md\n- [ ] Add project description\n- [ ] Add setup instructions\n- [ ] Add contribution guidelines`
-+    });
-+  }
-+  
-+  const contributingPath = path.join(REPO_ROOT, 'CONTRIBUTING.md');
-+  if (!fs.existsSync(contributingPath)) {
-+    issues.push({
-+      title: 'Add CONTRIBUTING.md guidelines',
-+      category: LOW_HANGING_FRUIT_CATEGORIES.missingDocs,
-+      body: `${ISSUE_TEMPLATE}\n\n## Description\nThe repository is missing CONTRIBUTING.md guidelines for new contributors.\n\n## Tasks\n- [ ] Create CONTRIBUTING.md\n- [ ] Add development setup instructions\n- [ ] Add PR template requirements\n- [ ] Add code style guidelines`
-+    });
-+  }
-+  
-+  return issues;
-+}
-+
-+function detectTypos() {
-+  const issues = [];
-+  const files = findFiles(REPO_ROOT, /\.(md|ts|tsx|js|jsx|json)$/);
-+  
-+  const commonTypos = {
-+    'recieve': 'receive',
-+    'teh ': 'the ',
-+    'adn ': 'and ',
-+    'fo r': 'for ',
-+    'teh': 'the',
-+    'fucntion': 'function',
-+    'funtion': 'function',
-+    'varable': 'variable',
-+    'recrusive': 'recursive',
-+    'recusrive': 'recursive'
++function githubApi(path, method = 'GET', body = null) {
++  const url = `https://api.github.com/repos/${OWNER}/${REPO}${path}`;
++  const options = {
++    method,
++    headers: {
++      'Authorization': `token ${GITHUB_TOKEN}`,
++      'Accept': 'application/vnd.github.v3+json',
++      'User-Agent': 'LowHangingFruitBot/1.0',
++    },
 +  };
 +  
-+  for (const file of files.slice(0, 50)) {
-+    const content = readFileContent(file);
-+    for (const [typo, correction] of Object.entries(commonTypos)) {
-+      if (content.toLowerCase().includes(typo)) {
-+        issues.push({
-+          title: `Fix typo: "${typo}" should be "${correction}"`,
-+          category: LOW_HANGING_FRUIT_CATEGORIES.typo,
-+          body: `${ISSUE_TEMPLATE}\n\n## Description\nFound typo in \`${path.relative(REPO_ROOT, file)}\`: "${typo}" should be "${correction}".\n\n## Location\nFile: \`${path.relative(REPO_ROOT, file)}\`\n\n## Tasks\n- [ ] Fix the typo\n- [ ] Search for similar typos in the codebase`
-+        });
-+        break;
-+      }
-+    }
-+  }
++  const curlCmd = `curl -s -X ${method} ${Object.entries(options.headers).map(([k, v]) => `-H "${k}: ${v}"`).join(' ')} ${body ? `-d '${JSON.stringify(body)}'` : ''} "${url}"`;
 +  
-+  return issues.slice(0, 5);
++  try {
++    const response = execSync(curlCmd, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 });
++    return JSON.parse(response);
++  } catch (error) {
++    console.error(`API Error: ${error.message}`);
++    return null;
++  }
 +}
 +
-+function detectMissingTests() {
-+  const issues = [];
-+  const sourceFiles = findFiles(REPO_ROOT, /\.(ts|tsx|js|jsx)$/, ['node_modules', 'dist', '.next']);
++// Issue template with required string
++function createIssueBody(title, description, category) {
++  const restrictedString = "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.";
 +  
++  return `## ${category}: ${title}
 +
++${description}
++
++---
++
++${restrictedString}
++
++## Automation Details
++- **Detected by**: Low Hanging Fruit Automation
++- **Category**: ${category}
++- **Original Issue**: #743
++- **Created**: ${new Date().toISOString()}
++
++## Next Steps
++1. Review the issue details
++2. Create a focused branch for this work
++3. Submit a pull request that references this issue
++
++/bounty $50
++`;
++}
++
++// Detectors for various low hanging fruit
++const detectors = {
++  // Check for TODO/FIXME comments without issues
++  findTodoComments() {
++    const issues = [];
++    const extensions = ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rs'];
++    
++    function scanDir(dir) {
++      if (dir.includes('node_modules') || dir.includes('.git') || dir.includes('dist')) return;
++      
++      const items = fs.readdirSync(dir, { withFileTypes: true });
++      for (const item of items) {
++        const fullPath = path.join(dir, item.name);
++        if (item.isDirectory()) {
++          scanDir(fullPath);
++        } else if (extensions.some(ext => item.name.endsWith(ext))) {
++          try {
++            const content = fs.readFileSync(fullPath, 'utf-8');
++            const lines = content.split('\n');
++            lines.forEach((line, idx) => {
++              const match = line.match(/(?:TODO|FIXME|HACK|BUG|XXX)[\s:]*(.{10,200})/i);
++              if (match) {
++                issues.push({
++                  title: `Address ${match[0].split(':')[0]} in ${path.relative(process.cwd(), fullPath)}`,
++                  description: `Found in \`${fullPath}:${idx + 1}\`:\n\`\`\`\n${line.trim()}\n\`\`\`\n\nThis ${match[0].split(':')[0]} should be addressed to improve code quality.`,
++                  category: 'Code Quality',
++                  file: fullPath,
++                  line: idx + 1,
++                });
++              }
++            });
++          } catch (e) {
++            // Skip files we can't read
++          }
++        }
++      }
++    }
++    
++    scanDir(process.cwd());
++    return issues.slice(0, 10); // Limit to prevent spam
++ 
