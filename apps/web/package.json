@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start -p 3000"
+    "start": "next start -p 3000",
+    "test": "node --test test/*.test.js"
   },
   "devDependencies": {
     "@types/node": "22.15.19",
