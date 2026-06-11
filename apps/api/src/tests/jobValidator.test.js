@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createJobSchema, updateJobSchema } from "../validators/job.js";
+import { createJobSchema, jobSchemaBase, updateJobSchema } from "../validators/job.js";
 
 const validJob = {
   title: "Build landing page",
@@ -48,4 +48,11 @@ test("updateJobSchema allows partial budget updates with one side omitted", () =
 
   assert.equal(minOnly.success, true);
   assert.equal(maxOnly.success, true);
+});
+
+test("jobSchemaBase remains available for object-schema composition", () => {
+  const titleOnlySchema = jobSchemaBase.pick({ title: true });
+  const result = titleOnlySchema.safeParse({ title: "Build landing page" });
+
+  assert.equal(result.success, true);
 });

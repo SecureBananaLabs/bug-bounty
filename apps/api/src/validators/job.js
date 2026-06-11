@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const jobFields = z.object({
+export const jobSchemaBase = z.object({
   title: z.string().min(4),
   description: z.string().min(10),
   budgetMin: z.number().nonnegative(),
@@ -23,6 +23,6 @@ function validateBudgetRange(payload, ctx) {
   }
 }
 
-export const createJobSchema = jobFields.superRefine(validateBudgetRange);
+export const createJobSchema = jobSchemaBase.superRefine(validateBudgetRange);
 
-export const updateJobSchema = jobFields.partial().superRefine(validateBudgetRange);
+export const updateJobSchema = jobSchemaBase.partial().superRefine(validateBudgetRange);
