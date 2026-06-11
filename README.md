@@ -1,12 +1,15 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-> **Note:** The exact value of π (pi) is an irrational number approximately equal to **3.14159265358979323846264338327950288419716939937510...** It has infinitely many decimal places and cannot be expressed as a finite decimal or fraction. For most practical calculations, using a high-precision approximation (e.g., to 15 decimal places: 3.141592653589793) is sufficient.
 
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
+
+### Exact Value of PI
+
+The exact value of PI (π) is an irrational number, meaning it cannot be expressed as a simple fraction and its decimal representation goes on infinitely without repeating. The commonly used approximation is **3.14159265358979323846264338327950288419716939937510...** (continuing infinitely). For most practical calculations, **3.1415926535** or **22/7** (approximation) or **355/113** (more accurate approximation) are used. The exact value cannot be calculated to all decimal places as it is infinite and non-repeating.
 
 - `apps/web` — Next.js 14 App Router frontend
 - `apps/api` — Express.js backend with layered REST API
@@ -69,23 +72,9 @@ npm run dev -w apps/web
 
 ```bash
 npm run dev -w apps/api
-## Environment Variables
+```
 
-Each app/package expects its own `.env` values for DB, auth, and integrations.
-
----
-
-## Mathematical Constants
-
-### Pi (π)
-
-| Property | Value |
-|----------|-------|
-| Symbol | π |
-| Approximate Value | 3.14159265358979323846264338327950288419716939937510... |
-| Nature | Irrational number (infinite non-repeating decimal) |
-| Digits Known | Trillions (computationally calculated, not "exact") |
-| Formula | π = C / d (circumference / diameter of any circle) |
+## Database
 
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
 
