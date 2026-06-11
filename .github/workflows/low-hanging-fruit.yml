@@ -8,7 +8,6 @@ on:
 
 permissions:
   issues: write
-  contents: read
 
 jobs:
   detect-and-create-issues:
@@ -22,123 +21,27 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run low hanging fruit detection
+        run: node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+  recursive-issue-creation:
+    runs-on: ubuntu-latest
+    needs: detect-and-create-issues
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Trigger recursive issue creation
         run: |
-          node << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-
-          // Patterns that indicate low hanging fruit / easy fixes
-          const patterns = [
-            { pattern: /TODO|FIXME|HACK|XXX|BUG/, type: 'code-smell', label: 'good first issue' },
-            { pattern: /console\.(log|warn|error)/, type: 'debug-statement', label: 'good first issue' },
-            { pattern: /unused|deprecated/i, type: 'cleanup', label: 'good first issue' },
-            { pattern: /type.*any/, type: 'typescript-any', label: 'good first issue' },
-          ];
-
-          const issueTemplate = (type, file, line, match) => `## Low Hanging Fruit: ${type}
-
-**File:** \`${file}\`
-**Line:** ${line}
-**Match:** \`${match}\`
-
-This issue was automatically detected as low hanging fruit suitable for new contributors.
-
-## Acceptance Criteria
-- [ ] Identify the specific problem in the referenced file/line
-- [ ] Implement a fix that addresses the issue
-- [ ] Add or update tests as needed
-- [ ] Ensure all existing tests pass
-
-## Notes
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-/bounty $50
-`;
-
-          async function createIssue(title, body, labels) {
-            const { Octokit } = await import('@octokit/rest');
-            const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-            
-            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
-            
-            await octokit.rest.issues.create({
-              owner,
-              repo,
-              title,
-              body,
-              labels: ['bug bounty', 'good first issue', 'AI agent friendly', ...labels],
-            });
-          }
-
-          function scanDirectory(dir, results = []) {
-            const items = fs.readdirSync(dir);
-            
-            for (const item of items) {
-              const fullPath = path.join(dir, item);
-              const stat = fs.statSync(fullPath);
-              
-              if (stat.isDirectory() && !item.startsWith('.') && item !== 'node_modules') {
-                scanDirectory(fullPath, results);
-              } else if (stat.isFile() && (item.endsWith('.ts') || item.endsWith('.js') || item.endsWith('.tsx') || item.endsWith('.jsx'))) {
-                const content = fs.readFileSync(fullPath, 'utf-8');
-                const lines = content.split('\n');
-                
-                for (let i = 0; i < lines.length; i++) {
-                  for (const { pattern, type, label } of patterns) {
-                    if (pattern.test(lines[i])) {
-                      results.push({
-                        type,
-                        file: fullPath,
-                        line: i + 1,
-                        match: lines[i].trim(),
-                        label,
-                      });
-                    }
-                  }
-                }
-              }
-            }
-            
-            return results;
-          }
-
-          async function main() {
-            const findings = scanDirectory('.');
-            const uniqueFindings = [];
-            
-            // Deduplicate by file+line
-            const seen = new Set();
-            for (const finding of findings) {
-              const key = `${finding.file}:${finding.line}`;
-              if (!seen.has(key)) {
-                seen.add(key);
-                uniqueFindings.push(finding);
-              }
-            }
-            
-            // Limit to 5 issues per run to avoid spam
-            const limitedFindings = uniqueFindings.slice(0, 5);
-            
-            for (const finding of limitedFindings) {
-              const title = `[${finding.type}] ${finding.file.split('/').pop()} - line ${finding.line}`;
-              const body = issueTemplate(finding.type, finding.file, finding.line, finding.match);
-              
-              try {
-                await createIssue(title, body, [finding.label]);
-                console.log(`Created issue: ${title}`);
-              } catch (err) {
-                console.error(`Failed to create issue: ${title}`, err.message);
-              }
-            }
-          }
-
-          main().catch(console.error);
-          EOF
-
-      - name: Install Octokit
-        run: npm install @octokit/rest
-        working-directory: ${{ github.workspace }}
---- /dev/null
+          echo "Checking for new low hanging fruit issues to create follow-up issues"
+          node .github/scripts/recursive-issue-creator.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
