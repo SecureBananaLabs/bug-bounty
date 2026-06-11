@@ -1,8 +1,8 @@
-import React from 'react';
-import { cn } from './utils.js';
+import React from "react";
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger';
+export function Button({ children }: { children: React.ReactNode }) {
+  return (
+    <button
       style={{
         background: "#5468ff",
         color: "white",
@@ -15,4 +15,14 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
       {children}
     </button>
   );
+import React from 'react';
+
+export interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+export const Button: React.FC<ButtonProps> = ({ children, onClick }) => {
+  return <button onClick={onClick}>{children}</button>;
+};
 }
