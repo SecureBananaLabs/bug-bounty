@@ -2,37 +2,35 @@
 
 ## A Poem for FreelanceFlow
 
----
+In circuits hum the dreams of those who seek
+To weave their craft through fiber, light, and wire,
+Where client calls and freelancer both speak
+In protocols of trust, in code's own choir.
 
-In circuits of trust where the gig-economy hums,
-Where developers toil and the deadline bell drums,
-A marketplace rises on TypeScript and dreams,
-Of clean RESTful APIs and well-structured schemes.
+No cubicle contains the minds that meet
+Across the packets racing through the night,
+The marketplace where skill and need compete
+Yet find their balance, fair and just and right.
 
-The client posts jobs with a hope and a brief,
-The freelancer answers with skill, not with grief,
-Through middleware layers the data flows free,
-From Prisma to React, what a sight to see.
+A stanza posted, scope and budget clear,
+The proposal weaves its argument tight,
+Through review and message, progress drawing near,
+Till payment flows and both sides claim their right.
 
----
+From schema.prisma to the UI's face,
+The stack connects what once was far and scattered,
+Each component, service, route in place,
+To build the dreams that truly mattered.
 
-Three stanzas at minimum, the bounty declares,
-But a poem of code needs more than three layers,
-So consider the schema, the models, the types,
-The Zod validations and auth pipeline's stripes.
-
-A proposal is sent, then a message, then pay,
-Stripe whispers secrets to settle the day,
-Reviews stack like commits in a version-controlled life,
-Five stars for the freelancer, escape from the strife.
-
----
-
-So here's to the monorepo, modern and grand,
-Where `npm install` makes everything land,
-May your builds never break and your types always pass,
-And your bug bounty hunters write poems, en masse.
+So here's to flows of freelance and of code,
+To monorepos where great things are sowed,
+Where bug and bounty, poem and prose,
+In open source, a better world grows.
 
 ---
 
-*Written for SecureBananaLabs/bug-bounty — because even infrastructure deserves a little verse.*
+*Written for the FreelanceFlow project — a full-stack marketplace where freelancers and clients connect through modern TypeScript architecture.*
+
+## Creative Decision
+
+**Why this theme, form, and tone:** I chose a traditional sonnet-inspired structure with alternating rhyme and iambic meter to create an intentional contrast with the modern tech stack described in the README. The poem treats software architecture (Prisma, monorepos, components, services) as the infrastructure of human connection—because that's what FreelanceFlow ultimately enables. The tone is earnest and slightly romantic about technology's potential to bridge distance and create economic opportunity, reflecting the project's mission while acknowledging the poetic absurdity of celebrating `npm install` in verse.
