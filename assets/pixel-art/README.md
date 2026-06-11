@@ -1,7 +1,7 @@
-# Pixel Art Gallery
+# Pixel Art: Cyberpunk Cityscape
 
-## Cosmic Cat Explorer
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night, featuring neon-lit skyscrapers, holographic billboards, and a glowing moon against a starry sky.
 
-**File:** `cosmic-cat-explorer.png`
-**Size:** 64x64 pixels
-**Description:** A cosmic cat astronaut exploring a starry nebula, created with creative thinking. The cat wears a retro space helmet with a reflective visor showing distant galaxies, floating among colorful pixel stars and nebula clouds in purple, teal, and gold tones. The scene evokes wonder and the spirit of exploration, blending retro sci-fi aesthetics with cute character design. This piece was inspired by the intersection of retro space exploration aesthetics and the universal appeal of cats, representing curiosity and adventure in a pixelated cosmos.
+**Why:** I chose this theme to celebrate the fusion of technology and creativity that drives modern software development. The neon colors represent innovation and energy, while the cityscape symbolizes the bustling ecosystem of developers, designers, and creators building the future together.
+
+**File:** `cyberpunk-cityscape.png` (64x64 pixels, PNG format)
