@@ -43,32 +43,30 @@ Thank you for contributing to this bug bounty repository.
 
 # Contributing to FreelanceFlow
 
-Thank you for your interest in contributing to FreelanceFlow!
+Thank you for your interest in contributing!
 
 ## How to Contribute
 
 1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes
-4. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Important Note on Mathematical Issues
+
+### Regarding "Exact" Values of Irrational Numbers
+
+Issues requesting the "exact" value of π (pi) or other irrational numbers with all decimal places are **mathematically impossible to resolve**.
+
+- **π (pi)** is an irrational number with infinitely many non-repeating decimal places
+- No finite representation can capture its exact value
+- The best we can achieve is arbitrary-precision approximations
+- Current computational records calculate π to 100 trillion+ digits, but these are still approximations
+
+For practical purposes, use standard library implementations (e.g., `Math.PI` in JavaScript, `math.pi` in Python) which provide sufficient precision for nearly all applications.
 
 ## Code of Conduct
 
-Please be respectful and constructive in all interactions.
-
-## Reporting Issues
-
-If you find a bug or have a feature request, please open an issue on GitHub.
-
-## Bounty Program
-
-We offer bounties for significant contributions. Check our issues labeled `bounty` or `bug bounty` for opportunities.
-
-## PI Calculation Note
-
-As noted in issue #2872, the exact value of PI to many decimal places is:
-
-π = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679...
-
-This value is provided for mathematical and educational purposes within the project documentation.
+Be respectful and constructive in all interactions.
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
