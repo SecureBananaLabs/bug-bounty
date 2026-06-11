@@ -1,2 +1,2 @@
-export * from "./Button.js";
-export * from "./Card.js";
+export { Button } from './Button';
+export { Card } from './Card';
