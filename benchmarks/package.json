@@ -5,14 +5,13 @@
   "type": "module",
   "scripts": {
     "benchmark": "node run-benchmarks.js",
-    "benchmark:smoke": "node run-benchmarks.js --smoke"
+    "benchmark:smoke": "node run-benchmarks.js --smoke",
+    "benchmark:ci": "node run-benchmarks.js --ci"
   },
   "dependencies": {
     "autocannon": "^7.15.0",
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "autocannon": "^7.15.0",
-    "dotenv": "^16.4.5"
   }
 }
