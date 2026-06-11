@@ -1,21 +1,28 @@
-import test from "node:test";
+import { randomUUID } from "node:crypto";
+import { beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
-import { createProposal, listProposals } from "../services/proposalService.js";
+import { createProposal, listProposals, resetProposalsForTest } from "../services/proposalService.js";
 
-test("createProposal preserves the generated proposal id over payload id", async () => {
+beforeEach(() => {
+  resetProposalsForTest();
+});
+
+test("createProposal ignores a client-provided id and stores the generated proposal id", async () => {
+  const jobId = `job_${randomUUID()}`;
+
   const proposal = await createProposal({
     id: "prp_client_supplied",
-    jobId: "job_123",
+    jobId,
     freelancerId: "usr_123",
     coverLetter: "Focused proposal",
   });
 
-  assert.match(proposal.id, /^prp_\d+$/);
-  assert.notEqual(proposal.id, "prp_client_supplied");
-  assert.equal(proposal.jobId, "job_123");
-  assert.equal(proposal.freelancerId, "usr_123");
-  assert.equal(proposal.coverLetter, "Focused proposal");
+  assert.match(proposal.id, /^prp_[0-9a-f-]+$/);
+  assert.notStrictEqual(proposal.id, "prp_client_supplied");
+  assert.strictEqual(proposal.jobId, jobId);
+  assert.strictEqual(proposal.freelancerId, "usr_123");
+  assert.strictEqual(proposal.coverLetter, "Focused proposal");
 
-  const stored = (await listProposals()).find((entry) => entry.jobId === "job_123");
-  assert.equal(stored?.id, proposal.id);
+  const stored = (await listProposals()).find((entry) => entry.jobId === jobId);
+  assert.strictEqual(stored?.id, proposal.id);
 });
