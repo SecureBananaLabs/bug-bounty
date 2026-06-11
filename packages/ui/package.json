@@ -1,42 +1,22 @@
 {
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "declaration": true,
-    "outDir": "dist",
-    "rootDir": "src",
-    "strict": true,
-    "esModuleInterop": true
-  },
-  "include": ["src/**/*"]
-}
-import React from "react";
-
-export interface ButtonProps {
-  children: React.ReactNode;
-  onClick?: () => void;
-}
-
-export const Button: React.FC<ButtonProps> = ({ children, onClick }) => {
-  return <button onClick={onClick}>{children}</button>;
-};
-import React from "react";
-
-export interface CardProps {
-  children: React.ReactNode;
-}
-
-export const Card: React.FC<CardProps> = ({ children }) => {
-  return <div className="card">{children}</div>;
-};
   "name": "@freelanceflow/ui",
-export { Button } from "./Button";
-export { Card } from "./Card";
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint ."
+  },
+  "dependencies": {
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "typescript": "^5.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   }
 }
