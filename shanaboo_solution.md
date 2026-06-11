@@ -1,12 +1,11 @@
  ```diff
---- a/.github/workflows/low-hanging-fruit-automation.yml
-+++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,85 @@
+--- a/.github/workflows/low-hanging-fruit.yml
++++ b/.github/workflows/low-hanging-fruit.yml
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    # Run daily at 00:00 UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
 +
@@ -27,152 +26,164 @@
 +          node-version: '20'
 +
 +      - name: Install dependencies
-+        run: |
-+          npm install -g @github/cli
++        run: npm ci
 +
-+      - name: Detect low hanging fruit and create issues
++      - name: Run low hanging fruit detection
++        id: detect
++        run: |
++          node -e "
++            const fs = require('fs');
++            const path = require('path');
++            
++            const scriptPath = path.join(process.cwd(), 'scripts', 'low-hanging-fruit.js');
++            const scriptContent = fs.readFileSync(scriptPath, 'utf8');
++            const script = new Function('require', 'module', 'exports', scriptContent);
++            const mod = { exports: {} };
++            script(require, mod, mod.exports);
++            mod.exports.run();
++          "
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+        run: |
-+          #!/bin/bash
-+          set -e
++          GITHUB_REPOSITORY: ${{ github.repository }}
 +
-+          # Define low hanging fruit patterns to search for
-+          declare -a PATTERNS=(
-+            "TODO:"
-+            "FIXME:"
-+            "HACK:"
-+            "XXX:"
-+            "BUG:"
-+            "OPTIMIZE:"
-+            "REFACTOR:"
-+          )
++      - name: Report status
++        if: always()
++        run: echo "Low hanging fruit detection completed with status ${{ job.status }}"
+--- a/scripts/low-hanging-fruit.js
++++ b/scripts/low-hanging-fruit.js
+@@ -0,0 +1,288 @@
++/**
++ * Low Hanging Fruit Automation
++ * 
++ * Recursively detects potential bugs and creates GitHub issues.
++ * Each created issue is limited to its creator.
++ */
 +
-+          # Search for patterns and collect findings
-+          ISSUE_COUNT=0
-+          ISSUE_BODY_TEMPLATE='This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
++const fs = require('fs');
++const path = require('path');
++const { execSync } = require('child_process');
++
++const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
++const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
++
++if (!GITHUB_TOKEN) {
++  console.error('GITHUB_TOKEN is required');
++  process.exit(1);
++}
++
++const ISSUE_TEMPLATE = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 +
 +## Automated Detection
 +
-+This issue was automatically created by the Low Hanging Fruit Automation workflow.
++This issue was automatically detected by the Low Hanging Fruit automation system.
 +
-+## Task
++## Details
 +
-+Please review the linked code location and implement the necessary fix or improvement.
++{{details}}
 +
-+## Acceptance Criteria
++## Suggested Fix
 +
-+- [ ] The identified issue has been resolved
-+- [ ] Tests pass (if applicable)
-+- [ ] Code follows project conventions'
++{{suggestion}}
 +
-+          # Function to create issue if not already exists
-+          create_issue_if_not_exists() {
-+            local title="$1"
-+            local body="$2"
-+            
-+            # Check if an open issue with this title already exists
-+            existing_issue=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "$title" --json number --jq '.[0].number' 2>/dev/null || true)
-+            
-+            if [ -z "$existing_issue" ] || [ "$existing_issue" = "null" ]; then
-+              gh issue create \
-+                --repo "$GITHUB_REPOSITORY" \
-+                --title "$title" \
-+                --body "$body" \
-+                --label "bug,good first issue,help wanted,bug bounty,AI agent friendly"
-+              echo "Created issue: $title"
-+            else
-+              echo "Issue already exists: $title (#$existing_issue)"
-+            fi
-+          }
++---
++*This is a bounty-eligible issue. /bounty $50*`;
 +
-+          # Search for TODO/FIXME patterns in source code
-+          for pattern in "${PATTERNS[@]}"; do
-+            echo "Searching for pattern: $pattern"
-+            
-+            # Find files matching pattern, excluding node_modules and .git
-+            grep -r "$pattern" . \
-+              --include="*.ts" \
-+              --include="*.tsx" \
-+              --include="*.js" \
-+              --include="*.jsx" \
-+              --include="*.py" \
-+              --include="*.md" \
-+              --exclude-dir=node_modules \
-+              --exclude-dir=.git \
-+              --exclude-dir=dist \
-+              --exclude-dir=build \
-+              -n 2>/dev/null | while IFS= read -r line; do
-+              
-+              file_path=$(echo "$line" | cut -d':' -f1 | sed 's/^\.\///')
-+              line_num=$(echo "$line" | cut -d':' -f2)
-+              context=$(echo "$line" | cut -d':' -f3- | tr -d '\n' | head -c 200)
-+              
-+              # Create a sanitized title
-+              safe_context=$(echo "$context" | sed 's/["]//g' | head -c 80)
-+              issue_title="[Low Hanging Fruit] $pattern found in $file_path"
-+              
-+              issue_body="$ISSUE_BODY_TEMPLATE
++class LowHangingFruitDetector {
++  constructor() {
++    this.findings = [];
++    this.repoRoot = process.cwd();
++  }
 +
-+## Location
-+- **File:** \`$file_path\`
-+- **Line:** $line_num
-+- **Pattern:** $pattern
++  async run() {
++    console.log('Starting low hanging fruit detection...');
++    
++    this.scanForCommonBugs();
++    this.scanForMissingErrorHandling();
++    this.scanForHardcodedSecrets();
++    this.scanForTodoFixme();
++    this.scanForDeprecatedPatterns();
++    this.scanForMissingValidation();
++    
++    console.log(`Found ${this.findings.length} potential issues`);
++    
++    for (const finding of this.findings) {
++      await this.createIssue(finding);
++    }
++    
++    console.log('Detection complete');
++  }
 +
-+## Context
-+\`\`\`
-+$context
-+\`\`\`
++  scanForCommonBugs() {
++    const patterns = [
++      {
++        pattern: /JSON\.parse\([^)]*\)/g,
++        description: 'Unwrapped JSON.parse() without try-catch',
++        severity: 'high',
++        suggestion: 'Wrap JSON.parse() in a try-catch block to handle malformed JSON'
++      },
++      {
++        pattern: /eval\(/g,
++        description: 'Use of eval() detected',
++        severity: 'critical',
++        suggestion: 'Replace eval() with safer alternatives like JSON.parse or Function constructor'
++      },
++      {
++        pattern: /innerHTML\s*=/g,
++        description: 'Potential XSS via innerHTML assignment',
++        severity: 'high',
++        suggestion: 'Use textContent or a sanitization library like DOMPurify'
++      },
++      {
++        pattern: /document\.write\(/g,
++        description: 'Use of document.write() detected',
++        severity: 'medium',
++        suggestion: 'Use DOM manipulation methods instead of document.write()'
++      }
++    ];
 +
-+## Related
-+- Original automation issue:worthy #743"
-+              
-+              create_issue_if_not_exists "$issue_title" "$issue_body"
-+              ISSUE_COUNT=$((ISSUE_COUNT + 1))
-+              
-+              # Rate limiting - max 10 issues per run to avoid spam
-+              if [ "$ISSUE_COUNT" -ge 10 ]; then
-+                echo "Reached maximum issue creation limit (10). Stopping."
-+                exit 0
-+              fi
-+            done
-+          done
++    this.scanFiles(patterns, ['.js', '.ts', '.jsx', '.tsx']);
++  }
 +
-+          # Check for common documentation issues
-+          if [ -f "README.md" ]; then
-+            # Check for placeholder images or broken links
-+            if grep -q "placeholder\|example.com\|TODO\|FIXME" README.md 2>/dev/null; then
-+              issue_title="[Low Hanging Fruit] README.md contains placeholders or incomplete sections"
-+              issue_body="$ISSUE_BODY_TEMPLATE
++  scanForMissingErrorHandling() {
++    const patterns = [
++      {
++        pattern: /async\s+function\s+\w+[^}]*\n\s*(?!.*catch)[^}]*await/g,
++        description: 'Async function with await but no try-catch',
++        severity: 'medium',
++        suggestion: 'Add try-catch blocks around await statements'
++      },
++      {
++        pattern: /fetch\([^)]*\)\s*\.then/g,
++        description: 'fetch() without .catch() handler',
++        severity: 'medium',
++        suggestion: 'Add .catch() handler or wrap in try-catch for async/await'
++      }
++    ];
 +
-+## Location
-+- **File:** \`README.md\`
++    this.scanFiles(patterns, ['.js', '.ts', '.jsx', '.tsx']);
++  }
 +
-+## Description
-+The README.md file contains placeholder text, example URLs, or incomplete sections that need to be updated with actual project information.
++  scanForHardcodedSecrets() {
++    const patterns = [
++      {
++        pattern: /(api[_-]?key|apikey|password|secret|token)\s*[:=]\s*["'][^"']{8,}["']/gi,
++        description: 'Potential hardcoded secret or API key',
++        severity: 'critical',
++        suggestion: 'Move secrets to environment variables'
++      }
++    ];
 +
-+## Related
-+- Original automation issue: #743"
-+              
-+              create_issue_if_not_exists "$issue_title" "$issue_body"
-+            fi
-+          fi
++    this.scanFiles(patterns, ['.js', '.ts', '.json', '.env.example']);
++  }
 +
-+          # Check for missing environment variable documentation
-+          if [ ! -f ".env.example" ] && [ ! -f ".env.template" ]; then
-+            issue_title="[Low Hanging Fruit] Missing .env.example or .env.template file"
-+            issue_body="$ISSUE_BODY_TEMPLATE
++  scanForTodoFixme() {
++    const patterns = [
++      {
++        pattern: /\/\/\s*(TODO|FIXME|HACK|BUG|XXX)\s*[:;]?\s*(.+)/gi,
++        description: 'Unresolved TODO/FIXME comment found',
++        severity: 'low',
++        suggestion: 'Address the TODO/FIXME or create a proper issue for tracking'
++      }
++    ];
 +
-+## Description
-+The repository lacks an \`.env.example\` or \`.env.template\` file to help developers configure their environment. This is important for onboarding new contributors.
-+
-+## Suggested Action
-+Create an \`.env.example\` file with all required environment variables documented.
-+
-+## Related
-+- Original automation issue: #743"
-+            
-+            create_issue_if_not_exists "$issue_title" "$issue_body"
-+          fi
-+
-+          echo "Low Hanging Fruit automation completed.
++    this.scanFiles(patterns, ['.js', '.
