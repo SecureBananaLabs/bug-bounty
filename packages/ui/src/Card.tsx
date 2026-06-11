@@ -9,14 +9,7 @@ export function Card({ title, children }: { title: string; children: React.React
   );
 import React from "react";
 
-export interface CardProps {
-  children: React.ReactNode;
-  className?: string;
-}
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const Card: React.FC<CardProps> = ({ children, className }) => {
-  return <div className={className}>{children}</div>;
-};
-
-export default Card;
+export const Card: React.FC<CardProps> = (props) => <div {...props} />;
 }
