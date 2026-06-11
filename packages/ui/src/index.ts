@@ -1,2 +1,2 @@
-export * from "./Button.js";
-export * from "./Card.js";
+export { default as Button } from "./Button/index.js";
+export { default as Card } from "./Card/index.js";
