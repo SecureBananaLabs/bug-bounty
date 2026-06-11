@@ -11,17 +11,9 @@ import React from 'react';
 
 export interface CardProps {
   children: React.ReactNode;
-  title?: string;
 }
 
-export function Card({ children, title }: CardProps) {
-  return (
-    <div className="card">
-      {title && <h3 className="card-title">{title}</h3>}
-      <div className="card-content">{children}</div>
-    </div>
-  );
-}
-
-export default Card;
+export const Card: React.FC<CardProps> = ({ children }) => {
+  return <div className="card">{children}</div>;
+};
 }
