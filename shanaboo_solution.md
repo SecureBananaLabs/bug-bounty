@@ -1,19 +1,20 @@
  ```diff
---- /dev/null
-+++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,55 @@
+--- a/.github/workflows/low-hanging-fruit.yml
++++ b/.github/workflows/low-hanging-fruit.yml
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    - cron: '0 0 * * 0'
++    - cron: '0 0 * * *'
 +  workflow_dispatch:
 +
 +permissions:
 +  issues: write
++  contents: read
 +
 +jobs:
-+  detect-and-create-issues:
++  create-issues:
 +    runs-on: ubuntu-latest
 +    steps:
 +      - name: Checkout repository
@@ -33,132 +34,130 @@
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          GITHUB_REPOSITORY: ${{ github.repository }}
 +
 +      - name: Create issues from detected items
-+        if: steps.detect.outcome == 'success'
++        if: steps.detect.outputs.issues != ''
 +        run: |
 +          node .github/scripts/create-issues.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          GITHUB_REPOSITORY: ${{ github.repository }}
++          ISSUES_DATA: ${{ steps.detect.outputs.issues }}
++
++      - name: Report results
++        run: |
++          echo "Low hanging fruit detection completed"
++          echo "Check the Issues tab for newly created issues"
 +--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,162 @@
+@@ -0,0 +1,218 @@
 +const fs = require('fs');
 +const path = require('path');
-+const { execSync } = require('child_process');
 +
 +const REPO_ROOT = process.cwd();
-+const OUTPUT_FILE = path.join(REPO_ROOT, '.github', 'scripts', 'detected-issues.json');
++const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
++const REPO_OWNER = process.env.GITHUB_REPOSITORY?.split('/')[0] || 'SecureBananaLabs';
++const REPO_NAME = process.env.GITHUB_REPOSITORY?.split('/')[1] || 'bug-bounty';
 +
-+function findFiles(dir, extensions, excludeDirs = ['node_modules', '.git', 'dist', 'build']) {
-+  const files = [];
-+  function walk(currentDir) {
-+    let entries;
-+    try {
-+      entries = fs.readdirSync(currentDir, { withFileTypes: true });
-+    } catch (e) {
-+      return;
-+    }
-+    for (const entry of entries) {
-+      const fullPath = path.join(currentDir, entry.name);
-+      if (entry.isDirectory()) {
-+        if (!excludeDirs.includes(entry.name)) {
-+          walk(fullPath);
-+        }
-+      } else if (entry.isFile() && extensions.some(ext => entry.name.endsWith(ext))) {
-+        files.push(fullPath);
-+      }
-+    }
-+  }
-+  walk(dir);
-+  return files;
-+}
++const ISSUE_TEMPLATE = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`;
 +
-+function detectTodoComments(files) {
-+  const issues = [];
-+  const todoRegex = /\/\/\s*TODO[:\s]*(.+)|\/\*\s*TODO[:\s]*(.+?)\*\//i;
-+  for (const file of files) {
-+    const content = fs.readFileSync(file, 'utf-8');
-+    const lines = content.split('\n');
-+    lines.forEach((line, index) => {
-+      const match = line.match(todoRegex);
-+      if (match) {
-+        const description = (match[1] || match[2] || 'TODO item found').trim();
-+        issues.push({
-+          type: 'TODO',
-+          title: `TODO: ${description.substring(0, 80)}`,
-+          description: `Found a TODO comment in \`${path.relative(REPO_ROOT, file)}\` at line ${index + 1}:\n\n\`\`\`\n${line.trim()}\n\`\`\`\n\nThis is a low-hanging fruit item that needs to be addressed.`,
-+          file: path.relative(REPO_ROOT, file),
-+          line: index + 1,
-+          severity: 'low'
-+        });
-+      }
-+    });
-+  }
-+  return issues;
-+}
++const LOW_HANGING_FRUIT_CATEGORIES = {
++  missingDocs: 'Missing Documentation',
++  simpleBug: 'Simple Bug Fix',
++  enhancement: 'Simple Enhancement',
++  refactor: 'Simple Refactor',
++  testCoverage: 'Missing Test Coverage',
++  typo: 'Typo or Grammar Fix',
++  dependencyUpdate: 'Dependency Update',
++  accessibility: 'Accessibility Improvement',
++  performance: 'Performance Optimization',
++  security: 'Security Hardening'
++};
 +
-+function detectConsoleLogs(files) {
-+  const issues = [];
-+  const consoleRegex = /console\.(log|warn|error|debug)\s*\(/;
-+  for (const file of files) {
-+    const content = fs.readFileSync(file, 'utf-8');
-+    const lines = content.split('\n');
-+    let count = 0;
-+    lines.forEach((line, index) => {
-+      if (consoleRegex.test(line) && !line.includes('eslint-disable')) {
-+        count++;
-+      }
-+    });
-+    if (count > 0) {
-+      issues.push({
-+        type: 'CONSOLE_LOG',
-+        title: `Remove ${count} console.log statement${count > 1 ? 's' : ''} from ${path.basename(file)}`,
-+        description: `Found ${count} console.log statement(s) in \`${path.relative(REPO_ROOT, file)}\` that should be removed or replaced with proper logging.\n\nThis is a code quality improvement.`,
-+        file: path.relative(REPO_ROOT, file),
-+        severity: 'low'
-+      });
-+    }
-+  }
-+  return issues;
-+}
-+
-+function detectMissingTests(files) {
-+  const sourceFiles = files.filter(f => {
-+    const rel = path.relative(REPO_ROOT, f);
-+    return !rel.includes('.test.') && !rel.includes('.spec.') && !rel.includes('__tests__');
-+  });
++function findFiles(dir, pattern, exclude = []) {
++  const results = [];
++  const items = fs.readdirSync(dir, { withFileTypes: true });
 +  
-+  const issues = [];
-+  for (const file of sourceFiles) {
-+    const relPath = path.relative(REPO_ROOT, file);
-+    const dir = path.dirname(file);
-+    const baseName = path.basename(file, path.extname(file));
-+    const ext = path.extname(file);
++  for (const item of items) {
++    const fullPath = path.join(dir, item.name);
++    if (exclude.some(e => fullPath.includes(e))) continue;
 +    
-+    const testPatterns = [
-+      path.join(dir, `${baseName}.test${ext}`),
-+      path.join(dir, `${baseName}.spec${ext}`),
-+      path.join(dir, '__tests__', `${baseName}.test${ext}`),
-+      path.join(dir, '__tests__', `${baseName}.spec${ext}`)
-+    ];
-+    
-+    const hasTest = testPatterns.some(p => fs.existsSync(p));
-+    if (!hasTest && (relPath.includes('utils/') || relPath.includes('helpers/'))) {
-+      issues.push({
-+        type: 'MISSING_TEST',
-+        title: `Add unit tests for ${path.basename(file)}`,
-+        description: `The utility file \`${relPath}\` does not have corresponding unit tests. Adding tests would improve code reliability.\n\nThis is a good first issue for new contributors.`,
-+        file: relPath,
-+        severity: 'low'
-+      });
++    if (item.isDirectory()) {
++      results.push(...findFiles(fullPath, pattern, exclude));
++    } else if (pattern.test(item.name)) {
++      results.push(fullPath);
 +    }
 +  }
++  return results;
++}
++
++function readFileContent(filePath) {
++  try {
++    return fs.readFileSync(filePath, 'utf-8');
++  } catch {
++    return '';
++  }
++}
++
++function detectMissingDocs() {
++  const issues = [];
++  const readmePath = path.join(REPO_ROOT, 'README.md');
++  
++  if (!fs.existsSync(readmePath)) {
++    issues.push({
++      title: 'Add README.md with project documentation',
++      category: LOW_HANGING_FRUIT_CATEGORIES.missingDocs,
++      body: `${ISSUE_TEMPLATE}\n\n## Description\nThe repository is missing a README.md file. This is essential for new contributors to understand the project.\n\n## Tasks\n- [ ] Create README.md\n- [ ] Add project description\n- [ ] Add setup instructions\n- [ ] Add contribution guidelines`
++    });
++  }
++  
++  const contributingPath = path.join(REPO_ROOT, 'CONTRIBUTING.md');
++  if (!fs.existsSync(contributingPath)) {
++    issues.push({
++      title: 'Add CONTRIBUTING.md guidelines',
++      category: LOW_HANGING_FRUIT_CATEGORIES.missingDocs,
++      body: `${ISSUE_TEMPLATE}\n\n## Description\nThe repository is missing CONTRIBUTING.md guidelines for new contributors.\n\n## Tasks\n- [ ] Create CONTRIBUTING.md\n- [ ] Add development setup instructions\n- [ ] Add PR template requirements\n- [ ] Add code style guidelines`
++    });
++  }
++  
 +  return issues;
 +}
 +
-+function main() {
-+  const jsFiles = findFiles(REPO_ROOT, ['.js', '.ts', '.tsx', '.jsx']);
-+  const allCodeFiles = find
++function detectTypos() {
++  const issues = [];
++  const files = findFiles(REPO_ROOT, /\.(md|ts|tsx|js|jsx|json)$/);
++  
++  const commonTypos = {
++    'recieve': 'receive',
++    'teh ': 'the ',
++    'adn ': 'and ',
++    'fo r': 'for ',
++    'teh': 'the',
++    'fucntion': 'function',
++    'funtion': 'function',
++    'varable': 'variable',
++    'recrusive': 'recursive',
++    'recusrive': 'recursive'
++  };
++  
++  for (const file of files.slice(0, 50)) {
++    const content = readFileContent(file);
++    for (const [typo, correction] of Object.entries(commonTypos)) {
++      if (content.toLowerCase().includes(typo)) {
++        issues.push({
++          title: `Fix typo: "${typo}" should be "${correction}"`,
++          category: LOW_HANGING_FRUIT_CATEGORIES.typo,
++          body: `${ISSUE_TEMPLATE}\n\n## Description\nFound typo in \`${path.relative(REPO_ROOT, file)}\`: "${typo}" should be "${correction}".\n\n## Location\nFile: \`${path.relative(REPO_ROOT, file)}\`\n\n## Tasks\n- [ ] Fix the typo\n- [ ] Search for similar typos in the codebase`
++        });
++        break;
++      }
++    }
++  }
++  
++  return issues.slice(0, 5);
++}
++
++function detectMissingTests() {
++  const issues = [];
++  const sourceFiles = findFiles(REPO_ROOT, /\.(ts|tsx|js|jsx)$/, ['node_modules', 'dist', '.next']);
++  
++
