@@ -2,34 +2,37 @@
 
 ## A Poem for FreelanceFlow
 
-In circuits of trust where the gig-workers roam,
-Through digital halls they seek to atone—
-For the nine-to-five grind and the cubicle's hum,
-They chase independence, they want to become
-Free agents of craft in a marketplace home.
+---
 
-The client posts jobs with a hope and a need,
-While coders and writers compete to succeed,
-With proposals like arrows they shoot toward the sky,
-Each freelancer hoping their pitch will not die,
-But land in the inbox where dreams multiply.
+In circuits of trust where the gig-economy hums,
+Where developers toil and the deadline bell drums,
+A marketplace rises on TypeScript and dreams,
+Of clean RESTful APIs and well-structured schemes.
 
-From schema to screen, the full stack aligns,
-Prisma to Next, the architecture shines,
-Stripe for the payment, the message, the review,
-The monorepo hums with a purpose so true—
-To connect skill with need, and to see it all through.
-
-So here's to the builders, the makers, the free,
-Who trade in their talents for sovereignty,
-May your flow never falter, your code never break,
-May the gigs keep on coming for all of our sake—
-In this marketplace world that we all help to make.
+The client posts jobs with a hope and a brief,
+The freelancer answers with skill, not with grief,
+Through middleware layers the data flows free,
+From Prisma to React, what a sight to see.
 
 ---
 
-*Written for SecureBananaLabs/bug-bounty — FreelanceFlow*
+Three stanzas at minimum, the bounty declares,
+But a poem of code needs more than three layers,
+So consider the schema, the models, the types,
+The Zod validations and auth pipeline's stripes.
 
-## Creative Decision
+A proposal is sent, then a message, then pay,
+Stripe whispers secrets to settle the day,
+Reviews stack like commits in a version-controlled life,
+Five stars for the freelancer, escape from the strife.
 
-I chose the **ballad stanza** (ABCB rhyme scheme) for this poem because its rhythmic, song-like quality mirrors the "flow" in FreelanceFlow—suggesting continuous movement, connection, and momentum. The tone balances technical specificity (Prisma, Next, Stripe, monorepo) with human aspiration, reflecting how the platform bridges code and community. The theme of independence and connection felt natural for a freelance marketplace, where individual freedom and collective trust must coexist.
+---
+
+So here's to the monorepo, modern and grand,
+Where `npm install` makes everything land,
+May your builds never break and your types always pass,
+And your bug bounty hunters write poems, en masse.
+
+---
+
+*Written for SecureBananaLabs/bug-bounty — because even infrastructure deserves a little verse.*
