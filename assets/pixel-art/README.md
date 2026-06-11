@@ -1,7 +1,11 @@
-# Cyberpunk Cityscape Pixel Art
+# Cyberpunk City Pixel Art
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
+**File:** `cyberpunk_city.png`
+**Dimensions:** 64x64 pixels
+**Format:** PNG
 
-**Why:** I chose this theme because cyberpunk aesthetics blend retro and futuristic elements beautifully, making them perfect for pixel art. The limited color palette and small canvas force creative problem-solving to convey depth, light, and atmosphere—challenges that make pixel art rewarding. The neon pinks and cyans against deep blues create a striking visual contrast that captures the essence of a bustling metropolis after dark.
+## Description
+A cyberpunk cityscape pixel art scene featuring neon-lit skyscrapers, a reflective wet street, and a starry night sky with a holographic moon. The piece uses a limited color palette with high contrast between deep blues/purples and bright cyan/magenta neons to create atmospheric depth.
 
-**File:** `cyberpunk-cityscape.png` (64x64 pixels, PNG format)
+## Why
+Cyberpunk aesthetics are visually striking in pixel art due to the high contrast between dark environments and vibrant neon colors, making it an excellent showcase of creative thinking and technical pixel art skills.
