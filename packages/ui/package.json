@@ -1,31 +1,28 @@
 {
   "name": "@freelanceflow/ui",
-  "private": true,
-  "main": "src/index.ts"
-{
-  "name": "@freelanceflow/ui",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
-  },
+  "sideEffects": false,
   "dependencies": {
+    "react": "^18.2.0"
   },
-  "devDependencies": {
+    "@types/react": "^18.2.0",
     "typescript": "^5.0.0"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  }
-}
+  "scripts": {
+    "build": "tsc"
+  },
+  "license": "MIT"
 }
