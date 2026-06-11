@@ -2,7 +2,7 @@
   "name": "@bug-bounty/benchmarks",
   "version": "1.0.0",
   "private": true,
-  "description": "API benchmark suite for FreelanceFlow",
+  "type": "module",
   "scripts": {
     "benchmark": "node run-benchmarks.js",
     "benchmark:smoke": "node run-benchmarks.js --smoke"
