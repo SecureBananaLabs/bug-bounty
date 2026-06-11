@@ -2,5 +2,25 @@
 body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0b1020; color: #f2f5ff; }
 a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 1000;
+  transform: translateY(-150%);
+  border: 1px solid #8fb3ff;
+  border-radius: 8px;
+  background: #f2f5ff;
+  color: #0b1020;
+  padding: 0.6rem 0.85rem;
+  font-weight: 700;
+  transition: transform 0.15s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid #8fb3ff;
+  outline-offset: 2px;
+}
+#main-content:focus { outline: none; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
