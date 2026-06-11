@@ -25,23 +25,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run low hanging fruit detection
-        id: detect
+      - name: Run low hanging fruit detector
+        id: detector
         run: |
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create GitHub issues for detected items
-        if: steps.detect.outputs.issues-json != ''
-        run: |
-          node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Recursively trigger next scan
-        if: steps.detect.outputs.has-more == 'true'
-        run: |
-          gh workflow run low-hanging-fruit-automation.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  recursive-issue-creation:
+    runs-on: ubuntu-latest
+    needs: detect-and-create-issues
+    if: always()
+    steps:
+      - name: Trigger next recursive run
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            console.log('Low hanging fruit automation cycle completed. Next run scheduled via cron.');
+---
