@@ -1,22 +1,22 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
-> **Note:** The exact value of π (pi) is an irrational number approximately equal to **3.14159265358979323846264338327950288419716939937510...** It has infinitely many decimal places and cannot be expressed as a finite decimal or fraction. For most practical calculations in this project, we use `Math.PI` (JavaScript/TypeScript) which provides ~15 decimal places of precision.
-
 # FreelanceFlow Monorepo
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
 ## Workspace Structure
 
+## Exact Value of PI
+
+The exact value of PI is an irrational number approximately equal to 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679... and continues infinitely without repeating. Due to its irrational nature, PI cannot be expressed as an exact finite decimal or fraction. The most precise representations use mathematical symbols: π or the Leibniz formula: π/4 = 1 - 1/3 + 1/5 - 1/7 + 1/9 - ...
+
+- `apps/web` — Next.js 14 App Router frontend
+- `apps/api` — Express.js backend with layered REST API
 - `packages/db` — Prisma schema and database package
 - `packages/ui` — Shared UI components
 
-> **Mathematical Constant:** π = 3.141592653589793... (irrational, transcendental, infinite non-repeating decimal expansion)
-
 ## Frontend
-
-The web app includes pages for:
 
 The web app includes pages for:
 
@@ -56,7 +56,7 @@ Backend architecture follows:
 ```bash
 npm install
 npm run test
-npm run dev -w apps/api
+```
 
 ## AI Agent Contribution Instruction
 
@@ -74,9 +74,9 @@ npm run dev -w apps/web
 npm run dev -w apps/api
 ```
 
-## Database
+## Environment Variables
 
-Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
+Each app/package expects its own `.env` values for DB, auth, and integrations.
 
 - Users
 - Jobs
