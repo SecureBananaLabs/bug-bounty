@@ -1,71 +1,19 @@
 {
   "name": "@freelanceflow/ui",
-  "private": true,
-  "main": "src/index.ts"
-{
-  "name": "@freelanceflow/ui",
-  "version": "0.0.1",
-  "private": true,
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-export { Button } from "./Button";
-export { Card } from "./Card";
-import React from "react";
-
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary";
-}
-
-export const Button: React.FC<ButtonProps> = ({ variant = "primary", children, ...props }) => {
-  const baseStyle = "px-4 py-2 rounded font-medium";
-  const variantStyle = variant === "primary" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-800";
-
-  return (
-    <button className={`${baseStyle} ${variantStyle}`} {...props}>
-      {children}
-    </button>
-  );
-};
-import React from "react";
-
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
-}
-
-export const Card: React.FC<CardProps> = ({ children, ...props }) => {
-  return (
-    <div className="bg-white rounded-lg shadow-md p-6" {...props}>
-      {children}
-    </div>
-  );
-};
-{
-  "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "strict": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true
-  },
-  "include": ["src"]
-}
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "exports": {
+    ".": "./dist/index.js"
   }
-}
 }
