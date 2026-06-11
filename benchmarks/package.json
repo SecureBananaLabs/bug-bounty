@@ -8,10 +8,10 @@
     "benchmark:smoke": "node run-benchmarks.js --smoke",
     "benchmark:ci": "node run-benchmarks.js --ci"
   },
-  "devDependencies": {
+  "dependencies": {
     "autocannon": "^7.15.0"
   },
-  "dependencies": {
+  "devDependencies": {
     "dotenv": "^16.4.5"
   }
 }
