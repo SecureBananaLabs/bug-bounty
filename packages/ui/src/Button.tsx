@@ -15,14 +15,14 @@ export function Button({ children }: { children: React.ReactNode }) {
       {children}
     </button>
   );
-import React from 'react';
+import React from "react";
 
 export interface ButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
 }
 
-export const Button: React.FC<ButtonProps> = ({ children, onClick }) => {
+export function Button({ children, onClick }: ButtonProps) {
   return <button onClick={onClick}>{children}</button>;
-};
+}
 }
