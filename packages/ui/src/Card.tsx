@@ -7,6 +7,16 @@ export function Card({ title, children }: { title: string; children: React.React
       <div>{children}</div>
     </section>
   );
-// Card component implementation
-export const Card = () => null;
+import React from "react";
+
+export interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const Card: React.FC<CardProps> = ({ children, className }) => {
+  return <div className={className}>{children}</div>;
+};
+
+export default Card;
 }
