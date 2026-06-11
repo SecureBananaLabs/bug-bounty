@@ -1,11 +1,12 @@
  ```diff
 --- /dev/null
-+++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,0 @@
++++ b/.github/workflows/low-hanging-fruit-automation.yml
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
++    # Run daily at 00:00 UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
 +
@@ -34,96 +35,126 @@
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          REPO_OWNER: ${{ github.repository_owner }}
++          REPO_NAME: ${{ github.event.repository.name }}
 +
-+      - name: Create issues from detected items
-+        if: steps.detect.outputs.has_items == 'true'
++      - name: Create GitHub issues for detected items
++        if: success()
 +        run: |
 +          node .github/scripts/create-issues.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          REPO: ${{ github.repository }}
++          REPO_OWNER: ${{ github.repository_owner }}
++          REPO_NAME: ${{ github.event.repository.name }}
 +--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,0 @@
-+#!/usr/bin/env node
+@@ -0,0 +1,162 @@
++/**
++ * Low Hanging Fruit Detection Script
++ * 
++ * Recursively scans the repository for common bug patterns,
++ * missing features, and easy improvements to automate issue creation.
++ */
 +
 +const fs = require('fs');
 +const path = require('path');
 +
-+const PATTERNS = {
-+  todo: /TODO|FIXME|HACK|BUG|XXX/gi,
-+  emptyFunction: /function\s+\w+\s*\(\)\s*\{\s*\}/g,
-+  consoleLog: /console\.(log|warn|error)\(/g,
-+  hardcodedSecret: /(password|secret|key|token)\s*=\s*['"][^'"]+['"]/gi,
-+  unhandledPromise: /\.then\([^)]*\)(?!\.catch)/g,
-+  deprecatedApi: /res\.json\(|res\.send\(/g,
++// Patterns to detect low hanging fruit
++const DETECTION_PATTERNS = {
++  // TODO/FIXME comments without associated issues
++  todoComments: {
++    pattern: /\/\/\s*(TODO|FIXME|HACK|BUG|XXX)[\s:]*(.*)/gi,
++    severity: 'low',
++    category: 'code-quality'
++  },
++  // Empty catch blocks
++  emptyCatch: {
++    pattern: /catch\s*\([^)]*\)\s*\{\s*\}/g,
++    severity: 'medium',
++    category: 'bug'
++  },
++  // Console.log statements in production code
++  consoleLogs: {
++    pattern: /console\.(log|warn|error|debug)\s*\(/g,
++    severity: 'low',
++    category: 'code-quality'
++  },
++  // Missing error handling
++  unhandledPromises: {
++    pattern: /\.then\s*\([^)]*\)\s*(?!\.catch)/g,
++    severity: 'medium',
++    category: 'bug'
++  },
++  // Hardcoded secrets (basic detection)
++  hardcodedSecrets: {
++    pattern: /(password|secret|token|key)\s*[:=]\s*['"][^'"]{8,}['"]/gi,
++    severity: 'high',
++    category: 'security'
++  },
++  // Deprecated API usage
++  deprecatedAPIs: {
++    pattern: /(res\.sendFile|res\.sendfile|bodyParser|urlencoded\s*\(\s*\{[^}]*extended)/gi,
++    severity: 'low',
++    category: 'maintenance'
++  }
 +};
 +
-+function scanFile(filePath, content) {
-+  const issues = [];
-+  const lines = content.split('\n');
++// Files/directories to exclude
++const EXCLUDES = [
++  'node_modules',
++  '.git',
++  'dist',
++  'build',
++  '.next',
++  'coverage',
++  '.github/scripts'
++];
 +
-+  lines.forEach((line, index) => {
-+    // Check for TODO/FIXME comments
-+    if (PATTERNS.todo.test(line)) {
-+      issues.push({
-+        type: 'todo',
-+        file: filePath,
-+        line: index + 1,
-+        description: `Found ${line.match(/TODO|FIXME|HACK|BUG|XXX/)[0]} comment`,
-+        severity: 'low',
-+      });
-+    }
-+
-+    // Check for console.log statements
-+    if (PATTERNS.consoleLog.test(line)) {
-+      issues.push({
-+        type: 'console-log',
-+        file: filePath,
-+        line: index + 1,
-+        description: 'Console statement found in production code',
-+        severity: 'low',
-+      });
-+    }
-+
-+    // Check for hardcoded secrets
-+    if (PATTERNS.hardcodedSecret.test(line) && !filePath.includes('.env.example')) {
-+      issues.push({
-+        type: 'hardcoded-secret',
-+        file: filePath,
-+        line: index + 1,
-+        description: 'Potential hardcoded secret detected',
-+        severity: 'high',
-+      });
-+    }
-+
-+    // Check for unhandled promises
-+    if (PATTERNS.unhandledPromise.test(line) && !line.includes('catch')) {
-+      issues.push({
-+        type: 'unhandled-promise',
-+        file: filePath,
-+        line: index + 1,
-+        description: 'Potential unhandled promise',
-+        severity: 'medium',
-+      });
-+    }
-+  });
-+
-+  return issues;
++function shouldExclude(filePath) {
++  return EXCLUDES.some(ex => filePath.includes(ex));
 +}
 +
-+function scanDirectory(dir, results = []) {
-+  const items = fs.readdirSync(dir, { withFileTypes: true });
++function scanFile(filePath) {
++  const results = [];
++  const content = fs.readFileSync(filePath, 'utf-8');
++  const lines = content.split('\n');
 +
-+  for (const item of items) {
-+    const fullPath = path.join(dir, item.name);
++  for (const [patternName, config] of Object.entries(DETECTION_PATTERNS)) {
++    const regex = new RegExp(config.pattern.source, 'gi');
++    let match;
 +
-+    if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
-+      scanDirectory(fullPath, results);
-+    } else if (item.isFile() && /\.(ts|tsx|js|jsx)$/.test(item.name)) {
-+      const content = fs.readFileSync(fullPath, 'utf-8');
-+      const fileIssues = scanFile(fullPath, content);
-+      results.push(...fileIssues);
++    while ((match = regex.exec(content)) !== null) {
++      const lineNum = content.substring(0, match.index).split('\n').length;
++      const lineContent = lines[lineNum - 1].trim();
++
++      results.push({
++        pattern: patternName,
++        category: config.category,
++        severity: config.severity,
++        file: filePath,
++        line: lineNum,
++        match: match[0].substring(0, 100),
++        lineContent: lineContent.substring(0, 200)
++      });
++    }
++  }
++
++  return results;
++}
++
++function scanDirectory(dir) {
++  const results = [];
++  const entries = fs.readdirSync(dir, { withFileTypes: true });
++
++  for (const entry of entries) {
++    const fullPath = path.join(dir, entry.name);
++
++    if (shouldExclude(fullPath)) continue;
++
++    if (entry.isDirectory()) {
++      results.push(...scanDirectory(fullPath));
++    } else if (entry.isFile() && /\.(ts|tsx|js|jsx|json|md|yml|yaml|prisma)$/.test(entry.name)) {
++      results.push(...scanFile(fullPath));
 +    }
 +  }
 +
@@ -131,59 +162,30 @@
 +}
 +
 +function main() {
-+  const rootDir = process.cwd();
-+  const appsDir = path.join(rootDir, 'apps');
-+  const packagesDir = path.join(rootDir, 'packages');
++  const repoRoot = path.resolve(__dirname, '../..');
++  const findings = scanDirectory(repoRoot);
 +
-+  const allIssues = [];
++  // Group findings by category for better organization
++  const grouped = findings.reduce((acc, finding) => {
++    if (!acc[finding.category]) acc[finding.category] = [];
++    acc[finding.category].push(finding);
++    return acc;
++  }, {});
 +
-+  if (fs.existsSync(appsDir)) {
-+    allIssues.push(...scanDirectory(appsDir));
-+  }
++  // Write findings to a file for the next step
++  const outputPath = path.join(__dirname, 'findings.json');
++  fs.writeFileSync(outputPath, JSON.stringify(grouped, null, 2));
 +
-+  if (fs.existsSync(packagesDir)) {
-+    allIssues.push(...scanDirectory(packagesDir));
-+  }
-+
-+  // Group issues by type for deduplication
-+  const grouped = {};
-+  allIssues.forEach(issue => {
-+    const key = `${issue.type}-${issue.file}-${issue.line}`;
-+    grouped[key] = issue;
-+  });
-+
-+  const uniqueIssues = Object.values(grouped);
-+
-+  // Write results to file for next step
-+  const outputPath = path.join(rootDir, '.github', 'scripts', 'detected-issues.json');
-+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-+  fs.writeFileSync(outputPath, JSON.stringify(uniqueIssues, null, 2));
-+
-+  // Set output for GitHub Actions
-+  const hasItems = uniqueIssues.length > 0;
-+  console.log(`has_items=${hasItems}`);
-+
-+  // Also write to GITHUB_OUTPUT if available
-+  const githubOutput = process.env.GITHUB_OUTPUT;
-+  if (githubOutput) {
-+    fs.appendFileSync(githubOutput, `has_items=${hasItems}\n`);
-+  }
-+
-+  console.log(`Detected ${uniqueIssues.length} low hanging fruit items`);
++  console.log(`Detected ${findings.length} low hanging fruit items across ${Object.keys(grouped).length} categories`);
++  console.log('Categories:', Object.keys(grouped).join(', '));
 +}
 +
 +main();
 +--- /dev/null
 +++ b/.github/scripts/create-issues.js
-@@ -0,0 +1,0 @@
-+#!/usr/bin/env node
-+
-+const fs = require('fs');
-+const path = require('path');
-+
-+const REPO = process.env.REPO || 'SecureBananaLabs/bug-bounty';
-+const TOKEN = process.env.GITHUB_TOKEN;
-+
-+if (!TOKEN) {
-+  console.error('GITHUB_TOKEN is required');
-+
+@@ -0,0 +1,131 @@
++/**
++ * Issue Creation Script
++ * 
++ * Creates GitHub issues for detected low hanging fruit items.
++ *
