@@ -2,35 +2,38 @@
 
 ## A Poem for FreelanceFlow
 
-In circuits hum the dreams of those who seek
-To weave their craft through fiber, light, and wire,
-Where client calls and freelancer both speak
-In protocols of trust, in code's own choir.
+In digital halls where the gig-workers roam,
+Where clients post projects and call them their own,
+A marketplace hums with the click of a key—
+No cubicle walls, only screens set them free.
 
-No cubicle contains the minds that meet
-Across the packets racing through the night,
-The marketplace where skill and need compete
-Yet find their balance, fair and just and right.
+The frontend awakes in a Next.js dream,
+With routers and components woven in seam,
+TypeScript guards every variable's name,
+While Prisma whispers to tables the same.
 
-A stanza posted, scope and budget clear,
-The proposal weaves its argument tight,
-Through review and message, progress drawing near,
-Till payment flows and both sides claim their right.
+The backend stands steady on Express's frame,
+With JWT tokens that know every name,
+From auth to proposals, from jobs to the pay,
+Each layer of service keeps chaos at bay.
 
-From schema.prisma to the UI's face,
-The stack connects what once was far and scattered,
-Each component, service, route in place,
-To build the dreams that truly mattered.
+A freelancer bids with a cover letter's art,
+Hoping their profile will stand them apart,
+The client reviews through a dashboard so clean,
+While Stripe holds the promise of what cash will mean.
 
-So here's to flows of freelance and of code,
-To monorepos where great things are sowed,
-Where bug and bounty, poem and prose,
-In open source, a better world grows.
+Messages flutter like birds through the wire,
+Reviews stack up and the ratings grow higher,
+Notifications ping on a screen dark or bright,
+As admin eyes watch for what goes wrong or right.
+
+So here's to the builders of marketplaces free,
+Where code meets the hustle of liberty,
+No office, no boss, just the flow of the work—
+The future of labor, both gentle and berserk.
 
 ---
 
-*Written for the FreelanceFlow project — a full-stack marketplace where freelancers and clients connect through modern TypeScript architecture.*
-
-## Creative Decision
-
-**Why this theme, form, and tone:** I chose a traditional sonnet-inspired structure with alternating rhyme and iambic meter to create an intentional contrast with the modern tech stack described in the README. The poem treats software architecture (Prisma, monorepos, components, services) as the infrastructure of human connection—because that's what FreelanceFlow ultimately enables. The tone is earnest and slightly romantic about technology's potential to bridge distance and create economic opportunity, reflecting the project's mission while acknowledging the poetic absurdity of celebrating `npm install` in verse.
+*Written for the FreelanceFlow project,*
+*where stanzas meet status codes,*
+*and every commit is a verse in the greater poem of open source.*
