@@ -1,8 +1,13 @@
-import { Router } from "express";
-import { metrics } from "../controllers/adminController.js";
-import { authMiddleware } from "../middleware/auth.js";
+const express = require('express');
+const adminRoutes = express.Router();
+const { metrics } = require('../controllers/adminController');
+const authMiddleware = require('../middleware/auth');
+const adminMiddleware = require('../middleware/admin');
 
-export const adminRoutes = Router();
-
+// Apply authentication and admin authorization to all admin routes
 adminRoutes.use(authMiddleware);
-adminRoutes.get("/metrics", metrics);
+adminRoutes.use(adminMiddleware);
+
+adminRoutes.get('/metrics', metrics);
+
+module.exports = adminRoutes;
