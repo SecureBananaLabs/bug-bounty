@@ -86,3 +86,15 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+An example `.env` file structure:
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/freelanceflow"
+
+# Auth
+JWT_SECRET="your-secret-key"
+
+# Integrations
+STRIPE_API_KEY="sk_test_..."
+```
