@@ -1,3 +1,5 @@
+import { createId } from "../utils/ids.js";
+
 const users = [];
 
 export async function listUsers() {
@@ -6,7 +8,11 @@ export async function listUsers() {
 
 export async function createUser(payload) {
   const { id, ...userPayload } = payload;
-  const user = { ...userPayload, id: `usr_${Date.now()}` };
+  const user = { ...userPayload, id: createId("usr") };
   users.push(user);
   return user;
+}
+
+export function resetUsers() {
+  users.length = 0;
 }

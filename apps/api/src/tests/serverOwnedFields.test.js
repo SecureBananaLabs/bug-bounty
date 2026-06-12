@@ -1,10 +1,23 @@
 import assert from "node:assert/strict";
-import test from "node:test";
-import { sendMessage } from "../services/messageService.js";
-import { createNotification } from "../services/notificationService.js";
-import { createProposal } from "../services/proposalService.js";
-import { createReview } from "../services/reviewService.js";
-import { createUser } from "../services/userService.js";
+import { afterEach, test } from "node:test";
+import { resetMessages, sendMessage } from "../services/messageService.js";
+import { createNotification, resetNotifications } from "../services/notificationService.js";
+import { createProposal, resetProposals } from "../services/proposalService.js";
+import { createReview, resetReviews } from "../services/reviewService.js";
+import { createUser, resetUsers } from "../services/userService.js";
+
+afterEach(() => {
+  resetUsers();
+  resetProposals();
+  resetReviews();
+  resetMessages();
+  resetNotifications();
+});
+
+function assertServerId(actual, prefix, attackerId) {
+  assert.match(actual, new RegExp(`^${prefix}_[0-9a-f-]+$`));
+  assert.notEqual(actual, attackerId);
+}
 
 test("createUser keeps the generated id server-owned", async () => {
   const user = await createUser({
@@ -13,8 +26,7 @@ test("createUser keeps the generated id server-owned", async () => {
     role: "freelancer"
   });
 
-  assert.match(user.id, /^usr_\d+$/);
-  assert.notEqual(user.id, "usr_attacker");
+  assertServerId(user.id, "usr", "usr_attacker");
   assert.equal(user.email, "freelancer@example.com");
   assert.equal(user.role, "freelancer");
 });
@@ -27,8 +39,7 @@ test("createProposal keeps the generated id server-owned", async () => {
     bidAmount: 500
   });
 
-  assert.match(proposal.id, /^prp_\d+$/);
-  assert.notEqual(proposal.id, "prp_attacker");
+  assertServerId(proposal.id, "prp", "prp_attacker");
   assert.equal(proposal.jobId, "job_123");
   assert.equal(proposal.freelancerId, "usr_456");
   assert.equal(proposal.bidAmount, 500);
@@ -42,8 +53,7 @@ test("createReview keeps the generated id server-owned", async () => {
     rating: 5
   });
 
-  assert.match(review.id, /^rev_\d+$/);
-  assert.notEqual(review.id, "rev_attacker");
+  assertServerId(review.id, "rev", "rev_attacker");
   assert.equal(review.reviewerId, "usr_reviewer");
   assert.equal(review.revieweeId, "usr_reviewee");
   assert.equal(review.rating, 5);
@@ -58,8 +68,7 @@ test("sendMessage keeps id and sentAt server-owned", async () => {
     body: "Hello"
   });
 
-  assert.match(message.id, /^msg_\d+$/);
-  assert.notEqual(message.id, "msg_attacker");
+  assertServerId(message.id, "msg", "msg_attacker");
   assert.notEqual(message.sentAt, "1999-01-01T00:00:00.000Z");
   assert.doesNotThrow(() => new Date(message.sentAt).toISOString());
   assert.equal(message.body, "Hello");
@@ -74,8 +83,7 @@ test("createNotification keeps id and read server-owned", async () => {
     body: "A freelancer responded"
   });
 
-  assert.match(notification.id, /^ntf_\d+$/);
-  assert.notEqual(notification.id, "ntf_attacker");
+  assertServerId(notification.id, "ntf", "ntf_attacker");
   assert.equal(notification.read, false);
   assert.equal(notification.title, "Proposal update");
   assert.equal(notification.body, "A freelancer responded");
