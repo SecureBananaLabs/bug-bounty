@@ -1,4 +1,20 @@
-export const jobs = [
+export type Job = {
+  id: string;
+  title: string;
+  budget: string;
+  summary: string;
+  milestones: string[];
+};
+
+export type Freelancer = {
+  username: string;
+  displayName: string;
+  skills: string[];
+  rate: string;
+  bio: string;
+};
+
+export const jobs: Job[] = [
   {
     id: "job-101",
     title: "Build an AI customer support widget",
@@ -22,7 +38,7 @@ export const jobs = [
   }
 ];
 
-export const freelancers = [
+export const freelancers: Freelancer[] = [
   {
     username: "maya-dev",
     displayName: "Maya Chen",
@@ -39,10 +55,10 @@ export const freelancers = [
   }
 ];
 
-export function getJobById(id: string) {
+export function getJobById(id: string): Job | undefined {
   return jobs.find((job) => job.id === id);
 }
 
-export function getFreelancerByUsername(username: string) {
+export function getFreelancerByUsername(username: string): Freelancer | undefined {
   return freelancers.find((freelancer) => freelancer.username === username);
 }
