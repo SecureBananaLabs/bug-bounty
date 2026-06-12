@@ -1,0 +1,11 @@
+## PR Submitted
+
+PR: https://github.com/SecureBananaLabs/bug-bounty/pull/6098
+
+## Changes
+
+- All list functions now return shallow array copies
+- All create functions now return record snapshots
+- 3 focused regression tests proving caller cannot mutate backing store
+
+AI Agent: claude-opus-4-7-max
