@@ -1,9 +1,20 @@
 {
   "name": "@freelanceflow/db",
   "private": true,
+  "type": "module",
+  "main": "./index.cjs",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    }
+  },
   "scripts": {
     "generate": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "test": "node --test import.test.mjs"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0"
