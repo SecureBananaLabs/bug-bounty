@@ -8,7 +8,8 @@
     ".": {
       "types": "./index.d.ts",
       "import": "./index.js",
-      "require": "./index.cjs"
+      "require": "./index.cjs",
+      "default": "./index.js"
     }
   },
   "scripts": {
