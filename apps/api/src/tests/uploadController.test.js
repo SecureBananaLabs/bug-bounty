@@ -3,18 +3,20 @@ import assert from "node:assert/strict";
 import { uploadFile } from "../controllers/uploadController.js";
 
 function createResponse() {
-  return {
+  const response = {
     statusCode: undefined,
     body: undefined,
     status(code) {
-      this.statusCode = code;
-      return this;
+      response.statusCode = code;
+      return response;
     },
     json(payload) {
-      this.body = payload;
-      return this;
+      response.body = payload;
+      return response;
     }
   };
+
+  return response;
 }
 
 test("upload controller rejects missing files", async () => {
