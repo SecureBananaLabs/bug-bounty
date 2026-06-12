@@ -7,7 +7,11 @@ const links = [
   ["/dashboard/client", "Client Dashboard"],
   ["/dashboard/freelancer", "Freelancer Dashboard"],
   ["/messaging", "Messaging"],
-  ["/admin", "Admin"]
+  ["/admin", "Admin"],
++ ["/jobs/post", "Post a Job"],
++ ["/billing", "Billing"],
++ ["/notifications", "Notifications"],
++ ["/settings", "Settings"]
 ];
 
 export function Navigation() {
