@@ -5,7 +5,7 @@ export function ok(res, data, status = 200) {
 export function fail(res, message, status = 400, errors) {
   const payload = { success: false, message };
 
-  if (errors !== undefined) {
+  if (Array.isArray(errors)) {
     payload.errors = errors;
   }
 
