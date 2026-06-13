@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
+import { env } from "./config/env.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
@@ -19,7 +20,20 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  const allowedOrigins = env.corsOrigins
+    ? env.corsOrigins.split(",").map(o => o.trim())
+    : [];
+
+  app.use(cors({
+    origin(origin, callback) {
+      // allow requests with no origin (mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.length === 0) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      callback(new Error("CORS origin not allowed"));
+    },
+    credentials: true
+  }));
   app.use(express.json());
   app.use(apiLimiter);
 
