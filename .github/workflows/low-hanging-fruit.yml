@@ -22,27 +22,27 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Run low hanging fruit detector
-        id: detector
+      - name: Run low hanging fruit detection
+        id: detect
         run: |
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create issues for detected items
-        if: steps.detector.outputs.has_items == 'true'
+      - name: Create issues from detected items
+        if: steps.detect.outputs.has_items == 'true'
         run: |
           node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Recursively trigger next scan
-        if: steps.detector.outputs.has_items == 'true'
+      - name: Recursively schedule next run
+        if: steps.detect.outputs.has_items == 'true'
         run: |
-          gh workflow run low-hanging-fruit.yml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "Scheduling next recursive check..."
+          # The cron schedule handles automatic recursion
+          echo "Next run scheduled via cron"
