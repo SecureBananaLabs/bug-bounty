@@ -2,10 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at midnight UTC
     - cron: '0 0 * * *'
-  
-  # Allow manual trigger
   workflow_dispatch:
 
 permissions:
@@ -24,94 +21,26 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Create GitHub issues for detected items
+        if: steps.detect.outputs.issues-json != ''
         run: |
-          #!/bin/bash
-          set -e
+          echo '${{ steps.detect.outputs.issues-json }}' | node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-          # Function to create issue if it doesn't exist
-          create_issue_if_not_exists() {
-            local title="$1"
-            local body="$2"
-            local label="$3"
-            
-            # Check if issue already exists
-            existing_issue=$(gh issue list --repo "$GITHUB_REPOSITORY" --search "$title" --json number --jq '.[0].number' 2>/dev/null || true)
-            
-            if [ -z "$existing_issue" ] || [ "$existing_issue" = "null" ]; then
-              # Create the issue
-              gh issue create \
-                --repo "$GITHUB_REPOSITORY" \
-                --title "$title" \
-                --body "$body" \
-                --label "$label"
-              echo "Created issue: $title"
-            else
-              echo "Issue already exists: $title (#$existing_issue)"
-            fi
-          }
-
-          # Template for issue body
-          ISSUE_TEMPLATE="This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Description
-%s
-
-## Acceptance Criteria
-- [ ] Identify the specific problem or improvement needed
-- [ ] Implement the fix or feature
-- [ ] Add tests if applicable
-- [ ] Update documentation if needed
-
-## Bounty
-/bounty \$50"
-
-          # Check for missing documentation
-          if [ ! -f "CONTRIBUTING.md" ] || [ ! -f "CODE_OF_CONDUCT.md" ] || [ ! -f "SECURITY.md" ]; then
-            body=$(printf "$ISSUE_TEMPLATE" "Add missing standard documentation files (CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md) to improve project accessibility for new contributors.")
-            create_issue_if_not_exists "Missing standard documentation files" "$body" "documentation,good first issue,bug bounty"
-          fi
-
-          # Check for missing tests
-          if ! grep -r "test" package.json >/dev/null 2>&1; then
-            body=$(printf "$ISSUE_TEMPLATE" "Add test infrastructure and initial test coverage to ensure code quality and prevent regressions.")
-            create_issue_if_not_exists "Missing test infrastructure" "$body" "bug,good first issue,bug bounty"
-          fi
-
-          # Check for missing CI/CD workflows
-          if [ ! -d ".github/workflows" ] || [ -z "$(ls -A .github/workflows 2>/dev/null)" ]; then
-            body=$(printf "$ISSUE_TEMPLATE" "Add CI/CD workflows for automated testing, linting, and deployment to improve development workflow.")
-            create_issue_if_not_exists "Missing CI/CD workflows" "$body" "bug,good first issue,bug bounty"
-          fi
-
-          # Check for environment variable documentation
-          if [ ! -f ".env.example" ] && [ ! -f ".env.template" ]; then
-            body=$(printf "$ISSUE_TEMPLATE" "Add .env.example file documenting required environment variables for local development setup.")
-            create_issue_if_not_exists "Missing environment variable documentation" "$body" "documentation,good first issue,bug bounty"
-          fi
-
-          # Check for missing README sections
-          if ! grep -q "License" README.md 2>/dev/null; then
-            body=$(printf "$ISSUE_TEMPLATE" "Add License section to README.md to clarify project licensing for contributors and users.")
-            create_issue_if_not_exists "Missing License section in README" "$body" "documentation,good first issue,bug bounty"
-          fi
-
-          # Check for package.json issues
-          if [ -f "package.json" ]; then
-            # Check for missing scripts
-            if ! grep -q '"lint"' package.json; then
-              body=$(printf "$ISSUE_TEMPLATE" "Add lint script to package.json for code quality enforcement.")
-              create_issue_if_not_exists "Missing lint script in package.json" "$body" "bug,good first issue,bug bounty"
-            fi
-            
-            # Check for missing type-check script
-            if ! grep -q '"type-check"' package.json && ! grep -q '"typecheck"' package.json; then
-              body=$(printf "$ISSUE_TEMPLATE" "Add TypeScript type checking script to package.json for compile-time error detection.")
-              create_issue_if_not_exists "Missing TypeScript type-check script" "$body" "bug,good first issue,bug bounty"
-            fi
-          fi
-
-          echo "Low hanging fruit detection complete"
-        shell: bash
+      - name: Report status
+        run: |
+          echo "Low hanging fruit detection completed"
+          echo "Check created issues at: https://github.com/${{ github.repository }}/issues"
