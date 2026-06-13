@@ -51,7 +51,7 @@ This issue tracks the automation of detecting simple bugs and creating issues fo
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: 'Low Hanging Fruit Automation - Recursive Issue Creation',
-              body: neighbourhoods: issueBody,
+              body: issueBody,
               labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', 'bounty', '💎 Bounty']
             });
             
