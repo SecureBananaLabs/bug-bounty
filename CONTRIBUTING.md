@@ -42,3 +42,22 @@ Thank you for contributing to this bug bounty repository.
 ## Code of Conduct
 
 By participating, you agree to collaborate respectfully and professionally in all issue and PR discussions.
+
+A new file POEM.md has been added to the project root with the following content:
+ 
+In silicon halls, where code does reign
+A world of wonder, born of human brain
+The hum of servers, a gentle hush
+As innovation's spark, the future's rush
+
+In this realm of bits, where dreams take flight
+A community gathers, united in sight
+Of progress and growth, of knowledge shared
+The open source spirit, forever bared
+
+Through lines of code, a story's told
+Of collaboration, of hearts made of gold
+The bounty hunters, with skills so fine
+Seeking solutions, one bug at a time
+
+The PR description includes a one-line note on the creative decision: I chose this theme to reflect the project's focus on technology and community.
