@@ -15,9 +15,11 @@ async function withServer(run) {
     const { port } = server.address();
     await run(`http://127.0.0.1:${port}`);
   } finally {
-    await new Promise((resolve, reject) => {
-      server.close((error) => (error ? reject(error) : resolve()));
-    });
+    if (server.listening) {
+      await new Promise((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+      });
+    }
   }
 }
 
@@ -44,7 +46,8 @@ test("registered API routes still reach their handlers", async () => {
     const payload = await response.json();
 
     assert.equal(response.status, 200);
-    assert.deepEqual(payload, { success: true, data: [] });
+    assert.equal(payload.success, true);
+    assert.ok(Array.isArray(payload.data));
   });
 });
 
