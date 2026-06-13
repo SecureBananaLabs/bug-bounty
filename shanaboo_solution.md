@@ -1,5 +1,8 @@
  ```diff
 --- /dev/null
-+++ b/assets/pixel-art/cyberpunk_city.png
++++ b/assets/pixel-art/shanaboo-robot-friend.png
 @@ -0,0 +1,1 @@
-+iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPdoAAAIaSURBVHic7ZCxatMwFIafpE1oKRRKIR0cOjg4dOjQoePQoUNHHbokG0OHQoeODg4ODg4ODg4ODg4ODg4ODg4
++�PNG
++
++IHDR           ��a
++sRGB ��   gAMA  ���a   pHYs  �  ��+   tEXtSoftware  Adobe ImageReadyq�e<   IDATx���k�0���!�M���6�M�&h�R(�P(�P(�P(�P(�P(�P
