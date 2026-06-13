@@ -25,8 +25,10 @@ test("GET /health returns ok payload", async () => {
     assert.ok(cacheDirectives?.includes("no-store"));
     assert.deepEqual(payload, { ok: true, service: "api" });
   } finally {
-    await new Promise((resolve, reject) => {
-      server.close((error) => (error ? reject(error) : resolve()));
-    });
+    if (server.listening) {
+      await new Promise((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+      });
+    }
   }
 });
