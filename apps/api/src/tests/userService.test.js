@@ -23,11 +23,13 @@ async function withServer(fn) {
 
 test("POST /api/users omits submitted password from stored user records", async () => {
   await withServer(async (baseUrl) => {
+    const email = `new-user-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`;
+
     const createResponse = await fetch(`${baseUrl}/api/users`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        email: "new-user@example.com",
+        email,
         name: "New User",
         role: "freelancer",
         password: "super-secret-password"
@@ -38,14 +40,14 @@ test("POST /api/users omits submitted password from stored user records", async 
     const created = createPayload.data;
 
     assert.equal(createResponse.status, 201);
-    assert.equal(created.email, "new-user@example.com");
+    assert.equal(created.email, email);
     assert.equal(created.name, "New User");
     assert.equal(created.role, "freelancer");
     assert.equal("password" in created, false);
 
     const listResponse = await fetch(`${baseUrl}/api/users`);
     const listPayload = await listResponse.json();
-    const stored = listPayload.data.find((user) => user.email === "new-user@example.com");
+    const stored = listPayload.data.find((user) => user.email === email);
 
     assert.equal(listResponse.status, 200);
     assert.ok(stored);
