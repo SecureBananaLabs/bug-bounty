@@ -1,11 +1,11 @@
-# Cosmic Banana Spaceship
+# Cosmic Robot Pixel Art
 
-**What:** A pixel art illustration of a banana-shaped spaceship exploring deep space.
+**What:** A friendly robot exploring a starry cosmos, rendered in retro pixel art style.
 
-**Why:** I chose this theme because it combines the repository name "SecureBananaLabs" with a sense of adventure and creativity. The banana represents the project's identity, while the spaceship embodies exploration and pushing boundaries—fitting for a bug bounty program that encourages creative problem-solving.
+**Why:** I chose this theme because robots represent the intersection of technology and creativity, and the cosmic backdrop adds a sense of wonder and exploration. The limited color palette and blocky aesthetic embrace the constraints of pixel art as a medium, turning technical limitations into expressive charm. This piece celebrates curiosity and the spirit of discovery—qualities that drive both art and software development.
 
 **Specifications:**
-- Canvas: 64x64 pixels
-- Format: PNG
-- Colors: Vibrant pixel palette with neon accents
-- Style: Retro arcade-inspired pixel art
+- Canvas size: 64x64 pixels
+- Format: PNG with transparency
+- Color palette: 8-bit inspired with neon accents
+- Style: Retro pixel art with dithering effects
