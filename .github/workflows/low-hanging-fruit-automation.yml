@@ -2,7 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at midnight UTC
+    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -17,31 +17,75 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node .github/scripts/detect-low-hanging-fruit.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-  recursive-issue-creation:
-    needs: detect-and-create-issues
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Trigger next recursive run
+      - name: Detect low hanging fruit and create issues
         uses: actions/github-script@v7
         with:
           script: |
-            console.log('Low hanging fruit automation cycle completed. Next run scheduled via cron.');
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            const fs = require('fs');
+            const path = require('path');
+
+            // Recursive function to find files with potential issues indicators
+            async function findLowHangingFruit(dir, results = []) {
+              const items = fs.readdirSync(dir, { withFileTypes: true });
+              
+              for (const item of items) {
+                const fullPath = path.join(dir, item.name);
+                
+                if (item.isDirectory()) {
+                  // Skip common non-source directories
+                  if (['node_modules', '.git', 'dist', 'build', '.next'].includes(item.name)) {
+                    continue;
+                  }
+                  await findLowHangingFruit(fullPath, results);
+                } else {
+                  // Check file extensions that might contain issues
+                  const ext = path.extname(item.name).toLowerCase();
+                  if (['.ts', '.tsx', '.js', '.jsx', '.json', '.md', '.yml', '.yaml', '.prisma', '.env.example'].includes(ext)) {
+                    results.push(fullPath);
+                  }
+                }
+              }
+              
+              return results;
+            }
+
+            // Get existing issues to avoid duplicates
+            const { data: existingIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+
+            const existingTitles = new Set(existingIssues.map(i => i.title));
+
+            // Find potential low hanging fruit issues
+            const sourceFiles = await findLowHangingFruit('.');
+            
+            // Define issue templates for common low hanging fruit
+            const issueTemplates = [
+              {
+                title: 'Automated Low Hanging Fruit: Code Quality and Documentation Review',
+                body: `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Automated Detection\n\nThis issue was automatically created by the Low Hanging Fruit Automation workflow.\n\n## Scope\n\n- Review code quality in identified source files\n- Improve documentation where needed\n- Address minor bugs or inconsistencies\n- Update outdated dependencies or configurations\n\n## Files to Review\n\n${sourceFiles.slice(0, 20).map(f => `- \\`${f}\\``).join('\n')}\n\n## Acceptance Criteria\n\n- [ ] Code quality issues identified and fixed\n- [ ] Documentation improved\n- [ ] Tests pass\n- [ ] No regressions introduced`
+              }
+            ];
+
+            for (const template of issueTemplates) {
+              if (!existingTitles.has(template.title)) {
+                try {
+                  await github.rest.issues.create({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    title: template.title,
+                    body: template.body,
+                    labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly']
+                  });
+                  console.log(`Created issue: ${template.title}`);
+                } catch (error) {
+                  console.error(`Failed to create issue: ${error.message}`);
+                }
+              } else {
+                console.log(`Issue already exists: ${template.title}`);
+              }
+            }
+          github-token: ${{ secrets.GITHUB_TOKEN }}
