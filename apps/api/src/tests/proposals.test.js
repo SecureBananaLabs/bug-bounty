@@ -21,7 +21,7 @@ async function withServer(fn) {
   }
 }
 
-test("POST /api/proposals rejects missing estimated duration", async () => {
+test("POST /api/proposals rejects missing estDuration", async () => {
   await withServer(async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/proposals`, {
       method: "POST",
@@ -38,7 +38,7 @@ test("POST /api/proposals rejects missing estimated duration", async () => {
   });
 });
 
-test("POST /api/proposals accepts provided estimated duration", async () => {
+test("POST /api/proposals rejects blank estDuration", async () => {
   await withServer(async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/proposals`, {
       method: "POST",
@@ -46,7 +46,28 @@ test("POST /api/proposals accepts provided estimated duration", async () => {
       body: JSON.stringify({
         jobId: "job_123",
         coverLetter: "I can help with this.",
-        estimatedDuration: "3 days"
+        estDuration: "   "
+      })
+    });
+    const payload = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(payload, {
+      success: false,
+      message: "Estimated duration is required"
+    });
+  });
+});
+
+test("POST /api/proposals accepts provided estDuration", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/proposals`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jobId: "job_123",
+        coverLetter: "I can help with this.",
+        estDuration: "3 days"
       })
     });
     const payload = await response.json();
@@ -54,6 +75,6 @@ test("POST /api/proposals accepts provided estimated duration", async () => {
     assert.equal(response.status, 201);
     assert.equal(payload.success, true);
     assert.equal(payload.data.jobId, "job_123");
-    assert.equal(payload.data.estimatedDuration, "3 days");
+    assert.equal(payload.data.estDuration, "3 days");
   });
 });

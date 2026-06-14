@@ -6,7 +6,8 @@ export async function getProposals(req, res) {
 }
 
 export async function postProposal(req, res) {
-  if (!req.body?.estimatedDuration) {
+  const { estDuration } = req.body ?? {};
+  if (typeof estDuration !== "string" || estDuration.trim().length === 0) {
     return fail(res, "Estimated duration is required", 400);
   }
 
