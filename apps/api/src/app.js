@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
+import { jsonErrorHandler } from "./middleware/jsonErrorHandler.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
@@ -15,13 +16,14 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
-export function createApp() {
+export function createApp({ limiter = apiLimiter } = {}) {
   const app = express();
 
   app.use(helmet());
   app.use(cors());
+  app.use(limiter);
   app.use(express.json());
-  app.use(apiLimiter);
+  app.use(jsonErrorHandler);
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
