@@ -1,10 +1,15 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
+import { registerSchema, loginSchema, refreshSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
+  const payload = registerSchema.safeParse(req.body);
+
+  if (!payload.success) {
+    return fail(res, payload.error.issues[0]?.message ?? "Invalid registration payload", 400);
+  }
+
+  const result = await registerUser(payload.data);
   return ok(res, result, 201);
 }
 
@@ -22,6 +27,16 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  const payload = refreshSchema.safeParse(req.body);
+
+  if (!payload.success) {
+    return fail(res, payload.error.issues[0]?.message ?? "Refresh token is required", 400);
+  }
+
+  try {
+    const result = await refreshToken(payload.data.token);
+    return ok(res, result);
+  } catch {
+    return fail(res, "Invalid token", 401);
+  }
 }
