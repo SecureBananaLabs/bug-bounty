@@ -5,21 +5,25 @@ const MAX_SEARCH_QUERY_LENGTH = 200;
 
 function normalizeSearchQuery(query) {
   if (query === undefined) {
-    return "";
+    return { value: "" };
+  }
+
+  if (Array.isArray(query)) {
+    return { error: "Search query must be a single value" };
   }
 
   if (typeof query !== "string") {
-    return null;
+    return { error: "Search query must be a string" };
   }
 
-  return query.trim().replace(/[\u0000-\u001f\u007f]/g, "");
+  return { value: query.trim().replace(/[\u0000-\u001f\u007f]/g, "") };
 }
 
 export async function search(req, res) {
-  const query = normalizeSearchQuery(req.query.q);
+  const { value: query, error } = normalizeSearchQuery(req.query.q);
 
-  if (query === null) {
-    return fail(res, "Search query must be a string", 400);
+  if (error) {
+    return fail(res, error, 400);
   }
 
   if (query.length > MAX_SEARCH_QUERY_LENGTH) {

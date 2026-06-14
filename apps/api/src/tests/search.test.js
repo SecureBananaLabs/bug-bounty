@@ -39,7 +39,7 @@ test("GET /api/search rejects repeated query parameters", async () => {
 
     assert.equal(response.status, 400);
     assert.equal(payload.success, false);
-    assert.match(payload.message, /must be a string/i);
+    assert.match(payload.message, /single value/i);
   });
 });
 
