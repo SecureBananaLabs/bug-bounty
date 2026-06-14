@@ -86,3 +86,13 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+## API Benchmarks
+
+Run the full local API benchmark suite:
+
+```bash
+npm run benchmark
+```
+
+The benchmark runner covers every `/api/` endpoint, writes JSON and Markdown reports to `benchmarks/results/`, and enforces reviewable p99/error-rate thresholds from `benchmarks/thresholds.json`. To benchmark staging, copy `.env.benchmark.example` to `.env.benchmark` and set `BENCHMARK_TARGET_URL` plus a dedicated `BENCHMARK_TOKEN`.
