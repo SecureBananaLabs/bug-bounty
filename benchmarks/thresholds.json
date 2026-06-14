@@ -1,0 +1,21 @@
+{
+  "comment": "p99 latency thresholds in ms per endpoint group. CI smoke gate fails if exceeded.",
+  "defaults": {
+    "p99_latency_ms": 500,
+    "error_rate_pct": 1
+  },
+  "endpoints": {
+    "/health": { "p99_latency_ms": 50 },
+    "/api/auth/register": { "p99_latency_ms": 800 },
+    "/api/auth/login": { "p99_latency_ms": 800 },
+    "/api/jobs": { "p99_latency_ms": 400 },
+    "/api/users": { "p99_latency_ms": 400 },
+    "/api/proposals": { "p99_latency_ms": 400 },
+    "/api/search": { "p99_latency_ms": 600 },
+    "/api/reviews": { "p99_latency_ms": 400 },
+    "/api/messages": { "p99_latency_ms": 400 },
+    "/api/notifications": { "p99_latency_ms": 400 },
+    "/api/payments": { "p99_latency_ms": 1000 },
+    "/api/admin": { "p99_latency_ms": 600 }
+  }
+}
