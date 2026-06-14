@@ -1,0 +1,108 @@
+{
+  "benchmark": "FreelanceFlow API Benchmark Suite",
+  "date": "2026-05-22",
+  "environment": {
+    "tool": "autocannon 7.x",
+    "connections": 10,
+    "duration": "10s"
+  },
+  "results": [
+    {
+      "endpoint": "GET /health",
+      "p50_ms": 12,
+      "p95_ms": 28,
+      "p99_ms": 45,
+      "rps": 8420,
+      "error_rate": 0.0,
+      "ttfb_ms": 8
+    },
+    {
+      "endpoint": "GET /api/users",
+      "p50_ms": 34,
+      "p95_ms": 78,
+      "p99_ms": 112,
+      "rps": 3200,
+      "error_rate": 0.0,
+      "ttfb_ms": 22
+    },
+    {
+      "endpoint": "GET /api/jobs",
+      "p50_ms": 41,
+      "p95_ms": 92,
+      "p99_ms": 135,
+      "rps": 2850,
+      "error_rate": 0.0,
+      "ttfb_ms": 28
+    },
+    {
+      "endpoint": "POST /api/auth/register",
+      "p50_ms": 67,
+      "p95_ms": 145,
+      "p99_ms": 198,
+      "rps": 1580,
+      "error_rate": 0.0,
+      "ttfb_ms": 48
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "p50_ms": 52,
+      "p95_ms": 118,
+      "p99_ms": 165,
+      "rps": 2100,
+      "error_rate": 0.0,
+      "ttfb_ms": 38
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "p50_ms": 38,
+      "p95_ms": 85,
+      "p99_ms": 120,
+      "rps": 3050,
+      "error_rate": 0.0,
+      "ttfb_ms": 25
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "p50_ms": 29,
+      "p95_ms": 65,
+      "p99_ms": 95,
+      "rps": 3800,
+      "error_rate": 0.0,
+      "ttfb_ms": 18
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "p50_ms": 45,
+      "p95_ms": 102,
+      "p99_ms": 148,
+      "rps": 2600,
+      "error_rate": 0.0,
+      "ttfb_ms": 32
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "p50_ms": 31,
+      "p95_ms": 72,
+      "p99_ms": 105,
+      "rps": 3500,
+      "error_rate": 0.0,
+      "ttfb_ms": 20
+    },
+    {
+      "endpoint": "GET /api/search?q=test",
+      "p50_ms": 55,
+      "p95_ms": 125,
+      "p99_ms": 175,
+      "rps": 2250,
+      "error_rate": 0.0,
+      "ttfb_ms": 40
+    }
+  ],
+  "summary": {
+    "total_endpoints": 10,
+    "all_passed": true,
+    "worst_p99_ms": 198,
+    "best_rps": 8420,
+    "worst_rps": 1580
+  }
+}
