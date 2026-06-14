@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { corsOriginGuard, createCorsOptions } from "./config/cors.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
@@ -15,11 +16,12 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
-export function createApp() {
+export function createApp(options = {}) {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(corsOriginGuard(options));
+  app.use(cors(createCorsOptions(options)));
   app.use(express.json());
   app.use(apiLimiter);
 
