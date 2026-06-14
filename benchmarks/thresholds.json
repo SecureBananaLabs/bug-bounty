@@ -1,0 +1,11 @@
+{
+  "defaults": {
+    "p99LatencyMs": 250,
+    "errorRate": 0
+  },
+  "endpoints": {
+    "uploads.create": {
+      "p99LatencyMs": 500
+    }
+  }
+}
