@@ -65,11 +65,18 @@ def run(title, body, pr_body, filepath, old_text, new_text):
 def auth_fix(name, route_file, import_stmt, route_line):
     nimp = import_stmt + '\nimport { authMiddleware } from "../middleware/auth.js"'
     nroute = route_line.replace(");", ", authMiddleware);")
+    # Combine import + route change in one run
+    # First, read the file, apply both changes, then run
+    fp = os.path.join(REPO_DIR, route_file)
+    with open(fp) as f: c = f.read()
+    c = c.replace(import_stmt, nimp)
+    c = c.replace(route_line, nroute)
+    with open(fp, 'w') as f: f.write(c)
+    # Now run with both changes already in the file
     run(f"fix: require auth on {name} endpoint",
         f"Bug: {name} POST lacks auth.\nFile: {route_file}\nSee #743.",
         f"Adds authMiddleware to {name} POST.",
-        route_file, import_stmt, nimp)
-    run("", "", "", route_file, route_line, nroute)
+        route_file, nroute, nroute)
 
 # ========== RUN ALL ==========
 
