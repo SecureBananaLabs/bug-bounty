@@ -13,6 +13,13 @@ enum UserRole {
   ADMIN
 }
 
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  CLOSED
+}
+
 enum JobStatus {
   DRAFT
   OPEN
@@ -37,6 +44,9 @@ model User {
   reviewsGiven   Review[]    @relation("Reviewer")
   reviewsGot     Review[]    @relation("Reviewee")
   notifications  Notification[]
+  auditLogs      AuditLog[]
+  disputesRaised Dispute[]   @relation("DisputeRaisedBy")
+  disputesResolved Dispute[] @relation("DisputeResolvedBy")
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -54,6 +64,7 @@ model Job {
   category      Category    @relation(fields: [categoryId], references: [id])
   proposals     Proposal[]
   payments      Payment[]
+  disputes      Dispute[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -124,4 +135,38 @@ model Notification {
   body          String
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
+}
+
+model AuditLog {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  action        String
+  entityType    String
+  entityId      String?
+  metadata      Json?
+  createdAt     DateTime    @default(now())
+
+  @@index([userId])
+  @@index([entityType, entityId])
+}
+
+model Dispute {
+  id            String          @id @default(cuid())
+  jobId         String
+  job           Job             @relation(fields: [jobId], references: [id])
+  raisedById    String
+  raisedBy      User            @relation("DisputeRaisedBy", fields: [raisedById], references: [id])
+  reason        String
+  status        DisputeStatus   @default(OPEN)
+  resolution    String?
+  resolvedById  String?
+  resolvedBy    User?           @relation("DisputeResolvedBy", fields: [resolvedById], references: [id])
+  resolvedAt    DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([jobId])
+  @@index([raisedById])
+  @@index([status])
 }
