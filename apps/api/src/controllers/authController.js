@@ -1,27 +1,41 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+const authService = require('../services/authService');
 
-export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
-}
+const register = async (req, res, next) => {
+  try {
+    const { error, value } = registerSchema.validate(req.body);
+    if (error) return res.status(400).json({ message: error.details[0].message });
 
-export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
-}
+    const result = await authService.register(value);
+    return res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
 
-export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
-}
+const login = async (req, res, next) => {
+  try {
+    const { error, value } = loginSchema.validate(req.body);
+    if (error) return res.status(400).json({ message: error.details[0].message });
 
-export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
-}
+    const result = await authService.login(value);
+    return res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const refresh = async (req, res, next) => {
+  try {
+    const { token } = req.body;           // FIX: extract token from body
+    if (!token) {
+      return res.status(400).json({ message: 'Refresh token is required.' });
+    }
+
+    const result = await authService.refreshToken(token);  // FIX: pass token
+    return res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { register, login, refresh };
