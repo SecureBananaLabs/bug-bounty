@@ -1,9 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import express from "express";
 import { createApp } from "../app.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
+import { errorHandler } from "../middleware/errorHandler.js";
 
 async function withServer(callback) {
   const app = createApp();
+  await withAppServer(app, callback);
+}
+
+async function withAppServer(app, callback) {
   const server = app.listen(0);
 
   await new Promise((resolve, reject) => {
@@ -37,5 +44,49 @@ test("Zod validation failures return a 400 response", async () => {
       payload.errors.map((error) => error.path).sort(),
       ["email", "password"]
     );
+  });
+});
+
+test("asyncHandler forwards synchronous route errors to the error handler", async () => {
+  const app = express();
+  app.get(
+    "/throws",
+    asyncHandler(() => {
+      throw new Error("boom");
+    })
+  );
+  app.use(errorHandler);
+
+  await withAppServer(app, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/throws`);
+    const payload = await response.json();
+
+    assert.equal(response.status, 500);
+    assert.deepEqual(payload, {
+      success: false,
+      message: "Unexpected server error"
+    });
+  });
+});
+
+test("asyncHandler forwards rejected route promises to the error handler", async () => {
+  const app = express();
+  app.get(
+    "/rejects",
+    asyncHandler(async () => {
+      throw new Error("boom");
+    })
+  );
+  app.use(errorHandler);
+
+  await withAppServer(app, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/rejects`);
+    const payload = await response.json();
+
+    assert.equal(response.status, 500);
+    assert.deepEqual(payload, {
+      success: false,
+      message: "Unexpected server error"
+    });
   });
 });
