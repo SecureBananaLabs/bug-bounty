@@ -1,0 +1,164 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health",
+    "smoke": true
+  },
+  {
+    "name": "auth-register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "body": {
+      "email": "bench-register@example.com",
+      "password": "benchmark-password",
+      "role": "client"
+    }
+  },
+  {
+    "name": "auth-login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "smoke": true,
+    "body": {
+      "email": "bench-login@example.com",
+      "password": "benchmark-password"
+    }
+  },
+  {
+    "name": "auth-refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh"
+  },
+  {
+    "name": "auth-oauth-callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback"
+  },
+  {
+    "name": "users-list",
+    "method": "GET",
+    "path": "/api/users",
+    "smoke": true
+  },
+  {
+    "name": "users-create",
+    "method": "POST",
+    "path": "/api/users",
+    "body": {
+      "email": "bench-user@example.com",
+      "fullName": "Benchmark User",
+      "role": "client"
+    }
+  },
+  {
+    "name": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs"
+  },
+  {
+    "name": "jobs-create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "smoke": true,
+    "body": {
+      "title": "Build dashboard",
+      "description": "Create a benchmark-friendly dashboard payload.",
+      "budgetMin": 500,
+      "budgetMax": 1500,
+      "categoryId": "cat_engineering",
+      "skills": ["react", "node"]
+    }
+  },
+  {
+    "name": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals"
+  },
+  {
+    "name": "proposals-create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "body": {
+      "coverLetter": "I can deliver this benchmark project.",
+      "bidAmount": 950,
+      "estDuration": "2 weeks",
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark"
+    }
+  },
+  {
+    "name": "payments-create",
+    "method": "POST",
+    "path": "/api/payments",
+    "smoke": true,
+    "body": {
+      "amount": 1500,
+      "currency": "usd"
+    }
+  },
+  {
+    "name": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews"
+  },
+  {
+    "name": "reviews-create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "body": {
+      "rating": 5,
+      "comment": "Delivered on schedule.",
+      "reviewerId": "usr_client",
+      "revieweeId": "usr_freelancer"
+    }
+  },
+  {
+    "name": "messages-list",
+    "method": "GET",
+    "path": "/api/messages"
+  },
+  {
+    "name": "messages-create",
+    "method": "POST",
+    "path": "/api/messages",
+    "body": {
+      "body": "Can you review the latest milestone?",
+      "senderId": "usr_client",
+      "receiverId": "usr_freelancer"
+    }
+  },
+  {
+    "name": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications"
+  },
+  {
+    "name": "notifications-create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "body": {
+      "userId": "usr_client",
+      "title": "Proposal update",
+      "body": "A freelancer responded to your job."
+    }
+  },
+  {
+    "name": "uploads-create",
+    "method": "POST",
+    "path": "/api/uploads"
+  },
+  {
+    "name": "search",
+    "method": "GET",
+    "path": "/api/search?q=dashboard",
+    "smoke": true
+  },
+  {
+    "name": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": true,
+    "smoke": true
+  }
+]

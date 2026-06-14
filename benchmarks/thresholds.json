@@ -1,0 +1,12 @@
+{
+  "default": {
+    "p99Ms": 1000,
+    "maxErrorRatePct": 5
+  },
+  "endpoints": {
+    "admin-metrics": {
+      "p99Ms": 1500,
+      "maxErrorRatePct": 5
+    }
+  }
+}

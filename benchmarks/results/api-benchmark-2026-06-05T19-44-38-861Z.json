@@ -1,0 +1,570 @@
+{
+  "generatedAt": "2026-06-05T19:44:38.861Z",
+  "settings": {
+    "mode": "full",
+    "targetUrl": "http://127.0.0.1:4000",
+    "connections": 2,
+    "pipelining": 1,
+    "amount": 8
+  },
+  "thresholds": {
+    "default": {
+      "p99Ms": 1000,
+      "maxErrorRatePct": 5
+    },
+    "endpoints": {
+      "admin-metrics": {
+        "p99Ms": 1500,
+        "maxErrorRatePct": 5
+      }
+    }
+  },
+  "endpoints": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbMs": 0.25,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 1,
+      "p95Ms": 4,
+      "p99Ms": 4,
+      "ttfbMs": 1.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.63,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbMs": 0.25,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.63,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "users-create",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbMs": 0.25,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "jobs-create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "proposals-create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbMs": 0.25,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "payments-create",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbMs": 0.25,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "reviews-create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "messages-create",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.38,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "notifications-create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "uploads-create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbMs": 0.5,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/search?q=dashboard",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 1,
+      "p95Ms": 4,
+      "p99Ms": 4,
+      "ttfbMs": 1.63,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1000,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    },
+    {
+      "name": "admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 8,
+      "sustainedRps": 8,
+      "peakRps": 8,
+      "p50Ms": 0,
+      "p95Ms": 5,
+      "p99Ms": 5,
+      "ttfbMs": 1.38,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "maxErrorRatePct": 5
+      },
+      "passedThreshold": true
+    }
+  ]
+}
