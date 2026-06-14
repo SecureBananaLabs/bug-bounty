@@ -6,6 +6,8 @@
     "packages/*"
   ],
   "scripts": {
+    "benchmark": "node benchmarks/api-benchmark.mjs",
+    "benchmark:smoke": "BENCHMARK_MODE=smoke node benchmarks/api-benchmark.mjs",
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
