@@ -1,0 +1,14 @@
+{
+  "Health Check": { "maxP99Ms": 100 },
+  "Auth Register": { "maxP99Ms": 500 },
+  "Auth Login": { "maxP99Ms": 300 },
+  "List Users": { "maxP99Ms": 200 },
+  "List Jobs": { "maxP99Ms": 200 },
+  "List Proposals": { "maxP99Ms": 200 },
+  "List Payments": { "maxP99Ms": 200 },
+  "List Reviews": { "maxP99Ms": 200 },
+  "List Messages": { "maxP99Ms": 200 },
+  "List Notifications": { "maxP99Ms": 200 },
+  "Search": { "maxP99Ms": 300 },
+  "Admin Dashboard": { "maxP99Ms": 300 }
+}
