@@ -1,0 +1,32 @@
+name: Smoke Benchmark
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+
+jobs:
+  smoke-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install benchmark dependencies
+        run: cd benchmarks && npm install
+
+      - name: Start API server
+        run: |
+          npm run start -w apps/api &
+          sleep 5
+          curl -sf http://localhost:4000/health || (echo "Server may have failed to start; continuing anyway")
+
+      - name: Run smoke benchmark
+        run: cd benchmarks && node benchmark.js --smoke
