@@ -1,0 +1,34 @@
+    name: Benchmark Smoke
+    on: [push, pull_request]
+    jobs:
+      benchmark:
+        runs-on: ubuntu-latest
+        services:
+          postgres:
+            image: postgres:16
+            env:
+              POSTGRES_DB: app
+              POSTGRES_USER: app
+              POSTGRES_PASSWORD: app
+            ports: ["5432:5432"]
+        steps:
+          - uses: actions/checkout@v4
+          - uses: actions/setup-node@v4
+            with: { node-version: "20" }
+          - run: npm ci
+          - name: Start API (background)
+            run: |
+              # Start app in background
+              node apps/api/src/index.js &
+              sleep 10
+          - name: Run benchmarks
+            if: hashFiles('benchmarks/') != ''
+            run: |
+              cd benchmarks && npm install && npm run benchmark:ci
+            env:
+              BENCHMARK_HOST: http://localhost:4000
+          - uses: actions/upload-artifact@v4
+            if: always()
+            with:
+              name: benchmark-results
+              path: benchmarks/results/
