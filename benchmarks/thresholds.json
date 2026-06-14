@@ -1,0 +1,6 @@
+{
+  "p99_latency_ms": 500,
+  "error_rate_percent": 5,
+  "p50_latency_ms": 100,
+  "p95_latency_ms": 300
+}
