@@ -11,5 +11,12 @@ export async function postProposal(req, res) {
     return fail(res, "Estimated duration is required", 400);
   }
 
-  return ok(res, await createProposal(req.body), 201);
+  return ok(
+    res,
+    await createProposal({
+      ...req.body,
+      estDuration: estDuration.trim()
+    }),
+    201
+  );
 }
