@@ -1,0 +1,22 @@
+{
+  "_description": "Benchmark thresholds for API regression gates. Values in ms or %.",
+  "defaults": {
+    "p99_max_ms": 1000,
+    "max_error_pct": 5
+  },
+  "endpoints": {
+    "/api/auth/register": { "p99_max_ms": 2000 },
+    "/api/auth/login": { "p99_max_ms": 1500 },
+    "/api/auth/refresh": { "p99_max_ms": 1000 },
+    "/api/admin/metrics": { "p99_max_ms": 500 },
+    "/api/jobs": { "p99_max_ms": 800 },
+    "/api/messages": { "p99_max_ms": 800 },
+    "/api/notifications": { "p99_max_ms": 800 },
+    "/api/payment": { "p99_max_ms": 3000 },
+    "/api/proposals": { "p99_max_ms": 800 },
+    "/api/reviews": { "p99_max_ms": 800 },
+    "/api/search": { "p99_max_ms": 1000 },
+    "/api/users": { "p99_max_ms": 800 },
+    "/api/upload": { "p99_max_ms": 5000 }
+  }
+}
