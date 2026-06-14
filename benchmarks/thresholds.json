@@ -1,0 +1,20 @@
+{
+  "thresholds": {
+    "http_req_duration": {
+      "p50_ms": 500,
+      "p95_ms": 2000,
+      "p99_ms": 5000,
+      "warn_if_exceeded_pct": 5
+    },
+    "http_req_failed": {
+      "max_error_rate_pct": 5
+    },
+    "endpoints": {
+      "health": { "p99_ms": 200, "p95_ms": 100 },
+      "auth_login": { "p99_ms": 1000, "p95_ms": 500 },
+      "auth_register": { "p99_ms": 1000, "p95_ms": 500 },
+      "jobs_list": { "p99_ms": 1500, "p95_ms": 800 },
+      "admin_metrics": { "p99_ms": 1000, "p95_ms": 500 }
+    }
+  }
+}
