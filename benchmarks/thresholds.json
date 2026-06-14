@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "defaults": {
+    "maxP99Ms": 750,
+    "maxTtfbP95Ms": 500,
+    "maxErrorRate": 0.02,
+    "minSustainedRps": 1
+  },
+  "endpoints": {
+    "uploads.create": {
+      "maxP99Ms": 1200,
+      "maxTtfbP95Ms": 750
+    },
+    "auth.register": {
+      "maxP99Ms": 1000
+    },
+    "jobs.create": {
+      "maxP99Ms": 1000
+    },
+    "proposals.create": {
+      "maxP99Ms": 1000
+    }
+  }
+}
