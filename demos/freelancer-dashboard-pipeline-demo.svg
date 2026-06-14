@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Freelancer dashboard proposal and earnings demo">
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <text x="72" y="82" fill="#f2f5ff" font-family="Inter, Arial, sans-serif" font-size="38" font-weight="700">Dashboard (Freelancer)</text>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="72" y="126" width="336" height="142" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="96" y="168" fill="#f2f5ff" font-size="23" font-weight="700">Open proposals</text>
+    <text x="96" y="218" fill="#f2f5ff" font-size="48" font-weight="700">6</text>
+    <text x="96" y="246" fill="#b9c2df" font-size="22">3 need follow-up today</text>
+
+    <rect x="472" y="126" width="336" height="142" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="496" y="168" fill="#f2f5ff" font-size="23" font-weight="700">Accepted jobs</text>
+    <text x="496" y="218" fill="#f2f5ff" font-size="48" font-weight="700">2</text>
+    <text x="496" y="246" fill="#b9c2df" font-size="22">$2.4k in active work</text>
+
+    <rect x="872" y="126" width="336" height="142" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="896" y="168" fill="#f2f5ff" font-size="23" font-weight="700">Earnings</text>
+    <text x="896" y="218" fill="#f2f5ff" font-size="48" font-weight="700">$5.8k</text>
+    <text x="896" y="246" fill="#b9c2df" font-size="22">$750 pending payout</text>
+
+    <rect x="72" y="316" width="1136" height="184" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="96" y="360" fill="#f2f5ff" font-size="26" font-weight="700">Proposal pipeline</text>
+    <line x1="96" y1="386" x2="1184" y2="386" stroke="#2a3765"/>
+    <text x="96" y="426" fill="#f2f5ff" font-size="23" font-weight="700">AI support widget</text>
+    <text x="380" y="426" fill="#b9c2df" font-size="22">Interview stage - $1,500 - Send architecture notes</text>
+    <line x1="96" y1="452" x2="1184" y2="452" stroke="#2a3765"/>
+    <text x="96" y="492" fill="#f2f5ff" font-size="23" font-weight="700">Landing page refresh</text>
+    <text x="380" y="492" fill="#b9c2df" font-size="22">Client viewed - $900 - Follow up in 4h</text>
+
+    <rect x="72" y="548" width="536" height="116" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="96" y="590" fill="#f2f5ff" font-size="25" font-weight="700">Accepted jobs</text>
+    <text x="96" y="628" fill="#b9c2df" font-size="22">Node API migration - Milestone 2 - Due Friday</text>
+
+    <rect x="672" y="548" width="536" height="116" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="696" y="590" fill="#f2f5ff" font-size="25" font-weight="700">Earnings queue</text>
+    <text x="696" y="628" fill="#b9c2df" font-size="22">Ready to withdraw - Available now - $310</text>
+  </g>
+</svg>
