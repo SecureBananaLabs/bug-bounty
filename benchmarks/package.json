@@ -1,0 +1,8 @@
+{
+  "name": "benchmark",
+  "private": true,
+  "dependencies": {
+    "autocannon": "^8.0.0",
+    "axios": "^1.16.1"
+  }
+}

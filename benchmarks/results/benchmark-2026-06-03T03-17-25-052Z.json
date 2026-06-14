@@ -1,0 +1,30 @@
+[
+  {
+    "endpoint": "/apiGET /metrics",
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "endpoint": "/apiPOST /register",
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "endpoint": "/apiPOST /login",
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "endpoint": "/apiGET /oauth/:provider/callback",
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "endpoint": "/apiPOST /refresh",
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "endpoint": "/apiGET /",
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "endpoint": "/apiPOST /",
+    "error": "Unexpected end of JSON input"
+  }
+]

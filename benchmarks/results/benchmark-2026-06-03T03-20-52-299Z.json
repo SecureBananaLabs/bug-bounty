@@ -1,0 +1,149 @@
+[
+  {
+    "name": "GET /health",
+    "method": "GET",
+    "path": "/health",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/admin/metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/auth/register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/auth/login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/auth/oauth/:provider/callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/:provider/callback",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/auth/refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/jobs",
+    "method": "GET",
+    "path": "/api/jobs",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/jobs",
+    "method": "POST",
+    "path": "/api/jobs",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/messages",
+    "method": "GET",
+    "path": "/api/messages",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/messages",
+    "method": "POST",
+    "path": "/api/messages",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/notifications",
+    "method": "GET",
+    "path": "/api/notifications",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/notifications",
+    "method": "POST",
+    "path": "/api/notifications",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/payments",
+    "method": "POST",
+    "path": "/api/payments",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/proposals",
+    "method": "GET",
+    "path": "/api/proposals",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/proposals",
+    "method": "POST",
+    "path": "/api/proposals",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/reviews",
+    "method": "GET",
+    "path": "/api/reviews",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/reviews",
+    "method": "POST",
+    "path": "/api/reviews",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/search",
+    "method": "GET",
+    "path": "/api/search",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/uploads",
+    "method": "POST",
+    "path": "/api/uploads",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "GET /api/users",
+    "method": "GET",
+    "path": "/api/users",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  },
+  {
+    "name": "POST /api/users",
+    "method": "POST",
+    "path": "/api/users",
+    "result": null,
+    "error": "Unexpected end of JSON input"
+  }
+]
