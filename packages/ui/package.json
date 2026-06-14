@@ -1,5 +1,20 @@
 {
   "name": "@freelanceflow/ui",
   "private": true,
-  "main": "src/index.ts"
+  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./Button": {
+      "types": "./src/Button.tsx",
+      "default": "./src/Button.tsx"
+    },
+    "./Card": {
+      "types": "./src/Card.tsx",
+      "default": "./src/Card.tsx"
+    }
+  },
+  "files": ["src"]
 }
