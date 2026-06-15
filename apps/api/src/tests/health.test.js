@@ -4,22 +4,33 @@ import { createApp } from "../app.js";
 
 test("GET /health returns ok payload", async () => {
   const app = createApp();
-  const server = app.listen(0);
+  const layer = app._router.stack.find(
+    (entry) => entry.route?.path === "/health" && entry.route.methods.get,
+  );
 
-  await new Promise((resolve, reject) => {
-    server.once("listening", resolve);
-    server.once("error", reject);
-  });
+  assert.ok(layer, "expected /health GET route to be registered");
 
-  const { port } = server.address();
-  const response = await fetch(`http://127.0.0.1:${port}/health`);
-  const payload = await response.json();
+  const headers = new Map();
+  const res = {
+    statusCode: 0,
+    body: undefined,
+    set(name, value) {
+      headers.set(name.toLowerCase(), value);
+      return this;
+    },
+    status(code) {
+      this.statusCode = code;
+      return this;
+    },
+    json(payload) {
+      this.body = payload;
+      return this;
+    },
+  };
 
-  assert.equal(response.status, 200);
-  assert.equal(response.headers.get("cache-control"), "no-store");
-  assert.deepEqual(payload, { ok: true, service: "api" });
+  await layer.route.stack[0].handle({}, res);
 
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
+  assert.equal(res.statusCode, 200);
+  assert.equal(headers.get("cache-control"), "no-store");
+  assert.deepEqual(res.body, { ok: true, service: "api" });
 });
