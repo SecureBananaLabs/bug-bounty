@@ -14,7 +14,12 @@ export async function login(req, res) {
   return ok(res, result);
 }
 
+const SUPPORTED_PROVIDERS = ["google", "github"];
+
 export async function oauthCallback(req, res) {
+  if (!SUPPORTED_PROVIDERS.includes(req.params.provider)) {
+    return fail(res, `Unsupported OAuth provider: ${req.params.provider}`, 400);
+  }
   return ok(res, {
     provider: req.params.provider,
     status: "callback-received"
