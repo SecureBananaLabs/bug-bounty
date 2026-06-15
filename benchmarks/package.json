@@ -1,0 +1,1 @@
+{"name":"bench","scripts":{"benchmark":"node run-benchmarks.js"},"dependencies":{"autocannon":"^7.15.0"}}
