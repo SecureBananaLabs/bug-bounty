@@ -18,6 +18,7 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
+export async function refreshToken(existingToken) {
+  if (!existingToken) throw new Error("Refresh token required");
   return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
 }
