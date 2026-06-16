@@ -20,8 +20,21 @@ export const jobs = [
 ];
 
 export const freelancers = [
-  { username: "maya-dev", skills: ["Next.js", "TypeScript"], rate: "$65/hr" },
-  { username: "jordan-ux", skills: ["Figma", "UX Research"], rate: "$52/hr" }
+  { 
+    username: "maya-dev", 
+    name: "Maya Chen",
+    skills: ["Next.js", "TypeScript", "Tailwind CSS"], 
+    rate: "$65/hr",
+    bio: "Full-stack developer specializing in modern React applications and scalable cloud architecture."
+  },
+  { 
+    username: "jordan-ux", 
+    name: "Jordan Smith",
+    skills: ["Figma", "UX Research", "Design Systems"], 
+    rate: "$52/hr",
+    bio: "User experience designer focused on creating intuitive and accessible digital products for enterprises."
+  }
 ];
 
 export const getJobById = (id: string) => jobs.find(j => j.id === id) || null;
+export const getFreelancerByUsername = (username: string) => freelancers.find(f => f.username === username) || null;
