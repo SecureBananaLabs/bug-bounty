@@ -1,9 +1,20 @@
+import { jobs } from "../../../lib/mock";
+
 export default function JobDetailPage({ params }: { params: { id: string } }) {
+  const job = jobs.find((entry) => entry.id === params.id);
+
   return (
     <section className="card">
       <h2>Job Detail</h2>
-      <p>Viewing details for <strong>{params.id}</strong>.</p>
-      <p>Responsibilities, milestones, and proposals would be shown here.</p>
+      {job ? (
+        <div style={{ display: "grid", gap: "0.5rem" }}>
+          <p>{job.title}</p>
+          <p>{job.budget}</p>
+          <p>Responsibilities, milestones, and proposals would be shown here.</p>
+        </div>
+      ) : (
+        <p>Job not found</p>
+      )}
     </section>
   );
 }
