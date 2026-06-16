@@ -1,0 +1,2 @@
+import { z } from "zod";
+export const registrationSchema = z.object({username: z.string().min(3).max(50),email: z.string().email(),password: z.string().min(8),role: z.enum(["user","freelancer"]).default("user"),fullName: z.string().min(1).max(100)}).refine((d)=>d.role!=="admin",{message:"Admin role cannot be self-assigned",path:["role"]});
