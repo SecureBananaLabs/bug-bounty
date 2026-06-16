@@ -1,19 +1,17 @@
 {
   "name": "@freelanceflow/api",
+  "version": "0.0.1",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "node src/server.js",
-    "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "node --test src/tests/index.test.ts"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "express-rate-limit": "^7.4.0",
-    "helmet": "^7.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^2.1.1",
-    "zod": "^3.23.8"
+    "@freelanceflow/common": "workspace:*",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.3.1",
+    "typescript": "^5.1.3"
   }
 }
