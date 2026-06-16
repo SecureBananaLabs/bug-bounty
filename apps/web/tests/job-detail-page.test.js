@@ -10,7 +10,7 @@ test("job detail page renders mock data and fallback", async () => {
 
   assert.match(source, /jobs\.find/);
   assert.match(source, /Job not found/);
-  assert.match(source, /Responsibilities, milestones, and proposals would be shown here\./);
+  assert.match(source, /job\.description/);
   assert.match(source, /job\.title/);
   assert.match(source, /job\.budget/);
 });

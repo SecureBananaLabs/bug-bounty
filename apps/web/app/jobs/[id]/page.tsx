@@ -10,7 +10,7 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
         <div style={{ display: "grid", gap: "0.5rem" }}>
           <p>{job.title}</p>
           <p>{job.budget}</p>
-          <p>Responsibilities, milestones, and proposals would be shown here.</p>
+          <p>{job.description}</p>
         </div>
       ) : (
         <p>Job not found</p>
