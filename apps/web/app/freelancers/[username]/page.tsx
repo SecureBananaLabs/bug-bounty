@@ -1,5 +1,6 @@
 import { freelancers } from "@/lib/mock";
 import { notFound } from "next/navigation";
+import { findFreelancerByUsername } from "./lookup";
 
 /**
  * Freelancer profile page.
@@ -13,7 +14,7 @@ export default function FreelancerProfilePage({
 }: {
   params: { username: string };
 }) {
-  const freelancer = freelancers.find((f) => f.username === params.username);
+  const freelancer = findFreelancerByUsername(freelancers, params.username);
 
   if (!freelancer) {
     notFound();
