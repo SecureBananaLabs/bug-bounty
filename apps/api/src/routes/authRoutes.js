@@ -1,9 +1,16 @@
 import { Router } from "express";
-import { login, oauthCallback, refresh, register } from "../controllers/authController.js";
+import { register, login } from "../controllers/authController.js";
 
-export const authRoutes = Router();
+const router = Router();
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
-authRoutes.get("/oauth/:provider/callback", oauthCallback);
-authRoutes.post("/refresh", refresh);
+// Prevent admin role self-assignment during registration
+router.post("/register", (req, res, next) => {
+  if (req.body.role === "admin") {
+    return res.status(400).json({ error: "Admin role cannot be self-assigned" });
+  }
+  next();
+}, register);
+
+router.post("/login", login);
+
+export { router as authRoutes };
