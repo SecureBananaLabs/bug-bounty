@@ -1,7 +1,9 @@
+import { snapshotRecords } from "./snapshot.js";
+
 const proposals = [];
 
 export async function listProposals() {
-  return proposals;
+  return snapshotRecords(proposals);
 }
 
 export async function createProposal(payload) {
