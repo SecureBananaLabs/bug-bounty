@@ -28,3 +28,25 @@ test("upload endpoint rejects requests without a file", async () => {
     assert.deepEqual(payload, { success: false, message: "File is required" });
   });
 });
+
+test("upload endpoint accepts requests with a file", async () => {
+  await withServer(async (baseUrl) => {
+    const form = new FormData();
+    form.set("file", new Blob(["hello"], { type: "text/plain" }), "hello.txt");
+
+    const response = await fetch(`${baseUrl}/api/uploads`, {
+      method: "POST",
+      body: form
+    });
+    const payload = await response.json();
+
+    assert.equal(response.status, 201);
+    assert.deepEqual(payload, {
+      success: true,
+      data: {
+        filename: "hello.txt",
+        status: "uploaded"
+      }
+    });
+  });
+});
