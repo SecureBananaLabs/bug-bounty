@@ -1,7 +1,18 @@
-export const env = {
-  nodeEnv: process.env.NODE_ENV ?? "development",
-  port: Number(process.env.PORT ?? 4000),
-  jwtSecret: process.env.JWT_SECRET ?? "development-secret",
-  stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
-  databaseUrl: process.env.DATABASE_URL ?? ""
-};
+export function createEnv(source = process.env) {
+  const nodeEnv = source.NODE_ENV ?? "development";
+  const jwtSecret = source.JWT_SECRET ?? "";
+
+  if (nodeEnv === "production" && !jwtSecret) {
+    throw new Error("JWT_SECRET is required in production");
+  }
+
+  return {
+    nodeEnv,
+    port: Number(source.PORT ?? 4000),
+    jwtSecret: jwtSecret || "development-secret",
+    stripeSecretKey: source.STRIPE_SECRET_KEY ?? "",
+    databaseUrl: source.DATABASE_URL ?? ""
+  };
+}
+
+export const env = createEnv();
