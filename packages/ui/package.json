@@ -2,12 +2,14 @@
   "name": "@freelanceflow/ui",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "default": "./dist/index.js"
     }
   },
@@ -16,7 +18,9 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test:import": "npm run build && node -e \"import('@freelanceflow/ui').then((m) => { if (!m.Button || !m.Card) throw new Error('missing exports'); console.log(Object.keys(m).sort().join(',')); })\""
+    "test:import": "npm run build && node -e \"import('@freelanceflow/ui').then((m) => { if (!m.Button || !m.Card) throw new Error('missing ESM exports'); console.log(Object.keys(m).sort().join(',')); })\"",
+    "test:require": "node -e \"const m = require('@freelanceflow/ui'); if (!m.Button || !m.Card) throw new Error('missing CJS exports'); console.log(Object.keys(m).sort().join(','));\"",
+    "test:entrypoints": "npm run test:import && npm run test:require"
   },
   "peerDependencies": {
     "react": ">=18"
