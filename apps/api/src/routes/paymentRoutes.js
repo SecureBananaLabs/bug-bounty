@@ -3,4 +3,6 @@ import { createPayment } from "../controllers/paymentController.js";
 
 export const paymentRoutes = Router();
 
-paymentRoutes.post("/", createPayment);
+import { authMiddleware } from "../middleware/auth.js";
+
+paymentRoutes.post("/", authMiddleware, createPayment);
