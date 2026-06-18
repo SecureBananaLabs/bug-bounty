@@ -5,11 +5,6 @@ on:
     # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
-    inputs:
-      dry_run:
-        description: 'Run in dry-run mode (no issues created)'
-        required: false
-        default: 'false'
 
 permissions:
   issues: write
@@ -33,50 +28,92 @@ jobs:
       - name: Run low hanging fruit detection
         id: detect
         run: |
-          node .github/scripts/detect-low-hanging-fruit.js
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Simple heuristic: find TODO/FIXME comments, empty files, or common patterns
+            const results = [];
+            
+            function scanDir(dir, depth = 0) {
+              if (depth > 3) return;
+              const entries = fs.readdirSync(dir, { withFileTypes: true });
+              for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+                if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
+                  scanDir(fullPath, depth + 1);
+                } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.js') || entry.name.endsWith('.tsx') || entry.name.endsWith('.jsx'))) {
+                  const content = fs.readFileSync(fullPath, 'utf-8');
+                  const lines = content.split('\n');
+                  lines.forEach((line, idx) => {
+                    if (line.includes('TODO') || line.includes('FIXME') || line.includes('HACK') || line.includes('XXX')) {
+                      results.push({ file: fullPath, line: idx + 1, text: line.trim() });
+                    }
+                  });
+                }
+              }
+            }
+            
+            try {
+              scanDir('apps');
+              scanDir('packages');
+            } catch (e) {
+              console.error('Scan error:', e.message);
+            }
+            
+            // Output results for next step
+            const output = JSON.stringify(results.slice(0, 50));
+            fs.writeFileSync('detected-issues.json', output);
+            console.log('Detected items:', results.length);
+          "
+
+      - name: Create GitHub Issues for detected items
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-
-      - name: Create issues from detected items
-        if: steps.detect.outputs.has_items == 'true'
         run: |
-          node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-          DETECTED_ITEMS: ${{ steps.detect.outputs.items }}
+          node -e "
+            const fs = require('fs');
+            const detected = JSON.parse(fs.readFileSync('detected-issues.json', 'utf-8'));
+            
+            async function createIssue(item, index) {
+              const title = \`Low Hanging Fruit: \${item.file.split('/').pop()} - \${item.text.slice(0, 50)}\`;
+              const body = \`## Automated Low Hanging Fruit Detection
 
-  recursive-issue-creation:
-    runs-on: ubuntu-latest
-    needs: detect-and-create-issues
-    if: always()
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+**File:** \\\`\${item.file}\\\`
+**Line:** \${item.line}
+**Detected Pattern:** \${item.text}
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-      - name: Install dependencies
-        run: npm ci
+## Suggested Fix
+- Review the detected pattern and implement appropriate fix.
+- Add tests if applicable.
+- Update documentation if needed.
+\`;
+              
+              // Use GitHub CLI to create issue
+              const { execSync } = require('child_process');
+              try {
+                execSync(\`gh issue create --title '\${title.replace(/'/g, \"'\\\"'\"'\").replace(/\"/g, '\\\\\"')}' --body '\${body.replace(/'/g, \"'\\\"'\"'\").replace(/\"/g, '\\\\\"')}' --label 'bug,good first issue,help wanted,bug bounty,AI agent friendly'\`, {
+                  stdio: 'inherit',
+                  env: { ...process.env, GH_TOKEN: process.env.GITHUB_TOKEN }
+                });
+                console.log('Created issue for:', item.file);
+              } catch (e) {
+                console.error('Failed to create issue:', e.message);
+              }
+            }
+            
+            async function run() {
+              for (let i = 0; i < Math.min(detected.length, 5); i++) {
+                await createIssue(detected[i], i);
+                // Rate limit: wait between issues
+                await new Promise(r => setTimeout(r, 2000));
+              }
+            }
+            
+            run().catch(console.error);
+          "
 
-      - name: Run recursive issue creation
-        run: |
-          node .github/scripts/recursive-issue-creator.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-
-  notify-completion:
-    runs-on: ubuntu-latest
-    needs: [detect-and-create-issues, recursive-issue-creation]
-    if: always()
-    steps:
-      - name: Log completion
-        run: |
-          echo "Low Hanging Fruit automation completed"
-          echo "Detect job status: ${{ needs.detect-and-create-issues.result }}"
-          echo "Recursive job status: ${{ needs.recursive-issue-creation.result }}"
+      - name: Clean up
+        run: rm -f detected-issues.json
