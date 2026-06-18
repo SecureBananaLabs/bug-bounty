@@ -2,8 +2,14 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
+    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no issues created)'
+        required: false
+        default: 'false'
 
 permissions:
   issues: write
@@ -22,7 +28,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run low hanging fruit detection
         id: detect
@@ -30,7 +36,7 @@ jobs:
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
 
       - name: Create issues from detected items
         if: steps.detect.outputs.has_items == 'true'
@@ -38,11 +44,39 @@ jobs:
           node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          DETECTED_ITEMS: ${{ steps.detect.outputs.items }}
 
-      - name: Recursively schedule next run
-        if: steps.detect.outputs.has_items == 'true'
+  recursive-issue-creation:
+    runs-on: ubuntu-latest
+    needs: detect-and-create-issues
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run recursive issue creation
         run: |
-          echo "Scheduling next recursive check..."
-          # The cron schedule handles automatic recursion
-          echo "Next run scheduled via cron"
+          node .github/scripts/recursive-issue-creator.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+
+  notify-completion:
+    runs-on: ubuntu-latest
+    needs: [detect-and-create-issues, recursive-issue-creation]
+    if: always()
+    steps:
+      - name: Log completion
+        run: |
+          echo "Low Hanging Fruit automation completed"
+          echo "Detect job status: ${{ needs.detect-and-create-issues.result }}"
+          echo "Recursive job status: ${{ needs.recursive-issue-creation.result }}"
