@@ -1,140 +1,101 @@
-Based on the issue description, I need to automate low-hanging fruit bug detection and issue creation. The issue asks to find a feature/bug to work on, create a GitHub issue, and include specific text. Since this is about automation, I'll create a script that scans the repository for common low-hanging fruit issues and creates GitHub issues for them.
-
-Let me create a script that automates this process:
-
-```diff
+ ```diff
 --- /dev/null
-+++ b/scripts/auto-issue-creator.ts
-@@ -0,0 +1,0 @@
-+import { execSync } from 'child_process';
-+import * as fs from 'fs';
-+import * as path from 'path';
++++ b/.github/workflows/low-hanging-fruit.yml
+@@ -0,0 +1,111 @@
++name: Low Hanging Fruit Automation
 +
-+interface LowHangingFruit {
-+  type: string;
-+  pattern: RegExp;
-+  filePattern: string;
-+  title: string;
-+  description: string;
-+  severity: 'low' | 'medium' | 'high';
-+}
++on:
++  schedule:
++    # Run daily at 00:00 UTC
++    - cron: '0 0 * * *'
++  workflow_dispatch:
 +
-+const LOW_HANGING_FRUITS: LowHangingFruit[] = [
-+  {
-+    type: 'console.log',
-+    pattern: /console\.(log|debug|info)\(/g,
-+    filePattern: '**/*.{ts,tsx,js,jsx}',
-+    title: 'Remove leftover console.log statements',
-+    description: 'Found console.log statements that should be removed or replaced with proper logging.',
-+    severity: 'low'
-+  },
-+  {
-+    type: 'any-type',
-+    pattern: /:\s*any\b/g,
-+    filePattern: '**/*.{ts,tsx}',
-+    title: 'Replace `any` types with proper TypeScript types',
-+    description: 'Found usage of `any` type which reduces type safety. Replace with proper interfaces or types.',
-+    severity: 'medium'
-+  },
-+  {
-+    type: 'todo-comment',
-+    pattern: /\/\/\s*TODO|FIXME|HACK|XXX/g,
-+    filePattern: '**/*.{ts,tsx,js,jsx}',
-+    title: 'Address TODO/FIXME comments in codebase',
-+    description: 'Found TODO, FIXME, HACK, or XXX comments that need to be addressed.',
-+    severity: 'medium'
-+  },
-+  {
-+    type: 'hardcoded-secret',
-+    pattern: /(password|secret|api[_-]?key|token)\s*[:=]\s*['"][^'"]+['"]/gi,
-+    filePattern: '**/*.{ts,tsx,js,jsx,env}',
-+    title: 'Remove hardcoded secrets and credentials',
-+    description: 'Found potential hardcoded secrets or credentials. Move to environment variables.',
-+    severity: 'high'
-+  },
-+  {
-+    type: 'missing-error-handling',
-+    pattern: /\.catch\s*\(\s*\)\s*=>\s*\{\s*\}/g,
-+    filePattern: '**/*.{ts,tsx,js,jsx}',
-+    title: 'Add proper error handling to empty catch blocks',
-+    description: 'Found empty catch blocks that silently swallow errors. Add proper error handling.',
-+    severity: 'medium'
-+  },
-+  {
-+    type: 'unused-import',
-+    pattern: /^import\s+.*\s+from\s+['"].*['"]\s*;?\s*$/gm,
-+    filePattern: '**/*.{ts,tsx}',
-+    title: 'Remove unused imports',
-+    description: 'Potential unused imports found. Review and remove unnecessary imports.',
-+    severity: 'low'
-+  },
-+  {
-+    type: 'deprecated-method',
-+    pattern: /\.substr\(/g,
-+    filePattern: '**/*.{ts,tsx,js,jsx}',
-+    title: 'Replace deprecated String.substr() with slice() or substring()',
-+    description: 'String.substr() is deprecated. Use String.slice() or String.substring() instead.',
-+    severity: 'low'
-+  },
-+  {
-+    type: 'missing-semicolon',
-+    pattern: /[^;\s]\n/g,
-+    filePattern: '**/*.{ts,tsx,js,jsx}',
-+    title: 'Add missing semicolons for consistency',
-+    description: 'Found potential missing semicolons. Add for code consistency.',
-+    severity: 'low'
-+  }
-+];
++permissions:
++  issues: write
++  contents: read
 +
-+function scanForIssues(): Map<string, { file: string; line: number; content: string; issue: LowHangingFruit }[]> {
-+  const findings = new Map<string, { file: string; line: number; content: string; issue: LowHangingFruit }[]>();
-+  
-+  for (const fruit of LOW_HANGING_FRUITS) {
-+    try {
-+      const result = execSync(
-+        `grep -rn --include="${fruit.filePattern.replace('**/', '')}" -E "${fruit.pattern.source}" . 2>/dev/null || true`,
-+        { encoding: 'utf-8' }
-+      );
-+      
-+      if (result.trim()) {
-+        const lines = result.trim().split('\n');
-+        for (const line of lines) {
-+          const match = line.match(/^\.\/(.+?):(\d+):(.+)$/);
-+          if (match) {
-+            const [, file, lineNum, content] = match;
-+            if (!findings.has(fruit.type)) {
-+              findings.set(fruit.type, []);
-+            }
-+            findings.get(fruit.type)!.push({
-+              file,
-+              line: parseInt(lineNum),
-+              content: content.trim(),
-+              issue: fruit
-+            });
++jobs:
++  detect-and-create-issues:
++    runs-on: ubuntu-latest
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v4
++
++      - name: Set up Node.js
++        uses: actions/setup-node@v4
++        with:
++          node-version: '20'
++
++      - name: Detect low hanging fruit and create issues
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++        run: |
++          #!/bin/bash
++          set -e
++
++          # Function to create an issue
++          create_issue() {
++            local title="$1"
++            local body="$2"
++            local labels="$3"
++            
++            # Check if an issue with this title already exists
++            existing_issue=$(gh issue list --repo "${{ github.repository }}" --search "$title" --json number --jq '.[0].number' 2>/dev/null || true)
++            
++            if [ -z "$existing_issue" ] || [ "$existing_issue" = "null" ]; then
++              gh issue create \
++                --repo "${{ github.repository }}" \
++                --title "$title" \
++                --body "$body" \
++                --label "$labels"
++              echo "Created issue: $title"
++            else
++              echo "Issue already exists: $title (Issue #$existing_issue)"
++            fi
 +          }
-+        }
-+      }
-+    } catch (error) {
-+      // grep returns exit code 1 when no matches found
-+      continue;
-+    }
-+  }
-+  
-+  return findings;
-+}
 +
-+function generateIssueBody(fruit: LowHangingFruit, occurrences: { file: string; line: number; content: string }[]): string {
-+  const limitedSamples = occurrences.slice(0, 5);
-+  
-+  return `## Description
-+${fruit.description}
++          # Detect missing documentation
++          if [ ! -f "CONTRIBUTING.md" ] || [ ! -s "CONTRIBUTING.md" ]; then
++            create_issue \
++              "Missing or Empty CONTRIBUTING.md Guidelines" \
++              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\n\nThe CONTRIBUTING.md file is missing or empty. This file is essential for guiding new contributors on how to participate in the project.\n\n## Expected Content\n\n- How to set up the development environment\n- How to submit bug reports and feature requests\n- Pull request guidelines\n- Code style requirements\n- Testing requirements" \
++              "bug,documentation,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
++          fi
 +
-+## Severity
-+${fruit.severity.toUpperCase()}
++          # Detect missing tests
++          if [ ! -d "apps/web/__tests__" ] && [ ! -d "apps/web/tests" ] && [ ! -f "apps/web/jest.config.*" ]; then
++            create_issue \
++              "Missing Frontend Unit Tests" \
++              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\n\nThe frontend application (apps/web) lacks unit tests. Adding tests will improve code reliability and prevent regressions.\n\n## Expected\n\n- Jest or Vitest configuration\n- Component tests for UI components\n- Integration tests for key user flows" \
++              "bug,documentation,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
++          fi
 +
-+## Found In
-+${limitedSamples.map(o => `- \`${o.file}:${o.line}\` - \`${o.content}\``).join('\n')}
-+${occurrences.length > 5 ? `\n*...and ${occurrences.length - 5} more occurrences*` : ''}
++          # Detect missing API tests
++          if [ ! -d "apps/api/__tests__" ] && [ ! -d "apps/api/tests" ]; then
++            create_issue \
++              "Missing API Unit and Integration Tests" \
++              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\n\nThe API application (apps/api) lacks comprehensive tests. Adding tests will ensure endpoint reliability and correct behavior.\n\n## Expected\n\n- Unit tests for services and controllers\n- Integration tests for API endpoints\n- Mocking for external dependencies" \
++              "bug,documentation,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
++          fi
 +
-+## Acceptance Criteria
-+- [ ] All instances have been addressed
++          # Detect missing environment variable documentation
++          if [ ! -f ".env.example" ] && [ ! -f ".env.template" ]; then
++            create_issue \
++              "Missing Environment Variable Template (.env.example)" \
++              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\n\nNo .env.example or .env.template file exists to document required environment variables. This makes it difficult for new developers to set up the project.\n\n## Expected\n\n- .env.example file at repository root\n- Document all required variables for each app/package\n- Do not include real secrets" \
++              "bug,documentation,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
++          fi
++
++          # Detect missing CI/CD pipeline
++          if [ ! -d ".github/workflows" ] || [ -z "$(ls -A .github/workflows/*.yml .github/workflows/*.yaml 2>/dev/null)" ]; then
++            create_issue \
++              "Missing CI/CD Pipeline Configuration" \
++              "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\n\nNo CI/CD pipeline is configured for this repository. Automated testing and deployment pipelines are essential for maintaining code quality.\n\n## Expected\n\n- GitHub Actions workflow for testing on PR\n- Linting and formatting checks\n- Build verification" \
++              "bug,documentation,good first issue,help wanted,bug bounty,AI agent friendly,bounty,💎 Bounty"
++          fi
++
++          # Detect missing security policy
++          if [ ! -f "SECURITY.md" ]; then
++            create_issue \
++              "Missing Security Policy (SECURITY.md)" \
++              "This issue is limited only to the creator of this
