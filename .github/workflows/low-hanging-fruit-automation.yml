@@ -2,16 +2,15 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
-
-permissions:
-  issues: write
 
 jobs:
   detect-and-create-issues:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,23 +25,22 @@ jobs:
 
       - name: Run low hanging fruit detection
         id: detect
-        run: node .github/scripts/detect-low-hanging-fruit.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Create issues for detected items
-        if: steps.detect.outputs.has_issues == 'true'
-        run: node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Recursively process new issues
-        if: steps.detect.outputs.has_issues == 'true'
         run: |
-          echo "Triggering recursive analysis for newly created issues..."
-          node .github/scripts/recursive-issue-processor.js
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Create issues from detected items
+        if: success()
+        run: |
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+
+      - name: Report status
+        if: failure()
+        run: |
+          echo "Low hanging fruit automation failed. Check logs for details."
+          exit 1
