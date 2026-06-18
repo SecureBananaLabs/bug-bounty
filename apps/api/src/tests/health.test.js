@@ -22,3 +22,31 @@ test("GET /health returns ok payload", async () => {
     server.close((error) => (error ? reject(error) : resolve()));
   });
 });
+
+test("JSON request bodies larger than 1mb are rejected", async () => {
+  const app = createApp();
+  const server = app.listen(0);
+
+  await new Promise((resolve, reject) => {
+    server.once("listening", resolve);
+    server.once("error", reject);
+  });
+
+  const { port } = server.address();
+  const response = await fetch(`http://127.0.0.1:${port}/api/messages`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ content: "x".repeat(1024 * 1024) })
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 413);
+  assert.deepEqual(payload, {
+    success: false,
+    message: "JSON request body exceeds the 1mb limit"
+  });
+
+  await new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()));
+  });
+});
