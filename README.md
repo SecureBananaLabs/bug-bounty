@@ -86,3 +86,18 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+Use this template for local development:
+
+```bash
+# apps/api/.env
+NODE_ENV=development
+PORT=4000
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/freelanceflow"
+JWT_SECRET="replace-with-a-local-development-secret"
+STRIPE_SECRET_KEY="sk_test_replace_me"
+```
+
+`DATABASE_URL` is consumed by Prisma in `packages/db`, while the API reads
+`PORT`, `JWT_SECRET`, `STRIPE_SECRET_KEY`, and `NODE_ENV` from `apps/api/.env`.
+Use production-specific values in deployed environments.
