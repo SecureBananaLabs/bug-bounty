@@ -2,46 +2,35 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
-
-permissions:
-  issues: write
-  contents: read
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch:  # Allow manual triggering
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/scripts/**'
+      - '.github/workflows/low-hanging-fruit.yml'
 
 jobs:
   detect-and-create-issues:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Run low hanging fruit detector
+      - name: Run low hanging fruit detection
         run: node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Create issues for detected items
-        run: node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Commit leaderboard updates
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add leaderboard.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update leaderboard from low hanging fruit automation"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
