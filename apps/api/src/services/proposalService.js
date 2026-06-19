@@ -1,8 +1,9 @@
 const proposals = [];
 
 export async function listProposals() {
-  return proposals;
+  return [...proposals];
 }
+
 
 export async function createProposal(payload) {
   const proposal = { id: `prp_${Date.now()}`, ...payload };
