@@ -2,36 +2,37 @@
 
 ## A Poem for FreelanceFlow
 
-In circuits of trust where the gig-economy hums,
-A marketplace wakes where ambition becomes
-The bridge between skill and the client who seeks,
-Through APIs routing where Prisma still speaks.
+In circuits deep where data streams align,
+A marketplace of skill begins to shine,
+Where client dreams and coder's craft combine,
+In FreelanceFlow, the threads of work entwine.
 
-The frontend awakes in Next.js's light,
-With components shared through the packages' flight,
-From landing to billing, dashboards aglow,
-Where freelancers flourish and clients all grow.
+The frontend hums with React's graceful dance,
+Next.js routes guide every user's chance,
+From landing page to dashboard's wide expanse,
+Components render with a fluid trance.
 
-But what of the backend, the Express layer deep,
-Where JWT tokens their vigilance keep?
-Through middleware gates, rate-limited and true,
-Controllers and services process each queue.
+The API, in layers dressed so fine,
+Controllers, services, in sequence line,
+With Zod validation keeping bounds in line,
+And middleware guards each endpoint's sign.
 
-The database hums with its schema so tight,
-Users and jobs in relational light,
-Proposals like pollen, messages like rain,
-Connecting the seekers through digital plain.
+Prisma speaks where PostgreSQL holds sway,
+Models of users, jobs, and messages play,
+From schema migrations to the data's way,
+The database package paves the path each day.
 
-So here's to the builders, the code and the craft,
-To monorepos structured from fore to aft,
-To TypeScript's promise, the bug bounty won,
-Where open source beats and new features are spun.
+A Stripe intent, a payment's gentle flow,
+Reviews and stars that help good freelancers grow,
+Notifications tell what users need to know,
+In this ecosystem, skills and trust both grow.
 
-May your tests always pass, may your builds never break,
-May your PRs be merged for the community's sake,
-FreelanceFlow rising, a platform so grand—
-Built line by line, by developer's hand.
+So here's to code that bridges near and far,
+To open source, to every commit's star,
+May bugs be few and pull requests go far,
+In FreelanceFlow, we build without a bar.
 
 ---
 
-*Creative decision: I chose a traditional AABB rhyme scheme with an optimistic, celebratory tone to mirror the collaborative spirit of open-source development and the gig economy. The poem weaves in specific technical references (Next.js, Express, Prisma, JWT, TypeScript) to honor the project's actual architecture, making it a love letter to both the codebase and the community that builds it.*
+*Written for SecureBananaLabs/bug-bounty — celebrating the architecture, 
+community, and collaborative spirit of open-source freelance marketplaces.*
