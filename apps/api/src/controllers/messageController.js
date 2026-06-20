@@ -1,4 +1,5 @@
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
+import { createMessageSchema } from "../validators/message.js";
 import { listMessages, sendMessage } from "../services/messageService.js";
 
 export async function getMessages(req, res) {
@@ -6,5 +7,9 @@ export async function getMessages(req, res) {
 }
 
 export async function postMessage(req, res) {
-  return ok(res, await sendMessage(req.body), 201);
+  const result = createMessageSchema.safeParse(req.body);
+  if (!result.success) {
+    return fail(res, result.error.issues[0].message, 400);
+  }
+  return ok(res, await sendMessage(result.data), 201);
 }
