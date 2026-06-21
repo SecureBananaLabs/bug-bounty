@@ -1,6 +1,12 @@
+import { z } from "zod";
 import { ok } from "../utils/response.js";
-import { globalSearch } from "../services/searchService.js";
+import { searchAll } from "../services/searchService.js";
+
+const searchQuerySchema = z.object({
+  q: z.string().min(1, "Search query required").max(200, "Query too long")
+});
 
 export async function search(req, res) {
-  return ok(res, await globalSearch(req.query.q ?? ""));
+  const { q } = searchQuerySchema.parse(req.query);
+  return ok(res, await searchAll(q));
 }
