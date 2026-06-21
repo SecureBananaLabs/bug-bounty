@@ -5,7 +5,12 @@ export async function listMessages() {
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
+  // Server controls these fields — never trust client input
+  const message = {
+    id: `msg_${Date.now()}`,
+    sentAt: new Date().toISOString(),
+    ...payload,
+  };
   messages.push(message);
   return message;
 }
