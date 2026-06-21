@@ -5,7 +5,8 @@ export async function listProposals() {
 }
 
 export async function createProposal(payload) {
-  const proposal = { id: `prp_${Date.now()}`, ...payload };
+  const { id: _ignored, ...safePayload } = payload;
+  const proposal = { id: `prp_${Date.now()}`, ...safePayload };
   proposals.push(proposal);
   return proposal;
 }
