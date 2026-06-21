@@ -1,6 +1,6 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
+import { registerSchema, loginSchema, refreshSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -22,6 +22,17 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  // Accept token from Authorization: Bearer header or request body
+  let token = req.headers?.authorization?.replace(/^Bearer\s+/i, "");
+  if (!token || token === "") {
+    try {
+      const body = refreshSchema.parse(req.body);
+      token = body.refreshToken;
+    } catch {
+      return fail(res, "Refresh token is required", 401);
+    }
+  }
+
+  const result = await refreshToken(token);
   return ok(res, result);
 }
