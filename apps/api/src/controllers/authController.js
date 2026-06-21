@@ -15,13 +15,15 @@ export async function login(req, res) {
 }
 
 export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
+  const provider = req.params.provider;
+  if (!["google", "github", "linkedin"].includes(provider)) {
+    return res.status(400).json({ success: false, message: "Unsupported OAuth provider" });
+  }
+  return ok(res, { provider, status: "callback-received" });
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  const token = req.body?.token ?? req.headers?.["x-refresh-token"];
+  const result = await refreshToken(token);
   return ok(res, result);
 }
