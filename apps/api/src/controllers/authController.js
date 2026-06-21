@@ -1,6 +1,7 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
+import { registerSchema, loginSchema, refreshSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
+import { verifyAccessToken } from "../utils/jwt.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -22,6 +23,20 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  const { token: bearerToken } = req.headers.authorization
+    ? { token: req.headers.authorization.replace(/^Bearer\s+/i, '').trim() }
+    : {};
+  const bodyToken = refreshSchema.parse(req.body).token;
+  const token = bearerToken || bodyToken;
+  if (!token) {
+    return fail(res, "Refresh token is required", 401);
+  }
+  let payload;
+  try {
+    payload = verifyAccessToken(token);
+  } catch {
+    return fail(res, "Invalid or expired refresh token", 401);
+  }
+  const result = await refreshToken(payload);
   return ok(res, result);
 }
