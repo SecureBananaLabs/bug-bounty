@@ -1,4 +1,4 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, verifyAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
@@ -18,6 +18,19 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(token) {
+  // Fix #5243: Validate supplied token before minting replacements
+  if (!token) {
+    const err = new Error("Missing refresh token");
+    err.statusCode = 400;
+    throw err;
+  }
+  try {
+    const decoded = verifyAccessToken(token);
+    return { token: signAccessToken({ sub: decoded.sub, role: decoded.role }) };
+  } catch {
+    const err = new Error("Invalid refresh token");
+    err.statusCode = 401;
+    throw err;
+  }
 }
