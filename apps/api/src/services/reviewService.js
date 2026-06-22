@@ -5,7 +5,8 @@ export async function listReviews() {
 }
 
 export async function createReview(payload) {
-  const review = { id: `rev_${Date.now()}`, ...payload };
+  const { id: _ignoredId, reviewerId: _ignoredReviewerId, targetId: _ignoredTargetId, rating: _ignoredRating, comment: _ignoredComment, ...safePayload } = payload || {};
+  const review = { id: `rev_${Date.now()}`, ...safePayload };
   reviews.push(review);
   return review;
 }
