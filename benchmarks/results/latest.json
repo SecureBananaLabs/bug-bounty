@@ -1,0 +1,1037 @@
+{
+  "profile": "full",
+  "generatedAt": "2026-06-03T13:39:07.335Z",
+  "profileConfig": {
+    "durationSeconds": 5,
+    "connections": 10,
+    "pipelining": 1,
+    "ttfbSamples": 5
+  },
+  "target": {
+    "baseUrl": "http://127.0.0.1:60553",
+    "localServer": true
+  },
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "arch": "x64",
+    "cpu": "Intel(R) Core(TM) i9-14900HX, 32 logical processors",
+    "totalMemoryGiB": 31.8,
+    "freeMemoryGiB": 9.1,
+    "node": "v24.4.1"
+  },
+  "thresholds": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "defaults": {
+      "maxP99Ms": 750,
+      "maxTtfbP95Ms": 500,
+      "maxErrorRate": 0.02,
+      "minSustainedRps": 1
+    },
+    "endpoints": {
+      "uploads.create": {
+        "maxP99Ms": 1200,
+        "maxTtfbP95Ms": 750
+      },
+      "auth.register": {
+        "maxP99Ms": 1000
+      },
+      "jobs.create": {
+        "maxP99Ms": 1000
+      },
+      "proposals.create": {
+        "maxP99Ms": 1000
+      }
+    }
+  },
+  "thresholdFailures": [],
+  "results": [
+    {
+      "id": "health.check",
+      "method": "GET",
+      "path": "/health",
+      "routePattern": "/health",
+      "description": "Service health check",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 2.06,
+        "p95": 4.08,
+        "p99": 6.96
+      },
+      "rps": {
+        "sustained": 4327.19,
+        "peak": 5030
+      },
+      "requests": {
+        "total": 21641,
+        "sent": 21641
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 21641
+      },
+      "ttfbMs": {
+        "samples": [
+          31.64,
+          3.07,
+          1.56,
+          1.42,
+          1.09
+        ],
+        "p50": 1.56,
+        "p95": 31.64,
+        "p99": 31.64,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "routePattern": "/api/auth/register",
+      "description": "Client registration with benchmark-sized credential payload",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 8.32,
+        "p95": 11.85,
+        "p99": 14.49
+      },
+      "rps": {
+        "sustained": 1160.68,
+        "peak": 1260
+      },
+      "requests": {
+        "total": 5809,
+        "sent": 5809
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 5809
+      },
+      "ttfbMs": {
+        "samples": [
+          16.63,
+          2.77,
+          1.49,
+          1.72,
+          1.73
+        ],
+        "p50": 1.73,
+        "p95": 16.63,
+        "p99": 16.63,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "routePattern": "/api/auth/login",
+      "description": "Client login using a realistic email/password body",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 7.56,
+        "p95": 10,
+        "p99": 12.93
+      },
+      "rps": {
+        "sustained": 1279.62,
+        "peak": 1347
+      },
+      "requests": {
+        "total": 6399,
+        "sent": 6399
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 6399
+      },
+      "ttfbMs": {
+        "samples": [
+          1.34,
+          0.96,
+          0.83,
+          0.93,
+          0.87
+        ],
+        "p50": 0.93,
+        "p95": 1.34,
+        "p99": 1.34,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "auth.oauth.callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "routePattern": "/api/auth/oauth/:provider/callback",
+      "description": "OAuth callback route using the GitHub provider parameter",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 1.8,
+        "p95": 2.95,
+        "p99": 6.6
+      },
+      "rps": {
+        "sustained": 4944.79,
+        "peak": 5221
+      },
+      "requests": {
+        "total": 24729,
+        "sent": 24729
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 24729
+      },
+      "ttfbMs": {
+        "samples": [
+          1.22,
+          0.55,
+          0.47,
+          0.47,
+          0.41
+        ],
+        "p50": 0.47,
+        "p95": 1.22,
+        "p99": 1.22,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "routePattern": "/api/auth/refresh",
+      "description": "Refresh-token flow placeholder endpoint",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 7.34,
+        "p95": 9.76,
+        "p99": 12.27
+      },
+      "rps": {
+        "sustained": 1316.11,
+        "peak": 1390
+      },
+      "requests": {
+        "total": 6586,
+        "sent": 6586
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 6586
+      },
+      "ttfbMs": {
+        "samples": [
+          1.8,
+          1.12,
+          1.1,
+          1.06,
+          0.91
+        ],
+        "p50": 1.1,
+        "p95": 1.8,
+        "p99": 1.8,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "routePattern": "/api/users",
+      "description": "List users collection",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 1.71,
+        "p95": 2.82,
+        "p99": 6.09
+      },
+      "rps": {
+        "sustained": 5190.46,
+        "peak": 5420
+      },
+      "requests": {
+        "total": 25959,
+        "sent": 25959
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 25959
+      },
+      "ttfbMs": {
+        "samples": [
+          0.74,
+          0.36,
+          0.27,
+          0.26,
+          0.26
+        ],
+        "p50": 0.27,
+        "p95": 0.74,
+        "p99": 0.74,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "routePattern": "/api/users",
+      "description": "Create a freelancer user profile payload",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 2.6,
+        "p95": 4.11,
+        "p99": 7.76
+      },
+      "rps": {
+        "sustained": 3490.66,
+        "peak": 3620
+      },
+      "requests": {
+        "total": 17458,
+        "sent": 17458
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 17458
+      },
+      "ttfbMs": {
+        "samples": [
+          1.08,
+          0.5,
+          0.4,
+          0.38,
+          0.52
+        ],
+        "p50": 0.5,
+        "p95": 1.08,
+        "p99": 1.08,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "routePattern": "/api/jobs",
+      "description": "List open jobs",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 1.72,
+        "p95": 2.84,
+        "p99": 6.4
+      },
+      "rps": {
+        "sustained": 5120.54,
+        "peak": 5467
+      },
+      "requests": {
+        "total": 25609,
+        "sent": 25609
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 25609
+      },
+      "ttfbMs": {
+        "samples": [
+          1.09,
+          0.74,
+          0.42,
+          0.41,
+          0.36
+        ],
+        "p50": 0.42,
+        "p95": 1.09,
+        "p99": 1.09,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "routePattern": "/api/jobs",
+      "description": "Create a project brief with production-schema-sized fields",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 2.73,
+        "p95": 4.23,
+        "p99": 7.99
+      },
+      "rps": {
+        "sustained": 3353.37,
+        "peak": 3594
+      },
+      "requests": {
+        "total": 16769,
+        "sent": 16769
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 16769
+      },
+      "ttfbMs": {
+        "samples": [
+          1.37,
+          0.74,
+          0.46,
+          0.43,
+          0.54
+        ],
+        "p50": 0.54,
+        "p95": 1.37,
+        "p99": 1.37,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "routePattern": "/api/proposals",
+      "description": "List proposals",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 1.85,
+        "p95": 2.93,
+        "p99": 6.73
+      },
+      "rps": {
+        "sustained": 4916.27,
+        "peak": 5248
+      },
+      "requests": {
+        "total": 24587,
+        "sent": 24587
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 24587
+      },
+      "ttfbMs": {
+        "samples": [
+          6.07,
+          0.6,
+          0.39,
+          0.33,
+          0.31
+        ],
+        "p50": 0.39,
+        "p95": 6.07,
+        "p99": 6.07,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "routePattern": "/api/proposals",
+      "description": "Create a realistic freelancer proposal",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 2.66,
+        "p95": 3.9,
+        "p99": 7.93
+      },
+      "rps": {
+        "sustained": 3454.86,
+        "peak": 3602
+      },
+      "requests": {
+        "total": 17279,
+        "sent": 17279
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 17279
+      },
+      "ttfbMs": {
+        "samples": [
+          0.95,
+          0.61,
+          0.63,
+          0.52,
+          0.35
+        ],
+        "p50": 0.61,
+        "p95": 0.95,
+        "p99": 0.95,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "routePattern": "/api/payments",
+      "description": "Create a payment intent placeholder",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 2.66,
+        "p95": 4.06,
+        "p99": 8.23
+      },
+      "rps": {
+        "sustained": 3460.72,
+        "peak": 3736
+      },
+      "requests": {
+        "total": 17309,
+        "sent": 17309
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 17309
+      },
+      "ttfbMs": {
+        "samples": [
+          1.27,
+          0.6,
+          0.77,
+          0.62,
+          0.7
+        ],
+        "p50": 0.7,
+        "p95": 1.27,
+        "p99": 1.27,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "routePattern": "/api/reviews",
+      "description": "List reviews",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 1.83,
+        "p95": 2.84,
+        "p99": 6.83
+      },
+      "rps": {
+        "sustained": 4921.84,
+        "peak": 5148
+      },
+      "requests": {
+        "total": 24617,
+        "sent": 24617
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 24617
+      },
+      "ttfbMs": {
+        "samples": [
+          5.91,
+          0.44,
+          0.29,
+          0.26,
+          0.24
+        ],
+        "p50": 0.29,
+        "p95": 5.91,
+        "p99": 5.91,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "routePattern": "/api/reviews",
+      "description": "Create a marketplace review payload",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 2.71,
+        "p95": 4.12,
+        "p99": 8.11
+      },
+      "rps": {
+        "sustained": 3385.89,
+        "peak": 3582
+      },
+      "requests": {
+        "total": 16934,
+        "sent": 16934
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 16934
+      },
+      "ttfbMs": {
+        "samples": [
+          0.99,
+          0.67,
+          0.47,
+          0.58,
+          0.63
+        ],
+        "p50": 0.63,
+        "p95": 0.99,
+        "p99": 0.99,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "routePattern": "/api/messages",
+      "description": "List message thread payloads",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 1.61,
+        "p95": 2.47,
+        "p99": 6.25
+      },
+      "rps": {
+        "sustained": 5538.29,
+        "peak": 5882
+      },
+      "requests": {
+        "total": 27698,
+        "sent": 27698
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 27698
+      },
+      "ttfbMs": {
+        "samples": [
+          0.77,
+          0.39,
+          0.27,
+          0.25,
+          0.25
+        ],
+        "p50": 0.27,
+        "p95": 0.77,
+        "p99": 0.77,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "routePattern": "/api/messages",
+      "description": "Create a client-to-freelancer message",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 2.53,
+        "p95": 3.86,
+        "p99": 8.03
+      },
+      "rps": {
+        "sustained": 3597.03,
+        "peak": 3910
+      },
+      "requests": {
+        "total": 17989,
+        "sent": 17989
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 17989
+      },
+      "ttfbMs": {
+        "samples": [
+          0.82,
+          0.39,
+          4.24,
+          0.45,
+          0.36
+        ],
+        "p50": 0.45,
+        "p95": 4.24,
+        "p99": 4.24,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "routePattern": "/api/notifications",
+      "description": "List notifications",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 1.63,
+        "p95": 2.43,
+        "p99": 6.54
+      },
+      "rps": {
+        "sustained": 5488.81,
+        "peak": 5840
+      },
+      "requests": {
+        "total": 27449,
+        "sent": 27449
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 27449
+      },
+      "ttfbMs": {
+        "samples": [
+          0.85,
+          0.48,
+          0.33,
+          0.32,
+          0.32
+        ],
+        "p50": 0.33,
+        "p95": 0.85,
+        "p99": 0.85,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "routePattern": "/api/notifications",
+      "description": "Create an operational notification",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 2.5,
+        "p95": 3.76,
+        "p99": 7.84
+      },
+      "rps": {
+        "sustained": 3635.26,
+        "peak": 3764
+      },
+      "requests": {
+        "total": 18226,
+        "sent": 18226
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 18226
+      },
+      "ttfbMs": {
+        "samples": [
+          1.2,
+          0.8,
+          0.62,
+          0.53,
+          0.75
+        ],
+        "p50": 0.75,
+        "p95": 1.2,
+        "p99": 1.2,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "routePattern": "/api/uploads",
+      "description": "Upload a small benchmark attachment using multipart/form-data",
+      "expectedStatus": 201,
+      "latencyMs": {
+        "p50": 3.03,
+        "p95": 5.08,
+        "p99": 9.23
+      },
+      "rps": {
+        "sustained": 2973.55,
+        "peak": 3409
+      },
+      "requests": {
+        "total": 14870,
+        "sent": 14870
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "201": 14870
+      },
+      "ttfbMs": {
+        "samples": [
+          9.76,
+          1.19,
+          0.81,
+          0.74,
+          0.68
+        ],
+        "p50": 0.81,
+        "p95": 9.76,
+        "p99": 9.76,
+        "statuses": {
+          "201": 5
+        }
+      }
+    },
+    {
+      "id": "search.query",
+      "method": "GET",
+      "path": "/api/search?q=performance%20dashboard%20node",
+      "routePattern": "/api/search",
+      "description": "Global search with a realistic marketplace query",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 1.79,
+        "p95": 2.62,
+        "p99": 6.6
+      },
+      "rps": {
+        "sustained": 5046.06,
+        "peak": 5204
+      },
+      "requests": {
+        "total": 25239,
+        "sent": 25239
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 25239
+      },
+      "ttfbMs": {
+        "samples": [
+          1.61,
+          0.62,
+          0.38,
+          0.33,
+          0.35
+        ],
+        "p50": 0.38,
+        "p95": 1.61,
+        "p99": 1.61,
+        "statuses": {
+          "200": 5
+        }
+      }
+    },
+    {
+      "id": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "routePattern": "/api/admin/metrics",
+      "description": "Protected admin metrics with benchmark-only JWT",
+      "expectedStatus": 200,
+      "latencyMs": {
+        "p50": 6.79,
+        "p95": 8.57,
+        "p99": 11.72
+      },
+      "rps": {
+        "sustained": 1443.08,
+        "peak": 1522
+      },
+      "requests": {
+        "total": 7219,
+        "sent": 7219
+      },
+      "errors": {
+        "count": 0,
+        "errorRate": 0,
+        "requestErrors": 0,
+        "timeouts": 0,
+        "non2xx": 0,
+        "unexpectedStatus": 0
+      },
+      "statusDistribution": {
+        "200": 7219
+      },
+      "ttfbMs": {
+        "samples": [
+          2.33,
+          1.09,
+          0.79,
+          0.73,
+          0.76
+        ],
+        "p50": 0.79,
+        "p95": 2.33,
+        "p99": 2.33,
+        "statuses": {
+          "200": 5
+        }
+      }
+    }
+  ]
+}
