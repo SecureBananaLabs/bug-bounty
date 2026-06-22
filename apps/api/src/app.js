@@ -15,11 +15,14 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+import { env } from "./config/env.js";
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  const allowedOrigins = env.corsOrigin.split(",").map(o => o.trim());
+  app.use(cors({ origin: allowedOrigins, credentials: true }));
   app.use(express.json());
   app.use(apiLimiter);
 
