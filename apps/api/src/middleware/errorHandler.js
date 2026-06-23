@@ -1,7 +1,18 @@
 import { ZodError } from "zod";
 
 export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
+  const errorSummary =
+    err instanceof Error
+      ? {
+          name: err.name,
+          message: err.message,
+          stack: err.stack
+        }
+      : {
+          message: String(err)
+        };
+
+  console.error("Unhandled API error:", errorSummary);
   if (res.headersSent) {
     return next(err);
   }

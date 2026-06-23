@@ -15,6 +15,8 @@ async function withServer(run) {
     const { port } = server.address();
     await run(port);
   } finally {
+    server.closeIdleConnections?.();
+    server.closeAllConnections?.();
     await new Promise((resolve, reject) => {
       server.close((error) => (error ? reject(error) : resolve()));
     });
