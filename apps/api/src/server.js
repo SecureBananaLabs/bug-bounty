@@ -5,8 +5,9 @@ import { createApp } from "./app.js";
 async function bootstrap() {
   await connectDb();
   const app = createApp();
-  app.listen(env.port, () => {
-    console.log(`API listening on http://localhost:${env.port}`);
+  const server = app.listen(env.port, () => {
+    const actualPort = server.address().port;
+    console.log(`API listening on http://localhost:${actualPort}`);
   });
 }
 
