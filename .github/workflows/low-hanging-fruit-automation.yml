@@ -36,11 +36,11 @@ jobs:
   recursive-issue-creation:
     needs: detect-and-create-issues
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    if: always()
     steps:
-      - name: Trigger recursive workflow
+      - name: Trigger next automation cycle
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          event-type: low-hanging-fruit-detected
+          event-type: low-hanging-fruit-cycle
+        continue-on-error: true
