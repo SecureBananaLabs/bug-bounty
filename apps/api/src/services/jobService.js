@@ -1,11 +1,12 @@
 const jobs = [];
 
 export async function listJobs() {
-  return jobs;
+  return jobs.map((j) => ({ ...j }));
 }
 
 export async function createJob(payload) {
-  const job = { id: `job_${Date.now()}`, status: "open", ...payload };
+  const { id: _id, status: _status, ...safePayload } = payload;
+  const job = { id: `job_${Date.now()}`, status: "open", ...safePayload };
   jobs.push(job);
-  return job;
+  return { ...job };
 }
