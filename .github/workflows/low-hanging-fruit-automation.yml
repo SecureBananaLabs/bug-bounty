@@ -22,25 +22,98 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node .github/scripts/detect-low-hanging-fruit.js
+      - name: Detect low hanging fruit and create issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          const { execSync } = require('child_process');
 
-  recursive-issue-creation:
-    needs: detect-and-create-issues
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Trigger next automation cycle
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: low-hanging-fruit-cycle
-        continue-on-error: true
+          // Helper to run GitHub CLI commands
+          function gh(args) {
+            return execSync(`gh ${args}`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+          }
+
+          // Patterns for low hanging fruit detection
+          const patterns = [
+            { type: 'TODO', regex: /TODO[:\s]/i, desc: 'TODO comment found' },
+            { type: 'FIXME', regex: /FIXME[:\s]/i, desc: 'FIXME comment found' },
+            { type: 'HACK', regex: /HACK[:\s]/i, desc: 'HACK comment found' },
+            { type: 'BUG', regex: /BUG[:\s]/i, desc: 'BUG comment found' },
+            { type: 'XXX', regex: /XXX[:\s]/i, desc: 'XXX marker found' },
+            { type: 'console.log', regex: /console\.log\(/, desc: 'Leftover console.log statement' },
+            { type: 'debugger', regex: /debugger;/, desc: 'Leftover debugger statement' },
+            { type: 'empty_catch', regex: /catch\s*\([^)]*\)\s*\{\s*\}/, desc: 'Empty catch block' },
+            { type: 'hardcoded_secret', regex: /(password|secret|key|token)\s*=\s*['"][^'"]+['"]/i, desc: 'Potential hardcoded secret' },
+          ];
+
+          const filesToCheck = [];
+          
+          // Recursively find source files
+          function findFiles(dir, extensions) {
+            const results = [];
+            const items = fs.readdirSync(dir, { withFileTypes: true });
+            for (const item of items) {
+              const fullPath = path.join(dir, item.name);
+              if (item.isDirectory() && item.name !== 'node_modules' && item.name !== '.git') {
+                results.push(...findFiles(fullPath, extensions));
+              } else if (item.isFile() && extensions.some(ext => item.name.endsWith(ext))) {
+                results.push(fullPath);
+              }
+            }
+            return results;
+          }
+
+          const sourceFiles = findFiles('.', ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rs']);
+          const findings = [];
+
+          for (const file of sourceFiles) {
+            const content = fs.readFileSync(file, 'utf-8');
+            const lines = content.split('\n');
+            
+            for (let i = 0; i < lines.length; i++) {
+              for (const pattern of patterns) {
+                if (pattern.regex.test(lines[i])) {
+                  findings.push({
+                    file: file.replace(/^\.\//, ''),
+                    line: i + 1,
+                    type: pattern.type,
+                    description: pattern.desc,
+                    code: lines[i].trim()
+                  });
+                }
+              }
+            }
+          }
+
+          // Create issues for findings, avoiding duplicates
+          const existingIssues = JSON.parse(gh('issue list --repo ${{ github.repository }} --state all --json title --limit 100'));
+          const existingTitles = new Set(existingIssues.map(i => i.title));
+
+          for (const finding of findings) {
+            const title = `[Low Hanging Fruit] ${finding.description} in ${finding.file}:${finding.line}`;
+            if (existingTitles.has(title)) continue;
+
+            const body = `## Automated Low Hanging Fruit Detection
+
+**File:** \`${finding.file}\`
+**Line:** ${finding.line}
+**Type:** ${finding.type}
+**Code:** \`${finding.code}\`
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+/bounty $50`;
+
+            try {
+              gh(`issue create --repo ${{ github.repository }} --title "${title.replace(/"/g, '\\"')}" --body "${body.replace(/"/g, '\\"')}"`);
+              console.log(`Created issue: ${title}`);
+            } catch (e) {
+              console.error(`Failed to create issue: ${title}`, e.message);
+            }
+          }
+
+          console.log(`Processed ${findings.length} findings`);
+          EOF
