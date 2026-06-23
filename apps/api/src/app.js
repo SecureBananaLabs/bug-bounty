@@ -20,14 +20,27 @@ import { env } from "./config/env.js";
 export function createApp() {
   const app = express();
 
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+        scriptSrc: ["'self'"],
+        frameSrc: ["'none'"],
+        objectSrc: ["'none'"]
+      }
+    }
+  }));
   app.use(cors({
-    origin: env.corsOrigin || "*",
+    origin: env.corsOrigin === "*"
+      ? undefined
+      : env.corsOrigin.split(",").map(o => o.trim()).filter(Boolean),
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
   }));
-  app.use(express.json({ limit: "10mb" }));
-  app.use(express.urlencoded({ extended: false, limit: "10mb" }));
+  app.use(express.json({ limit: "1mb" }));
   app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
