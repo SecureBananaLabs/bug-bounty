@@ -1,0 +1,12 @@
+SecureBananaLabs bounty #76 demo
+
+PR: feat/poem-issue-76
+File added: POEM.md (project root)
+
+Validation shown in this demo:
+1) git status contains POEM.md change only for this task
+2) POEM.md is present at repository root
+3) POEM.md contains original 4-stanza technical poem
+4) PR includes creative decision note and /claim #76
+
+This is a short visual proof artifact for bounty review.
