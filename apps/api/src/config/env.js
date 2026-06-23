@@ -6,3 +6,23 @@ export const env = {
   databaseUrl: process.env.DATABASE_URL ?? "",
   corsOrigin: process.env.CORS_ORIGIN ?? "*"
 };
+
+// Validate required production secrets
+if (!env.jwtSecret) {
+  console.warn(
+    "[env] JWT_SECRET not set — signing tokens with weak defaults is insecure. " +
+    "Set JWT_SECRET in .env or production."
+  );
+}
+
+if (env.nodeEnv === "production" && !env.jwtSecret) {
+  throw new Error(
+    "JWT_SECRET is required in production. Set the environment variable."
+  );
+}
+
+if (env.nodeEnv === "production" && !env.databaseUrl) {
+  throw new Error(
+    "DATABASE_URL is required in production. Set the environment variable."
+  );
+}
