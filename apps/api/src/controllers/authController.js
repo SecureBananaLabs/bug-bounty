@@ -15,8 +15,13 @@ export async function login(req, res) {
 }
 
 export async function oauthCallback(req, res) {
+  const allowedProviders = ["google", "github", "facebook", "twitter"];
+  const provider = req.params.provider;
+  if (!allowedProviders.includes(provider)) {
+    return res.status(400).json({ success: false, error: "Invalid OAuth provider" });
+  }
   return ok(res, {
-    provider: req.params.provider,
+    provider,
     status: "callback-received"
   });
 }
