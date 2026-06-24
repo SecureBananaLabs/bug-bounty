@@ -5,6 +5,18 @@ export const jobs = [
 ];
 
 export const freelancers = [
-  { username: "maya-dev", skills: ["Next.js", "TypeScript"], rate: "$65/hr" },
-  { username: "jordan-ux", skills: ["Figma", "UX Research"], rate: "$52/hr" }
+  {
+    username: "maya-dev",
+    skills: ["Next.js", "TypeScript"],
+    rate: "$65/hr",
+    availability: "Available now",
+    profileContext: "Frontend engineer focused on SaaS dashboards and performance tuning."
+  },
+  {
+    username: "jordan-ux",
+    skills: ["Figma", "UX Research"],
+    rate: "$52/hr",
+    availability: "Available in 1 week",
+    profileContext: "Product designer with strong discovery, research, and onboarding UX experience."
+  }
 ];
