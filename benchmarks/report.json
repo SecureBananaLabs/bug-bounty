@@ -1,0 +1,837 @@
+{
+  "summary": {
+    "timestamp": "2026-06-24T18:31:26.626Z",
+    "target": "http://127.0.0.1:4000",
+    "durationPerRouteSec": 10,
+    "concurrentConnections": 10,
+    "totalRoutesTested": 17,
+    "routesSuccessful": 17,
+    "totalRequests": 1035759,
+    "totalErrors": 1035390,
+    "overallErrorRate": 99.9643739518556,
+    "averageRps": 6092.7,
+    "aggregateLatency": {
+      "p50": 1,
+      "p95": 0,
+      "p99": 2.59
+    }
+  },
+  "routes": [
+    {
+      "route": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 64955,
+        "average": 5904.55,
+        "mean": 5904.55,
+        "stddev": 583.54,
+        "max": 6322,
+        "rps": 6495.5,
+        "sent": 64955
+      },
+      "latency": {
+        "min": 1,
+        "max": 14,
+        "average": 1.15,
+        "p50": 1,
+        "p75": 1,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.48
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 64746,
+        "rate": 99.67823878069433,
+        "timeout": 0,
+        "non2xx": 64746
+      },
+      "throughput": {
+        "total": 68184379,
+        "average": 6198178.91
+      }
+    },
+    {
+      "route": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 68172,
+        "average": 6197.28,
+        "mean": 6197.28,
+        "stddev": 106.67,
+        "max": 6306,
+        "rps": 6817.2,
+        "sent": 68172
+      },
+      "latency": {
+        "min": 1,
+        "max": 10,
+        "average": 1.1,
+        "p50": 1,
+        "p75": 1,
+        "p90": 1,
+        "p95": 0,
+        "p99": 2,
+        "p999": 0,
+        "stddev": 0.33
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 68162,
+        "rate": 99.98533122102916,
+        "timeout": 0,
+        "non2xx": 68162
+      },
+      "throughput": {
+        "total": 71570100,
+        "average": 6506496
+      }
+    },
+    {
+      "route": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 68130,
+        "average": 6192.91,
+        "mean": 6192.91,
+        "stddev": 72.49,
+        "max": 6283,
+        "rps": 6813,
+        "sent": 68130
+      },
+      "latency": {
+        "min": 1,
+        "max": 4,
+        "average": 1.09,
+        "p50": 1,
+        "p75": 1,
+        "p90": 1,
+        "p95": 0,
+        "p99": 2,
+        "p999": 0,
+        "stddev": 0.3
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 68120,
+        "rate": 99.98532217818875,
+        "timeout": 0,
+        "non2xx": 68120
+      },
+      "throughput": {
+        "total": 71526000,
+        "average": 6501655.28
+      }
+    },
+    {
+      "route": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 67891,
+        "average": 6171.82,
+        "mean": 6171.82,
+        "stddev": 104.28,
+        "max": 6320,
+        "rps": 6789.1,
+        "sent": 67891
+      },
+      "latency": {
+        "min": 1,
+        "max": 4,
+        "average": 1.1,
+        "p50": 1,
+        "p75": 1,
+        "p90": 1,
+        "p95": 0,
+        "p99": 2,
+        "p999": 0,
+        "stddev": 0.31
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 67881,
+        "rate": 99.98527050713643,
+        "timeout": 0,
+        "non2xx": 67881
+      },
+      "throughput": {
+        "total": 71275050,
+        "average": 6479685.82
+      }
+    },
+    {
+      "route": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 68018,
+        "average": 6183.46,
+        "mean": 6183.46,
+        "stddev": 127.16,
+        "max": 6316,
+        "rps": 6801.8,
+        "sent": 68018
+      },
+      "latency": {
+        "min": 1,
+        "max": 13,
+        "average": 1.1,
+        "p50": 1,
+        "p75": 1,
+        "p90": 1,
+        "p95": 0,
+        "p99": 2,
+        "p999": 0,
+        "stddev": 0.34
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 68008,
+        "rate": 99.98529800935046,
+        "timeout": 0,
+        "non2xx": 68008
+      },
+      "throughput": {
+        "total": 71408400,
+        "average": 6491973.82
+      }
+    },
+    {
+      "route": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 68226,
+        "average": 6201.64,
+        "mean": 6201.64,
+        "stddev": 70.65,
+        "max": 6318,
+        "rps": 6822.6,
+        "sent": 68226
+      },
+      "latency": {
+        "min": 1,
+        "max": 4,
+        "average": 1.1,
+        "p50": 1,
+        "p75": 1,
+        "p90": 1,
+        "p95": 0,
+        "p99": 2,
+        "p999": 0,
+        "stddev": 0.3
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 68216,
+        "rate": 99.98534283117873,
+        "timeout": 0,
+        "non2xx": 68216
+      },
+      "throughput": {
+        "total": 71626800,
+        "average": 6511336.73
+      }
+    },
+    {
+      "route": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 67917,
+        "average": 6173.64,
+        "mean": 6173.64,
+        "stddev": 114.26,
+        "max": 6365,
+        "rps": 6791.7,
+        "sent": 67917
+      },
+      "latency": {
+        "min": 1,
+        "max": 13,
+        "average": 1.1,
+        "p50": 1,
+        "p75": 1,
+        "p90": 1,
+        "p95": 0,
+        "p99": 2,
+        "p999": 0,
+        "stddev": 0.35
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 67907,
+        "rate": 99.98527614588394,
+        "timeout": 0,
+        "non2xx": 67907
+      },
+      "throughput": {
+        "total": 71302350,
+        "average": 6481920
+      }
+    },
+    {
+      "route": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 68758,
+        "average": 6250.73,
+        "mean": 6250.73,
+        "stddev": 75.43,
+        "max": 6344,
+        "rps": 6875.8,
+        "sent": 68758
+      },
+      "latency": {
+        "min": 1,
+        "max": 3,
+        "average": 1.07,
+        "p50": 1,
+        "p75": 1,
+        "p90": 1,
+        "p95": 0,
+        "p99": 2,
+        "p999": 0,
+        "stddev": 0.27
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 68748,
+        "rate": 99.9854562378196,
+        "timeout": 0,
+        "non2xx": 68748
+      },
+      "throughput": {
+        "total": 72185400,
+        "average": 6562350.55
+      }
+    },
+    {
+      "route": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 53939,
+        "average": 4903.1,
+        "mean": 4903.1,
+        "stddev": 227.51,
+        "max": 5090,
+        "rps": 5393.9,
+        "sent": 53939
+      },
+      "latency": {
+        "min": 1,
+        "max": 19,
+        "average": 1.38,
+        "p50": 1,
+        "p75": 2,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.58
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 53929,
+        "rate": 99.98146053875674,
+        "timeout": 0,
+        "non2xx": 53929
+      },
+      "throughput": {
+        "total": 56625450,
+        "average": 5147741.1
+      }
+    },
+    {
+      "route": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 55528,
+        "average": 5047.82,
+        "mean": 5047.82,
+        "stddev": 72.27,
+        "max": 5137,
+        "rps": 5552.8,
+        "sent": 55528
+      },
+      "latency": {
+        "min": 1,
+        "max": 8,
+        "average": 1.27,
+        "p50": 1,
+        "p75": 1,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.5
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 55518,
+        "rate": 99.98199106756951,
+        "timeout": 0,
+        "non2xx": 55518
+      },
+      "throughput": {
+        "total": 58293900,
+        "average": 5299665.46
+      }
+    },
+    {
+      "route": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 55310,
+        "average": 5027.82,
+        "mean": 5027.82,
+        "stddev": 53.79,
+        "max": 5095,
+        "rps": 5531,
+        "sent": 55310
+      },
+      "latency": {
+        "min": 1,
+        "max": 4,
+        "average": 1.28,
+        "p50": 1,
+        "p75": 2,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.5
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 55300,
+        "rate": 99.98192008678359,
+        "timeout": 0,
+        "non2xx": 55300
+      },
+      "throughput": {
+        "total": 58065000,
+        "average": 5278440.73
+      }
+    },
+    {
+      "route": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 54040,
+        "average": 4911.82,
+        "mean": 4911.82,
+        "stddev": 201.19,
+        "max": 5161,
+        "rps": 5404,
+        "sent": 54040
+      },
+      "latency": {
+        "min": 1,
+        "max": 10,
+        "average": 1.36,
+        "p50": 1,
+        "p75": 2,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.57
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 54030,
+        "rate": 99.98149518874907,
+        "timeout": 0,
+        "non2xx": 54030
+      },
+      "throughput": {
+        "total": 56731500,
+        "average": 5157794.91
+      }
+    },
+    {
+      "route": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 55408,
+        "average": 5036.19,
+        "mean": 5036.19,
+        "stddev": 112.95,
+        "max": 5193,
+        "rps": 5540.8,
+        "sent": 55408
+      },
+      "latency": {
+        "min": 1,
+        "max": 4,
+        "average": 1.28,
+        "p50": 1,
+        "p75": 2,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.49
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 55398,
+        "rate": 99.9819520646838,
+        "timeout": 0,
+        "non2xx": 55398
+      },
+      "throughput": {
+        "total": 58167900,
+        "average": 5288494.55
+      }
+    },
+    {
+      "route": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 54951,
+        "average": 4995.82,
+        "mean": 4995.82,
+        "stddev": 112.07,
+        "max": 5159,
+        "rps": 5495.1,
+        "sent": 54951
+      },
+      "latency": {
+        "min": 1,
+        "max": 5,
+        "average": 1.3,
+        "p50": 1,
+        "p75": 2,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.52
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 54941,
+        "rate": 99.98180196902695,
+        "timeout": 0,
+        "non2xx": 54941
+      },
+      "throughput": {
+        "total": 57688050,
+        "average": 5244928
+      }
+    },
+    {
+      "route": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 54223,
+        "average": 4929.28,
+        "mean": 4929.28,
+        "stddev": 114.8,
+        "max": 5153,
+        "rps": 5422.3,
+        "sent": 54223
+      },
+      "latency": {
+        "min": 1,
+        "max": 11,
+        "average": 1.34,
+        "p50": 1,
+        "p75": 2,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.57
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 54213,
+        "rate": 99.98155764159121,
+        "timeout": 0,
+        "non2xx": 54213
+      },
+      "throughput": {
+        "total": 56923650,
+        "average": 5174551.28
+      }
+    },
+    {
+      "route": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 54956,
+        "average": 4995.1,
+        "mean": 4995.1,
+        "stddev": 99.82,
+        "max": 5119,
+        "rps": 5495.6,
+        "sent": 54956
+      },
+      "latency": {
+        "min": 1,
+        "max": 4,
+        "average": 1.28,
+        "p50": 1,
+        "p75": 2,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.51
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 54946,
+        "rate": 99.98180362471795,
+        "timeout": 0,
+        "non2xx": 54946
+      },
+      "throughput": {
+        "total": 57693300,
+        "average": 5244555.64
+      }
+    },
+    {
+      "route": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "durationSec": 10,
+      "connections": 10,
+      "requests": {
+        "total": 55337,
+        "average": 5030,
+        "mean": 5030,
+        "stddev": 87.76,
+        "max": 5138,
+        "rps": 5533.7,
+        "sent": 55337
+      },
+      "latency": {
+        "min": 1,
+        "max": 7,
+        "average": 1.28,
+        "p50": 1,
+        "p75": 2,
+        "p90": 2,
+        "p95": 0,
+        "p99": 3,
+        "p999": 0,
+        "stddev": 0.51
+      },
+      "ttfb": {
+        "min": 0,
+        "max": 0,
+        "average": 0,
+        "p50": 0,
+        "p75": 0,
+        "p90": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "errors": {
+        "total": 55327,
+        "rate": 99.98192890832536,
+        "timeout": 0,
+        "non2xx": 55327
+      },
+      "throughput": {
+        "total": 58093350,
+        "average": 5281047.28
+      }
+    }
+  ]
+}
