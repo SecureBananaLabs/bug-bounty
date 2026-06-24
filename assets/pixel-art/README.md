@@ -1,11 +1,11 @@
-# Cosmic Robot Pixel Art
+# Cosmic Forest Pixel Art
 
-**What:** A friendly robot exploring a starry cosmos, rendered in retro pixel art style.
+**What:** A serene nighttime forest scene with a starry sky, glowing mushrooms, and a small campfire.
 
-**Why:** I chose this theme because robots represent the intersection of technology and creativity, and the cosmic backdrop adds a sense of wonder and exploration. The limited color palette and blocky aesthetic embrace the constraints of pixel art as a medium, turning technical limitations into expressive charm. This piece celebrates curiosity and the spirit of discovery—qualities that drive both art and software development.
+**Why:** I chose this theme to capture the peaceful contrast between the vastness of the cosmos and the quiet intimacy of a forest clearing. The glowing elements represent creative inspiration found in nature.
 
-**Specifications:**
+## Details
 - Canvas size: 64x64 pixels
-- Format: PNG with transparency
-- Color palette: 8-bit inspired with neon accents
-- Style: Retro pixel art with dithering effects
+- Format: PNG
+- Colors used: Deep blues, purples, warm oranges, and bright cyans
+- Style: Limited palette pixel art with dithering for atmosphere
