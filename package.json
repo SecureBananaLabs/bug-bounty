@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "freelance-platform-monorepo",
   "private": true,
   "workspaces": [
@@ -9,5 +9,8 @@
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
   }
 }
