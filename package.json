@@ -8,6 +8,8 @@
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api",
+    "benchmark": "k6 run --out json=benchmarks/results/raw.json benchmarks/k6-benchmark.js",
+    "benchmark:smoke": "k6 run benchmarks/k6-smoke.js"
   }
 }
