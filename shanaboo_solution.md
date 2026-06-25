@@ -1,13 +1,13 @@
  ```diff
---- a/.github/workflows/low-hanging-fruit.yml
-+++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,46 @@
+--- /dev/null
++++ b/.github/workflows/low-hanging-fruit-automation.yml
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
-+  workflow_dispatch:  # Allow manual trigger
++    - cron: '0 0 * * *'
++  workflow_dispatch:
 +
 +permissions:
 +  issues: write
@@ -34,139 +34,161 @@
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          GITHUB_REPOSITORY: ${{ github.repository }}
 +
 +  recursive-issue-creation:
-+    needs: detect-and-create-issues
 +    runs-on: ubuntu-latest
++    needs: detect-and-create-issues
 +    if: always()
 +    steps:
-+      - name: Trigger recursive workflow
-+        uses: actions/github-script@v7
-+        with:
-+          github-token: ${{ secrets.GITHUB_TOKEN }}
-+          script: |
-+            // This creates a self-referential issue to maintain recursion
-+            // The detection script handles the actual recursive logic
-+            console.log('Recursive issue creation framework initialized');
-+---
-+--- a/.github/scripts/detect-low-hanging-fruit.js
-++++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,289 @@
-+#!/usr/bin/env node
-+/**
-+ * Low Hanging Fruit Automation Script
-+ * 
-+ * This script automates bug detection and issue creation recursively.
-+ * It scans the repository for common issues, creates GitHub issues,
-+ * and maintains the recursive pattern as specified.
-+ */
++      - name: Checkout repository
++        uses: actions/checkout@v4
 +
++      - name: Create recursive issues
++        run: |
++          node .github/scripts/create-recursive-issues.js
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          REPO: ${{ github.repository }}
+--- /dev/null
++++ b/.github/scripts/detect-low-hanging-fruit.js
+@@ -0,0 +1,187 @@
 +const fs = require('fs');
 +const path = require('path');
 +const { execSync } = require('child_process');
 +
-+// GitHub API helpers
 +const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
-+const [OWNER, REPO] = GITHUB_REPOSITORY.split('/');
++const REPO = process.env.GITHUB_REPOSITORY || process.env.REPO;
++
++if (!GITHUB_TOKEN) {
++  console.error('GITHUB_TOKEN is required');
++  process.exit(1);
++}
 +
 +const API_BASE = 'https://api.github.com';
 +
-+async function githubApi(endpoint, options = {}) {
++function githubRequest(endpoint, method = 'GET', data = null) {
 +  const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}${endpoint}`;
-+  const response = await fetch(url, {
-+    ...options,
++  const options = {
++    method,
 +    headers: {
-+      'Authorization': `Bearer ${GITHUB_TOKEN}`,
++      'Authorization': `token ${GITHUB_TOKEN}`,
 +      'Accept': 'application/vnd.github.v3+json',
-+      'User-Agent': 'LowHangingFruitBot/1.0',
-+      ...options.headers,
-+    },
-+  });
++      'User-Agent': 'LowHangingFruitBot',
++      'Content-Type': 'application/json'
++    }
++  };
++
++  const cmd = `curl -s -X ${method} ${Object.entries(options.headers).map(([k, v]) => `-H "${k}: ${v}"`).join(' ')} ${data ? `-d '${JSON.stringify(data)}'` : ''} "${url}"`;
 +  
-+  if (!response.ok) {
-+    const text = await response.text();
-+    throw new Error(`GitHub API error: ${response.status} ${text}`);
++  try {
++    const result = execSync(cmd, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 });
++    return JSON.parse(result);
++  } catch (e) {
++    console.error('Request failed:', e.message);
++    return null;
 +  }
-+  
-+  return response.json();
 +}
 +
-+// Issue template with required string
-+function createIssueTemplate(featureName, issueNumber = 743) {
-+  return `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #${issueNumber} for more information.
-+
-+## Automated Low Hanging Fruit Detection
-+
-+This issue was automatically created by the Low Hanging Fruit automation system.
-+
-+### Feature/Bug to Work On
-+${featureName}
-+
-+### Instructions
-+1. Find a feature/bug to work on from this repository
-+2. Create a GitHub issue on the repository to start working on it -- Pull requests without issues will not be considered.
-+3. Use the following string in the issue that you created: "This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #${issueNumber} for more information."
-+
-+/bounty $700
-+
-+Bounties can only be paid upon successful PR merge.`;
-+}
-+
-+// Detect common low hanging fruit issues
-+function detectLowHangingFruit() {
++function findBugsAndImprovements() {
 +  const issues = [];
-+  const rootDir = process.cwd();
 +  
-+  // Check for missing documentation
-+  const docsToCheck = ['CONTRIBUTING.md', 'LICENSE', 'CHANGELOG.md', 'SECURITY.md'];
-+  for (const doc of docsToCheck) {
-+    const docPath = path.join(rootDir, doc);
-+    if (!fs.existsSync(docPath)) {
-+      issues.push({
-+        title: `Missing ${doc}`,
-+        type: 'documentation',
-+        description: `The repository is missing ${doc}. This is a standard file that helps contributors understand how to participate.`,
-+        priority: 'low',
-+      });
-+    }
-+  }
-+  
-+  // Check for common code issues
-+  const packageJsonPath = path.join(rootDir, 'package.json');
-+  if (fs.existsSync(packageJsonPath)) {
-+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
-+    
-+    // Check for missing scripts
-+    const expectedScripts = ['build', 'test', 'lint'];
-+    for (const script of expectedScripts) {
-+      if (!packageJson.scripts || !packageJson.scripts[script]) {
-+        issues.push({
-+          title: `Missing npm script: ${script}`,
-+          type: 'bug',
-+          description: `The package.json is missing the "${script}" script. This is a standard script for Node.js projects.`,
-+          priority: 'low',
-+        });
++  // Check for common low-hanging fruit patterns
++  const checks = [
++    {
++      type: 'documentation',
++      title: 'README.md needs installation instructions for new contributors',
++      check: () => {
++        const readme = fs.readFileSync('README.md', 'utf-8');
++        return !readme.includes('npm install') || !readme.includes('npm run dev');
++      }
++    },
++    {
++      type: 'documentation', 
++      title: 'Add CONTRIBUTING.md guidelines for issue creation',
++      check: () => {
++        try {
++          fs.accessSync('CONTRIBUTING.md');
++          const content = fs.readFileSync('CONTRIBUTING.md', 'utf-8');
++          return !content.includes('issue') || !content.includes('pull request');
++        } catch {
++          return true;
++        }
++      }
++    },
++    {
++      type: 'bug',
++      title: 'Missing .env.example files for apps',
++      check: () => {
++        const apps = ['apps/web', 'apps/api'];
++        return apps.some(app => !fs.existsSync(path.join(app, '.env.example')));
++      }
++    },
++    {
++      type: 'bug',
++      title: 'Package.json missing test script',
++      check: () => {
++        const pkg = JSON.parse(fs.readSync('package.json', 'utf-8'));
++        return !pkg.scripts || !pkg.scripts.test;
++      }
++    },
++    {
++      type: 'improvement',
++      title: 'Add GitHub issue templates for bug reports and features',
++      check: () => {
++        return !fs.existsSync('.github/ISSUE_TEMPLATE');
++      }
++    },
++    {
++      type: 'bug',
++      title: 'Missing error handling middleware in API',
++      check: () => {
++        try {
++          const apiFiles = fs.readdirSync('apps/api');
++          return !apiFiles.some(f => f.includes('error') || f.includes('middleware'));
++        } catch {
++          return false;
++        }
++      }
++    },
++    {
++      type: 'documentation',
++      title: 'Add API documentation with OpenAPI/Swagger',
++      check: () => {
++        return !fs.existsSync('apps/api/swagger') && !fs.existsSync('apps/api/openapi');
++      }
++    },
++    {
++      type: 'improvement',
++      title: 'Add pre-commit hooks for code quality',
++      check: () => {
++        return !fs.existsSync('.husky') && !fs.existsSync('.pre-commit-config.yaml');
 +      }
 +    }
-+    
-+    // Check for missing fields
-+    const expectedFields = ['description', 'repository', 'bugs', 'homepage'];
-+    for (const field of expectedFields) {
-+      if (!packageJson[field]) {
++  ];
++
++  for (const check of checks) {
++    try {
++      if (check.check()) {
 +        issues.push({
-+          title: `Missing package.json field: ${field}`,
-+          type: 'documentation',
-+          description: `The package.json is missing the "${field}" field. This field helps users understand and find the project.`,
-+          priority: 'low',
++          title: check.title,
++          type: check.type,
++          labels: [check.type, 'good first issue', 'bug bounty', 'AI agent friendly']
 +        });
 +      }
++    } catch (e) {
++      console.error(`Check failed for ${check.title}:`, e.message);
 +    }
 +  }
++
++  return issues;
++}
++
++function main() {
++  console.log('Detecting low hanging fruit...');
 +  
-+  // Check for .env.example
-+  const envExamplePath = path.join(rootDir, '.env.example');
-+  if (!fs.existsSync(envExamplePath)) {
-+    issues.push({
-+      title:
++  const detectedIssues = findBugsAndImprovements();
++  
++  // Write detected issues to file for next step
++  fs.writeFileSync('.github/detected-issues.json', JSON.stringify(detectedIssues, null, 2));
++  
++  console.log(`Detected ${detect
