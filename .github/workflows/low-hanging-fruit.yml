@@ -2,6 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
+    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -10,40 +11,37 @@ permissions:
   contents: read
 
 jobs:
-  create-issues:
+  detect-and-create-issues:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Find and create low hanging fruit issues
-        uses: actions/github-script@v7
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
-            
-            // Read the issue template
-            const templatePath = path.join(process.env.GITHUB_WORKSPACE, '.github', 'ISSUE_TEMPLATE', 'low-hanging-fruit.md');
-            const template = fs.readFileSync(templatePath, 'utf8');
-            
-            // Find existing issues to avoid duplicates
-            const { data: existingIssues } = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              per_page: 100
-            });
-            
-            const existingTitles = new Set(existingIssues.map(i => i.title));
-            
-            // Create new issue if it doesn't exist
-            if (!existingTitles.has('Low Hanging Fruit: Automated Bug Detection')) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: 'Low Hanging Fruit: Automated Bug Detection',
-                body: template
-              });
-            }
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Low Hanging Fruit Detector
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node .github/scripts/detect-low-hanging-fruit.js
+
+      - name: Create Issues from Detected Items
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node .github/scripts/create-issues.js
+
+      - name: Commit leaderboard updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add leaderboard.json || true
+          git diff --staged --quiet || git commit -m "Update leaderboard from low-hanging-fruit automation"
+          git push || true
+        continue-on-error: true
