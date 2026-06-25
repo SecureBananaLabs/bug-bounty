@@ -1,0 +1,1 @@
+export function fixTokenSub(userId,payload){return{...payload,sub:userId,id:userId};}
