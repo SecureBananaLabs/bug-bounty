@@ -15,12 +15,32 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+import { env } from "./config/env.js";
+
 export function createApp() {
   const app = express();
 
-  app.use(helmet());
-  app.use(cors());
-  app.use(express.json());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+        scriptSrc: ["'self'"],
+        frameSrc: ["'none'"],
+        objectSrc: ["'none'"]
+      }
+    }
+  }));
+  app.use(cors({
+    origin: env.corsOrigin === "*"
+      ? undefined
+      : env.corsOrigin.split(",").map(o => o.trim()).filter(Boolean),
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  }));
+  app.use(express.json({ limit: "1mb" }));
   app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
