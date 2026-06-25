@@ -10,38 +10,40 @@ permissions:
   contents: read
 
 jobs:
-  detect-and-create-issues:
+  create-issues:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Find and create low hanging fruit issues
+        uses: actions/github-script@v7
         with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node scripts/detect-low-hanging-fruit.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Create issues from detected items
-        if: steps.detect.outputs.has_items == 'true'
-        run: |
-          node scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
-      - name: Report status
-        if: always()
-        run: |
-          echo "Low hanging fruit automation completed"
-          echo "Detection status: ${{ steps.detect.outcome }}"
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Read the issue template
+            const templatePath = path.join(process.env.GITHUB_WORKSPACE, '.github', 'ISSUE_TEMPLATE', 'low-hanging-fruit.md');
+            const template = fs.readFileSync(templatePath, 'utf8');
+            
+            // Find existing issues to avoid duplicates
+            const { data: existingIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+            
+            const existingTitles = new Set(existingIssues.map(i => i.title));
+            
+            // Create new issue if it doesn't exist
+            if (!existingTitles.has('Low Hanging Fruit: Automated Bug Detection')) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'Low Hanging Fruit: Automated Bug Detection',
+                body: template
+              });
+            }
+          github-token: ${{ secrets.GITHUB_TOKEN }}
