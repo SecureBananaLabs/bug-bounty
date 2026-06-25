@@ -2,7 +2,6 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at midnight UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -23,92 +22,26 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run low hanging fruit detection
         id: detect
         run: |
-          node -e "
-            const fs = require('fs');
-            const path = require('path');
-            
-            const patterns = [
-              { pattern: /TODO|FIXME|XXX|HACK/g, label: 'todo-found', title: 'TODO/FIXME items detected in codebase' },
-              { pattern: /console\\.(log|warn|error)/g, label: 'console-logs', title: 'Console statements found in production code' },
-              { pattern: /debugger;/g, label: 'debugger-statements', title: 'Debugger statements found in code' },
-              { pattern: /throw new Error\\(['\\\"][^'\\\"]*['\\\"]\\)/g, label: 'generic-errors', title: 'Generic error throwing patterns detected' },
-              { pattern: /\\['\\\"]password['\\\"]\\s*[=:]|password\\s*=/gi, label: 'hardcoded-passwords', title: 'Potential hardcoded password patterns detected' },
-              { pattern: /process\\.env\\.[A-Z_]+/g, label: 'env-usage', title: 'Environment variable usage detected - verify all are documented' },
-              { pattern: /\\/\\/.*deprecated|\\/\\*[\\s\\S]*?deprecated[\\s\\S]*?\\*\\//gi, label: 'deprecated-code', title: 'Deprecated code patterns detected' },
-              { pattern: /setTimeout\\(|setInterval\\(/g, label: 'timers', title: 'Timer functions detected - verify cleanup logic' },
-              { pattern: /fetch\\(|axios\\.|request\\(/g, label: 'api-calls', title: 'API calls detected - verify error handling' },
-              { pattern: /localStorage|sessionStorage/g, label: 'storage-usage', title: 'Browser storage usage detected - verify security' }
-            ];
-            
-            const results = [];
-            
-            function scanDir(dir, ext) {
-              const items = fs.readdirSync(dir, { withFileTypes: true });
-              for (const item of items) {
-                const fullPath = path.join(dir, item.name);
-                if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
-                  scanDir(fullPath, ext);
-                } else if (item.isFile() && (ext.some(e => item.name.endsWith(e)))) {
-                  try {
-                    const content = fs.readFileSync(fullPath, 'utf8');
-                    for (const { pattern, label, title } of patterns) {
-                      const matches = content.match(pattern);
-                      if (matches && matches.length > 0) {
-                        results.push({ file: fullPath, label, title, count: matches.length, pattern: pattern.toString() });
-                      }
-                    }
-                  } catch (e) {}
-                }
-              }
-            }
-            
-            scanDir('.', ['.ts', '.tsx', '.js', '.jsx']);
-            
-            const grouped = {};
-            for (const r of results) {
-              if (!grouped[r.label]) grouped[r.label] = { title: r.title, files: [] };
-              grouped[r.label].files.push(r.file);
-            }
-            
-            const issuesToCreate = Object.entries(grouped).map(([label, data]) => ({
-              title: data.title,
-              body: \`## Automated Low Hanging Fruit Detection\n\n**Pattern:** \${label}\n**Files affected:** \${data.files.length}\n\n### Affected Files\n\${data.files.map(f => \`- \\${f}\`).join('\\n')}\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n/label ~\\${label}\n\`
-            }));
-            
-            fs.writeFileSync('issues-to-create.json', JSON.stringify(issuesToCreate, null, 2));
-            console.log('Found', issuesToCreate.length, 'categories to create issues for');
-          "
+          node scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create GitHub Issues
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const issues = require('./issues-to-create.json');
-            const existingIssues = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'all',
-              per_page: 100
-            });
-            
-            const existingTitles = new Set(existingIssues.data.map(i => i.title));
-            
-            for (const issue of issues) {
-              if (!existingTitles.has(issue.title)) {
-                await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: issue.title,
-                  body: issue.body,
-                  labels: ['bug', 'good first issue', 'AI agent friendly', 'bug bounty', '💎 Bounty']
-                });
-                console.log('Created issue:', issue.title);
-              } else {
-                console.log('Issue already exists:', issue.title);
-              }
-            }
+      - name: Create issues from detected items
+        if: steps.detect.outputs.has_items == 'true'
+        run: |
+          node scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Report status
+        if: always()
+        run: |
+          echo "Low hanging fruit automation completed"
+          echo "Detection status: ${{ steps.detect.outcome }}"
