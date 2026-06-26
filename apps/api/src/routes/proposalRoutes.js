@@ -1,7 +1,15 @@
-import { Router } from "express";
-import { getProposals, postProposal } from "../controllers/proposalController.js";
+import { Router } from 'express';
+import { protect } from '../middleware/auth.js';
+import { createProposal, getProposals, getProposalById, updateProposal, deleteProposal } from '../controllers/proposalController.js';
+import { validate } from '../middleware/validate.js';
+import { createProposalSchema } from '../validators/proposalValidator.js';
 
-export const proposalRoutes = Router();
+const router = Router();
 
-proposalRoutes.get("/", getProposals);
-proposalRoutes.post("/", postProposal);
+router.post('/', protect, validate(createProposalSchema), createProposal);
+router.get('/', protect, getProposals);
+router.get('/:id', protect, getProposalById);
+router.put('/:id', protect, updateProposal);
+router.delete('/:id', protect, deleteProposal);
+
+export { router as proposalRoutes };
