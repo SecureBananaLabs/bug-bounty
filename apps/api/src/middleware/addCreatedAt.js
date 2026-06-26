@@ -1,0 +1,1 @@
+export const addCreatedAt=(req,_,next)=>{req.body.createdAt=new Date().toISOString();delete req.body.id;return next();};
