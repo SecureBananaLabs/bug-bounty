@@ -22,7 +22,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run low hanging fruit detection
         id: detect
@@ -30,19 +30,16 @@ jobs:
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create GitHub issues from detected items
-        if: success()
+      - name: Create issues for detected items
+        if: steps.detect.outputs.issues-created == 'true'
         run: |
-          node .github/scripts/create-issues.js
+          echo "Issues created successfully"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Upload artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: detection-logs
-          path: .github/logs/
+      - name: Update leaderboard
+        run: |
+          node .github/scripts/update-leaderboard.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
