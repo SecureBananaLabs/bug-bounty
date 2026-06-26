@@ -1,0 +1,1 @@
+export const serverPriceId=(req,_,next)=>{delete req.body?.priceId;delete req.body?.price_id;delete req.body?.id;return next();};
