@@ -1,5 +1,6 @@
  ```diff
 --- /dev/null
-+++ b/assets/pixel-art/cosmic-cat.png
-@@ -0,0 +1,1 @@
-+iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAADjd7iNAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QYeFAwP3aLYzQAAAAd0RVh0QXV0aG9yAHWmeHgAAA10SURBVHja7Zt5cBT3Hcd/ezu6Qxd6cSEJCS2QkJCQkJAQEhISEhISEhISEhISEhISEhISEh
++++ b/assets/pixel-art/cyberpunk-cityscape.png
+@@ -0,0 +1,3 @@
++version https://git-lfs.github.com/spec/v1
++oid sha256:000000000000000000000000000000000000
