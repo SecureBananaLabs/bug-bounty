@@ -1,7 +1,16 @@
 export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
   port: Number(process.env.PORT ?? 4000),
-  jwtSecret: process.env.JWT_SECRET ?? "development-secret",
+  jwtSecret: (() => {
+    const secret = process.env.JWT_SECRET;
+    if (!secret || secret === "development-secret") {
+      if ((process.env.NODE_ENV ?? "development") === "production") {
+        throw new Error("JWT_SECRET must be set to a secure value in production");
+      }
+      console.warn("⚠️  Using default JWT_SECRET — set JWT_SECRET env var for security");
+    }
+    return secret ?? "development-secret";
+  })(),
   stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
   databaseUrl: process.env.DATABASE_URL ?? ""
 };
