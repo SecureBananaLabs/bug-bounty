@@ -1,7 +1,7 @@
  ```diff
 --- /dev/null
 +++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,69 @@
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
@@ -12,7 +12,6 @@
 +
 +permissions:
 +  issues: write
-+  contents: read
 +
 +jobs:
 +  detect-and-create-issues:
@@ -29,111 +28,172 @@
 +      - name: Install dependencies
 +        run: npm ci
 +
-+      - name: Run low hanging fruit detection
-+        id: detect
++      - name: Run low hanging fruit detector
++        id: detector
 +        run: |
-+          node -e "
-+          const fs = require('fs');
-+          const path = require('path');
-+          
-+          const lowHangingFruits = [];
-+          
-+          // Check for common low hanging fruit patterns
-+          const checks = [
-+            { pattern: 'TODO|FIXME|HACK|XXX|BUG', files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'], description: 'Code contains TODO/FIXME/HACK comments that should be addressed' },
-+            { pattern: 'console\\.(log|warn|error)', files: ['**/*.ts', '**/*.tsx'], description: 'Debug console statements found in source code' },
-+            { pattern: 'any', files: ['**/*.ts', '**/*.tsx'], description: 'TypeScript \`any\` types used - should be replaced with proper types' },
-+            { pattern: 'TODO', files: ['README.md', 'CONTRIBUTING.md'], description: 'Documentation contains TODO items' },
-+          ];
-+          
-+          // Simple file scanning
-+          function scanFiles() {
-+            const results = [];
-+            // Check for missing tests
-+            const hasTestCommand = fs.existsSync('package.json') && JSON.parse(fs.readFileSync('package.json', 'utf8')).scripts?.test;
-+            if (!hasTestCommand) {
-+              results.push({ title: 'Add test suite to project', description: 'No test command found in package.json. Adding tests would improve code quality and catch regressions.' });
-+            }
-+            
-+            // Check for missing CI/CD
-+            if (!fs.existsSync('.github/workflows')) {
-+              results.push({ title: 'Set up CI/CD pipeline', description: 'No GitHub Actions workflows found. Setting up CI/CD would automate testing and deployment.' });
-+            }
-+            
-+            // Check for missing environment documentation
-+            if (!fs.existsSync('.env.example') && !fs.existsSync('.env.template')) {
-+              results.push({ title: 'Add .env.example file', description: 'No .env.example or .env.template found. Adding one would help new contributors set up the project.' });
-+            }
-+            
-+            // Check for missing issue templates
-+            if (!fs.existsSync('.github/ISSUE_TEMPLATE')) {
-+              results.push({ title: 'Add GitHub issue templates', description: 'No issue templates found. Adding templates would standardize bug reports and feature requests.' });
-+            }
-+            
-+            // Check for missing PR template
-+            if (!fs.existsSync('.github/pull_request_template.md')) {
-+              results.push({ title: 'Add pull request template', description: 'No PR template found. Adding one would improve PR quality and review process.' });
-+            }
-+            
-+            // Check for missing CODE_OF_CONDUCT
-+            if (!fs.existsSync('CODE_OF_CONDUCT.md')) {
-+              results.push({ title: 'Add CODE_OF_CONDUCT.md', description: 'No code of conduct found. Adding one would help maintain a welcoming community.' });
-+            }
-+            
-+            // Check for missing LICENSE
-+            if (!fs.existsSync('LICENSE') && !fs.existsSync('LICENSE.md')) {
-+              results.push({ title: 'Add LICENSE file', description: 'No license found. Adding a license would clarify usage rights for contributors and users.' });
-+            }
-+            
-+            // Check for missing security policy
-+            if (!fs.existsSync('SECURITY.md')) {
-+              results.push({ title: 'Add SECURITY.md', description: 'No security policy found. Adding one would help users report vulnerabilities responsibly.' });
-+            }
-+            
-+            // Check for missing contributing guidelines in root
-+            if (!fs.existsSync('CONTRIBUTING.md')) {
-+              results.push({ title: 'Add CONTRIBUTING.md', description: 'No contributing guidelines found. Adding them would help new contributors get started.' });
-+            }
-+            
-+            return results;
-+          }
-+          
-+          const results = scanFiles();
-+          fs.writeFileSync('low-hanging-fruit.json', JSON.stringify(results, null, 2));
-+          console.log('Found', results.length, 'low hanging fruit items');
-+          "
-+
-+      - name: Create GitHub issues for low hanging fruit
++          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          GITHUB_REPOSITORY: ${{ github.repository }}
++
++      - name: Create issues from detected items
++        if: success()
 +        run: |
-+          node -e "
-+          const fs = require('fs');
-+          const { execSync } = require('child_process');
-+          
-+          const items = JSON.parse(fs.readFileSync('low-hanging-fruit.json', 'utf8'));
-+          const existingIssues = JSON.parse(execSync('gh issue list --json title --limit 100', { encoding: 'utf8' }));
-+          const existingTitles = new Set(existingIssues.map(i => i.title));
-+          
-+          const referenceIssue = process.env.GITHUB_ISSUE_REFERENCE || '743';
-+          
-+          for (const item of items) {
-+            if (existingTitles.has(item.title)) {
-+              console.log('Skipping existing issue:', item.title);
-+              continue;
-+            }
-+            
-+            const body = \`\${item.description}
++          node .github/scripts/create-issues.js
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          GITHUB_REPOSITORY: ${{ github.repository }}
 +
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #\${referenceIssue} for more information.
++      - name: Upload results artifact
++        if: always()
++        uses: actions/upload-artifact@v4
++        with:
++          name: detection-results
++          path: .github/scripts/results/
+--- /dev/null
++++ b/.github/scripts/detect-low-hanging-fruit.js
+@@ -0,0 +1,287 @@
++#!/usr/bin/env node
++/**
++ * Low Hanging Fruit Detector
++ * 
++ * Recursively scans the repository for common bug patterns,
++ * missing features, and easy fixes that can be automated.
++ */
 +
-+/bounty \\$50\`;
-+            
-+            try {
-+              execSync(\`gh issue create --title '\${item.title.replace(/'/g, \"'\\''\")}' --body '\${body.replace(/'/g, \"'\\''\")}' --label 'good first issue,help wanted,bug bounty'\`, { stdio: 'inherit' });
-+              console.log('Created issue:', item.title);
-+            } catch (e) {
-+              console.error('Failed to create issue:', item.title, e.message);
-+            }
-+          }
++const fs = require('fs');
++const path = require('path');
++const { execSync } = require('child_process');
 +
++// Results storage
++const RESULTS_DIR = path.join(__dirname, 'results');
++if (!fs.existsSync(RESULTS_DIR)) {
++  fs.mkdirSync(RESULTS_DIR, { recursive: true });
++}
++
++const findings = [];
++
++// Common bug patterns to detect
++const BUG_PATTERNS = [
++  {
++    name: 'TODO/FIXME comments',
++    pattern: /(?:TODO|FIXME|XXX|HACK|BUG)\s*[:#]?\s*(.+)/gi,
++    severity: 'low',
++    category: 'code-debt',
++    description: 'Unresolved TODO or FIXME comments indicate incomplete work'
++  },
++  {
++    name: 'Console.log statements',
++    pattern: /console\.(log|warn|error|debug)\s*\(/gi,
++    severity: 'low',
++    category: 'debug-cleanup',
++    description: 'Debug console statements should be removed or replaced with proper logging',
++    excludeFiles: ['.test.', '.spec.', 'logger', 'log.']
++  },
++  {
++    name: 'Empty catch blocks',
++    pattern: /catch\s*\([^)]*\)\s*\{\s*(?:\/\/[^\n]*)?\s*\}/gi,
++    severity: 'medium',
++    category: 'error-handling',
++    description: 'Empty catch blocks swallow errors and make debugging difficult'
++  },
++  {
++    name: 'Hardcoded secrets',
++    pattern: /(?:password|secret|token|key|api[_-]?key)\s*[:=]\s*["'][^"']{4,}["']/gi,
++    severity: 'high',
++    category: 'security',
++    description: 'Potential hardcoded secrets detected',
++    excludeFiles: ['.env.example', 'example', 'sample', 'test', 'spec']
++  },
++  {
++    name: 'Unused imports',
++    pattern: /^import\s+.+?\s+from\s+['"][^'"]+['"];?\s*$/gm,
++    severity: 'low',
++    category: 'cleanup',
++    description: 'Potentially unused imports (requires manual verification)'
++  }
++];
++
++// File patterns to scan
++const SCAN_PATTERNS = [
++  '**/*.ts',
++  '**/*.tsx',
++  '**/*.js',
++  '**/*.jsx',
++  '**/*.json',
++  '**/*.md',
++  '**/*.yml',
++  '**/*.yaml'
++];
++
++// Directories to exclude
++const EXCLUDE_DIRS = [
++  'node_modules',
++  '.git',
++  'dist',
++  'build',
++  '.next',
++  'coverage',
++  '.github/scripts/results'
++];
++
++function shouldExclude(filePath) {
++  return EXCLUDE_DIRS.some(dir => filePath.includes(dir));
++}
++
++function scanFile(filePath) {
++  const content = fs.readFileSync(filePath, 'utf-8');
++  const lines = content.split('\n');
++  const results = [];
++
++  for (const bugPattern of BUG_PATTERNS) {
++    // Check exclusions
++    if (bugPattern.excludeFiles) {
++      const shouldSkip = bugPattern.excludeFiles.some(ex => filePath.includes(ex));
++      if (shouldSkip) continue;
++    }
++
++    let match;
++    const pattern = new RegExp(bugPattern.pattern.source, 'gi');
++    
++    while ((match = pattern.exec(content)) !== null) {
++      const lineNum = content.substring(0, match.index).split('\n').length;
++      const lineContent = lines[lineNum - 1]?.trim() || '';
++      
++      results.push({
++        pattern: bugPattern.name,
++        category: bugPattern.category,
++        severity: bugPattern.severity,
++        description: bugPattern.description,
++        file: filePath,
++        line: lineNum,
++        content: lineContent.substring(0, 200)
++      });
++    }
++  }
++
++  return results;
++}
++
++function walkDir(dir, callback) {
++  const items = fs.readdirSync(dir);
++  for (const item of items) {
++    const fullPath = path.join(dir, item);
++    const stat = fs.statSync(fullPath);
++    
++    if (stat.isDirectory()) {
++      if (!shouldExclude(fullPath)) {
++        walkDir(fullPath, callback);
++      }
++    } else {
++      if (!shouldExclude(fullPath)) {
++        callback(fullPath);
++      }
++    }
++  }
++}
++
++function detectMissingFeatures() {
++  const features = [];
++  
++  // Check for common
