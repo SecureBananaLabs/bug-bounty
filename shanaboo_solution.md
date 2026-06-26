@@ -1,20 +1,13 @@
  ```diff
 --- /dev/null
-+++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,95 @@
++++ b/.github/workflows/low-hanging-fruit.yml
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    # Run daily at midnight UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
-+    inputs:
-+      dry_run:
-+        description: 'Run in dry-run mode (no issues created)'
-+        required: false
-+        default: 'false'
-+        type: boolean
 +
 +permissions:
 +  issues: write
@@ -32,154 +25,111 @@
 +        with:
 +          node-version: '20'
 +
-+      - name: Detect low hanging fruit and create issues
++      - name: Install dependencies
++        run: npm install
++
++      - name: Run low hanging fruit detection
++        run: node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
-+        run: |
-+          node .github/scripts/detect-low-hanging-fruit.js
-+
++          GITHUB_REPOSITORY: ${{ github.repository }}
 +--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,245 @@
-+#!/usr/bin/env node
-+/**
-+ * Low Hanging Fruit Detection and Issue Creation Script
-+ * 
-+ * This script recursively scans the repository for common
-+ * "low hanging fruit" issues and creates GitHub issues for them.
-+ */
-+
+@@ -0,0 +1,188 @@
 +const fs = require('fs');
 +const path = require('path');
 +const { execSync } = require('child_process');
 +
-+// Configuration
-+const CONFIG = {
-+  // Patterns that indicate low hanging fruit
-+  patterns: [
-+    {
-+      type: 'TODO/FIXME comment',
-+      regex: /(?:TODO|FIXME|XXX|HACK|BUG|NOTE)\s*[:;]?\s*(.+)/i,
-+      severity: 'low',
-+      createIssue: true
-+    },
-+    {
-+      type: 'Console statement',
-+      regex: /console\.(log|warn|error|debug)\s*\(/i,
-+      severity: 'low',
-+      createIssue: true,
-+      excludeFiles: ['.test.', '.spec.', 'test/']
-+    },
-+    {
-+      type: 'Empty catch block',
-+      regex: /catch\s*\([^)]*\)\s*\{\s*\}/i,
-+      severity: 'medium',
-+      createIssue: true
-+    },
-+    {
-+      type: 'Hardcoded secret pattern',
-+      regex: /(?:password|secret|key|token|api[_-]?key)\s*[:=]\s*["\'][^"\'\n]{4,}["\']/i,
-+      severity: 'high',
-+      createIssue: true
-+    },
-+    {
-+      type: 'Deprecated API usage',
-+      regex: /(?:deprecated|DEPRECATED)/i,
-+      severity: 'low',
-+      createIssue: true
++const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
++const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
++const [OWNER, REPO] = GITHUB_REPOSITORY.split('/');
++
++if (!GITHUB_TOKEN) {
++  console.error('GITHUB_TOKEN is required');
++  process.exit(1);
++}
++
++const REPO_ROOT = process.cwd();
++
++function findFiles(dir, extensions, files = []) {
++  const items = fs.readdirSync(dir, { withFileTypes: true });
++  for (const item of items) {
++    const fullPath = path.join(dir, item.name);
++    if (item.isDirectory() && item.name !== 'node_modules' && item.name !== '.git' && item.name !== 'dist' && item.name !== 'build') {
++      findFiles(fullPath, extensions, files);
++    } else if (item.isFile() && extensions.some(ext => item.name.endsWith(ext))) {
++      files.push(fullPath);
 +    }
-+  ],
-+  // File patterns to scan
-+  includeExtensions: ['.js', '.ts', '.tsx', '.jsx', '.py', '.java', '.go', '.rb', '.php'],
-+  // Directories to exclude
-+  excludeDirs: ['node_modules', '.git', 'dist', 'build', '.next', 'coverage', '.github'],
-+  // Maximum issues to create per run
-+  maxIssuesPerRun: 5,
-+  // Issue label
-+  issueLabel: 'low-hanging-fruit'
-+};
-+
-+// Utility: Execute GitHub CLI command
-+function ghCommand(args) {
-+  try {
-+    return execSync(`gh ${args}`, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
-+  } catch (error) {
-+    console.error(`GitHub CLI error: ${error.message}`);
-+    return null;
 +  }
++  return files;
 +}
 +
-+// Utility: Check if issue already exists
-+function issueExists(title) {
-+  const result = ghCommand(`issue list --repo "${process.env.GITHUB_REPOSITORY || '.'}" --search "${title.substring(0, 50)}" --json number --limit 1`);
-+  if (!result) return false;
-+  const issues = JSON.parse(result);
-+  return issues.length > 0;
-+}
-+
-+// Utility: Create a GitHub issue
-+function createIssue(title, body, labels = []) {
-+  const dryRun = process.env.DRY_RUN === 'true';
++function detectIssues() {
++  const issues = [];
++  const tsFiles = findFiles(REPO_ROOT, ['.ts', '.tsx', '.js', '.jsx']);
 +  
-+  if (dryRun) {
-+    console.log(`[DRY RUN] Would create issue: ${title}`);
-+    return true;
-+  }
-+
-+  if (issueExists(title)) {
-+    console.log(`Issue already exists: ${title}`);
-+    return false;
-+  }
-+
-+  const escapedBody = body.replace(/"/g, '\\"').replace(/`/g, '\\`');
-+  const labelsArg = labels.length > 0 ? `--label "${labels.join(',')}"` : '';
-+  
-+  const result = ghCommand(`issue create --title "${title.substring(0, 256)}" --body "${escapedBody}" ${labelsArg}`);
-+  
-+  if (result !== null) {
-+    console.log(`Created issue: ${title}`);
-+    return true;
-+  }
-+  return false;
-+}
-+
-+// Scan a single file for patterns
-+function scanFile(filePath, relativePath) {
-+  const findings = [];
-+  const content = fs.readFileSync(filePath, 'utf-8');
-+  const lines = content.split('\n');
-+
-+  for (const pattern of CONFIG.patterns) {
-+    // Check if file should be excluded
-+    if (pattern.excludeFiles) {
-+      const shouldExclude = pattern.excludeFiles.some(ex => relativePath.includes(ex));
-+      if (shouldExclude) continue;
++  for (const file of tsFiles) {
++    const content = fs.readFileSync(file, 'utf-8');
++    const relativePath = path.relative(REPO_ROOT, file);
++    
++    // Detect TODO/FIXME comments
++    const todoRegex = /(TODO|FIXME|HACK|BUG|XXX)\s*:?\s*(.+)/gi;
++    let match;
++    while ((match = todoRegex.exec(content)) !== null) {
++      const lines = content.substring(0, match.index).split('\n');
++      const lineNumber = lines.length;
++      issues.push({
++        title: `TODO/FIXME found: ${match[2].trim().substring(0, 80)}`,
++        body: `**Location:** \`${relativePath}:${lineNumber}\`\n\n**Match:** \`${match[0]}\`\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
++        type: 'todo',
++        severity: 'low'
++      });
 +    }
-+
-+    lines.forEach((line, index) => {
-+      const match = line.match(pattern.regex);
-+      if (match) {
-+        findings.push({
-+          type: pattern.type,
-+          severity: pattern.severity,
-+          file: relativePath,
-+          line: index + 1,
-+          content: line.trim(),
-+          match: match[1] || match[0]
-+        });
-+      }
++    
++    // Detect console.log statements
++    const consoleRegex = /console\.(log|warn|error|debug)\(/g;
++    let consoleMatch;
++    while ((consoleMatch = consoleRegex.exec(content)) !== null) {
++      const lines = content.substring(0, consoleMatch.index).split('\n');
++      const lineNumber = lines.length;
++      issues.push({
++        title: `Remove console statement in ${relativePath}`,
++        body: `**Location:** \`${relativePath}:${lineNumber}\`\n\nFound \`${consoleMatch[0]}\` - Console statements should be removed or replaced with proper logging.\n\nThis issue is limited only to the creator of thisitia. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
++        type: 'console',
++        severity: 'low'
++      });
++    }
++    
++    // Detect empty catch blocks
++    const catchRegex = /catch\s*\([^)]*\)\s*\{\s*\}/g;
++    let catchMatch;
++    while ((catchMatch = catchRegex.exec(content)) !== null) {
++      const lines = content.substring(0, catchMatch.index).split('\n');
++      const lineNumber = lines.length;
++      issues.push({
++        title: `Empty catch block in ${relativePath}`,
++        body: `**Location:** \`${relativePath}:${lineNumber}\`\n\nEmpty catch blocks swallow errors and make debugging difficult.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
++        type: 'empty-catch',
++        severity: 'medium'
++      });
++    }
++  }
++  
++  // Detect missing documentation
++  const mdFiles = findFiles(REPO_ROOT, ['.md']);
++  const hasContributing = mdFiles.some(f => f.toLowerCase().includes('contributing'));
++  if (!hasContributing) {
++    issues.push({
++      title: 'Missing CONTRIBUTING.md documentation',
++      body: `The repository is missing a CONTRIBUTING.md file. This file helps guide new contributors.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
++      type: 'documentation',
++      severity: 'low'
 +    });
 +  }
-+
-+  return findings;
-+}
-+
-+// Recursively scan directory
-+function scanDirectory(dir, baseDir = dir) {
-+  const findings = [];
-+  const items = fs.readdirSync(dir);
-+
-+  for (const item of items) {
-+    const fullPath = path.join(dir, item);
-+
++  
++  // Detect missing tests
++  const testFiles = findFiles(REPO_ROOT, ['.test.ts', '.test.tsx', '.spec.ts', '.spec.tsx', '.test.js', '.spec.js']);
++  if (testFiles.length === 0) {
++    issues.push({
++      title: 'No test files detected in repository',
++      body: `No test files were found in the repository. Consider
