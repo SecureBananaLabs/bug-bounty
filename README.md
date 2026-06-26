@@ -1,6 +1,7 @@
 # Project
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
-<img width="64" height="64" alt="Pixel Art - Robot Friend" src="assets/pixel-art/shanaboo-robot-friend.png" />
+
+![Pixel Art - Cyberpunk Cityscape](assets/pixel-art/cyberpunk-cityscape.png)
 
 # FreelanceFlow Monorepo
 
