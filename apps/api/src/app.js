@@ -14,12 +14,28 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { env } from "./config/env.js";
 
 export function createApp() {
   const app = express();
 
+  const allowedOrigins = env.corsOrigin
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+
   app.use(helmet());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(null, false);
+        }
+      }
+    })
+  );
   app.use(express.json());
   app.use(apiLimiter);
 
