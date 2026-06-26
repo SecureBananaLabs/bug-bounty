@@ -1,43 +1,28 @@
 # The Flow of Code and Coin
 
-## I. The Marketplace of Dreams
+## A Poem for FreelanceFlow
 
-In digital halls where talents meet,
-Where clients post and freelancers greet,
-A job takes shape in bits and bytes,
-Through morning haze and neon nights.
+In digital halls where seekers roam,
+Through lines of code and pixels' home,
+A marketplace of skill and dream,
+Where talent flows like data stream.
 
-The proposal flies, the message sent,
-Across the wire, with hope intent,
-No face to face, yet trust is born,
-In lines of code, a contract sworn.
+The client posts their need by night,
+A project born of pure delight,
+The freelancer wakes to find their place,
+And builds a bridge through cyberspace.
 
-## II. The Architecture of Trust
-
-From Prisma schemas, tables rise,
-To hold the data, organize,
-The user, job, the payment due,
-Each model built, each relation true.
-
-Express awaits on API,
-To route and serve, to verify,
-While Next.js paints the interface,
-Where React components find their place.
-
-## III. The Freelance Flow
-
-So here we build the modern stage,
-For gig economy's new age,
-No cubicle, no timecard punch,
-Just skills and will to break the lunch.
-
-From landing page to admin's eye,
-This monorepo aims to fly,
-FreelanceFlow, our shared creation,
-Code and commerce's fusion.
+No office walls, no binding chain,
+Just honest work through joy and pain,
+From Stripe to Prisma, React to Node,
+We plant our seeds and watch them grow.
 
 ---
 
-*Written for the FreelanceFlow project — a tribute to the architecture and ambition of building a modern freelance marketplace.*
+*Creative Decision: I chose a traditional AABB rhyme scheme with iambic meter to create a contrast between the classical form of poetry and the modern, digital subject matter of a freelance tech marketplace. This juxtaposition mirrors how FreelanceFlow brings human connection and artistry into the structured world of code and contracts — the "old" craft of making a living through skill, expressed through an "old" craft of verse, both thriving in a digital age.*
 
-**Creative Decision:** I chose a traditional ballad form (ABAB rhyme scheme with alternating tetrameter) to create an intentional contrast with the modern tech stack described in the README. The poem mirrors the three-layer structure of the project itself: the user-facing marketplace, the technical backend, and the philosophical vision of freelance work. This juxtaposition of old poetic form with new technology reflects how timeless human needs (connecting talent with opportunity) find new expression through ever-evolving tools.
+---
+
+## PR Note
+
+**Creative Decision:** I chose the theme of bridging traditional craftsmanship with modern technology, using a classical rhyming structure to tell the story of how FreelanceFlow connects people in the digital economy. The tone is hopeful and human-centered, reflecting the platform's purpose of empowering independent workers and the clients who need them.
