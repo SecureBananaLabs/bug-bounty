@@ -1,11 +1,7 @@
-# Cosmic Forest Pixel Art
+# Pixel Art: Cyberpunk City Sunset
 
-**What:** A serene nighttime forest scene with a starry sky, glowing mushrooms, and a small campfire.
+A 64x64 pixel art piece depicting a futuristic cyberpunk city skyline at sunset, with neon-lit buildings against a gradient sky. Created to add creative visual assets to the project.
 
-**Why:** I chose this theme to capture the peaceful contrast between the vastness of the cosmos and the quiet intimacy of a forest clearing. The glowing elements represent creative inspiration found in nature.
+**Why:** I wanted to capture the intersection of technology and art that defines modern development—bright, bold, and built pixel by pixel.
 
-## Details
-- Canvas size: 64x64 pixels
-- Format: PNG
-- Colors used: Deep blues, purples, warm oranges, and bright cyans
-- Style: Limited palette pixel art with dithering for atmosphere
+**Tool:** Generated programmatically with precise pixel placement for authentic retro aesthetics.
