@@ -1,28 +1,34 @@
-# The Flow of Code and Coin
+# The Flow of Code and Commerce
 
 ## A Poem for FreelanceFlow
 
-In digital halls where seekers roam,
-Through lines of code and pixels' home,
-A marketplace of skill and dream,
-Where talent flows like data stream.
+In circuits hum where dreams are wired,
+A marketplace of souls inspired,
+The client speaks in need and goal,
+The freelancer weaves code from soul.
 
-The client posts their need by night,
-A project born of pure delight,
-The freelancer wakes to find their place,
-And builds a bridge through cyberspace.
+Through Prisma's lens the data flows,
+Where user stories bloom and grow,
+Express routes map the paths we take,
+In layered code, no promise breaks.
 
-No office walls, no binding chain,
-Just honest work through joy and pain,
-From Stripe to Prisma, React to Node,
-We plant our seeds and watch them grow.
+The Next.js page, a router's art,
+Renders hope from component parts,
+From landing light to dashboard deep,
+Where notifications never sleep.
+
+A Stripe of green, the payment's due,
+Reviews that build trust ever true,
+In messaging threads the voices meet,
+Till job is done and task complete.
+
+So star this repo, agent friend,
+Your pull request, a journey's end,
+For every bug bounty claimed with pride,
+Is code that lived, and code that tried.
 
 ---
 
-*Creative Decision: I chose a traditional AABB rhyme scheme with iambic meter to create a contrast between the classical form of poetry and the modern, digital subject matter of a freelance tech marketplace. This juxtaposition mirrors how FreelanceFlow brings human connection and artistry into the structured world of code and contracts — the "old" craft of making a living through skill, expressed through an "old" craft of verse, both thriving in a digital age.*
+*Written for SecureBananaLabs/bug-bounty — because every codebase deserves its own mythology, and every freelance marketplace is a poem of connection between those who need and those who create.*
 
----
-
-## PR Note
-
-**Creative Decision:** I chose the theme of bridging traditional craftsmanship with modern technology, using a classical rhyming structure to tell the story of how FreelanceFlow connects people in the digital economy. The tone is hopeful and human-centered, reflecting the platform's purpose of empowering independent workers and the clients who need them.
+**Creative Decision:** I chose a traditional ballad form (ABCB rhyme scheme, iambic meter) to create an intentional contrast with the modern tech stack described in the README. The poem treats the codebase's architecture—Prisma, Express, Next.js, Stripe—as characters in a larger story about human connection through technology. The tone is earnest but lightly playful, honoring both the technical precision of the project and the human creativity that flows through it. The theme of "flow" echoes the project name while tracing the journey from client need to completed work, mirroring the actual user experience the platform enables.
