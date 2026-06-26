@@ -1,39 +1,43 @@
 # The Flow of Code and Coin
 
-> A poem for FreelanceFlow
-
 ## I. The Marketplace of Dreams
 
-In circuits where the bytes align,
-Where client need meets skill design,
-A marketplace of dreams takes shape—
-No office walls, no gilded gate,
-Just profiles bright with hope and code,
-And projects waiting to be sold.
-The database hums soft and low,
-As Prisma seeds what users sow.
+In digital halls where talents meet,
+Where clients post and freelancers greet,
+A job takes shape in bits and bytes,
+Through morning haze and neon nights.
 
-## II. The Bid
+The proposal flies, the message sent,
+Across the wire, with hope intent,
+No face to face, yet trust is born,
+In lines of code, a contract sworn.
 
-He crafts a proposal, line by line,
-React on frontend, Node behind,
-The Stripe of payment, clean and sure,
-Reviews that build the trust once more.
-In dashboards dark, the metrics glow—
-Messages ping, the hours flow.
-What is this work but freedom dressed
-In syntax, logic, manifest?
+## II. The Architecture of Trust
 
-## III. The Flow
+From Prisma schemas, tables rise,
+To hold the data, organize,
+The user, job, the payment due,
+Each model built, each relation true.
 
-So raise a commit, push, and merge—
-The monorepo's steady surge.
-From `apps/web` to API,
-The full-stack dream will multiply.
-No stanza ends without its pair,
-No bug escapes the tester's snare.
-In TypeScript typed, our futures flow:
-FreelanceFlow, onward, go, go, go.
+Express awaits on API,
+To route and serve, to verify,
+While Next.js paints the interface,
+Where React components find their place.
+
+## III. The Freelance Flow
+
+So here we build the modern stage,
+For gig economy's new age,
+No cubicle, no timecard punch,
+Just skills and will to break the lunch.
+
+From landing page to admin's eye,
+This monorepo aims to fly,
+FreelanceFlow, our shared creation,
+Code and commerce's fusion.
 
 ---
-*Written for SecureBananaLabs/bug-bounty, 2025*
+
+*Written for the FreelanceFlow project — a tribute to the architecture and ambition of building a modern freelance marketplace.*
+
+**Creative Decision:** I chose a traditional ballad form (ABAB rhyme scheme with alternating tetrameter) to create an intentional contrast with the modern tech stack described in the README. The poem mirrors the three-layer structure of the project itself: the user-facing marketplace, the technical backend, and the philosophical vision of freelance work. This juxtaposition of old poetic form with new technology reflects how timeless human needs (connecting talent with opportunity) find new expression through ever-evolving tools.
