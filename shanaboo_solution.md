@@ -1,11 +1,12 @@
  ```diff
 --- /dev/null
-+++ b/.github/workflows/low-hanging-fruit-automation.yml
++++ b/.github/workflows/low-hanging-fruit.yml
 @@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
++    # Run daily at midnight UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
 +
@@ -28,167 +29,106 @@
 +      - name: Install dependencies
 +        run: npm ci
 +
-+      - name: Run low hanging fruit detection
-+        id: detect
++      - name: Run low hanging fruit detector
++        id: detector
 +        run: |
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          GITHUB_REPOSITORY: ${{ github.repository }}
 +
-+  recursive-issue-creation:
-+    runs-on: ubuntu-latest
-+    needs: detect-and-create-issues
-+    if: always()
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v4
-+
-+      - name: Create recursive issues
++      - name: Create issues for detected items
++        if: steps.detector.outputs.issues-created == 'true'
 +        run: |
-+          node .github/scripts/create-recursive-issues.js
-+        env:
-+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          REPO: ${{ github.repository }}
---- /dev/null
++          echo "Low hanging fruit issues have been created successfully"
++--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,187 @@
+@@ -0,0 +1,218 @@
++#!/usr/bin/env node
++
 +const fs = require('fs');
 +const path = require('path');
-+const { execSync } = require('child_process');
 +
++// GitHub API helper
 +const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const REPO = process.env.GITHUB_REPOSITORY || process.env.REPO;
++const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
 +
-+if (!GITHUB_TOKEN) {
-+  console.error('GITHUB_TOKEN is required');
-+  process.exit(1);
-+}
-+
-+const API_BASE = 'https://api.github.com';
-+
-+function githubRequest(endpoint, method = 'GET', data = null) {
-+  const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}${endpoint}`;
-+  const options = {
-+    method,
++async function githubApi(endpoint, options = {}) {
++  const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com${endpoint}`;
++  const response = await fetch(url, {
++    ...options,
 +    headers: {
 +      'Authorization': `token ${GITHUB_TOKEN}`,
 +      'Accept': 'application/vnd.github.v3+json',
 +      'User-Agent': 'LowHangingFruitBot',
-+      'Content-Type': 'application/json'
-+    }
-+  };
-+
-+  const cmd = `curl -s -X ${method} ${Object.entries(options.headers).map(([k, v]) => `-H "${k}: ${v}"`).join(' ')} ${data ? `-d '${JSON.stringify(data)}'` : ''} "${url}"`;
++      ...options.headers,
++    },
++  });
 +  
-+  try {
-+    const result = execSync(cmd, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 });
-+    return JSON.parse(result);
-+  } catch (e) {
-+    console.error('Request failed:', e.message);
-+    return null;
++  if (!response.ok) {
++    const text = await response.text();
++    throw new Error(`GitHub API error: ${response.status} ${response.statusText}\n${text}`);
 +  }
++  
++  return response.json();
 +}
 +
-+function findBugsAndImprovements() {
++// Detect low hanging fruit issues in the codebase
++function detectLowHangingFruit() {
 +  const issues = [];
 +  
-+  // Check for common low-hanging fruit patterns
-+  const checks = [
-+    {
-+      type: 'documentation',
-+      title: 'README.md needs installation instructions for new contributors',
-+      check: () => {
-+        const readme = fs.readFileSync('README.md', 'utf-8');
-+        return !readme.includes('npm install') || !readme.includes('npm run dev');
-+      }
-+    },
-+    {
-+      type: 'documentation', 
-+      title: 'Add CONTRIBUTING.md guidelines for issue creation',
-+      check: () => {
-+        try {
-+          fs.accessSync('CONTRIBUTING.md');
-+          const content = fs.readFileSync('CONTRIBUTING.md', 'utf-8');
-+          return !content.includes('issue') || !content.includes('pull request');
-+        } catch {
-+          return true;
-+        }
-+      }
-+    },
-+    {
-+      type: 'bug',
-+      title: 'Missing .env.example files for apps',
-+      check: () => {
-+        const apps = ['apps/web', 'apps/api'];
-+        return apps.some(app => !fs.existsSync(path.join(app, '.env.example')));
-+      }
-+    },
-+    {
-+      type: 'bug',
-+      title: 'Package.json missing test script',
-+      check: () => {
-+        const pkg = JSON.parse(fs.readSync('package.json', 'utf-8'));
-+        return !pkg.scripts || !pkg.scripts.test;
-+      }
-+    },
-+    {
-+      type: 'improvement',
-+      title: 'Add GitHub issue templates for bug reports and features',
-+      check: () => {
-+        return !fs.existsSync('.github/ISSUE_TEMPLATE');
-+      }
-+    },
-+    {
-+      type: 'bug',
-+      title: 'Missing error handling middleware in API',
-+      check: () => {
-+        try {
-+          const apiFiles = fs.readdirSync('apps/api');
-+          return !apiFiles.some(f => f.includes('error') || f.includes('middleware'));
-+        } catch {
-+          return false;
-+        }
-+      }
-+    },
-+    {
-+      type: 'documentation',
-+      title: 'Add API documentation with OpenAPI/Swagger',
-+      check: () => {
-+        return !fs.existsSync('apps/api/swagger') && !fs.existsSync('apps/api/openapi');
-+      }
-+    },
-+    {
-+      type: 'improvement',
-+      title: 'Add pre-commit hooks for code quality',
-+      check: () => {
-+        return !fs.existsSync('.husky') && !fs.existsSync('.pre-commit-config.yaml');
-+      }
-+    }
-+  ];
-+
-+  for (const check of checks) {
-+    try {
-+      if (check.check()) {
++  // Check for common low hanging fruit patterns
++  const rootDir = process.cwd();
++  
++  // Pattern 1: Check for TODO/FIXME comments in source files
++  const sourceFiles = findSourceFiles(rootDir);
++  for (const file of sourceFiles) {
++    const content = fs.readFileSync(file, 'utf-8');
++    const lines = content.split('\n');
++    
++    lines.forEach((line, index) => {
++      const todoMatch = line.match(/TODO[:\s](.+)/i);
++      const fixmeMatch = line.match(/FIXME[:\s](.+)/i);
++      const hackMatch = line.match(/HACK[:\s](.+)/i);
++      
++      if (todoMatch || fixmeMatch || hackMatch) {
++        const match = todoMatch || fixmeMatch || hackMatch;
++        const relativePath = path.relative(rootDir, file);
 +        issues.push({
-+          title: check.title,
-+          type: check.type,
-+          labels: [check.type, 'good first issue', 'bug bounty', 'AI agent friendly']
++          title: `TODO/FIXME found in ${relativePath}`,
++          body: `## Low Hanging Fruit Detected\n\n**File:** \`${relativePath}\`\n**Line:** ${index + 1}\n**Content:** \`${line.trim()}\`\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n### Suggested Action\n- Review the TODO/FIXME comment\n- Implement the required fix or feature\n- Remove the comment once resolved`,
++          labels: ['bug', 'good first issue', 'help wanted', 'low-hanging-fruit'],
 +        });
 +      }
-+    } catch (e) {
-+      console.error(`Check failed for ${check.title}:`, e.message);
++    });
++  }
++  
++  // Pattern 2: Check for missing documentation
++  const readmePath = path.join(rootDir, 'README.md');
++  if (fs.existsSync(readmePath)) {
++    const readmeContent = fs.readFileSync(readmePath, 'utf-8');
++    if (!readmeContent.includes('## API Documentation')) {
++      issues.push({
++        title: 'Missing API Documentation',
++        body: `## Low Hanging Fruit: Missing API Documentation\n\nThe README.md lacks API documentation section.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n### Suggested Action\n- Add API documentation to README.md\n- Document all available endpoints\n- Include request/response examples`,
++        labels: ['documentation', 'good first issue', 'help wanted', 'low-hanging-fruit'],
++      });
 +    }
 +  }
-+
-+  return issues;
-+}
-+
-+function main() {
-+  console.log('Detecting low hanging fruit...');
 +  
-+  const detectedIssues = findBugsAndImprovements();
++  // Pattern 3: Check for missing tests
++  const testFiles = findTestFiles(rootDir);
++  if (testFiles.length === 0) {
++    issues.push({
++      title: 'No Test Files Found',
++      body: `## Low Hanging Fruit: Missing Test Coverage\n\nNo test files were detected in the repository.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nestr\n### Suggested Action\n- Add unit tests for critical functions\n- Add integration tests for API endpoints\n- Set up test coverage reporting`,
++      labels: ['bug', 'good first issue', 'help wanted', 'low-hanging-fruit'],
++    });
++  }
 +  
-+  // Write detected issues to file for next step
-+  fs.writeFileSync('.github/detected-issues.json', JSON.stringify(detectedIssues, null, 2));
-+  
-+  console.log(`Detected ${detect
++  // Pattern 4: Check for outdated dependencies
++  const packageJsonPath = path.join(rootDir, 'package.json');
++  if (fs.existsSync(packageJsonPath)) {
++    issues.push({
++      title: 'Review and Update Dependencies',
++      body: `## Low Hanging Fruit: Dependency Review\n\nDependencies should be reviewed and updated regularly.\n\nThis issue is limited only to the creator of this issue. This means that the issue author can attempt to solve this issue. If you would like to work on it, please create
