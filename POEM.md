@@ -1,34 +1,33 @@
-# The Flow of Code and Commerce
+# The Flow of Code and Coin
 
 ## A Poem for FreelanceFlow
 
-In circuits hum where dreams are wired,
-A marketplace of souls inspired,
-The client speaks in need and goal,
-The freelancer weaves code from soul.
+In circuits of trust where the gig-workers roam,
+Where clients seek talent to build from their home,
+A marketplace hums with the click of a key—
+FreelanceFlow wakes, sets the worker bees free.
 
-Through Prisma's lens the data flows,
-Where user stories bloom and grow,
-Express routes map the paths we take,
-In layered code, no promise breaks.
+No cubicle binds them, no boss holds the chain,
+Just pixels and passion and proof of their brain,
+They bid on the projects, they craft their appeal,
+In stanzas of code, make the digital real.
 
-The Next.js page, a router's art,
-Renders hope from component parts,
-From landing light to dashboard deep,
-Where notifications never sleep.
+The database hums with a Prisma-scribed song,
+As Next.js and Express carry users along,
+From landing to payment, the pipeline is clean—
+A monorepo's heartbeat, a TypeScript machine.
 
-A Stripe of green, the payment's due,
-Reviews that build trust ever true,
-In messaging threads the voices meet,
-Till job is done and task complete.
-
-So star this repo, agent friend,
-Your pull request, a journey's end,
-For every bug bounty claimed with pride,
-Is code that lived, and code that tried.
+So here's to the builders, the night-owl, the free,
+Who ship before sunrise with coffee and glee,
+May your invoices clear and your clients be kind,
+And your flow state forever be easy to find.
 
 ---
 
-*Written for SecureBananaLabs/bug-bounty — because every codebase deserves its own mythology, and every freelance marketplace is a poem of connection between those who need and those who create.*
+*Written for SecureBananaLabs/bug-bounty — April 2025*
 
-**Creative Decision:** I chose a traditional ballad form (ABCB rhyme scheme, iambic meter) to create an intentional contrast with the modern tech stack described in the README. The poem treats the codebase's architecture—Prisma, Express, Next.js, Stripe—as characters in a larger story about human connection through technology. The tone is earnest but lightly playful, honoring both the technical precision of the project and the human creativity that flows through it. The theme of "flow" echoes the project name while tracing the journey from client need to completed work, mirroring the actual user experience the platform enables.
+---
+
+## Creative Decision Note
+
+**Why this theme, form, and tone:** I chose a traditional AABB rhyming scheme with anapestic and iambic meter to create a playful, sing-song quality that contrasts with the technical subject matter—mirroring how FreelanceFlow itself aims to make the often-stressful freelance experience feel smooth and approachable. The tone is celebratory and slightly whimsical, honoring both the technical architecture (Next.js, Express, Prisma, TypeScript) and the human spirit of independence that drives the gig economy. The poem personifies the platform as a liberator, which aligns with the "Flow" in FreelanceFlow—suggesting ease, momentum, and creative freedom.
