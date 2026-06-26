@@ -21,114 +21,105 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run low hanging fruit detection
+        id: detect
         run: |
-          node << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-          const { execSync } = require('child_process');
-
-          const REPO = process.env.GITHUB_REPOSITORY;
-          const TOKEN = process.env.GITHUB_TOKEN;
-
-          function runCommand(cmd) {
-            return execSync(cmd, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 });
-          }
-
-          function createIssue(title, body) {
-            const escapedBody = body.replace(/"/g, '\\"');
-            const escapedTitle = title.replace(/"/g, '\\"');
-            const cmd = `curl -s -X POST \
-              -H "Authorization: token ${TOKEN}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/repos/${REPO}/issues \
-              -d "{\"title\":\"${escapedTitle}\",\"body\":\"${escapedBody}\"}"`;
-            const result = runCommand(cmd);
-            return JSON.parse(result);
-          }
-
-          function getExistingIssues() {
-            const cmd = `curl -s -H "Authorization: token ${TOKEN}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/${REPO}/issues?state=all&per_page=100"`;
-            const result = runCommand(cmd);
-            return JSON.parse(result);
-          }
-
-          function issueExists(title, existingIssues) {
-            return existingIssues.some(issue => issue.title === title);
-          }
-
-          const existingIssues = getExistingIssues();
-
-          const issueTemplate = (description) => `## Description
-${description}
-
-## Instructions
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-## Bounty
-/bounty $700
-
-Bounties can only be paid upon successful PR merge.`;
-
-          const checks = [
-            {
-              title: 'Add input validation for job posting endpoints',
-              description: 'The job posting endpoints in `apps/api` lack comprehensive input validation. Add Zod schemas to validate job title, description, budget, and deadline fields. This is a security and data integrity concern.'
-            },
-            {
-              title: 'Implement rate limiting for authentication routes',
-              description: 'The auth routes (register, login, OAuth callback) in `apps/api` do not have rate limiting implemented. Add express-rate-limit or similar middleware to prevent brute force attacks.'
-            },
-            {
-              title: 'Add missing database indexes for performance',
-              description: 'The Prisma schema in `packages/db/prisma/schema.prisma` is missing indexes on frequently queried fields like user email, job status, and proposal status. Add appropriate @index directives.'
-            },
-            {
-              title: 'Implement proper error handling middleware',
-              description: 'The API lacks a centralized error handling middleware. Create a middleware that catches all errors, logs them appropriately, and returns consistent error responses without leaking sensitive information.'
-            },
-            {
-              title: 'Add CORS configuration for production',
-              description: 'The Express.js backend does not have explicit CORS configuration. Add proper CORS middleware with whitelist configuration for production environments.'
-            },
-            {
-              title: 'Implement API request logging',
-              description: 'Add structured request/response logging to the API using a library like morgan or pino. Logs should include timestamp, method, path, status code, and response time.'
-            },
-            {
-              title: 'Add health check endpoint',
-              description: 'The API lacks a health check endpoint. Add a `/health` or `/api/health` endpoint that returns database connection status and basic service health metrics.'
-            },
-            {
-              title: 'Validate environment variables at startup',
-              description: 'The applications do not validate required environment variables at startup. Add validation using a library like envalid or joi to fail fast with clear error messages when required env vars are missing.'
-            },
-            {
-              title: 'Add pagination to list endpoints',
-              description: 'List endpoints for jobs, users, and proposals do not implement pagination. Add cursor-based or offset pagination to prevent performance issues with large datasets.'
-            },
-            {
-              title: 'Implement soft delete for critical entities',
-              description: 'Users, jobs, and proposals use hard deletes. Implement soft delete pattern using a deletedAt timestamp field to preserve data integrity and enable recovery.'
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Simple heuristic: check for TODO/FIXME comments, empty files, common patterns
+            const results = [];
+            
+            function scanDir(dir, depth = 0) {
+              if (depth > 3) return;
+              const entries = fs.readdirSync(dir, { withFileTypes: true });
+              for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+                if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.git') {
+                  scanDir(fullPath, depth + 1);
+                } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx') || entry.name.endsWith('.js') || entry.name.endsWith('.md'))) {
+                  try {
+                    const content = fs.readFileSync(fullPath, 'utf-8');
+                    const lines = content.split('\n');
+                    lines.forEach((line, idx) => {
+                      if (line.includes('TODO') || line.includes('FIXME') || line.includes('HACK') || line.includes('XXX')) {
+                        results.push({ file: fullPath, line: idx + 1, text: line.trim(), type: 'todo-fixme' });
+                      }
+                      if (line.includes('console.log') || line.includes('debugger;')) {
+                        results.push({ file: fullPath, line: idx + 1, text: line.trim(), type: 'debug-statement' });
+                      }
+                      if (line.includes('any') && (fullPath.ends('.ts') || fullPath.ends('.tsx'))) {
+                        results.push({ file: fullPath, line: idx + 1, text: line.trim(), type: 'any-type' });
+                      }
+                    });
+                    if (content.trim() === '' && !fullPath.endsWith('.md')) {
+                      results.push({ file: fullPath, line: 0, text: 'Empty file', type: 'empty-file' });
+                    }
+                  } catch (e) {}
+                }
+              }
             }
-          ];
+            
+            scanDir('.');
+            
+            // Group by type and create summary
+            const grouped = {};
+            results.forEach(r => {
+              if (!grouped[r.type]) grouped[r.type] = [];
+              grouped[r.type].push(r);
+            });
+            
+            const issueBody = JSON.stringify({ count: results.length, grouped, sample: results.slice(0, 10) });
+            fs.writeFileSync('detection-results.json', issueBody);
+            console.log('Detected ' + results.length + ' items');
+          "
 
-          for (const check of checks) {
-            if (!issueExists(check.title, existingIssues)) {
-              console.log(`Creating issue: ${check.title}`);
-              const body = issueTemplate(check.description);
-              createIssue(check.title, body);
-              // Rate limit to avoid hitting GitHub API limits
-              execCommand('sleep 1');
-            } else {
-              console.log(`Issue already exists: ${check.title}`);
-            }
-          }
+      - name: Create GitHub Issues for detected items
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Read detection results
+          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('detection-results.json','utf-8')).count)")
+          
+          if [ "$COUNT" -eq 0 ]; then
+            echo "No low hanging fruit detected"
+            exit 0
+          fi
+          
+          # Create a single tracking issue with all findings
+          ISSUE_BODY="This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-          console.log('Low hanging fruit automation complete.');
-          EOF
-        shell: bash
+## Automated Low Hanging Fruit Detection Results
+
+Detected $COUNT potential improvements:
+
+$(node -e "
+const data = JSON.parse(require('fs').readFileSync('detection-results.json','utf-8'));
+const grouped = data.grouped;
+for (const [type, items] of Object.entries(grouped)) {
+  console.log('### ' + type + ' (' + items.length + ' items)');
+  items.slice(0, 5).forEach(item => {
+    console.log('- ' + item.file + ':' + item.line + ' - ' + item.text.substring(0, 100));
+  });
+  if (items.length > 5) console.log('- ... and ' + (items.length - 5) + ' more');
+}
+")
+
+---
+*This issue was automatically created by the Low Hanging Fruit Automation workflow.*"
+
+          # Check if we already created an issue today to avoid spam
+          TODAY=$(date +%Y-%m-%Y)
+          EXISTING=$(gh issue list --repo ${{ github.repository }} --search "Low Hanging Fruit Detection" --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+          
+          if [ -n "$EXISTING" ]; then
+            echo "Issue already exists: #$EXISTING"
+            # Update existing issue with new findings
+            gh issue edit "$EXISTING" --repo ${{ github.repository }} --body "$ISSUE_BODY"
+          else
+            gh issue create --repo ${{ github.repository }} --title "Low Hanging Fruit Detection - $(date +%Y-%m-%d)" --body "$ISSUE_BODY"
+          fi
