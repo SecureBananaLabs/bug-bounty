@@ -2,7 +2,6 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -22,29 +21,24 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
+
+      - name: Create issues for detected items
+        if: steps.detect.outputs.issues_to_create != ''
         run: |
-          node << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-          const { execSync } = require('child_process');
-
-          // Helper to run GitHub CLI commands
-          function gh(command) {
-            return execSync(command, { encoding: 'utf-8', stdio: 'pipe' });
-          }
-
-          // Find potential low hanging fruit issues in the codebase
-          const issues = [];
-
-          // Check for TODO/FIXME comments
-          try {
-            const todoOutput = execSync('grep -r -n "TODO\\|FIXME" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --include="*.md" . 2>/dev/null || true', { encoding: 'utf-8' });
-            if (todoOutput.trim()) {
-              issues.push({
-                title: 'TODO/FIXME comments need to be addressed',
-                body: 'The following TODO/FIXME comments were found in the codebase and need to be addressed:\n\n
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          ISSUES_DATA: ${{ steps.detect.outputs.issues_to_create }}
