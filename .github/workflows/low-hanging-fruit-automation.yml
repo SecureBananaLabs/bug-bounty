@@ -2,6 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
+    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -24,21 +25,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run low hanging fruit detector
-        id: detector
+      - name: Run low hanging fruit detection
+        id: detect
         run: |
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create GitHub issues for detected items
-        if: steps.detector.outputs.issues_to_create != ''
+  recursive-issue-creation:
+    needs: detect-and-create-issues
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * *'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Trigger recursive issue creation
         run: |
-          node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: ${{ github.repository_owner }}
-          REPO_NAME: ${{ github.event.repository.name }}
-          ISSUES_JSON: ${{ steps.detector.outputs.issues_to_create }}
+          echo "Low hanging fruit automation completed. Issues created for detected bugs/features."
+          echo "This workflow will run again on schedule to find more issues."
