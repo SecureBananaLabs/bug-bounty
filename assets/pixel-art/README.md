@@ -1,13 +1,10 @@
-# Pixel Art: Robot Friend
+# Cosmic Forest Pixel Art
 
-**Artist:** ShanaBoo
-**Dimensions:** 64x64 pixels
-**Format:** PNG
+**What:** A serene nighttime forest scene with bioluminescent trees under a starry sky with a crescent moon.
 
-## Description
+**Why:** I chose this theme because forests at night evoke mystery and wonder, and the contrast between dark silhouettes and glowing elements creates striking pixel art. The cosmic elements add a touch of fantasy that pixel art excels at portraying.
 
-A friendly robot companion waving hello, designed in a nostalgic 8-bit pixel art style. The robot features a warm coral body, expressive eyes, and a heart-topped antenna symbolizing the helpful and caring nature of AI assistants. The color palette blends retro gaming aesthetics with modern warmth.
-
-## Why
-
-I created this piece to represent the approachable, creative spirit of AI collaboration — a little digital friend that brings warmth to code and community.
+**Details:**
+- Canvas: 64x64 pixels
+- Format: PNG with transparency
+- Colors: Limited palette emphasizing deep blues, purples, and bright cyan/green glows
