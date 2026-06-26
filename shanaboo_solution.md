@@ -1,12 +1,11 @@
  ```diff
 --- /dev/null
 +++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,45 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    # Run daily at midnight UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
 +
@@ -27,7 +26,7 @@
 +          node-version: '20'
 +
 +      - name: Install dependencies
-+        run: npm ci
++        run: npm install
 +
 +      - name: Run low hanging fruit detection
 +        id: detect
@@ -35,151 +34,142 @@
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          REPO_OWNER: ${{ github.repository_owner }}
++          REPO_NAME: ${{ github.event.repository.name }}
 +
 +      - name: Create GitHub issues for detected items
-+        if: steps.detect.outputs.issues-created == 'true'
++        if: success()
 +        run: |
-+          echo "Low hanging fruit issues have been created successfully."
-+--- /dev/null
++          node .github/scripts/create-issues.js
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          REPO_OWNER: ${{ github.repository_owner }}
++          REPO_NAME: ${{ github.event.repository.name }}
++
++      - name: Report status
++        if: failure()
++        run: echo "Low hanging fruit detection failed"
+--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
 @@ -0,0 +1,228 @@
 +/**
 + * Low Hanging Fruit Detection Script
 + * 
-+ * This script recursively scans the repository for common bug patterns,
-+ * missing documentation, TODO comments, and other easy-to-fix issues.
-+ * It then creates GitHub issues for each finding.
++ * Scans the repository for common issues, missing features,
++ * and easy wins that can be automated into GitHub issues.
 + */
 +
 +const fs = require('fs');
 +const path = require('path');
-+const { execSync } = require('child_process');
 +
-+// Configuration
-+const CONFIG = {
-+  // File patterns to scan
-+  scanPatterns: [
-+    '**/*.js',
-+    '**/*.ts',
-+    '**/*.tsx',
-+    '**/*.jsx',
-+    '**/*.md',
-+    '**/*.json',
-+    '**/*.yml',
-+    '**/*.yaml',
-+    '**/*.prisma',
-+  ],
-+  // Directories to exclude
-+  excludeDirs: [
-+    'node_modules',
-+    '.git',
-+    'dist',
-+    'build',
-+    '.next',
-+    'coverage',
-+  ],
-+  // Patterns that indicate low hanging fruit
-+  patterns: {
-+    todo: /TODO|FIXME|HACK|XXX|BUG/gi,
-+    emptyCatch: /catch\s*\([^)]*\)\s*\{\s*\}/g,
-+    consoleLog: /console\.(log|warn|error)\(/g,
-+    hardcodedSecret: /(password|secret|key|token)\s*=\s*['"][^'"]+['"]/gi,
-+    unusedImport: /import\s+.*\s+from\s+/g, // Simplified, would need AST for accurate detection
-+    missingErrorHandling: /async\s+function|\.then\(/g,
-+    deprecatedApi: /deprecated|DEPRECATED/gi,
-+    missingDocs: /\/\*\*[\s\S]*?\*\//g, // Inverse: files without JSDoc
++const RESULTS_FILE = '.github/scripts/detected-issues.json';
++
++// Patterns to detect low hanging fruit
++const DETECTION_PATTERNS = {
++  // TODO/FIXME comments in code
++  todoComments: {
++    pattern: /TODO|FIXME|HACK|XXX|BUG/,
++    extensions: ['.ts', '.tsx', '.js', '.jsx', '.py', '.java', '.go', '.rs'],
++    severity: 'low',
++    label: 'good first issue'
 +  },
++  
++  // Missing documentation
++  missingDocs: {
++    checkFiles: ['README.md', 'CONTRIBUTING.md', 'LICENSE', 'CHANGELOG.md', 'SECURITY.md'],
++    severity: 'low',
++    label: 'documentation'
++  },
++  
++  // Common security issues
++  securityIssues: {
++    patterns: [
++      { regex: /password.*=.*['"][^'"]+['"]/i, issue: 'Hardcoded password detected' },
++      { regex: /api[_-]?key.*=.*['"][^'"]+['"]/i, issue: 'Hardcoded API key detected' },
++      { regex: /secret.*=.*['"][^'"]+['"]/i, issue: 'Hardcoded secret detected' },
++      { regex: /eval\s*\(/, issue: 'Dangerous eval() usage detected' },
++      { regex: /innerHTML\s*=/, issue: 'Potential XSS via innerHTML' }
++    ],
++    severity: 'medium',
++    label: 'security'
++  },
++  
++  // Missing tests
++  missingTests: {
++    testPatterns: ['*.test.*', '*.spec.*'],
++    sourcePatterns: ['*.ts', '*.tsx', '*.js', '*.jsx'],
++    severity: 'low',
++    label: 'good first issue'
++  },
++  
++  // Dependency vulnerabilities (basic check)
++  outdatedDependencies: {
++    files: ['package.json', 'requirements.txt', 'Cargo.toml', 'go.mod'],
++    severity: 'low',
++    label: 'dependencies'
++  }
 +};
 +
-+// Track created issues to avoid duplicates
-+let createdIssues = new Set();
-+
-+function loadExistingIssues() {
-+  try {
-+    const output = execSync('gh issue list --repo ' + process.env.GITHUB_REPOSITORY + ' --json title --limit 100', {
-+      encoding: 'utf-8',
-+      env: { ...process.env, GH_TOKEN: process.env.GITHUB_TOKEN },
-+    });
-+    const issues = JSON.parse(output);
-+    issues.forEach(issue => createdIssues.add(issue.title));
-+  } catch (e) {
-+    console.log('Could not load existing issues, starting fresh');
++function walkDir(dir, extensions, results = []) {
++  const items = fs.readdirSync(dir, { withFileTypes: true });
++  
++  for (const item of items) {
++    const fullPath = path.join(dir, item.name);
++    
++    if (item.isDirectory()) {
++      if (item.name === 'node_modules' || item.name === '.git' || item.name === 'dist' || item.name === 'build') {
++        continue;
++      }
++      walkDir(fullPath, extensions, results);
++    } else if (extensions.some(ext => item.name.endsWith(ext))) {
++      results.push(fullPath);
++    }
 +  }
++  
++  return results;
 +}
 +
-+function scanFile(filePath) {
-+  const findings = [];
-+  const content = fs.readFileSync(filePath, 'utf-8');
-+  const lines = content.split('\n');
-+
-+  // Check for TODO/FIXME comments
-+  lines.forEach((line, index) => {
-+    if (CONFIG.patterns.todo.test(line)) {
-+      findings.push({
-+        type: 'TODO/FIXME Comment',
-+        file: filePath,
-+        line: index + 1,
-+        content: line.trim(),
-+        severity: 'low',
-+        description: 'Unresolved TODO or FIXME comment found in code.',
++function detectTodoComments() {
++  const issues = [];
++  const sourceFiles = walkDir('.', DETECTION_PATTERNS.todoComments.extensions);
++  
++  for (const file of sourceFiles) {
++    try {
++      const content = fs.readFileSync(file, 'utf8');
++      const lines = content.split('\n');
++      
++      lines.forEach((line, index) => {
++        if (DETECTION_PATTERNS.todoComments.pattern.test(line)) {
++          issues.push({
++            title: `TODO/FIXME found in ${path.relative('.', file)}`,
++            body: `**Location:** ${file}:${index + 1}\n\n**Code:**\n\`\`\`\n${line.trim()}\n\`\`\`\n\nThis is a low hanging fruit issue that can be addressed.`,
++            severity: DETECTION_PATTERNS.todoComments.severity,
++            label: DETECTION_PATTERNS.todoComments.label
++          });
++        }
 +      });
++    } catch (err) {
++      // Skip files that can't be read
 +    }
++  }
++  
++  return issues;
++}
 +
-+    // Check for empty catch blocks
-+    if (CONFIG.patterns.emptyCatch.test(line)) {
-+      findings.push({
-+        type: 'Empty Catch Block',
-+        file: filePath,
-+        line: index + 1,
-+        content: line.trim(),
-+        severity: 'medium',
-+        description: 'Empty catch block suppresses errors and makes debugging difficult.',
-+      });
-+    }
-+
-+    // Check for console.log statements
-+    if (CONFIG.patterns.consoleLog.test(line) && !filePath.includes('test') && !filePath.includes('spec')) {
-+      findings.push({
-+        type: 'Console Statement in Production Code',
-+        file: filePath,
-+        line: index + 1,
-+        content: line.trim(),
-+        severity: 'low',
-+        description: 'Console statement found in non-test code. Consider using a proper logging library.',
-+      });
-+    }
-+
-+    // Check for hardcoded secrets
-+    if (CONFIG.patterns.hardDetection.test(line)) {
-+      findings.push({
-+        type: 'Potential Hardcoded Secret',
-+        file: filePath,
-+        line: index + 1,
-+        content: line.trim().replace(/['"][^'"]+['"]/, '***'),
-+        severity: 'high',
-+        description: 'Potential hardcoded secret or credential detected.',
-+      });
-+    }
-+  });
-+
-+  // Check for missing JSDoc on exported functions
-+  if ((filePath.endsWith('.ts') || filePath.endsWith('.js')) && !filePath.includes('.d.ts')) {
-+    const hasJSDoc = content.includes('/**');
-+    const hasExports = content.includes('export');
-+    if (hasExports && !hasJSDoc) {
-+      findings.push({
-+        type: 'Missing Documentation',
-+        file: filePath,
-+        line: 1,
-+        content: 'File lacks JSDoc documentation',
-+        severity: 'low',
-+        description: 'Exported code should have JSDoc documentation for better maintainability.',
++function detectMissingDocs() {
++  const issues = [];
++  const rootDir = '.';
++  
++  for (const docFile of DETECTION_PATTERNS.missingDocs.checkFiles) {
++    const fullPath = path.join(rootDir, docFile);
++    if (!fs.existsSync(fullPath)) {
++      issues.push({
++        title: `Missing documentation: ${docFile}`,
++        body: `The repository is missing \`${docFile}\`. This is an important documentation file that should be added.\n\nThis is a low hanging fruit issue suitable for new contributors.`,
++        severity: DETECTION_PATTERNS.missingDocs.severity,
++        label: DETECTION_PATTERNS.missingDocs.label
 +      });
 +    }
 +  }
-+
-+  return findings;
-+}
-+
-+function scanDirectory(dir) {
-+  const findings = [];
++  
++  return issues;
