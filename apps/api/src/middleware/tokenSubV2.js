@@ -1,0 +1,1 @@
+export const tokenSubV2=(uid,payload)=>({...payload,sub:String(uid),id:String(uid)});
