@@ -1,5 +1,7 @@
  ```diff
 --- /dev/null
-+++ b/assets/pixel-art/cyberpunk_cityscape.png
-@@ -0,0 +1,1 @@
-+iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAB9mU7DAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5QYfFS4wZf3y6QAAAB1pVFh0Q29tbWVudAAAAABCYW5hbmFMYWJzLzgwMHgwMDAvYnVncy1ib3VudHkAAP+aSURBVHja7Zx5eFXV+cfPOffc7SQhC0mAEEISyEIWkrDvOwmQhCzsZCGbsggIgiAIgqKICIgIqCgiKqJWtVq1Wq1Wq9Vq1epfq9Vq1Vq1Wq1Wq9VqtVqtVq1Wq9VqtVqtVq1Wq9VqtVqtVq1Wq9VqtVqtVq1Wq9VqtVqtVq1Wq9VqtVqtV
++++ b/assets/pixel-art/cyberpunk-city.png
+@@ -0,0 +1,0 @@
++PNG
++
++IHDR     @   @   sSZz   sRGB     gAMA    8  GE            
