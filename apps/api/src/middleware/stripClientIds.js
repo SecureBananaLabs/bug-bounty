@@ -1,0 +1,1 @@
+export const stripClientIds=(req,_,next)=>{["id","createdAt","updatedAt","status"].forEach(f=>delete req.body?.[f]);return next();};
