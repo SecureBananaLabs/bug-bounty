@@ -22,104 +22,27 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Run low hanging fruit detection
         id: detect
         run: |
-          node -e "
-            const fs = require('fs');
-            const path = require('path');
-            
-            // Simple heuristic: check for TODO/FIXME comments, empty files, common patterns
-            const results = [];
-            
-            function scanDir(dir, depth = 0) {
-              if (depth > 3) return;
-              const entries = fs.readdirSync(dir, { withFileTypes: true });
-              for (const entry of entries) {
-                const fullPath = path.join(dir, entry.name);
-                if (entry.isDirectory() && entry.name !== 'node_modules' && entry.name !== '.git') {
-                  scanDir(fullPath, depth + 1);
-                } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx') || entry.name.endsWith('.js') || entry.name.endsWith('.md'))) {
-                  try {
-                    const content = fs.readFileSync(fullPath, 'utf-8');
-                    const lines = content.split('\n');
-                    lines.forEach((line, idx) => {
-                      if (line.includes('TODO') || line.includes('FIXME') || line.includes('HACK') || line.includes('XXX')) {
-                        results.push({ file: fullPath, line: idx + 1, text: line.trim(), type: 'todo-fixme' });
-                      }
-                      if (line.includes('console.log') || line.includes('debugger;')) {
-                        results.push({ file: fullPath, line: idx + 1, text: line.trim(), type: 'debug-statement' });
-                      }
-                      if (line.includes('any') && (fullPath.ends('.ts') || fullPath.ends('.tsx'))) {
-                        results.push({ file: fullPath, line: idx + 1, text: line.trim(), type: 'any-type' });
-                      }
-                    });
-                    if (content.trim() === '' && !fullPath.endsWith('.md')) {
-                      results.push({ file: fullPath, line: 0, text: 'Empty file', type: 'empty-file' });
-                    }
-                  } catch (e) {}
-                }
-              }
-            }
-            
-            scanDir('.');
-            
-            // Group by type and create summary
-            const grouped = {};
-            results.forEach(r => {
-              if (!grouped[r.type]) grouped[r.type] = [];
-              grouped[r.type].push(r);
-            });
-            
-            const issueBody = JSON.stringify({ count: results.length, grouped, sample: results.slice(0, 10) });
-            fs.writeFileSync('detection-results.json', issueBody);
-            console.log('Detected ' + results.length + ' items');
-          "
-
-      - name: Create GitHub Issues for detected items
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Create GitHub issues from detected items
+        if: success()
         run: |
-          # Read detection results
-          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('detection-results.json','utf-8')).count)")
-          
-          if [ "$COUNT" -eq 0 ]; then
-            echo "No low hanging fruit detected"
-            exit 0
-          fi
-          
-          # Create a single tracking issue with all findings
-          ISSUE_BODY="This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-## Automated Low Hanging Fruit Detection Results
-
-Detected $COUNT potential improvements:
-
-$(node -e "
-const data = JSON.parse(require('fs').readFileSync('detection-results.json','utf-8'));
-const grouped = data.grouped;
-for (const [type, items] of Object.entries(grouped)) {
-  console.log('### ' + type + ' (' + items.length + ' items)');
-  items.slice(0, 5).forEach(item => {
-    console.log('- ' + item.file + ':' + item.line + ' - ' + item.text.substring(0, 100));
-  });
-  if (items.length > 5) console.log('- ... and ' + (items.length - 5) + ' more');
-}
-")
-
----
-*This issue was automatically created by the Low Hanging Fruit Automation workflow.*"
-
-          # Check if we already created an issue today to avoid spam
-          TODAY=$(date +%Y-%m-%Y)
-          EXISTING=$(gh issue list --repo ${{ github.repository }} --search "Low Hanging Fruit Detection" --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
-          
-          if [ -n "$EXISTING" ]; then
-            echo "Issue already exists: #$EXISTING"
-            # Update existing issue with new findings
-            gh issue edit "$EXISTING" --repo ${{ github.repository }} --body "$ISSUE_BODY"
-          else
-            gh issue create --repo ${{ github.repository }} --title "Low Hanging Fruit Detection - $(date +%Y-%m-%d)" --body "$ISSUE_BODY"
-          fi
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detection-logs
+          path: .github/logs/
