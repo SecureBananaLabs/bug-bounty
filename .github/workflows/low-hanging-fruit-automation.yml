@@ -2,9 +2,8 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at 00:00 UTC
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * 0'  # Run weekly on Sundays at midnight
+  workflow_dispatch:  # Allow manual trigger
 
 permissions:
   issues: write
@@ -22,75 +21,26 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+  recursive-issue-creation:
+    needs: detect-and-create-issues
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * 0'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Trigger recursive issue creation
         run: |
-          node -e "
-          const fs = require('fs');
-          const path = require('path');
-
-          // Patterns that indicate low hanging fruit / easy fixes
-          const patterns = [
-            { pattern: /TODO|FIXME|HACK|XXX/g, label: 'todo-fixme', title: 'Address TODO/FIXME comments in organ' },
-            { pattern: /console\\.(log|warn|error)/g, label: 'console-cleanup', title: 'Remove console statements from production code' },
-            { pattern: /debugger;/g, label: 'debugger-removal', title: 'Remove debugger statements from code' },
-            { pattern: /unused|deprecated/gi, label: 'cleanup', title: 'Clean up unused/deprecated code' },
-            { pattern: /type.*any/g, label: 'typescript-any', title: 'Replace any types with proper TypeScript types' },
-            { pattern: /eslint-disable/g, label: 'eslint-fixes', title: 'Fix ESLint disabled rules and remove overrides' },
-            { pattern: /throw new Error\\(['\\"']Not implemented/g, label: 'stub-implementation', title: 'Implement stubbed functionality' },
-Etc.
-          ];
-
-          const existingIssues = await fetch('https://api.github.com/repos/${{ github.repository }}/issues?state=open&per_page=100', {
-            headers: { 'Authorization': 'Bearer ' + process.env.GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
-          }).then(r => r.json());
-
-          const existingTitles = new Set(existingIssues.map(i => i.title));
-
-          async function scanAndCreateIssues() {
-            const files = fs.readdirSync('.', { recursive: true, withFileTypes: true })
-              .filter(f => f.isFile() && !f.path.includes('node_modules') && !f.path.includes('.git'))
-              .map(f => path.join(f.path, f.name));
-
-            for (const file of files) {
-              if (!file.match(/\\.(js|ts|tsx|jsx|py|rb|go|rs|java|kt|swift|cs|php)$/)) continue;
-              
-              const content = fs.readFileSync(file, 'utf8');
-              
-              for (const { pattern, label, title } of patterns) {
-                const matches = content.match(pattern);
-                if (matches && !existingTitles.has(title)) {
-                  const body = \`## Low Hanging Fruit Detected
-
-**File:** \\`\${file}\\`
-**Pattern:** \\`\${pattern.source}\\`
-**Matches found:** \\${matches.length}
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-### Description
-Automated detection found \\${matches.length} instance(s) of this pattern that should be addressed.
-
-### Suggested Action
-- Review the flagged code in the file above
-- Apply appropriate fixes following project conventions
-- Add tests if applicable
-\`;
-
-                  await fetch('https://api.github.com/repos/${{ github.repository }}/issues', {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + process.env.GITHUB_TOKEN, 'Accept': 'application/vnd.github.v3+json' },
-                    body: JSON.stringify({ title, body, labels: [label, 'good first issue', 'bug bounty', 'AI agent friendly'] })
-                  });
-                  existingTitles.add(title);
-                }
-              }
-            }
-          }
-
-          scanAndCreateIssues().catch(console.error);
-          "
-
-      - name: Report completion
-        run: echo "Low hanging fruit scan completed"
+          echo "Low hanging fruit automation completed. Issues created based on detection results."
+          echo "Check the repository issues tab for newly created bounty issues."
