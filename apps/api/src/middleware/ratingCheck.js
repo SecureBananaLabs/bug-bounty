@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const validateRating=(req,res,next)=>{const r=req.body?.rating;if(!Number.isInteger(r)||r<1||r>5)return fail(res,"rating must be integer 1-5",400);return next();};
