@@ -1,9 +1,7 @@
-# Pixel Art Submission
+# Cosmic Owl Pixel Art
 
-**Title:** Cyberpunk City Sunset
+A wise owl perched under a starry night sky, created in pixel art style.
 
-**Description:** A vibrant 64x64 pixel art piece depicting a futuristic city skyline at sunset, featuring neon-lit skyscrapers against a gradient twilight sky. Created to add creative visual assets to the FreelanceFlow project.
+**Why:** Owls symbolize wisdom and creativity, and the cosmic theme represents the limitless possibilities of open-source collaboration. The color palette uses deep purples and blues with golden accents to evoke a sense of wonder and nocturnal mystery.
 
-**Dimensions:** 64x64 pixels
-**Format:** PNG
-**Created by:** ShanaBoo
+**Canvas size:** 64x64 pixels
