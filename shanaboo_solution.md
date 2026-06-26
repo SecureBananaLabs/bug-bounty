@@ -1,14 +1,19 @@
  ```diff
 --- /dev/null
 +++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,45 @@
+@@ -0,0 +1,68 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    # Run daily at midnight UTC
++    # Run daily at 00:00 UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
++    inputs:
++      dry_run:
++        description: 'Run in dry-run mode (no issues created)'
++        required: false
++        default: 'false'
 +
 +permissions:
 +  issues: write
@@ -21,114 +26,169 @@
 +      - name: Checkout repository
 +        uses: actions/checkout@v4
 +
-+      - name: Set up Node.js
++      - name: Setup Node.js
 +        uses: actions/setup-node@v4
 +        with:
 +          node-version: '20'
 +
 +      - name: Install dependencies
-+        run: npm ci
++        run: |
++          npm install -g tsx
++          npm install
 +
 +      - name: Run low hanging fruit detector
 +        id: detector
-+        run: |
-+          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          GITHUB_REPOSITORY: ${{ github.repository }}
-+
-+      - name: Create issues for detected items
-+        if: steps.detector.outputs.issues-created == 'true'
++          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
 +        run: |
-+          echo "Low hanging fruit issues have been created successfully"
++          npx tsx .github/scripts/detect-low-hanging-fruit.ts
++
++  recursive-issue-creation:
++    needs: detect-and-create-issues
++    runs-on: ubuntu-latest
++    if: github.event_name == 'workflow_dispatch'
++    steps:
++      - name: Checkout repository
++        uses: actions/checkout@v4
++
++      - name: Setup Node.js
++        uses: actions/setup-node@v4
++        with:
++          node-version: '20'
++
++      - name: Install dependencies
++        run: |
++          npm install -g tsx
++          npm install
++
++      - name: Create recursive issues
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++        run: |
++          npx tsx .github/scripts/create-recursive-issues.ts
 +--- /dev/null
-+++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,218 @@
-+#!/usr/bin/env node
++++ b/.github/scripts/detect-low-hanging-fruit.ts
+@@ -0,0 +1,389 @@
++#!/usr/bin/env tsx
++/**
++ * Low Hanging Fruit Detector
++ * 
++ * Scans the repository for common bugs, missing features, and issues
++ * that can be automatically detected and creates GitHub issues for them.
++ */
 +
-+const fs = require('fs');
-+const path = require('path');
++import { execSync } from 'child_process';
++import * as fs from 'fs';
++import * as path from 'path';
 +
-+// GitHub API helper
++// Configuration
++const REPO_ROOT = process.cwd();
 +const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
++const DRY_RUN = process.env.DRY_RUN === 'true';
 +
-+async function githubApi(endpoint, options = {}) {
-+  const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com${endpoint}`;
-+  const response = await fetch(url, {
-+    ...options,
-+    headers: {
-+      'Authorization': `token ${GITHUB_TOKEN}`,
-+      'Accept': 'application/vnd.github.v3+json',
-+      'User-Agent': 'LowHangingFruitBot',
-+      ...options.headers,
-+    },
-+  });
-+  
-+  if (!response.ok) {
-+    const text = await response.text();
-+    throw new Error(`GitHub API error: ${response.status} ${response.statusText}\n${text}`);
-+  }
-+  
-+  return response.json();
++interface DetectedIssue {
++  title: string;
++  body: string;
++  labels: string[];
++  severity: 'low' | 'medium' | 'high';
++  category: string;
 +}
 +
-+// Detect low hanging fruit issues in the codebase
-+function detectLowHangingFruit() {
-+  const issues = [];
-+  
-+  // Check for common low hanging fruit patterns
-+  const rootDir = process.cwd();
-+  
-+  // Pattern 1: Check for TODO/FIXME comments in source files
-+  const sourceFiles = findSourceFiles(rootDir);
-+  for (const file of sourceFiles) {
-+    const content = fs.readFileSync(file, 'utf-8');
-+    const lines = content.split('\n');
-+    
-+    lines.forEach((line, index) => {
-+      const todoMatch = line.match(/TODO[:\s](.+)/i);
-+      const fixmeMatch = line.match(/FIXME[:\s](.+)/i);
-+      const hackMatch = line.match(/HACK[:\s](.+)/i);
-+      
-+      if (todoMatch || fixmeMatch || hackMatch) {
-+        const match = todoMatch || fixmeMatch || hackMatch;
-+        const relativePath = path.relative(rootDir, file);
-+        issues.push({
-+          title: `TODO/FIXME found in ${relativePath}`,
-+          body: `## Low Hanging Fruit Detected\n\n**File:** \`${relativePath}\`\n**Line:** ${index + 1}\n**Content:** \`${line.trim()}\`\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n### Suggested Action\n- Review the TODO/FIXME comment\n- Implement the required fix or feature\n- Remove the comment once resolved`,
-+          labels: ['bug', 'good first issue', 'help wanted', 'low-hanging-fruit'],
-+        });
-+      }
-+    });
++interface FileIssue {
++  file: string;
++  line: number;
++  message: string;
++  severity: 'low' | 'medium' | 'high';
++}
++
++// Utility: Read file content
++function readFile(filePath: string): string {
++  try {
++    return fs.readFileSync(filePath, 'utf-8');
++  } catch {
++    return '';
 +  }
-+  
-+  // Pattern 2: Check for missing documentation
-+  const readmePath = path.join(rootDir, 'README.md');
-+  if (fs.existsSync(readmePath)) {
-+    const readmeContent = fs.readFileSync(readmePath, 'utf-8');
-+    if (!readmeContent.includes('## API Documentation')) {
-+      issues.push({
-+        title: 'Missing API Documentation',
-+        body: `## Low Hanging Fruit: Missing API Documentation\n\nThe README.md lacks API documentation section.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n### Suggested Action\n- Add API documentation to README.md\n- Document all available endpoints\n- Include request/response examples`,
-+        labels: ['documentation', 'good first issue', 'help wanted', 'low-hanging-fruit'],
-+      });
++}
++
++// Utility: Check if string contains pattern
++function contains(content: string, pattern: string | RegExp): boolean {
++  if (typeof pattern === 'string') {
++    return content.includes(pattern);
++  }
++  return pattern.test(content);
++}
++
++// Utility: Find line number of pattern in content
++function findLineNumber(content: string, pattern: string): number {
++  const lines = content.split('\n');
++  for (let i = 0; i < lines.length; i++) {
++    if (lines[i].includes(pattern)) {
++      return i + 1;
 +    }
 +  }
-+  
-+  // Pattern 3: Check for missing tests
-+  const testFiles = findTestFiles(rootDir);
-+  if (testFiles.length === 0) {
-+    issues.push({
-+      title: 'No Test Files Found',
-+      body: `## Low Hanging Fruit: Missing Test Coverage\n\nNo test files were detected in the repository.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\nestr\n### Suggested Action\n- Add unit tests for critical functions\n- Add integration tests for API endpoints\n- Set up test coverage reporting`,
-+      labels: ['bug', 'good first issue', 'help wanted', 'low-hanging-fruit'],
-+    });
++  return 0;
++}
++
++// Detectors
++class BugDetectors {
++  // Detect console.log statements in production code
++  static detectConsoleLogs(files: string[]): FileIssue[] {
++    const issues: FileIssue[] = [];
++    for (const file of files) {
++      if (file.includes('node_modules') || file.includes('.git')) continue;
++      const content = readFile(file);
++      const lines = content.splituntsplit('\n');
++      lines.forEach((line, index) => {
++        if (line.includes('console.log') || line.includes('console.warn') || line.includes('console.error')) {
++          // Skip if it's in a test file or already wrapped
++          if (!file.includes('.test.') && !file.includes('.spec.') && !line.includes('// TODO')) {
++            issues.push({
++              file,
++              line: index + 1,
++              message: `Console statement found: ${line.trim()}`,
++              severity: 'low'
++            });
++          }
++        }
++      });
++    }
++    return issues;
 +  }
-+  
-+  // Pattern 4: Check for outdated dependencies
-+  const packageJsonPath = path.join(rootDir, 'package.json');
-+  if (fs.existsSync(packageJsonPath)) {
-+    issues.push({
-+      title: 'Review and Update Dependencies',
-+      body: `## Low Hanging Fruit: Dependency Review\n\nDependencies should be reviewed and updated regularly.\n\nThis issue is limited only to the creator of this issue. This means that the issue author can attempt to solve this issue. If you would like to work on it, please create
++
++  // Detect TODO/FIXME comments
++  static detectTodoFixme(files: string[]): FileIssue[] {
++    const issues: FileIssue[] = [];
++    for (const file of files) {
++      if (file.includes('node_modules') || file.includes('.git')) continue;
++      const content = readFile(file);
++      const todoRegex = /TODO|FIXME|HACK|XXX/g;
++      const lines = content.split('\n');
++      lines.forEach((line, index) => {
++        if (todoRegex.test(line)) {
++          issues.push({
++            file,
++            line: index + 1,
++            message: `Unresolved comment: ${line.trim()}`,
++            severity: 'low'
++          });
++        }
++      });
++    }
++    return issues;
++  }
++
++  // Detect missing error handling
++  static detectMissingErrorHandling(files: string[]): FileIssue[] {
++    const issues: FileIssue[] = [];
++    for (const file of files) {
++      if (!file.endsWith('.ts') && !file.endsWith('.js')) continue;
++      if (file.includes('node_modules') || file.includes('.git')) continue;
++      const content = readFile(file);
++      
++      // Detect async functions without try/catch
++      const asyncFunctionRegex = /async\s+(?:function\s+\w+|\w+\s*\([^)]*\)\s*=>)\s*\{[^}]*\}/g;
++      const matches = content.match(asyncFunctionRegex) || [];
++      
++      matches.forEach(match => {
++        if (!
