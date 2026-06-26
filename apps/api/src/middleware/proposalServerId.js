@@ -1,0 +1,1 @@
+export const proposalServerId=(req,_,next)=>{delete req.body?.id;delete req.body?.status;delete req.body?.createdAt;return next();};
