@@ -1,7 +1,7 @@
  ```diff
 --- /dev/null
 +++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,60 @@
+@@ -0,0 +1,0 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
@@ -11,7 +11,8 @@
 +  workflow_dispatch:
 +
 +permissions:
-+  issues: write
++  issues:
++    issues: write
 +  contents: read
 +
 +jobs:
@@ -29,134 +30,150 @@
 +      - name: Install dependencies
 +        run: npm ci
 +
-+      - name: Run low hanging fruit detection
-+        id: detect
++      - name: Run lint to detect issues
++        id: lint
 +        run: |
-+          node .github/scripts/detect-low-hanging-fruit.js
-+        env:
-+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          npm run lint 2>&1 | tee lint-output.txt || true
++          echo "lint_completed=true" >> $GITHUB_OUTPUT
++        continue-on-error: true
 +
-+--- /dev/null
-+++  .github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,258 @@
-+#!/usr/bin/env node
++      - name: Run tests to detect failures
++        id: tests
++        run: |
++          npm test 2>&1 | tee test-output.txt || true
++          echo "tests_completed=true" >> $GITHUB_OUTPUT
++        continue-on-error: true
 +
-+/**
-+ * Low Hanging Fruit Automation Script
-+ * 
-+ * This script recursively scans the repository for common bugs,
-+ * issues, and improvements, then creates GitHub issues for each finding.
-+ */
++      - name: Check for security vulnerabilities
++       容: |
++          npm audit --audit-level=moderate 2>&1 | tee audit-output.txt || true
++          echo "audit_completed=true" >> $GITHUB_OUTPUT
++        continue-on-error: true
 +
-+const fs = require('fs');
-+const path = require('path');
-+const { execSync } = require('child_process');
-+
-+// GitHub API helper
-+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const REPO = process.env.GITHUB_REPOSITORY;
-+
-+if (!GITHUB_TOKEN) {
-+  console.error('GITHUB_TOKEN is required');
-+  process.exit(1);
-+}
-+
-+const API_BASE = 'https://api.github.com';
-+
-+function githubRequest(endpoint, method = 'GET', data = null) {
-+  const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}${endpoint}`;
-+  const options = {
-+    method,
-+    headers: {
-+      'Authorization': `token ${GITHUB_TOKEN}`,
-+      'Accept': 'application/vnd.github.v3+json',
-+      'Content-Type': 'application/json',
-+      'User-Agent': 'LowHangingFruitBot/1.0'
-+    }
-+  };
-+
-+  const curlCmd = `curl -s -X ${method} \
-+    -H "Authorization: token ${GITHUB_TOKEN}" \
-+    -H "Accept: application/vnd.github.v3+json" \
-+    -H "Content-Type: application/json" \
-+    ${data ? `-d '${JSON.stringify(data)}'` : ''} \
-+    "${url}"`;
-+
-+  const result = execSync(curlCmd, { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 });
-+  return JSON.parse(result);
-+}
-+
-+// Issue template
-+const ISSUE_TEMPLATE = (title, body, originalIssueNumber = '743') => 
-+`## ${title}
-+
-+${body}
-+
-+---
-+
-+**This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #${originalIssueNumber} for more information.**`;
-+
-+// Detectors for low hanging fruit
-+const detectors = {
-+  // Check for TODO/FIXME comments in code
-+  findTodos: (files) => {
-+    const issues = [];
-+    for (const file of files) {
-+      if (!file.endsWith('.js') && !file.endsWith('.ts') && !file.endsWith('.tsx') && !file.endsWith('.jsx')) continue;
-+      
-+      const content = fs.readFileSync(file, 'utf-8');
-+      const lines = content.split('\n');
-+      
-+      lines.forEach((line, index) => {
-+        const match = line.match(/(TODO|FIXME|HACK|BUG|XXX)[\s:]*(.*)/i);
-+        if (match) {
-+          issues.push({
-+            title: `Code cleanup: ${match[1]} in ${path.basename(file)}`,
-+            body: `Found a \`${match[1]}\` comment in \`${file}\` at line ${index + 1}:\n\n\`\`\`\n${line.trim()}\n\`\`\`\n\n**Suggested fix:** Address or remove this comment.`
-+          });
-+        }
-+      });
-+    }
-+    return issues;
-+  },
-+
-+  // Check for missing error handling
-+  findMissingErrorHandling: (files) => {
-+    const issues = [];
-+    for (const file of files) {
-+      if (!file.endsWith('.js') && !file.endsWith('.ts')) continue;
-+      if (file.includes('test') || file.includes('spec')) continue;
-+      
-+      const content = fs.readFileSync(file, 'utf-8');
-+      
-+      // Check for async functions without try/catch
-+      const asyncFunctionMatches = content.match(/async\s+\w+\s*\([^)]*\)\s*\{(?![^}]*catch)/g);
-+      if (asyncFunctionMatches && !content.includes('try') && content.includes('await')) {
-+        issues.push({
-+          title: `Missing error handling in ${path.basename(file)}`,
-+          body: `File \`${file}\` contains async/await patterns without proper error handling. Consider adding try/catch blocks or using a global error handler.`
-+        });
-+      }
-+    }
-+    return issues;
-+  },
-+
-+  // Check for hardcoded secrets
-+  findHardcodedSecrets: (files) => {
-+    const issues = [];
-+    const secretPatterns = [
-+      /['"]?api[_-]?key['"]?\s*[:=]\s*['"][^'"]+['"]/i,
-+      /['"]?password['"]?\s*[:=]\s*['"][^'"]+['"]/i,
-+      /['"]?secret['"]?\s*[:=]\s*['"][^'"]+['"]/i,
-+      /['"]?token['"]?\s*[:=]\s*['"][^'"]+['"]/i
-+    ];
-+    
-+    for (const file of files) {
-+      if (file.includes('.env') || file.includes('example')) continue;
-+      
-+      const content = fs.readFileSync(file, 'utf-8');
-+      
-+      for (const pattern of secretPatterns) {
-+        if (pattern.test(content)) {
-+          issues.push({
-+            title: `Potential hardcoded secret in
++      - name: Analyze and create issues
++        uses: actions/github-script@v7
++        with:
++          github-token: ${{ secrets.GITHUB_TOKEN }}
++          script: |
++            const fs = require('fs');
++            
++            // Read outputs
++            let lintOutput = '';
++            let testOutput = '';
++            let auditOutput = '';
++            
++            github.rest.issues.listForRepo({
++              owner: context.repo.owner,
++              repo: context.repo.repo,
++              state: 'open',
++              per_page: 100
++            }).then(existingIssues => {
++              const existingTitles = new Set(existingIssues.data.map(i => i.title));
++              
++              const createIssue = async (title, body, labels = []) => {
++                if (existingTitles.has(title)) {
++                  console.log(`Issue already exists: ${title}`);
++                  return;
++                }
++                
++                const issueBody = body + '\n\n---\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.';
++                
++                await github.rest.issues.create({
++                  owner: context.repo.owner,
++                  repo: context.repo.repo,
++                  title: title,
++                  body: issueBody,
++                  labels: ['bug', 'low-hanging-fruit', ...labels]
++                });
++                console.log(`Created issue: ${title}`);
++              };
++              
++              // Check for missing documentation
++              const readmeExists = fs.existsSync('README.md');
++              const contributingExists = fs.existsSync('CONTRIBUTING.md');
++              
++              if (!readmeExists) {
++                createIssue(
++                  'Missing README.md documentation',
++                  'The repository is missing a README.md file. This is essential for users to understand how to use the project.',
++                  ['documentation', 'good first issue']
++                );
++              }
++              
++              if (!contributingExists) {
++                createIssue(
++                  'Missing contributor guidelines',
++                  'The repository is missing a CONTRIBUTING.md file. This is essential for guiding new contributors.',
++                  ['documentation', 'good first issue']
++                );
++              }
++              
++              // Check for common configuration files
++              const hasGitignore = fs.existsSync('.gitignore');
++              if (!hasGitignore) {
++                createIssue(
++                  'Missing .gitignore file',
++                  'The repository is missing a .gitignore file. This can lead to sensitive files or unnecessary files being committed.',
++                  ['bug', 'good first issue']
++                );
++              }
++              
++              // Check for environment variable documentation
++              const envExampleExists = fs.existsSync('.env.example') || fs.existsSync('.env.sample');
++              if (!envExampleExists) {
++                createIssue(
++                  'Missing .env.example file',
++                  'The repository is missing an .env.example file. This makes it difficult for new developers to know what environment variables are required.',
++                  ['documentation', 'good first issue']
++                );
++              }
++              
++              // Check for CI/CD configuration
++              const hasCI = fs.existsSync('.github/workflows');
++              if (!hasCI) {
++                createIssue(
++                  'Missing CI/CD configuration',
++                  'The repository is missing CI/CD workflows. This should include automated testing, linting, and deployment pipelines.',
++                  ['enhancement', 'good first issue']
++                );
++              }
++              
++              // Check for package.json scripts
++              if (fs.existsSync('package.json')) {
++                const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
++                const scripts = pkg.scripts || {};
++                
++                if (!scripts.test) {
++                  createIssue(
++                    'Missing test script in package.json',
++                    'The package.json is missing a test script. This makes it difficult to run tests and ensure code quality.',
++                    ['指引', 'good first issue']
++                  );
++                }
++                
++                if (!scripts.lint) {
++                  createIssue(
++                    'Missing lint script in package.json',
++                    'The package.json is missing a lint script. This makes it difficult to maintain code quality and consistency.',
++                    ['enhancement', 'good first issue']
++                  );
++                }
++              }
++              
++              // Check for TypeScript configuration
++              const hasTsConfig = fs.existsSync('tsconfig.json');
++              if (!hasTsConfig) {
++                createIssue(
++                  'Missing TypeScript configuration',
++                  'The repository is missing a tsconfig.json file. This is needed for TypeScript projects to compile correctly.',
++                  ['bug', 'good first issue']
++                );
++              }
++              
++              // Check for license file
++              const hasLicense = fs.exists License file exists
++              const hasLicense = fs.existsSync('LICENSE') || fs.existsSync('LICENSE.md');
++              if (!hasLicense) {
++                createIssue(
++                  'Missing LICENSE file',
++                  'The repository is missing a LICENSE file. This is important for clarifying the terms under
