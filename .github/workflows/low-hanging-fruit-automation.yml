@@ -2,15 +2,8 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at midnight UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
-    inputs:
-      max_issues:
-        description: 'Maximum number of issues to create'
-        required: false
-        default: '5'
-        type: string
 
 permissions:
   issues: write
@@ -28,84 +21,28 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const maxIssues = parseInt('${{ github.event.inputs.max_issues || '5' }}', 10);
-            
-            // Define low hanging fruit patterns to detect
-            const patterns = [
-              {
-                name: 'Missing Documentation',
-                check: () => true, // Always check for doc improvements
-                title: 'Add missing documentation for API endpoints',
-                body: `## Description
-The API endpoints in \`apps/api\` lack comprehensive documentation. This issue aims to add JSDoc comments and a dedicated API documentation page.
+      - name: Install dependencies
+        run: npm install
 
-## Acceptance Criteria
-- [ ] Add JSDoc comments to all controller functions
-- [ ] Create API documentation in \`apps/api/docs\`
-- [ ] Document all request/response schemas
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-                labels: ['documentation', 'good first issue', 'bug bounty', 'AI agent friendly']
-              },
-              {
-                name: 'Input Validation Gaps',
-                check: () => true,
-                title: 'Strengthen input validation across all API routes',
-                body: `## Description
-Several API routes may have inconsistent or missing input validation. This issue focuses on auditing and improving Zod validation schemas.
+      - name: Create issues for detected items
+        if: steps.detect.outputs.has_issues == 'true'
+        run: |
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-## Acceptance Criteria
-- [ ] Audit all routes in \`apps/api/src/routes\`
-- [ ] Ensure consistent Zod schemas for all inputs
-- [ ] Add custom validation rules for edge cases
-- [ ] Add tests for validation failures
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-                labels: ['bug', 'good first issue', 'bug bounty', 'AI agent friendly']
-              },
-              {
-                name: 'Error Handling Standardization',
-                check: () => true,
-                title: 'Standardize error handling middleware',
-                body: `## Description
-The error handling across the API is inconsistent. This issue aims to create a unified error handling strategy with proper HTTP status codes and error messages.
-
-## Acceptance Criteria
-- [ ] Review current error handling in \`apps/api/src/middleware/error.ts\`
-- [ ] Create standardized error classes
-- [ ] Ensure all errors return consistent JSON structure
-- [ ] Log errors appropriately based on environment
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-                labels: ['bug', 'good first issue', 'bug bounty', 'AI agent friendly']
-              }
-            ];
-            
-            const createdIssues = [];
-            
-            for (let i = 0; i < Math.min(patterns.length, maxIssues); i++) {
-              const pattern = patterns[i];
-              
-              try {
-                const issue = await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: pattern.title,
-                  body: pattern.body,
-                  labels: pattern.labels
-                });
-                
-                createdIssues.push({ title: pattern.title, number: issue.data.number });
-                console.log(`Created issue #${issue.data.number}: ${pattern.title}`);
-              } catch (error) {
-                console.error(`Failed to create issue "${pattern.title}":`, error.message);
-              }
-            }
-            
-            console.log(`Created ${createdIssues.length} issues`);
-            return createdIssues;
+      - name: Recursively trigger next scan
+        if: steps.detect.outputs.has_more == 'true'
+        run: |
+          gh workflow run low-hanging-fruit-automation.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
