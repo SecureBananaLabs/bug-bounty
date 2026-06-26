@@ -1,7 +1,9 @@
-# Pixel Art: Cyberpunk Cityscape
+# Pixel Art Submission
 
-A 64x64 pixel art piece depicting a futuristic cyberpunk cityscape at night, inspired by the neon-soaked aesthetics of classic sci-fi and modern retro-wave art. Created to add creative visual assets to the FreelanceFlow project.
+**Title:** Cyberpunk City Sunset
 
-## Details
-- **Theme:** Cyberpunk / Retro-futuristic cityscape
-- **Why:** Represents the intersection of technology and creativity that freelance platforms enable
+**Description:** A vibrant 64x64 pixel art piece depicting a futuristic city skyline at sunset, featuring neon-lit skyscrapers against a gradient twilight sky. Created to add creative visual assets to the FreelanceFlow project.
+
+**Dimensions:** 64x64 pixels
+**Format:** PNG
+**Created by:** ShanaBoo
