@@ -1,11 +1,12 @@
  ```diff
 --- /dev/null
-+++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,45 @@
++++ b/.github/workflows/low-hanging-fruit-automation.yml
+@@ -0,0 +1,69 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
++    # Run daily at 00:00 UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
 +
@@ -26,110 +27,113 @@
 +          node-version: '20'
 +
 +      - name: Install dependencies
-+        run: npm install
++        run: npm ci
 +
 +      - name: Run low hanging fruit detection
-+        run: node .github/scripts/detect-low-hanging-fruit.js
++        id: detect
++        run: |
++          node -e "
++          const fs = require('fs');
++          const path = require('path');
++          
++          const lowHangingFruits = [];
++          
++          // Check for common low hanging fruit patterns
++          const checks = [
++            { pattern: 'TODO|FIXME|HACK|XXX|BUG', files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'], description: 'Code contains TODO/FIXME/HACK comments that should be addressed' },
++            { pattern: 'console\\.(log|warn|error)', files: ['**/*.ts', '**/*.tsx'], description: 'Debug console statements found in source code' },
++            { pattern: 'any', files: ['**/*.ts', '**/*.tsx'], description: 'TypeScript \`any\` types used - should be replaced with proper types' },
++            { pattern: 'TODO', files: ['README.md', 'CONTRIBUTING.md'], description: 'Documentation contains TODO items' },
++          ];
++          
++          // Simple file scanning
++          function scanFiles() {
++            const results = [];
++            // Check for missing tests
++            const hasTestCommand = fs.existsSync('package.json') && JSON.parse(fs.readFileSync('package.json', 'utf8')).scripts?.test;
++            if (!hasTestCommand) {
++              results.push({ title: 'Add test suite to project', description: 'No test command found in package.json. Adding tests would improve code quality and catch regressions.' });
++            }
++            
++            // Check for missing CI/CD
++            if (!fs.existsSync('.github/workflows')) {
++              results.push({ title: 'Set up CI/CD pipeline', description: 'No GitHub Actions workflows found. Setting up CI/CD would automate testing and deployment.' });
++            }
++            
++            // Check for missing environment documentation
++            if (!fs.existsSync('.env.example') && !fs.existsSync('.env.template')) {
++              results.push({ title: 'Add .env.example file', description: 'No .env.example or .env.template found. Adding one would help new contributors set up the project.' });
++            }
++            
++            // Check for missing issue templates
++            if (!fs.existsSync('.github/ISSUE_TEMPLATE')) {
++              results.push({ title: 'Add GitHub issue templates', description: 'No issue templates found. Adding templates would standardize bug reports and feature requests.' });
++            }
++            
++            // Check for missing PR template
++            if (!fs.existsSync('.github/pull_request_template.md')) {
++              results.push({ title: 'Add pull request template', description: 'No PR template found. Adding one would improve PR quality and review process.' });
++            }
++            
++            // Check for missing CODE_OF_CONDUCT
++            if (!fs.existsSync('CODE_OF_CONDUCT.md')) {
++              results.push({ title: 'Add CODE_OF_CONDUCT.md', description: 'No code of conduct found. Adding one would help maintain a welcoming community.' });
++            }
++            
++            // Check for missing LICENSE
++            if (!fs.existsSync('LICENSE') && !fs.existsSync('LICENSE.md')) {
++              results.push({ title: 'Add LICENSE file', description: 'No license found. Adding a license would clarify usage rights for contributors and users.' });
++            }
++            
++            // Check for missing security policy
++            if (!fs.existsSync('SECURITY.md')) {
++              results.push({ title: 'Add SECURITY.md', description: 'No security policy found. Adding one would help users report vulnerabilities responsibly.' });
++            }
++            
++            // Check for missing contributing guidelines in root
++            if (!fs.existsSync('CONTRIBUTING.md')) {
++              results.push({ title: 'Add CONTRIBUTING.md', description: 'No contributing guidelines found. Adding them would help new contributors get started.' });
++            }
++            
++            return results;
++          }
++          
++          const results = scanFiles();
++          fs.writeFileSync('low-hanging-fruit.json', JSON.stringify(results, null, 2));
++          console.log('Found', results.length, 'low hanging fruit items');
++          "
++
++      - name: Create GitHub issues for low hanging fruit
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          GITHUB_REPOSITORY: ${{ github.repository }}
-+--- /dev/null
-+++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,188 @@
-+const fs = require('fs');
-+const path = require('path');
-+const { execSync } = require('child_process');
++        run: |
++          node -e "
++          const fs = require('fs');
++          const { execSync } = require('child_process');
++          
++          const items = JSON.parse(fs.readFileSync('low-hanging-fruit.json', 'utf8'));
++          const existingIssues = JSON.parse(execSync('gh issue list --json title --limit 100', { encoding: 'utf8' }));
++          const existingTitles = new Set(existingIssues.map(i => i.title));
++          
++          const referenceIssue = process.env.GITHUB_ISSUE_REFERENCE || '743';
++          
++          for (const item of items) {
++            if (existingTitles.has(item.title)) {
++              console.log('Skipping existing issue:', item.title);
++              continue;
++            }
++            
++            const body = \`\${item.description}
 +
-+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
-+const [OWNER, REPO] = GITHUB_REPOSITORY.split('/');
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #\${referenceIssue} for more information.
 +
-+if (!GITHUB_TOKEN) {
-+  console.error('GITHUB_TOKEN is required');
-+  process.exit(1);
-+}
++/bounty \\$50\`;
++            
++            try {
++              execSync(\`gh issue create --title '\${item.title.replace(/'/g, \"'\\''\")}' --body '\${body.replace(/'/g, \"'\\''\")}' --label 'good first issue,help wanted,bug bounty'\`, { stdio: 'inherit' });
++              console.log('Created issue:', item.title);
++            } catch (e) {
++              console.error('Failed to create issue:', item.title, e.message);
++            }
++          }
 +
-+const REPO_ROOT = process.cwd();
-+
-+function findFiles(dir, extensions, files = []) {
-+  const items = fs.readdirSync(dir, { withFileTypes: true });
-+  for (const item of items) {
-+    const fullPath = path.join(dir, item.name);
-+    if (item.isDirectory() && item.name !== 'node_modules' && item.name !== '.git' && item.name !== 'dist' && item.name !== 'build') {
-+      findFiles(fullPath, extensions, files);
-+    } else if (item.isFile() && extensions.some(ext => item.name.endsWith(ext))) {
-+      files.push(fullPath);
-+    }
-+  }
-+  return files;
-+}
-+
-+function detectIssues() {
-+  const issues = [];
-+  const tsFiles = findFiles(REPO_ROOT, ['.ts', '.tsx', '.js', '.jsx']);
-+  
-+  for (const file of tsFiles) {
-+    const content = fs.readFileSync(file, 'utf-8');
-+    const relativePath = path.relative(REPO_ROOT, file);
-+    
-+    // Detect TODO/FIXME comments
-+    const todoRegex = /(TODO|FIXME|HACK|BUG|XXX)\s*:?\s*(.+)/gi;
-+    let match;
-+    while ((match = todoRegex.exec(content)) !== null) {
-+      const lines = content.substring(0, match.index).split('\n');
-+      const lineNumber = lines.length;
-+      issues.push({
-+        title: `TODO/FIXME found: ${match[2].trim().substring(0, 80)}`,
-+        body: `**Location:** \`${relativePath}:${lineNumber}\`\n\n**Match:** \`${match[0]}\`\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-+        type: 'todo',
-+        severity: 'low'
-+      });
-+    }
-+    
-+    // Detect console.log statements
-+    const consoleRegex = /console\.(log|warn|error|debug)\(/g;
-+    let consoleMatch;
-+    while ((consoleMatch = consoleRegex.exec(content)) !== null) {
-+      const lines = content.substring(0, consoleMatch.index).split('\n');
-+      const lineNumber = lines.length;
-+      issues.push({
-+        title: `Remove console statement in ${relativePath}`,
-+        body: `**Location:** \`${relativePath}:${lineNumber}\`\n\nFound \`${consoleMatch[0]}\` - Console statements should be removed or replaced with proper logging.\n\nThis issue is limited only to the creator of thisitia. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-+        type: 'console',
-+        severity: 'low'
-+      });
-+    }
-+    
-+    // Detect empty catch blocks
-+    const catchRegex = /catch\s*\([^)]*\)\s*\{\s*\}/g;
-+    let catchMatch;
-+    while ((catchMatch = catchRegex.exec(content)) !== null) {
-+      const lines = content.substring(0, catchMatch.index).split('\n');
-+      const lineNumber = lines.length;
-+      issues.push({
-+        title: `Empty catch block in ${relativePath}`,
-+        body: `**Location:** \`${relativePath}:${lineNumber}\`\n\nEmpty catch blocks swallow errors and make debugging difficult.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-+        type: 'empty-catch',
-+        severity: 'medium'
-+      });
-+    }
-+  }
-+  
-+  // Detect missing documentation
-+  const mdFiles = findFiles(REPO_ROOT, ['.md']);
-+  const hasContributing = mdFiles.some(f => f.toLowerCase().includes('contributing'));
-+  if (!hasContributing) {
-+    issues.push({
-+      title: 'Missing CONTRIBUTING.md documentation',
-+      body: `The repository is missing a CONTRIBUTING.md file. This file helps guide new contributors.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-+      type: 'documentation',
-+      severity: 'low'
-+    });
-+  }
-+  
-+  // Detect missing tests
-+  const testFiles = findFiles(REPO_ROOT, ['.test.ts', '.test.tsx', '.spec.ts', '.spec.tsx', '.test.js', '.spec.js']);
-+  if (testFiles.length === 0) {
-+    issues.push({
-+      title: 'No test files detected in repository',
-+      body: `No test files were found in the repository. Consider
