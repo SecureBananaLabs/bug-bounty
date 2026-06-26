@@ -1,0 +1,3 @@
+import{ok,fail}from"../utils/response.js";
+const M=new Map([["alice",{username:"alice",name:"Alice Dev",skills:["React","Node.js"],rating:4.9}],["bob",{username:"bob",name:"Bob Code",skills:["Python"],rating:4.7}]]);
+export async function getProfile(req,res){const p=M.get(String(req.params.username||req.params.userId).toLowerCase());if(!p)return fail(res,"Profile not found",404);return ok(res,{profile:p});}
