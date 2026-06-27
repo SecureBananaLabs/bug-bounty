@@ -1,0 +1,1 @@
+export const userNoSpread=(req,_,next)=>{const{name,email,password,role}=req.body||{};req.body={name,email,password,...(role?{role}:{})};return next();};
