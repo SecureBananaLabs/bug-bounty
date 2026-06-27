@@ -1,11 +1,11 @@
-export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
-  if (res.headersSent) {
-    return next(err);
-  }
+import { ZodError } from "zod";
+import { fail } from "../utils/response.js";
 
-  return res.status(500).json({
-    success: false,
-    message: "Unexpected server error"
-  });
+export function errorHandler(err, req, res, next) {
+  if (err instanceof ZodError) {
+    return fail(res, err.errors, 400);
+  }
+  const status = err.status ?? err.statusCode ?? 500;
+  const message = err.message ?? "Internal Server Error";
+  return fail(res, message, status);
 }
