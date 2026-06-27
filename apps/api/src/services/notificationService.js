@@ -1,7 +1,7 @@
 const notifications = [];
 
 export async function listNotifications() {
-  return notifications;
+  return [...notifications];
 }
 
 export async function createNotification(payload) {
