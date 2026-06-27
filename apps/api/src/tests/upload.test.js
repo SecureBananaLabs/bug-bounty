@@ -71,3 +71,34 @@ test("POST /api/uploads with oversized file returns 413", async () => {
     server.close((error) => (error ? reject(error) : resolve()));
   });
 });
+
+test("POST /api/uploads without file returns 400", async () => {
+  const app = createApp();
+  const server = app.listen(0);
+
+  await new Promise((resolve, reject) => {
+    server.once("listening", resolve);
+    server.once("error", reject);
+  });
+
+  const { port } = server.address();
+
+  // Send multipart request without a file field
+  const boundary = "----FormBoundary" + Math.random().toString(36).slice(2);
+  const body = Buffer.from(`--${boundary}--\r\n`, "utf-8");
+
+  const response = await fetch(`http://127.0.0.1:${port}/api/uploads`, {
+    method: "POST",
+    headers: { "Content-Type": `multipart/form-data; boundary=${boundary}` },
+    body
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 400);
+  assert.equal(payload.success, false);
+  assert.ok(payload.message.toLowerCase().includes("no file"));
+
+  await new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()));
+  });
+});
