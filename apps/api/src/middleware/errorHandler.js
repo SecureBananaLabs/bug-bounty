@@ -12,6 +12,15 @@ export function errorHandler(err, req, res, next) {
     });
   }
 
+  // Handle Multer file size limit errors
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    console.warn("File size limit exceeded:", err.message);
+    return res.status(413).json({
+      success: false,
+      message: "File too large. Maximum size is 5 MB"
+    });
+  }
+
   // Handle Zod validation errors
   if (err.name === 'ZodError' && err.issues) {
     console.warn("Validation error:", err.issues);
