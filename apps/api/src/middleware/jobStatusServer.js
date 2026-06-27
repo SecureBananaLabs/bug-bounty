@@ -1,0 +1,1 @@
+export const jobStatusServer=(req,_,next)=>{delete req.body?.id;req.body.status="OPEN";if(req.body?.title)req.body.title=req.body.title.trim();return next();};
