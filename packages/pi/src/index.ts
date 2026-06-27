@@ -20,132 +20,116 @@
  * @returns       PI as a string with exactly `digits` decimal places
  */
 export function computePi(digits: number = 1000): string {
-  if (digits < 1) {
-    throw new Error("digits must be >= 1");
-  }
+  if (digits < 1) throw new Error("digits must be >= 1");
 
-  // --- Constants for the Chudnovsky algorithm -------------------------
-  // PI = C / (SUM), where C = 426880 * sqrt(10005)
-  // SUM = SUM_{k=0}^{∞} ( (6k)! * (13591409 + 545140134*k) ) / ( (3k)! * (k!)^3 * (-262537412640768000)^k )
-  //
-  // We work with scaled integers:
-  //   scale = 10^(digits + guard_digits)
-  //   C = floor(426880 * sqrt(10005) * scale)
-  //   SUM = 0 (scaled), accumulate terms until the term < 1
+  // Guard digits (extra precision for rounding)
+  const guard = 14;
+  const totalDigits = digits + guard;
 
-  const guardDigits = 14; // extra digits to avoid rounding errors (~1 term worth)
-  const scale = BigInt(10) ** BigInt(digits + guardDigits);
+  // Working scale: 10^(digits + guard)
+  const S = 10n ** BigInt(totalDigits);
 
-  // sqrt(10005) computed via Newton's method on BigInts
-  const sqrt10005 = bigIntSqrt(10005n * scale);
-  const C = (426880n * sqrt10005) / bigIntSqrt(scale); // scale down earlier
-  // Actually, let's compute C = floor(426880 * sqrt(10005) * scale)
-  const C_full = 426880n * bigIntSqrt(10005n * scale * scale); // sqrt(10005) * scale
+  // --- Pre-compute sqrt(10005) * S using Newton's method ---
+  // C = 426880 * sqrt(10005) * S
+  const sqrt10005S = bigIntSqrt(10005n * S * S);
+  const C = 426880n * sqrt10005S;
 
-  // --- Accumulate the series ------------------------------------------
-  // term_k = (6k)! * (13591409 + 545140134*k) / ( (3k)! * (k!)^3 * (-262537412640768000)^k )
-  // We keep term_k as a rational: numerator / denominator, both BigInts.
+  // --- Chudnovsky series: π = C / Σ_{k=0}^{∞} term_k ---
+  // term_k = (6k)! * (13591409 + 545140134k) / ((3k)! * (k!)^3 * (-262537412640768000)^k)
+  // term_0 = 13591409 / 1
 
-  let sumNumerator = 13591409n * scale; // k=0 term numerator (scaled)
-  let sumDenominator = 1n;
+  let sumNum = 13591409n; // term_0 numerator (no S factor - S is in C)
+  let sumDen = 1n;
 
-  // Precompute factorials iteratively to avoid massive recomputation
-  let fact6k = 1n;    // (6k)!
-  let fact3k = 1n;    // (3k)!
-  let factK = 1n;     // k!
+  let fact6_k = 1n;  // (6k)! for current k
+  let fact3_k = 1n;  // (3k)! for current k
+  let fact1_k = 1n;  // k! for current k
+  let powD_k = 1n;   // D^k for current k, where D = -262537412640768000n
 
-  const D = -262537412640768000n; // the constant denominator factor
+  const D = 262537412640768000n; // positive, we track sign separately
 
-  let powerD = 1n; // D^k
+  for (let k = 1; k <= 100000; k++) {
+    // Update factorials incrementally from k-1 to k
+    const k6 = BigInt(6 * k);
+    const k3 = BigInt(3 * k);
+    const k1 = BigInt(k);
 
-  for (let k = 1; k < 100_000; k++) {
-    // Update factorials for this k
-    // (6k)! = (6k-5)*(6k-4)*(6k-3)*(6k-2)*(6k-1)*(6k) * (6(k-1))!
-    const kBig = BigInt(k);
-    const kMinus1 = BigInt(k - 1);
+    // (6k)! = (6k-5)(6k-4)(6k-3)(6k-2)(6k-1)(6k) * (6(k-1))!
+    fact6_k = fact6_k * (k6 - 5n) * (k6 - 4n) * (k6 - 3n) * (k6 - 2n) * (k6 - 1n) * k6;
+    // (3k)! = (3k-2)(3k-1)(3k) * (3(k-1))!
+    fact3_k = fact3_k * (k3 - 2n) * (k3 - 1n) * k3;
+    // k! = k * (k-1)!
+    fact1_k = fact1_k * k1;
+    // D^k = D * D^(k-1)
+    powD_k = powD_k * D;
 
-    // Compute (6k)! incrementally
-    for (let j = 6 * (k - 1) + 1; j <= 6 * k; j++) {
-      fact6k *= BigInt(j);
-    }
-    // Compute (3k)! incrementally
-    for (let j = 3 * (k - 1) + 1; j <= 3 * k; j++) {
-      fact3k *= BigInt(j);
-    }
-    // Compute k! incrementally
-    factK *= kBig;
+    // term numerator = (6k)! * (13591409 + 545140134k)
+    const termNum = fact6_k * (13591409n + 545140134n * k1);
 
-    // D^k
-    powerD *= D;
+    // term denominator = (3k)! * (k!)^3 * D^k
+    const termDen = fact3_k * fact1_k * fact1_k * fact1_k * powD_k;
 
-    // numerator_k = (6k)! * (13591409 + 545140134*k)
-    const termNum = fact6k * (13591409n + 545140134n * kBig);
+    // sign alternates: D^k has sign (-1)^k
+    const termNeg = (k % 2 === 1);
 
-    // denominator_k = (3k)! * (k!)^3 * D^k
-    const termDen = fact3k * factK * factK * factK * powerD;
-
-    // term_k = termNum / termDen  (rational)
-    // Add to sum: sumNumerator/sumDenominator + termNum/termDen
-    // = (sumNumerator * termDen + termNum * sumDenominator) / (sumDenominator * termDen)
-
-    // To avoid huge intermediate numbers, we check if the term is negligible
-    // |term_k| ≈ 1 / (262537412640768000)^k  → converges fast
-    // Early exit when term < 1 (i.e., |termNum * scale| < |termDen|)
-
-    // Scale the term: term_scaled = termNum * scale / termDen
-    // If |term_scaled| < 1, it won't affect the first `digits` decimal places
-    const termAbsScaled = termNum * scale / (termDen < 0n ? -termDen : termDen);
+    // Check convergence: |term_k| < 10^(-digits-guard), meaning it doesn't affect result
+    // |term_k| = termNum / termDen
+    // If termNum * 10^(digits+guard) / termDen < 1, we can stop
+    const precisionCheck = S; // 10^(digits + guardDigits)
+    const termAbsScaled = termNum * precisionCheck / (termDen < 0n ? -termDen : termDen);
     if (termAbsScaled < 1n) {
       break;
     }
 
-    // Add term to sum: sum += term
-    sumNumerator = sumNumerator * termDen + termNum * sumDenominator;
-    sumDenominator = sumDenominator * termDen;
+    // sum += term  (with sign)
+    // sumNum/sumDen + termNum/termDen (accounting for sign)
+    // = (sumNum * termDen + termNum * sumDen * sign) / (sumDen * termDen)
+    // where sign = -1 if termNeg else +1
 
-    // Reduce fraction periodically to keep numbers manageable
+    const newNum = sumNum * termDen + (termNeg ? -termNum : termNum) * sumDen;
+    const newDen = sumDen * termDen;
+
+    sumNum = newNum >= 0n ? newNum : -newNum;
+    sumDen = newDen;
+
+    // Periodically reduce fraction to keep numbers manageable
     if (k % 10 === 0) {
-      const g = gcd(sumNumerator, sumDenominator);
+      const g = gcd(sumNum, sumDen);
       if (g > 1n) {
-        sumNumerator /= g;
-        sumDenominator /= g;
+        sumNum /= g;
+        sumDen /= g;
       }
     }
   }
 
-  // PI = C_full / (sumNumerator / sumDenominator)
-  // PI_scaled = C_full * sumDenominator / sumNumerator
-  const piScaled = (C_full * sumDenominator) / sumNumerator;
+  // PI = C / (sumNum/sumDen)  [sum is positive since π > 0]
+  // But our sum tracks sign separately
+  // piScaled = C * sumDen / sumNum  (scaled by S)
+  const piScaled = C * sumDen / sumNum;
 
-  // --- Convert to decimal string ------------------------------------
+  // Convert to string: piScaled = floor(π * 10^(digits+guard))
   const piStr = piScaled.toString();
 
-  // The number of digits we have: piScaled = floor(PI * 10^(digits+guardDigits))
-  // So PI = piScaled / 10^(digits+guardDigits)
-  // Insert decimal point at position (digits + guardDigits) from right
-  const totalDecimalDigits = digits + guardDigits;
+  // Extract integer and fractional parts
   let intPart: string;
   let fracPart: string;
 
-  if (piStr.length <= totalDecimalDigits) {
-    // Need leading zeros
-    intPart = "3"; // PI is ~3.14..., should not happen in practice
-    fracPart = piStr.padStart(totalDecimalDigits, "0");
+  if (piStr.length <= totalDigits) {
+    intPart = piStr.slice(0, 1);
+    fracPart = piStr.length > 1 ? piStr.slice(1).padStart(totalDigits, "0") : "0".repeat(totalDigits);
   } else {
-    intPart = piStr.slice(0, piStr.length - totalDecimalDigits);
-    fracPart = piStr.slice(piStr.length - totalDecimalDigits);
+    intPart = piStr.slice(0, piStr.length - totalDigits);
+    fracPart = piStr.slice(piStr.length - totalDigits);
   }
 
-  // Round to `digits` decimal places using the guard digits
+  // Round using guard digits
   const roundDigit = Number(fracPart[digits]);
   let roundedFrac = fracPart.slice(0, digits);
 
   if (roundDigit >= 5) {
-    // Round up
     const roundedNum = BigInt(roundedFrac || "0") + 1n;
     roundedFrac = roundedNum.toString().padStart(digits, "0");
     if (roundedFrac.length > digits) {
-      // Carry to integer part
       intPart = (BigInt(intPart) + 1n).toString();
       roundedFrac = roundedFrac.slice(1);
     }
@@ -161,9 +145,7 @@ function bigIntSqrt(n: bigint): bigint {
   if (n < 0n) throw new Error("Cannot compute sqrt of negative number");
   if (n < 2n) return n;
 
-  // Initial estimate: 2^(bitLength/2)
   let x = 1n << BigInt((n.toString(2).length + 1) >> 1);
-
   while (true) {
     const y = (x + n / x) >> 1n;
     if (y >= x) return x;
@@ -184,14 +166,11 @@ function gcd(a: bigint, b: bigint): bigint {
 }
 
 // ── CLI entry point ───────────────────────────────────────────────
-// When run directly via `node dist/index.js` or `npx tsx src/index.ts`
 try {
-  // @ts-ignore - process.argv is Node.js specific
   const isDirectRun =
     typeof process !== "undefined" &&
     typeof process.argv !== "undefined" &&
-    process.argv.length >= 2 &&
-    // @ts-ignore
+    typeof import.meta !== "undefined" &&
     import.meta.url.endsWith(process.argv[1].replace(/\\/g, "/"));
 
   if (isDirectRun) {
@@ -200,7 +179,6 @@ try {
       console.error("Usage: node dist/index.js <digits (positive integer)>");
       process.exit(1);
     }
-
     const pi = computePi(digitsArg);
     console.log(pi);
   }
