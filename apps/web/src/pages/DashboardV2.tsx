@@ -1,0 +1,1 @@
+import React from"react";export default function Dashboard(){return(<main><h1>Dashboard</h1><section><h2>Active Projects</h2><a href="/jobs/new">Post a Job</a></section><section><h2>Recent Activity</h2><p>No recent activity.</p></section></main>);}
