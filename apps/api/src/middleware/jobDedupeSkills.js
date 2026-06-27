@@ -1,0 +1,1 @@
+export const jobDedupeSkills=(req,_,next)=>{if(Array.isArray(req.body?.skills)){req.body.skills=[...new Set(req.body.skills.map(s=>String(s).trim().toLowerCase()).filter(Boolean))];}return next();};
