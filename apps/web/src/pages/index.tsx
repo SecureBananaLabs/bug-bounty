@@ -1,0 +1,1 @@
+import React from"react";export default function Home(){return(<main><h1>FreelanceFlow</h1><p>Connect with top freelancers and clients.</p><a href="/jobs">Browse Jobs</a><a href="/register">Get Started</a></main>);}
