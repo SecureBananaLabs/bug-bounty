@@ -1,0 +1,20 @@
+# PI Extended to 300 Decimal Places
+
+## Result
+
+3.
+1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
+8214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196
+6442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127
+
+**Total: 300 decimal places**
+
+## Method
+
+Calculated using Python mpmath library with 310-digit precision.
+
+## Verification
+
+See scripts/pi_verify.py for the calculation script and the discussion at
+https://github.com/SecureBananaLabs/bug-bounty/discussions/2872#discussioncomment-17123044
+for the discussion comment with these digits.
