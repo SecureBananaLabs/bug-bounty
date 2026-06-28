@@ -22,105 +22,81 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run low hanging fruit detection
-        id: detect
+      | name: Install dependencies
         run: |
-          node -e "
-            const fs = require('fs');
-            const path = require('path');
-            
-            const findings = [];
-            
-            // Check for missing tests
-            const hasTestScript = fs.existsSync('package.json') && JSON.parse(fs.readFileSync('package.json', 'utf8')).scripts?.test;
-            if (!hasTestScript) {
-              findings.push({ title: 'Missing test script in package.json', labels: ['bug', 'good first issue'] });
-            }
-            
-            // Check for missing README sections
-            const readme = fs.readFileSync('README.md', 'utf8');
-            const requiredSections = ['Installation', 'Usage', 'Contributing', 'License'];
-            const missingSections = requiredSections.filter(s => !readme.includes(s));
-            if (missingSections.length > 0) {
-              findings.push({ title: 'Missing README sections: ' + missingSections.join(', '), labels: ['documentation', 'good first issue'] });
-            }
-            
-            // Check for missing .env.example
-            if (!fs.existsSync('.env.example')) {
-              findings.push({ title: 'Missing .env.example file', labels: ['documentation', 'good first issue', 'bug'] });
-            }
-            
-            // Check for missing CONTRIBUTING.md
-            if (!fs.existsSync('CONTRIBUTING.md')) {
-              findings.push({ title: 'Missing CONTRIBUTING.md file', labels: ['documentation', 'good first issue'] });
-            }
-            
-            // Check for TODO comments in source files
-            const { execSync } = require('child_process');
-            try {
-              const todos = execSync('grep -r \"TODO\\|FIXME\\|XXX\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" --include=\"*.jsx\" apps/ packages/ 2>/dev/null || true').toString();
-              if (todos.trim()) {
-                findings.push({ title: 'TODO/FIXME comments found in codebase', labels: ['bug', 'good first issue'] });
-              }
-            } catch (e) {}
-            
-            fs.writeFileSync('findings.json', JSON.stringify(findings, null, 2));
-          "
+          npm install -g @github/github-script
 
-      - name: Create GitHub issues for findings
+      - name: Detect low hanging fruit and create issues
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            
-            let findings = [];
-            try {
-              findings = JSON.parse(fs.readFileSync('findings.json', 'utf8'));
-            } catch (e) {
-              console.log('No findings or error reading findings.json');
-              return;
-            }
-            
-            const issueBody = \`This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+            const path = require('path');
 
-## Description
-This issue was automatically detected as low-hanging fruit. Please review and address accordingly.
+            // Patterns that indicate low hanging fruit / easy fixes
+            const lowHangingPatterns = [
+              { pattern: /TODO|FIXME|HACK|BUG|XXX/g, type: 'code-comment' },
+              { pattern: /console\.(log|warn|error)/g, type: 'console-statement' },
+              { pattern: /debugger;/g, type: 'debugger-statement' },
+              { pattern: /unused|deprecated|legacy/i, type: 'cleanup' },
+            ];
 
-## Acceptance Criteria
-- [ ] Identify the root cause
-- [ ] Implement a fix
-- [ ] Add tests if applicable
-- [ ] Update documentation if needed
-\`;
-            
-            for (const finding of findings) {
-              const title = finding.title;
-              const labels = finding.labels || ['bug', 'good first issue'];
-              
-              // Check if issue already exists
-              const { data: existingIssues } = await github.rest.issues.listForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                state: 'open',
-                labels: labels.join(','),
-              });
-              
-              const duplicate = existingIssues.find(i => i.title === title);
-              if (duplicate) {
-                console.log(\`Issue already exists: \${title}\`);
-                continue;
+            async function scanDirectory(dir, results = []) {
+              const entries = fs.readdirSync(dir, { withFileTypes: true });
+              for (const entry of entries) {
+                const fullPath = path.join(dir, entry.name);
+                if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
+                  await scanDirectory(fullPath, results);
+                } else if (entry.isFile() && /\.(ts|tsx|js|jsx|py|rb|go|rs|java|kt|swift|md)$/.test(entry.name)) {
+                  const content = fs.readFileSync(fullPath, 'utf-8');
+                  for (const { pattern, type } of lowHangingPatterns) {
+                    const matches = content.match(pattern);
+                    if (matches) {
+                      results.push({
+                        file: fullPath,
+                        type,
+                        count: matches.length,
+                        sample: content.substring(Math.max(0, content.indexOf(matches[0]) - 50), content.indexOf(matches[0]) + matches[0].length + 50)
+                      });
+                    }
+                  }
+                }
               }
-              
+              return results;
+            }
+
+            const findings = await scanDirectory('.');
+            
+            // Group findings by type for issue creation
+            const grouped = findings.reduce((acc, f) => {
+              acc[f.type] = acc[f.type] || [];
+              acc[f.type].push(f);
+              return acc;
+            }, {});
+
+            for (const [type, items] of Object.entries(grouped)) {
+              const title = `[Low Hanging Fruit] ${type}: ${items.length} occurrences found`;
+              const body = `## Automated Low Hanging Fruit Detection
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue Low Hanging Fruit Automation for more information.
+
+### Findings (${items.length} total)
+
+${items.map(i => `- \`${i.file}\`: ${i.count} occurrence(s)`).join('\n')}
+
+### Sample
+\`\`\`
+${items[0]?.sample || 'N/A'}
+\`\`\`
+`;
+
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                title: title,
-                body: issueBody,
-                labels: labels,
+                title,
+                body,
+                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', '💎 Bounty']
               });
-              
-              console.log(\`Created issue: \${title}\`);
             }
+
+            console.log(`Created ${Object.keys(grouped).length} issue(s) from ${findings.length} findings`);
