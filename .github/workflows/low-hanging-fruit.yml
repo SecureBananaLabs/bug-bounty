@@ -2,8 +2,14 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at midnight UTC
-  workflow_dispatch:  # Allow manual trigger
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      max_issues:
+        description: 'Maximum number of issues to create'
+        required: false
+        default: '5'
 
 permissions:
   issues: write
@@ -21,25 +27,74 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run low hanging fruit detection
-        id: detect
-        run: |
-          node .github/scripts/detect-low-hanging-fruit.js
+      - name: Detect low hanging fruit and create issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create GitHub issues for detected items
-        if: steps.detect.outputs.issues-created == 'true'
+          REPO: ${{ github.repository }}
+          MAX_ISSUES: ${{ github.event.inputs.max_issues || '5' }}
         run: |
-          node .github/scripts/create-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          node -e "
+            const fs = require('fs');
+            const { execSync } = require('child_process');
 
-      - name: Update leaderboard
+            // Helper to run GitHub CLI commands
+            function ghCommand(args) {
+              return execSync(\`gh \${args}\`, { encoding: 'utf-8', env: { ...process.env, GH_TOKEN: process.env.GITHUB_TOKEN } });
+            }
+
+            // Detect potential low hanging fruit items from codebase
+            function detectLowHangingFruit() {
+              const items = [];
+              
+              // Check for TODO/FIXME/HACK comments
+              try {
+                const grepResult = execSync('grep -rn -E \"(TODO|FIXME|HACK|XXX|BUG|OPTIMIZE|REFACTOR)\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" --include=\"*.jsx\" --include=\"*.md\" apps/ packages/ 2>/dev/null || true', { encoding: 'utf-8' });
+                const lines = grepResult.split('\\n').filter(l => l.trim());
+                for (const line of lines.slice(0, parseInt(process.env.MAX_ISSUES))) {
+                  const [location, ...commentParts] = line.split(':');
+                  const comment = commentParts.join(':').trim();
+                  if (location && comment) {
+                      title: \`Low Hanging Fruit: \${comment.substring(0, 80)}\`,
+                      body: \`## Detected Low Hanging Fruit\\n\\n**Location:** \${location}\\n\\n**Comment:**\\n\${comment}\\n\\n---\\n\\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\`
+                    });
+                  }
+                }
+              } catch (e) {
+                console.log('No TODO/FIXME comments found or grep failed');
+              }
+              
+              // Check for missing tests
+              try {
+                const testFiles = execSync('find apps packages -name \"*.test.*\" -o -name \"*.spec.*\" 2>/dev/null || true', { encoding: 'utf-8' });
+                if (!testFiles.trim()) {
+                  items.push({
+                    title: 'Low Hanging Fruit: Add unit tests for core functionality',
+                    body: '## Detected Low Hanging Fruit\\n\\nNo test files were found in the repository. Adding tests would improve code quality and reliability.\\n\\n---\\n\\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
+                  });
+                }
+              } catch (e) {
+                console.log('Test detection failed');
+              }
+              
+              return items.slice(0, parseInt(process.env.MAX_ISSUES));
+            }
+
+            const items = detectLowHangingFruit();
+            console.log(\`Found \${items.length} low hanging fruit items\`);
+
+            for (const item of items) {
+              try {
+                // Create issue using GitHub CLI
+                const escapedTitle = item.title.replace(/\"/g, '\\\\\"');
+                const escapedBody = item.body.replace(/\"/g, '\\\\\"').replace(/\\n/g, '\\\\n');
+                const result = ghCommand(\`issue create --repo \${process.env.REPO} --title \"\${escapedTitle}\" --body \"\${escapedBody}\"\`);
+                console.log('Created issue:', result.trim());
+              } catch (e) {
+                console.error('Failed to create issue:', e.message);
+              }
+            }
+          "
+
+      - name: Report completion
         run: |
-          node .github/scripts/update-leaderboard.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "Low hanging fruit automation completed"
