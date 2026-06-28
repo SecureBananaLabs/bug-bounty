@@ -1,0 +1,1 @@
+export const normalizeSkillSep=(skills)=>Array.isArray(skills)?skills.map(s=>String(s).trim().replace(/[,;|\s]+/g,",").split(",").filter(Boolean)).flat():[];
