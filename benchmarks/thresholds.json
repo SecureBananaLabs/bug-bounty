@@ -1,0 +1,8 @@
+{
+  "default": { "p99MaxMs": 500 },
+  "GET  /health": { "p99MaxMs": 50 },
+  "GET  /api/jobs": { "p99MaxMs": 200 },
+  "GET  /api/search?q=typescript": { "p99MaxMs": 200 },
+  "POST /api/auth/register": { "p99MaxMs": 300 },
+  "POST /api/auth/login": { "p99MaxMs": 300 }
+}
