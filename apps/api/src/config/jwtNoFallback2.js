@@ -1,0 +1,1 @@
+if(!process.env.JWT_SECRET){const prod=process.env.NODE_ENV==="production";if(prod){console.error("FATAL: JWT_SECRET required in production");process.exit(1);}console.warn("WARNING: Using insecure dev JWT secret");}export const JWT_SECRET=process.env.JWT_SECRET||"dev-insecure-local-only";
