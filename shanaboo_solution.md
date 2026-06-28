@@ -1,22 +1,19 @@
  ```diff
 --- /dev/null
 +++ b/.github/workflows/low-hanging-fruit-automation.yml
-@@ -0,0 +1,45 @@
-+name: Low Hanging Fruit Automation
-+
+@@ -0,0 +1,0 @@
++name Low Hanging Fruit Automation
 +on:
 +  schedule:
-+    # Run daily at 00:00 UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
-+
-+permissions:
-+  issues: write
-+  contents: read
 +
 +jobs:
 +  detect-and-create-issues:
 +    runs-on: ubuntu-latest
++    permissions:
++      issues: write
++      contents: read
 +    steps:
 +      - name: Checkout repository
 +        uses: actions/checkout@v4
@@ -27,7 +24,7 @@
 +          node-version: '20'
 +
 +      - name: Install dependencies
-+        run: npm install
++        run: npm ci
 +
 +      - name: Run low hanging fruit detection
 +        id: detect
@@ -35,142 +32,136 @@
 +          node .github/scripts/detect-low-hanging-fruit.js
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          REPO_OWNER: ${{ github.repository_owner }}
++          REPO_NAME: ${{ github.event.repository.name }}
 +
++      - name: Create issues from detected items
++        if: steps.detect.outputs.has_items == 'true'
++        run: |
++          node .github/scripts/create-issues.js
++        env:
++          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++          REPO_OWNER: ${{ github.repository_owner }}
++          REPO_NAME: ${{ github.event.repository.name }}
 +--- /dev/null
 +++ b/.github/scripts/detect-low-hanging-fruit.js
-@@ -0,0 +1,234 @@
-+/**
-+ * Low Hanging Fruit Automation Script
-+ * 
-+ * This script recursively detects common bugs and issues in the codebase
-+ * and creates GitHub issues for them automatically.
-+ */
-+
+@@ -0,0 +1,0 @@
 +const fs = require('fs');
 +const path = require('path');
 +const { execSync } = require('child_process');
 +
-+// GitHub API helper
-+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-+const REPO = process.env.GITHUB_REPOSITORY || 'SecureBananaLabs/bug-bounty';
++const OUTPUT_FILE = path.join(__dirname, 'detected-items.json');
 +
-+async function createGitHubIssue(title, body, labels = ['bug', 'good first issue', 'AI agent friendly']) {
-+  if (!GITHUB_TOKEN) {
-+    console.log(`[DRY RUN] Would create issue: ${title}`);
-+    return { number: Math.floor(Math.random() * 10000) };
++function findTodoComments(dir, results = []) {
++  try {
++    const grepResult = execSync(
++      `grep -r -n -i "TODO\\|FIXME\\|HACK\\|BUG\\|XXX" --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" --include="*.py" --include="*.md" "${dir}" 2>/dev/null || true`,
++      { encoding: 'utf-8', maxBuffer: 10 * 1024 * 1024 }
++    );
++    
++    const lines = grepResult.split('\n').filter(Boolean);
++    for (const line of lines) {
++      const match = line.match(/^(.+):(\d+):(.+)$/);
++      if (match) {
++        results.push({
++          type: 'todo_comment',
++          file: match[1],
++          line: parseInt(match[2], 10),
++          content: match[3].trim(),
++          severity: 'low'
++        });
++      }
++    }
++  } catch (e) {
++    // Ignore errors
 +  }
-+
-+  const issueBody = `${body}
-+
-+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`;
-+
-+  const response = await fetch(`https://api.github.com/repos/${REPO}/issues`, {
-+    method: 'POST',
-+    headers: {
-+      'Authorization': `token ${GITHUB_TOKEN}`,
-+      'Accept': 'application/vnd.github.v3+json',
-+      'Content-Type': 'application/json',
-+    },
-+    body: JSON.stringify({
-+      title,
-+      body: issueBody,
-+      labels,
-+    }),
-+  });
-+
-+  if (!response.ok) {
-+    throw new Error(`Failed to create issue: ${response.statusText}`);
-+  }
-+
-+  return await response.json();
++  return results;
 +}
 +
-+// Issue detection patterns
-+const DETECTORS = {
-+  // Find TODO/FIXME comments without issues
-+  findTodos: (rootPath) => {
-+    const issues = [];
-+    const files = findFiles(rootPath, ['.ts', '.tsx', '.js', '.jsx']);
++function findEmptyFunctions(dir, results = []) {
++  try {
++    const files = execSync(
++      `find "${dir}" -type f \\( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \\) 2>/dev/null || true`,
++      { encoding: 'utf-8' }
++    ).split('\n').filter(Boolean);
 +    
 +    for (const file of files) {
 +      const content = fs.readFileSync(file, 'utf-8');
-+      const lines = content.split('\n');
-+      
-+      lines.forEach((line, index) => {
-+        const todoMatch = line.match(/(?:TODO|FIXME|HACK|BUG|XXX)[\s:]*(.{0,200})/i);
-+        if (todoMatch && !line.includes('issue #')) {
-+          issues.push({
-+            type: 'TODO/FIXME',
-+            file: path.relative(rootPath, file),
-+            line: index + 1,
-+            description: todoMatch[1].trim(),
-+          });
-+        }
-+      });
++      const emptyFunctionRegex = /function\s+\w+\s*\([^)]*\)\s*\{\s*(\/\/[^\n]*\s*)*\s*\}/g;
++      let match;
++      while ((match = emptyFunctionRegex.exec(content)) !== null) {
++        const lines = content.substring(0, match.index).split('\n');
++        results.push({
++          type: 'empty_function',
++          file: file,
++          line: lines.length,
++          content: match[0].substring(0, 100),
++          severity: 'low'
++        });
++      }
 +    }
-+    
-+    return issues;
-+  },
++  } catch (e) {
++    // Ignore errors
++  }
++  return results;
++}
 +
-+  // Find missing error handling
-+  findMissingErrorHandling: (rootPath) => {
-+    const issues = [];
-+    const files = findFiles(rootPath, ['.ts', '.tsx', '.js', '.jsx']);
++function findMissingTests(dir, results = []) {
++  try {
++    const sourceFiles = execSync(
++      `find "${dir}" -type f \\( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \\) ! -name "*.test.*" ! -name "*.spec.*" ! -path "*/node_modules/*" 2>/dev/null || true`,
++      { encoding: 'utf-8' }
++    ).split('\n').filter(Boolean);
 +    
-+    for (const file of files) {
-+      const content = fs.readFileSync(file, 'utf-8');
++    for (const file of sourceFiles) {
++      const testFile = file.replace(/\.(ts|tsx|js|jsx)$/, '.test.$1').replace(/\.(ts|tsx|js|jsx)$/, '.spec.$1');
++      const altTestFile = file.replace(/\.(ts|tsx|js|jsx)$/, '.test.$1');
 +      
-+      // Check for async functions without try/catch
-+      const asyncFunctionPattern = /async\s+(?:function\s+\w+|\w+\s*=>|function\s*\([^)]*\))\s*\{[^}]*\}/gs;
-+      const matches = content.match(asyncFunctionPattern) || [];
-+      
-+      for (const match of matches) {
-+        if (!match.includes('try') && (match.includes('await') || match.includes('fetch'))) {
-+          issues.push({
-+            type: 'Missing Error Handling',
-+            file: path.relative(rootPath, file),
-+            description: 'Async function lacks try/catch error handling',
++      if (!fs.existsSync(testFile) && !fs.existsSync(altTestFile)) {
++        const relativePath = path.relative(process.cwd(), file);
++        if (!relativePath.includes('node_modules')) {
++          results.push({
++            type: 'missing_test',
++            file: relativePath,
++            line: 1,
++            content: `Missing test file for ${relativePath}`,
++            severity: 'low'
 +          });
-+          break; // One issue per file
 +        }
 +      }
 +    }
-+    
-+    return issues;
-+  },
++  } catch (e) {
++    // Ignore errors
++  }
++  return results;
++}
 +
-+  // Find hardcoded values
-+  findHardcodedValues: (rootPath) => {
-+    const issues = [];
-+    const files = findFiles(rootPath, ['.ts', '.tsx', '.js', '.jsx']);
-+    
-+    for (const file of files) {
-+      const content = fs.readFileSync(file, 'utf-8');
++function findDocumentationIssues(dir, results = []) {
++  try {
++    const readmePath = path.join(dir, 'README.md');
++    if (fs.existsSync(readmePath)) {
++      const content = fs.readFileSync(readmePath, 'utf-8');
 +      
-+      // Check for hardcoded URLs, API keys, secrets
-+      const patterns = [
-+        { pattern: /https?:\/\/[^'"`\s]+/g, desc: 'Hardcoded URL found' },
-+        { pattern: /['"]pk_(live|test)_[^'"]+['"]/g, desc: 'Hardcoded Stripe public key' },
-+        { pattern: /['"]sk_(live|test)_[^'"]+['"]/g, desc: 'Hardcoded Stripe secret key' },
-+      ];
-+      
-+      for (const { pattern, desc } of patterns) {
-+        if (pattern.test(content)) {
-+          issues.push({
-+            type: 'Hardcoded Value',
-+            file: path.relative(rootPath, file),
-+            description: desc,
-+          });
-+          break;
-+        }
++      if (content.includes('TODO') || content.includes('FIXME') || content.includes('placeholder') || content.includes('Placeholder')) {
++        results.push({
++          type: 'documentation_issue',
++          file: 'README.md',
++          line: 1,
++          content: 'README contains placeholder or incomplete content',
++          severity: 'low'
++        });
 +      }
 +    }
-+    
-+   arf issues;
-+  },
++  } catch (e) {
++    // Ignore errors
++  }
++  return results;
++}
 +
-+  // Find missing tests
-+  findMissingTests: (rootPath) => {
-+    const issues = [];
-+    const sourceFiles = findFiles(rootPath, ['.ts', '.tsx', '.js', '.jsx'])
-+      .filter(f => !f.includes('.test.') && !f.includes('.spec.') && !f.includes('
++function main() {
++  const repoRoot = path.resolve(__dirname, '..', '..');
++  let allItems = [];
++  
++  // Scan different areas of the codebase
++  const scanDirs = ['apps', 'packages', 'docs'];
++  for (
