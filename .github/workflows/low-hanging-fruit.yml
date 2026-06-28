@@ -2,8 +2,8 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * 0'
-  workflow_dispatch:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
+  workflow_dispatch:  # Allow manual trigger
 
 permissions:
   issues: write
@@ -30,18 +30,16 @@ jobs:
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create issues for detected items
-        if: steps.detect.outputs.has_issues == 'true'
+      - name: Create GitHub issues for detected items
+        if: steps.detect.outputs.issues-created == 'true'
         run: |
           node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Report status
-        if: always()
+      - name: Update leaderboard
         run: |
-          echo "Low hanging fruit detection completed"
-          echo "Check the Actions tab for details"
+          node .github/scripts/update-leaderboard.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
