@@ -1,3 +1,10 @@
-# Cyberpunk City Pixel Art
+# Pixel Art Gallery
 
-A futuristic cyberpunk cityscape at night with neon lights, towering skyscrapers, and a glowing moon — created to capture the essence of a digital metropolis where freelancers and clients might meet in a sci-fi future.
+This directory contains original pixel art submissions.
+
+## Cosmic Cat
+
+**File:** `cosmic-cat.png` (to be added)
+**Size:** 64x64 pixels
+**Description:** A purple cosmic cat floating among cyan and white stars, representing the curiosity and exploration spirit of open source contributors. The cat's glowing cyan eyes peer into the digital cosmos, while its pink ears catch the light of distant nebulae.
+**Why:** Cats are iconic in tech culture, and the cosmic theme represents the vast possibilities of collaborative coding. This piece celebrates the playful, creative side of software development.
