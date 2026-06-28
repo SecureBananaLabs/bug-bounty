@@ -1,4 +1,4 @@
-import { jobs } from "@/lib/mock";
+import { jobs } from "../../../lib/mock";
 
 export default function JobDetailPage({ params }: { params: { id: string } }) {
   const job = jobs.find((j) => j.id === params.id);
