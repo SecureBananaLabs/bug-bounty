@@ -1,0 +1,26 @@
+# Fix for Issue #743: Low Handing Fruit Automation
+
+### Suggested Action
+Please address this {tag} comment and remove it once resolved.
+
+### Category
+- Type: Developer Note ({tag})
+- Effort: Low
+- Priority: Low
+
+{self.ISSUE_DISCLAIMER}"""
+
+    def _create_pattern_body(self, description: str, file_path: Path,
+                             line_num: int, line_content: str,
+                             category: str, severity: str) -> str:
+        """Create issue body for pattern matches."""
+        return f"""## {description}
+
+**File:** `{file_path}`
+**Line:** {line_num}
+**Severity:** {severity.capitalize()}
+
+### Issue Description
+A potential {category} issue was detected in the codebase.
+
+### Code Context
