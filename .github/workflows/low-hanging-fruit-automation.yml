@@ -2,7 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    # Run daily at midnight UTC
+    # Run daily at 00:00 UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -25,33 +25,102 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run low hanging fruit detector
-        id: detector
+      - name: Run low hanging fruit detection
+        id: detect
         run: |
-          node .github/scripts/detect-low-hanging-fruit.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            
+            const findings = [];
+            
+            // Check for missing tests
+            const hasTestScript = fs.existsSync('package.json') && JSON.parse(fs.readFileSync('package.json', 'utf8')).scripts?.test;
+            if (!hasTestScript) {
+              findings.push({ title: 'Missing test script in package.json', labels: ['bug', 'good first issue'] });
+            }
+            
+            // Check for missing README sections
+            const readme = fs.readFileSync('README.md', 'utf8');
+            const requiredSections = ['Installation', 'Usage', 'Contributing', 'License'];
+            const missingSections = requiredSections.filter(s => !readme.includes(s));
+            if (missingSections.length > 0) {
+              findings.push({ title: 'Missing README sections: ' + missingSections.join(', '), labels: ['documentation', 'good first issue'] });
+            }
+            
+            // Check for missing .env.example
+            if (!fs.existsSync('.env.example')) {
+              findings.push({ title: 'Missing .env.example file', labels: ['documentation', 'good first issue', 'bug'] });
+            }
+            
+            // Check for missing CONTRIBUTING.md
+            if (!fs.existsSync('CONTRIBUTING.md')) {
+              findings.push({ title: 'Missing CONTRIBUTING.md file', labels: ['documentation', 'good first issue'] });
+            }
+            
+            // Check for TODO comments in source files
+            const { execSync } = require('child_process');
+            try {
+              const todos = execSync('grep -r \"TODO\\|FIXME\\|XXX\" --include=\"*.ts\" --include=\"*.tsx\" --include=\"*.js\" --include=\"*.jsx\" apps/ packages/ 2>/dev/null || true').toString();
+              if (todos.trim()) {
+                findings.push({ title: 'TODO/FIXME comments found in codebase', labels: ['bug', 'good first issue'] });
+              }
+            } catch (e) {}
+            
+            fs.writeFileSync('findings.json', JSON.stringify(findings, null, 2));
+          "
 
-  recursive-issue-creation:
-    runs-on: ubuntu-latest
-    needs: detect-and-create-issues
-    if: always()
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Create GitHub issues for findings
+        uses: actions/github-script@v7
         with:
-          node-version: '20'
+          script: |
+            const fs = require('fs');
+            
+            let findings = [];
+            try {
+              findings = JSON.parse(fs.readFileSync('findings.json', 'utf8'));
+            } catch (e) {
+              console.log('No findings or error reading findings.json');
+              return;
+            }
+            
+            const issueBody = \`This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
 
-      - name: Install dependencies
-        run: npm ci
+## Description
+This issue was automatically detected as low-hanging fruit. Please review and address accordingly.
 
-      - name: Create recursive issues
-        run: |
-          node .github/scripts/create-recursive-issues.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+## Acceptance Criteria
+- [ ] Identify the root cause
+- [ ] Implement a fix
+- [ ] Add tests if applicable
+- [ ] Update documentation if needed
+\`;
+            
+            for (const finding of findings) {
+              const title = finding.title;
+              const labels = finding.labels || ['bug', 'good first issue'];
+              
+              // Check if issue already exists
+              const { data: existingIssues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                state: 'open',
+                labels: labels.join(','),
+              });
+              
+              const duplicate = existingIssues.find(i => i.title === title);
+              if (duplicate) {
+                console.log(\`Issue already exists: \${title}\`);
+                continue;
+              }
+              
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: issueBody,
+                labels: labels,
+              });
+              
+              console.log(\`Created issue: \${title}\`);
+            }
