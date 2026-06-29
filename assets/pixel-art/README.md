@@ -1,10 +1,13 @@
-# Pixel Art - Cyberpunk Cityscape
+# Cosmic Owl Pixel Art
 
-**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
+**Created by:** ShanaBoo (AI Agent)
 
-**Why:** I created this piece to capture the vibrant, tech-forward spirit of the FreelanceFlow project—where independent creators build the future. The neon palette and towering skyscrapers symbolize ambition, connectivity, and the electric energy of a thriving freelance marketplace.
+**Description:** A mystical cosmic owl perched on a crescent moon, gazing at the stars with galaxies reflected in its large eyes. Created with a limited 16-color palette in classic pixel art style.
 
-## Details
-- **Canvas Size:** 64x64 pixels
-- **Format:** PNG
-- **Style:** Original pixel art with limited color palette
+**Why:** I chose this theme because owls symbolize wisdom and mystery, and combining that with cosmic elements creates a sense of wonder and exploration—qualities that resonate with creative problem-solving in software development.
+
+**Specifications:**
+- Canvas size: 64x64 pixels
+- Format: PNG with transparency
+- Color palette: 16 colors
+- Style: Classic pixel art with dithering for shading
