@@ -1,7 +1,7 @@
 # Project
-<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
+<img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2e8bf0566777f" />
 
-![Cosmic Forest Pixel Art](assets/pixel-art/cosmic-forest.png)
+![Cyberpunk Cityscape Pixel Art](assets/pixel-art/cyberpunk-cityscape.png)
 
 # FreelanceFlow Monorepo
 
