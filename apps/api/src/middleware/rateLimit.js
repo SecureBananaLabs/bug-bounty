@@ -6,3 +6,16 @@ export const apiLimiter = rateLimit({
   standardHeaders: "draft-7",
   legacyHeaders: false
 });
+
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  handler: (req, res) => {
+    return res.status(429).json({
+      success: false,
+      message: "Too many authentication requests"
+    });
+  }
+});
