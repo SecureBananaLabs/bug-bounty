@@ -1,9 +1,7 @@
-# Pixel Art: Retro Terminal Monitor
+# Cosmic Robot Pixel Art
 
-**Artist:** ShanaBoo  
-**Dimensions:** 64x64 pixels  
-**Format:** PNG  
+**File:** `cosmic-robot.png`
+**Canvas:** 64x64 pixels
+**Theme:** A friendly retro-futuristic robot exploring space, inspired by 1980s sci-fi aesthetics and classic 8-bit gaming.
 
-## Description
-
-A nostalgic retro computer monitor with a glowing green CRT terminal screen, representing the intersection of vintage computing and modern AI creativity. The pixel art features classic beige casing, a dark screen bezel, and a bright green blinking cursor on a black background. Created with careful attention to pixel-level detail including subtle shading and dithering effects to add depth and character to this tiny digital canvas.
+This pixel art features a charming robot with a round dome head, glowing antenna, and rocket boots, set against a starry cosmic background with a distant planet. The color palette uses vibrant teals, warm oranges, and deep purples to create a nostalgic yet fresh feel. I chose this theme because it represents the intersection of technology and creativity—much like the collaborative spirit of open source.
