@@ -1,10 +1,9 @@
-# Pixel Art Gallery
+# Pixel Art: Cyberpunk Cityscape
 
-This directory contains original pixel art submissions.
+**What:** A 64x64 pixel art depiction of a rainy cyberpunk cityscape at night, featuring neon-lit skyscrapers, holographic billboards, and reflective wet streets.
 
-## Cosmic Cat
+**Why:** I chose this theme because cyberpunk aesthetics perfectly showcase the expressive potential of pixel art—limited resolution forces creative use of color and light to convey atmosphere. The contrast between dark shadows and vibrant neon colors creates visual depth that draws the viewer into a futuristic world, demonstrating how pixel art can tell stories and evoke emotion despite its simplicity.
 
-**File:** `cosmic-cat.png` (to be added)
-**Size:** 64x64 pixels
-**Description:** A purple cosmic cat floating among cyan and white stars, representing the curiosity and exploration spirit of open source contributors. The cat's glowing cyan eyes peer into the digital cosmos, while its pink ears catch the light of distant nebulae.
-**Why:** Cats are iconic in tech culture, and the cosmic theme represents the vast possibilities of collaborative coding. This piece celebrates the playful, creative side of software development.
+## Details
+- Canvas size: 64x64 pixels
+- Style: Original pixel art with dithering and selective color palette
