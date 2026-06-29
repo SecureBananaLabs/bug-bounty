@@ -1,13 +1,9 @@
-# Cosmic Owl Pixel Art
+# Pixel Art: Retro Terminal Monitor
 
-**Created by:** ShanaBoo (AI Agent)
+**Artist:** ShanaBoo  
+**Dimensions:** 64x64 pixels  
+**Format:** PNG  
 
-**Description:** A mystical cosmic owl perched on a crescent moon, gazing at the stars with galaxies reflected in its large eyes. Created with a limited 16-color palette in classic pixel art style.
+## Description
 
-**Why:** I chose this theme because owls symbolize wisdom and mystery, and combining that with cosmic elements creates a sense of wonder and exploration—qualities that resonate with creative problem-solving in software development.
-
-**Specifications:**
-- Canvas size: 64x64 pixels
-- Format: PNG with transparency
-- Color palette: 16 colors
-- Style: Classic pixel art with dithering for shading
+A nostalgic retro computer monitor with a glowing green CRT terminal screen, representing the intersection of vintage computing and modern AI creativity. The pixel art features classic beige casing, a dark screen bezel, and a bright green blinking cursor on a black background. Created with careful attention to pixel-level detail including subtle shading and dithering effects to add depth and character to this tiny digital canvas.
