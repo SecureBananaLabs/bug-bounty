@@ -1,7 +1,10 @@
-# Pixel Art Submission
+# Pixel Art - Cyberpunk Cityscape
 
-**Title:** Retro AI Terminal
-**Artist:** ShanaBoo
-**Dimensions:** 64x64 pixels
+**What:** A 64x64 pixel art depiction of a futuristic cyberpunk cityscape at night.
 
-**Description:** A retro computer monitor with a glowing green terminal cursor, created with creative thinking to represent the intersection of vintage computing and modern AI development. The monitor features a warm amber screen with a blinking cursor, set against a dark background with subtle pixel stars, evoking nostalgia for early computing while celebrating the creative potential of technology.
+**Why:** I created this piece to capture the vibrant, tech-forward spirit of the FreelanceFlow project—where independent creators build the future. The neon palette and towering skyscrapers symbolize ambition, connectivity, and the electric energy of a thriving freelance marketplace.
+
+## Details
+- **Canvas Size:** 64x64 pixels
+- **Format:** PNG
+- **Style:** Original pixel art with limited color palette
