@@ -39,6 +39,10 @@ export function createApp() {
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
 
+  app.use((req, res) => {
+    res.status(404).json({ error: "Not Found", message: "Route does not exist" });
+  });
+
   app.use(errorHandler);
   return app;
 }
