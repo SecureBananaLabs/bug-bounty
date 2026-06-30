@@ -1,7 +1,14 @@
-import { Router } from "express";
-import { getUsers, postUser } from "../controllers/userController.js";
+const express = require('express');
+const router = express.Router();
+const { authenticate } = require('../middleware/auth');
+const userController = require('../controllers/userController');
 
-export const userRoutes = Router();
+// Existing routes
+// router.get('/', authenticate, userController.getUsers);
+// router.get('/:id', authenticate, userController.getProfile);
+// router.put('/:id', authenticate, userController.updateProfile);
 
-userRoutes.get("/", getUsers);
-userRoutes.post("/", postUser);
+// NEW: Route for the Settings page to provide actionable account controls
+router.get('/settings', authenticate, userController.getSettings);
+
+module.exports = router;
