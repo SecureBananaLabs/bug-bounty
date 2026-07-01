@@ -1,0 +1,49 @@
+{
+  "targetBaseUrl": "http://127.0.0.1:4000",
+  "durationSeconds": 20,
+  "concurrency": 8,
+  "timeoutMs": 10000,
+  "endpoints": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health"
+    },
+    {
+      "name": "list-jobs",
+      "method": "GET",
+      "path": "/api/jobs"
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/search?q=designer"
+    },
+    {
+      "name": "login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": {
+        "email": "benchmark@example.com",
+        "password": "benchmark-password"
+      }
+    },
+    {
+      "name": "create-job",
+      "method": "POST",
+      "path": "/api/jobs",
+      "headers": {
+        "content-type": "application/json"
+      },
+      "body": {
+        "title": "Benchmark job",
+        "description": "Synthetic benchmark payload used to measure API latency.",
+        "budget": 500,
+        "skills": ["node", "api", "benchmark"]
+      }
+    }
+  ]
+}
