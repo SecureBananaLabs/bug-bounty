@@ -1,0 +1,18 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "80",
+  "title": "Pixel Art Creation with high Creative Thinking",
+  "body": "**Goal**\nGenerate a pixel art image and submit it as a file in the project.\n\n**Acceptance Criteria**\n- [ ] Image is original pixel art, theme and subject are your choice\n- [ ] Submitted as a `.png`, `.jpg`, or `.jpeg` file under `/assets/pixel-art/`\n- [ ] Minimum canvas size of 64x64 pixels\n- [ ] PR description includes a one-line note on what you made and why\n\n/bounty $780",
+  "labels": [
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$780"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
