@@ -22,6 +22,7 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  const refreshTokenValue = req.body.refreshToken || req.headers["x-refresh-token"];
+  const result = await refreshToken(refreshTokenValue);
   return ok(res, result);
 }
