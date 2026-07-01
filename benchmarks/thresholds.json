@@ -1,0 +1,12 @@
+{
+  "POST /auth/register": { "p99": 500, "minRps": 50 },
+  "POST /auth/login": { "p99": 300, "minRps": 100 },
+  "GET /jobs": { "p99": 200, "minRps": 200 },
+  "GET /jobs/:id": { "p99": 150, "minRps": 300 },
+  "POST /jobs": { "p99": 500, "minRps": 50 },
+  "GET /users": { "p99": 300, "minRps": 100 },
+  "GET /users/:id": { "p99": 200, "minRps": 200 },
+  "PATCH /users/:id": { "p99": 400, "minRps": 80 },
+  "GET /applications": { "p99": 200, "minRps": 150 },
+  "POST /applications": { "p99": 400, "minRps": 80 }
+}
