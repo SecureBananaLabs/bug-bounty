@@ -1,12 +1,13 @@
+import crypto from "crypto";
 import { signAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
   return {
-    id: `usr_${Date.now()}`,
+    id: crypto.randomUUID(),
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    token: signAccessToken({ sub: crypto.randomUUID(), role: payload.role })
   };
 }
 

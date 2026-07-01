@@ -1,3 +1,4 @@
+import crypto from "crypto";
 const users = [];
 
 export async function listUsers() {
@@ -5,7 +6,7 @@ export async function listUsers() {
 }
 
 export async function createUser(payload) {
-  const user = { id: `usr_${Date.now()}`, ...payload };
+  const user = { id: crypto.randomUUID(), ...payload };
   users.push(user);
   return user;
 }
