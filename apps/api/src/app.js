@@ -39,6 +39,11 @@ export function createApp() {
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
 
+  // catch-all for unmatched /api routes
+  app.use("/api", (req, res) => {
+    res.status(404).json({ success: false, message: "Not found" });
+  });
+
   app.use(errorHandler);
   return app;
 }
