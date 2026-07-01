@@ -1,0 +1,47 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/api-benchmark-smoke.yml"
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test
+
+      - name: Start API
+        run: |
+          JWT_SECRET=benchmark-secret PORT=4000 npm run dev -w apps/api > /tmp/freelanceflow-api.log 2>&1 &
+          echo $! > /tmp/freelanceflow-api.pid
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4000/health > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/freelanceflow-api.log
+          exit 1
+
+      - name: Run smoke benchmark
+        env:
+          BENCHMARK_TARGET: http://127.0.0.1:4000
+          BENCHMARK_JWT_SECRET: benchmark-secret
+          BENCHMARK_CONNECTIONS: 1
+          BENCHMARK_REQUESTS_PER_ENDPOINT: 2
+        run: npm run benchmark:smoke
