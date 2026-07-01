@@ -1,10 +1,12 @@
 import { ok } from "../utils/response.js";
 import { createProposal, listProposals } from "../services/proposalService.js";
+import { createProposalSchema } from "../validators/endpoints.js";
 
 export async function getProposals(req, res) {
   return ok(res, await listProposals());
 }
 
 export async function postProposal(req, res) {
-  return ok(res, await createProposal(req.body), 201);
+  const payload = createProposalSchema.parse(req.body);
+  return ok(res, await createProposal(payload), 201);
 }
