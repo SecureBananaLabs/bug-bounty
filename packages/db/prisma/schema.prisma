@@ -37,6 +37,9 @@ model User {
   reviewsGiven   Review[]    @relation("Reviewer")
   reviewsGot     Review[]    @relation("Reviewee")
   notifications  Notification[]
+  disputesCreated Dispute[]   @relation("DisputeCreator")
+  disputesResolved Dispute[]  @relation("DisputeResolver")
+  auditLogs      AuditLog[]
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -54,6 +57,7 @@ model Job {
   category      Category    @relation(fields: [categoryId], references: [id])
   proposals     Proposal[]
   payments      Payment[]
+  disputes      Dispute[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -124,4 +128,34 @@ model Notification {
   body          String
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
+}
+
+enum DisputeStatus {
+  PENDING
+  RESOLVED
+  REJECTED
+}
+
+model Dispute {
+  id           String        @id @default(cuid())
+  reason       String
+  status       DisputeStatus @default(PENDING)
+  jobId        String
+  job          Job           @relation(fields: [jobId], references: [id])
+  creatorId    String
+  creator      User          @relation("DisputeCreator", fields: [creatorId], references: [id])
+  resolverId   String?
+  resolver     User?         @relation("DisputeResolver", fields: [resolverId], references: [id])
+  resolution   String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  adminId   String
+  admin     User     @relation(fields: [adminId], references: [id])
+  details   String?
+  createdAt DateTime @default(now())
 }
