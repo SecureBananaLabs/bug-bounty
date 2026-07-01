@@ -5,3 +5,7 @@ dist
 .env.*
 coverage
 *.log
+# Benchmark generated artifacts
+!benchmarks/.env.benchmark.example
+benchmarks/results/*
+!benchmarks/results/.gitkeep
