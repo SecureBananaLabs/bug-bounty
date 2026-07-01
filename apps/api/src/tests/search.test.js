@@ -32,6 +32,17 @@ test("GET /api/search accepts a valid query", async () => {
   });
 });
 
+test("GET /api/search trims surrounding whitespace", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/search?q=%20designer%20`);
+    const payload = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(payload.success, true);
+    assert.equal(payload.data.query, "designer");
+  });
+});
+
 test("GET /api/search rejects non-string query values", async () => {
   await withServer(async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/search?q=one&q=two`);
@@ -47,14 +58,14 @@ test("GET /api/search rejects non-string query values", async () => {
 
 test("GET /api/search rejects overly long queries", async () => {
   await withServer(async (baseUrl) => {
-    const longQuery = "a".repeat(101);
+    const longQuery = "a".repeat(201);
     const response = await fetch(`${baseUrl}/api/search?q=${longQuery}`);
     const payload = await response.json();
 
     assert.equal(response.status, 400);
     assert.deepEqual(payload, {
       success: false,
-      message: "Search query must be 100 characters or fewer"
+      message: "Search query must be 200 characters or fewer"
     });
   });
 });
