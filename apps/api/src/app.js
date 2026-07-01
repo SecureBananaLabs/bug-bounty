@@ -14,6 +14,7 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { env } from "./config/env.js";
 
 export function createApp() {
   const app = express();
@@ -21,7 +22,9 @@ export function createApp() {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use(apiLimiter);
+  if (env.nodeEnv !== "benchmark") {
+    app.use(apiLimiter);
+  }
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
