@@ -40,5 +40,11 @@ export function createApp() {
   app.use("/api/admin", adminRoutes);
 
   app.use(errorHandler);
+
+  // Catch-all: unmatched API routes return JSON 404
+  app.use((req, res) => {
+    res.status(404).json({ success: false, message: "Route not found" });
+  });
+
   return app;
 }
