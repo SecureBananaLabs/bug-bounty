@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="520" viewBox="0 0 980 520" role="img" aria-labelledby="title desc">
+  <title id="title">Case-insensitive Bearer authentication demo</title>
+  <desc id="desc">Shows that admin metrics accepts Bearer, bearer, and BEARER schemes for the same valid JWT while malformed headers still fail.</desc>
+  <rect width="980" height="520" fill="#0b1020"/>
+  <rect x="38" y="36" width="904" height="448" rx="16" fill="#121a31" stroke="#2b3b68"/>
+  <text x="72" y="84" fill="#f4f7ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">Bearer auth scheme is now case-insensitive</text>
+  <text x="72" y="118" fill="#aab6d8" font-family="Arial, sans-serif" font-size="16">Regression evidence for PR #4567 / issue #4566</text>
+
+  <rect x="72" y="154" width="836" height="238" rx="12" fill="#1a2540" stroke="#3a4d80"/>
+  <text x="104" y="199" fill="#f4f7ff" font-family="Menlo, Consolas, monospace" font-size="17">GET /api/admin/metrics</text>
+  <text x="104" y="238" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="16">Authorization: Bearer &lt;valid token&gt;   -> 200 OK</text>
+  <text x="104" y="278" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="16">Authorization: bearer &lt;valid token&gt;   -> 200 OK</text>
+  <text x="104" y="318" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="16">Authorization: BEARER &lt;valid token&gt;   -> 200 OK</text>
+  <text x="104" y="358" fill="#ffb4b4" font-family="Menlo, Consolas, monospace" font-size="16">Authorization: Bearer                  -> 401 Unauthorized</text>
+
+  <text x="72" y="438" fill="#dbe6ff" font-family="Arial, sans-serif" font-size="16">Validated locally: npm test -w apps/api -> 3 tests passed; node --check changed files; git diff --check.</text>
+</svg>
