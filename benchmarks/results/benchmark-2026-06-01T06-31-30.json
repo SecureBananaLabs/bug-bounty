@@ -1,0 +1,699 @@
+{
+  "summary": {
+    "target": "http://localhost:4000",
+    "timestamp": "2026-06-01T06:31:30.806Z",
+    "mode": "smoke",
+    "endpoints": 17,
+    "passed": 17,
+    "failed": 0
+  },
+  "thresholds": {
+    "default": {
+      "p99MaxMs": 500,
+      "errorRateMax": 0.01,
+      "description": "Default thresholds: p99 < 500ms, error rate < 1%"
+    }
+  },
+  "results": [
+    {
+      "endpoint": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "timestamp": "2026-06-01T06:30:10.314Z",
+      "duration": 5.07,
+      "latency": {
+        "min": 0.003,
+        "p50": 0.004,
+        "p75": 0.007,
+        "p95": 0,
+        "p99": 0.023,
+        "p999": 0,
+        "max": 0.064,
+        "avg": 0.00571
+      },
+      "throughput": {
+        "rps": 803,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 4016,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.002284,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 5,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "timestamp": "2026-06-01T06:30:15.362Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.002,
+        "p50": 0.003,
+        "p75": 0.005,
+        "p95": 0,
+        "p99": 0.02,
+        "p999": 0,
+        "max": 0.044,
+        "avg": 0.00456
+      },
+      "throughput": {
+        "rps": 988,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 4941,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.001824,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 5,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "timestamp": "2026-06-01T06:30:20.395Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.001,
+        "p50": 0.005,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.021,
+        "p999": 0,
+        "max": 0.032,
+        "avg": 0.00591
+      },
+      "throughput": {
+        "rps": 1552,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 7759,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.002364,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "timestamp": "2026-06-01T06:30:25.443Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.001,
+        "p50": 0.006,
+        "p75": 0.007,
+        "p95": 0,
+        "p99": 0.025,
+        "p999": 0,
+        "max": 0.031,
+        "avg": 0.00705
+      },
+      "throughput": {
+        "rps": 1328,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 6638,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.00282,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "timestamp": "2026-06-01T06:30:30.477Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.002,
+        "p50": 0.005,
+        "p75": 0.005,
+        "p95": 0,
+        "p99": 0.018,
+        "p999": 0,
+        "max": 0.027,
+        "avg": 0.00556
+      },
+      "throughput": {
+        "rps": 1651,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 8254,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.002224,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "timestamp": "2026-06-01T06:30:35.508Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.003,
+        "p50": 0.006,
+        "p75": 0.007,
+        "p95": 0,
+        "p99": 0.023,
+        "p999": 0,
+        "max": 0.028,
+        "avg": 0.0067
+      },
+      "throughput": {
+        "rps": 1391,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 6956,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.00268,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "timestamp": "2026-06-01T06:30:40.541Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.002,
+        "p50": 0.005,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.016,
+        "p999": 0,
+        "max": 0.028,
+        "avg": 0.0056500000000000005
+      },
+      "throughput": {
+        "rps": 1623,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 8114,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.0022600000000000003,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "timestamp": "2026-06-01T06:30:45.564Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.002,
+        "p50": 0.007,
+        "p75": 0.007,
+        "p95": 0,
+        "p99": 0.027,
+        "p999": 0,
+        "max": 0.03,
+        "avg": 0.0074
+      },
+      "throughput": {
+        "rps": 1269,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 6343,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.0029600000000000004,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "POST /api/payment",
+      "method": "POST",
+      "path": "/api/payment",
+      "timestamp": "2026-06-01T06:30:50.587Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.004,
+        "p50": 0.005,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.022,
+        "p999": 0,
+        "max": 0.035,
+        "avg": 0.00611
+      },
+      "throughput": {
+        "rps": 1513,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 7564,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.002444,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "timestamp": "2026-06-01T06:30:55.626Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.001,
+        "p50": 0.005,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.015,
+        "p999": 0,
+        "max": 0.026,
+        "avg": 0.00545
+      },
+      "throughput": {
+        "rps": 1682,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 8409,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.00218,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "timestamp": "2026-06-01T06:31:00.653Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.002,
+        "p50": 0.006,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.023,
+        "p999": 0,
+        "max": 0.045,
+        "avg": 0.00646
+      },
+      "throughput": {
+        "rps": 1437,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 7184,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.002584,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "timestamp": "2026-06-01T06:31:05.684Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.001,
+        "p50": 0.005,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.018,
+        "p999": 0,
+        "max": 0.03,
+        "avg": 0.00591
+      },
+      "throughput": {
+        "rps": 1556,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 7780,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.002364,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "timestamp": "2026-06-01T06:31:10.713Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.001,
+        "p50": 0.006,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.022,
+        "p999": 0,
+        "max": 0.027,
+        "avg": 0.0061600000000000005
+      },
+      "throughput": {
+        "rps": 1500,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 7502,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.0024640000000000005,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "timestamp": "2026-06-01T06:31:15.734Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.001,
+        "p50": 0.005,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.017,
+        "p999": 0,
+        "max": 0.027,
+        "avg": 0.00567
+      },
+      "throughput": {
+        "rps": 1622,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 8111,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.002268,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "timestamp": "2026-06-01T06:31:20.758Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.004,
+        "p50": 0.006,
+        "p75": 0.006,
+        "p95": 0,
+        "p99": 0.024,
+        "p999": 0,
+        "max": 0.027,
+        "avg": 0.0061200000000000004
+      },
+      "throughput": {
+        "rps": 1506,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 7531,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.0024480000000000005,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "GET /api/search?q=react",
+      "method": "GET",
+      "path": "/api/search?q=react+developer",
+      "timestamp": "2026-06-01T06:31:25.786Z",
+      "duration": 5.01,
+      "latency": {
+        "min": 0.003,
+        "p50": 0.005,
+        "p75": 0.005,
+        "p95": 0,
+        "p99": 0.015,
+        "p999": 0,
+        "max": 0.025,
+        "avg": 0.004900000000000001
+      },
+      "throughput": {
+        "rps": 1848,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 9242,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.0019600000000000004,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 10,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    },
+    {
+      "endpoint": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "timestamp": "2026-06-01T06:31:30.805Z",
+      "duration": 5,
+      "latency": {
+        "min": 0.001,
+        "p50": 0.002,
+        "p75": 0.002,
+        "p95": 0,
+        "p99": 0.008,
+        "p999": 0,
+        "max": 0.024,
+        "avg": 0.0023599999999999997
+      },
+      "throughput": {
+        "rps": 1729,
+        "sentPerSec": 0,
+        "recvPerSec": 0,
+        "totalRequests": 8646,
+        "totalBytesSent": 0,
+        "totalBytesRecv": 0
+      },
+      "errors": {
+        "total": 0,
+        "rate": 0,
+        "timeout": 0,
+        "connect": 0,
+        "write": 0,
+        "read": 0
+      },
+      "ttfb": {
+        "estimated": 0.000944,
+        "note": "TTFB is estimated as 40% of avg latency (autocannon does not expose TTFB directly)"
+      },
+      "connections": 5,
+      "pipelining": 1,
+      "rawNon2xx": {}
+    }
+  ]
+}
