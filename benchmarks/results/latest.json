@@ -1,0 +1,701 @@
+{
+  "startedAt": "2026-05-22T13:11:55.419Z",
+  "completedAt": "2026-05-22T13:14:51.951Z",
+  "environment": {
+    "node": "v24.15.0",
+    "platform": "win32",
+    "arch": "x64",
+    "cpuCount": 8,
+    "totalMemoryGb": 5.92
+  },
+  "config": {
+    "concurrency": 8,
+    "durationMs": 8000,
+    "warmupRequests": 3,
+    "targetUrl": null
+  },
+  "discoveredRoutes": [
+    {
+      "method": "GET",
+      "path": "/api/admin/metrics"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/oauth/:provider/callback"
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs"
+    },
+    {
+      "method": "GET",
+      "path": "/api/messages"
+    },
+    {
+      "method": "GET",
+      "path": "/api/notifications"
+    },
+    {
+      "method": "GET",
+      "path": "/api/proposals"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reviews"
+    },
+    {
+      "method": "GET",
+      "path": "/api/search"
+    },
+    {
+      "method": "GET",
+      "path": "/api/users"
+    },
+    {
+      "method": "GET",
+      "path": "/health"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/register"
+    },
+    {
+      "method": "POST",
+      "path": "/api/jobs"
+    },
+    {
+      "method": "POST",
+      "path": "/api/messages"
+    },
+    {
+      "method": "POST",
+      "path": "/api/notifications"
+    },
+    {
+      "method": "POST",
+      "path": "/api/payments"
+    },
+    {
+      "method": "POST",
+      "path": "/api/proposals"
+    },
+    {
+      "method": "POST",
+      "path": "/api/reviews"
+    },
+    {
+      "method": "POST",
+      "path": "/api/uploads"
+    },
+    {
+      "method": "POST",
+      "path": "/api/users"
+    }
+  ],
+  "results": [
+    {
+      "name": "GET /api/admin/metrics",
+      "description": "Admin metrics with benchmark admin token",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 9699,
+      "requestsPerSecond": 1212.38,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 9699
+      },
+      "latencyMs": {
+        "p50": 6.1,
+        "p95": 10.05,
+        "p99": 13.79
+      },
+      "ttfbMs": {
+        "p50": 6.1,
+        "p95": 10.05,
+        "p99": 13.79
+      }
+    },
+    {
+      "name": "GET /api/auth/oauth/github/callback",
+      "description": "OAuth callback route",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "requests": 18919,
+      "requestsPerSecond": 2364.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 18919
+      },
+      "latencyMs": {
+        "p50": 3.01,
+        "p95": 4.55,
+        "p99": 11.34
+      },
+      "ttfbMs": {
+        "p50": 3.01,
+        "p95": 4.55,
+        "p99": 11.34
+      }
+    },
+    {
+      "name": "GET /api/jobs",
+      "description": "Auto-discovered route",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 22279,
+      "requestsPerSecond": 2784.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 22279
+      },
+      "latencyMs": {
+        "p50": 2.56,
+        "p95": 3.67,
+        "p99": 10.3
+      },
+      "ttfbMs": {
+        "p50": 2.56,
+        "p95": 3.67,
+        "p99": 10.3
+      }
+    },
+    {
+      "name": "GET /api/messages",
+      "description": "Auto-discovered route",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 22059,
+      "requestsPerSecond": 2757.38,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 22059
+      },
+      "latencyMs": {
+        "p50": 2.55,
+        "p95": 3.73,
+        "p99": 10.46
+      },
+      "ttfbMs": {
+        "p50": 2.55,
+        "p95": 3.73,
+        "p99": 10.46
+      }
+    },
+    {
+      "name": "GET /api/notifications",
+      "description": "Auto-discovered route",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 21039,
+      "requestsPerSecond": 2629.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 21039
+      },
+      "latencyMs": {
+        "p50": 2.66,
+        "p95": 4.37,
+        "p99": 10.49
+      },
+      "ttfbMs": {
+        "p50": 2.66,
+        "p95": 4.37,
+        "p99": 10.49
+      }
+    },
+    {
+      "name": "GET /api/proposals",
+      "description": "Auto-discovered route",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 22278,
+      "requestsPerSecond": 2784.75,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 22278
+      },
+      "latencyMs": {
+        "p50": 2.54,
+        "p95": 3.67,
+        "p99": 10.88
+      },
+      "ttfbMs": {
+        "p50": 2.54,
+        "p95": 3.67,
+        "p99": 10.88
+      }
+    },
+    {
+      "name": "GET /api/reviews",
+      "description": "Auto-discovered route",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 22101,
+      "requestsPerSecond": 2762.63,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 22101
+      },
+      "latencyMs": {
+        "p50": 2.55,
+        "p95": 3.79,
+        "p99": 10.59
+      },
+      "ttfbMs": {
+        "p50": 2.55,
+        "p95": 3.79,
+        "p99": 10.59
+      }
+    },
+    {
+      "name": "GET /api/search",
+      "description": "Auto-discovered route",
+      "method": "GET",
+      "path": "/api/search",
+      "requests": 21117,
+      "requestsPerSecond": 2639.63,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 21117
+      },
+      "latencyMs": {
+        "p50": 2.63,
+        "p95": 4.18,
+        "p99": 10.8
+      },
+      "ttfbMs": {
+        "p50": 2.63,
+        "p95": 4.18,
+        "p99": 10.8
+      }
+    },
+    {
+      "name": "GET /api/search?q=security",
+      "description": "Search route with query",
+      "method": "GET",
+      "path": "/api/search?q=security",
+      "requests": 21167,
+      "requestsPerSecond": 2645.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 21167
+      },
+      "latencyMs": {
+        "p50": 2.69,
+        "p95": 3.91,
+        "p99": 10.48
+      },
+      "ttfbMs": {
+        "p50": 2.69,
+        "p95": 3.91,
+        "p99": 10.48
+      }
+    },
+    {
+      "name": "GET /api/users",
+      "description": "Auto-discovered route",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 22298,
+      "requestsPerSecond": 2787.25,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 22298
+      },
+      "latencyMs": {
+        "p50": 2.54,
+        "p95": 3.65,
+        "p99": 10.19
+      },
+      "ttfbMs": {
+        "p50": 2.54,
+        "p95": 3.65,
+        "p99": 10.19
+      }
+    },
+    {
+      "name": "GET /health",
+      "description": "Service health endpoint",
+      "method": "GET",
+      "path": "/health",
+      "requests": 22407,
+      "requestsPerSecond": 2800.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 22407
+      },
+      "latencyMs": {
+        "p50": 2.52,
+        "p95": 3.74,
+        "p99": 10.64
+      },
+      "ttfbMs": {
+        "p50": 2.52,
+        "p95": 3.74,
+        "p99": 10.64
+      }
+    },
+    {
+      "name": "POST /api/auth/login",
+      "description": "Login realistic client payload",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 8551,
+      "requestsPerSecond": 1068.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 8551
+      },
+      "latencyMs": {
+        "p50": 6.79,
+        "p95": 10.69,
+        "p99": 17.17
+      },
+      "ttfbMs": {
+        "p50": 6.79,
+        "p95": 10.69,
+        "p99": 17.17
+      }
+    },
+    {
+      "name": "POST /api/auth/refresh",
+      "description": "Refresh token route",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 9079,
+      "requestsPerSecond": 1134.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "200": 9079
+      },
+      "latencyMs": {
+        "p50": 6.75,
+        "p95": 9.48,
+        "p99": 17.43
+      },
+      "ttfbMs": {
+        "p50": 6.75,
+        "p95": 9.48,
+        "p99": 17.43
+      }
+    },
+    {
+      "name": "POST /api/auth/register",
+      "description": "Register realistic client payload",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 10605,
+      "requestsPerSecond": 1325.63,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 10605
+      },
+      "latencyMs": {
+        "p50": 5.66,
+        "p95": 7.4,
+        "p99": 15.47
+      },
+      "ttfbMs": {
+        "p50": 5.66,
+        "p95": 7.4,
+        "p99": 15.47
+      }
+    },
+    {
+      "name": "POST /api/jobs",
+      "description": "Create job with realistic schema payload",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 14503,
+      "requestsPerSecond": 1812.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 14503
+      },
+      "latencyMs": {
+        "p50": 3.94,
+        "p95": 5.51,
+        "p99": 14.11
+      },
+      "ttfbMs": {
+        "p50": 3.94,
+        "p95": 5.51,
+        "p99": 14.11
+      }
+    },
+    {
+      "name": "POST /api/messages",
+      "description": "Send message payload",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 14327,
+      "requestsPerSecond": 1790.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 14327
+      },
+      "latencyMs": {
+        "p50": 3.93,
+        "p95": 6.09,
+        "p99": 14.17
+      },
+      "ttfbMs": {
+        "p50": 3.93,
+        "p95": 6.09,
+        "p99": 14.17
+      }
+    },
+    {
+      "name": "POST /api/notifications",
+      "description": "Create notification payload",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 15319,
+      "requestsPerSecond": 1914.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 15319
+      },
+      "latencyMs": {
+        "p50": 3.71,
+        "p95": 5.09,
+        "p99": 14.25
+      },
+      "ttfbMs": {
+        "p50": 3.71,
+        "p95": 5.09,
+        "p99": 14.25
+      }
+    },
+    {
+      "name": "POST /api/payments",
+      "description": "Create payment intent payload",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 15095,
+      "requestsPerSecond": 1886.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 15095
+      },
+      "latencyMs": {
+        "p50": 3.74,
+        "p95": 5.19,
+        "p99": 14.33
+      },
+      "ttfbMs": {
+        "p50": 3.74,
+        "p95": 5.19,
+        "p99": 14.33
+      }
+    },
+    {
+      "name": "POST /api/proposals",
+      "description": "Create proposal payload",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 14945,
+      "requestsPerSecond": 1868.13,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 14945
+      },
+      "latencyMs": {
+        "p50": 3.76,
+        "p95": 5.4,
+        "p99": 14.18
+      },
+      "ttfbMs": {
+        "p50": 3.76,
+        "p95": 5.4,
+        "p99": 14.18
+      }
+    },
+    {
+      "name": "POST /api/reviews",
+      "description": "Create review payload",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 14559,
+      "requestsPerSecond": 1819.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 14559
+      },
+      "latencyMs": {
+        "p50": 3.97,
+        "p95": 5.79,
+        "p99": 14.79
+      },
+      "ttfbMs": {
+        "p50": 3.97,
+        "p95": 5.79,
+        "p99": 14.79
+      }
+    },
+    {
+      "name": "POST /api/uploads",
+      "description": "Upload small file payload",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 8831,
+      "requestsPerSecond": 1103.88,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 8831
+      },
+      "latencyMs": {
+        "p50": 6.73,
+        "p95": 9.92,
+        "p99": 19.43
+      },
+      "ttfbMs": {
+        "p50": 6.73,
+        "p95": 9.92,
+        "p99": 19.43
+      }
+    },
+    {
+      "name": "POST /api/users",
+      "description": "Create user payload",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 14752,
+      "requestsPerSecond": 1844,
+      "errorRate": 0,
+      "statusCodes": {
+        "201": 14752
+      },
+      "latencyMs": {
+        "p50": 3.81,
+        "p95": 5.46,
+        "p99": 14.69
+      },
+      "ttfbMs": {
+        "p50": 3.81,
+        "p95": 5.46,
+        "p99": 14.69
+      }
+    }
+  ],
+  "thresholdSummary": [
+    {
+      "name": "GET /api/admin/metrics",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/auth/oauth/github/callback",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/jobs",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/messages",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/notifications",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/proposals",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/reviews",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/search",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/search?q=security",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /api/users",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "GET /health",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/auth/login",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/auth/refresh",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/auth/register",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/jobs",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/messages",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/notifications",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/payments",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/proposals",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/reviews",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/uploads",
+      "passed": true,
+      "failures": []
+    },
+    {
+      "name": "POST /api/users",
+      "passed": true,
+      "failures": []
+    }
+  ]
+}
