@@ -1,0 +1,26 @@
+{
+  "label": "Search",
+  "url": "GET /api/search?q=test",
+  "duration": 10,
+  "connections": 10,
+  "latency": {
+    "p50": 0,
+    "p95": 0,
+    "p99": 1,
+    "avg": 0.07,
+    "max": 3
+  },
+  "requestsPerSecond": {
+    "avg": 17523.2,
+    "total": 175236,
+    "sent": 175246
+  },
+  "throughput": {
+    "avg": 15000371.2,
+    "total": 150002016
+  },
+  "errors": 0,
+  "timeouts": 0,
+  "non2xx": 175236,
+  "errorRatePct": 100
+}

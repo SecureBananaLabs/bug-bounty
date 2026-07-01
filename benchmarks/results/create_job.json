@@ -1,0 +1,26 @@
+{
+  "label": "Create Job",
+  "url": "POST /api/jobs",
+  "duration": 10,
+  "connections": 10,
+  "latency": {
+    "p50": 0,
+    "p95": 1,
+    "p99": 1,
+    "avg": 0.13,
+    "max": 5
+  },
+  "requestsPerSecond": {
+    "avg": 15332,
+    "total": 153316,
+    "sent": 153326
+  },
+  "throughput": {
+    "avg": 13139968,
+    "total": 131391812
+  },
+  "errors": 0,
+  "timeouts": 0,
+  "non2xx": 153316,
+  "errorRatePct": 100
+}
