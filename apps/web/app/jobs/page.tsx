@@ -9,6 +9,8 @@ export default function JobsPage() {
         {jobs.map((job) => (
           <article className="card" key={job.id}>
             <h3>{job.title}</h3>
+            <p>{job.skills.join(" · ")}</p>
+            <p>{job.workMode} · {job.timeline}</p>
             <p>{job.budget}</p>
             <Link href={`/jobs/${job.id}`}>View details</Link>
           </article>
