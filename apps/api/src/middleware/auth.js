@@ -14,3 +14,15 @@ export function authMiddleware(req, res, next) {
     return fail(res, "Invalid token", 401);
   }
 }
+
+export function adminMiddleware(req, res, next) {
+  if (!req.user) {
+    return fail(res, "Unauthorized", 401);
+  }
+
+  if (req.user.role !== "admin") {
+    return fail(res, "Forbidden", 403);
+  }
+
+  return next();
+}
