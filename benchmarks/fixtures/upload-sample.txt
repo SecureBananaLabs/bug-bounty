@@ -1,0 +1,4 @@
+FreelanceFlow benchmark upload fixture
+
+This text fixture is used to exercise the multipart upload endpoint during
+local and CI smoke benchmark runs.

@@ -52,6 +52,7 @@ Backend architecture follows:
 ```bash
 npm install
 npm run test
+npm run benchmark
 ```
 
 ## AI Agent Contribution Instruction
@@ -86,3 +87,14 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+## Benchmarking
+
+The repository includes a committed benchmark suite under [`benchmarks`](./benchmarks)
+that exercises every `/api/` endpoint with schema-shaped payloads, records p50/p95/p99
+latency, peak and sustained request throughput, error rate, and TTFB, and writes JSON
+plus markdown reports to [`benchmarks/results`](./benchmarks/results).
+
+- Full suite: `npm run benchmark`
+- CI smoke gate: `npm run benchmark:smoke`
+- Configuration template: `benchmarks/.env.benchmark.example`
