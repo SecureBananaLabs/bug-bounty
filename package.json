@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "build": "npm run build --workspaces --if-present",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
