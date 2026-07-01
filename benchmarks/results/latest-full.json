@@ -1,0 +1,453 @@
+{
+  "mode": "full",
+  "target": "local",
+  "generated_at": "2026-05-24T03:05:40.779Z",
+  "iterations": 5,
+  "results": [
+    {
+      "name": "health check",
+      "method": "GET",
+      "path": "/health",
+      "tags": [
+        "health"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.79,
+      "p95_ms": 1.81,
+      "p99_ms": 1.81,
+      "ttfb_p95_ms": 1.7,
+      "requests_per_second": 1002.54,
+      "sustained_requests_per_second": 1002.54,
+      "peak_requests_per_second": 1443.17,
+      "error_rate": 0
+    },
+    {
+      "name": "register client",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "tags": [
+        "auth",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 1.24,
+      "p95_ms": 2.34,
+      "p99_ms": 2.34,
+      "ttfb_p95_ms": 2.15,
+      "requests_per_second": 708.13,
+      "sustained_requests_per_second": 708.13,
+      "peak_requests_per_second": 1424.5,
+      "error_rate": 0
+    },
+    {
+      "name": "login client",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "tags": [
+        "auth",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.63,
+      "p95_ms": 1.38,
+      "p99_ms": 1.38,
+      "ttfb_p95_ms": 1.33,
+      "requests_per_second": 1325.66,
+      "sustained_requests_per_second": 1325.66,
+      "peak_requests_per_second": 2014.61,
+      "error_rate": 0
+    },
+    {
+      "name": "oauth callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "tags": [
+        "auth",
+        "oauth"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.35,
+      "p95_ms": 0.88,
+      "p99_ms": 0.88,
+      "ttfb_p95_ms": 0.84,
+      "requests_per_second": 2075.55,
+      "sustained_requests_per_second": 2075.55,
+      "peak_requests_per_second": 2980.99,
+      "error_rate": 0
+    },
+    {
+      "name": "refresh token",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "tags": [
+        "auth",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.31,
+      "p95_ms": 0.4,
+      "p99_ms": 0.4,
+      "ttfb_p95_ms": 0.37,
+      "requests_per_second": 3037.44,
+      "sustained_requests_per_second": 3037.44,
+      "peak_requests_per_second": 3573.56,
+      "error_rate": 0
+    },
+    {
+      "name": "list users",
+      "method": "GET",
+      "path": "/api/users",
+      "tags": [
+        "users",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.28,
+      "p95_ms": 0.28,
+      "p99_ms": 0.28,
+      "ttfb_p95_ms": 0.26,
+      "requests_per_second": 3762.7,
+      "sustained_requests_per_second": 3762.7,
+      "peak_requests_per_second": 4109.59,
+      "error_rate": 0
+    },
+    {
+      "name": "create user",
+      "method": "POST",
+      "path": "/api/users",
+      "tags": [
+        "users",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 0.42,
+      "p95_ms": 0.56,
+      "p99_ms": 0.56,
+      "ttfb_p95_ms": 0.52,
+      "requests_per_second": 2310.14,
+      "sustained_requests_per_second": 2310.14,
+      "peak_requests_per_second": 2851.37,
+      "error_rate": 0
+    },
+    {
+      "name": "list jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "tags": [
+        "jobs",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.3,
+      "p95_ms": 0.41,
+      "p99_ms": 0.41,
+      "ttfb_p95_ms": 0.37,
+      "requests_per_second": 3124.67,
+      "sustained_requests_per_second": 3124.67,
+      "peak_requests_per_second": 3576.22,
+      "error_rate": 0
+    },
+    {
+      "name": "create job",
+      "method": "POST",
+      "path": "/api/jobs",
+      "tags": [
+        "jobs",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 0.54,
+      "p95_ms": 0.62,
+      "p99_ms": 0.62,
+      "ttfb_p95_ms": 0.59,
+      "requests_per_second": 1830.86,
+      "sustained_requests_per_second": 1830.86,
+      "peak_requests_per_second": 1975.8,
+      "error_rate": 0
+    },
+    {
+      "name": "list proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "tags": [
+        "proposals",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.32,
+      "p95_ms": 0.45,
+      "p99_ms": 0.45,
+      "ttfb_p95_ms": 0.42,
+      "requests_per_second": 3003.45,
+      "sustained_requests_per_second": 3003.45,
+      "peak_requests_per_second": 3908.16,
+      "error_rate": 0
+    },
+    {
+      "name": "create proposal",
+      "method": "POST",
+      "path": "/api/proposals",
+      "tags": [
+        "proposals",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 0.31,
+      "p95_ms": 0.37,
+      "p99_ms": 0.37,
+      "ttfb_p95_ms": 0.34,
+      "requests_per_second": 3032.14,
+      "sustained_requests_per_second": 3032.14,
+      "peak_requests_per_second": 3282.27,
+      "error_rate": 0
+    },
+    {
+      "name": "create payment",
+      "method": "POST",
+      "path": "/api/payments",
+      "tags": [
+        "payments",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 0.33,
+      "p95_ms": 1.25,
+      "p99_ms": 1.25,
+      "ttfb_p95_ms": 1.19,
+      "requests_per_second": 1952.97,
+      "sustained_requests_per_second": 1952.97,
+      "peak_requests_per_second": 3294.45,
+      "error_rate": 0
+    },
+    {
+      "name": "list reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "tags": [
+        "reviews",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.3,
+      "p95_ms": 0.41,
+      "p99_ms": 0.41,
+      "ttfb_p95_ms": 0.38,
+      "requests_per_second": 3258.92,
+      "sustained_requests_per_second": 3258.92,
+      "peak_requests_per_second": 3953.88,
+      "error_rate": 0
+    },
+    {
+      "name": "create review",
+      "method": "POST",
+      "path": "/api/reviews",
+      "tags": [
+        "reviews",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 0.31,
+      "p95_ms": 0.39,
+      "p99_ms": 0.39,
+      "ttfb_p95_ms": 0.36,
+      "requests_per_second": 3087.93,
+      "sustained_requests_per_second": 3087.93,
+      "peak_requests_per_second": 3386.48,
+      "error_rate": 0
+    },
+    {
+      "name": "list messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "tags": [
+        "messages",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.25,
+      "p95_ms": 0.28,
+      "p99_ms": 0.28,
+      "ttfb_p95_ms": 0.25,
+      "requests_per_second": 3915.94,
+      "sustained_requests_per_second": 3915.94,
+      "peak_requests_per_second": 4148.67,
+      "error_rate": 0
+    },
+    {
+      "name": "create message",
+      "method": "POST",
+      "path": "/api/messages",
+      "tags": [
+        "messages",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 0.34,
+      "p95_ms": 0.47,
+      "p99_ms": 0.47,
+      "ttfb_p95_ms": 0.43,
+      "requests_per_second": 2689.08,
+      "sustained_requests_per_second": 2689.08,
+      "peak_requests_per_second": 3275.55,
+      "error_rate": 0
+    },
+    {
+      "name": "list notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "tags": [
+        "notifications",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.25,
+      "p95_ms": 0.36,
+      "p99_ms": 0.36,
+      "ttfb_p95_ms": 0.34,
+      "requests_per_second": 3542.02,
+      "sustained_requests_per_second": 3542.02,
+      "peak_requests_per_second": 4137.93,
+      "error_rate": 0
+    },
+    {
+      "name": "create notification",
+      "method": "POST",
+      "path": "/api/notifications",
+      "tags": [
+        "notifications",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 0.31,
+      "p95_ms": 0.38,
+      "p99_ms": 0.38,
+      "ttfb_p95_ms": 0.35,
+      "requests_per_second": 3076.29,
+      "sustained_requests_per_second": 3076.29,
+      "peak_requests_per_second": 3379.81,
+      "error_rate": 0
+    },
+    {
+      "name": "upload file",
+      "method": "POST",
+      "path": "/api/uploads",
+      "tags": [
+        "uploads",
+        "write"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "201": 5
+      },
+      "p50_ms": 0.89,
+      "p95_ms": 2.89,
+      "p99_ms": 2.89,
+      "ttfb_p95_ms": 2.86,
+      "requests_per_second": 827.96,
+      "sustained_requests_per_second": 827.96,
+      "peak_requests_per_second": 1604.17,
+      "error_rate": 0
+    },
+    {
+      "name": "global search",
+      "method": "GET",
+      "path": "/api/search?q=contract",
+      "tags": [
+        "search",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.44,
+      "p95_ms": 0.96,
+      "p99_ms": 0.96,
+      "ttfb_p95_ms": 0.92,
+      "requests_per_second": 1851.88,
+      "sustained_requests_per_second": 1851.88,
+      "peak_requests_per_second": 3108.41,
+      "error_rate": 0
+    },
+    {
+      "name": "admin metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "tags": [
+        "admin",
+        "read"
+      ],
+      "iterations": 5,
+      "statuses": {
+        "200": 5
+      },
+      "p50_ms": 0.36,
+      "p95_ms": 0.8,
+      "p99_ms": 0.8,
+      "ttfb_p95_ms": 0.77,
+      "requests_per_second": 2196.31,
+      "sustained_requests_per_second": 2196.31,
+      "peak_requests_per_second": 3406.19,
+      "error_rate": 0
+    }
+  ],
+  "summary": {
+    "max_p99_ms": 2.89,
+    "max_error_rate": 0,
+    "endpoint_count": 21
+  }
+}
