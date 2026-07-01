@@ -21,6 +21,13 @@ enum JobStatus {
   CANCELLED
 }
 
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
 model User {
   id             String      @id @default(cuid())
   email          String      @unique
@@ -59,15 +66,16 @@ model Job {
 }
 
 model Proposal {
-  id            String      @id @default(cuid())
+  id            String         @id @default(cuid())
   coverLetter   String
   bidAmount     Float
   estDuration   String
+  status        ProposalStatus @default(PENDING)
   jobId         String
-  job           Job         @relation(fields: [jobId], references: [id])
+  job           Job            @relation(fields: [jobId], references: [id])
   freelancerId  String
-  freelancer    User        @relation(fields: [freelancerId], references: [id])
-  createdAt     DateTime    @default(now())
+  freelancer    User           @relation(fields: [freelancerId], references: [id])
+  createdAt     DateTime       @default(now())
 }
 
 model Payment {
