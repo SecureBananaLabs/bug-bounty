@@ -86,3 +86,4 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+For the API, copy `apps/api/.env.example` to `apps/api/.env` and replace the placeholder values before running the backend outside local-only development.
