@@ -1,0 +1,14 @@
+{
+  "endpoint": "/api/example",
+  "p50": 50,
+  "p95": 100,
+  "p99": 150,
+  "rps": 1000,
+  "errorRate": 0.5,
+  "ttfb": 40,
+  "benchmarkDate": "2023-01-01T00:00:00.000Z",
+  "metadata": {
+    "nodeVersion": "v18.0.0",
+    "platform": "linux"
+  }
+}
