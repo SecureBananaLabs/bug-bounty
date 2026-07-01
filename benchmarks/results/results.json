@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Health Endpoint",
+    "method": "GET",
+    "urlPath": "/health",
+    "p50": 0.29,
+    "p95": 0.69,
+    "p99": 1.26,
+    "avgTtfb": 0.38,
+    "rps": 12673.5,
+    "errorRate": 0,
+    "totalRequests": 25347
+  },
+  {
+    "name": "Auth Register",
+    "method": "POST",
+    "urlPath": "/api/auth/register",
+    "p50": 1.7,
+    "p95": 3.56,
+    "p99": 4.05,
+    "avgTtfb": 2.13,
+    "rps": 2333,
+    "errorRate": 0,
+    "totalRequests": 4666
+  },
+  {
+    "name": "Auth Login",
+    "method": "POST",
+    "urlPath": "/api/auth/login",
+    "p50": 1.59,
+    "p95": 3.24,
+    "p99": 3.53,
+    "avgTtfb": 2.02,
+    "rps": 2458.5,
+    "errorRate": 0,
+    "totalRequests": 4917
+  },
+  {
+    "name": "Create Payment Intent",
+    "method": "POST",
+    "urlPath": "/api/payments",
+    "p50": 0.34,
+    "p95": 0.73,
+    "p99": 1.19,
+    "avgTtfb": 0.44,
+    "rps": 11229,
+    "errorRate": 0,
+    "totalRequests": 22458
+  },
+  {
+    "name": "Admin Metrics",
+    "method": "GET",
+    "urlPath": "/api/admin/metrics",
+    "p50": 1.59,
+    "p95": 3.27,
+    "p99": 4.48,
+    "avgTtfb": 2.09,
+    "rps": 2380.5,
+    "errorRate": 0,
+    "totalRequests": 4761
+  }
+]
