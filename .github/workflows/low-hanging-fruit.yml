@@ -2,87 +2,40 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at midnight
-  workflow_dispatch:  # Allow manual triggering
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
 
 jobs:
   detect-and-create-issues:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run low hanging fruit detection
-        id: detect
+      - name: Run low hanging fruit detector
+        id: detector
         run: |
-          # Run tests and linting to find potential issues
-          echo "Running automated bug detection..."
-          
-          # Check for TypeScript errors
-          npx tsc --noEmit 2>&1 | tee ts-errors.log || true
-          
-          # Check for ESLint issues
-          npx eslint . --ext .ts,.tsx,.js,.jsx 2>&1 | tee eslint-issues.log || true
-          
-          # Check for security vulnerabilities
-          npm audit 2>&1 | tee audit-issues.log || true
-          
-          # Check for outdated dependencies
-          npm outdated 2>&1 | tee outdated-deps.log || true
-          
-          echo "Detection complete. Check logs for findings."
+          node .github/scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create issues from findings
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            
-            const findings = [];
-            
-            // Check TypeScript errors
-            if (fs.existsSync('ts-errors.log')) {
-              const tsErrors = fs.readFileSync('ts-errors.log', 'utf8').trim();
-              if (tsErrors && tsErrors.length > 0) {
-                findings.push({
-                  title: 'TypeScript Compilation Errors Detected',
-                  body: `## TypeScript Errors Found\n\n\`\`\`\n${tsErrors.substring(0, 5000)}\n\`\`\`\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-                  labels: ['bug', 'good first issue', 'automated']
-                });
-              }
-            }
-            
-            // Check ESLint issues
-            if (fs.existsSync('eslint-issues.log')) {
-              const eslintIssues = fs.readFileSync('eslint-issues.log', 'utf8').trim();
-              if (eslintIssues && eslintIssues.length > 0 && !eslintIssues.includes('0 errors')) {
-                findings.push({
-                  title: 'ESLint Issues Detected',
-                  body: `## ESLint Issues Found\n\n\`\`\`\n${eslintIssues.substring(0, 5000)}\n\`\`\`\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-                  labels: ['bug', 'good first issue', 'automated']
-                });
-              }
-            }
-            
-            // Create issues
-            for (const finding of findings) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: finding.title,
-                body: finding.body,
-                labels: finding.labels
-              });
-              console.log(`Created issue: ${finding.title}`);
-            }
+      - name: Create issues for detected items
+        if: steps.detector.outputs.detected == 'true'
+        run: |
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
