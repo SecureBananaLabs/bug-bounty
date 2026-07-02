@@ -1,38 +1,37 @@
-# The Flow of Code and Commerce
+# The Flow of Code and Coin
 
 ## A Poem for FreelanceFlow
 
-In circuits hum where dreams take，
-The marketplace of skill takes shape，
-A client posts their need at dawn，
-The network wakes, the code moves on.
+In circuits hum where dreams take digital shape,
+A marketplace wakes, no more bound by the tape
+Of nine-to-five chains or the commute's dull rove—
+Here the freelancer finds their own grove.
 
-No office walls, no binding chain,
-Just pixels forming trust again,
-Through APIs calm and databases deep,
-Where promises in packets sleep.
+Clients post needs in the dead of the night,
+While somewhere a coder ignites a bright light,
+Proposals like paper boats sail the dark stream,
+Chasing the promise of collaborative dream.
 
-The freelancer reads the brief with care,
-Proposals crafted, stripped of flair,
-Just merit speaks in JSON,
-Until the contract's finally won.
+The database hums with its Prisma-scribed grace,
+Each schema a vertebra, each model in place,
+From user to job, from the message to pay,
+TypeScript types guard what the APIs say.
 
-Then messages in threads unfold,
-Of milestones, payments, stories told,
-In Stripe we trust, the invoice sent,
-For honest work, the fair percent.
+Stripe holds the purse strings, JWT the gate,
+Middleware stands patient to validate, wait—
+For the rate limit's breath, for the auth to come through,
+For the controller to pass what the service once knew.
 
-Reviews like stars in darkness shine,
-A reputation built in time,
-Each five-star glow a beacon bright,
-For those who code through quiet night.
+In packages shared, UI components take form,
+Next.js renders pages to weather the storm
+Of deployment and scaling, of bug and of test,
+The monolith breathes while the developer rests.
 
-So here's to flows that freelance run,
-To projects launched and battles won,
-May every bug resolve with grace,
-In this, our digital marketplace.
+So here's to the flow, neither bound nor confined,
+To the gig and the grind and the peace of the mind
+That comes from a platform built clean, built to last—
+Where code meets the human, and both move too fast.
 
 ---
 
-*Written for the FreelanceFlow project, 2025.*
-*Creative decision: I chose a traditional ballad form with AABB rhyme scheme to create a contrast between the timeless nature of human work and commerce, and the modern digital infrastructure of a freelance platform. The tone is hopeful and dignified, celebrating the human connections that technology enables rather than the technology itself.*
+*Creative decision: I chose a loose iambic structure with an ABAB rhyme scheme to mirror the rhythmic, predictable-yet-flexible nature of well-architected software. The poem weaves together technical specifics (Prisma, TypeScript, JWT, Stripe, Next.js) with the human experience of freelance work, reflecting how this project bridges code and livelihood. The tone balances reverence for the engineering with warmth for the people it serves—much like a good codebase should.*
