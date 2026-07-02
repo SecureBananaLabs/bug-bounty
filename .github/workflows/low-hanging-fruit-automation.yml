@@ -2,86 +2,45 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at midnight
-  workflow_dispatch:  # Allow manual triggering
-  push:
-    branches:
-      - main
-    paths:
-      - '**.ts'
-      - '**.tsx'
-      - '**.js'
-      - '**.jsx'
-      - '**.prisma'
-      - 'package.json'
-      - 'package-lock.json'
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
 
 jobs:
   detect-and-create-issues:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run linting for low-hanging fruit detection
-        id: lint
-        continue-on-error: true
-        run: |
-          npx eslint . --ext .ts,.tsx,.js,.jsx --format json > eslint-results.json 2>/dev/null || true
-          echo "Linting completed"
-
-      - name: Detect low-hanging fruit bugs
+      - name: Run low hanging fruit detection
         id: detect
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const path = require('path');
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            const issues = [];
+      - name: Create issues from detected items
+        if: steps.detect.outputs.has_issues == 'true'
+        run: |
+          node .github/scripts/create-issues.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            // Check for common low-hanging fruit patterns
-            const patterns = [
-              {
-                title: 'Missing Error Handling in API Routes',
-                body: `## Low Hanging Fruit: Missing Error Handling\n\nSeveral API routes may lack proper error handling. This is a common source of bugs and should be addressed.\n\n### Steps to Fix:\n1. Review all API route handlers in \`apps/api\`\n2. Add try-catch blocks where missing\n3. Ensure proper error responses are sent\n4. Add input validation where needed\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', 'bounty', '💎 Bounty', '$700']
-              },
-              {
-                title: 'TypeScript Strict Mode Compliance',
-                body: `## Low Hanging Fruit: TypeScript Strict Mode\n\nSeveral files may not comply with TypeScript strict mode. Enabling strict mode can catch potential bugs early.\n\n### Steps to Fix:\n1. Review \`tsconfig.json\` files across the monorepo\n2. Enable \`strict: true\` where possible\n3. Fix any resulting type errors\n4. Add proper type annotations\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', 'bounty', '💎 Bounty', '$700']
-              },
-              {
-                title: 'Environment Variable Validation',
-                body: `## Low Hanging Fruit: Environment Variable Validation\n\nMissing validation for required environment variables can cause runtime errors.\n\n### Steps to Fix:\n1. Review all \`.env.example\` files\n2. Add validation for required environment variables\n3. Add clear error messages for missing variables\n4. Document all required variables in README\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.`,
-                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly', 'bounty', '💎 Bounty', '$700']
-              }
-            ];
-
-            // Create issues for each detected pattern
-            for (const issue of patterns) {
-              try {
-                await github.rest.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: issue.title,
-                  body: issue.body,
-                  labels: issue.labels
-                });
-                console.log(`Created issue: ${issue.title}`);
-              } catch (error) {
-                console.error(`Failed to create issue: ${issue.title}`, error);
-              }
-            }
+      - name: Recursively trigger next scan
+        if: steps.detect.outputs.has_more == 'true'
+        run: |
+          gh workflow run low-hanging-fruit-automation.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
