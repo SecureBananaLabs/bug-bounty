@@ -1,0 +1,111 @@
+name: API Benchmarks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    name: API Performance Benchmark
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: freelaneflow_test
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup database
+        run: npx prisma migrate deploy --schema=packages/db/prisma/schema.prisma
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/freelaneflow_test
+
+      - name: Start API server (background)
+        run: |
+          cd apps/api
+          npm run build &
+          npm start &
+          npx wait-on http://localhost:3001/health --timeout 30000
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/freelaneflow_test
+          JWT_SECRET: benchmark-test-secret
+          NODE_ENV: test
+
+      - name: Install k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Run benchmark (smoke)
+        run: |
+          cd benchmarks
+          k6 run --out json=results/smoke_${{ github.sha }}.json api_benchmark.js \
+            --env BASE_URL=http://localhost:3001 \
+            --env VUS=2 --env DURATION=10s
+        env:
+          K6_WEB_DASHBOARD: "true"
+
+      - name: Fail on threshold violation
+        run: |
+          cd benchmarks
+          node check_thresholds.js results/smoke_${{ github.sha }}.json
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const result = JSON.parse(fs.readFileSync('benchmarks/results/smoke_${{ github.sha }}.json', 'utf-8'));
+            
+            const p50 = Math.round(result.metrics.http_req_duration?.['p(50)'] || 0);
+            const p95 = Math.round(result.metrics.http_req_duration?.['p(95)'] || 0);
+            const p99 = Math.round(result.metrics.http_req_duration?.['p(99)'] || 0);
+            const errRate = ((result.metrics.http_req_failed?.values?.rate || 0) * 100).toFixed(2);
+            const rps = Math.round(result.metrics.requests_total?.values?.count / (result.state.testRunDurationMs / 1000) || 0);
+            
+            const body = `## 🏃 Benchmark Results
+            
+            | Metrik | Wert | Threshold |
+            |--------|------|-----------|
+            | p50 Latency | ${p50} ms | < 500 ms |
+            | p95 Latency | ${p95} ms | < 2000 ms |
+            | p99 Latency | ${p99} ms | < 5000 ms |
+            | Error Rate | ${errRate}% | < 5% |
+            | Requests/s | ${rps} | — |
+            
+            ✅ Smoke test passed! Full benchmarks: \`npm run benchmark\``;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
