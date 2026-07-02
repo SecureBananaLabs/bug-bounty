@@ -16,7 +16,10 @@ test("GET /health returns ok payload", async () => {
   const payload = await response.json();
 
   assert.equal(response.status, 200);
-  assert.deepEqual(payload, { ok: true, service: "api" });
+  assert.deepEqual(payload, {
+    success: true,
+    data: { ok: true, service: "api" }
+  });
 
   await new Promise((resolve, reject) => {
     server.close((error) => (error ? reject(error) : resolve()));
