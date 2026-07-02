@@ -5,7 +5,8 @@ export async function listReviews() {
 }
 
 export async function createReview(payload) {
-  const review = { id: `rev_${Date.now()}`, ...payload };
+  const { id: _ignoredId, ...clientFields } = payload ?? {};
+  const review = { ...clientFields, id: `rev_${Date.now()}` };
   reviews.push(review);
   return review;
 }
