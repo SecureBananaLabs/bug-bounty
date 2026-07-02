@@ -2,36 +2,33 @@
 
 ## A Poem for FreelanceFlow
 
-In circuits hum where dreams take digital shape,
-A marketplace wakes, no more bound by the tape
-Of nine-to-five chains or the commute's dull rove—
-Here the freelancer finds their own grove.
+In circuits of trust where the gig-economy hums,
+A marketplace wakes where ambition becomes
+The client who dreams, and the freelancer's hand,
+Connected by packets of promise and plan.
 
-Clients post needs in the dead of the night,
-While somewhere a coder ignites a bright light,
-Proposals like paper boats sail the dark stream,
-Chasing the promise of collaborative dream.
+No cubicle walls, no time-clock's demand,
+Just proposals like seeds in digital land,
+Where Stripe holds the promise of payment made true,
+And reviews shine like stars in a sky built by you.
 
-The database hums with its Prisma-scribed grace,
-Each schema a vertebra, each model in place,
-From user to job, from the message to pay,
-TypeScript types guard what the APIs say.
+From Prisma's deep schema the data takes shape,
+Controllers and services orchestrate,
+Middleware stands guard at the API gate,
+While Zod validates what the forms generate.
 
-Stripe holds the purse strings, JWT the gate,
-Middleware stands patient to validate, wait—
-For the rate limit's breath, for the auth to come through,
-For the controller to pass what the service once knew.
+The Next.js frontend, a canvas of light,
+Renders dashboards by morning, by evening, by night,
+For the coder in Prague, for the designer in Perth,
+FreelanceFlow bridges the ends of the Earth.
 
-In packages shared, UI components take form,
-Next.js renders pages to weather the storm
-Of deployment and scaling, of bug and of test,
-The monolith breathes while the developer rests.
-
-So here's to the flow, neither bound nor confined,
-To the gig and the grind and the peace of the mind
-That comes from a platform built clean, built to last—
-Where code meets the human, and both move too fast.
+So here's to the contracts, the milestones, the code,
+To the messages sent down the wire's long road,
+To the bug and the bounty, the fix and the feature,
+The flow of the freelance—the world's newest creature.
 
 ---
 
-*Creative decision: I chose a loose iambic structure with an ABAB rhyme scheme to mirror the rhythmic, predictable-yet-flexible nature of well-architected software. The poem weaves together technical specifics (Prisma, TypeScript, JWT, Stripe, Next.js) with the human experience of freelance work, reflecting how this project bridges code and livelihood. The tone balances reverence for the engineering with warmth for the people it serves—much like a good codebase should.*
+*Written for SecureBananaLabs/bug-bounty, 2025*
+
+**Creative Decision:** I chose a traditional ballad form with AABB/ABAB rhyme schemes to create an ironic contrast with the modern tech stack described in the poem. The tone is earnest but slightly whimsical—reflecting both the serious infrastructure of a production marketplace and the playful, human spirit of freelance work. The poem weaves in specific technical details (Prisma, Zod, Stripe, Next.js) to root it in the actual codebase, making it a true "technical poem" that serves as both art and accidental documentation.
