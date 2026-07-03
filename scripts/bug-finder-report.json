@@ -1,0 +1,172 @@
+{
+  "generatedAt": "2026-07-03T19:19:27.477Z",
+  "target": "SecureBananaLabs/bug-bounty",
+  "totalFindings": 31,
+  "findings": {
+    "CRITICAL": [
+      {
+        "line": 4,
+        "text": "jwtSecret: process.env.JWT_SECRET ?? \"development-secret\",",
+        "severity": "CRITICAL",
+        "desc": "Default JWT secret in config - anyone can forge tokens"
+      },
+      {
+        "file": "apps/api/src/routes/userRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/userRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/routes/jobRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/jobRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/routes/proposalRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/proposalRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/routes/paymentRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/paymentRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/routes/reviewRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/reviewRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/routes/messageRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/messageRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/routes/notificationRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/notificationRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/routes/uploadRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/uploadRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/routes/searchRoutes.js",
+        "severity": "CRITICAL",
+        "desc": "Route file apps/api/src/routes/searchRoutes.js has NO authMiddleware - all endpoints are publicly accessible"
+      },
+      {
+        "file": "apps/api/src/validators/auth.js",
+        "severity": "CRITICAL",
+        "desc": "Registration schema allows \"admin\" role - users can register as admin and gain full privileges"
+      },
+      {
+        "file": "apps/api/src/services/authService.js",
+        "severity": "CRITICAL",
+        "desc": "loginUser() has TODO for password verification - returns token without any password check"
+      }
+    ],
+    "HIGH": [
+      {
+        "line": 5,
+        "text": "stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? \"\",",
+        "severity": "HIGH",
+        "desc": "Empty Stripe/DB credentials fall through silently"
+      },
+      {
+        "line": 6,
+        "text": "databaseUrl: process.env.DATABASE_URL ?? \"\"",
+        "severity": "HIGH",
+        "desc": "Empty Stripe/DB credentials fall through silently"
+      },
+      {
+        "file": "apps/api/src/services/authService.js",
+        "severity": "HIGH",
+        "desc": "refreshToken() ignores request body - returns new token for hardcoded user without verifying old refresh token"
+      },
+      {
+        "file": "apps/api/src/services/userService.js",
+        "severity": "HIGH",
+        "desc": "In-memory array storage in userService - all data lost on server restart"
+      },
+      {
+        "file": "apps/api/src/services/jobService.js",
+        "severity": "HIGH",
+        "desc": "In-memory array storage in jobService - all data lost on server restart"
+      },
+      {
+        "file": "apps/api/src/services/proposalService.js",
+        "severity": "HIGH",
+        "desc": "In-memory array storage in proposalService - all data lost on server restart"
+      },
+      {
+        "file": "apps/api/src/services/messageService.js",
+        "severity": "HIGH",
+        "desc": "In-memory array storage in messageService - all data lost on server restart"
+      },
+      {
+        "file": "apps/api/src/services/reviewService.js",
+        "severity": "HIGH",
+        "desc": "In-memory array storage in reviewService - all data lost on server restart"
+      },
+      {
+        "file": "apps/api/src/services/notificationService.js",
+        "severity": "HIGH",
+        "desc": "In-memory array storage in notificationService - all data lost on server restart"
+      },
+      {
+        "file": "apps/api/src/controllers/proposalController.js",
+        "severity": "HIGH",
+        "desc": "No schema validation on proposal controller - req.body passed directly without parsing"
+      },
+      {
+        "file": "apps/api/src/controllers/messageController.js",
+        "severity": "HIGH",
+        "desc": "No schema validation on message controller - req.body passed directly without parsing"
+      },
+      {
+        "file": "apps/api/src/controllers/reviewController.js",
+        "severity": "HIGH",
+        "desc": "No schema validation on review controller - req.body passed directly without parsing"
+      },
+      {
+        "file": "apps/api/src/controllers/userController.js",
+        "severity": "HIGH",
+        "desc": "No schema validation on user controller - req.body passed directly without parsing"
+      },
+      {
+        "file": "apps/api/src/controllers/notificationController.js",
+        "severity": "HIGH",
+        "desc": "No schema validation on notification controller - req.body passed directly without parsing"
+      },
+      {
+        "file": "apps/api/src/controllers/paymentController.js",
+        "severity": "HIGH",
+        "desc": "No schema validation on payment controller - req.body passed directly without parsing"
+      },
+      {
+        "file": "apps/api/src/routes/uploadRoutes.js",
+        "severity": "HIGH",
+        "desc": "No file size limit or file type restriction on upload route - allows DoS via large files"
+      },
+      {
+        "file": "apps/api/src/config/db.js",
+        "severity": "HIGH",
+        "desc": "connectDb() is a placeholder - never actually connects to PostgreSQL database"
+      }
+    ],
+    "MEDIUM": [
+      {
+        "file": "apps/api/src/validators/job.js",
+        "severity": "MEDIUM",
+        "desc": "No validation that budgetMin <= budgetMax - clients can set impossible budgets"
+      },
+      {
+        "file": "apps/api/src/services/adminService.js",
+        "severity": "MEDIUM",
+        "desc": "Admin metrics are hardcoded mock data - returns fake numbers instead of querying database"
+      }
+    ],
+    "LOW": []
+  }
+}
