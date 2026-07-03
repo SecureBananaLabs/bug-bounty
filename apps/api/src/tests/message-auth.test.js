@@ -50,6 +50,7 @@ test("POST /api/messages accepts authenticated requests", async () => {
         authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
+        id: "client-id",
         recipientId: "usr_456",
         body: "hello"
       })
@@ -58,6 +59,8 @@ test("POST /api/messages accepts authenticated requests", async () => {
 
     assert.equal(response.status, 201);
     assert.equal(payload.success, true);
+    assert.notEqual(payload.data.id, "client-id");
+    assert.match(payload.data.id, /^msg_/);
     assert.equal(payload.data.body, "hello");
   });
 });
