@@ -1,23 +1,28 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
+  const id = `usr_${Date.now()}`;
   return {
-    id: `usr_${Date.now()}`,
+    id,
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    token: signAccessToken({ sub: id, role: payload.role }),
+    refreshToken: signRefreshToken({ sub: id, role: payload.role })
   };
 }
 
 export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
+  const user = { id: "usr_existing", role: "client" };
   return {
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    token: signAccessToken({ sub: user.id, role: user.role }),
+    refreshToken: signRefreshToken({ sub: user.id, role: user.role })
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(refreshTokenValue) {
+  const decoded = verifyRefreshToken(refreshTokenValue);
+  return { token: signAccessToken({ sub: decoded.sub, role: decoded.role }) };
 }
