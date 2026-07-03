@@ -17,9 +17,19 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 
 export function createApp() {
   const app = express();
+  const frontendOrigin = process.env.FRONTEND_ORIGIN ?? "http://localhost:3000";
+  const corsOptions = {
+    origin(origin, callback) {
+      if (!origin || origin === frontendOrigin) {
+        return callback(null, frontendOrigin);
+      }
+
+      return callback(null, false);
+    }
+  };
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(apiLimiter);
 
