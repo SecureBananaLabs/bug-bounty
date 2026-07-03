@@ -19,9 +19,13 @@ jobs:
       - run: npm ci
       - name: Start API server
         run: |
-          npm run start -w apps/api > /tmp/api.log 2>&1 &
+          PORT=3001 JWT_SECRET=ci-benchmark-secret npm run start -w apps/api > /tmp/api.log 2>&1 &
           echo $! > /tmp/api.pid
-          sleep 3
+          for i in {1..20}; do
+            curl -sf http://127.0.0.1:3001/health >/dev/null && break
+            sleep 0.5
+          done
+          curl -sf http://127.0.0.1:3001/health >/dev/null
       - name: Run smoke benchmark
         env:
           BENCHMARK_TARGET: http://127.0.0.1:3001
