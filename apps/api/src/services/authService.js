@@ -13,6 +13,8 @@ export async function registerUser(payload) {
 export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
   return {
+    id: "usr_existing",
+    role: "client",
     email: payload.email,
     token: signAccessToken({ sub: "usr_existing", role: "client" })
   };
