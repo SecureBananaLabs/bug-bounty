@@ -1,4 +1,11 @@
+import { getDb } from "./prisma.js";
+
 export async function connectDb() {
-  // TODO: wire Prisma client from @freelanceflow/db package
-  return { connected: true, driver: "prisma-placeholder" };
+  const db = getDb();
+
+  if (typeof db.$connect === "function") {
+    await db.$connect();
+  }
+
+  return { connected: true, driver: "prisma" };
 }
