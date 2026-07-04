@@ -1,7 +1,26 @@
+import { ZodError } from "zod";
+
 export function errorHandler(err, req, res, next) {
   console.error("Unhandled API error:", err);
   if (res.headersSent) {
     return next(err);
+  }
+
+  if (err instanceof ZodError || err.name === "ZodError") {
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed",
+      errors: err.errors
+    });
+  }
+
+  // Handle body-parser / JSON parse errors
+  const status = err.status || err.statusCode;
+  if (status && (status === 400 || status === 413)) {
+    return res.status(status).json({
+      success: false,
+      message: err.message || "Request parsing failed"
+    });
   }
 
   return res.status(500).json({
