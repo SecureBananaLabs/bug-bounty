@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createApp } from "../app.js";
 
 test("Login Password Verification", async (t) => {
+  process.env.JWT_SECRET = "test-jwt-secret-123456";
+  const { createApp } = await import("../app.js");
   const app = createApp();
   const server = app.listen(0);
 
