@@ -8,10 +8,20 @@ export async function register(req, res) {
   return ok(res, result, 201);
 }
 
-export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
+export async function login(req, res, next) {
+  try {
+    const payload = loginSchema.parse(req.body);
+    const result = await loginUser(payload);
+    return ok(res, result);
+  } catch (error) {
+    if (error.name === "ZodError") {
+      return next(error);
+    }
+    return res.status(401).json({
+      success: false,
+      error: "Invalid credentials"
+    });
+  }
 }
 
 export async function oauthCallback(req, res) {
