@@ -1,0 +1,14 @@
+const fs = require('fs');
+const path = require('path');
+const { Octokit } = require('@octokit/rest');
+
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+const repo = 'SecureBananaLabs/bug-bounty';
+
+function detectLowHangingFruit(code) {
+  // Implement a simple regex or pattern to detect low hanging fruit vulnerabilities
+  const regex = /(vulnerability|bug|issue|error|fault)/gi;
+  const matches = code.match(regex);
+  return matches ? matches.length : 0;
+}
