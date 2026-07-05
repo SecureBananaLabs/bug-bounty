@@ -17,3 +17,10 @@ test("createJob generates unique ids for same-millisecond creates", async () => 
     Date.now = originalNow;
   }
 });
+
+test("createJob ignores client-supplied id", async () => {
+  const job = await createJob({ id: "job_client_supplied", title: "Client id job" });
+
+  assert.match(job.id, /^job_/);
+  assert.notEqual(job.id, "job_client_supplied");
+});
