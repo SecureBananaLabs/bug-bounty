@@ -2,47 +2,83 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * 0'
-  workflow_dispatch:
-
-permissions:
-  issues: write
-  contents: read
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch:      # Allow manual triggering
+  issues:
+    types: [opened, labeled]
 
 jobs:
   detect-and-create-issues:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Run low hanging fruit detector
-        run: node .github/scripts/detect-low-hanging-fruit.js
+      - name: Run low-hanging-fruit detection
+        run: node .github/scripts/low-hanging-fruit-detector.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
 
-  recursive-issue-creation:
-    runs-on: ubuntu-latest
-    needs: detect-and-create-issues
-    if: always()
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Create issues from findings
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const findingsPath = '.github/scripts/findings.json';
+            
+            if (!fs.existsSync(findingsPath)) {
+              console.log('No findings to process.');
+              return;
+            }
+            
+            const findings = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
+            
+            for (const finding of findings) {
+              const issueBody = `## Low Hanging Fruit: ${finding.title}
 
-      - name: Trigger next automation cycle
-        run: |
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/low-hanging-fruit-automation.yml/dispatches \
-            -d '{"ref":"main"}'
-        continue-on-error: true
+### Description
+${finding.description}
+
+### Location
+- File: \`${finding.file}\`
+- Line: ${finding.line || 'N/A'}
+
+### Suggested Fix
+${finding.suggestedFix || 'Investigate and apply appropriate fix.'}
+
+### Severity
+${finding.severity || 'low'}
+
+---
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
+
+> 🤖 This issue was automatically created by the Low Hanging Fruit Automation workflow.`;
+
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `[Low Hanging Fruit] ${finding.title}`,
+                body: issueBody,
+                labels: ['bug', 'low-hanging-fruit', 'good first issue', 'automated'],
+              });
+              
+              console.log(`Created issue: ${finding.title}`);
+            }
+            
+            // Clean up findings file
+            fs.unlinkSync(findingsPath);
