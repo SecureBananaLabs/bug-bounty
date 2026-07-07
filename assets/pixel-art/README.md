@@ -1,7 +1,7 @@
-# Cosmic Robot Pixel Art
+# Cosmic Cat Pixel Art
 
-**File:** `cosmic-robot.png`
-**Canvas:** 64x64 pixels
-**Theme:** A friendly retro-futuristic robot exploring space, inspired by 1980s sci-fi aesthetics and classic 8-bit gaming.
+A pixel art illustration of a cat floating in space, surrounded by stars and planets. Created to add a touch of creative personality to the FreelanceFlow project — representing the curiosity and exploration that drives freelancers to discover new opportunities.
 
-This pixel art features a charming robot with a round dome head, glowing antenna, and rocket boots, set against a starry cosmic background with a distant planet. The color palette uses vibrant teals, warm oranges, and deep purples to create a nostalgic yet fresh feel. I chose this theme because it represents the intersection of technology and creativity—much like the collaborative spirit of open source.
+- **Canvas size:** 64x64 pixels
+- **Format:** PNG
+- **Tool:** Pixel art created programmatically
