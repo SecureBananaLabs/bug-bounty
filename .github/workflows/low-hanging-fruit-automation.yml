@@ -2,10 +2,8 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at midnight
-  workflow_dispatch:      # Allow manual triggering
-  issues:
-    types: [opened, labeled]
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
 
 jobs:
   detect-and-create-issues:
@@ -13,72 +11,36 @@ jobs:
     permissions:
       issues: write
       contents: read
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run low-hanging-fruit detection
-        run: node .github/scripts/low-hanging-fruit-detector.js
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create issues from detected items
+        if: steps.detect.outcome == 'success'
+        run: |
+          node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
 
-      - name: Create issues from findings
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const findingsPath = '.github/scripts/findings.json';
-            
-            if (!fs.existsSync(findingsPath)) {
-              console.log('No findings to process.');
-              return;
-            }
-            
-            const findings = JSON.parse(fs.readFileSync(findingsPath, 'utf8'));
-            
-            for (const finding of findings) {
-              const issueBody = `## Low Hanging Fruit: ${finding.title}
-
-### Description
-${finding.description}
-
-### Location
-- File: \`${finding.file}\`
-- Line: ${finding.line || 'N/A'}
-
-### Suggested Fix
-${finding.suggestedFix || 'Investigate and apply appropriate fix.'}
-
-### Severity
-${finding.severity || 'low'}
-
----
-
-This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
-
-> 🤖 This issue was automatically created by the Low Hanging Fruit Automation workflow.`;
-
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: `[Low Hanging Fruit] ${finding.title}`,
-                body: issueBody,
-                labels: ['bug', 'low-hanging-fruit', 'good first issue', 'automated'],
-              });
-              
-              console.log(`Created issue: ${finding.title}`);
-            }
-            
-            // Clean up findings file
-            fs.unlinkSync(findingsPath);
+      - name: Recursively trigger next scan
+        if: always()
+        run: |
+          echo "Scan complete. Next scan scheduled via cron."
