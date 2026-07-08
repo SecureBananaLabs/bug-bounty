@@ -22,82 +22,25 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Detect low hanging fruit and create issues
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run low hanging fruit detection
+        id: detect
+        run: |
+          node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          node -e "
-          const fs = require('fs');
-          const path = require('path');
-          const { execSync } = require('child_process');
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
-          // Helper to run GitHub CLI
-          function gh(args) {
-            return execSync('gh ' + args, { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
-          }
-
-          // Find potential issues in codebase
-          const issues = [];
-
-          // Check for TODO/FIXME comments
-          try {
-            const grepResult = execSync('grep -rnri \\\"TODO\\\\|FIXME\\\\|HACK\\\\|XXX\\\\|BUG\\\" --include=\\\"*.ts\\\" --include=\\\"*.tsx\\\" --include=\\\"*.js\\\" --include=\\\"*.jsx\\\" --include=\\\"*.json\\\" . 2>/dev/null || true', { encoding: 'utf-8', cwd: process.cwd() });
-            if (grepResult.trim()) {
-              const lines = grepResult.trim().split('\\n').slice(0, 10);
-              issues.push({
-                title: 'TODO/FIXME items found in codebase',
-                body: 'The following TODO/FIXME items were found:\\n\\n\\' + lines.map(l => '- \\`' + l + '\\`').join('\\n') + '\\n\\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
-              });
-            }
-          } catch (e) {}
-
-          // Check for missing tests
-          try {
-            const testFiles = execSync('find . -name \\\"*.test.*\\\" -o -name \\\"*.spec.*\\\" 2>/dev/null || true', { encoding: 'utf-8' });
-            if (!testFiles.trim()) {
-              issues.push({
-                title: 'No test files found in repository',
-                body: 'The repository appears to lack automated tests. Consider adding unit tests, integration tests, or end-to-end tests.\\n\\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
-              });
-            }
-          } catch (e) {}
-
-          // Check for missing documentation
-          const docs = ['CONTRIBUTING.md', 'LICENSE', 'CHANGELOG.md', 'CODE_OF_CONDUCT.md'];
-          const missingDocs = docs.filter(d => !fs.existsSync(path.join(process.cwd(), d)));
-          if (missingDocs.length > 0) {
-            issues.push({
-              title: 'Missing documentation files: ' + missingDocs.join(', '),
-              body: 'The following documentation files are missing: ' + missingDocs.join(', ') + '.\\n\\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
-            });
-          }
-
-          // Check for .env.example
-          if (!fs.existsSync(path.join(process.cwd(), '.env.example'))) {
-            issues.push({
-              title: 'Missing .env.example file',
-              body: 'The repository lacks a .env.example file to help developers configure their environment.\\n\\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.'
-            });
-          }
-
-          // Create issues
-          let createdCount = 0;
-          for (const issue of issues) {
-            try {
-              // Check if similar issue already exists
-              const searchResult = gh('issue list --repo=' + process.env.GITHUB_REPOSITORY + ' --search \\\"' + issue.title.replace(/'/g, \\\"'\\\"'\\\") + '\\\" --json number');
-              const existing = JSON.parse(searchResult);
-              if (existing.length === 0) {
-                const escapedTitle = issue.title.replace(/'/g, \\\"'\\\"'\\\").replace(/\\\"/g, '\\\\\\\"');
-                const escapedBody = issue.body.replace(/'/g, \\\"'\\\"'\\\").replace(/\\\"/g, '\\\\\\\"');
-                gh('issue create --repo=' + process.env.GITHUB_REPOSITORY + ' --title \\\"' + escapedTitle + '\\\" --body \\\"' + escapedBody + '\\\"');
-                createdCount++;
-              }
-            } catch (err) {
-              console.error('Failed to create issue:', err.message);
-            }
-          }
-
-          console.log('Created ' + createdCount + ' new issues');
-          "
-          gh auth status
+  recursive-trigger:
+    needs: detect-and-create-issues
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Trigger next recursive run
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: low-hanging-fruit-recursive
+          client-payload: '{"recursive": true}'
