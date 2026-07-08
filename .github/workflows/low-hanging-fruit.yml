@@ -2,6 +2,7 @@ name: Low Hanging Fruit Automation
 
 on:
   schedule:
+    # Run daily at midnight UTC
     - cron: '0 0 * * *'
   workflow_dispatch:
 
@@ -32,11 +33,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Create GitHub issues for detected items
-        if: steps.detect.outputs.issues_json != '[]'
+      - name: Create issues from detected items
+        if: steps.detect.outputs.has_items == 'true'
         run: |
           node .github/scripts/create-issues.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          ISSUES_JSON: ${{ steps.detect.outputs.issues_json }}
+
+      - name: Report status
+        run: |
+          echo "Low hanging fruit automation completed"
