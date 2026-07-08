@@ -31,16 +31,17 @@ jobs:
           node .github/scripts/detect-low-hanging-fruit.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
 
-  recursive-trigger:
+  recursive-issue-creation:
     needs: detect-and-create-issues
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * *'
     steps:
-      - name: Trigger next recursive run
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: low-hanging-fruit-recursive
-          client-payload: '{"recursive": true}'
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Trigger recursive issue creation
+        run: |
+          echo "Low hanging fruit detection completed. Issues created for detected items."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
