@@ -17,9 +17,21 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 
 export function createApp() {
   const app = express();
+  const frontendOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
 
   app.use(helmet());
-  app.use(cors());
+  app.use(
+    cors({
+      origin(origin, callback) {
+        if (!origin || origin === frontendOrigin) {
+          callback(null, true);
+          return;
+        }
+
+        callback(null, false);
+      },
+    }),
+  );
   app.use(express.json());
   app.use(apiLimiter);
 
