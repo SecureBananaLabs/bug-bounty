@@ -1,27 +1,22 @@
  ```diff
 --- /dev/null
-+++ b/.github/workflows/low-hanging-fruit.yml
-@@ -0,0 +1,95 @@
++++ b/.github/workflows/low-hanging-fruit-automation.yml
+@@ -0,0 +1,101 @@
 +name: Low Hanging Fruit Automation
 +
 +on:
 +  schedule:
-+    # Run daily at midnight UTC
++    # Run daily at 00:00 UTC
 +    - cron: '0 0 * * *'
 +  workflow_dispatch:
-+    inputs:
-+      dry_run:
-+        description: 'Run in dry-run mode (no issues created)'
-+        required: false
-+        default: 'false'
-+
-+permissions:
-+  issues: write
-+  contents: read
 +
 +jobs:
 +  detect-and-create-issues:
 +    runs-on: ubuntu-latest
++    permissions:
++      issues: write
++      contents: read
++
 +    steps:
 +      - name: Checkout repository
 +        uses: actions/checkout@v4
@@ -34,68 +29,163 @@
 +      - name: Detect low hanging fruit and create issues
 +        env:
 +          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
++          REPO: ${{ github.repository }}
 +        run: |
-+          node -e "
-+            const fs = require('fs');
-+            const path = require('path');
++          node << 'EOF'
++          const fs = require('fs');
++          const path = require('path');
 +
-+            // Read existing issues to avoid duplicates
-+            async function getExistingIssues() {
-+              const { execSync } = require('child_process');
-+              try {
-+                const output = execSync('gh issue list --json title --limit 100', { encoding: 'utf8' });
-+                return JSON.parse(output).map(i => i.title);
-+              } catch (e) {
-+                return [];
++          // Common low hanging fruit patterns
++          const patterns = [
++            {
++              name: 'Missing Error Handling',
++              search: /catch\s*\([^)]*\)\s*\{\s*\}/g,
++              description: 'Empty catch blocks found - error handling needs to be implemented'
++            },
++            {
++              name: 'TODO/FIXME Comments',
++              search: /(TODO|FIXME|HACK|XXX)/g,
++              description: 'Unresolved TODO/FIXME comments found in codebase'
++            },
++            {
++              name: 'Console Logs in Production Code',
++              search: /console\.(log|warn|error)\(/g,
++              description: 'Console statements should be replaced with proper logging'
++            },
++            {
++              name: 'Missing Input Validation',
++              search: /req\.(body|params|query)/g,
++              description: 'Request inputs may need additional validation'
++            }
++          ];
++
++          const findings = [];
++
++          function scanDirectory(dir, baseDir = '') {
++            const items = fs.readdirSync(dir, { withFileTypes: true });
++            for (const item of items) {
++              const fullPath = path.join(dir, item.name);
++              const relativePath = path.join(baseDir, item.name);
++              
++              if (item.isDirectory() && !item.name.startsWith('.') && item.name !== 'node_modules') {
++                scanDirectory(fullPath, relativePath);
++              } else if (item.isFile() && (item.name.endsWith('.ts') || item.name.endsWith('.js') || item.name.endsWith('.tsx') || item.name.endsWith('.jsx'))) {
++                try {
++                  const content = fs.readFileSync(fullPath, 'utf8');
++                  for (const pattern of patterns) {
++                    const matches = content.match(pattern.search);
++                    if (matches) {
++                      findings.push({
++                        pattern: pattern.name,
++                        file: relativePath,
++                        description: pattern.description,
++                        count: matches.length
++                      });
++                    }
++                  }
++                } catch (e) {
++                  // Skip files that can't be read
++                }
 +              }
 +            }
++          }
 +
-+            // Detect common low hanging fruit patterns
-+            async function detectLowHangingFruit() {
-+              const issues = [];
-+              
-+              // Check for missing tests
-+              const testFiles = require('child_process').execSync('find . -name \"*.test.*\" -o -name \"*.spec.*\" 2>/dev/null | head -20', { encoding: 'utf8' }).trim();
-+              if (!testFiles || testFiles.split('\n').length < 3) {
-+                issues.push({
-+                  title: '[Low Hanging Fruit] Add comprehensive test coverage',
-+                  body: 'This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\nThe repository lacks comprehensive test coverage. This is a great entry point for new contributors.\n\n## Tasks\n- [ ] Add unit tests for core API routes\n- [ ] Add integration tests for database operations\n- [ ] Add frontend component tests\n- [ ] Set up test coverage reporting\n\n## Bounty\n/bounty \\$50'
-+                });
-+              }
++          try {
++            scanDirectory('.');
++          } catch (e) {
++            console.error('Error scanning directory:', e.message);
++          }
 +
-+              // Check for missing documentation
-+              if (!fs.existsSync('CONTRIBUTING.md') || fs.statSync('CONTRIBUTING.md').size < 500) {
-+                issues.push({
-+                  title: '[Low Hanging Fruit] Expand CONTRIBUTING.md documentation',
-+                  body: 'This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\nThe CONTRIBUTING.md file needs expansion with clearer guidelines for new contributors.\n\n## Tasks\n- [ ] Add development environment setup instructions\n- [ ] Add coding standards and style guide\n- [ ] Add pull request template and process\n- [ ] Add commit message conventions\n\n## Bounty\n/bounty \\$50'
-+                });
-+              }
++          // Group findings by pattern
++          const grouped = {};
++          for (const finding of findings) {
++            if (!grouped[finding.pattern]) {
++              grouped[finding.pattern] = [];
++            }
++            grouped[finding.pattern].push(finding);
++          }
 +
-+              // Check for missing CI/CD
-+              if (!fs.existsSync('.github/workflows/ci.yml')) {
-+                issues.push({
-+                  title: '[Low Hanging Fruit] Add CI/CD pipeline with GitHub Actions',
-+                  body: 'This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\nThe repository lacks a continuous integration pipeline. Adding one will improve code quality and contributor confidence.\n\n## Tasks\n- [ ] Create CI workflow for linting and testing\n- [ ] Add automated PR checks\n- [ ] Set up build verification\n- [ ] Add dependency vulnerability scanning\n\n## Bounty\n/bounty \\$75'
-+                });
-+              }
++          // Create issues for each pattern group
++          const { Octokit } = require('@octokit/rest');
++          const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
++          const [owner, repo] = process.env.REPO.split('/');
 +
-+              // Check for missing environment documentation
-+              const envExample = fs.existsSync('.env.example') || fs.existsSync('.env.sample');
-+              if (!envExample) {
-+                issues.push({
-+                  title: '[Low Hanging Fruit] Create .env.example with all required environment variables',
-+                  body: 'This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\nNew contributors need a reference for all required environment variables.\n\n## Tasks\n- [ ] Document all required environment variables\n- [ ] Add descriptions for each variable\n- [ ] Include default values where applicable\n- [ ] Update README.md to reference the file\n\n## Bounty\n/bounty \\$50'
-+                });
-+              }
++          async function createIssue(title, body) {
++            try {
++              await octokit.rest.issues.create({
++                owner,
++                repo,
++                title,
++                body,
++                labels: ['bug', 'good first issue', 'help wanted', 'bug bounty', 'AI agent friendly']
++              });
++              console.log(`Created issue: ${title}`);
++            } catch (error) {
++              console.error(`Failed to create issue "${title}":`, error.message);
++            }
++          }
 +
-+              // Check for missing error handling
-+              issues.push({
-+                title: '[Low Hanging Fruit] Add centralized error handling middleware',
-+                body: 'This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\nThe API needs centralized error handling to ensure consistent error responses and proper logging.\n\n## Tasks\n- [ ] Create custom error classes (ValidationError, AuthenticationError, etc.)\n- [ ] Implement global error handling middleware\n- [ ] Add structured error logging\n- [ ] Ensure proper HTTP status codes for all errors\n\n## Bounty\n/bounty \\$100'
++          (async () => {
++            for (const [patternName, patternFindings] of Object.entries(grouped)) {
++              // Check if an open issue already exists for this pattern
++              const existingIssues = await octokit.rest.issues.listForRepo({
++                owner,
++                repo,
++                state: 'open',
++                labels: 'good first issue'
 +              });
 +
-+              // Check for missing input validation
-+              issues.push({
-+                title: '[Low Hanging Fruit] Implement comprehensive input validation with Zod',
-+                body: 'This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.\n\n## Description\nAll API endpoints need robust input validation to prevent security issues and data corruption
++              const issueTitle = `[Low Hanging Fruit] ${patternName}`;
++              const alreadyExists = existingIssues.data.some(issue => issue.title === issueTitle);
++
++              if (alreadyExists) {
++                console.log(`Issue already exists for: ${patternName}`);
++                continue;
++              }
++
++              const filesList = patternFindings.map(f => `- \`${f.file}\` (${f.count} occurrences)`).join('\n');
++              
++              const body = `## ${patternName}
++
+${patternFindings[0].description}
++
+### Affected Files
++${filesList}
++
+### Next Steps
++- Review the identified files
++- Implement proper fixes
++- Add tests where applicable
++
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
++
+/bounty $50`;
++
++              await createIssue(issueTitle, body);
++            }
++          })();
++          EOF
++
++      - name: Install Octokit
++        run: npm install @octokit/rest
++        working-directory: ${{ github.workspace }}
++--- /dev/null
++++ b/.github/scripts/low-hanging-fruit.js
+@@ -0,0 +1,122 @@
++#!/usr/bin/env node
++
++/**
++ * Low Hanging Fruit Detection Script
++ * 
++ * Scans the codebase for common issues and creates GitHub issues
++ * to track them. Designed to be run in CI or locally.
++ */
++
++const fs = require('fs');
++const path = require('path');
++const { execSync } = require('child_process');
++
++// Configuration
++const SCAN_DIRS = ['apps', 'packages'];
++const FILE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx'];
++const SKIP_DIRS = ['node_modules', '.git', 'dist
