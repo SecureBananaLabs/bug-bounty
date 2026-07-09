@@ -1,23 +1,35 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+  // TODO: persist new user via Prisma; check for duplicate email
+  const id = `usr_${Date.now()}`;
+  const { password: _pw, ...safePayload } = payload;
   return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    id,
+    email: safePayload.email,
+    fullName: safePayload.fullName,
+    role: safePayload.role,
+    token: signAccessToken({ sub: id, role: safePayload.role }),
+    refreshToken: signRefreshToken({ sub: id, role: safePayload.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  // TODO: look up user, verify bcrypt password hash, require isVerified === true
+  const id = "usr_existing";
   return {
+    id,
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    role: "client",
+    token: signAccessToken({ sub: id, role: "client" }),
+    refreshToken: signRefreshToken({ sub: id, role: "client" })
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(token) {
+  const decoded = verifyRefreshToken(token);
+  return {
+    token: signAccessToken({ sub: decoded.sub, role: decoded.role }),
+    refreshToken: signRefreshToken({ sub: decoded.sub, role: decoded.role })
+  };
 }
