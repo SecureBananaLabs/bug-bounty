@@ -1,0 +1,1 @@
+export const stripMsgIdV3=(req,_,next)=>{["id","createdAt","updatedAt","sentAt","readAt"].forEach(f=>delete req.body?.[f]);return next();};
