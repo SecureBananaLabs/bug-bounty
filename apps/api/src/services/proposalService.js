@@ -5,7 +5,9 @@ export async function listProposals() {
 }
 
 export async function createProposal(payload) {
-  const proposal = { id: `prp_${Date.now()}`, ...payload };
+  // eslint-disable-next-line no-unused-vars
+  const { id: _id, ...safe } = payload;
+  const proposal = { id: `prp_${Date.now()}`, ...safe };
   proposals.push(proposal);
   return proposal;
 }
