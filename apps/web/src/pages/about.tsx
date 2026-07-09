@@ -1,0 +1,1 @@
+import React from"react";export default function About(){return<main><h1>About FreelanceFlow</h1><p>Connecting talented freelancers with clients worldwide.</p><section><h2>Our Mission</h2><p>Empowering remote work through technology.</p></section></main>;}
