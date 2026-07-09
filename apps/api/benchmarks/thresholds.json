@@ -1,0 +1,5 @@
+{
+  "p99_latency_ms": 500,
+  "error_rate_percent": 5,
+  "description": "CI smoke benchmark thresholds. PRs that exceed these values will fail CI."
+}
