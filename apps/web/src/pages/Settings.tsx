@@ -1,0 +1,2 @@
+import React from"react";
+export default function Settings(){return(<main><h1>Account Settings</h1><section><h2>Profile</h2><form><label>Name<input type="text"/></label><label>Email<input type="email"/></label><button type="submit">Save</button></form></section><section><h2>Password</h2><form><label>Current<input type="password"/></label><label>New<input type="password"/></label><button type="submit">Update</button></form></section><section><h2>Danger Zone</h2><button type="button">Delete Account</button></section></main>);}
