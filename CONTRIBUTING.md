@@ -4,6 +4,25 @@
 
 # Contributing Guidelines
 
+## Quick Start for New Bounty Hunters
+
+New to bug bounty hunting or this repo? Here's the fastest path to your first bounty:
+
+1. **Browse issues** with the `bounty` label — these are paid tasks
+2. **Comment** on the issue you want to work on to claim it
+3. **Fork** this repo and create a branch
+4. **Implement** the fix or feature (keep changes minimal)
+5. **Open a PR** that includes `Closes #ISSUE_NUMBER` in the description
+6. **Add evidence** — screenshots, logs, or test output proving your fix works
+7. **Wait for review** — maintainers review and merge if criteria are met
+8. **Get paid** — bounty is sent on merge
+
+> 💡 **Tip:** Start with issues labeled `good first issue` or `$` (dollar amount shown in label) for tasks with clear expectations.
+
+---
+
+## Thank You
+
 Thank you for contributing to this bug bounty repository.
 
 ## Eligibility for Bounty Payment
