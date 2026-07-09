@@ -1,17 +1,25 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
+  const result = registerSchema.safeParse(req.body);
+  if (!result.success) {
+    return fail(res, "Invalid registration payload", 400);
+  }
+
+  const user = await registerUser(result.data);
+  return ok(res, user, 201);
 }
 
 export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
+  const result = loginSchema.safeParse(req.body);
+  if (!result.success) {
+    return fail(res, "Invalid login payload", 400);
+  }
+
+  const user = await loginUser(result.data);
+  return ok(res, user);
 }
 
 export async function oauthCallback(req, res) {
