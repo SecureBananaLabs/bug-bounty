@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1774",
+  "title": "CORS configured with no origin restrictions — allows any domain",
+  "body": "## Security: Unrestricted CORS Policy\n\n**Description:** The Express app uses `cors()` with no configuration, allowing requests from any origin. In a production freelance platform, this should be restricted to trusted domains.\n\n**File:** `apps/api/src/app.js`\n\n**Current code:**\n```js\napp.use(cors());\n```\n\n**Expected behavior:** CORS should be configured with an explicit allowlist of permitted origins, or at minimum read from an environment variable.\n\n**Impact:** Medium — could enable cross-origin attacks in production if the API is exposed publicly.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
