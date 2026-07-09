@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "node --test src/tests/health.test.js src/tests/validation.test.js"
+
   },
   "dependencies": {
     "cors": "^2.8.5",
