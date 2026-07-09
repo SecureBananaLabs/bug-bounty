@@ -1,7 +1,13 @@
-import { Router } from "express";
-import { getJobs, postJob } from "../controllers/jobController.js";
+const express = require('express');
+const router = express.Router();
+const jobController = require('../controllers/jobController');
+const { validate } = require('../middleware/validate');
+const { createJobSchema } = require('../validators/jobValidators');
 
-export const jobRoutes = Router();
+router.post('/', validate(createJobSchema), jobController.createJob);
+router.get('/', jobController.getJobs);
+router.get('/:id', jobController.getJobById);
+router.put('/:id', jobController.updateJob);
+router.delete('/:id', jobController.deleteJob);
 
-jobRoutes.get("/", getJobs);
-jobRoutes.post("/", postJob);
+module.exports = router;
