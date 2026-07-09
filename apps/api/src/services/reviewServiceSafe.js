@@ -1,0 +1,2 @@
+const reviews=[];
+export const reviewService={list:()=>reviews.map(r=>({...r})),get:(id)=>{const r=reviews.find(x=>x.id===id);return r?{...r}:null;},create:(data)=>{const{id:_,...safe}=data;const r={...safe,id:crypto.randomUUID(),createdAt:new Date()};reviews.push(r);return{...r};}};
