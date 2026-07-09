@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";const SUPPORTED=new Set(["google","github","facebook"]);export const oauthProviderCheck=(req,res,next)=>{const p=(req.params?.provider||req.query?.provider||"").toLowerCase();if(!SUPPORTED.has(p))return fail(res,`OAuth provider "${p}" not supported`,400);return next();};
