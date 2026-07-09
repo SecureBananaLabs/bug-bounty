@@ -5,7 +5,9 @@ export async function listUsers() {
 }
 
 export async function createUser(payload) {
-  const user = { id: `usr_${Date.now()}`, ...payload };
+  // Fix #5201: Prevent caller from overriding server-generated id
+  const { id: _ignored, ...safePayload } = payload;
+  const user = { id: `usr_${Date.now()}`, ...safePayload };
   users.push(user);
   return user;
 }
