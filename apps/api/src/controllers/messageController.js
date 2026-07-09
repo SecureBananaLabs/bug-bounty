@@ -6,5 +6,8 @@ export async function getMessages(req, res) {
 }
 
 export async function postMessage(req, res) {
-  return ok(res, await sendMessage(req.body), 201);
+  // Derive senderId from authenticated user, ignore client-supplied value
+  const { senderId: _senderId, ...rest } = req.body;
+  const payload = { ...rest, senderId: req.user.sub };
+  return ok(res, await sendMessage(payload), 201);
 }
