@@ -6,6 +6,7 @@ export async function registerUser(payload) {
   return {
     id,
     email: payload.email,
+    fullName: payload.fullName,
     role: payload.role,
     token: signAccessToken({ sub: id, role: payload.role })
   };
