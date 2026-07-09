@@ -1,6 +1,7 @@
-import { Router } from "express";
-import { createPayment } from "../controllers/paymentController.js";
+const express = require('express');
+const router = express.Router();
+const paymentController = require('../controllers/paymentController');
 
-export const paymentRoutes = Router();
+router.post('/', paymentController.createPaymentIntent);
 
-paymentRoutes.post("/", createPayment);
+module.exports = router;
