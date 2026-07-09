@@ -1,0 +1,1 @@
+export const matchSub=(userId,payload)=>({...payload,sub:String(userId),id:String(userId)});
