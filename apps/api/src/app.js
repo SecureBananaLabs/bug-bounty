@@ -19,7 +19,21 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+
+  const allowedOrigins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(",").map(o => o.trim())
+    : [];
+
+  app.use(cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, false);
+      }
+    }
+  }));
+
   app.use(express.json());
   app.use(apiLimiter);
 
