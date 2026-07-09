@@ -9,6 +9,8 @@ export async function register(req, res) {
 }
 
 export async function login(req, res) {
+  const { email, password } = req.body || {};
+  if (!email || !password) return fail(res, "Email and password required.", 400);
   const payload = loginSchema.parse(req.body);
   const result = await loginUser(payload);
   return ok(res, result);
