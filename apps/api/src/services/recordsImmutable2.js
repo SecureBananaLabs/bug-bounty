@@ -1,0 +1,1 @@
+export const toSafeRecord=(r)=>r&&typeof r==="object"?{...r}:r;export const toSafeList=(a)=>Array.isArray(a)?a.map(toSafeRecord):[];
