@@ -19,6 +19,7 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
+  app.use((req,res,next)=>{res.cookie=function(...a){if(a[2])a[2]={...a[2],secure:true,sameSite:"strict",httpOnly:true};return res.cookie(...a)};next()});
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
