@@ -4,3 +4,62 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.settings-page { display: grid; gap: 1rem; }
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #2a3765;
+}
+.settings-header h2 { margin: 0.25rem 0; font-size: 2rem; }
+.settings-header p { margin: 0; color: #b8c2e6; line-height: 1.55; }
+.eyebrow { color: #7dd3fc; font-size: 0.78rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+.settings-summary {
+  min-width: 210px;
+  background: #10182e;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+  padding: 0.85rem;
+}
+.settings-summary span { display: block; color: #94a3b8; font-size: 0.85rem; }
+.settings-summary strong { display: block; margin-top: 0.35rem; color: #facc15; }
+.settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.settings-panel {
+  background: #151c35;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+  padding: 1rem;
+  min-width: 0;
+}
+.settings-panel-header { display: flex; justify-content: space-between; gap: 0.75rem; align-items: center; }
+.settings-panel h3 { margin: 0; font-size: 1.05rem; }
+.settings-panel p { color: #cbd5e1; line-height: 1.5; }
+.chip {
+  flex: 0 0 auto;
+  border: 1px solid #22c55e;
+  color: #bbf7d0;
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+}
+.chip.warning { border-color: #facc15; color: #fde68a; }
+.settings-list { margin: 0 0 1rem; padding-left: 1rem; color: #dbeafe; line-height: 1.7; }
+.settings-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.settings-actions button {
+  border: 1px solid #38bdf8;
+  background: #0f172a;
+  color: #e0f2fe;
+  border-radius: 6px;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .settings-header { display: grid; }
+  .settings-summary { min-width: 0; }
+  .settings-grid { grid-template-columns: 1fr; }
+}
