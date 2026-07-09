@@ -1,0 +1,1 @@
+export const stripReviewId=(req,_,next)=>{["id","createdAt","updatedAt"].forEach(f=>delete req.body?.[f]);return next();};
