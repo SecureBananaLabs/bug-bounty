@@ -1,7 +1,14 @@
 const notifications = [];
 
-export async function listNotifications() {
-  return notifications;
+export async function listNotifications({ page = 1, limit = 20 } = {}) {
+  const offset = (page - 1) * limit;
+  return {
+    data: notifications.slice(offset, offset + limit),
+    total: notifications.length,
+    page,
+    limit,
+    totalPages: Math.ceil(notifications.length / limit),
+  };
 }
 
 export async function createNotification(payload) {
