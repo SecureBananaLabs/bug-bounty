@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const paymentInvalidV2=(req,res,next)=>{const a=Number(req.body?.amount);if(!req.body?.amount||a<=0||!isFinite(a))return fail(res,"Payment amount must be a positive number",400);return next();};
