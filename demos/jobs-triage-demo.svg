@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Jobs triage page demo</title>
+  <desc id="desc">A mock jobs page with search, category filtering, summary counts, job cards, and a post job action.</desc>
+  <rect width="960" height="540" fill="#0b1020"/>
+  <text x="64" y="72" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="34" font-weight="700">Job Listings</text>
+  <text x="64" y="106" fill="#aeb8df" font-family="Arial, sans-serif" font-size="16">Search, filter, and compare open projects before sending a proposal.</text>
+  <rect x="760" y="58" width="120" height="42" rx="8" fill="#eef2ff"/>
+  <text x="790" y="85" fill="#10172f" font-family="Arial, sans-serif" font-size="15" font-weight="700">Post job</text>
+  <rect x="64" y="140" width="390" height="70" rx="8" fill="#111832" stroke="#2a3765"/>
+  <text x="88" y="164" fill="#cbd5ff" font-family="Arial, sans-serif" font-size="13">Search</text>
+  <text x="88" y="193" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="17">API</text>
+  <rect x="486" y="140" width="260" height="70" rx="8" fill="#111832" stroke="#2a3765"/>
+  <text x="510" y="164" fill="#cbd5ff" font-family="Arial, sans-serif" font-size="13">Category</text>
+  <text x="510" y="193" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="17">Backend</text>
+  <text x="64" y="248" fill="#ffffff" font-family="Arial, sans-serif" font-size="21" font-weight="700">1</text>
+  <text x="91" y="248" fill="#cbd5ff" font-family="Arial, sans-serif" font-size="16">matching projects</text>
+  <text x="245" y="248" fill="#ffffff" font-family="Arial, sans-serif" font-size="21" font-weight="700">Backend</text>
+  <text x="337" y="248" fill="#cbd5ff" font-family="Arial, sans-serif" font-size="16">category</text>
+  <text x="432" y="248" fill="#ffffff" font-family="Arial, sans-serif" font-size="21" font-weight="700">$2,800</text>
+  <text x="514" y="248" fill="#cbd5ff" font-family="Arial, sans-serif" font-size="16">top budget</text>
+  <rect x="64" y="286" width="260" height="142" rx="12" fill="#151c35" stroke="#2a3765"/>
+  <text x="88" y="326" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="21" font-weight="700">Migrate legacy API</text>
+  <text x="88" y="354" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="21" font-weight="700">to Node.js</text>
+  <text x="88" y="386" fill="#aeb8df" font-family="Arial, sans-serif" font-size="15">Backend</text>
+  <text x="88" y="414" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="17">$2,800</text>
+  <text x="198" y="414" fill="#9bb0ff" font-family="Arial, sans-serif" font-size="15" font-weight="700">View details</text>
+</svg>
