@@ -19,6 +19,7 @@ test("GET /health returns ok payload", async () => {
   assert.deepEqual(payload, { ok: true, service: "api" });
 
   await new Promise((resolve, reject) => {
+    if (server.closeAllConnections) server.closeAllConnections();
     server.close((error) => (error ? reject(error) : resolve()));
   });
 });
