@@ -1,0 +1,1 @@
+export const encodeJobId=(req,res,next)=>{if(req.params?.id)req.params.id=encodeURIComponent(decodeURIComponent(req.params.id));return next();};
