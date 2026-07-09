@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createJobSchema = z.object({
+export const createJobBase = z.object({
   title: z.string().min(4),
   description: z.string().min(10),
   budgetMin: z.number().nonnegative(),
@@ -9,4 +9,22 @@ export const createJobSchema = z.object({
   skills: z.array(z.string().min(1)).default([])
 });
 
-export const updateJobSchema = createJobSchema.partial();
+export const createJobSchema = createJobBase.refine(
+  (data) => data.budgetMax >= data.budgetMin,
+  {
+    message: "budgetMax must be greater than or equal to budgetMin",
+    path: ["budgetMax"],
+  }
+);
+
+export const updateJobSchema = createJobBase.partial().refine(
+  (data) => {
+    // Only validate budget range when both fields are present
+    if (data.budgetMin === undefined || data.budgetMax === undefined) return true;
+    return data.budgetMax >= data.budgetMin;
+  },
+  {
+    message: "budgetMax must be greater than or equal to budgetMin when both are provided",
+    path: ["budgetMax"],
+  }
+);
