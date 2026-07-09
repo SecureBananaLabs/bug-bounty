@@ -1,6 +1,15 @@
 {
   "name": "@freelanceflow/db",
   "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
   "scripts": {
     "generate": "prisma generate",
     "migrate": "prisma migrate dev"
