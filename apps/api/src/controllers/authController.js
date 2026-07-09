@@ -14,11 +14,18 @@ export async function login(req, res) {
   return ok(res, result);
 }
 
-export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
+export async function oauthCallback(req, res, next) {
+  try {
+    if (!req.params.provider) {
+      throw new Error("Provider parameter is missing");
+    }
+    return ok(res, {
+      provider: req.params.provider,
+      status: "callback-received"
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function refresh(req, res) {
