@@ -1,6 +1,8 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
+
+const ALLOWED_PROVIDERS = ["github", "google", "gitlab"];
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -15,13 +17,18 @@ export async function login(req, res) {
 }
 
 export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
+  const { provider } = req.params;
+  if (!ALLOWED_PROVIDERS.includes(provider)) {
+    return fail(res, `Unsupported OAuth provider: ${provider}`, 400);
+  }
+  return ok(res, { provider, status: "callback-received" });
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  const { refreshToken: token } = req.body ?? {};
+  if (!token || typeof token !== "string") {
+    return fail(res, "refreshToken is required", 400);
+  }
+  const result = await refreshToken(token);
   return ok(res, result);
 }
