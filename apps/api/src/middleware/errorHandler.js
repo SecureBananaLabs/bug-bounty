@@ -4,6 +4,20 @@ export function errorHandler(err, req, res, next) {
     return next(err);
   }
 
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({
+      success: false,
+      message: "Malformed JSON"
+    });
+  }
+
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({
+      success: false,
+      message: "Payload Too Large"
+    });
+  }
+
   return res.status(500).json({
     success: false,
     message: "Unexpected server error"
