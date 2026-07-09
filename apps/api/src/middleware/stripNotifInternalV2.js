@@ -1,0 +1,1 @@
+export const stripNotifFields=(req,_,next)=>{["id","read","readAt","createdAt","updatedAt"].forEach(f=>delete req.body?.[f]);return next();};
