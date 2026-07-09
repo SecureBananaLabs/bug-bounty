@@ -1,0 +1,2 @@
+import React from"react";
+export default function FreelancerDash(){return(<main><h1>Freelancer Dashboard</h1><section><h2>Proposals</h2><p>0 active.<a href="/jobs">Browse Jobs</a></p></section><section><h2>Earnings</h2><p>$0.00 total</p></section></main>);}
