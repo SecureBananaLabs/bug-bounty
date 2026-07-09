@@ -14,6 +14,7 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { ok } from "./utils/response.js";
 
 export function createApp() {
   const app = express();
@@ -24,7 +25,7 @@ export function createApp() {
   app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
+    return ok(res, { service: "api" });
   });
 
   app.use("/api/auth", authRoutes);
