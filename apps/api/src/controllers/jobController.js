@@ -1,4 +1,4 @@
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 import { createJobSchema } from "../validators/job.js";
 import { createJob, listJobs } from "../services/jobService.js";
 
@@ -7,6 +7,23 @@ export async function getJobs(req, res) {
 }
 
 export async function postJob(req, res) {
-  const payload = createJobSchema.parse(req.body);
-  return ok(res, await createJob(payload), 201);
+  try {
+    const payload = createJobSchema.parse(req.body);
+    if (payload.clientId && payload.clientId !== req.user.sub) {
+      return fail(res, "clientId mismatch", 403);
+    }
+    const job = await createJob({ ...payload, clientId: req.user.sub });
+    return ok(res, job, 201);
+  } catch (error) {
+    if (error.name === "ZodError") {
+      return res.status(400).json({
+        status: "error",
+        errors: error.errors.map((e) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
+      });
+    }
+    throw error;
+  }
 }
