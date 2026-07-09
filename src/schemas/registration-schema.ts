@@ -1,0 +1,2 @@
+import { z } from "zod";
+export const registrationSchema = z.object({username: z.string().min(3).max(50),email: z.string().email(),password: z.string().min(8),fullName: z.string().min(1,"Full name is required").max(100)});
