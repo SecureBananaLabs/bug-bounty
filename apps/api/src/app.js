@@ -18,8 +18,26 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim()).filter(Boolean)
+    : [];
+
+  app.use(
+    cors({
+      credentials: true,
+      origin(origin, callback) {
+        // Allow requests with no origin (server-to-server, curl, etc.)
+        if (!origin) {
+          return callback(null, true);
+        }
+        if (allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        return callback(new Error(`CORS: origin '${origin}' not allowed`));
+      },
+    })
+  );
   app.use(helmet());
-  app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
 
