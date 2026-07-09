@@ -5,7 +5,8 @@ export async function listJobs() {
 }
 
 export async function createJob(payload) {
-  const job = { id: `job_${Date.now()}`, status: "open", ...payload };
+  const { title, description, budgetMin, budgetMax, clientId } = payload;
+  const job = { id: `job_${Date.now()}`, status: "open", title, description, budgetMin, budgetMax, clientId };
   jobs.push(job);
   return job;
 }
