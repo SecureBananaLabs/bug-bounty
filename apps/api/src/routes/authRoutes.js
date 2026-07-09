@@ -1,9 +1,11 @@
-import { Router } from "express";
-import { login, oauthCallback, refresh, register } from "../controllers/authController.js";
+import { Router } from 'express';
+import { register, login } from '../controllers/authController.js';
+import { validate } from '../middleware/validate.js';
+import { registerSchema, loginSchema } from '../validations/authValidation.js';
 
-export const authRoutes = Router();
+const router = Router();
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
-authRoutes.get("/oauth/:provider/callback", oauthCallback);
-authRoutes.post("/refresh", refresh);
+router.post('/register', validate(registerSchema), register);
+router.post('/login', validate(loginSchema), login);
+
+export { router as authRoutes };
