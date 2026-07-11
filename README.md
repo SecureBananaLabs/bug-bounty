@@ -82,6 +82,7 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 - Messages
 - Categories
 - Skills
+- Notifications
 
 ## Environment Variables
 
