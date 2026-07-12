@@ -1,0 +1,28 @@
+name: Benchmark Smoke Test
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build -w apps/api
+      - name: Start API server
+        run: |
+          node apps/api/src/server.js &
+          sleep 3
+          curl -s http://localhost:4000/health || exit 1
+      - name: Run smoke benchmark
+        env:
+          BENCHMARK_HOST: http://localhost:4000
+          BENCHMARK_TOKEN: ci-smoke-token
+          BENCHMARK_CONNECTIONS: 5
+          BENCHMARK_DURATION: 3
+        run: npm run benchmark

@@ -1,0 +1,24 @@
+{
+  "defaults": {
+    "connections": 50,
+    "duration": 10,
+    "pipelining": 1
+  },
+  "endpoints": [
+    {"method": "GET", "path": "/health", "protected": false},
+    {"method": "GET", "path": "/api/auth/google", "protected": false},
+    {"method": "POST", "path": "/api/auth/register", "payload": {"email": "bench@test.com", "password": "Bench123!", "role": "client"}, "protected": false},
+    {"method": "POST", "path": "/api/auth/login", "payload": {"email": "bench@test.com", "password": "Bench123!"}, "protected": false},
+    {"method": "GET", "path": "/api/users", "protected": true},
+    {"method": "GET", "path": "/api/users/me", "protected": true},
+    {"method": "GET", "path": "/api/jobs", "protected": true},
+    {"method": "POST", "path": "/api/jobs", "payload": {"budgetMin": 100, "budgetMax": 500, "category": "dev", "title": "Benchmark Job", "description": "Load test"}, "protected": true},
+    {"method": "GET", "path": "/api/proposals", "protected": true},
+    {"method": "GET", "path": "/api/payments", "protected": true},
+    {"method": "GET", "path": "/api/reviews", "protected": true},
+    {"method": "GET", "path": "/api/messages", "protected": true},
+    {"method": "GET", "path": "/api/notifications", "protected": true},
+    {"method": "GET", "path": "/api/search?q=test", "protected": false},
+    {"method": "GET", "path": "/api/admin/metrics", "protected": true}
+  ]
+}
