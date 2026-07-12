@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 const proposals = [];
 
 export async function listProposals() {
@@ -5,7 +7,7 @@ export async function listProposals() {
 }
 
 export async function createProposal(payload) {
-  const proposal = { id: `prp_${Date.now()}`, ...payload };
+  const proposal = { ...payload, id: `prp_${randomUUID()}` };
   proposals.push(proposal);
   return proposal;
 }
