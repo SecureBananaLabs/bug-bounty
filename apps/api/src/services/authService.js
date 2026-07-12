@@ -1,12 +1,15 @@
 import { signAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
+  // Generate a single consistent user ID
+  const userId = `usr_${Date.now()}`;
+
   // TODO: persist new user via Prisma
   return {
-    id: `usr_${Date.now()}`,
+    id: userId,
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    token: signAccessToken({ sub: userId, role: payload.role })
   };
 }
 
