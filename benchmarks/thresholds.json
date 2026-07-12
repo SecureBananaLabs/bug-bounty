@@ -1,0 +1,35 @@
+{
+  "default": {
+    "p99_ms": 500,
+    "error_rate_max": 1.0
+  },
+  "GET /api/health": {
+    "p99_ms": 100,
+    "error_rate_max": 0.1
+  },
+  "GET /api/users/me": {
+    "p99_ms": 300,
+    "error_rate_max": 1.0
+  },
+  "GET /api/items?limit=20": {
+    "p99_ms": 400,
+    "error_rate_max": 1.0
+  },
+  "POST /api/items": {
+    "p99_ms": 500,
+    "error_rate_max": 1.0
+  },
+  "POST /api/search": {
+    "p99_ms": 600,
+    "error_rate_max": 1.0
+  },
+  "_docs": {
+    "env_template": ".env.benchmark\nBENCHMARK_HOST=http://localhost:3000\nBENCHMARK_TOKEN=benchmark-test-token\n",
+    "commands": {
+      "full": "node benchmarks/run-benchmarks.js",
+      "smoke_ci": "node benchmarks/run-benchmarks.js --smoke",
+      "npm": "npm run benchmark"
+    },
+    "notes": "CI should run smoke mode and fail on non-zero exit when p99 exceeds thresholds. Auth routes use BENCHMARK_TOKEN."
+  }
+}
