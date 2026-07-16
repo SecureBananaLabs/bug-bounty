@@ -44,14 +44,17 @@ export function incrementLeaderboardText(source, user) {
     throw new Error("leaderboard.json must contain a JSON object");
   }
 
-  const current = leaderboard[user] ?? 0;
-  if (typeof current !== "number" || !Number.isFinite(current)) {
-    throw new Error(`leaderboard entry for ${user} must be a finite number`);
+  for (const value of Object.values(leaderboard)) {
+    if (typeof value !== "number" || !Number.isFinite(value)) {
+      throw new Error("leaderboard top-level values must be finite numbers");
+    }
   }
 
+  const hasUser = Object.prototype.hasOwnProperty.call(leaderboard, user);
+  const current = hasUser ? leaderboard[user] : 0;
   const next = current + 1;
   const key = JSON.stringify(user);
-  if (Object.prototype.hasOwnProperty.call(leaderboard, user)) {
+  if (hasUser) {
     const valuePattern = new RegExp(`(^[ \\t]*${escapeRegExp(key)}[ \\t]*:[ \\t]*)(-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)(?=[ \\t]*\\r?(?:,|$))`, "m");
     const match = valuePattern.exec(source);
     if (!match) throw new Error(`leaderboard entry for ${user} must be a top-level number`);
@@ -109,11 +112,11 @@ export async function runUpdate({
     requireGit(git(["reset", "--hard", `origin/${defaultBranch}`]), "reset to default branch", token);
 
     const existing = requireGit(
-      git(["log", "--format=%s", `--grep=^${subject}$`, "-n", "1"]),
+      git(["log", "--format=%s", `--grep=^${subject}$`]),
       "check idempotency commit",
       token,
     );
-    if (existing.stdout.trim()) return "already-counted";
+    if (existing.stdout.split(/\r?\n/).some((line) => line === subject)) return "already-counted";
 
     const source = file.exists("leaderboard.json") ? file.read("leaderboard.json") : "{}\n";
     file.write("leaderboard.json", incrementLeaderboardText(source, prUser));

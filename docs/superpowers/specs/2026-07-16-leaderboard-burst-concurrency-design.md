@@ -43,7 +43,7 @@ The inline update block moves to `.github/scripts/update-pr-leaderboard.mjs`. Th
 2. Configure the bot identity and authenticated origin URL.
 3. Fetch and hard-reset the ephemeral runner checkout to the latest default branch.
 4. Check the exact commit subject `chore: update leaderboard for PR #<number>`; exit successfully if already counted.
-5. Parse `leaderboard.json`, increment only the PR author's key, and write two-space-indented JSON with a trailing newline.
+5. Parse `leaderboard.json`, verify it is a flat mapping whose every top-level value is a finite number, then increment only the PR author's key by replacing the existing numeric token in the source text or appending a new key before the closing brace.
 6. Commit the update and attempt a direct push to the default branch.
 7. If the push loses a race, discard the local attempt, return to step 3, recompute from the new remote state, and retry up to five times with a short bounded delay.
 8. Fail the workflow after the fifth rejected push so GitHub surfaces a visible error instead of silently losing the event.
@@ -54,7 +54,7 @@ Hard-resetting is safe here because the checkout is an ephemeral GitHub-hosted r
 
 The commit subject is the idempotency key. A retried or manually rerun event checks the remote branch after every fetch and exits without changing the file when that subject already exists.
 
-JSON object insertion order is preserved by parsing and serializing the existing object. Existing users remain in their current order; a new user is appended. No unrelated leaderboard entries are modified.
+The updater first parses and validates a flat finite-number mapping, then makes a targeted source-text change: it replaces an existing user's numeric value or appends a new key at the end. This preserves numeric-looking key order, LF or CRLF line endings, indentation, and trailing newlines. Existing users remain in their current order, a new user is appended, and no unrelated leaderboard entries are modified.
 
 ## Error handling
 
