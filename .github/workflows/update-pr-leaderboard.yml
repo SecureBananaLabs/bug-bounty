@@ -10,7 +10,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: leaderboard-json-update
+  group: leaderboard-json-update-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:
