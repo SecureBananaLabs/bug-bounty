@@ -26,12 +26,15 @@ test("different PRs do not share a replaceable pending concurrency slot", () => 
 
 test("workflow invokes the tested Node updater from the trusted checkout", () => {
   const workflow = readFileSync(workflowPath, "utf8");
+  const job = workflow.slice(workflow.indexOf("  update-leaderboard:"));
+  const checkoutIndex = job.indexOf("uses: actions/checkout@v4");
+  const refIndex = job.indexOf("ref: ${{ github.event.repository.default_branch }}");
+  const runIndex = job.indexOf("run: node .github/scripts/update-pr-leaderboard.mjs");
 
   assert.match(workflow, /^\s*pull_request_target:\s*$/m);
   assert.match(workflow, /^\s*contents:\s*write\s*$/m);
   assert.match(workflow, /^\s*pull-requests:\s*read\s*$/m);
-  assert.match(workflow, /^\s*ref:\s*\$\{\{ github\.event\.repository\.default_branch \}\}\s*$/m);
-  assert.match(workflow, /^\s*run:\s*node \.github\/scripts\/update-pr-leaderboard\.mjs\s*$/m);
+  assert.ok(checkoutIndex >= 0 && checkoutIndex < refIndex && refIndex < runIndex);
   assert.doesNotMatch(workflow, /jq --arg user/);
   assert.doesNotMatch(workflow, /^\s*GITHUB_REPOSITORY:\s*/m);
 });
@@ -50,6 +53,16 @@ test("leaderboard mutation preserves numeric-key order and formatting", async ()
   const { incrementLeaderboardText } = await loadUpdater();
   const source = '{\n  "alice": 2,\n  "2569658930": 7,\n  "bob": 9\n}\n';
   const expected = '{\n  "alice": 2,\n  "2569658930": 8,\n  "bob": 9\n}\n';
+
+  const result = incrementLeaderboardText(source, "2569658930");
+  assert.equal(result, expected);
+  assert.deepEqual(JSON.parse(result), { alice: 2, "2569658930": 8, bob: 9 });
+});
+
+test("leaderboard mutation preserves numeric-key order and formatting with CRLF", async () => {
+  const { incrementLeaderboardText } = await loadUpdater();
+  const source = '{\r\n  "alice": 2,\r\n  "bob": 9,\r\n  "2569658930": 7\r\n}\r\n';
+  const expected = '{\r\n  "alice": 2,\r\n  "bob": 9,\r\n  "2569658930": 8\r\n}\r\n';
 
   const result = incrementLeaderboardText(source, "2569658930");
   assert.equal(result, expected);

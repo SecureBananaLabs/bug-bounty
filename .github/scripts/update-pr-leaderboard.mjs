@@ -52,7 +52,7 @@ export function incrementLeaderboardText(source, user) {
   const next = current + 1;
   const key = JSON.stringify(user);
   if (Object.prototype.hasOwnProperty.call(leaderboard, user)) {
-    const valuePattern = new RegExp(`(^[ \\t]*${escapeRegExp(key)}[ \\t]*:[ \\t]*)(-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)(?=[ \\t]*(?:,|$))`, "m");
+    const valuePattern = new RegExp(`(^[ \\t]*${escapeRegExp(key)}[ \\t]*:[ \\t]*)(-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)(?=[ \\t]*\\r?(?:,|$))`, "m");
     const match = valuePattern.exec(source);
     if (!match) throw new Error(`leaderboard entry for ${user} must be a top-level number`);
     return `${source.slice(0, match.index)}${match[1]}${next}${source.slice(match.index + match[0].length)}`;
