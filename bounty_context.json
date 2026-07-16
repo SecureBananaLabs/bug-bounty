@@ -1,0 +1,17 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "76",
+  "title": "Technical Poem Generation and Content Creation",
+  "body": "**Goal**\nAdd a poem to the project — theme, form, and tone are entirely your choice.\n\n**Acceptance Criteria**\n- [ ] Poem is original and written for this project specifically\n- [ ] Minimum 3 stanzas\n- [ ] Submitted as `POEM.md` in the project root\n- [ ] PR description includes a one-line note on the creative decision you made (why this theme, form, or tone)\n\n/bounty $430",
+  "labels": [
+    "good first issue",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
