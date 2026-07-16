@@ -24,6 +24,14 @@ test("different PRs do not share a replaceable pending concurrency slot", () => 
   );
 });
 
+test("workflow invokes the tested Node updater from the trusted checkout", () => {
+  const workflow = readFileSync(workflowPath, "utf8");
+
+  assert.match(workflow, /^\s*run:\s*node \.github\/scripts\/update-pr-leaderboard\.mjs\s*$/m);
+  assert.doesNotMatch(workflow, /jq --arg user/);
+  assert.match(workflow, /ref:\s*\$\{\{ github\.event\.repository\.default_branch \}\}/);
+});
+
 test("leaderboard mutation increments one user and preserves unrelated values", async () => {
   const { incrementLeaderboardText } = await loadUpdater();
   const source = `${JSON.stringify({ alice: 2, bob: 7 }, null, 2)}\n`;
