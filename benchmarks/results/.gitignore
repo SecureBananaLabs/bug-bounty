@@ -1,0 +1,4 @@
+api-benchmark-*.json
+api-benchmark-*.md
+!latest.json
+!latest.md
