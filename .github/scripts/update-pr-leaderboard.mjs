@@ -34,6 +34,10 @@ export function parseInputs(env) {
   return { token, defaultBranch, repository, prUser, prNumber };
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export function incrementLeaderboardText(source, user) {
   const leaderboard = source.trim() ? JSON.parse(source) : {};
   if (leaderboard === null || Array.isArray(leaderboard) || typeof leaderboard !== "object") {
@@ -45,8 +49,23 @@ export function incrementLeaderboardText(source, user) {
     throw new Error(`leaderboard entry for ${user} must be a finite number`);
   }
 
-  leaderboard[user] = current + 1;
-  return `${JSON.stringify(leaderboard, null, 2)}\n`;
+  const next = current + 1;
+  const key = JSON.stringify(user);
+  if (Object.prototype.hasOwnProperty.call(leaderboard, user)) {
+    const valuePattern = new RegExp(`(^[ \\t]*${escapeRegExp(key)}[ \\t]*:[ \\t]*)(-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)(?=[ \\t]*(?:,|$))`, "m");
+    const match = valuePattern.exec(source);
+    if (!match) throw new Error(`leaderboard entry for ${user} must be a top-level number`);
+    return `${source.slice(0, match.index)}${match[1]}${next}${source.slice(match.index + match[0].length)}`;
+  }
+
+  const closeIndex = source.lastIndexOf("}");
+  const lineEnding = source.includes("\r\n") ? "\r\n" : "\n";
+  const indentation = source.match(new RegExp(`${lineEnding}([ \\t]+)${escapeRegExp(JSON.stringify(Object.keys(leaderboard)[0] ?? ""))}`))?.[1] ?? "  ";
+  const beforeClose = source.slice(0, closeIndex);
+  const trailingWhitespace = beforeClose.match(/\s*$/)?.[0] ?? "";
+  const content = beforeClose.slice(0, beforeClose.length - trailingWhitespace.length);
+  const prefix = Object.keys(leaderboard).length ? `,${lineEnding}` : lineEnding;
+  return `${content}${prefix}${indentation}${key}: ${next}${lineEnding}}${source.slice(closeIndex + 1)}`;
 }
 
 function defaultGit(args) {

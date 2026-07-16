@@ -27,9 +27,13 @@ test("different PRs do not share a replaceable pending concurrency slot", () => 
 test("workflow invokes the tested Node updater from the trusted checkout", () => {
   const workflow = readFileSync(workflowPath, "utf8");
 
+  assert.match(workflow, /^\s*pull_request_target:\s*$/m);
+  assert.match(workflow, /^\s*contents:\s*write\s*$/m);
+  assert.match(workflow, /^\s*pull-requests:\s*read\s*$/m);
+  assert.match(workflow, /^\s*ref:\s*\$\{\{ github\.event\.repository\.default_branch \}\}\s*$/m);
   assert.match(workflow, /^\s*run:\s*node \.github\/scripts\/update-pr-leaderboard\.mjs\s*$/m);
   assert.doesNotMatch(workflow, /jq --arg user/);
-  assert.match(workflow, /ref:\s*\$\{\{ github\.event\.repository\.default_branch \}\}/);
+  assert.doesNotMatch(workflow, /^\s*GITHUB_REPOSITORY:\s*/m);
 });
 
 test("leaderboard mutation increments one user and preserves unrelated values", async () => {
@@ -40,6 +44,26 @@ test("leaderboard mutation increments one user and preserves unrelated values", 
     incrementLeaderboardText(source, "alice"),
     `${JSON.stringify({ alice: 3, bob: 7 }, null, 2)}\n`,
   );
+});
+
+test("leaderboard mutation preserves numeric-key order and formatting", async () => {
+  const { incrementLeaderboardText } = await loadUpdater();
+  const source = '{\n  "alice": 2,\n  "2569658930": 7,\n  "bob": 9\n}\n';
+  const expected = '{\n  "alice": 2,\n  "2569658930": 8,\n  "bob": 9\n}\n';
+
+  const result = incrementLeaderboardText(source, "2569658930");
+  assert.equal(result, expected);
+  assert.deepEqual(JSON.parse(result), { alice: 2, "2569658930": 8, bob: 9 });
+});
+
+test("leaderboard mutation appends a new key after numeric keys", async () => {
+  const { incrementLeaderboardText } = await loadUpdater();
+  const source = '{\n  "alice": 2,\n  "2569658930": 7,\n  "bob": 9\n}\n';
+  const expected = '{\n  "alice": 2,\n  "2569658930": 7,\n  "bob": 9,\n  "charlie": 1\n}\n';
+
+  const result = incrementLeaderboardText(source, "charlie");
+  assert.equal(result, expected);
+  assert.deepEqual(JSON.parse(result), { alice: 2, "2569658930": 7, bob: 9, charlie: 1 });
 });
 
 test("leaderboard mutation appends a new user and keeps shell text as data", async () => {
