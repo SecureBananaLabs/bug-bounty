@@ -1,0 +1,13 @@
+{
+  "_comment": "CI benchmark thresholds. Tests fail if p99 exceeds these values.",
+  "smoke": {
+    "p99_max_ms": 500,
+    "error_rate_max_pct": 5,
+    "description": "Quick CI smoke test thresholds (2 connections, 3s)"
+  },
+  "full": {
+    "p99_max_ms": 2000,
+    "error_rate_max_pct": 10,
+    "description": "Full benchmark thresholds (10 connections, 10s)"
+  }
+}
