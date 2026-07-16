@@ -39,7 +39,7 @@ function escapeRegExp(value) {
 }
 
 export function incrementLeaderboardText(source, user) {
-  const leaderboard = source.trim() ? JSON.parse(source) : {};
+  const leaderboard = JSON.parse(source);
   if (leaderboard === null || Array.isArray(leaderboard) || typeof leaderboard !== "object") {
     throw new Error("leaderboard.json must contain a JSON object");
   }

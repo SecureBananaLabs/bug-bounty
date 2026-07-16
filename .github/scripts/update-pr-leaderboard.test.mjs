@@ -108,6 +108,14 @@ test("leaderboard mutation rejects nested and non-numeric top-level values", asy
   }
 });
 
+test("leaderboard mutation rejects empty and whitespace-only source text", async () => {
+  const { incrementLeaderboardText } = await loadUpdater();
+
+  for (const source of ["", " \t\r\n"]) {
+    assert.throws(() => incrementLeaderboardText(source, "alice"), SyntaxError);
+  }
+});
+
 test("workflow inputs reject malformed PR numbers", async () => {
   const { parseInputs } = await loadUpdater();
 
@@ -167,6 +175,25 @@ test("already-counted PR exits before writing or pushing", async () => {
     "--format=%s",
     "--grep=^chore: update leaderboard for PR #123$",
   ]);
+});
+
+test("an existing whitespace-only leaderboard fails before writing, committing, or pushing", async () => {
+  const { runUpdate } = await loadUpdater();
+  const file = makeFile(" \t\r\n");
+  const calls = [];
+  const git = (args) => {
+    calls.push(args);
+    if (args[0] === "log") return result();
+    return result();
+  };
+
+  await assert.rejects(
+    runUpdate({ inputs, git, file, sleep: async () => {}, log: () => {} }),
+    SyntaxError,
+  );
+  assert.equal(file.snapshot().writes, 0);
+  assert.equal(calls.filter((args) => args[0] === "commit").length, 0);
+  assert.equal(calls.filter((args) => args[0] === "push").length, 0);
 });
 
 test("a body-only grep match with a different subject is not already-counted", async () => {
