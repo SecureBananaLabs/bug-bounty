@@ -1,0 +1,18 @@
+{
+  "defaults": {
+    "p99Ms": 750,
+    "ttfbP99Ms": 500,
+    "errorRate": 0.02
+  },
+  "smoke": {
+    "p99Ms": 1500,
+    "ttfbP99Ms": 1000,
+    "errorRate": 0.1
+  },
+  "endpoints": {
+    "POST /api/uploads": {
+      "p99Ms": 2000,
+      "ttfbP99Ms": 1500
+    }
+  }
+}
