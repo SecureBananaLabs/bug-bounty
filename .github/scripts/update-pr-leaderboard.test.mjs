@@ -56,3 +56,97 @@ test("workflow inputs reject malformed PR numbers", async () => {
     /PR_NUMBER must contain digits only/,
   );
 });
+
+function result(status = 0, stdout = "", stderr = "") {
+  return { status, stdout, stderr };
+}
+
+function makeFile(initial = "{}\n") {
+  let contents = initial;
+  let writes = 0;
+  return {
+    exists: () => true,
+    read: () => contents,
+    write: (_path, next) => {
+      contents = next;
+      writes += 1;
+    },
+    snapshot: () => ({ contents, writes }),
+  };
+}
+
+const inputs = {
+  token: "secret-token",
+  defaultBranch: "main",
+  repository: "owner/repo",
+  prUser: "alice",
+  prNumber: "123",
+};
+
+test("already-counted PR exits before writing or pushing", async () => {
+  const { runUpdate } = await loadUpdater();
+  const file = makeFile();
+  const calls = [];
+  const git = (args) => {
+    calls.push(args);
+    if (args[0] === "log") return result(0, "chore: update leaderboard for PR #123\n");
+    return result();
+  };
+
+  assert.equal(await runUpdate({ inputs, git, file, sleep: async () => {}, log: () => {} }), "already-counted");
+  assert.equal(file.snapshot().writes, 0);
+  assert.equal(calls.some((args) => args[0] === "push"), false);
+});
+
+test("rejected push resets, recomputes, and succeeds without losing a concurrent increment", async () => {
+  const { runUpdate } = await loadUpdater();
+  const file = makeFile(`${JSON.stringify({ alice: 4, bob: 2 }, null, 2)}\n`);
+  let pushes = 0;
+  let resets = 0;
+  const git = (args) => {
+    if (args[0] === "log") return result();
+    if (args[0] === "diff") return result(1);
+    if (args[0] === "reset") {
+      resets += 1;
+      if (resets === 2) {
+        file.write("leaderboard.json", `${JSON.stringify({ alice: 4, bob: 3 }, null, 2)}\n`);
+      }
+      return result();
+    }
+    if (args[0] === "push") {
+      pushes += 1;
+      return pushes === 1 ? result(1, "", "non-fast-forward") : result();
+    }
+    return result();
+  };
+
+  assert.equal(await runUpdate({ inputs, git, file, sleep: async () => {}, log: () => {} }), "updated");
+  assert.equal(pushes, 2);
+  assert.equal(resets, 2);
+  assert.deepEqual(JSON.parse(file.snapshot().contents), { alice: 5, bob: 3 });
+});
+
+test("retry exhaustion fails visibly without leaking the token", async () => {
+  const { runUpdate, MAX_ATTEMPTS } = await loadUpdater();
+  const file = makeFile();
+  let pushes = 0;
+  const git = (args) => {
+    if (args[0] === "log") return result();
+    if (args[0] === "diff") return result(1);
+    if (args[0] === "push") {
+      pushes += 1;
+      return result(1, "", `rejected secret-token attempt ${pushes}`);
+    }
+    return result();
+  };
+
+  await assert.rejects(
+    runUpdate({ inputs, git, file, sleep: async () => {}, log: () => {} }),
+    (error) => {
+      assert.match(error.message, /failed after 5 attempts/);
+      assert.doesNotMatch(error.message, /secret-token/);
+      return true;
+    },
+  );
+  assert.equal(pushes, MAX_ATTEMPTS);
+});
