@@ -632,4 +632,3 @@ Closes #11198
 - [ ] **Step 6: Verify remote checks and PR state**
 
 Confirm the PR is open, non-draft, mergeable, the changed-file list matches the local diff, and every available GitHub check passes. Address review comments or CI failures before reporting completion.
-
