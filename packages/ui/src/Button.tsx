@@ -1,6 +1,6 @@
-import React from "react";
+import type { ReactNode } from "react";
 
-export function Button({ children }: { children: React.ReactNode }) {
+export function Button({ children }: { children: ReactNode }) {
   return (
     <button
       style={{
