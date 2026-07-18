@@ -1,9 +1,24 @@
+import { ZodError } from "zod";
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
+
+function invalidRequestBody(res, error) {
+  if (error instanceof ZodError) {
+    return fail(res, "Invalid request body", 400);
+  }
+
+  throw error;
+}
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
+  let payload;
+  try {
+    payload = registerSchema.parse(req.body);
+  } catch (error) {
+    return invalidRequestBody(res, error);
+  }
+
   const result = await registerUser(payload);
   return ok(res, result, 201);
 }
