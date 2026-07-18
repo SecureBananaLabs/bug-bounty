@@ -57,6 +57,10 @@ export async function registerUser(payload) {
   return buildAuthResponse(user);
 }
 
+export async function listRegisteredUsers() {
+  return Array.from(usersByEmail.values()).map(({ passwordHash, ...user }) => user);
+}
+
 export async function loginUser(payload) {
   const user = usersByEmail.get(payload.email);
 
