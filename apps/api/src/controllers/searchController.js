@@ -1,11 +1,6 @@
-import { ok, fail } from "../utils/response.js";
+import { ok } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
-import { searchQuerySchema } from "../validators/search.js";
 
 export async function search(req, res) {
-  const parsed = searchQuerySchema.safeParse(req.query.q ?? "");
-  if (!parsed.success) {
-    return fail(res, parsed.error.issues[0].message);
-  }
-  return ok(res, await globalSearch(parsed.data));
+  return ok(res, await globalSearch(req.query.q ?? ""));
 }
