@@ -1,9 +1,27 @@
-import { Router } from "express";
-import { login, oauthCallback, refresh, register } from "../controllers/authController.js";
+const express = require('express');
+const { body } = require('express-validator');
+const authController = require('../controllers/authController');
 
-export const authRoutes = Router();
+const router = express.Router();
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
-authRoutes.get("/oauth/:provider/callback", oauthCallback);
-authRoutes.post("/refresh", refresh);
+router.post(
+  '/register',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('fullName').notEmpty().withMessage('Full name is required').trim(),
+    body('role').optional().isIn(['CLIENT', 'FREELANCER']).withMessage('Role must be CLIENT or FREELANCER')
+  ],
+  authController.register
+);
+
+router.post(
+  '/login',
+  [
+    body('email').isEmail().withMessage('Valid email is required'),
+    body('password').notEmpty().withMessage('Password is required')
+  ],
+  authController.login
+);
+
+module.exports = router;
