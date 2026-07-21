@@ -1,0 +1,607 @@
+{
+  "generatedAt": "2026-07-19T22:58:30.051Z",
+  "targetHost": "http://localhost:4000",
+  "mode": "smoke",
+  "endpoints": [
+    {
+      "name": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "auth": false,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1144.6,
+      "peakRequestsPerSecond": 1510,
+      "totalRequests": 5723,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 5723,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1201817.61,
+        "max": 1585500
+      }
+    },
+    {
+      "name": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "auth": false,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 983.6,
+      "peakRequestsPerSecond": 1252,
+      "totalRequests": 4918,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 4918,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1032755.2,
+        "max": 1314600
+      }
+    },
+    {
+      "name": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "auth": false,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1278.2,
+      "peakRequestsPerSecond": 1684,
+      "totalRequests": 6391,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 6391,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1342156.8,
+        "max": 1768200
+      }
+    },
+    {
+      "name": "POST /api/auth/refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "auth": false,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1122,
+      "peakRequestsPerSecond": 1299,
+      "totalRequests": 5610,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 5610,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1177958.4,
+        "max": 1363950
+      }
+    },
+    {
+      "name": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1555.8,
+      "peakRequestsPerSecond": 1858,
+      "totalRequests": 7779,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 7779,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1633587.2,
+        "max": 1950900
+      }
+    },
+    {
+      "name": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1159,
+      "peakRequestsPerSecond": 1320,
+      "totalRequests": 5795,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 5795,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1216819.2,
+        "max": 1386000
+      }
+    },
+    {
+      "name": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1422.8,
+      "peakRequestsPerSecond": 1713,
+      "totalRequests": 7114,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 7114,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1493913.6,
+        "max": 1798650
+      }
+    },
+    {
+      "name": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1058.41,
+      "peakRequestsPerSecond": 1349,
+      "totalRequests": 5292,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 5292,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1111244.8,
+        "max": 1416450
+      }
+    },
+    {
+      "name": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1495,
+      "peakRequestsPerSecond": 1620,
+      "totalRequests": 7475,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 7475,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1569894.4,
+        "max": 1701000
+      }
+    },
+    {
+      "name": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1061.2,
+      "peakRequestsPerSecond": 1379,
+      "totalRequests": 5306,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 5306,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1114368,
+        "max": 1447950
+      }
+    },
+    {
+      "name": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1108.41,
+      "peakRequestsPerSecond": 1373,
+      "totalRequests": 5542,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 5542,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1163571.2,
+        "max": 1441650
+      }
+    },
+    {
+      "name": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1282.2,
+      "peakRequestsPerSecond": 1539,
+      "totalRequests": 6411,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 6411,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1346662.4,
+        "max": 1615950
+      }
+    },
+    {
+      "name": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1381.8,
+      "peakRequestsPerSecond": 1641,
+      "totalRequests": 6909,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 6909,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1450905.6,
+        "max": 1723050
+      }
+    },
+    {
+      "name": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1396.4,
+      "peakRequestsPerSecond": 1810,
+      "totalRequests": 6982,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 6982,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1466060.8,
+        "max": 1900500
+      }
+    },
+    {
+      "name": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1427.8,
+      "peakRequestsPerSecond": 1834,
+      "totalRequests": 7139,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 7139,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1499238.4,
+        "max": 1925700
+      }
+    },
+    {
+      "name": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 2172.6,
+      "peakRequestsPerSecond": 2399,
+      "totalRequests": 10860,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 10860,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 2280550.4,
+        "max": 2518950
+      }
+    },
+    {
+      "name": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1665.4,
+      "peakRequestsPerSecond": 1714,
+      "totalRequests": 8327,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 8327,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1748480,
+        "max": 1799700
+      }
+    },
+    {
+      "name": "POST /api/uploads",
+      "method": "POST",
+      "path": "/api/uploads",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1116.6,
+      "peakRequestsPerSecond": 1675,
+      "totalRequests": 5583,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 5583,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1172480,
+        "max": 1758750
+      }
+    },
+    {
+      "name": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 360.6,
+      "peakRequestsPerSecond": 606,
+      "totalRequests": 1803,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 1803,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 378649.6,
+        "max": 636300
+      }
+    },
+    {
+      "name": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "auth": true,
+      "connections": 2,
+      "duration": 5,
+      "requestsPerSecond": 1022.8,
+      "peakRequestsPerSecond": 1512,
+      "totalRequests": 5114,
+      "errorRate": 100,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 5114,
+      "ttfb": {
+        "mean": null
+      },
+      "latency": {
+        "p50": null,
+        "p95": null,
+        "p99": null,
+        "min": null,
+        "max": null,
+        "mean": null
+      },
+      "throughput": {
+        "average": 1074022.4,
+        "max": 1587600
+      }
+    }
+  ]
+}

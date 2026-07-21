@@ -1,0 +1,22 @@
+{
+  "GET /health": { "p99Ms": 50 },
+  "POST /api/auth/register": { "p99Ms": 200 },
+  "POST /api/auth/login": { "p99Ms": 200 },
+  "POST /api/auth/refresh": { "p99Ms": 200 },
+  "GET /api/users": { "p99Ms": 150 },
+  "POST /api/users": { "p99Ms": 200 },
+  "GET /api/jobs": { "p99Ms": 150 },
+  "POST /api/jobs": { "p99Ms": 200 },
+  "GET /api/proposals": { "p99Ms": 150 },
+  "POST /api/proposals": { "p99Ms": 200 },
+  "POST /api/payments": { "p99Ms": 250 },
+  "GET /api/reviews": { "p99Ms": 150 },
+  "POST /api/reviews": { "p99Ms": 200 },
+  "GET /api/messages": { "p99Ms": 150 },
+  "POST /api/messages": { "p99Ms": 200 },
+  "GET /api/notifications": { "p99Ms": 150 },
+  "POST /api/notifications": { "p99Ms": 200 },
+  "POST /api/uploads": { "p99Ms": 300 },
+  "GET /api/search": { "p99Ms": 200 },
+  "GET /api/admin/metrics": { "p99Ms": 150 }
+}
