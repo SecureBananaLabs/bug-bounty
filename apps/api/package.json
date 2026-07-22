@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "JWT_SECRET=test-suite-only-secret-do-not-use-in-prod node --test 'src/tests/**/*.test.js'"
   },
   "dependencies": {
     "cors": "^2.8.5",
