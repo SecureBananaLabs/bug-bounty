@@ -1,0 +1,31 @@
+Script started on 2026-06-08 08:10:37-05:00 [COMMAND="/tmp/demo-5875.sh" <not executed on terminal>]
+Demo for issue #5875 / parent #743
+1) Validate accepted and rejected budget ranges through createJobSchema
+valid range accepted: true
+inverted range accepted: false
+error path: budgetMax
+error message: budgetMax must be greater than or equal to budgetMin
+
+2) Run test suite
+
+> test
+> npm run test -w apps/api
+
+[1G[0K
+> test
+> node --test src/tests/*.js
+
+[1G[0K✔ GET /health returns ok payload (58.397235ms)
+✔ createJobSchema accepts a valid budget range (1.884848ms)
+✔ createJobSchema rejects an inverted budget range (0.919068ms)
+✔ createJobSchema reports a clear budgetMax path and message (0.9022ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 363.62076
+[1G[0K⠙[1G[0K[1G[0K⠙[1G[0K
+Script done on 2026-06-08 08:10:37-05:00 [COMMAND_EXIT_CODE="0"]
