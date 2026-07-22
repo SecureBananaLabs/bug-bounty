@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import "express-async-errors";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
