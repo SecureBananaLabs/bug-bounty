@@ -5,6 +5,9 @@ export async function getUsers(req, res) {
   return ok(res, await listUsers());
 }
 
+import { registerSchema } from "../validators/auth.js";
+
 export async function postUser(req, res) {
-  return ok(res, await createUser(req.body), 201);
+  const payload = registerSchema.parse(req.body);
+  return ok(res, await createUser(payload), 201);
 }
