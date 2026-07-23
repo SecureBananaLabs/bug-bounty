@@ -23,6 +23,17 @@ export function createApp() {
   app.use(express.json());
   app.use(apiLimiter);
 
+  app.get("/", (req, res) => {
+    res.status(200).json({ ok: true, message: "FreelanceFlow API Server is running." });
+  });
+
+  app.get("/admin", (req, res) => {
+    res.status(404).json({
+      error: "Not Found",
+      message: "This is the Backend API Server. To access the Admin Panel UI, please navigate to the Frontend Client at http://localhost:3005/admin"
+    });
+  });
+
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
