@@ -125,3 +125,49 @@ model Notification {
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
 }
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+}
+
+model Dispute {
+  id            String         @id @default(cuid())
+  jobId         String
+  job           Job            @relation(fields: [jobId], references: [id])
+  clientId      String
+  client        User           @relation("ClientDisputes", fields: [clientId], references: [id])
+  freelancerId  String
+  freelancer    User           @relation("FreelancerDisputes", fields: [freelancerId], references: [id])
+  status        DisputeStatus  @default(OPEN)
+  reason        String
+  evidence      String?
+  adminNotes    String?
+  ruling        String?
+  ruledInFavor  String?
+  resolvedAt    DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String
+  targetType String
+  targetId   String?
+  details    String?
+  createdAt  DateTime @default(now())
+}
+
+model PlatformConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+// Add these to User model:
+// disputesAsClient     Dispute[]     @relation("ClientDisputes")
+// disputesAsFreelancer Dispute[]     @relation("FreelancerDisputes")
