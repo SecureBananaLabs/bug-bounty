@@ -13,32 +13,49 @@ enum UserRole {
   ADMIN
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
 enum JobStatus {
   DRAFT
   OPEN
   IN_PROGRESS
   COMPLETED
   CANCELLED
+  FLAGGED
+  REJECTED
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+  ESCALATED
 }
 
 model User {
-  id             String      @id @default(cuid())
-  email          String      @unique
+  id             String         @id @default(cuid())
+  email          String         @unique
   passwordHash   String
   fullName       String
   bio            String?
-  role           UserRole    @default(CLIENT)
-  isVerified     Boolean     @default(false)
+  role           UserRole       @default(CLIENT)
+  status         UserStatus     @default(ACTIVE)
+  isVerified     Boolean        @default(false)
   skills         Skill[]
-  postedJobs     Job[]       @relation("ClientJobs")
+  postedJobs     Job[]          @relation("ClientJobs")
   proposals      Proposal[]
-  sentMessages   Message[]   @relation("SentMessages")
-  receivedMsgs   Message[]   @relation("ReceivedMessages")
-  reviewsGiven   Review[]    @relation("Reviewer")
-  reviewsGot     Review[]    @relation("Reviewee")
+  sentMessages   Message[]      @relation("SentMessages")
+  receivedMsgs   Message[]      @relation("ReceivedMessages")
+  reviewsGiven   Review[]       @relation("Reviewer")
+  reviewsGot     Review[]       @relation("Reviewee")
   notifications  Notification[]
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  auditLogs      AuditLog[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model Job {
@@ -54,6 +71,7 @@ model Job {
   category      Category    @relation(fields: [categoryId], references: [id])
   proposals     Proposal[]
   payments      Payment[]
+  disputes      Dispute[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -124,4 +142,31 @@ model Notification {
   body          String
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
+}
+
+model Dispute {
+  id             String         @id @default(cuid())
+  jobId          String
+  job            Job            @relation(fields: [jobId], references: [id])
+  creatorId      String
+  status         DisputeStatus  @default(OPEN)
+  reason         String
+  evidence       String?
+  ruling         String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model PlatformSetting {
+  key            String         @id
+  value          String
+}
+
+model AuditLog {
+  id             String         @id @default(cuid())
+  adminId        String
+  admin          User           @relation(fields: [adminId], references: [id])
+  action         String
+  details        String?
+  createdAt      DateTime       @default(now())
 }
