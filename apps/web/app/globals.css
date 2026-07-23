@@ -4,3 +4,133 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.admin-shell { display: grid; gap: 1rem; }
+.admin-hero,
+.admin-section,
+.admin-forbidden {
+  background: #151c35;
+  border: 1px solid #2a3765;
+  border-radius: 12px;
+  padding: 1rem;
+}
+.admin-hero { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; }
+.admin-kicker { margin: 0 0 0.25rem; color: #93c5fd; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.admin-hero h1,
+.admin-forbidden h1 { margin: 0 0 0.5rem; }
+.admin-hero p,
+.admin-card p,
+.admin-controls p,
+.admin-forbidden p { color: #c7d2fe; }
+.admin-button,
+.admin-actions button {
+  background: #2563eb;
+  border: 0;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+}
+.admin-button:disabled { cursor: progress; opacity: 0.72; }
+.admin-secondary-button { align-self: end; background: #1e293b; border: 1px solid #475569; }
+.admin-live-status {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #bfdbfe;
+  display: inline-block;
+  margin: 0.75rem 0 0;
+  padding: 0.35rem 0.55rem;
+}
+.admin-metrics,
+.admin-card-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.admin-metric,
+.admin-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 1rem;
+}
+.admin-metric span { color: #c7d2fe; display: block; font-size: 0.85rem; }
+.admin-metric strong { display: block; font-size: 1.7rem; margin-top: 0.25rem; }
+.admin-section-header { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: 0.75rem; }
+.admin-section-header h2,
+.admin-card h3 { margin: 0; }
+.admin-section-meta,
+.admin-muted { color: #94a3b8; font-size: 0.85rem; }
+.admin-muted { display: block; margin-top: 0.2rem; }
+.admin-table { border-collapse: collapse; width: 100%; }
+.admin-table th,
+.admin-table td { border-bottom: 1px solid #334155; padding: 0.7rem; text-align: left; vertical-align: top; }
+.admin-table th { color: #bfdbfe; font-size: 0.85rem; }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.admin-actions button { background: #1e293b; border: 1px solid #475569; }
+.admin-link-button {
+  background: none;
+  border: 0;
+  color: #bfdbfe;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+}
+.admin-badge {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.5rem;
+  text-transform: capitalize;
+}
+.admin-badge-active,
+.admin-badge-approved,
+.admin-badge-resolved { background: #14532d; color: #bbf7d0; }
+.admin-badge-suspended,
+.admin-badge-pending,
+.admin-badge-under-review { background: #78350f; color: #fde68a; }
+.admin-badge-banned,
+.admin-badge-rejected { background: #7f1d1d; color: #fecaca; }
+.admin-badge-escalated { background: #312e81; color: #c7d2fe; }
+.admin-filters,
+.admin-controls { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+.admin-filters label,
+.admin-controls label { color: #c7d2fe; display: grid; gap: 0.35rem; }
+.admin-filters input,
+.admin-filters select {
+  background: #0f172a;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  color: #f8fafc;
+  min-height: 2.4rem;
+  padding: 0.4rem 0.55rem;
+}
+.admin-empty,
+.admin-inline-detail {
+  background: #0f172a;
+  border: 1px dashed #475569;
+  border-radius: 10px;
+  color: #c7d2fe;
+  padding: 0.85rem;
+}
+.admin-inline-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.admin-inline-detail strong { color: #f8fafc; }
+.admin-thread {
+  color: #c7d2fe;
+  margin: 0.75rem 0 0;
+  padding-left: 1rem;
+}
+.admin-thread li + li { margin-top: 0.35rem; }
+.admin-bars { display: grid; gap: 0.65rem; }
+.admin-bar-row { display: grid; gap: 0.75rem; grid-template-columns: 4rem 1fr 2rem; align-items: center; }
+.admin-bar-track { background: #0f172a; border: 1px solid #334155; border-radius: 999px; height: 0.9rem; overflow: hidden; }
+.admin-bar-fill { background: #38bdf8; height: 100%; }
+
+@media (max-width: 760px) {
+  .admin-hero,
+  .admin-section-header { display: grid; }
+  .admin-table { display: block; overflow-x: auto; }
+}
