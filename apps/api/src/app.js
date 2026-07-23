@@ -19,7 +19,13 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: (process.env.ALLOWED_ORIGINS || "http://localhost:3000")
+        .split(",")
+        .map((o) => o.trim()),
+    })
+  );
   app.use(express.json());
   app.use(apiLimiter);
 
