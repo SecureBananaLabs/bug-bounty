@@ -1,0 +1,43 @@
+name: Benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/benchmark-smoke.yml"
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Start API
+        env:
+          BENCHMARK_DISABLE_RATE_LIMIT: "1"
+        run: |
+          npm run start -w apps/api &
+          echo $! > api.pid
+          sleep 5
+      - name: Create benchmark token
+        run: |
+          TOKEN=$(node -e "const jwt = require('jsonwebtoken'); console.log(jwt.sign({ sub: 'benchmark-admin', role: 'admin' }, process.env.JWT_SECRET || 'development-secret', { expiresIn: '15m' }));")
+          echo "BENCHMARK_TOKEN=$TOKEN" >> "$GITHUB_ENV"
+      - name: Run smoke benchmark
+        env:
+          BENCHMARK_BASE_URL: http://127.0.0.1:4000
+          BENCHMARK_SMOKE: "1"
+          BENCHMARK_CONNECTIONS: "1"
+          BENCHMARK_DURATION_SECONDS: "3"
+        run: npm run benchmark
+      - name: Stop API
+        if: always()
+        run: |
+          if [ -f api.pid ]; then kill "$(cat api.pid)" || true; fi
