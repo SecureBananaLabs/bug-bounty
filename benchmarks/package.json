@@ -1,0 +1,15 @@
+{
+  "name": "freelanceflow-benchmarks",
+  "version": "1.0.0",
+  "description": "API benchmark suite for FreelanceFlow — p50/p95/p99 latency, RPS, error rate, TTFB",
+  "type": "module",
+  "scripts": {
+    "benchmark": "node benchmark.js",
+    "benchmark:ci": "node benchmark.js --duration 5 --connections 20 --report ./benchmark-report.json",
+    "benchmark:staging": "BENCHMARK_HOST=$STAGING_URL node benchmark.js --duration 15 --connections 50"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0",
+    "commander": "^12.1.0"
+  }
+}
