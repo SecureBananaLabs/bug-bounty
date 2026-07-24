@@ -1,0 +1,12 @@
+{
+  "defaults": {
+    "maxP99Ms": 750,
+    "maxErrorRate": 0.02,
+    "maxNon2xxRate": 0.05
+  },
+  "routes": {
+    "POST /api/auth/login": {
+      "maxNon2xxRate": 0.5
+    }
+  }
+}

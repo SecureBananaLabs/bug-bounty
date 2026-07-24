@@ -1,0 +1,364 @@
+{
+  "startedAt": "2026-05-17T15:06:17.472Z",
+  "finishedAt": "2026-05-17T15:07:17.676Z",
+  "mode": "full",
+  "target": "http://127.0.0.1:57747",
+  "config": {
+    "duration": 3,
+    "connections": 4,
+    "pipelining": 1,
+    "resultsDir": "benchmarks/results",
+    "baseUrl": ""
+  },
+  "environment": {
+    "os": "Windows_NT 10.0.26300 x64",
+    "cpu": "Intel(R) Core(TM) i5-1035G1 CPU @ 1.00GHz",
+    "logicalCores": 8,
+    "totalMemoryMb": 7986,
+    "freeMemoryMb": 1718,
+    "node": "v24.4.0"
+  },
+  "routes": [
+    {
+      "name": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 5,
+        "p95Ms": 11,
+        "p99Ms": 14,
+        "requestsPerSecond": 646.67,
+        "peakRequestsPerSecond": 804,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 56.1408,
+        "totalRequests": 1940
+      }
+    },
+    {
+      "name": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 5,
+        "p95Ms": 29,
+        "p99Ms": 32,
+        "requestsPerSecond": 597.34,
+        "peakRequestsPerSecond": 764,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 13.7623,
+        "totalRequests": 1792
+      }
+    },
+    {
+      "name": "GET /api/auth/oauth/:provider/callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 3,
+        "p99Ms": 10,
+        "requestsPerSecond": 2494,
+        "peakRequestsPerSecond": 3712,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 17.2811,
+        "totalRequests": 7480
+      }
+    },
+    {
+      "name": "POST /api/auth/refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 5,
+        "p95Ms": 25,
+        "p99Ms": 30,
+        "requestsPerSecond": 600,
+        "peakRequestsPerSecond": 768,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 10.8571,
+        "totalRequests": 1800
+      }
+    },
+    {
+      "name": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 3,
+        "p99Ms": 7,
+        "requestsPerSecond": 3993.34,
+        "peakRequestsPerSecond": 4844,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 5.3746,
+        "totalRequests": 11976
+      }
+    },
+    {
+      "name": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 2,
+        "p99Ms": 8,
+        "requestsPerSecond": 3681.67,
+        "peakRequestsPerSecond": 4568,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 4.7824,
+        "totalRequests": 11040
+      }
+    },
+    {
+      "name": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 2,
+        "p99Ms": 2,
+        "requestsPerSecond": 4272.34,
+        "peakRequestsPerSecond": 4816,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 21.0897,
+        "totalRequests": 12812
+      }
+    },
+    {
+      "name": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 3,
+        "p99Ms": 9,
+        "requestsPerSecond": 3198.34,
+        "peakRequestsPerSecond": 4096,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 9.0399,
+        "totalRequests": 9592
+      }
+    },
+    {
+      "name": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 4,
+        "p99Ms": 7,
+        "requestsPerSecond": 3478.34,
+        "peakRequestsPerSecond": 4924,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 11.3244,
+        "totalRequests": 10432
+      }
+    },
+    {
+      "name": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 4,
+        "p99Ms": 8,
+        "requestsPerSecond": 3298.67,
+        "peakRequestsPerSecond": 4236,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 3.8485,
+        "totalRequests": 9892
+      }
+    },
+    {
+      "name": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 3,
+        "p99Ms": 5,
+        "requestsPerSecond": 3223.67,
+        "peakRequestsPerSecond": 3504,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 5.9419,
+        "totalRequests": 9668
+      }
+    },
+    {
+      "name": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 2,
+        "p99Ms": 3,
+        "requestsPerSecond": 4569.67,
+        "peakRequestsPerSecond": 5756,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 20.4217,
+        "totalRequests": 13704
+      }
+    },
+    {
+      "name": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 1,
+        "p95Ms": 4,
+        "p99Ms": 7,
+        "requestsPerSecond": 2588.34,
+        "peakRequestsPerSecond": 3684,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 7.1007,
+        "totalRequests": 7764
+      }
+    },
+    {
+      "name": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 2,
+        "p99Ms": 4,
+        "requestsPerSecond": 4061.67,
+        "peakRequestsPerSecond": 4480,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 6.048,
+        "totalRequests": 12180
+      }
+    },
+    {
+      "name": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 3,
+        "p99Ms": 6,
+        "requestsPerSecond": 3356,
+        "peakRequestsPerSecond": 4148,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 4.7075,
+        "totalRequests": 10064
+      }
+    },
+    {
+      "name": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 2,
+        "p99Ms": 4,
+        "requestsPerSecond": 4512.34,
+        "peakRequestsPerSecond": 5300,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 6.5199,
+        "totalRequests": 13532
+      }
+    },
+    {
+      "name": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 3,
+        "p99Ms": 5,
+        "requestsPerSecond": 3190.67,
+        "peakRequestsPerSecond": 4312,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 23.8557,
+        "totalRequests": 9568
+      }
+    },
+    {
+      "name": "POST /api/uploads",
+      "method": "POST",
+      "path": "/api/uploads",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 4,
+        "p99Ms": 8,
+        "requestsPerSecond": 3245,
+        "peakRequestsPerSecond": 3732,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 6.0527,
+        "totalRequests": 9732
+      }
+    },
+    {
+      "name": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "auth": false,
+      "metrics": {
+        "p50Ms": 0,
+        "p95Ms": 3,
+        "p99Ms": 6,
+        "requestsPerSecond": 3594.34,
+        "peakRequestsPerSecond": 3936,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 11.1983,
+        "totalRequests": 10780
+      }
+    },
+    {
+      "name": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "auth": true,
+      "metrics": {
+        "p50Ms": 4,
+        "p95Ms": 15,
+        "p99Ms": 18,
+        "requestsPerSecond": 754.67,
+        "peakRequestsPerSecond": 848,
+        "errorRate": 0,
+        "non2xxRate": 0,
+        "ttfbMs": 10.4318,
+        "totalRequests": 2264
+      }
+    }
+  ],
+  "thresholdFailures": []
+}
