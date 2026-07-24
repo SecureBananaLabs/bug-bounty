@@ -1,0 +1,15 @@
+{
+  "defaults": {
+    "p99Ms": 750,
+    "errorRatePercent": 0
+  },
+  "smoke": {
+    "p99Ms": 1500,
+    "errorRatePercent": 0
+  },
+  "routes": {
+    "uploads.create": {
+      "p99Ms": 2000
+    }
+  }
+}
