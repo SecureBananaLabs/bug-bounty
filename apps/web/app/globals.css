@@ -4,3 +4,232 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.admin-ops {
+  --admin-bg: #000000;
+  --admin-panel: #0B0C0A;
+  --admin-line: #263024;
+  --admin-text: #E9F4E6;
+  --admin-muted: #98A494;
+  --admin-signal: #00E676;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-line);
+  color: var(--admin-text);
+  font-family: "IBM Plex Mono", "JetBrains Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
+  padding: 1rem;
+}
+
+.admin-ops button,
+.admin-ops input,
+.admin-ops select {
+  background: #000000;
+  border: 1px solid var(--admin-line);
+  color: var(--admin-text);
+  font: inherit;
+  padding: 0.55rem 0.7rem;
+}
+
+.admin-ops button:focus-visible,
+.admin-ops input:focus-visible,
+.admin-ops select:focus-visible {
+  outline: 2px solid var(--admin-signal);
+  outline-offset: 2px;
+}
+
+.admin-hero,
+.admin-panel,
+.metric-card,
+.detail-card,
+.queue-card,
+.admin-alert {
+  background: var(--admin-panel);
+  border: 1px solid var(--admin-line);
+}
+
+.admin-hero {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.admin-hero h2 {
+  font-size: clamp(2rem, 7vw, 5.8rem);
+  letter-spacing: -0.08em;
+  line-height: 0.86;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.admin-kicker,
+.section-heading span,
+.metric-card span,
+.admin-refresh span,
+.admin-ops td span {
+  color: var(--admin-muted);
+}
+
+.admin-refresh {
+  align-content: start;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.metrics-grid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.two-column {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.metric-card,
+.admin-panel,
+.detail-card,
+.queue-card,
+.admin-alert {
+  padding: 1rem;
+}
+
+.metric-card strong {
+  color: var(--admin-signal);
+  display: block;
+  font-size: 1.8rem;
+  margin-top: 0.35rem;
+}
+
+.section-heading {
+  align-items: baseline;
+  border-bottom: 1px solid var(--admin-line);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+}
+
+.section-heading h3,
+.queue-card h4,
+.detail-card h4 {
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.admin-controls-row,
+.button-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.admin-controls-row label {
+  color: var(--admin-muted);
+  display: grid;
+  gap: 0.3rem;
+}
+
+.table-shell {
+  overflow-x: auto;
+}
+
+.admin-ops table {
+  border-collapse: collapse;
+  min-width: 760px;
+  width: 100%;
+}
+
+.admin-ops th,
+.admin-ops td {
+  border-bottom: 1px solid var(--admin-line);
+  padding: 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.admin-ops th {
+  color: var(--admin-signal);
+  text-transform: uppercase;
+}
+
+.admin-ops td:first-child {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.link-button {
+  border-color: transparent !important;
+  padding: 0 !important;
+  text-align: left;
+  text-decoration: underline;
+}
+
+.detail-card,
+.queue-card {
+  margin-top: 1rem;
+}
+
+.queue-card dl {
+  display: grid;
+  gap: 0.35rem 0.75rem;
+  grid-template-columns: max-content 1fr;
+}
+
+.queue-card dt {
+  color: var(--admin-muted);
+}
+
+.queue-card dd {
+  margin: 0;
+}
+
+.bar-row {
+  align-items: center;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 72px 1fr 32px;
+  margin: 0.8rem 0;
+}
+
+.bar-row div {
+  border: 1px solid var(--admin-line);
+  height: 18px;
+}
+
+.bar-row i {
+  background: var(--admin-signal);
+  display: block;
+  height: 100%;
+}
+
+.control-toggle {
+  display: block;
+  margin-bottom: 0.75rem;
+  text-align: left;
+  width: 100%;
+}
+
+.empty-state,
+.admin-alert {
+  color: var(--admin-signal);
+}
+
+@media (max-width: 700px) {
+  .admin-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-controls-row,
+  .button-cluster {
+    display: grid;
+  }
+}
