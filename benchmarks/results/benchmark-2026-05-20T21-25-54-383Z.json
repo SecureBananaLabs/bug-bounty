@@ -1,0 +1,234 @@
+{
+  "meta": {
+    "generatedAt": "2026-05-20T21:25:54.384Z",
+    "baseUrl": "http://127.0.0.1:4000",
+    "nodeVersion": "v22.22.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "smokeMode": true,
+    "connections": 2,
+    "duration": 2
+  },
+  "results": [
+    {
+      "endpoint": "GET /api/jobs",
+      "target": "http://127.0.0.1:4000/api/jobs",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 19712,
+      "rpsMax": 20667,
+      "errorRatePct": 0,
+      "ttfbMs": 13.21
+    },
+    {
+      "endpoint": "POST /api/jobs",
+      "target": "http://127.0.0.1:4000/api/jobs",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 17320,
+      "rpsMax": 17829,
+      "errorRatePct": 0,
+      "ttfbMs": 6.22
+    },
+    {
+      "endpoint": "GET /api/users",
+      "target": "http://127.0.0.1:4000/api/users",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 21016,
+      "rpsMax": 21218,
+      "errorRatePct": 0,
+      "ttfbMs": 0.86
+    },
+    {
+      "endpoint": "POST /api/users",
+      "target": "http://127.0.0.1:4000/api/users",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 17704,
+      "rpsMax": 18038,
+      "errorRatePct": 0,
+      "ttfbMs": 1.01
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "target": "http://127.0.0.1:4000/api/proposals",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 21000,
+      "rpsMax": 21255,
+      "errorRatePct": 0,
+      "ttfbMs": 0.64
+    },
+    {
+      "endpoint": "POST /api/proposals",
+      "target": "http://127.0.0.1:4000/api/proposals",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 18056,
+      "rpsMax": 18122,
+      "errorRatePct": 0,
+      "ttfbMs": 0.97
+    },
+    {
+      "endpoint": "POST /api/payments",
+      "target": "http://127.0.0.1:4000/api/payments",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 17816,
+      "rpsMax": 17971,
+      "errorRatePct": 0,
+      "ttfbMs": 1.08
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "target": "http://127.0.0.1:4000/api/reviews",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 21040,
+      "rpsMax": 21061,
+      "errorRatePct": 0,
+      "ttfbMs": 0.48
+    },
+    {
+      "endpoint": "POST /api/reviews",
+      "target": "http://127.0.0.1:4000/api/reviews",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 17960,
+      "rpsMax": 17981,
+      "errorRatePct": 0,
+      "ttfbMs": 1.78
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "target": "http://127.0.0.1:4000/api/messages",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 21000,
+      "rpsMax": 21061,
+      "errorRatePct": 0,
+      "ttfbMs": 0.59
+    },
+    {
+      "endpoint": "POST /api/messages",
+      "target": "http://127.0.0.1:4000/api/messages",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 17608,
+      "rpsMax": 17928,
+      "errorRatePct": 0,
+      "ttfbMs": 0.72
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "target": "http://127.0.0.1:4000/api/notifications",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 21120,
+      "rpsMax": 21288,
+      "errorRatePct": 0,
+      "ttfbMs": 0.46
+    },
+    {
+      "endpoint": "POST /api/notifications",
+      "target": "http://127.0.0.1:4000/api/notifications",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 17984,
+      "rpsMax": 18048,
+      "errorRatePct": 0,
+      "ttfbMs": 0.57
+    },
+    {
+      "endpoint": "POST /api/uploads",
+      "target": "http://127.0.0.1:4000/api/uploads",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 17768,
+      "rpsMax": 17815,
+      "errorRatePct": 0,
+      "ttfbMs": 0.6
+    },
+    {
+      "endpoint": "GET /api/search",
+      "target": "http://127.0.0.1:4000/api/search?q=benchmark",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 20656,
+      "rpsMax": 20839,
+      "errorRatePct": 0,
+      "ttfbMs": 0.87
+    },
+    {
+      "endpoint": "GET /api/admin/metrics",
+      "target": "http://127.0.0.1:4000/api/admin/metrics",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 20736,
+      "rpsMax": 20883,
+      "errorRatePct": 0,
+      "ttfbMs": 0.45
+    },
+    {
+      "endpoint": "POST /api/auth/register",
+      "target": "http://127.0.0.1:4000/api/auth/register",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 18016,
+      "rpsMax": 18156,
+      "errorRatePct": 0,
+      "ttfbMs": 0.94
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "target": "http://127.0.0.1:4000/api/auth/login",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 17952,
+      "rpsMax": 18190,
+      "errorRatePct": 0,
+      "ttfbMs": 0.53
+    },
+    {
+      "endpoint": "POST /api/auth/refresh",
+      "target": "http://127.0.0.1:4000/api/auth/refresh",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 18112,
+      "rpsMax": 18124,
+      "errorRatePct": 0,
+      "ttfbMs": 0.52
+    },
+    {
+      "endpoint": "GET /api/auth/oauth/github/callback",
+      "target": "http://127.0.0.1:4000/api/auth/oauth/github/callback?code=benchmark&state=benchmark",
+      "p50Ms": 0,
+      "p95Ms": 0,
+      "p99Ms": 0,
+      "rpsAvg": 20432,
+      "rpsMax": 20456,
+      "errorRatePct": 0,
+      "ttfbMs": 0.6
+    }
+  ]
+}
