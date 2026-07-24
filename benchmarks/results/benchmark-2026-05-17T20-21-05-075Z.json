@@ -1,0 +1,387 @@
+{
+  "startedAt": "2026-05-17T20:21:05.075Z",
+  "finishedAt": "2026-05-17T20:21:25.162Z",
+  "mode": "smoke",
+  "baseUrl": "local Express app",
+  "configuration": {
+    "durationSeconds": 1,
+    "connections": 1
+  },
+  "environment": {
+    "cpu": "Apple M3 Max (16 logical cores)",
+    "ramMb": 131072,
+    "freeRamMb": 15593,
+    "platform": "Darwin 25.4.0 arm64",
+    "node": "v20.13.1",
+    "network": "loopback",
+    "machineType": "local workstation"
+  },
+  "thresholds": {
+    "maxP99Ms": 1500,
+    "maxErrorRatePercent": 10,
+    "minSustainedRps": 1
+  },
+  "endpoints": [
+    {
+      "name": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 1883,
+        "peak": 1883
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 14.01,
+      "totalRequests": 1883,
+      "failedRequests": 0
+    },
+    {
+      "name": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 2131,
+        "peak": 2130
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 1.43,
+      "totalRequests": 2130,
+      "failedRequests": 0
+    },
+    {
+      "name": "auth.oauthCallback",
+      "method": "GET",
+      "path": "/api/auth/oauth/google/callback",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 10164,
+        "peak": 10166
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 1.36,
+      "totalRequests": 10166,
+      "failedRequests": 0
+    },
+    {
+      "name": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 2335,
+        "peak": 2335
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.85,
+      "totalRequests": 2335,
+      "failedRequests": 0
+    },
+    {
+      "name": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 10572,
+        "peak": 10568
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.48,
+      "totalRequests": 10568,
+      "failedRequests": 0
+    },
+    {
+      "name": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 8796,
+        "peak": 8794
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.59,
+      "totalRequests": 8794,
+      "failedRequests": 0
+    },
+    {
+      "name": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 10044,
+        "peak": 10047
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.62,
+      "totalRequests": 10047,
+      "failedRequests": 0
+    },
+    {
+      "name": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 8692,
+        "peak": 8689
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 1.05,
+      "totalRequests": 8689,
+      "failedRequests": 0
+    },
+    {
+      "name": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 10572,
+        "peak": 10572
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.52,
+      "totalRequests": 10572,
+      "failedRequests": 0
+    },
+    {
+      "name": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 9044,
+        "peak": 9047
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.56,
+      "totalRequests": 9047,
+      "failedRequests": 0
+    },
+    {
+      "name": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 8868,
+        "peak": 8870
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.46,
+      "totalRequests": 8870,
+      "failedRequests": 0
+    },
+    {
+      "name": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 10452,
+        "peak": 10453
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.47,
+      "totalRequests": 10453,
+      "failedRequests": 0
+    },
+    {
+      "name": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 8876,
+        "peak": 8874
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.57,
+      "totalRequests": 8874,
+      "failedRequests": 0
+    },
+    {
+      "name": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 10436,
+        "peak": 10435
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.64,
+      "totalRequests": 10435,
+      "failedRequests": 0
+    },
+    {
+      "name": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 8868,
+        "peak": 8869
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 1.16,
+      "totalRequests": 8869,
+      "failedRequests": 0
+    },
+    {
+      "name": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 10284,
+        "peak": 10283
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.5,
+      "totalRequests": 10283,
+      "failedRequests": 0
+    },
+    {
+      "name": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 9012,
+        "peak": 9010
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.8,
+      "totalRequests": 9010,
+      "failedRequests": 0
+    },
+    {
+      "name": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 7038,
+        "peak": 7037
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 5.68,
+      "totalRequests": 7037,
+      "failedRequests": 0
+    },
+    {
+      "name": "search.query",
+      "method": "GET",
+      "path": "/api/search?q=marketplace%20dashboard",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 9948,
+        "peak": 9947
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 0.92,
+      "totalRequests": 9947,
+      "failedRequests": 0
+    },
+    {
+      "name": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 2359,
+        "peak": 2359
+      },
+      "errorRatePercent": 0,
+      "ttfbMs": 1.93,
+      "totalRequests": 2359,
+      "failedRequests": 0
+    }
+  ],
+  "failures": []
+}
