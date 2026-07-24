@@ -1,0 +1,530 @@
+{
+  "timestamp": "2026-05-17T10:24:07.616Z",
+  "results": [
+    {
+      "endpoint": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "latency": {
+        "p50": 2,
+        "p75": 2,
+        "p95": 4,
+        "p99": 5,
+        "average": 2.35,
+        "min": 1,
+        "max": 22
+      },
+      "requests": {
+        "total": 34074,
+        "average": 3408,
+        "throughput": 2920192
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "latency": {
+        "p50": 3,
+        "p75": 3,
+        "p95": 5,
+        "p99": 6,
+        "average": 2.86,
+        "min": 1,
+        "max": 30
+      },
+      "requests": {
+        "total": 29386,
+        "average": 2939,
+        "throughput": 2521139
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "latency": {
+        "p50": 2,
+        "p75": 3,
+        "p95": 5,
+        "p99": 6,
+        "average": 2.74,
+        "min": 1,
+        "max": 11
+      },
+      "requests": {
+        "total": 30261,
+        "average": 3026,
+        "throughput": 2595840
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/auth/refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "latency": {
+        "p50": 2,
+        "p75": 3,
+        "p95": 7,
+        "p99": 11,
+        "average": 2.6,
+        "min": 1,
+        "max": 41
+      },
+      "requests": {
+        "total": 31892,
+        "average": 3190,
+        "throughput": 3243418
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/auth/oauth/google/callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/google/callback",
+      "latency": {
+        "p50": 2,
+        "p75": 3,
+        "p95": 7,
+        "p99": 10,
+        "average": 2.6,
+        "min": 1,
+        "max": 29
+      },
+      "requests": {
+        "total": 32022,
+        "average": 3203,
+        "throughput": 3381043
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "latency": {
+        "p50": 2,
+        "p75": 3,
+        "p95": 7,
+        "p99": 11,
+        "average": 2.66,
+        "min": 1,
+        "max": 27
+      },
+      "requests": {
+        "total": 31778,
+        "average": 3178,
+        "throughput": 3355648
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "latency": {
+        "p50": 3,
+        "p75": 4,
+        "p95": 5,
+        "p99": 6,
+        "average": 3.4,
+        "min": 1,
+        "max": 29
+      },
+      "requests": {
+        "total": 25072,
+        "average": 2508,
+        "throughput": 2647859
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "latency": {
+        "p50": 2,
+        "p75": 3,
+        "p95": 7,
+        "p99": 10,
+        "average": 2.61,
+        "min": 1,
+        "max": 25
+      },
+      "requests": {
+        "total": 31940,
+        "average": 3195,
+        "throughput": 3372646
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "latency": {
+        "p50": 3,
+        "p75": 4,
+        "p95": 5,
+        "p99": 6,
+        "average": 3.47,
+        "min": 1,
+        "max": 35
+      },
+      "requests": {
+        "total": 24798,
+        "average": 2480,
+        "throughput": 2618778
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "latency": {
+        "p50": 2,
+        "p75": 3,
+        "p95": 7,
+        "p99": 10,
+        "average": 2.64,
+        "min": 1,
+        "max": 29
+      },
+      "requests": {
+        "total": 31798,
+        "average": 3180,
+        "throughput": 3358106
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "latency": {
+        "p50": 3,
+        "p75": 4,
+        "p95": 5,
+        "p99": 6,
+        "average": 3.38,
+        "min": 1,
+        "max": 30
+      },
+      "requests": {
+        "total": 25227,
+        "average": 2523,
+        "throughput": 2663834
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "latency": {
+        "p50": 3,
+        "p75": 3,
+        "p95": 5,
+        "p99": 6,
+        "average": 3.31,
+        "min": 1,
+        "max": 7
+      },
+      "requests": {
+        "total": 25585,
+        "average": 2559,
+        "throughput": 2701722
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "latency": {
+        "p50": 2,
+        "p75": 3,
+        "p95": 7,
+        "p99": 10,
+        "average": 2.64,
+        "min": 1,
+        "max": 40
+      },
+      "requests": {
+        "total": 31804,
+        "average": 3181,
+        "throughput": 3358515
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "latency": {
+        "p50": 3,
+        "p75": 4,
+        "p95": 5,
+        "p99": 6,
+        "average": 3.4,
+        "min": 1,
+        "max": 12
+      },
+      "requests": {
+        "total": 25230,
+        "average": 2523,
+        "throughput": 2664448
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "latency": {
+        "p50": 3,
+        "p75": 3,
+        "p95": 7,
+        "p99": 10,
+        "average": 2.68,
+        "min": 1,
+        "max": 42
+      },
+      "requests": {
+        "total": 31631,
+        "average": 3163,
+        "throughput": 3340288
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "latency": {
+        "p50": 3,
+        "p75": 4,
+        "p95": 5,
+        "p99": 6,
+        "average": 3.4,
+        "min": 1,
+        "max": 30
+      },
+      "requests": {
+        "total": 25152,
+        "average": 2516,
+        "throughput": 2655846
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "latency": {
+        "p50": 3,
+        "p75": 3,
+        "p95": 7,
+        "p99": 11,
+        "average": 2.7,
+        "min": 1,
+        "max": 44
+      },
+      "requests": {
+        "total": 31366,
+        "average": 3137,
+        "throughput": 3312640
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "latency": {
+        "p50": 4,
+        "p75": 4,
+        "p95": 5,
+        "p99": 6,
+        "average": 3.74,
+        "min": 1,
+        "max": 31
+      },
+      "requests": {
+        "total": 23946,
+        "average": 2395,
+        "throughput": 2528666
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "POST /api/uploads",
+      "method": "POST",
+      "path": "/api/uploads",
+      "latency": {
+        "p50": 3,
+        "p75": 3,
+        "p95": 8,
+        "p99": 13,
+        "average": 2.87,
+        "min": 1,
+        "max": 49
+      },
+      "requests": {
+        "total": 30234,
+        "average": 3024,
+        "throughput": 3192627
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search",
+      "latency": {
+        "p50": 3,
+        "p75": 3,
+        "p95": 8,
+        "p99": 13,
+        "average": 2.84,
+        "min": 1,
+        "max": 28
+      },
+      "requests": {
+        "total": 30663,
+        "average": 3067,
+        "throughput": 3238298
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    },
+    {
+      "endpoint": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "latency": {
+        "p50": 3,
+        "p75": 3,
+        "p95": 8,
+        "p99": 12,
+        "average": 2.91,
+        "min": 1,
+        "max": 56
+      },
+      "requests": {
+        "total": 30022,
+        "average": 3003,
+        "throughput": 3170099
+      },
+      "errors": {
+        "total": 0,
+        "non2xx": 0,
+        "codes": {}
+      },
+      "ttfb": "—"
+    }
+  ]
+}
