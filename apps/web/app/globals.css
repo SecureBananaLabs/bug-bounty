@@ -1,6 +1,97 @@
 * { box-sizing: border-box; }
-body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0b1020; color: #f2f5ff; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0f141b; color: #f4f7fb; }
 a { color: inherit; text-decoration: none; }
-main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
-.card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+main { max-width: 1180px; margin: 0 auto; padding: 2rem 1rem; }
+button, input, select { font: inherit; }
+button, select, input { border-radius: 6px; }
+button {
+  border: 1px solid #3f536c;
+  background: #1c2734;
+  color: #f4f7fb;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+button:disabled { color: #718093; cursor: not-allowed; }
+input, select {
+  border: 1px solid #334155;
+  background: #0f1720;
+  color: #f4f7fb;
+  padding: 0.5rem 0.65rem;
+}
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 0.75rem 0.6rem; border-bottom: 1px solid #253447; text-align: left; vertical-align: top; }
+td span, small { display: block; color: #9aa9bb; }
+.card { background: #151c35; border: 1px solid #2a3765; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.admin-shell { display: grid; gap: 1rem; }
+.admin-toolbar, .section-heading, .filter-row, .toolbar-actions, .button-row, .pagination, .toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.admin-toolbar, .admin-section, .metric-grid article {
+  border: 1px solid #273548;
+  background: #121922;
+  border-radius: 8px;
+}
+.admin-toolbar { justify-content: space-between; padding: 1rem; }
+.admin-toolbar h2, .section-heading h3 { margin: 0; }
+.eyebrow { margin: 0 0 0.25rem; color: #9fb3c8; font-size: 0.78rem; text-transform: uppercase; }
+.admin-session { color: #9fb3c8; }
+.metric-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.metric-grid article { padding: 0.9rem; }
+.metric-grid span { display: block; color: #9fb3c8; font-size: 0.84rem; }
+.metric-grid strong { display: block; margin-top: 0.4rem; font-size: 1.6rem; }
+.admin-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.admin-section { padding: 1rem; min-width: 0; }
+.admin-section-wide { grid-column: 1 / -1; }
+.section-heading { justify-content: space-between; margin-bottom: 0.85rem; }
+.section-heading span { color: #9fb3c8; font-size: 0.85rem; }
+.filter-row { flex-wrap: wrap; margin-bottom: 0.8rem; }
+.filter-row input { min-width: 220px; }
+.button-row { flex-wrap: wrap; }
+.pagination { justify-content: flex-end; margin-top: 0.8rem; }
+.status { display: inline-flex; border-radius: 999px; padding: 0.18rem 0.5rem; font-size: 0.82rem; color: #0f141b; }
+.status-active, .status-approved, .status-resolved { background: #80e1a7; }
+.status-pending, .status-under-review { background: #f6c76d; }
+.status-suspended, .status-escalated { background: #83b7ff; }
+.status-banned, .status-rejected { background: #ff8d8d; }
+.queue-list, .audit-list { display: grid; gap: 0.7rem; }
+.queue-item, .audit-list article {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.8rem;
+  align-items: center;
+  border: 1px solid #253447;
+  border-radius: 8px;
+  padding: 0.8rem;
+  background: #0f1720;
+}
+.queue-item div span, .queue-item small { display: block; color: #9aa9bb; }
+.dispute-item { grid-template-columns: minmax(0, 1fr) auto minmax(240px, auto); }
+.toggle-row {
+  justify-content: space-between;
+  border: 1px solid #253447;
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-top: 0.7rem;
+  background: #0f1720;
+}
+.toggle-row input { width: 20px; height: 20px; }
+.trust-bars { display: grid; gap: 0.7rem; }
+.trust-row { display: grid; grid-template-columns: 64px 1fr 28px; gap: 0.6rem; align-items: center; }
+.trust-row div { height: 10px; border-radius: 999px; background: #273548; overflow: hidden; }
+.trust-row i { display: block; height: 100%; max-width: 100%; background: #80e1a7; }
+.empty-state, .admin-error {
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 0.8rem;
+  color: #cbd5e1;
+  background: #0f1720;
+}
+.admin-error { border-color: #8b3a3a; color: #ffc9c9; }
+@media (max-width: 860px) {
+  .metric-grid, .admin-grid { grid-template-columns: 1fr; }
+  .admin-toolbar, .queue-item, .dispute-item { align-items: stretch; grid-template-columns: 1fr; }
+  .admin-toolbar { display: grid; }
+}
