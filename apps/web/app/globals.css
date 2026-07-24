@@ -4,3 +4,57 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+button, input, select { font: inherit; }
+button { border: 1px solid #31406d; background: #223052; color: #f2f5ff; border-radius: 8px; padding: 0.45rem 0.65rem; cursor: pointer; }
+button:hover { background: #2c3e68; }
+input, select { border: 1px solid #31406d; background: #0f172a; color: #f2f5ff; border-radius: 8px; padding: 0.45rem 0.6rem; min-width: 0; }
+.admin-shell { display: grid; gap: 1rem; }
+.admin-shell, .admin-section, .admin-titlebar { min-width: 0; }
+.admin-titlebar, .admin-section-title { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.admin-titlebar p { margin: 0.25rem 0 0; color: #aab6d3; }
+.metric-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.metric-card { border: 1px solid #29375f; background: #111a2f; border-radius: 8px; padding: 0.85rem; }
+.metric-card span { display: block; color: #aab6d3; font-size: 0.82rem; }
+.metric-card strong { display: block; margin-top: 0.4rem; font-size: 1.45rem; }
+.admin-section { border-top: 1px solid #2a3765; padding-top: 1rem; }
+.admin-section h3 { margin-top: 0; }
+.admin-filters { display: grid; grid-template-columns: 1fr auto auto; gap: 0.5rem; margin-bottom: 0.75rem; }
+.admin-table { border: 1px solid #29375f; border-radius: 8px; overflow: hidden; }
+.admin-table [role="row"] { display: grid; grid-template-columns: 1.2fr 0.8fr 0.8fr 0.5fr 1.8fr; gap: 0.5rem; align-items: center; padding: 0.65rem; border-bottom: 1px solid #29375f; }
+.admin-table [role="row"]:first-child { background: #111a2f; color: #aab6d3; font-size: 0.8rem; text-transform: uppercase; }
+.admin-table [role="row"]:last-child { border-bottom: 0; }
+.admin-table [role="row"] > span:last-child { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.admin-table button:first-child { text-align: left; background: transparent; border-color: transparent; padding-left: 0; }
+.admin-detail { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 0.75rem; color: #c7d2ee; }
+.admin-detail strong { color: #ffffff; }
+.two-column { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.admin-item { border: 1px solid #29375f; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem; background: #10182b; }
+.admin-item strong, .admin-item span, .admin-item small { display: block; }
+.admin-item span { color: #c7d2ee; margin: 0.35rem 0; }
+.admin-item small { color: #8da0c8; margin-bottom: 0.55rem; }
+.admin-item div { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.admin-toggle { display: flex; align-items: center; gap: 0.5rem; padding: 0.65rem 0; }
+.trust-bars { display: grid; gap: 0.5rem; }
+.trust-bars > div { display: grid; grid-template-columns: 70px 1fr 28px; gap: 0.75rem; align-items: center; }
+.trust-bars div div { height: 10px; background: #10182b; border-radius: 999px; overflow: hidden; }
+.trust-bars i { display: block; height: 100%; background: #5ee0a0; }
+.audit-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+.audit-list li { border: 1px solid #29375f; border-radius: 8px; padding: 0.65rem; background: #10182b; }
+.audit-list strong, .audit-list span, .audit-list small { display: block; }
+.audit-list span { color: #c7d2ee; margin: 0.2rem 0; }
+.audit-list small { color: #8da0c8; }
+.admin-empty { border: 1px solid #553047; background: #241322; border-radius: 8px; padding: 1rem; }
+
+@media (max-width: 760px) {
+  .admin-titlebar, .admin-section-title { align-items: stretch; flex-direction: column; }
+  .admin-titlebar button { width: 100%; }
+  .admin-titlebar p { overflow-wrap: anywhere; }
+  .admin-filters, .two-column { grid-template-columns: 1fr; }
+  .admin-table { overflow-x: auto; }
+  .admin-table [role="row"] { min-width: 760px; }
+}
+
+@media (max-width: 460px) {
+  .metric-grid { grid-template-columns: 1fr; }
+  .trust-bars > div { grid-template-columns: 52px minmax(0, 1fr) 28px; }
+}
