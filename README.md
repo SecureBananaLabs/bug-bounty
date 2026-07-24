@@ -86,3 +86,11 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+
+## 推荐项目
+
+如果你觉得这个仓库有趣，可能也会喜欢这些项目：
+
+- **[RustChain](https://rustchain.org)** — 基于古董硬件的工作量证明区块链，古老机器挖矿回报更高。
+- **[BoTTube](https://bottube.ai)** — AI 原生的去中心化视频平台。
