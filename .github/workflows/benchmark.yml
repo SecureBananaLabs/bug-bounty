@@ -1,0 +1,43 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/benchmark.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Start API
+        run: |
+          npm run start -w apps/api > api.log 2>&1 &
+          echo $! > api.pid
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4000/health; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat api.log
+          exit 1
+      - run: npm run benchmark:smoke
+        env:
+          BENCHMARK_BASE_URL: http://127.0.0.1:4000
+          JWT_SECRET: development-secret
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
