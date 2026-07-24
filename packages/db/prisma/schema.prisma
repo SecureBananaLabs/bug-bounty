@@ -21,6 +21,25 @@ enum JobStatus {
   CANCELLED
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum ModerationStatus {
+  APPROVED
+  FLAGGED
+  REJECTED
+  ESCALATED
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+}
+
 model User {
   id             String      @id @default(cuid())
   email          String      @unique
@@ -28,6 +47,8 @@ model User {
   fullName       String
   bio            String?
   role           UserRole    @default(CLIENT)
+  status         UserStatus  @default(ACTIVE)
+  trustScore     Int         @default(100)
   isVerified     Boolean     @default(false)
   skills         Skill[]
   postedJobs     Job[]       @relation("ClientJobs")
@@ -37,6 +58,8 @@ model User {
   reviewsGiven   Review[]    @relation("Reviewer")
   reviewsGot     Review[]    @relation("Reviewee")
   notifications  Notification[]
+  clientDisputes Dispute[]   @relation("ClientDisputes")
+  freelancerDisputes Dispute[] @relation("FreelancerDisputes")
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -48,12 +71,16 @@ model Job {
   budgetMin     Float
   budgetMax     Float
   status        JobStatus   @default(OPEN)
+  moderationStatus ModerationStatus @default(APPROVED)
+  flagReason    String?
+  reportCount   Int         @default(0)
   clientId      String
   client        User        @relation("ClientJobs", fields: [clientId], references: [id])
   categoryId    String
   category      Category    @relation(fields: [categoryId], references: [id])
   proposals     Proposal[]
   payments      Payment[]
+  disputes      Dispute[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -124,4 +151,40 @@ model Notification {
   body          String
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
+}
+
+model Dispute {
+  id            String        @id @default(cuid())
+  jobId         String
+  job           Job           @relation(fields: [jobId], references: [id])
+  clientId      String
+  client        User          @relation("ClientDisputes", fields: [clientId], references: [id])
+  freelancerId  String
+  freelancer    User          @relation("FreelancerDisputes", fields: [freelancerId], references: [id])
+  amount        Float
+  status        DisputeStatus @default(OPEN)
+  evidence      Json?
+  thread        Json?
+  transaction   Json?
+  ruling        Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model PlatformControl {
+  key           String   @id
+  label         String
+  enabled       Boolean  @default(true)
+  updatedBy     String
+  updatedAt     DateTime @updatedAt
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  adminId       String
+  actionType    String
+  targetType    String
+  targetId      String
+  message       String
+  createdAt     DateTime @default(now())
 }
