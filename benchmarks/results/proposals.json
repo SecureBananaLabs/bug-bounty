@@ -1,0 +1,26 @@
+{
+  "label": "Proposals",
+  "url": "GET /api/proposals",
+  "duration": 10,
+  "connections": 10,
+  "latency": {
+    "p50": 0,
+    "p95": 0,
+    "p99": 1,
+    "avg": 0.08,
+    "max": 3
+  },
+  "requestsPerSecond": {
+    "avg": 17164.8,
+    "total": 171648,
+    "sent": 171658
+  },
+  "throughput": {
+    "avg": 14693171.2,
+    "total": 146930688
+  },
+  "errors": 0,
+  "timeouts": 0,
+  "non2xx": 171648,
+  "errorRatePct": 100
+}

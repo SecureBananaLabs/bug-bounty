@@ -1,0 +1,26 @@
+{
+  "label": "Register",
+  "url": "POST /api/auth/register",
+  "duration": 10,
+  "connections": 10,
+  "latency": {
+    "p50": 0,
+    "p95": 1,
+    "p99": 1,
+    "avg": 0.13,
+    "max": 4
+  },
+  "requestsPerSecond": {
+    "avg": 15511.2,
+    "total": 155098,
+    "sent": 155108
+  },
+  "throughput": {
+    "avg": 13292339.2,
+    "total": 132918986
+  },
+  "errors": 0,
+  "timeouts": 0,
+  "non2xx": 155098,
+  "errorRatePct": 100
+}
