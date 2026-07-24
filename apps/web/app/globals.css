@@ -4,3 +4,172 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #4a5c97;
+  border-radius: 6px;
+  background: #253260;
+  color: #f2f5ff;
+  cursor: pointer;
+  padding: 0.45rem 0.65rem;
+}
+
+button:hover {
+  background: #31417a;
+}
+
+input, select {
+  border: 1px solid #334374;
+  border-radius: 6px;
+  background: #0f1730;
+  color: #f2f5ff;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.65rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border-bottom: 1px solid #26335d;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+td span, .queue-item span, .audit-list span {
+  color: #a9b6df;
+  display: block;
+  font-size: 0.88rem;
+  margin-top: 0.2rem;
+}
+
+.admin-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-header, .section-heading, .queue-item, .toggle-row {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.admin-header {
+  border-bottom: 1px solid #26335d;
+  padding-bottom: 1rem;
+}
+
+.admin-header h2, .admin-section h3 {
+  margin: 0;
+}
+
+.eyebrow {
+  color: #7dd3fc;
+  margin: 0 0 0.25rem;
+  text-transform: uppercase;
+}
+
+.status-pill {
+  background: #123a2c;
+  border: 1px solid #2c8c69;
+  border-radius: 999px;
+  color: #b7f7da;
+  padding: 0.45rem 0.7rem;
+  white-space: nowrap;
+}
+
+.metric-grid, .admin-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.metric-tile, .admin-section {
+  background: #151c35;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.metric-tile span {
+  color: #a9b6df;
+  display: block;
+  font-size: 0.88rem;
+}
+
+.metric-tile strong {
+  display: block;
+  font-size: 1.75rem;
+  margin-top: 0.35rem;
+}
+
+.filters, .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.queue-item {
+  align-items: flex-start;
+  border-top: 1px solid #26335d;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+}
+
+.queue-item p {
+  color: #d8def5;
+  margin: 0.45rem 0 0;
+}
+
+.toggle-row {
+  border-top: 1px solid #26335d;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+}
+
+.toggle-row input {
+  min-height: 1.25rem;
+  width: 1.25rem;
+}
+
+.audit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.audit-list li {
+  border-top: 1px solid #26335d;
+  padding: 0.75rem 0;
+}
+
+.empty-state {
+  color: #a9b6df;
+}
+
+@media (max-width: 720px) {
+  .admin-header, .section-heading, .queue-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filters, .actions {
+    width: 100%;
+  }
+
+  .filters input, .filters select, .actions button {
+    flex: 1 1 100%;
+  }
+}
