@@ -1,6 +1,8 @@
 node_modules
 .next
 dist
+!packages/ui/dist/
+!packages/ui/dist/**
 .env
 .env.*
 coverage
