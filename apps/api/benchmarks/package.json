@@ -1,0 +1,9 @@
+{
+  "name": "@freelanceflow/benchmarks",
+  "private": true,
+  "scripts": {
+    "benchmark": "k6 run benchmarks/all-endpoints.js",
+    "benchmark:quick": "k6 run --duration 10s --vus 5 benchmarks/all-endpoints.js",
+    "benchmark:report": "k6 run --out json=benchmark-results.json benchmarks/all-endpoints.js"
+  }
+}
