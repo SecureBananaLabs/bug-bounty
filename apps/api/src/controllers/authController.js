@@ -22,6 +22,10 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  const { refreshToken: token } = req.body;
+  if (!token || typeof token !== "string") {
+    return res.status(400).json({ error: "refreshToken is required" });
+  }
+  const result = await refreshToken(token);
   return ok(res, result);
 }
