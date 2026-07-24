@@ -86,3 +86,13 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+### `apps/api` environment variables
+
+| Variable | Description | Required |
+|---|---|---|
+| `NODE_ENV` | Runtime environment (`development`, `production`, `test`) | No (default: `development`) |
+| `PORT` | API server port | No (default: `4000`) |
+| `DATABASE_URL` | PostgreSQL connection string | Yes |
+| `JWT_SECRET` | Secret key for signing JWT tokens | Yes |
+| `STRIPE_SECRET_KEY` | Stripe secret key for payment processing (e.g., `sk_test_...`) | Yes (for payments) |
