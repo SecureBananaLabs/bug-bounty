@@ -1,0 +1,14 @@
+{
+  "global": {
+    "maxP99Ms": 1000,
+    "maxErrorRatePercent": 0,
+    "maxUnexpectedStatusPercent": 0
+  },
+  "endpoints": {
+    "uploads-create": {
+      "maxP99Ms": 1500,
+      "maxErrorRatePercent": 0,
+      "maxUnexpectedStatusPercent": 0
+    }
+  }
+}
