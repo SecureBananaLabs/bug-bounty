@@ -1,0 +1,160 @@
+[
+  {
+    "name": "auth register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "body": {
+      "email": "bench-user@example.com",
+      "password": "benchmark-password",
+      "role": "client"
+    }
+  },
+  {
+    "name": "auth login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "body": {
+      "email": "bench-user@example.com",
+      "password": "benchmark-password"
+    }
+  },
+  {
+    "name": "auth oauth callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback"
+  },
+  {
+    "name": "auth refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh"
+  },
+  {
+    "name": "users list",
+    "method": "GET",
+    "path": "/api/users"
+  },
+  {
+    "name": "users create",
+    "method": "POST",
+    "path": "/api/users",
+    "body": {
+      "email": "new-user@example.com",
+      "role": "freelancer",
+      "displayName": "Benchmark User"
+    }
+  },
+  {
+    "name": "jobs list",
+    "method": "GET",
+    "path": "/api/jobs"
+  },
+  {
+    "name": "jobs create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "body": {
+      "title": "Build a landing page",
+      "description": "Create a responsive freelance marketplace landing page.",
+      "budgetMin": 500,
+      "budgetMax": 1200,
+      "categoryId": "design",
+      "skills": ["react", "css"]
+    }
+  },
+  {
+    "name": "proposals list",
+    "method": "GET",
+    "path": "/api/proposals"
+  },
+  {
+    "name": "proposals create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "body": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark",
+      "coverLetter": "I can deliver this benchmark project quickly.",
+      "bidAmount": 900
+    }
+  },
+  {
+    "name": "payments create",
+    "method": "POST",
+    "path": "/api/payments",
+    "body": {
+      "amount": 2500,
+      "currency": "usd",
+      "metadata": {
+        "jobId": "job_benchmark"
+      }
+    }
+  },
+  {
+    "name": "reviews list",
+    "method": "GET",
+    "path": "/api/reviews"
+  },
+  {
+    "name": "reviews create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "body": {
+      "targetUserId": "usr_benchmark",
+      "rating": 5,
+      "comment": "Reliable delivery and clear communication."
+    }
+  },
+  {
+    "name": "messages list",
+    "method": "GET",
+    "path": "/api/messages"
+  },
+  {
+    "name": "messages create",
+    "method": "POST",
+    "path": "/api/messages",
+    "body": {
+      "threadId": "thread_benchmark",
+      "senderId": "usr_client",
+      "recipientId": "usr_freelancer",
+      "body": "Can you share an update?"
+    }
+  },
+  {
+    "name": "notifications list",
+    "method": "GET",
+    "path": "/api/notifications"
+  },
+  {
+    "name": "notifications create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "body": {
+      "userId": "usr_benchmark",
+      "type": "job_update",
+      "message": "Your proposal was viewed."
+    }
+  },
+  {
+    "name": "uploads create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "multipart": {
+      "field": "file",
+      "filename": "benchmark.txt",
+      "contentType": "text/plain",
+      "content": "benchmark upload"
+    }
+  },
+  {
+    "name": "search",
+    "method": "GET",
+    "path": "/api/search?q=react"
+  },
+  {
+    "name": "admin metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": true
+  }
+]
