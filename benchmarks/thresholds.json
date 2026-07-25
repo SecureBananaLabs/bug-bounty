@@ -1,0 +1,20 @@
+{
+  "p99_latency_ms": {
+    "smoke": 500,
+    "light": 1000,
+    "medium": 2000,
+    "heavy": 5000
+  },
+  "error_rate_pct": {
+    "smoke": 0,
+    "light": 0.5,
+    "medium": 1,
+    "heavy": 2
+  },
+  "min_rps": {
+    "smoke": 10,
+    "light": 50,
+    "medium": 100,
+    "heavy": 200
+  }
+}
