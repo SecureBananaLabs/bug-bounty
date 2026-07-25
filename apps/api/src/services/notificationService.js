@@ -5,7 +5,13 @@ export async function listNotifications() {
 }
 
 export async function createNotification(payload) {
-  const notification = { id: `ntf_${Date.now()}`, read: false, ...payload };
+  // Server-generated fields placed AFTER spread to prevent client override
+  const { id: _id, read: _read, ...safePayload } = payload;
+  const notification = {
+    ...safePayload,
+    id: `ntf_${Date.now()}`,
+    read: false,
+  };
   notifications.push(notification);
   return notification;
 }

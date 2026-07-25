@@ -5,7 +5,13 @@ export async function listMessages() {
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
+  // Strip dangerous fields before spread, then apply server-generated values last
+  const { id: _id, sentAt: _sentAt, ...safePayload } = payload;
+  const message = {
+    ...safePayload,
+    id: `msg_${Date.now()}`,
+    sentAt: new Date().toISOString(),
+  };
   messages.push(message);
   return message;
 }
