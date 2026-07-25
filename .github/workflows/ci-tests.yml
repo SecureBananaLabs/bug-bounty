@@ -1,0 +1,31 @@
+name: CI - Run Tests
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "package.json"
+      - "package-lock.json"
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - run: npm ci
+
+      - run: npm test
