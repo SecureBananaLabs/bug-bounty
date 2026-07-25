@@ -121,15 +121,15 @@ async function run() {
     const p99Threshold = thresholds.p99_latency_ms[profileName] || 1000;
     const errThreshold = thresholds.error_rate_pct[profileName] || 1;
     if (r.latency_p99 > p99Threshold) {
-      failed.push(\`\${r.path}: p99 \${r.latency_p99.toFixed(0)}ms > threshold \${p99Threshold}ms\`);
+      failed.push(`\${r.path}: p99 \${r.latency_p99.toFixed(0)}ms > threshold \${p99Threshold}ms`);
     }
     if (r.error_rate_pct > errThreshold) {
-      failed.push(\`\${r.path}: error rate \${r.error_rate_pct.toFixed(2)}% > threshold \${errThreshold}%\`);
+      failed.push(`\${r.path}: error rate \${r.error_rate_pct.toFixed(2)}% > threshold \${errThreshold}%`);
     }
   }
   if (failed.length > 0) {
     console.log('\nTHRESHOLD FAILURES:');
-    failed.forEach(f => console.log(\`  [FAIL] \${f}\`));
+    failed.forEach(f => console.log(`  [FAIL] \${f}`));
     if (isCI) process.exit(1);
   } else {
     console.log('\nAll thresholds passed.');
