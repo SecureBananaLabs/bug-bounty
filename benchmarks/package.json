@@ -1,0 +1,12 @@
+{
+  "name": "benchmarks",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "benchmark": "node run.js",
+    "benchmark:ci": "node run.js --ci"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0"
+  }
+}
