@@ -1,0 +1,64 @@
+name: Automated Bug Detection
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      create_issues:
+        description: "Create GitHub issues from findings"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: bug-detection
+  cancel-in-progress: true
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run bug detector
+        id: detect
+        run: |
+          node scripts/detect-issues.mjs --json
+          echo "count=$(jq '.findings | length' scripts/detect-results.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload detection report
+        uses: actions/upload-artifact@v4
+        with:
+          name: bug-detection-report
+          path: |
+            scripts/detect-results.json
+            scripts/detect-results.md
+
+      - name: Create issues from findings
+        if: inputs.create_issues == true || github.event_name == 'schedule'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/create-issues.mjs \
+            --repo "${{ github.repository }}" \
+            --token "${{ secrets.GITHUB_TOKEN }}" \
+            --no-dry-run \
+            --label "automated"
+
+      - name: Summary
+        run: |
+          echo "## Bug Detection Results" >> "$GITHUB_STEP_SUMMARY"
+          echo "Found ${{ steps.detect.outputs.count }} potential issues." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          cat scripts/detect-results.md >> "$GITHUB_STEP_SUMMARY"
