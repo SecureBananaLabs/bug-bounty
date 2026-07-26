@@ -23,6 +23,18 @@ export function createApp() {
   app.use(express.json());
   app.use(apiLimiter);
 
+  // Request timeout middleware — prevents hanging connections
+  const timeoutMs = parseInt(process.env.REQUEST_TIMEOUT || "30000", 10);
+  app.use((req, res, next) => {
+    const timer = setTimeout(() => {
+      if (!res.headersSent) {
+        res.status(408).json({ error: "Request timeout" });
+      }
+    }, timeoutMs);
+    res.on("finish", () => clearTimeout(timer));
+    next();
+  });
+
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
