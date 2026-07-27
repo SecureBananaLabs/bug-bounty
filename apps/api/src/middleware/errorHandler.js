@@ -1,7 +1,6 @@
 import { fail } from "../utils/response.js";
 
 export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
   if (res.headersSent) {
     return next(err);
   }
@@ -10,8 +9,6 @@ export function errorHandler(err, req, res, next) {
     return fail(res, "Malformed JSON request body", 400);
   }
 
-  return res.status(500).json({
-    success: false,
-    message: "Unexpected server error"
-  });
+  console.error("Unhandled API error:", err);
+  return fail(res, "Unexpected server error", 500);
 }
