@@ -5,7 +5,11 @@ export function errorHandler(err, req, res, next) {
     return next(err);
   }
 
-  if (err instanceof ZodError) {
+  const isZodError =
+    err instanceof ZodError ||
+    (err?.name === "ZodError" && Array.isArray(err.issues));
+
+  if (isZodError) {
     return res.status(400).json({
       success: false,
       message: "Validation error",
