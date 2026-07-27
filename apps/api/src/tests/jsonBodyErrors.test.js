@@ -18,7 +18,7 @@ function createJsonResponse() {
   };
 }
 
-test("malformed JSON request bodies return 400", async () => {
+test("malformed JSON request bodies return 400", () => {
   const error = new SyntaxError("Unexpected end of JSON input");
   error.type = "entity.parse.failed";
   const response = createJsonResponse();
