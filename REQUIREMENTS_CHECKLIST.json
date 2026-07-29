@@ -1,0 +1,21 @@
+{
+  "title": "Automate Bug Detection and Reviews",
+  "labels": [
+    "bug",
+    "documentation",
+    "enhancement",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "\ud83d\udc8e Bounty",
+    "$780",
+    "$1k",
+    "$1.2k"
+  ],
+  "acceptance_criteria": [],
+  "code_references_mentioned": [],
+  "sections": [],
+  "audit_rule": "Every mentioned code block and acceptance criterion must be 100% covered in deliverables before submission."
+}
