@@ -1,0 +1,49 @@
+name: API Benchmark Smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+
+jobs:
+  smoke-benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start API
+        run: npm run dev -w apps/api &
+        env:
+          JWT_SECRET: development-secret
+          PORT: 4000
+
+      - name: Wait for API
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:4000/health >/dev/null 2>&1; then
+              echo "API is up"; exit 0
+            fi
+            sleep 1
+          done
+          echo "API failed to start"; exit 1
+
+      - name: Run smoke benchmark
+        run: npm run benchmark --workspace=@freelanceflow/benchmarks -- benchmark:smoke
+        env:
+          BENCHMARK_HOST: http://localhost:4000
+          BENCHMARK_JWT_SECRET: development-secret
+          BENCHMARK_SMOKE: "1"
