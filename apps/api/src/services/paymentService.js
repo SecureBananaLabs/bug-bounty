@@ -1,20 +1,26 @@
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-02-24.acacia",
-});
+let stripe;
+
+function getStripe() {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error("STRIPE_SECRET_KEY environment variable is not set");
+  }
+  if (!stripe) {
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2025-02-24.acacia",
+    });
+  }
+  return stripe;
+}
 
 export async function createPaymentIntent(payload) {
   if (!payload || typeof payload.amount !== "number" || payload.amount <= 0 || !Number.isInteger(payload.amount)) {
     throw new Error("amount is required and must be a positive integer (in cents)");
   }
 
-  if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error("STRIPE_SECRET_KEY environment variable is not set");
-  }
-
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await getStripe().paymentIntents.create({
       amount: payload.amount,
       currency: payload.currency || "usd",
       metadata: payload.metadata || {},
