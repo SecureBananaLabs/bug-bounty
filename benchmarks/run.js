@@ -11,6 +11,10 @@ const isCI = process.argv.includes('--ci');
 const profileName = isCI ? 'smoke' : (process.env.BENCHMARK_PROFILE || 'light');
 const profile = PROFILES[profileName] || PROFILES.light;
 
+function p95From(latency) {
+  return latency.p90 + ((latency.p97_5 - latency.p90) * (95 - 90)) / (97.5 - 90);
+}
+
 async function benchmarkEndpoint(endpoint) {
   const url = `${TARGET}${endpoint.path}`;
   const opts = {
@@ -34,7 +38,7 @@ async function benchmarkEndpoint(endpoint) {
         path: endpoint.path,
         method: endpoint.method || 'GET',
         latency_p50: result.latency.p50,
-        latency_p95: result.latency.p95,
+        latency_p95: p95From(result.latency),
         latency_p99: result.latency.p99,
         requests_per_second: result.requests.average,
         error_rate_pct: (result.errors / Math.max(result.requests.total, 1)) * 100,
@@ -68,17 +72,18 @@ async function run() {
 
   // Generate report
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const okResults = results.filter(r => !r.error);
   const report = {
     timestamp: new Date().toISOString(),
     profile: profileName,
     target: TARGET,
     results,
     summary: {
-      avg_p50: results.filter(r => !r.error).reduce((s, r) => s + r.latency_p50, 0) / results.filter(r => !r.error).length,
-      avg_p95: results.filter(r => !r.error).reduce((s, r) => s + r.latency_p95, 0) / results.filter(r => !r.error).length,
-      avg_p99: results.filter(r => !r.error).reduce((s, r) => s + r.latency_p99, 0) / results.filter(r => !r.error).length,
-      total_rps: results.filter(r => !r.error).reduce((s, r) => s + r.requests_per_second, 0),
-      avg_error_pct: results.filter(r => !r.error).reduce((s, r) => s + r.error_rate_pct, 0) / results.filter(r => !r.error).length,
+      avg_p50: okResults.length ? okResults.reduce((s, r) => s + r.latency_p50, 0) / okResults.length : 0,
+      avg_p95: okResults.length ? okResults.reduce((s, r) => s + r.latency_p95, 0) / okResults.length : 0,
+      avg_p99: okResults.length ? okResults.reduce((s, r) => s + r.latency_p99, 0) / okResults.length : 0,
+      total_rps: okResults.reduce((s, r) => s + r.requests_per_second, 0),
+      avg_error_pct: okResults.length ? okResults.reduce((s, r) => s + r.error_rate_pct, 0) / okResults.length : 0,
     }
   };
 
@@ -121,15 +126,15 @@ async function run() {
     const p99Threshold = thresholds.p99_latency_ms[profileName] || 1000;
     const errThreshold = thresholds.error_rate_pct[profileName] || 1;
     if (r.latency_p99 > p99Threshold) {
-      failed.push(`\${r.path}: p99 \${r.latency_p99.toFixed(0)}ms > threshold \${p99Threshold}ms`);
+      failed.push(`${r.path}: p99 ${r.latency_p99.toFixed(0)}ms > threshold ${p99Threshold}ms`);
     }
     if (r.error_rate_pct > errThreshold) {
-      failed.push(`\${r.path}: error rate \${r.error_rate_pct.toFixed(2)}% > threshold \${errThreshold}%`);
+      failed.push(`${r.path}: error rate ${r.error_rate_pct.toFixed(2)}% > threshold ${errThreshold}%`);
     }
   }
   if (failed.length > 0) {
     console.log('\nTHRESHOLD FAILURES:');
-    failed.forEach(f => console.log(`  [FAIL] \${f}`));
+    failed.forEach(f => console.log(`  [FAIL] ${f}`));
     if (isCI) process.exit(1);
   } else {
     console.log('\nAll thresholds passed.');
