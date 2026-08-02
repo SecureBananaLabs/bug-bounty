@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-08-02T15:07:22.274Z",
+  "totalFindings": 11,
+  "findings": [
+    {
+      "ruleId": "TODO_IN_CODE",
+      "severity": "LOW",
+      "file": "apps\\api\\src\\config\\db.js",
+      "todos": [
+        "TODO: wire Prisma client from @freelanceflow/db package"
+      ]
+    },
+    {
+      "ruleId": "HARDCODED_SECRET",
+      "severity": "HIGH",
+      "file": "apps\\api\\src\\config\\env.js",
+      "detail": "Hardcoded default secret/credential found"
+    },
+    {
+      "ruleId": "MISSING_AUTH",
+      "severity": "CRITICAL",
+      "file": "apps\\api\\src\\routes\\jobRoutes.js",
+      "endpoints": [
+        "GET /",
+        "POST /"
+      ]
+    },
+    {
+      "ruleId": "MISSING_AUTH",
+      "severity": "CRITICAL",
+      "file": "apps\\api\\src\\routes\\searchRoutes.js",
+      "endpoints": [
+        "GET /"
+      ]
+    },
+    {
+      "ruleId": "NO_FILE_SIZE_LIMIT",
+      "severity": "MEDIUM",
+      "file": "apps\\api\\src\\routes\\uploadRoutes.js",
+      "detail": "multer configured without file size limits (DoS risk)"
+    },
+    {
+      "ruleId": "MISSING_AUTH",
+      "severity": "CRITICAL",
+      "file": "apps\\api\\src\\routes\\userRoutes.js",
+      "endpoints": [
+        "GET /",
+        "POST /"
+      ]
+    },
+    {
+      "ruleId": "ADMIN_REGISTRATION",
+      "severity": "CRITICAL",
+      "file": "apps\\api\\src\\services\\authService.js",
+      "detail": "Registration accepts role from user input (potential privilege escalation)"
+    },
+    {
+      "ruleId": "TODO_IN_CODE",
+      "severity": "LOW",
+      "file": "apps\\api\\src\\services\\authService.js",
+      "todos": [
+        "TODO: persist new user via Prisma",
+        "TODO: verify password hash against stored user record"
+      ]
+    },
+    {
+      "ruleId": "TODO_IN_CODE",
+      "severity": "LOW",
+      "file": "apps\\api\\src\\services\\paymentService.js",
+      "todos": [
+        "TODO: integrate Stripe SDK and return client secret."
+      ]
+    },
+    {
+      "ruleId": "TODO_IN_CODE",
+      "severity": "LOW",
+      "file": "apps\\api\\src\\services\\searchService.js",
+      "todos": [
+        "TODO: use PostgreSQL full-text search + ranking."
+      ]
+    },
+    {
+      "ruleId": "HARDCODED_SECRET",
+      "severity": "HIGH",
+      "file": "scripts\\auto-bug-detect.js",
+      "detail": "Hardcoded default secret/credential found"
+    }
+  ]
+}
