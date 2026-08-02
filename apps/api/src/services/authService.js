@@ -1,23 +1,36 @@
 import { signAccessToken } from "../utils/jwt.js";
+import bcrypt from "bcryptjs";
+
+const USERS = new Map();
 
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+  const passwordHash = await bcrypt.hash(payload.password, 12);
+  const id = `usr_${Date.now()}`;
+  const user = { id, email: payload.email, role: payload.role, passwordHash };
+  USERS.set(payload.email, user);
   return {
-    id: `usr_${Date.now()}`,
+    id,
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    token: signAccessToken({ sub: id, role: payload.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  const user = USERS.get(payload.email);
+  if (!user) {
+    throw new Error("Invalid email or password");
+  }
+  const valid = await bcrypt.compare(payload.password, user.passwordHash);
+  if (!valid) {
+    throw new Error("Invalid email or password");
+  }
   return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    email: user.email,
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(sub, role) {
+  return { token: signAccessToken({ sub, role }) };
 }
