@@ -6,7 +6,18 @@ export const createJobSchema = z.object({
   budgetMin: z.number().nonnegative(),
   budgetMax: z.number().nonnegative(),
   categoryId: z.string().min(1),
-  skills: z.array(z.string().min(1)).default([])
+  skills: z.array(z.string().min(1)).default([]),
+}).refine(data => data.budgetMax >= data.budgetMin, {
+  message: "budgetMax must be >= budgetMin",
+  path: ["budgetMax"],
 });
 
-export const updateJobSchema = createJobSchema.partial();
+export const updateJobSchema = createJobSchema.partial().refine(data => {
+  if (data.budgetMin !== undefined && data.budgetMax !== undefined) {
+    return data.budgetMax >= data.budgetMin;
+  }
+  return true;
+}, {
+  message: "budgetMax must be >= budgetMin",
+  path: ["budgetMax"],
+});
