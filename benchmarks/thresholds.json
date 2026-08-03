@@ -1,0 +1,16 @@
+{
+  "p99_latency_ms": {
+    "GET /health": 50,
+    "POST /api/auth/login": 500,
+    "POST /api/auth/register": 500,
+    "GET /api/users": 300,
+    "GET /api/jobs": 300,
+    "POST /api/payments/create-intent": 1000,
+    "_default": 800
+  },
+  "error_rate_percent": 5,
+  "smoke_connections": 5,
+  "smoke_duration_seconds": 10,
+  "full_connections": 50,
+  "full_duration_seconds": 30
+}
