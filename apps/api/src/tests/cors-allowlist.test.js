@@ -28,12 +28,11 @@ test("allows configured localhost origin", async () => {
   });
 });
 
-test("rejects unknown origin", async () => {
+test("rejects unknown origin without ACAO header", async () => {
   await withServer(async (port) => {
     const response = await fetch(`http://127.0.0.1:${port}/health`, {
       headers: { Origin: "https://evil.example" }
     });
-    // cors package surfaces error via error handler / failed request
-    assert.notEqual(response.headers.get("access-control-allow-origin"), "https://evil.example");
+    assert.equal(response.headers.get("access-control-allow-origin"), null);
   });
 });

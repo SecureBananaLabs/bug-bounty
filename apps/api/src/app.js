@@ -38,7 +38,7 @@ function buildCorsOptions() {
       if (allowlist.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+      return callback(null, false);
     }
   };
 }
