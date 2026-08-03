@@ -14,12 +14,40 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { env } from "./config/env.js";
+
+function buildCorsOptions() {
+  const configured = (process.env.CORS_ORIGINS ?? "")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+
+  const allowlist =
+    configured.length > 0
+      ? configured
+      : env.nodeEnv === "production"
+        ? []
+        : ["http://localhost:3000", "http://127.0.0.1:3000"];
+
+  return {
+    origin(origin, callback) {
+      // Allow non-browser / same-origin requests with no Origin header.
+      if (!origin) {
+        return callback(null, true);
+      }
+      if (allowlist.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+    }
+  };
+}
 
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(buildCorsOptions()));
   app.use(express.json());
   app.use(apiLimiter);
 
