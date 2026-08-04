@@ -1,20 +1,28 @@
 import { signAccessToken } from "../utils/jwt.js";
 
+// in-memory user store for demo (register stores, login verifies)
+const users = [];
+
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+  const id = `usr_${Date.now()}`;
+  const user = { id, email: payload.email, password: payload.password, role: payload.role };
+  users.push(user);
   return {
-    id: `usr_${Date.now()}`,
+    id,
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    token: signAccessToken({ sub: id, role: payload.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  const user = users.find(u => u.email === payload.email);
+  if (!user || user.password !== payload.password) {
+    throw Object.assign(new Error("Invalid credentials"), { status: 401 });
+  }
   return {
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
