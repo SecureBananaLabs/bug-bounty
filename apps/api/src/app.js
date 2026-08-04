@@ -20,8 +20,9 @@ export function createApp() {
 
   app.use(helmet());
   app.use(cors());
-  app.use(express.json());
+  // rate limit BEFORE body parsing so malformed JSON still consumes quota
   app.use(apiLimiter);
+  app.use(express.json());
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
