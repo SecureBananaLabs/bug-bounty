@@ -19,7 +19,20 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+
+  // CORS with origin allowlist — deny unknown origins in production
+  const allowedOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(',').map(s => s.trim())
+    : ['http://localhost:3000'];
+  app.use(cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  }));
   app.use(express.json());
   app.use(apiLimiter);
 
