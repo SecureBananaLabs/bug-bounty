@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="520" viewBox="0 0 980 520" role="img" aria-labelledby="title desc">
+  <title id="title">Upload endpoint validation demo</title>
+  <desc id="desc">Shows that POST /api/uploads rejects missing files with 400 while valid multipart uploads still return 201.</desc>
+  <rect width="980" height="520" fill="#0b1020"/>
+  <rect x="36" y="34" width="908" height="452" rx="16" fill="#121a31" stroke="#2b3b68"/>
+  <text x="70" y="82" fill="#f4f7ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">POST /api/uploads now requires a file</text>
+  <text x="70" y="116" fill="#aab6d8" font-family="Arial, sans-serif" font-size="16">Regression evidence for PR #4558 / issue #4557</text>
+
+  <rect x="70" y="152" width="392" height="252" rx="12" fill="#1d2846" stroke="#394a78"/>
+  <text x="96" y="194" fill="#ffb4b4" font-family="Arial, sans-serif" font-size="20" font-weight="700">Before</text>
+  <text x="96" y="235" fill="#f4f7ff" font-family="Menlo, Consolas, monospace" font-size="16">POST /api/uploads</text>
+  <text x="96" y="264" fill="#aab6d8" font-family="Menlo, Consolas, monospace" font-size="15">Content-Type: multipart/form-data</text>
+  <text x="96" y="293" fill="#aab6d8" font-family="Menlo, Consolas, monospace" font-size="15">Body: no file field</text>
+  <text x="96" y="340" fill="#ffb4b4" font-family="Menlo, Consolas, monospace" font-size="17">201 Created</text>
+  <text x="96" y="368" fill="#ffb4b4" font-family="Menlo, Consolas, monospace" font-size="15">{ "status": "no-file" }</text>
+
+  <rect x="518" y="152" width="392" height="252" rx="12" fill="#17283e" stroke="#2e6c75"/>
+  <text x="544" y="194" fill="#8df5d0" font-family="Arial, sans-serif" font-size="20" font-weight="700">After</text>
+  <text x="544" y="235" fill="#f4f7ff" font-family="Menlo, Consolas, monospace" font-size="16">POST /api/uploads</text>
+  <text x="544" y="264" fill="#aab6d8" font-family="Menlo, Consolas, monospace" font-size="15">Body: no file field</text>
+  <text x="544" y="311" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="17">400 Bad Request</text>
+  <text x="544" y="339" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="15">message: File required</text>
+  <text x="544" y="378" fill="#8df5d0" font-family="Menlo, Consolas, monospace" font-size="15">Valid upload returns 201</text>
+
+  <text x="70" y="452" fill="#dbe6ff" font-family="Arial, sans-serif" font-size="16">Validated locally: npm test -w apps/api -> 3 passed; node --check; git diff --check.</text>
+</svg>
