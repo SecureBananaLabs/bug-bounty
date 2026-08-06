@@ -4,3 +4,24 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.settings-page { display: grid; gap: 1rem; }
+.settings-header { align-items: flex-start; display: flex; gap: 1rem; justify-content: space-between; }
+.settings-header h2 { margin: 0 0 0.4rem; }
+.settings-header p, .setting-card p { color: #b9c4e6; line-height: 1.55; margin: 0; }
+.settings-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.setting-card { display: flex; flex-direction: column; gap: 0.9rem; min-height: 260px; min-width: 0; }
+.setting-card-header { align-items: flex-start; display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; }
+.setting-card h3 { margin: 0; }
+.status-chip { border: 1px solid #51608e; border-radius: 999px; color: #e8edff; display: inline-flex; font-size: 0.78rem; font-weight: 700; line-height: 1; padding: 0.4rem 0.55rem; white-space: nowrap; }
+.status-chip.ready { background: #123b2d; border-color: #2d8c65; color: #9ef0c9; }
+.status-chip.neutral { background: #26304f; border-color: #6576b4; color: #dce4ff; }
+.status-chip.warning { background: #4a3510; border-color: #b7791f; color: #ffd891; }
+.setting-detail-list { display: grid; gap: 0.65rem; margin: 0; }
+.setting-detail-list div { display: flex; gap: 1rem; justify-content: space-between; }
+.setting-detail-list dt { color: #8794bf; }
+.setting-detail-list dd { font-weight: 700; margin: 0; text-align: right; }
+.setting-action { align-self: flex-start; background: #f2f5ff; border: 0; border-radius: 8px; color: #0b1020; cursor: pointer; font: inherit; font-weight: 700; margin-top: auto; padding: 0.65rem 0.85rem; }
+@media (max-width: 620px) {
+  .settings-header, .setting-card-header, .setting-detail-list div { align-items: flex-start; flex-direction: column; }
+  .setting-detail-list dd { text-align: left; }
+}
