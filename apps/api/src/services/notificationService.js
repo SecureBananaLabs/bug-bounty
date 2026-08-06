@@ -1,7 +1,9 @@
+import { snapshotRecords } from "./snapshot.js";
+
 const notifications = [];
 
 export async function listNotifications() {
-  return notifications;
+  return snapshotRecords(notifications);
 }
 
 export async function createNotification(payload) {
