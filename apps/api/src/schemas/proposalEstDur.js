@@ -1,0 +1,2 @@
+import{z}from"zod";
+export const proposalEstDur=z.object({jobId:z.string().min(1),description:z.string().min(20).trim(),price:z.number().positive(),deliveryDays:z.number().int().positive(),estimatedDuration:z.string().min(1).trim()});
