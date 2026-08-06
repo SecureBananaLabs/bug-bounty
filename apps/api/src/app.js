@@ -19,7 +19,11 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors({
+    origin: process.env.CORS_ORIGIN
+      ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+      : 'http://localhost:3000'
+  }));
   app.use(express.json());
   app.use(apiLimiter);
 
