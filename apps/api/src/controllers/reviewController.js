@@ -6,5 +6,5 @@ export async function getReviews(req, res) {
 }
 
 export async function postReview(req, res) {
-  return ok(res, await createReview(req.body), 201);
+  return ok(res, await createReview(req.body, req.user), 201);
 }
