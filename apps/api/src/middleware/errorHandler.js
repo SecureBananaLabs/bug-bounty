@@ -1,11 +1,22 @@
+import { fail } from "../utils/response.js";
+
+function isBodyParserError(err, type) {
+  return Boolean(err && typeof err === "object" && err.type === type);
+}
+
 export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
   if (res.headersSent) {
     return next(err);
   }
 
-  return res.status(500).json({
-    success: false,
-    message: "Unexpected server error"
-  });
+  if (isBodyParserError(err, "entity.parse.failed")) {
+    return fail(res, "Invalid JSON body", 400);
+  }
+
+  if (isBodyParserError(err, "entity.too.large")) {
+    return fail(res, "Request body too large", 413);
+  }
+
+  console.error("Unhandled API error:", err);
+  return fail(res, "Unexpected server error", 500);
 }
