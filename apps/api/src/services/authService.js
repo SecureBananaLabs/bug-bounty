@@ -1,12 +1,13 @@
 import { signAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+  // Fix #5204: Generate ID once and reuse for both user.id and JWT sub
+  const userId = `usr_${Date.now()}`;
   return {
-    id: `usr_${Date.now()}`,
+    id: userId,
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    token: signAccessToken({ sub: userId, role: payload.role })
   };
 }
 
