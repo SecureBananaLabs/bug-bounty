@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const budgetInvV13=(req,res,next)=>{const{budget}=req.body||{};if(budget&&budget.min>=budget.max)return fail(res,"Invalid budget range",400);return next();};
