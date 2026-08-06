@@ -1,0 +1,38 @@
+{
+  "Health Check": {
+    "p99": 100
+  },
+  "Auth Login": {
+    "p99": 500
+  },
+  "Auth Register": {
+    "p99": 500
+  },
+  "Jobs List": {
+    "p99": 300
+  },
+  "Jobs Search": {
+    "p99": 400
+  },
+  "Users List": {
+    "p99": 300
+  },
+  "Reviews List": {
+    "p99": 300
+  },
+  "Notifications": {
+    "p99": 300
+  },
+  "Messages": {
+    "p99": 300
+  },
+  "Proposals": {
+    "p99": 300
+  },
+  "Payments": {
+    "p99": 300
+  },
+  "Admin Stats": {
+    "p99": 400
+  }
+}
