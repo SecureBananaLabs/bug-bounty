@@ -1,11 +1,12 @@
 const reviews = [];
 
 export async function listReviews() {
-  return reviews;
+  return reviews.map(r => ({ ...r }));
 }
 
 export async function createReview(payload) {
-  const review = { id: `rev_${Date.now()}`, ...payload };
+  const { reviewerId, targetId, rating, comment } = payload;
+  const review = { id: `rev_${Date.now()}`, reviewerId, targetId, rating, comment };
   reviews.push(review);
-  return review;
+  return { ...review };
 }
