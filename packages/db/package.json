@@ -2,6 +2,7 @@
   "name": "@freelanceflow/db",
   "private": true,
   "scripts": {
+    "build": "prisma generate",
     "generate": "prisma generate",
     "migrate": "prisma migrate dev"
   },
