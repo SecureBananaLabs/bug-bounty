@@ -1,7 +1,11 @@
-import { Router } from "express";
-import { getJobs, postJob } from "../controllers/jobController.js";
+const express = require('express');
+const router = express.Router();
+const jobController = require('../controllers/jobController');
 
-export const jobRoutes = Router();
+router.post('/', jobController.createJob);
+router.get('/', jobController.listJobs);
+router.get('/:id', jobController.getJob);
+router.put('/:id', jobController.updateJob);
+router.delete('/:id', jobController.deleteJob);
 
-jobRoutes.get("/", getJobs);
-jobRoutes.post("/", postJob);
+module.exports = router;
