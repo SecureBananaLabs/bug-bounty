@@ -1,0 +1,1 @@
+export const normCurrLower2=(req,_,next)=>{if(req.body?.currency)req.body.currency=String(req.body.currency).toLowerCase().trim();return next();};
