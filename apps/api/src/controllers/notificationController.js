@@ -6,5 +6,8 @@ export async function getNotifications(req, res) {
 }
 
 export async function postNotification(req, res) {
-  return ok(res, await createNotification(req.body), 201);
+  // Derive userId from authenticated user, ignore client-supplied value
+  const { userId: _userId, ...rest } = req.body;
+  const payload = { ...rest, userId: req.user.sub };
+  return ok(res, await createNotification(payload), 201);
 }
