@@ -15,12 +15,14 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+const JSON_BODY_LIMIT = "1mb";
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
   app.use(cors());
-  app.use(express.json());
+  app.use(express.json({ limit: JSON_BODY_LIMIT }));
   app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
