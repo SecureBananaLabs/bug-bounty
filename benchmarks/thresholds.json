@@ -1,0 +1,158 @@
+{
+  "version": 1,
+  "description": "CI regression thresholds for API benchmarks. Update as baseline evolves.",
+  "routes": [
+    {
+      "route": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "maxLatencyP95": 50,
+      "maxLatencyP99": 100,
+      "maxErrorRate": 1.0
+    },
+    {
+      "route": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "maxLatencyP95": 200,
+      "maxLatencyP99": 500,
+      "minRps": 100,
+      "maxErrorRate": 2.0
+    },
+    {
+      "route": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "maxLatencyP95": 200,
+      "maxLatencyP99": 500,
+      "minRps": 100,
+      "maxErrorRate": 2.0
+    },
+    {
+      "route": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "maxLatencyP95": 200,
+      "maxLatencyP99": 500,
+      "minRps": 100,
+      "maxErrorRate": 2.0
+    },
+    {
+      "route": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "maxLatencyP95": 200,
+      "maxLatencyP99": 500,
+      "minRps": 100,
+      "maxErrorRate": 2.0
+    },
+    {
+      "route": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "maxLatencyP95": 200,
+      "maxLatencyP99": 500,
+      "minRps": 100,
+      "maxErrorRate": 2.0
+    },
+    {
+      "route": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "maxLatencyP95": 200,
+      "maxLatencyP99": 500,
+      "minRps": 100,
+      "maxErrorRate": 2.0
+    },
+    {
+      "route": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search",
+      "maxLatencyP95": 200,
+      "maxLatencyP99": 500,
+      "minRps": 100,
+      "maxErrorRate": 2.0
+    },
+    {
+      "route": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    },
+    {
+      "route": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    },
+    {
+      "route": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    },
+    {
+      "route": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    },
+    {
+      "route": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    },
+    {
+      "route": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    },
+    {
+      "route": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    },
+    {
+      "route": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    },
+    {
+      "route": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "maxLatencyP95": 500,
+      "maxLatencyP99": 1000,
+      "minRps": 50,
+      "maxErrorRate": 5.0
+    }
+  ]
+}
