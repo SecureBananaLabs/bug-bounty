@@ -1,0 +1,38 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { createApp } from "../app.js";
+
+test("POST /api/notifications ignores caller-supplied id and read state", async () => {
+  const app = createApp();
+  const server = app.listen(0);
+
+  await new Promise((resolve, reject) => {
+    server.once("listening", resolve);
+    server.once("error", reject);
+  });
+
+  const { port } = server.address();
+  const response = await fetch(`http://127.0.0.1:${port}/api/notifications`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      id: "user-controlled-id",
+      read: true,
+      title: "System alert",
+      message: "Hello"
+    })
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 201);
+  assert.equal(payload.success, true);
+  assert.equal(payload.data.title, "System alert");
+  assert.equal(payload.data.message, "Hello");
+  assert.equal(payload.data.read, false);
+  assert.match(payload.data.id, /^ntf_\d+$/);
+  assert.notEqual(payload.data.id, "user-controlled-id");
+
+  await new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()));
+  });
+});
