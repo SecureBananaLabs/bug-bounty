@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const budgetInvV17b=(req,res,next)=>{const b=req.body?.budget;if(b&&typeof b.min==="number"&&typeof b.max==="number"&&b.min>=b.max)return fail(res,"Invalid budget range: max must exceed min",400);return next();};
