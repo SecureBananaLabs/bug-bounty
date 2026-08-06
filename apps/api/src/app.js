@@ -15,11 +15,22 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+export function createCorsOptions() {
+  const allowedOrigins = (process.env.CORS_ORIGINS ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  return {
+    origin: allowedOrigins.length > 0 ? allowedOrigins : false
+  };
+}
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(createCorsOptions()));
   app.use(express.json());
   app.use(apiLimiter);
 
