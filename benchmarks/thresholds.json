@@ -1,0 +1,4 @@
+{
+  "maxErrorRate": 0.02,
+  "maxP99Ms": 1000
+}
