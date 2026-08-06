@@ -5,7 +5,9 @@ export async function listProposals() {
 }
 
 export async function createProposal(payload) {
-  const proposal = { id: `prp_${Date.now()}`, ...payload };
+  // id must come after spread to prevent client from injecting a chosen id.
+  const proposal = { ...payload, id: `prp_${Date.now()}` };
   proposals.push(proposal);
   return proposal;
 }
+
