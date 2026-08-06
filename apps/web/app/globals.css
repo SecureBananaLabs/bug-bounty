@@ -4,3 +4,6 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.status-chip { display: inline-block; margin: 0 0 0.5rem; padding: 0.25rem 0.5rem; border: 1px solid #3f5f9e; border-radius: 999px; color: #bfdbfe; font-size: 0.85rem; }
+.action-button { border: 1px solid #60a5fa; border-radius: 8px; background: #1d4ed8; color: #f8fafc; cursor: pointer; font: inherit; padding: 0.55rem 0.8rem; }
+.action-button:hover { background: #2563eb; }
