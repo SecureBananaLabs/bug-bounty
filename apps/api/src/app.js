@@ -20,7 +20,9 @@ export function createApp() {
 
   app.use(helmet());
   app.use(cors());
-  app.use(express.json());
+  // Keep JSON request bodies bounded so write endpoints cannot consume
+  // unbounded memory before validation/rate limiting runs.
+  app.use(express.json({ limit: "1mb" }));
   app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
