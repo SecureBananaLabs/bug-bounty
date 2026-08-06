@@ -8,3 +8,8 @@ export const freelancers = [
   { username: "maya-dev", skills: ["Next.js", "TypeScript"], rate: "$65/hr" },
   { username: "jordan-ux", skills: ["Figma", "UX Research"], rate: "$52/hr" }
 ];
+
+export const currentUser = {
+  username: "maya-dev",
+  role: "freelancer" as const
+};
