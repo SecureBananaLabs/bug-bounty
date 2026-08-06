@@ -1,15 +1,25 @@
-import React from "react";
+import type { ButtonHTMLAttributes, CSSProperties, ReactNode } from "react";
 
-export function Button({ children }: { children: React.ReactNode }) {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  children: ReactNode;
+};
+
+const defaultButtonStyle: CSSProperties = {
+  background: "#5468ff",
+  color: "white",
+  border: "none",
+  borderRadius: 8,
+  padding: "0.6rem 0.9rem",
+  cursor: "pointer"
+};
+
+export function Button({ children, style, ...props }: ButtonProps) {
   return (
     <button
+      {...props}
       style={{
-        background: "#5468ff",
-        color: "white",
-        border: "none",
-        borderRadius: 8,
-        padding: "0.6rem 0.9rem",
-        cursor: "pointer"
+        ...defaultButtonStyle,
+        ...style
       }}
     >
       {children}
