@@ -39,6 +39,16 @@ export function createApp() {
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
 
+  [authRoutes, userRoutes, jobRoutes, proposalRoutes, paymentRoutes, reviewRoutes, messageRoutes, notificationRoutes, uploadRoutes, searchRoutes, adminRoutes].forEach(router => {
+    const paths = new Set();
+    router.stack.forEach(layer => {
+      if (layer.route && layer.route.path) paths.add(layer.route.path);
+    });
+    paths.forEach(path => {
+      router.all(path, (req, res) => res.status(405).json({ error: "Method Not Allowed" }));
+    });
+  });
+
   app.use(errorHandler);
   return app;
 }
