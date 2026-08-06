@@ -4,3 +4,84 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.settingsHeader {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.settingsHeader h2,
+.settingsPanel h3 {
+  margin-top: 0;
+}
+.settingsGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.settingsPanel {
+  display: grid;
+  gap: 0.8rem;
+}
+.settingsPanelHeader,
+.settingsRow {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+.statusBadge {
+  background: #d8f5e1;
+  border-radius: 999px;
+  color: #12351f;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+}
+.statusBadge.warning {
+  background: #ffe8ba;
+  color: #4a3000;
+}
+.fieldGroup {
+  display: grid;
+  gap: 0.35rem;
+}
+.fieldGroup input,
+.fieldGroup select {
+  background: #0f1730;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+  color: #f2f5ff;
+  font: inherit;
+  padding: 0.65rem 0.75rem;
+}
+.checkRow {
+  align-items: center;
+  display: flex;
+  gap: 0.55rem;
+}
+.settingsButton {
+  background: #89a4ff;
+  border: 1px solid #89a4ff;
+  border-radius: 8px;
+  color: #081022;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.65rem 0.9rem;
+}
+.settingsButton.secondary {
+  background: transparent;
+  color: #dce6ff;
+}
+@media (max-width: 640px) {
+  .settingsHeader,
+  .settingsPanelHeader,
+  .settingsRow {
+    display: grid;
+  }
+  .settingsButton {
+    width: 100%;
+  }
+}
