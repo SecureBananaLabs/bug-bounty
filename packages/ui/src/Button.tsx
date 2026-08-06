@@ -1,18 +1,25 @@
-import React from "react";
+import React from 'react';
 
-export function Button({ children }: { children: React.ReactNode }) {
+interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  variant?: 'primary' | 'secondary';
+}
+
+export const Button: React.FC<ButtonProps> = ({ children, onClick, variant = 'primary' }) => {
   return (
     <button
+      onClick={onClick}
       style={{
-        background: "#5468ff",
-        color: "white",
-        border: "none",
-        borderRadius: 8,
-        padding: "0.6rem 0.9rem",
-        cursor: "pointer"
+        padding: '8px 16px',
+        backgroundColor: variant === 'primary' ? '#007bff' : '#6c757d',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        cursor: 'pointer',
       }}
     >
       {children}
     </button>
   );
-}
+};
