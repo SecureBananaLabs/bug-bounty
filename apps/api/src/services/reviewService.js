@@ -1,7 +1,9 @@
+import { copyRecords } from "../utils/recordCopy.js";
+
 const reviews = [];
 
 export async function listReviews() {
-  return reviews;
+  return copyRecords(reviews);
 }
 
 export async function createReview(payload) {
