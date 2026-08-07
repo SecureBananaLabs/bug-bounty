@@ -1,12 +1,34 @@
 import { signAccessToken } from "../utils/jwt.js";
 
+const registeredUsersByEmail = new Map();
+
+function normalizeEmail(email) {
+  return email.trim().toLowerCase();
+}
+
+function duplicateEmailError(email) {
+  const error = new Error(`User with email ${email} already exists`);
+  error.status = 409;
+  return error;
+}
+
 export async function registerUser(payload) {
+  const email = normalizeEmail(payload.email);
+  if (registeredUsersByEmail.has(email)) {
+    throw duplicateEmailError(email);
+  }
+
   // TODO: persist new user via Prisma
-  return {
+  const user = {
     id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    email,
+    role: payload.role
+  };
+  registeredUsersByEmail.set(email, user);
+
+  return {
+    ...user,
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
