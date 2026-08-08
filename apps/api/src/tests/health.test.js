@@ -12,13 +12,19 @@ test("GET /health returns ok payload", async () => {
   });
 
   const { port } = server.address();
-  const response = await fetch(`http://127.0.0.1:${port}/health`);
-  const payload = await response.json();
 
-  assert.equal(response.status, 200);
-  assert.deepEqual(payload, { ok: true, service: "api" });
+  try {
+    const response = await fetch(`http://127.0.0.1:${port}/health`);
+    const payload = await response.json();
 
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
+    assert.equal(response.status, 200);
+    assert.deepEqual(payload, {
+      success: true,
+      data: { service: "api" }
+    });
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
 });
