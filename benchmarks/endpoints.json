@@ -1,0 +1,48 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health"
+  },
+  {
+    "name": "users-list",
+    "method": "GET",
+    "path": "/api/users"
+  },
+  {
+    "name": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs"
+  },
+  {
+    "name": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals"
+  },
+  {
+    "name": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews"
+  },
+  {
+    "name": "messages-list",
+    "method": "GET",
+    "path": "/api/messages"
+  },
+  {
+    "name": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications"
+  },
+  {
+    "name": "search",
+    "method": "GET",
+    "path": "/api/search?q=react"
+  },
+  {
+    "name": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": true
+  }
+]
