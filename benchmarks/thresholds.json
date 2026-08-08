@@ -1,0 +1,12 @@
+{
+  "_comment": "Performance thresholds for CI smoke tests. p99 latency in ms.",
+  "global": {
+    "p99_max_ms": 500,
+    "error_rate_max_pct": 1.0
+  },
+  "endpoints": {
+    "GET /": { "p99_max_ms": 200 },
+    "GET /api/health": { "p99_max_ms": 100 },
+    "POST /api/data": { "p99_max_ms": 500 }
+  }
+}
