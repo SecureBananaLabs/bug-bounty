@@ -1,12 +1,18 @@
 import { signAccessToken } from "../utils/jwt.js";
 
+const REGISTRATION_ROLES = {
+  client: "CLIENT",
+  freelancer: "FREELANCER"
+};
+
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
+  const role = normalizeRegistrationRole(payload.role);
   return {
     id: `usr_${Date.now()}`,
     email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    role,
+    token: signAccessToken({ sub: `usr_${Date.now()}`, role })
   };
 }
 
@@ -20,4 +26,13 @@ export async function loginUser(payload) {
 
 export async function refreshToken() {
   return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+}
+
+function normalizeRegistrationRole(role = "client") {
+  const canonicalRole = REGISTRATION_ROLES[role];
+  if (!canonicalRole) {
+    throw new Error("Unsupported registration role");
+  }
+
+  return canonicalRole;
 }
