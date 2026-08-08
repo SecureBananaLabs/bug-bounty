@@ -28,10 +28,10 @@ test("POST /api/proposals without token returns 401", async () => {
   });
 });
 
-test("GET /api/proposals without token returns 401", async () => {
+test("GET /api/proposals without token returns 200 (public read)", async () => {
   await withServer(async (base) => {
     const response = await fetch(`${base}/api/proposals`);
-    assert.equal(response.status, 401);
+    assert.equal(response.status, 200);
   });
 });
 
