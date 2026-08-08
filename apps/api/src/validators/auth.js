@@ -10,3 +10,4 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8)
 });
+// closes #1426
