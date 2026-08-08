@@ -14,3 +14,15 @@ export function authMiddleware(req, res, next) {
     return fail(res, "Invalid token", 401);
   }
 }
+
+export function optionalAuth(req, _res, next) {
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith("Bearer ")) {
+    try {
+      req.user = verifyAccessToken(authHeader.slice(7));
+    } catch {
+      // token invalid — continue without user
+    }
+  }
+  return next();
+}
