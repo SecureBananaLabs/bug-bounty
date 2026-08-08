@@ -1,0 +1,29 @@
+name: API Benchmark (Smoke)
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      # In a real scenario, we'd start the server here
+      # - name: Start API
+      #   run: npm run start:api & sleep 5
+      
+      - name: Install dependencies
+        working-directory: ./benchmarks
+        run: npm install
+        
+      - name: Run Smoke Benchmark
+        working-directory: ./benchmarks
+        run: npm run benchmark:smoke
+        env:
+          TARGET_HOST: http://localhost:3000
