@@ -51,6 +51,7 @@ Backend architecture follows:
 
 ```bash
 npm install
+cp .env.example .env
 npm run test
 ```
 
@@ -86,3 +87,19 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+Use the checked-in template as the starting point for local development:
+
+```bash
+cp .env.example .env
+```
+
+The template covers the variables read by the API config and Prisma schema:
+
+| Variable | Used by | Default or example | Notes |
+| --- | --- | --- | --- |
+| `NODE_ENV` | `apps/api/src/config/env.js` | `development` | Controls the API runtime mode. |
+| `PORT` | `apps/api/src/config/env.js` | `4000` | API server port. |
+| `JWT_SECRET` | `apps/api/src/config/env.js` | `replace-with-a-local-development-secret` | Replace this for shared or deployed environments. |
+| `DATABASE_URL` | `apps/api/src/config/env.js`, `packages/db/prisma/schema.prisma` | `postgresql://freelanceflow:freelanceflow@localhost:5432/freelanceflow?schema=public` | Prisma connection string for the local database. |
+| `STRIPE_SECRET_KEY` | `apps/api/src/config/env.js` | empty | Optional while using the payment placeholder locally. |
