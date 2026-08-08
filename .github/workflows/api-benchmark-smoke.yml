@@ -1,0 +1,64 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify benchmark endpoint coverage
+        run: npm run benchmark:coverage
+
+      - name: Start API
+        env:
+          JWT_SECRET: benchmark-ci-secret
+          PORT: 4100
+        run: |
+          npm run start -w apps/api > /tmp/freelanceflow-api.log 2>&1 &
+          echo "$!" > /tmp/freelanceflow-api.pid
+          for attempt in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:4100/health; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/freelanceflow-api.log
+          exit 1
+
+      - name: Run smoke benchmark
+        env:
+          BENCHMARK_TARGET: http://127.0.0.1:4100
+          BENCHMARK_CONCURRENCY: 1
+          BENCHMARK_REQUESTS_PER_ENDPOINT: 2
+          BENCHMARK_RESULTS_DIR: benchmarks/results/ci
+          JWT_SECRET: benchmark-ci-secret
+        run: npm run benchmark:smoke
+
+      - name: Stop API
+        if: always()
+        run: |
+          if [ -f /tmp/freelanceflow-api.pid ]; then
+            kill "$(cat /tmp/freelanceflow-api.pid)" || true
+          fi
