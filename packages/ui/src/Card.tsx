@@ -1,8 +1,10 @@
 import React from "react";
 
-export function Card({ title, children }: { title: string; children: React.ReactNode }) {
+type CardProps = React.ComponentProps<"section"> & { title: string; children: React.ReactNode };
+
+export function Card({ title, children, ...sectionProps }: CardProps) {
   return (
-    <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: "1rem" }}>
+    <section {...sectionProps} style={{ border: "1px solid #ddd", borderRadius: 8, padding: "1rem" }}>
       <h3>{title}</h3>
       <div>{children}</div>
     </section>
