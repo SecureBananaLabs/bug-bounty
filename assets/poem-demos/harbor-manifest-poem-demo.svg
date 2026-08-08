@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Harbor Manifest poem animated preview</title>
+  <desc id="desc">Animated preview of the Harbor Manifest poem submitted for SecureBananaLabs bug-bounty issue 76.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#09111f"/>
+      <stop offset="100%" stop-color="#12233f"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#132645"/>
+      <stop offset="100%" stop-color="#0d1b31"/>
+    </linearGradient>
+    <style>
+      .page {
+        fill: url(#bg);
+      }
+      .frame {
+        fill: url(#panel);
+        stroke: #5dd4ff;
+        stroke-opacity: 0.38;
+        stroke-width: 2;
+      }
+      .label {
+        fill: #7ce4ff;
+        font: 600 18px 'Segoe UI', Arial, sans-serif;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+      .title {
+        fill: #f2f7ff;
+        font: 700 44px 'Georgia', 'Times New Roman', serif;
+      }
+      .meta {
+        fill: #98abc9;
+        font: 500 18px 'Segoe UI', Arial, sans-serif;
+      }
+      .stanza-title {
+        fill: #ffd782;
+        font: 700 20px 'Segoe UI', Arial, sans-serif;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .line {
+        fill: #edf4ff;
+        font: 500 28px 'Courier New', monospace;
+      }
+      .accent {
+        fill: #4fd6c8;
+      }
+      .rail {
+        fill: #1a3155;
+      }
+      .dot {
+        fill: #38567f;
+      }
+      .dot.active {
+        fill: #7ce4ff;
+      }
+      .stanza {
+        opacity: 0;
+        animation: reveal 16s infinite;
+      }
+      #s1 { animation-delay: 0s; }
+      #s2 { animation-delay: 4s; }
+      #s3 { animation-delay: 8s; }
+      #s4 { animation-delay: 12s; }
+      @keyframes reveal {
+        0% { opacity: 0; transform: translateY(10px); }
+        8% { opacity: 1; transform: translateY(0); }
+        22% { opacity: 1; transform: translateY(0); }
+        30% { opacity: 0; transform: translateY(-10px); }
+        100% { opacity: 0; transform: translateY(-10px); }
+      }
+    </style>
+  </defs>
+
+  <rect class="page" width="1200" height="675" rx="28"/>
+  <circle cx="1050" cy="122" r="92" fill="#1a3c63" fill-opacity="0.45"/>
+  <circle cx="1090" cy="98" r="34" fill="#7ce4ff" fill-opacity="0.16"/>
+  <rect class="frame" x="54" y="54" width="1092" height="567" rx="24"/>
+  <text class="label" x="86" y="104">Animated Preview</text>
+  <text class="title" x="84" y="162">Harbor Manifest</text>
+  <text class="meta" x="86" y="198">PR #449 for SecureBananaLabs/bug-bounty issue #76</text>
+
+  <rect class="rail" x="84" y="224" width="1032" height="4" rx="2"/>
+  <rect class="accent" x="84" y="224" width="228" height="4" rx="2"/>
+
+  <g id="s1" class="stanza">
+    <text class="stanza-title" x="86" y="278">Stanza 1</text>
+    <text class="line" x="86" y="338">
+      <tspan x="86" dy="0">At FreelanceFlow the first crate is a promise,</tspan>
+      <tspan x="86" dy="42">measured in line items, sealed against the rain;</tspan>
+      <tspan x="86" dy="42">scope is the ink on a harbor manifest,</tspan>
+      <tspan x="86" dy="42">what leaves the dock should match what comes again.</tspan>
+    </text>
+    <circle class="dot active" cx="92" cy="576" r="8"/>
+    <circle class="dot" cx="124" cy="576" r="8"/>
+    <circle class="dot" cx="156" cy="576" r="8"/>
+    <circle class="dot" cx="188" cy="576" r="8"/>
+  </g>
+
+  <g id="s2" class="stanza">
+    <text class="stanza-title" x="86" y="278">Stanza 2</text>
+    <text class="line" x="86" y="338">
+      <tspan x="86" dy="0">Then evidence arrives in tagged containers:</tspan>
+      <tspan x="86" dy="42">screens, traces, tests, each pallet checked by hand;</tspan>
+      <tspan x="86" dy="42">proof is not thunder but labeled cargo,</tspan>
+      <tspan x="86" dy="42">stacked where both shores can read and understand.</tspan>
+    </text>
+    <circle class="dot" cx="92" cy="576" r="8"/>
+    <circle class="dot active" cx="124" cy="576" r="8"/>
+    <circle class="dot" cx="156" cy="576" r="8"/>
+    <circle class="dot" cx="188" cy="576" r="8"/>
+  </g>
+
+  <g id="s3" class="stanza">
+    <text class="stanza-title" x="86" y="278">Stanza 3</text>
+    <text class="line" x="86" y="338">
+      <tspan x="86" dy="0">Review lifts lanterns over midnight water,</tspan>
+      <tspan x="86" dy="42">counting the bolts, the timestamps, and the seams;</tspan>
+      <tspan x="86" dy="42">a patient tide decides what safely crosses</tspan>
+      <tspan x="86" dy="42">before the route is stamped for open seas.</tspan>
+    </text>
+    <circle class="dot" cx="92" cy="576" r="8"/>
+    <circle class="dot" cx="124" cy="576" r="8"/>
+    <circle class="dot active" cx="156" cy="576" r="8"/>
+    <circle class="dot" cx="188" cy="576" r="8"/>
+  </g>
+
+  <g id="s4" class="stanza">
+    <text class="stanza-title" x="86" y="278">Stanza 4</text>
+    <text class="line" x="86" y="338">
+      <tspan x="86" dy="0">When all is cleared, the harbor stays unspectacular:</tspan>
+      <tspan x="86" dy="42">no hidden hand, no fog that hides the freight;</tspan>
+      <tspan x="86" dy="42">the shipment moves, the worker sees the payout,</tspan>
+      <tspan x="86" dy="42">and trust is moored because the books ran straight.</tspan>
+    </text>
+    <circle class="dot" cx="92" cy="576" r="8"/>
+    <circle class="dot" cx="124" cy="576" r="8"/>
+    <circle class="dot" cx="156" cy="576" r="8"/>
+    <circle class="dot active" cx="188" cy="576" r="8"/>
+  </g>
+
+  <text class="meta" x="838" y="580">Preview asset for quick review in PR #449</text>
+</svg>
