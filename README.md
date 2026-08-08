@@ -12,6 +12,46 @@ FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern
 - `packages/db` — Prisma schema and database package
 - `packages/ui` — Shared UI components
 
+## Architecture
+
+```mermaid
+flowchart LR
+  subgraph Web["apps/web - Next.js App Router"]
+    Pages["App pages"]
+    Navigation["Navigation component"]
+    MockData["Mock data"]
+  end
+
+  subgraph API["apps/api - Express REST API"]
+    Middleware["Middleware: auth, rate limit, errors"]
+    Routes["Route modules"]
+    Controllers["Controllers"]
+    Services["In-memory services"]
+    Validators["Zod validators"]
+    Utils["Response and JWT utilities"]
+  end
+
+  subgraph Packages["Shared packages"]
+    DB["packages/db - Prisma schema"]
+    UI["packages/ui - shared UI"]
+  end
+
+  Browser["Browser"] --> Pages
+  Pages --> Navigation
+  Pages --> MockData
+  Browser --> API
+  API --> Middleware
+  Middleware --> Routes
+  Routes --> Controllers
+  Controllers --> Services
+  Controllers --> Validators
+  Controllers --> Utils
+  Services -.-> DB
+  Pages -.-> UI
+  Services -.-> Stripe["Stripe placeholder"]
+  DB -.-> Database["PostgreSQL"]
+```
+
 ## Frontend
 
 The web app includes pages for:
