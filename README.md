@@ -42,12 +42,16 @@ Backend architecture follows:
 
 - Middleware layer (auth, rate limiting, error handling)
 - Controller layer
-- Service layer
-- Route layer
-- Validation schemas (Zod)
-- Utility helpers
+- File uploads and search
+- Admin routes
 
-## Getting Started
+### Security Notes
+
+- Admin role assignment is restricted to existing administrators. New users cannot self-assign the admin role during registration.
+
+Backend architecture follows:
+
+- Middleware layer (auth, rate limiting, error handling)
 
 ```bash
 npm install
