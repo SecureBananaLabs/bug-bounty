@@ -4,3 +4,109 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.admin-shell { max-width: 1180px; }
+.admin-top,
+.admin-band,
+.metric,
+.queue-row {
+  background: #151c35;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+}
+.admin-top {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+.admin-actions,
+.button-row,
+.filters,
+.section-head {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.section-head { justify-content: space-between; }
+.metric-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  margin-bottom: 1rem;
+}
+.metric { padding: 0.9rem; }
+.metric span,
+small,
+.muted,
+.section-head span {
+  color: #aeb8dc;
+}
+.metric strong {
+  display: block;
+  font-size: 1.6rem;
+  margin-top: 0.2rem;
+}
+.admin-band {
+  margin-bottom: 1rem;
+  overflow-x: auto;
+  padding: 1rem;
+}
+.two-column {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+button,
+input,
+select {
+  background: #0f1730;
+  border: 1px solid #3a4773;
+  border-radius: 6px;
+  color: #f2f5ff;
+  font: inherit;
+  padding: 0.48rem 0.7rem;
+}
+button { cursor: pointer; }
+button:hover { border-color: #7aa2ff; }
+input { min-width: 220px; }
+table {
+  border-collapse: collapse;
+  min-width: 760px;
+  width: 100%;
+}
+th,
+td {
+  border-bottom: 1px solid #2a3765;
+  padding: 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+td small {
+  display: block;
+  margin-top: 0.2rem;
+}
+.queue-row {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: 1fr auto;
+  margin-top: 0.75rem;
+  padding: 0.8rem;
+}
+.queue-row .button-row { grid-column: 1 / -1; }
+.empty { color: #ffd37a; }
+@media (max-width: 720px) {
+  .admin-top,
+  .queue-row {
+    display: block;
+  }
+  input,
+  select,
+  button {
+    width: 100%;
+  }
+  table { min-width: 680px; }
+}
