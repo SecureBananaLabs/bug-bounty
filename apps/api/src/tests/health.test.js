@@ -22,3 +22,44 @@ test("GET /health returns ok payload", async () => {
     server.close((error) => (error ? reject(error) : resolve()));
   });
 });
+
+test("malformed JSON requests consume global rate limit quota", async () => {
+  const app = createApp();
+  const server = app.listen(0);
+
+  await new Promise((resolve, reject) => {
+    server.once("listening", resolve);
+    server.once("error", reject);
+  });
+
+  try {
+    const { port } = server.address();
+    let rateLimitedResponse;
+    const originalConsoleError = console.error;
+    console.error = () => {};
+
+    try {
+      for (let attempt = 0; attempt < 205; attempt += 1) {
+        const response = await fetch(`http://127.0.0.1:${port}/api/jobs`, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: "{"
+        });
+
+        if (response.status === 429) {
+          rateLimitedResponse = response;
+          break;
+        }
+      }
+    } finally {
+      console.error = originalConsoleError;
+    }
+
+    assert.ok(rateLimitedResponse, "expected malformed JSON requests to eventually hit the rate limiter");
+    assert.equal(rateLimitedResponse.status, 429);
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
+});
