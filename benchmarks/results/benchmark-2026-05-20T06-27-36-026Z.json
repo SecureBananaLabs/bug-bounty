@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-05-20T06-27-36-026Z",
+  "target": "http://localhost:4000",
+  "results": {
+    "Health Check": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "Auth Register": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "Auth Login": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "List Users": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "List Jobs": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "List Proposals": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "List Payments": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "List Reviews": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "List Messages": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "List Notifications": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "Search": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    },
+    "Admin Dashboard": {
+      "error": "Cannot read properties of undefined (reading 'toFixed')"
+    }
+  }
+}
