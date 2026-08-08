@@ -1,0 +1,23 @@
+export const scenarios = [
+  { name: "health", method: "GET", path: "/health", expectedStatus: 200, auth: false },
+  { name: "auth_register", method: "POST", path: "/api/auth/register", expectedStatus: 201, auth: false, json: () => ({ email: `bench-${Date.now()}-${Math.random().toString(16).slice(2)}@example.com`, password: "BenchmarkPass123!", role: "freelancer" }) },
+  { name: "auth_login", method: "POST", path: "/api/auth/login", expectedStatus: 200, auth: false, json: () => ({ email: "client@example.com", password: "Password123!" }) },
+  { name: "auth_oauth_callback", method: "GET", path: "/api/auth/oauth/github/callback", expectedStatus: 200, auth: false },
+  { name: "auth_refresh", method: "POST", path: "/api/auth/refresh", expectedStatus: 200, auth: false, json: () => ({}) },
+  { name: "users_list", method: "GET", path: "/api/users", expectedStatus: 200, auth: false },
+  { name: "users_create", method: "POST", path: "/api/users", expectedStatus: 201, auth: false, json: () => ({ email: `bench-user-${Date.now()}-${Math.random().toString(16).slice(2)}@example.com`, name: "Benchmark Client", role: "client" }) },
+  { name: "jobs_list", method: "GET", path: "/api/jobs", expectedStatus: 200, auth: false },
+  { name: "jobs_create", method: "POST", path: "/api/jobs", expectedStatus: 201, auth: false, json: () => ({ title: "Benchmark landing page", description: "Create a realistic benchmark fixture job for API load testing.", budgetMin: 500, budgetMax: 1500, categoryId: "web-development", skills: ["node", "react", "benchmarking"] }) },
+  { name: "proposals_list", method: "GET", path: "/api/proposals", expectedStatus: 200, auth: false },
+  { name: "proposals_create", method: "POST", path: "/api/proposals", expectedStatus: 201, auth: false, json: () => ({ jobId: "job_benchmark", freelancerId: "usr_benchmark_freelancer", coverLetter: "I can deliver this benchmark fixture project with tests and clear reporting.", bidAmount: 1200, estimatedDays: 5 }) },
+  { name: "payments_create", method: "POST", path: "/api/payments", expectedStatus: 201, auth: false, json: () => ({ jobId: "job_benchmark", amount: 1200, currency: "usd" }) },
+  { name: "reviews_list", method: "GET", path: "/api/reviews", expectedStatus: 200, auth: false },
+  { name: "reviews_create", method: "POST", path: "/api/reviews", expectedStatus: 201, auth: false, json: () => ({ jobId: "job_benchmark", reviewerId: "usr_benchmark_client", revieweeId: "usr_benchmark_freelancer", rating: 5, comment: "Fast communication and high quality delivery during benchmark fixture creation." }) },
+  { name: "messages_list", method: "GET", path: "/api/messages", expectedStatus: 200, auth: false },
+  { name: "messages_create", method: "POST", path: "/api/messages", expectedStatus: 201, auth: false, json: () => ({ conversationId: "conv_benchmark", senderId: "usr_benchmark_client", recipientId: "usr_benchmark_freelancer", body: "Can you start the benchmark fixture work Monday?" }) },
+  { name: "notifications_list", method: "GET", path: "/api/notifications", expectedStatus: 200, auth: false },
+  { name: "notifications_create", method: "POST", path: "/api/notifications", expectedStatus: 201, auth: false, json: () => ({ userId: "usr_benchmark_freelancer", type: "proposal.accepted", message: "Your benchmark fixture proposal was accepted." }) },
+  { name: "uploads_create", method: "POST", path: "/api/uploads", expectedStatus: 201, auth: false, multipart: () => ({ field: "file", filename: "benchmark.txt", type: "text/plain", body: "hello benchmark" }) },
+  { name: "search", method: "GET", path: "/api/search?q=react", expectedStatus: 200, auth: false },
+  { name: "admin_metrics", method: "GET", path: "/api/admin/metrics", expectedStatus: 200, auth: true }
+];
