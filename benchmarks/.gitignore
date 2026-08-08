@@ -1,0 +1,4 @@
+# Benchmark result files (generated, not committed)
+benchmarks/results/*.json
+benchmarks/results/*.md
+!.gitkeep
