@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1770",
+  "title": "Admin routes lack role-based access control — any authenticated user can access admin endpoints",
+  "body": "## Bug: Missing Admin Role Check on Admin Routes\n\n**Description:** The `/api/admin` routes only apply `authMiddleware`, which verifies the JWT is valid but does **not** check if the user has an admin role. Any authenticated user (client, freelancer) can access admin-only endpoints like `/api/admin/metrics`.\n\n**File:** `apps/api/src/routes/adminRoutes.js`\n\n**Current code:**\n```js\nadminRoutes.use(authMiddleware);\nadminRoutes.get(\"/metrics\", metrics);\n```\n\n**Expected behavior:** A separate `adminMiddleware` should verify that `req.user.role === \"admin\"` and return 403 for non-admin users.\n\n**Impact:** High — privilege escalation vulnerability allowing unauthorized access to admin data.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
