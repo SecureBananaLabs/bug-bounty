@@ -1,0 +1,37 @@
+{
+  "/health": {
+    "p50": 1,
+    "p99": 4,
+    "rps": 4927,
+    "errorRate": 0,
+    "ttfb": 1.47
+  },
+  "/api/jobs": {
+    "p50": 1,
+    "p99": 3,
+    "rps": 5852.67,
+    "errorRate": 0,
+    "ttfb": 1.13
+  },
+  "/api/users": {
+    "p50": 1,
+    "p99": 3,
+    "rps": 5844.67,
+    "errorRate": 0,
+    "ttfb": 1.13
+  },
+  "/api/proposals": {
+    "p50": 1,
+    "p99": 3,
+    "rps": 5818,
+    "errorRate": 0,
+    "ttfb": 1.13
+  },
+  "/api/admin/metrics": {
+    "p50": 1,
+    "p99": 3,
+    "rps": 5766,
+    "errorRate": 0,
+    "ttfb": 1.11
+  }
+}
