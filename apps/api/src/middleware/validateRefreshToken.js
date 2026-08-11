@@ -1,0 +1,2 @@
+import jwt from"jsonwebtoken";import{fail}from"../utils/response.js";
+export const validateRefreshToken=(req,res,next)=>{const{refreshToken}=req.body||{};if(!refreshToken)return fail(res,"refreshToken required",400);try{req.refreshPayload=jwt.verify(refreshToken,process.env.JWT_SECRET||"s");return next();}catch{return fail(res,"Invalid or expired refresh token",401);}};
