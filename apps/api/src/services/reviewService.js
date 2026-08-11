@@ -5,7 +5,14 @@ export async function listReviews() {
 }
 
 export async function createReview(payload) {
-  const review = { id: `rev_${Date.now()}`, ...payload };
+  const { targetUserId, jobId, rating, comment } = payload;
+  const review = {
+    id: `rev_${Date.now()}`,
+    targetUserId,
+    jobId,
+    rating,
+    comment
+  };
   reviews.push(review);
   return review;
 }
