@@ -1,6 +1,11 @@
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 import { createPaymentIntent } from "../services/paymentService.js";
 
 export async function createPayment(req, res) {
-  return ok(res, await createPaymentIntent(req.body), 201);
+  const result = createPaymentIntent(req.body);
+  if (!result.success) {
+    return fail(res, result.message, 400);
+  }
+
+  return ok(res, result.data, 201);
 }
