@@ -1,6 +1,8 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
+
+const supportedOAuthProviders = new Set(["github", "google"]);
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -15,8 +17,19 @@ export async function login(req, res) {
 }
 
 export async function oauthCallback(req, res) {
+  const provider = String(req.params.provider || "").toLowerCase();
+  const code = typeof req.query.code === "string" ? req.query.code.trim() : "";
+
+  if (!supportedOAuthProviders.has(provider)) {
+    return fail(res, "Unsupported OAuth provider", 400);
+  }
+
+  if (!code) {
+    return fail(res, "OAuth authorization code is required", 400);
+  }
+
   return ok(res, {
-    provider: req.params.provider,
+    provider,
     status: "callback-received"
   });
 }
