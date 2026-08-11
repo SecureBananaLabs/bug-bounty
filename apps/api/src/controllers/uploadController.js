@@ -1,8 +1,11 @@
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function uploadFile(req, res) {
+  if (!req.file) {
+    return fail(res, "Request must include a file in the 'file' field", 400);
+  }
   return ok(res, {
-    filename: req.file?.originalname ?? null,
-    status: req.file ? "uploaded" : "no-file"
+    filename: req.file.originalname,
+    status: "uploaded"
   }, 201);
 }
