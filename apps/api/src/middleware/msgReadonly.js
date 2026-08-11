@@ -1,0 +1,1 @@
+export const msgReadonly=(req,_,next)=>{delete req.body?.read;delete req.body?.readAt;delete req.body?.sentAt;delete req.body?.id;return next();};
