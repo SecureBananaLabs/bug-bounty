@@ -1,6 +1,9 @@
-import { Router } from "express";
-import { createPayment } from "../controllers/paymentController.js";
+const express = require('express');
+const router = express.Router();
+const { authMiddleware } = require('../middleware/authMiddleware');
+const { createPaymentIntent } = require('../controllers/paymentController');
 
-export const paymentRoutes = Router();
+// POST /api/payments - Protected endpoint requiring authentication middleware
+router.post('/', authMiddleware, createPaymentIntent);
 
-paymentRoutes.post("/", createPayment);
+module.exports = router;
