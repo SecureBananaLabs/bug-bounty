@@ -1,0 +1,1 @@
+export const trimCurrency=(req,_,next)=>{if(req.body?.currency)req.body.currency=String(req.body.currency).trim().toUpperCase();return next();};
