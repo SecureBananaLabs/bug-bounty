@@ -1,0 +1,25 @@
+{
+  "p99_thresholds_ms": {
+    "GET /health": 50,
+    "POST /auth/register": 100,
+    "POST /auth/login": 100,
+    "GET /users": 100,
+    "POST /users": 100,
+    "GET /jobs": 100,
+    "POST /jobs": 100,
+    "GET /proposals": 100,
+    "POST /proposals": 100,
+    "POST /payments": 100,
+    "GET /reviews": 100,
+    "POST /reviews": 100,
+    "GET /messages": 100,
+    "POST /messages": 100,
+    "GET /notifications": 100,
+    "POST /notifications": 100,
+    "GET /search?q=js": 100,
+    "POST /uploads": 100,
+    "GET /admin/metrics": 100
+  },
+  "rps_minimum": 50,
+  "max_error_rate_percent": 5
+}
