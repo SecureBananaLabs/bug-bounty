@@ -1,0 +1,2 @@
+import React from"react";
+export default function ClientDash(){return(<main><h1>Client Dashboard</h1><section><h2>Projects</h2><a href="/post-job">Post a Job</a></section><section><h2>Proposals</h2><p>0 pending</p></section></main>);}
