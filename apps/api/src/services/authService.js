@@ -11,10 +11,14 @@ export async function registerUser(payload) {
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  // TODO: verify password hash against stored user record and load real role
+  const id = `usr_existing`;
+  const role = payload.role ?? "client";
   return {
+    id,
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    role,
+    token: signAccessToken({ sub: id, role })
   };
 }
 
