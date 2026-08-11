@@ -1,0 +1,1 @@
+import React from"react";export default function Messages(){return(<main><h1>Messages</h1><section><p>No messages yet.</p><a href="/jobs">Browse Jobs</a></section></main>);}
