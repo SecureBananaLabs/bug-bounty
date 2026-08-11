@@ -9,9 +9,13 @@ export async function register(req, res) {
 }
 
 export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
+  try {
+    const payload = loginSchema.parse(req.body);
+    const result = await loginUser(payload);
+    return ok(res, result);
+  } catch (err) {
+    return res.status(401).json({ success: false, message: "Invalid credentials" });
+  }
 }
 
 export async function oauthCallback(req, res) {
