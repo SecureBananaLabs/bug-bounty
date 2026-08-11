@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const requireClientOwner=(req,res,next)=>{if(!req.user?.id&&!req.user?.sub)return fail(res,"Client owner id required",401);req.body.clientId=req.user.id||req.user.sub;return next();};
