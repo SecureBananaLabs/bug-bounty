@@ -1,8 +1,6 @@
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function uploadFile(req, res) {
-  return ok(res, {
-    filename: req.file?.originalname ?? null,
-    status: req.file ? "uploaded" : "no-file"
-  }, 201);
+  if (!req.file) return fail(res, "No file provided", 400);
+  return ok(res, { filename: req.file.originalname, mimetype: req.file.mimetype, size: req.file.size, status: "uploaded" }, 201);
 }
