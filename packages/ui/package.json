@@ -1,5 +1,1 @@
-{
-  "name": "@freelanceflow/ui",
-  "private": true,
-  "main": "src/index.ts"
-}
+{"name":"@freelanceflow/ui","private":true,"scripts":{"build":"tsc --project tsconfig.json","dev":"tsc --watch","test":"vitest"},"devDependencies":{"typescript":"^5.0.0","vitest":"^1.0.0"}}
