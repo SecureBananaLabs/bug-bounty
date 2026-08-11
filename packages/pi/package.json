@@ -1,0 +1,12 @@
+{
+  "name": "@freelanceflow/pi",
+  "private": true,
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "pi": "src/cli.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}
