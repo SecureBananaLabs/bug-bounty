@@ -4,7 +4,7 @@ import { createApp } from "../app.js";
 
 test("GET /health returns ok payload", async () => {
   const app = createApp();
-  const server = app.listen(0);
+  const server = app.listen(0, "127.0.0.1");
 
   await new Promise((resolve, reject) => {
     server.once("listening", resolve);
@@ -16,6 +16,7 @@ test("GET /health returns ok payload", async () => {
   const payload = await response.json();
 
   assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
   assert.deepEqual(payload, { ok: true, service: "api" });
 
   await new Promise((resolve, reject) => {
