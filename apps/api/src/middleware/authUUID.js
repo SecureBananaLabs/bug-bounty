@@ -1,0 +1,1 @@
+export const authUUID=(req,_,next)=>{delete req.body?.id;req._genUserId=()=>crypto.randomUUID();return next();};
