@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { getCorsAllowedOrigins } from "./config/env.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
@@ -17,9 +18,36 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 
 export function createApp() {
   const app = express();
+  const allowedOrigins = getCorsAllowedOrigins();
 
   app.use(helmet());
-  app.use(cors());
+  app.use((req, res, next) => {
+    const requestOrigin = req.headers.origin;
+    if (!requestOrigin) {
+      return next();
+    }
+
+    if (allowedOrigins.includes(requestOrigin)) {
+      return next();
+    }
+
+    return res.status(403).json({
+      success: false,
+      message: "Origin not allowed"
+    });
+  });
+
+  app.use(
+    cors({
+      origin(origin, callback) {
+        if (!origin) {
+          return callback(null, true);
+        }
+
+        return callback(null, allowedOrigins.includes(origin));
+      }
+    })
+  );
   app.use(express.json());
   app.use(apiLimiter);
 
