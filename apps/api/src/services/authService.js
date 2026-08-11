@@ -1,20 +1,33 @@
 import { signAccessToken } from "../utils/jwt.js";
 
+const registeredUsers = new Map();
+
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+  const id = `usr_${Date.now()}`;
+  registeredUsers.set(payload.email, {
+    id,
+    email: payload.email,
+    password: payload.password,
+    role: payload.role
+  });
+
   return {
-    id: `usr_${Date.now()}`,
+    id,
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    token: signAccessToken({ sub: id, role: payload.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  const registeredUser = registeredUsers.get(payload.email);
+  if (!registeredUser || registeredUser.password !== payload.password) {
+    return null;
+  }
+
   return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    email: registeredUser.email,
+    token: signAccessToken({ sub: registeredUser.id, role: registeredUser.role })
   };
 }
 
