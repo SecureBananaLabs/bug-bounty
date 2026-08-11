@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
+    "benchmark": "node benchmarks/api-benchmark.mjs",
     "test": "node --test src/tests"
   },
   "dependencies": {
