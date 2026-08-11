@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const validatePaymentAmount=(req,res,next)=>{const a=req.body?.amount;if(typeof a!=="number"||a<=0)return fail(res,"amount must be a positive number",400);return next();};
