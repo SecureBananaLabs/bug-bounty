@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const searchV3=(req,res,next)=>{const q=String(req.query.q||"").trim();if(!q)return fail(res,"q required",400);if(q.length>200)return fail(res,"q max 200 chars",400);req.query.q=q;return next();};
