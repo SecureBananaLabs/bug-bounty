@@ -2,7 +2,7 @@ import { ok } from "../utils/response.js";
 import { createNotification, listNotifications } from "../services/notificationService.js";
 
 export async function getNotifications(req, res) {
-  return ok(res, await listNotifications());
+  return ok(res, await listNotifications(req.user.sub));
 }
 
 export async function postNotification(req, res) {
