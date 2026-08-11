@@ -1,0 +1,8 @@
+{
+  "p50_ms": 50,
+  "p95_ms": 200,
+  "p99_ms": 500,
+  "rps_min": 100,
+  "error_rate_max": 1.0,
+  "ttfb_ms": 100
+}

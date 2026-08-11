@@ -1,0 +1,131 @@
+{
+  "timestamp": "2026-06-11T11:05:30.566Z",
+  "baseUrl": "http://localhost:4000",
+  "results": [
+    {
+      "endpoint": "health",
+      "path": "/health",
+      "method": "GET",
+      "duration": 10,
+      "connections": 10,
+      "latency": {
+        "p50": 0,
+        "p99": 0,
+        "avg": 0.01,
+        "max": 17
+      },
+      "requests": {
+        "avg": 31056.73,
+        "total": 341633
+      },
+      "throughput": {
+        "avg": 32612352,
+        "total": 358706740
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 341433,
+      "ttfb": 0.032199140089764766
+    },
+    {
+      "endpoint": "register",
+      "path": "/api/auth/register",
+      "method": "POST",
+      "duration": 10,
+      "connections": 10,
+      "latency": {
+        "p50": 0,
+        "p99": 0,
+        "avg": 0.01,
+        "max": 10
+      },
+      "requests": {
+        "avg": 25625.46,
+        "total": 281868
+      },
+      "throughput": {
+        "avg": 26904762.19,
+        "total": 295961400
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 281868,
+      "ttfb": 0.03902368972108208
+    },
+    {
+      "endpoint": "login",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "duration": 10,
+      "connections": 10,
+      "latency": {
+        "p50": 0,
+        "p99": 0,
+        "avg": 0.01,
+        "max": 3
+      },
+      "requests": {
+        "avg": 25926.4,
+        "total": 259287
+      },
+      "throughput": {
+        "avg": 27225292.8,
+        "total": 272251350
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 259287,
+      "ttfb": 0.03857072327820291
+    },
+    {
+      "endpoint": "list_jobs",
+      "path": "/api/jobs",
+      "method": "GET",
+      "duration": 10,
+      "connections": 10,
+      "latency": {
+        "p50": 0,
+        "p99": 0,
+        "avg": 0.01,
+        "max": 3
+      },
+      "requests": {
+        "avg": 30447.28,
+        "total": 334910
+      },
+      "throughput": {
+        "avg": 31970397.1,
+        "total": 351655500
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 334910,
+      "ttfb": 0.03284365631347037
+    },
+    {
+      "endpoint": "search",
+      "path": "/api/search?q=test",
+      "method": "GET",
+      "duration": 10,
+      "connections": 10,
+      "latency": {
+        "p50": 0,
+        "p99": 0,
+        "avg": 0.01,
+        "max": 3
+      },
+      "requests": {
+        "avg": 29009.6,
+        "total": 290110
+      },
+      "throughput": {
+        "avg": 30462771.2,
+        "total": 304615500
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 290110,
+      "ttfb": 0.0344713474160278
+    }
+  ]
+}
