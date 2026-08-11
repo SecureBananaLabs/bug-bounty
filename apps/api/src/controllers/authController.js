@@ -1,6 +1,6 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -15,6 +15,10 @@ export async function login(req, res) {
 }
 
 export async function oauthCallback(req, res) {
+  if (typeof req.query.code !== "string" || req.query.code.trim() === "") {
+    return fail(res, "OAuth authorization code is required", 400);
+  }
+
   return ok(res, {
     provider: req.params.provider,
     status: "callback-received"
