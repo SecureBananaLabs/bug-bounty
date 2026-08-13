@@ -20,7 +20,7 @@ export const endpoints = [
   { name: "health", method: "GET", path: "/health", auth: false },
 
   { name: "auth:register", method: "POST", path: "/api/auth/register", auth: false,
-    body: { email: "bench@example.com", password: "benchmark-password", name: "Bench User" } },
+    body: { email: "bench@example.com", password: "benchmark-password", role: "client" } },
   { name: "auth:login", method: "POST", path: "/api/auth/login", auth: false,
     body: { email: "bench@example.com", password: "benchmark-password" } },
   { name: "auth:refresh", method: "POST", path: "/api/auth/refresh", auth: false,
@@ -30,7 +30,8 @@ export const endpoints = [
   { name: "jobs:list", method: "GET", path: "/api/jobs", auth: false },
   { name: "jobs:create", method: "POST", path: "/api/jobs", auth: true,
     body: { title: "Migrate billing service", description: jobDescription,
-            budget: 4800, currency: "USD", tags: ["node", "postgres", "queues"] } },
+            budgetMin: 3500, budgetMax: 6000, categoryId: "backend-engineering",
+            skills: ["node", "postgres", "queues"] } },
 
   { name: "proposals:list", method: "GET", path: "/api/proposals", auth: true },
   { name: "proposals:create", method: "POST", path: "/api/proposals", auth: true,
