@@ -31,6 +31,21 @@ Each run writes to `benchmarks/results/`:
 - `<timestamp>.md` — a table you can paste into a pull request
 - `latest.json` / `latest.md` — the most recent run
 
+## The rate limiter
+
+`apps/api/src/middleware/rateLimit.js` allows 200 requests per 15 minutes
+globally — about 0.22 req/s. A benchmark reaches that in the first fraction of
+a second, and everything after it is a 429, so the first run of this suite
+reported 99% "errors" on every endpoint and measured nothing.
+
+The middleware now reads `RATE_LIMIT_MAX` and `RATE_LIMIT_WINDOW_MS` from the
+environment, keeping the current values as defaults so nothing changes in
+production. Raise them on the target you are benchmarking; the CI job does.
+
+The runner counts 429s separately from failures and warns when more than half
+the requests were throttled, because at that point the numbers describe the
+limiter rather than the API.
+
 ## Thresholds
 
 `thresholds.json` holds the p99 ceiling, maximum error rate and minimum

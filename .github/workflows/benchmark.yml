@@ -15,6 +15,11 @@ jobs:
       BENCHMARK_TARGET: http://localhost:4000
       JWT_SECRET: benchmark-ci-secret
       PORT: 4000
+      # Sin esto el limitador global corta a las 200 peticiones y la suite
+      # mide el limitador en vez de la API: la primera ejecucion salio con un
+      # 99% de 429 en todos los endpoints.
+      RATE_LIMIT_MAX: "1000000"
+      RATE_LIMIT_WINDOW_MS: "60000"
     steps:
       - uses: actions/checkout@v4
 

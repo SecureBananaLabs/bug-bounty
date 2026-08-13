@@ -74,7 +74,13 @@ async function measure(endpoint, token) {
 
   const result = await autocannon(options);
   const total = result.requests.total || 1;
-  const failed = (result.non2xx ?? 0) + (result.errors ?? 0) + (result.timeouts ?? 0);
+  // Un 429 no es un endpoint roto: es el limitador haciendo su trabajo. Se
+  // cuenta aparte porque mezclarlo con los errores esconde el unico dato que
+  // importa cuando toda la suite sale en rojo, que es que no se ha llegado a
+  // medir nada.
+  const rateLimited = result.statusCodeStats?.["429"]?.count ?? 0;
+  const failed =
+    Math.max(0, (result.non2xx ?? 0) - rateLimited) + (result.errors ?? 0) + (result.timeouts ?? 0);
 
   return {
     name: endpoint.name,
@@ -90,8 +96,12 @@ async function measure(endpoint, token) {
       peak: result.requests.max
     },
     throughput_bytes_per_second: result.throughput.average,
-    requests: { total, failed, non2xx: result.non2xx ?? 0, timeouts: result.timeouts ?? 0 },
-    error_rate_pct: Number(((failed / total) * 100).toFixed(2))
+    requests: {
+      total, failed, rate_limited: rateLimited,
+      non2xx: result.non2xx ?? 0, timeouts: result.timeouts ?? 0
+    },
+    error_rate_pct: Number(((failed / total) * 100).toFixed(2)),
+    rate_limited_pct: Number(((rateLimited / total) * 100).toFixed(2))
   };
 }
 
@@ -117,6 +127,14 @@ function check(measurement, thresholds) {
   }
   if (limits.error_rate_pct != null && measurement.error_rate_pct > limits.error_rate_pct) {
     breaches.push(`error rate ${measurement.error_rate_pct}% > ${limits.error_rate_pct}%`);
+  }
+  // Medir a traves del limitador no mide la API, mide el limitador. Se avisa
+  // en vez de publicar unas cifras que no significan nada.
+  if (measurement.rate_limited_pct > 50) {
+    breaches.push(
+      `${measurement.rate_limited_pct}% of requests were rate limited: ` +
+      "raise RATE_LIMIT_MAX for the benchmark target, these numbers measure the limiter"
+    );
   }
   if (limits.min_rps != null && measurement.requests_per_second.sustained < limits.min_rps) {
     breaches.push(`${Math.round(measurement.requests_per_second.sustained)} req/s < ${limits.min_rps}`);
