@@ -76,18 +76,16 @@ async function measure(endpoint, token) {
     // tells us nothing about how fast the upload path is.
     const { field, filename, contentType, content } = endpoint.multipart;
     const boundary = "----benchmarkBoundary7MA4YWxkTrZu0gW";
-    options.body =
-      `--${boundary}
-` +
-      `Content-Disposition: form-data; name="${field}"; filename="${filename}"
-` +
-      `Content-Type: ${contentType}
-
-` +
-      `${content}
-` +
-      `--${boundary}--
-`;
+    const CRLF = "\r\n";
+    options.body = [
+      `--${boundary}`,
+      `Content-Disposition: form-data; name="${field}"; filename="${filename}"`,
+      `Content-Type: ${contentType}`,
+      "",
+      content,
+      `--${boundary}--`,
+      ""
+    ].join(CRLF);
     options.headers["content-type"] = `multipart/form-data; boundary=${boundary}`;
   }
 

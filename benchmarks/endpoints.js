@@ -78,8 +78,7 @@ export const endpoints = [
       field: "file",
       filename: "benchmark.txt",
       contentType: "text/plain",
-      content: "benchmark upload payload
-".repeat(40)
+      content: Array(40).fill("benchmark upload payload").join("\n")
     } },
 
   // search
