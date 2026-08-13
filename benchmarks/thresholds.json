@@ -6,11 +6,38 @@
     "min_rps": 100
   },
   "endpoints": {
-    "health": { "p99_ms": 50, "error_rate_pct": 0, "min_rps": 500 },
-    "auth:register": { "p99_ms": 400, "min_rps": 50 },
-    "auth:login": { "p99_ms": 400, "min_rps": 50 },
-    "jobs:create": { "p99_ms": 350, "min_rps": 60 },
-    "proposals:create": { "p99_ms": 350, "min_rps": 60 },
-    "search": { "p99_ms": 500, "min_rps": 40 }
+    "health": {
+      "p99_ms": 50,
+      "error_rate_pct": 0,
+      "min_rps": 500
+    },
+    "auth:register": {
+      "p99_ms": 400,
+      "min_rps": 50
+    },
+    "auth:login": {
+      "p99_ms": 400,
+      "min_rps": 50
+    },
+    "jobs:create": {
+      "p99_ms": 350,
+      "min_rps": 60
+    },
+    "proposals:create": {
+      "p99_ms": 350,
+      "min_rps": 60
+    },
+    "payments:create": {
+      "p99_ms": 400,
+      "min_rps": 50
+    },
+    "search": {
+      "p99_ms": 500,
+      "min_rps": 40
+    },
+    "admin:metrics": {
+      "p99_ms": 300,
+      "min_rps": 50
+    }
   }
 }
