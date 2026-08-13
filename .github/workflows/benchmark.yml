@@ -38,9 +38,17 @@ jobs:
       - name: Smoke benchmark
         run: npm run benchmark:smoke
 
+      # `if: always()` hace que este paso corra tambien cuando el anterior
+      # ha fallado, y entonces no hay informe que publicar: el `cat` fallaba y
+      # anadia un segundo error rojo encima del de verdad, escondiendolo.
       - name: Publish the summary
         if: always()
-        run: cat benchmarks/results/latest.md >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          if [ -f benchmarks/results/latest.md ]; then
+            cat benchmarks/results/latest.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No benchmark report: the run did not get that far." >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - uses: actions/upload-artifact@v4
         if: always()
