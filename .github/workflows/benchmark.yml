@@ -1,0 +1,49 @@
+name: Benchmark
+
+# A smoke benchmark on every pull request. Low concurrency so it runs in
+# seconds on a shared runner, but it still fails the build when an endpoint
+# blows past the p99 ceiling in benchmarks/thresholds.json.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    env:
+      BENCHMARK_TARGET: http://localhost:4000
+      JWT_SECRET: benchmark-ci-secret
+      PORT: 4000
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Start the API
+        run: |
+          npm run -w apps/api start &
+          for i in $(seq 1 30); do
+            curl -sf "$BENCHMARK_TARGET/health" >/dev/null && exit 0
+            sleep 1
+          done
+          echo "API did not become healthy in 30s"
+          exit 1
+
+      - name: Smoke benchmark
+        run: npm run benchmark:smoke
+
+      - name: Publish the summary
+        if: always()
+        run: cat benchmarks/results/latest.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
