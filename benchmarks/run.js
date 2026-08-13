@@ -73,7 +73,28 @@ async function measure(endpoint, token) {
   if (endpoint.body) options.body = JSON.stringify(endpoint.body);
 
   const result = await autocannon(options);
-  const total = result.requests.total || 1;
+  const total = result.requests.total ?? 0;
+  // Cero peticiones completadas significa que no hay nadie al otro lado. El
+  // calculo anterior dividia entre uno para no romperse y publicaba cosas como
+  // "1849300% errors", que no dicen nada: lo que hay que decir es que el
+  // objetivo dejo de responder.
+  if (total === 0) {
+    return {
+      name: endpoint.name,
+      method: endpoint.method,
+      path: endpoint.path,
+      authenticated: Boolean(endpoint.auth),
+      unreachable: true,
+      latency: { p50_ms: null, p95_ms: null, p99_ms: null, mean_ms: null, max_ms: null },
+      ttfb_ms: null,
+      requests_per_second: { sustained: 0, peak: 0 },
+      throughput_bytes_per_second: 0,
+      requests: { total: 0, failed: result.errors ?? 0, rate_limited: 0, non2xx: 0,
+                  timeouts: result.timeouts ?? 0 },
+      error_rate_pct: 100,
+      rate_limited_pct: 0
+    };
+  }
   // Un 429 no es un endpoint roto: es el limitador haciendo su trabajo. Se
   // cuenta aparte porque mezclarlo con los errores esconde el unico dato que
   // importa cuando toda la suite sale en rojo, que es que no se ha llegado a
@@ -122,6 +143,9 @@ function readThresholds() {
 function check(measurement, thresholds) {
   const limits = { ...thresholds.default, ...(thresholds.endpoints?.[measurement.name] ?? {}) };
   const breaches = [];
+  if (measurement.unreachable) {
+    return ["the target stopped answering: no request completed"];
+  }
   if (limits.p99_ms != null && measurement.latency.p99_ms > limits.p99_ms) {
     breaches.push(`p99 ${measurement.latency.p99_ms}ms > ${limits.p99_ms}ms`);
   }
@@ -146,6 +170,9 @@ function markdown(report) {
   const rows = report.endpoints
     .map((e) => {
       const status = e.breaches.length ? `⚠️ ${e.breaches.join("; ")}` : "ok";
+      if (e.unreachable) {
+        return `| \`${e.method} ${e.path}\` | — | — | — | — | — | — | — | ${status} |`;
+      }
       return `| \`${e.method} ${e.path}\` | ${e.latency.p50_ms} | ${e.latency.p95_ms} | ` +
         `${e.latency.p99_ms} | ${e.ttfb_ms} | ${Math.round(e.requests_per_second.sustained)} | ` +
         `${Math.round(e.requests_per_second.peak)} | ${e.error_rate_pct}% | ${status} |`;
@@ -179,6 +206,17 @@ async function main() {
     const measurement = await measure(endpoint, token);
     measurement.breaches = check(measurement, thresholds);
     measurements.push(measurement);
+    if (measurement.unreachable) {
+      console.log("no answer — the target is down");
+      // Seguir midiendo contra un servidor caido produce quince filas de ceros
+      // y esconde el unico dato util, que es donde dejo de responder.
+      console.error(
+        `
+The target stopped answering at ${endpoint.method} ${endpoint.path}. ` +
+        "Everything after this point would be measuring nothing, so the run stops here."
+      );
+      break;
+    }
     console.log(
       `p99 ${measurement.latency.p99_ms}ms, ` +
       `${Math.round(measurement.requests_per_second.sustained)} req/s, ` +
