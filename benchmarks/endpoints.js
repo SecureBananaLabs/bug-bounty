@@ -71,6 +71,17 @@ export const endpoints = [
   { name: "notifications:create", method: "POST", path: "/api/notifications", auth: false,
     body: { userId: "bench-user-id", type: "proposal.received", payload: { jobId: "bench-job-id" } } },
 
+  // uploads — multer expects multipart, so this one carries its own body and
+  // content type instead of the JSON envelope every other route uses.
+  { name: "uploads:create", method: "POST", path: "/api/uploads", auth: false,
+    multipart: {
+      field: "file",
+      filename: "benchmark.txt",
+      contentType: "text/plain",
+      content: "benchmark upload payload
+".repeat(40)
+    } },
+
   // search
   { name: "search", method: "GET", path: "/api/search?q=node+postgres", auth: false },
 

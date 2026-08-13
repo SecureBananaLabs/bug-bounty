@@ -71,6 +71,25 @@ async function measure(endpoint, token) {
     }
   };
   if (endpoint.body) options.body = JSON.stringify(endpoint.body);
+  if (endpoint.multipart) {
+    // multer only reads multipart/form-data; a JSON body would be a 400 that
+    // tells us nothing about how fast the upload path is.
+    const { field, filename, contentType, content } = endpoint.multipart;
+    const boundary = "----benchmarkBoundary7MA4YWxkTrZu0gW";
+    options.body =
+      `--${boundary}
+` +
+      `Content-Disposition: form-data; name="${field}"; filename="${filename}"
+` +
+      `Content-Type: ${contentType}
+
+` +
+      `${content}
+` +
+      `--${boundary}--
+`;
+    options.headers["content-type"] = `multipart/form-data; boundary=${boundary}`;
+  }
 
   const result = await autocannon(options);
   const total = result.requests.total ?? 0;
