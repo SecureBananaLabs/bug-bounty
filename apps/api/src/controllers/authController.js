@@ -12,10 +12,14 @@ export async function register(req, res) {
 }
 
 export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
+  const validation = validateLogin(req.body);
+  if (!validation.ok) {
+    return fail(res, validation.error, 401);
+  }
+  const result = await loginUser(validation.data);
   return ok(res, result);
 }
+
 
 export async function oauthCallback(req, res) {
   return ok(res, {
