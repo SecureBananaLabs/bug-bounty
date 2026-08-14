@@ -12,10 +12,12 @@ export function createEnvConfig(overrideEnv = process.env) {
     nodeEnv: overrideEnv.NODE_ENV ?? "development",
     port: Number(overrideEnv.PORT ?? 4000),
     jwtSecret: getJwtSecret(overrideEnv),
+    corsOrigin: overrideEnv.CORS_ORIGIN ?? "http://localhost:3000",
     stripeSecretKey: overrideEnv.STRIPE_SECRET_KEY ?? "",
     databaseUrl: overrideEnv.DATABASE_URL ?? ""
   };
 }
+
 
 export const env = createEnvConfig();
 
