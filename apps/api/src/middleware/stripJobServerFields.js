@@ -1,0 +1,1 @@
+export const stripJobServerFields=(req,_res,next)=>{["id","status","createdAt","updatedAt","authorId"].forEach(f=>delete req.body?.[f]);return next();};
