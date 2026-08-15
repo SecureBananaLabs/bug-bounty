@@ -1,0 +1,6 @@
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+.next/
+out/
+node_modules/
