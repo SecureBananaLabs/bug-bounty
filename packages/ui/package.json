@@ -1,5 +1,27 @@
 {
   "name": "@freelanceflow/ui",
   "private": true,
-  "main": "src/index.ts"
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./Button": {
+      "types": "./Button.d.ts",
+      "import": "./Button.js",
+      "default": "./Button.js"
+    },
+    "./Card": {
+      "types": "./Card.d.ts",
+      "import": "./Card.js",
+      "default": "./Card.js"
+    }
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  }
 }
