@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const uploadReqV3=(req,res,next)=>{if(!req.file)return fail(res,"File is required",400);return next();};
