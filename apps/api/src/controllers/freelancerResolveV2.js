@@ -1,0 +1,1 @@
+import{ok,fail}from"../utils/response.js";const M=new Map([["1",{id:"1",name:"Alice",skills:["React"]}],["2",{id:"2",name:"Bob",skills:["Python"]}]]);export async function getFreelancerV2(req,res){const p=M.get(String(req.params.userId||req.params.id));if(!p)return fail(res,"Profile not found",404);return ok(res,{profile:p});}
