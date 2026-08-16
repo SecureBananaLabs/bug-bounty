@@ -1,0 +1,3 @@
+import { z } from "zod";
+export const createJobSchema = z.object({title: z.string().min(1),budgetMin: z.number().min(0).optional(),budgetMax: z.number().min(0).optional()}).refine((d)=>{if(d.budgetMin===undefined||d.budgetMax===undefined)return true;return d.budgetMax>=d.budgetMin;},{message:"budgetMax must be >= budgetMin",path:["budgetMax"]});
+export const partialJobSchema = createJobSchema.partial().refine((d)=>{if(d.budgetMin===undefined||d.budgetMax===undefined)return true;return d.budgetMax>=d.budgetMin;},{message:"budgetMax must be >= budgetMin",path:["budgetMax"]});
