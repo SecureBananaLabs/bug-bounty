@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const loginNoPasswd=(req,res,next)=>{const{email,password}=req.body||{};if(!email||!password)return fail(res,"email and password required",400);if(!password.trim())return fail(res,"Invalid credentials",401);return next();};
