@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">@freelanceflow/ui package entrypoint demo</title>
+  <desc id="desc">A before and after summary showing the package import failing before the fix and resolving Button and Card after the fix.</desc>
+  <rect width="960" height="540" fill="#f8fafc"/>
+  <rect x="40" y="36" width="880" height="468" rx="8" fill="#ffffff" stroke="#d7dee8"/>
+  <text x="80" y="92" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" fill="#0f172a">@freelanceflow/ui entrypoint</text>
+  <text x="80" y="124" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#475569">Issue #2781: direct package imports should work in a normal Node/ESM workspace consumer.</text>
+
+  <rect x="80" y="164" width="380" height="236" rx="8" fill="#fff7ed" stroke="#fed7aa"/>
+  <text x="112" y="208" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#9a3412">Before</text>
+  <rect x="112" y="232" width="316" height="44" rx="6" fill="#431407"/>
+  <text x="132" y="260" font-family="Consolas, monospace" font-size="14" fill="#fed7aa">import("@freelanceflow/ui")</text>
+  <text x="112" y="318" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#7c2d12">Package main pointed at TypeScript source.</text>
+  <text x="112" y="348" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#7c2d12">Node could not resolve ./Button or TSX files.</text>
+
+  <rect x="500" y="164" width="380" height="236" rx="8" fill="#ecfdf5" stroke="#bbf7d0"/>
+  <text x="532" y="208" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#166534">After</text>
+  <rect x="532" y="232" width="316" height="44" rx="6" fill="#052e16"/>
+  <text x="552" y="260" font-family="Consolas, monospace" font-size="14" fill="#bbf7d0">Button, Card</text>
+  <text x="532" y="318" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#14532d">Runtime index.js exposes React components.</text>
+  <text x="532" y="348" font-family="Arial, Helvetica, sans-serif" font-size="16" fill="#14532d">Type declarations and an import test cover it.</text>
+
+  <rect x="80" y="430" width="800" height="36" rx="6" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="104" y="454" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#1e3a8a">Validation: direct dynamic import, npm test -w packages/ui, npm run build -w apps/web.</text>
+</svg>
