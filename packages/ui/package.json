@@ -1,5 +1,13 @@
 {
   "name": "@freelanceflow/ui",
-  "private": true,
-  "main": "src/index.ts"
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc --outDir dist"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
 }
