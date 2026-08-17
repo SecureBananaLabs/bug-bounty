@@ -61,7 +61,9 @@ function resolveCurrency(currency) {
 
   if (
     typeof currency !== "string"
-    || currency.trim() === ""
+    || !/^[a-zA-Z]{3}$/.test(
+      currency.trim()
+    )
   ) {
     throw new Error(
       "currency must be a non-empty string."
