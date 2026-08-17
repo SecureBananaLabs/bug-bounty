@@ -24,7 +24,8 @@ async function request(path: string, options: RequestInit = {}) {
     }
     throw new Error(message || `Request failed with status ${res.status}`);
   }
-  return res.json();
+  const payload = await res.json();
+  return payload.data;
 }
 
 export const adminApi = {

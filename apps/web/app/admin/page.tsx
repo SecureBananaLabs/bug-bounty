@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { adminApi } from "../../lib/adminApi";
 
 const EMPTY_STATE: Record<string, string> = {
@@ -42,8 +42,6 @@ function ErrorMessage({ message, onRetry }: { message: string; onRetry?: () => v
 export default function AdminPanelPage() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [admin, setAdmin] = useState<{ sub: string; role: string; email?: string } | null>(null);
-  const [loginForm, setLoginForm] = useState({ email: "", secret: "" });
-  const [loginError, setLoginError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("dashboard");
@@ -58,19 +56,6 @@ export default function AdminPanelPage() {
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [selectedDispute, setSelectedDispute] = useState<any | null>(null);
   const [confirmAction, setConfirmAction] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
-
-  const isAdmin = useMemo(() => admin?.role === "ADMIN", [admin]);
-
-  function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setLoginError(null);
-    const payload = btoa(`${loginForm.email}:${loginForm.secret}`);
-    const token = `demo-admin-${payload}`;
-    const decoded: any = { sub: "admin-1", role: "ADMIN", email: loginForm.email };
-    setAccessToken(token);
-    setAdmin(decoded);
-    window.localStorage.setItem("adminToken", token);
-  }
 
   function loadSection(tab: string) {
     if (!accessToken) return;
@@ -111,37 +96,27 @@ export default function AdminPanelPage() {
   useEffect(() => {
     const stored = window.localStorage.getItem("adminToken");
     if (stored) {
-      setAccessToken(stored);
-      setAdmin({ sub: "admin-1", role: "ADMIN", email: "admin@example.com" });
+      try {
+        const encoded = stored.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+        const payload = JSON.parse(atob(encoded.padEnd(Math.ceil(encoded.length / 4) * 4, "=")));
+        if (payload.role !== "ADMIN") throw new Error("Forbidden");
+        setAccessToken(stored);
+        setAdmin(payload);
+      } catch {
+        window.localStorage.removeItem("adminToken");
+        document.cookie = "adminToken=; Path=/; Max-Age=0; SameSite=Strict";
+        window.location.replace("/admin/login?error=403");
+      }
     }
   }, []);
 
   useEffect(() => {
-    if (!isAdmin) return;
+    if (admin?.role !== "ADMIN") return;
     setLoading(true);
     Promise.all([loadTab(activeTab)]).finally(() => setLoading(false));
-  }, [isAdmin, activeTab]);
+  }, [admin, activeTab]);
 
-  if (!isAdmin) {
-    return (
-      <section className="card" style={{ maxWidth: 420, margin: "2rem auto" }}>
-        <h2>Admin Sign-In</h2>
-        <p style={{ color: "#a9b1d6" }}>Enter the admin passphrase to access the panel.</p>
-        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 16 }}>
-          <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <span>Email</span>
-            <input aria-label="Admin email" value={loginForm.email} onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })} style={{ padding: "0.5rem 0.7rem", borderRadius: 8, border: "1px solid #2a3765", background: "#0f1532", color: "#f2f5ff" }} />
-          </label>
-          <label style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-            <span>Passphrase</span>
-            <input type="password" aria-label="Admin passphrase" value={loginForm.secret} onChange={(e) => setLoginForm({ ...loginForm, secret: e.target.value })} style={{ padding: "0.5rem 0.7rem", borderRadius: 8, border: "1px solid #2a3765", background: "#0f1532", color: "#f2f5ff" }} />
-          </label>
-          {loginError && <p role="alert" style={{ color: "#ff8a8a" }}>{loginError}</p>}
-          <button type="submit" style={{ padding: "0.6rem 0.8rem", borderRadius: 8, background: "#2a3765", color: "#f2f5ff", border: "none", cursor: "pointer" }}>Access Panel</button>
-        </form>
-      </section>
-    );
-  }
+  if (!admin) return <Loading />;
 
   return (
     <div>
@@ -149,7 +124,7 @@ export default function AdminPanelPage() {
         <h2>Admin Panel</h2>
         <div>
           <span style={{ color: "#a9b1d6", marginRight: 12 }}>{admin.email || "admin@example.com"}</span>
-          <button onClick={() => { setAccessToken(null); setAdmin(null); window.localStorage.removeItem("adminToken"); }} style={{ padding: "0.45rem 0.7rem", borderRadius: 8, background: "#2a3765", color: "#f2f5ff", border: "none", cursor: "pointer" }}>Sign out</button>
+          <button onClick={() => { window.localStorage.removeItem("adminToken"); document.cookie = "adminToken=; Path=/; Max-Age=0; SameSite=Strict"; window.location.replace("/admin/login"); }} style={{ padding: "0.45rem 0.7rem", borderRadius: 8, background: "#2a3765", color: "#f2f5ff", border: "none", cursor: "pointer" }}>Sign out</button>
         </div>
       </div>
 
@@ -193,9 +168,9 @@ export default function AdminPanelPage() {
       {!loading && activeTab === "users" && (
         <section aria-labelledby="users-title">
           <h3 id="users-title">User Management</h3>
-          <UserToolbar onSearch={(q) => setUsers(await adminApi.listUsers({ page: 1, pageSize: 10, search: q }))} />
+          <UserToolbar onSearch={async (q) => setUsers(await adminApi.listUsers({ page: 1, pageSize: 10, search: q }))} />
           <UserTable users={users} onSelect={(u) => setSelectedUser(u)} />
-          <UserProfileModal user={selectedUser} onClose={() => setSelectedUser(null)} onRefresh={() => setUsers(await adminApi.listUsers({ page: 1, pageSize: 10 }))} />
+          <UserProfileModal user={selectedUser} onClose={() => setSelectedUser(null)} onRefresh={async () => setUsers(await adminApi.listUsers({ page: 1, pageSize: 10 }))} />
         </section>
       )}
 
