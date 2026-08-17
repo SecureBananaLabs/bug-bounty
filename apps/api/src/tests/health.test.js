@@ -22,3 +22,29 @@ test("GET /health returns ok payload", async () => {
     server.close((error) => (error ? reject(error) : resolve()));
   });
 });
+
+test("oversized JSON bodies are rejected before route logic", async () => {
+  const app = createApp();
+  const server = app.listen(0);
+
+  await new Promise((resolve, reject) => {
+    server.once("listening", resolve);
+    server.once("error", reject);
+  });
+
+  const { port } = server.address();
+  const bigBody = JSON.stringify({ email: "jon@example.com", password: "x".repeat(150000) });
+  const response = await fetch(`http://127.0.0.1:${port}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: bigBody
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 413);
+  assert.equal(payload.message, "Request body too large");
+
+  await new Promise((resolve, reject) => {
+    server.close((error) => (error ? reject(error) : resolve()));
+  });
+});
