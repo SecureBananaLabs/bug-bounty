@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { metrics } from "../controllers/adminController.js";
-import { adminMiddleware } from "../middleware/admin.js";
 import { authMiddleware } from "../middleware/auth.js";
+import { requireRole } from "../middleware/roles.js";
 
 export const adminRoutes = Router();
 
 adminRoutes.use(authMiddleware);
-adminRoutes.use(adminMiddleware);
+adminRoutes.use(requireRole("admin"));
 adminRoutes.get("/metrics", metrics);
