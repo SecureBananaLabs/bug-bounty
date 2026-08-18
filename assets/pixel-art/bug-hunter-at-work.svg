@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512">
+  <style>
+    rect { shape-rendering: crispEdges; }
+  </style>
+  <!-- Background - dark terminal green -->
+  <rect x="0" y="0" width="64" height="64" fill="#0a0a0a"/>
+  
+  <!-- Sky gradient of pixels -->
+  <rect x="0" y="0" width="64" height="10" fill="#1a1a2e"/>
+  <rect x="0" y="10" width="64" height="5" fill="#16213e"/>
+  
+  <!-- Stars -->
+  <rect x="10" y="3" width="2" height="2" fill="#ffff88"/>
+  <rect x="25" y="6" width="1" height="1" fill="#ffffff"/>
+  <rect x="45" y="2" width="2" height="2" fill="#ffff88"/>
+  <rect x="55" y="8" width="1" height="1" fill="#ffffff"/>
+  <rect x="35" y="4" width="1" height="1" fill="#88ccff"/>
+  
+  <!-- Moon -->
+  <rect x="52" y="1" width="5" height="5" fill="#ffdd66"/>
+  <rect x="53" y="1" width="4" height="5" fill="#0a0a0a"/> <!-- crescent cutout -->
+  <rect x="52" y="2" width="5" height="4" fill="#ffdd66"/>
+  <rect x="53" y="2" width="4" height="4" fill="#0a0a0a"/>
+  
+  <!-- Ground -->
+  <rect x="0" y="45" width="64" height="19" fill="#1a2a1a"/>
+  <rect x="0" y="44" width="64" height="2" fill="#2a3a2a"/>
+  
+  <!-- Terminal/Hacker desk -->
+  <rect x="8" y="30" width="48" height="15" fill="#1a1a2e"/>
+  <rect x="8" y="30" width="48" height="2" fill="#3a3a5e"/> <!-- top border -->
+  
+  <!-- Screen glow -->
+  <rect x="11" y="33" width="42" height="10" fill="#0f2f0f"/>
+  
+  <!-- Terminal text scanlines -->
+  <rect x="12" y="35" width="38" height="1" fill="#33ff33" opacity="0.8"/>
+  <rect x="12" y="37" width="25" height="1" fill="#33ff33" opacity="0.6"/>
+  <rect x="12" y="39" width="30" height="1" fill="#33ff33" opacity="0.7"/>
+  <rect x="12" y="41" width="18" height="1" fill="#ffaa00" opacity="0.8"/>  <!-- cursor line -->
+  <rect x="30" y="41" width="2" height="1" fill="#ffffff" opacity="0.9"/> <!-- blinking cursor -->
+  
+  <!-- Keyboard beneath screen -->
+  <rect x="14" y="46" width="36" height="3" fill="#2a2a3e"/>
+  <rect x="16" y="47" width="2" height="1" fill="#3a3a5e"/>
+  <rect x="20" y="47" width="2" height="1" fill="#3a3a5e"/>
+  <rect x="24" y="47" width="2" height="1" fill="#3a3a5e"/>
+  <rect x="28" y="47" width="2" height="1" fill="#3a3a5e"/>
+  <rect x="32" y="47" width="2" height="1" fill="#3a3a5e"/>
+  <rect x="36" y="47" width="2" height="1" fill="#3a3a5e"/>
+  <rect x="40" y="47" width="2" height="1" fill="#3a3a5e"/>
+  
+  <!-- Developer figure -->
+  <!-- Head -->
+  <rect x="28" y="22" width="8" height="8" fill="#dda87a"/>
+  <rect x="27" y="23" width="10" height="6" fill="#dda87a"/>
+  
+  <!-- Hair/hat -->
+  <rect x="26" y="20" width="12" height="3" fill="#223355"/>
+  <rect x="27" y="19" width="10" height="2" fill="#223355"/>
+  
+  <!-- Eyes -->
+  <rect x="30" y="25" width="1" height="1" fill="#000000"/>
+  <rect x="33" y="25" width="1" height="1" fill="#000000"/>
+  
+  <!-- Glasses - hacker style -->
+  <rect x="29" y="24" width="3" height="3" fill="none" stroke="#33ff33" stroke-width="1"/>
+  <rect x="32" y="24" width="3" height="3" fill="none" stroke="#33ff33" stroke-width="1"/>
+  <rect x="31" y="25" width="2" height="1" fill="#33ff33"/>
+  
+  <!-- Body -->
+  <rect x="27" y="29" width="10" height="5" fill="#1a3355"/>
+  
+  <!-- Arms -->
+  <rect x="23" y="30" width="5" height="2" fill="#dda87a"/>
+  <rect x="36" y="30" width="5" height="2" fill="#dda87a"/>
+  <rect x="37" y="31" width="4" height="3" fill="#dda87a"/> <!-- right arm reaching to keyboard -->
+  
+  <!-- Coffee mug -->
+  <rect x="5" y="28" width="3" height="4" fill="#442200"/>
+  <rect x="4" y="29" width="1" height="2" fill="#442200"/>
+  <rect x="6" y="29" width="1" height="2" fill="#884400"/> <!-- coffee steam -->
+  <rect x="5" y="27" width="1" height="1" fill="#ffffff" opacity="0.3"/> <!-- steam -->
+  
+  <!-- Bug icon - a pixel bug crawling near the screen -->
+  <rect x="55" y="35" width="2" height="1" fill="#ff4444"/>
+  <rect x="54" y="34" width="4" height="3" fill="#ff4444"/>
+  <rect x="53" y="35" width="1" height="1" fill="#cc0000"/>
+  <rect x="57" y="35" width="1" height="1" fill="#cc0000"/>
+  <!-- Bug legs -->
+  <rect x="55" y="33" width="1" height="1" fill="#ff4444"/>
+  <rect x="56" y="33" width="1" height="1" fill="#ff4444"/>
+  <rect x="54" y="37" width="1" height="1" fill="#ff4444"/>
+  <rect x="57" y="37" width="1" height="1" fill="#ff4444"/>
+  
+  <!-- Shield/protection icon beside the screen -->
+  <rect x="2" y="40" width="5" height="5" fill="#3355aa"/>
+  <rect x="3" y="39" width="3" height="1" fill="#3355aa"/>
+  <rect x="3" y="41" width="1" height="1" fill="#ffffff"/>
+  <rect x="4" y="42" width="1" height="1" fill="#ffffff"/>
+  <rect x="5" y="41" width="1" height="1" fill="#ffffff"/>
+  
+  <!-- Running text at bottom - Matrix-like -->
+  <rect x="0" y="50" width="64" height="1" fill="#33ff33" opacity="0.15"/>
+  <rect x="10" y="52" width="3" height="1" fill="#33ff33" opacity="0.2"/>
+  <rect x="30" y="54" width="2" height="1" fill="#33ff33" opacity="0.15"/>
+  <rect x="50" y="53" width="4" height="1" fill="#33ff33" opacity="0.2"/>
+  
+  <!-- Lock icon on shield -->
+  <rect x="4" y="42" width="1" height="2" fill="#ffdd44"/>
+  
+  <!-- Dollar sign bounty indicator -->
+  <rect x="58" y="25" width="4" height="4" fill="#ffd700" opacity="0.3"/>
+  <rect x="58" y="25" width="4" height="1" fill="#ffd700" opacity="0.5"/>
+</svg>
