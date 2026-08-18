@@ -54,6 +54,27 @@ test("registerSchema still accepts public registration roles", () => {
   assert.equal(defaulted.role, "client");
 });
 
+test("registration endpoint rejects admin self-assignment with a client error", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/auth/register`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        email: "admin@example.com",
+        password: "password123",
+        role: "admin"
+      })
+    });
+    const payload = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(payload, {
+      success: false,
+      message: "Invalid registration payload"
+    });
+  });
+});
+
 test("admin routes reject authenticated non-admin users", async () => {
   await withServer(async (baseUrl) => {
     const token = signAccessToken({ sub: "usr_client", role: "client" });
