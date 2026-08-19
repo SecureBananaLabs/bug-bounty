@@ -27,6 +27,28 @@ describe("Proposal Validation & Bid Amounts (#743)", () => {
     assert.equal(res.error, "coverLetter must be at least 10 characters");
   });
 
+  it("rejects invalid or oversized estimatedDuration", () => {
+    const res1 = validateCreateProposal({
+      jobId: "job_123",
+      freelancerId: "free_456",
+      coverLetter: "I have 5 years experience with Node.js and TypeScript.",
+      bidAmount: 500,
+      estimatedDuration: "x"
+    });
+    assert.equal(res1.ok, false);
+    assert.equal(res1.error, "estimatedDuration must be at least 2 characters");
+
+    const res2 = validateCreateProposal({
+      jobId: "job_123",
+      freelancerId: "free_456",
+      coverLetter: "I have 5 years experience with Node.js and TypeScript.",
+      bidAmount: 500,
+      estimatedDuration: "x".repeat(51)
+    });
+    assert.equal(res2.ok, false);
+    assert.equal(res2.error, "estimatedDuration cannot exceed 50 characters");
+  });
+
   it("accepts valid proposal payload", () => {
     const res = validateCreateProposal({
       jobId: "job_123",
@@ -40,3 +62,4 @@ describe("Proposal Validation & Bid Amounts (#743)", () => {
     assert.equal(res.data.estimatedDuration, "3 weeks");
   });
 });
+

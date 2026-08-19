@@ -15,9 +15,13 @@ export function validateCreateProposal(payload) {
   if (typeof bidAmount !== "number" || isNaN(bidAmount) || bidAmount <= 0) {
     return { ok: false, error: "bidAmount must be a positive number greater than zero" };
   }
-  if (!estimatedDuration || typeof estimatedDuration !== "string" || estimatedDuration.trim() === "") {
-    return { ok: false, error: "estimatedDuration is required" };
+  if (!estimatedDuration || typeof estimatedDuration !== "string" || estimatedDuration.trim().length < 2) {
+    return { ok: false, error: "estimatedDuration must be at least 2 characters" };
   }
+  if (estimatedDuration.trim().length > 50) {
+    return { ok: false, error: "estimatedDuration cannot exceed 50 characters" };
+  }
+
   return {
     ok: true,
     data: {
