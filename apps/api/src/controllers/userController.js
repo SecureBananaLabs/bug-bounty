@@ -6,5 +6,5 @@ export async function getUsers(req, res) {
 }
 
 export async function postUser(req, res) {
-  return ok(res, await createUser(req.body), 201);
+  return ok(res, await createUser(req.body, req.user), 201);
 }
