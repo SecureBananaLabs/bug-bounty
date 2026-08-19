@@ -1,0 +1,11 @@
+import { z } from "zod";
+
+export const createProposalSchema = z.object({
+  jobId: z.string().min(1),
+  coverLetter: z.string().min(10),
+  bidAmount: z.number().positive(),
+  estimatedDuration: z.string().min(1).max(100),
+  attachments: z.array(z.string()).optional()
+});
+
+export const updateProposalSchema = createProposalSchema.partial();
