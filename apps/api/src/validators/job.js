@@ -18,9 +18,15 @@ export function validateCreateJob(payload) {
   if (budgetMax < budgetMin) {
     return { ok: false, error: "budgetMax must be greater than or equal to budgetMin" };
   }
-  if (!categoryId || typeof categoryId !== "string" || categoryId.trim().length < 1) {
-    return { ok: false, error: "categoryId is required" };
+  if (!categoryId || typeof categoryId !== "string" || categoryId.trim().length < 2) {
+    return { ok: false, error: "categoryId must be at least 2 characters" };
   }
+  if (categoryId.trim().length > 50) {
+    return { ok: false, error: "categoryId cannot exceed 50 characters" };
+  }
+  const cleanSkills = Array.isArray(skills)
+    ? skills.filter((s) => typeof s === "string" && s.trim().length > 0).map((s) => s.trim())
+    : [];
   return {
     ok: true,
     data: {
@@ -29,9 +35,10 @@ export function validateCreateJob(payload) {
       budgetMin,
       budgetMax,
       categoryId: categoryId.trim(),
-      skills: Array.isArray(skills) ? skills : []
+      skills: cleanSkills
     }
   };
+
 }
 
 export function validateUpdateJob(payload) {
