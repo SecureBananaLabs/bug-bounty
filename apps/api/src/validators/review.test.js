@@ -34,6 +34,26 @@ describe("Review Validation & Rating Bounds (#743)", () => {
     assert.equal(res2.error, "Rating must be an integer between 1 and 5");
   });
 
+  it("rejects short or oversized comment (< 5 or > 1000 chars)", () => {
+    const res1 = validateCreateReview({
+      reviewerId: "user_1",
+      revieweeId: "user_2",
+      rating: 5,
+      comment: "Good"
+    });
+    assert.equal(res1.ok, false);
+    assert.equal(res1.error, "Comment must be at least 5 characters");
+
+    const res2 = validateCreateReview({
+      reviewerId: "user_1",
+      revieweeId: "user_2",
+      rating: 5,
+      comment: "a".repeat(1001)
+    });
+    assert.equal(res2.ok, false);
+    assert.equal(res2.error, "Comment cannot exceed 1000 characters");
+  });
+
   it("accepts valid review with rating between 1 and 5", () => {
     const res = validateCreateReview({
       reviewerId: "user_1",
@@ -46,3 +66,4 @@ describe("Review Validation & Rating Bounds (#743)", () => {
     assert.equal(res.data.comment, "Fantastic delivery on time!");
   });
 });
+

@@ -15,9 +15,13 @@ export function validateCreateReview(payload) {
   if (typeof rating !== "number" || !Number.isInteger(rating) || rating < 1 || rating > 5) {
     return { ok: false, error: "Rating must be an integer between 1 and 5" };
   }
-  if (!comment || typeof comment !== "string" || comment.trim().length < 3) {
-    return { ok: false, error: "Comment must be at least 3 characters" };
+  if (!comment || typeof comment !== "string" || comment.trim().length < 5) {
+    return { ok: false, error: "Comment must be at least 5 characters" };
   }
+  if (comment.trim().length > 1000) {
+    return { ok: false, error: "Comment cannot exceed 1000 characters" };
+  }
+
   return {
     ok: true,
     data: {
