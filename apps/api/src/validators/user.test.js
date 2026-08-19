@@ -22,6 +22,18 @@ describe("User Creation Validation & Role Enforcement (#743)", () => {
     assert.equal(res.error, "Full name must be at least 2 characters");
   });
 
+  it("rejects malformed email formats", () => {
+    const invalidEmails = ["notanemail", "user@", "@domain.com", "user@domain", "user@.com"];
+    for (const email of invalidEmails) {
+      const res = validateCreateUser({
+        email,
+        fullName: "Test User"
+      });
+      assert.equal(res.ok, false, `Expected ${email} to be rejected`);
+      assert.equal(res.error, "Valid email is required");
+    }
+  });
+
   it("accepts valid client user payload", () => {
     const res = validateCreateUser({
       email: "client@test.com",
@@ -34,3 +46,4 @@ describe("User Creation Validation & Role Enforcement (#743)", () => {
     assert.equal(res.data.fullName, "Alice Client");
   });
 });
+

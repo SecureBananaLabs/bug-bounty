@@ -1,11 +1,14 @@
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 export function validateCreateUser(payload) {
   if (!payload || typeof payload !== "object") {
     return { ok: false, error: "Invalid user payload" };
   }
   const { email, fullName, role = "client", bio, skills = [] } = payload;
-  if (!email || typeof email !== "string" || !email.includes("@")) {
+  if (!email || typeof email !== "string" || !EMAIL_REGEX.test(email.trim())) {
     return { ok: false, error: "Valid email is required" };
   }
+
   if (!fullName || typeof fullName !== "string" || fullName.trim().length < 2) {
     return { ok: false, error: "Full name must be at least 2 characters" };
   }
