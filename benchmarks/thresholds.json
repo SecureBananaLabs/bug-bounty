@@ -1,0 +1,19 @@
+{
+  "description": "Performance regression thresholds for CI smoke tests. If p99 latency exceeds these values, the CI benchmark step fails.",
+  "default": {
+    "p99_ms": 2000,
+    "error_rate_percent": 5
+  },
+  "endpoints": {
+    "health": { "p99_ms": 100, "error_rate_percent": 0 },
+    "auth_register": { "p99_ms": 2000, "error_rate_percent": 10 },
+    "auth_login": { "p99_ms": 2000, "error_rate_percent": 10 },
+    "users_list": { "p99_ms": 2000, "error_rate_percent": 5 },
+    "jobs_list": { "p99_ms": 2000, "error_rate_percent": 5 },
+    "proposals_list": { "p99_ms": 2000, "error_rate_percent": 5 },
+    "reviews_list": { "p99_ms": 2000, "error_rate_percent": 5 },
+    "messages_list": { "p99_ms": 2000, "error_rate_percent": 5 },
+    "notifications_list": { "p99_ms": 2000, "error_rate_percent": 5 },
+    "search": { "p99_ms": 3000, "error_rate_percent": 5 }
+  }
+}
