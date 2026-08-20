@@ -3,5 +3,8 @@ node_modules
 dist
 .env
 .env.*
+!.env.benchmark.example
 coverage
 *.log
+benchmarks/results/*.json
+benchmarks/results/*.md
