@@ -1,0 +1,30 @@
+name: Benchmark Smoke
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npm test
+
+      - name: Run smoke benchmark
+        run: npm run benchmark:smoke
+        env:
+          JWT_SECRET: benchmark-secret
+          BENCHMARK_DISABLE_RATE_LIMIT: "true"
