@@ -1,0 +1,5 @@
+{
+  "maxP99LatencyMs": 500,
+  "maxErrorRatePercent": 1.0,
+  "minRps": 100
+}
