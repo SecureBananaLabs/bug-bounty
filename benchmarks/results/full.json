@@ -1,0 +1,501 @@
+{
+  "generatedAt": "2026-05-22T12:54:04.229Z",
+  "mode": "full",
+  "target": "local app",
+  "manifest": {
+    "name": "freelance-platform-api",
+    "targetEnv": "local-or-staging",
+    "endpoints": [
+      {
+        "id": "GET /health",
+        "method": "GET",
+        "path": "/health",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "POST /api/auth/register",
+        "method": "POST",
+        "path": "/api/auth/register",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "POST /api/auth/login",
+        "method": "POST",
+        "path": "/api/auth/login",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "GET /api/auth/oauth/github/callback",
+        "method": "GET",
+        "path": "/api/auth/oauth/github/callback",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "POST /api/auth/refresh",
+        "method": "POST",
+        "path": "/api/auth/refresh",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "GET /api/users",
+        "method": "GET",
+        "path": "/api/users",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "POST /api/users",
+        "method": "POST",
+        "path": "/api/users",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "GET /api/jobs",
+        "method": "GET",
+        "path": "/api/jobs",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "POST /api/jobs",
+        "method": "POST",
+        "path": "/api/jobs",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "GET /api/proposals",
+        "method": "GET",
+        "path": "/api/proposals",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "POST /api/proposals",
+        "method": "POST",
+        "path": "/api/proposals",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "POST /api/payments",
+        "method": "POST",
+        "path": "/api/payments",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "GET /api/reviews",
+        "method": "GET",
+        "path": "/api/reviews",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "POST /api/reviews",
+        "method": "POST",
+        "path": "/api/reviews",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "GET /api/messages",
+        "method": "GET",
+        "path": "/api/messages",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "POST /api/messages",
+        "method": "POST",
+        "path": "/api/messages",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "GET /api/notifications",
+        "method": "GET",
+        "path": "/api/notifications",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "POST /api/notifications",
+        "method": "POST",
+        "path": "/api/notifications",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "POST /api/uploads",
+        "method": "POST",
+        "path": "/api/uploads",
+        "expectedStatuses": [
+          201
+        ]
+      },
+      {
+        "id": "GET /api/search?q=benchmark",
+        "method": "GET",
+        "path": "/api/search?q=benchmark",
+        "expectedStatuses": [
+          200
+        ]
+      },
+      {
+        "id": "GET /api/admin/metrics",
+        "method": "GET",
+        "path": "/api/admin/metrics",
+        "expectedStatuses": [
+          200
+        ],
+        "requiresAuth": true
+      }
+    ]
+  },
+  "thresholds": {
+    "defaults": {
+      "maxP99Ms": 750,
+      "maxErrorRate": 0
+    },
+    "endpoints": {
+      "GET /health": {
+        "maxP99Ms": 100,
+        "maxErrorRate": 0
+      },
+      "GET /api/admin/metrics": {
+        "maxP99Ms": 750,
+        "maxErrorRate": 0,
+        "requiresAuth": true
+      }
+    }
+  },
+  "benchmarkEnv": {
+    "node": "v20.20.2",
+    "platform": "win32",
+    "arch": "x64",
+    "cpu": "13th Gen Intel(R) Core(TM) i5-13500H",
+    "cores": 16,
+    "totalMemoryMb": 16088
+  },
+  "results": [
+    {
+      "id": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "status": 200,
+      "p50Ms": 2,
+      "p95Ms": 4,
+      "p99Ms": 4,
+      "ttfbP95Ms": 4,
+      "requestsPerSecond": 462.65,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "status": 201,
+      "p50Ms": 3,
+      "p95Ms": 3,
+      "p99Ms": 3,
+      "ttfbP95Ms": 3,
+      "requestsPerSecond": 351.4,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "status": 200,
+      "p50Ms": 3,
+      "p95Ms": 3,
+      "p99Ms": 3,
+      "ttfbP95Ms": 3,
+      "requestsPerSecond": 350.66,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/auth/oauth/github/callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "status": 200,
+      "p50Ms": 2,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbP95Ms": 2,
+      "requestsPerSecond": 572.1,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/auth/refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200,
+      "p50Ms": 2,
+      "p95Ms": 3,
+      "p99Ms": 3,
+      "ttfbP95Ms": 3,
+      "requestsPerSecond": 421.86,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "status": 200,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 887.78,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "status": 201,
+      "p50Ms": 1,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbP95Ms": 2,
+      "requestsPerSecond": 687.35,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "status": 200,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1233.68,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "status": 201,
+      "p50Ms": 1,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbP95Ms": 2,
+      "requestsPerSecond": 710.39,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "status": 200,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1317.28,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "status": 201,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1010.51,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "status": 201,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 950.68,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "status": 200,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1334.97,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "status": 201,
+      "p50Ms": 1,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbP95Ms": 2,
+      "requestsPerSecond": 813.7,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "status": 200,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1342.1,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "status": 201,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1139.03,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "status": 200,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1514.46,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "status": 201,
+      "p50Ms": 1,
+      "p95Ms": 1,
+      "p99Ms": 1,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1060.63,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "POST /api/uploads",
+      "method": "POST",
+      "path": "/api/uploads",
+      "status": 201,
+      "p50Ms": 2,
+      "p95Ms": 6,
+      "p99Ms": 6,
+      "ttfbP95Ms": 6,
+      "requestsPerSecond": 402.18,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/search?q=benchmark",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "status": 200,
+      "p50Ms": 1,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbP95Ms": 1,
+      "requestsPerSecond": 1110.52,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    },
+    {
+      "id": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "status": 200,
+      "p50Ms": 2,
+      "p95Ms": 2,
+      "p99Ms": 2,
+      "ttfbP95Ms": 2,
+      "requestsPerSecond": 631.58,
+      "errorRate": 0,
+      "passed": true,
+      "violations": []
+    }
+  ]
+}
