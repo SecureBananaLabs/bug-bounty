@@ -1,0 +1,5 @@
+{
+  "p99MaxMs": 1000,
+  "ttfbP99MaxMs": 1000,
+  "errorRateMax": 0
+}
