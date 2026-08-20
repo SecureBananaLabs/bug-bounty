@@ -1,0 +1,11 @@
+{
+  "name": "bug-bounty-benchmarks",
+  "private": true,
+  "scripts": {
+    "benchmark": "node run.js",
+    "benchmark:ci": "node run.js --ci"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0"
+  }
+}
