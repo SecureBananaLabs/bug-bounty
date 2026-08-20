@@ -1,0 +1,18 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1",
+  "title": "Implement Secure Payment Gateway and Payment Service",
+  "body": "## Relevant Code\n\n```js\nexport async function createPaymentIntent(payload) {\n  // TODO: integrate Stripe SDK and return client secret.\n  return {\n    paymentId: `pay_${Date.now()}`,\n    amount: payload.amount,\n    currency: payload.currency ?? \"usd\",\n    provider: \"stripe\"\n  };\n}\n```\n\n**Goals**\n- Replace the stub implementation with a real Stripe `PaymentIntent` via the Stripe Node.js SDK\n- Return the `client_secret` from the created `PaymentIntent` to the caller\n- Handle Stripe API errors and surface them with meaningful error messages\n- Ensure `amount`, `currency`, and any required metadata are validated before the API call\n\n**Acceptance Criteria**\n- [ ] `stripe` npm package is installed and a `STRIPE_SECRET_KEY` environment variable is used to initialise the client — no hardcoded keys\n- [ ] `payload.amount` is required and must be a positive integer (smallest currency unit, e.g. cents); function throws/rejects with a descriptive error if missing or invalid\n- [ ] `payload.currency` defaults to `\"usd\"` if not provided, consistent with current behaviour\n- [ ] A real `stripe.paymentIntents.create()` call is made with at minimum `{ amount, currency }`\n- [ ] The resolved value includes `clientSecret` (mapped from `paymentIntent.client_secret`) and `paymentId` (mapped from `paymentIntent.id`)\n- [ ] The stub `pay_${Date.now()}` id generation is removed\n- [ ] Stripe errors (`StripeCardError`, `StripeInvalidRequestError`, etc.) are caught and re-thrown with the original Stripe error message preserved\n- [ ] Unit test mocks the Stripe SDK and asserts correct arguments are passed to `paymentIntents.create()`\n- [ ] Integration/smoke test (guarded by an env flag) confirms a test-mode `PaymentIntent` is created successfully against the Stripe API\n\n/bounty $350",
+  "labels": [
+    "bug",
+    "good first issue",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$350"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
