@@ -1,0 +1,825 @@
+{
+  "generatedAt": "2026-05-20T04:28:18.515Z",
+  "mode": "full",
+  "target": {
+    "baseUrl": "http://127.0.0.1:65288",
+    "source": "in-process local app"
+  },
+  "config": {
+    "durationMs": 3000,
+    "concurrency": 8
+  },
+  "environment": {
+    "node": "v22.21.1",
+    "os": "Darwin 25.3.0 darwin",
+    "cpu": "Apple M2 Max (12 cores)",
+    "ramMb": 32768,
+    "freeRamMb": 92
+  },
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "name": "Auth register"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "name": "Auth login"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "name": "OAuth callback"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "name": "Auth refresh"
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "name": "List users"
+    },
+    {
+      "method": "POST",
+      "path": "/api/users",
+      "name": "Create user"
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs",
+      "name": "List jobs"
+    },
+    {
+      "method": "POST",
+      "path": "/api/jobs",
+      "name": "Create job"
+    },
+    {
+      "method": "GET",
+      "path": "/api/proposals",
+      "name": "List proposals"
+    },
+    {
+      "method": "POST",
+      "path": "/api/proposals",
+      "name": "Create proposal"
+    },
+    {
+      "method": "POST",
+      "path": "/api/payments",
+      "name": "Create payment"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reviews",
+      "name": "List reviews"
+    },
+    {
+      "method": "POST",
+      "path": "/api/reviews",
+      "name": "Create review"
+    },
+    {
+      "method": "GET",
+      "path": "/api/messages",
+      "name": "List messages"
+    },
+    {
+      "method": "POST",
+      "path": "/api/messages",
+      "name": "Send message"
+    },
+    {
+      "method": "GET",
+      "path": "/api/notifications",
+      "name": "List notifications"
+    },
+    {
+      "method": "POST",
+      "path": "/api/notifications",
+      "name": "Create notification"
+    },
+    {
+      "method": "POST",
+      "path": "/api/uploads",
+      "name": "Upload file"
+    },
+    {
+      "method": "GET",
+      "path": "/api/search?q=marketplace%20dashboard%20node",
+      "name": "Search"
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "name": "Admin metrics"
+    }
+  ],
+  "results": [
+    {
+      "name": "Auth register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 13627,
+      "elapsedMs": 3001,
+      "sustainedRps": 4541.25,
+      "peakRps": 5418.98,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 13627
+      },
+      "latencyMs": {
+        "p50": 1.48,
+        "p95": 3.02,
+        "p99": 4.02
+      },
+      "ttfbMs": {
+        "p50": 1.47,
+        "p95": 3,
+        "p99": 4.01
+      }
+    },
+    {
+      "name": "Auth login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 17702,
+      "elapsedMs": 3001,
+      "sustainedRps": 5899.36,
+      "peakRps": 6452.26,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 17702
+      },
+      "latencyMs": {
+        "p50": 1.24,
+        "p95": 2.21,
+        "p99": 2.61
+      },
+      "ttfbMs": {
+        "p50": 1.23,
+        "p95": 2.2,
+        "p99": 2.59
+      }
+    },
+    {
+      "name": "OAuth callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "requests": 26327,
+      "elapsedMs": 3001,
+      "sustainedRps": 8772.29,
+      "peakRps": 8000,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 26327
+      },
+      "latencyMs": {
+        "p50": 0.82,
+        "p95": 1.68,
+        "p99": 2.01
+      },
+      "ttfbMs": {
+        "p50": 0.82,
+        "p95": 1.67,
+        "p99": 2.01
+      }
+    },
+    {
+      "name": "Auth refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 21632,
+      "elapsedMs": 3001,
+      "sustainedRps": 7209.41,
+      "peakRps": 7927.01,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 21632
+      },
+      "latencyMs": {
+        "p50": 1.01,
+        "p95": 1.9,
+        "p99": 2.34
+      },
+      "ttfbMs": {
+        "p50": 1,
+        "p95": 1.9,
+        "p99": 2.34
+      }
+    },
+    {
+      "name": "List users",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 27072,
+      "elapsedMs": 3000,
+      "sustainedRps": 9022.83,
+      "peakRps": 8000,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 27072
+      },
+      "latencyMs": {
+        "p50": 0.81,
+        "p95": 1.63,
+        "p99": 1.97
+      },
+      "ttfbMs": {
+        "p50": 0.8,
+        "p95": 1.62,
+        "p99": 1.96
+      }
+    },
+    {
+      "name": "Create user",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 20816,
+      "elapsedMs": 3000,
+      "sustainedRps": 6937.86,
+      "peakRps": 7642.1,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 20816
+      },
+      "latencyMs": {
+        "p50": 1.05,
+        "p95": 2.02,
+        "p99": 2.35
+      },
+      "ttfbMs": {
+        "p50": 1.04,
+        "p95": 2.01,
+        "p99": 2.35
+      }
+    },
+    {
+      "name": "List jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 26504,
+      "elapsedMs": 3001,
+      "sustainedRps": 8832.73,
+      "peakRps": 8000,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 26504
+      },
+      "latencyMs": {
+        "p50": 0.81,
+        "p95": 1.76,
+        "p99": 2.15
+      },
+      "ttfbMs": {
+        "p50": 0.8,
+        "p95": 1.76,
+        "p99": 2.14
+      }
+    },
+    {
+      "name": "Create job",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 20096,
+      "elapsedMs": 3000,
+      "sustainedRps": 6697.62,
+      "peakRps": 7498.25,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 20096
+      },
+      "latencyMs": {
+        "p50": 1.07,
+        "p95": 2.16,
+        "p99": 2.63
+      },
+      "ttfbMs": {
+        "p50": 1.06,
+        "p95": 2.15,
+        "p99": 2.62
+      }
+    },
+    {
+      "name": "List proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 23808,
+      "elapsedMs": 3000,
+      "sustainedRps": 7934.85,
+      "peakRps": 8000,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 23808
+      },
+      "latencyMs": {
+        "p50": 0.83,
+        "p95": 1.9,
+        "p99": 3.42
+      },
+      "ttfbMs": {
+        "p50": 0.82,
+        "p95": 1.89,
+        "p99": 3.4
+      }
+    },
+    {
+      "name": "Create proposal",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 20584,
+      "elapsedMs": 3000,
+      "sustainedRps": 6860.73,
+      "peakRps": 7663.14,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 20584
+      },
+      "latencyMs": {
+        "p50": 1.04,
+        "p95": 2.14,
+        "p99": 2.43
+      },
+      "ttfbMs": {
+        "p50": 1.04,
+        "p95": 2.13,
+        "p99": 2.42
+      }
+    },
+    {
+      "name": "Create payment",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 20411,
+      "elapsedMs": 3000,
+      "sustainedRps": 6802.78,
+      "peakRps": 7665.59,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 20411
+      },
+      "latencyMs": {
+        "p50": 1.04,
+        "p95": 2.2,
+        "p99": 2.57
+      },
+      "ttfbMs": {
+        "p50": 1.04,
+        "p95": 2.19,
+        "p99": 2.56
+      }
+    },
+    {
+      "name": "List reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 26736,
+      "elapsedMs": 3000,
+      "sustainedRps": 8910.75,
+      "peakRps": 8000,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 26736
+      },
+      "latencyMs": {
+        "p50": 0.81,
+        "p95": 1.74,
+        "p99": 1.99
+      },
+      "ttfbMs": {
+        "p50": 0.81,
+        "p95": 1.74,
+        "p99": 1.99
+      }
+    },
+    {
+      "name": "Create review",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 20382,
+      "elapsedMs": 3001,
+      "sustainedRps": 6792.25,
+      "peakRps": 7608.18,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 20382
+      },
+      "latencyMs": {
+        "p50": 1.05,
+        "p95": 2.15,
+        "p99": 2.51
+      },
+      "ttfbMs": {
+        "p50": 1.05,
+        "p95": 2.14,
+        "p99": 2.5
+      }
+    },
+    {
+      "name": "List messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 26120,
+      "elapsedMs": 3000,
+      "sustainedRps": 8705.48,
+      "peakRps": 8000,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 26120
+      },
+      "latencyMs": {
+        "p50": 0.82,
+        "p95": 1.81,
+        "p99": 2.14
+      },
+      "ttfbMs": {
+        "p50": 0.81,
+        "p95": 1.81,
+        "p99": 2.13
+      }
+    },
+    {
+      "name": "Send message",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 20482,
+      "elapsedMs": 3000,
+      "sustainedRps": 6826.47,
+      "peakRps": 7607.58,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 20482
+      },
+      "latencyMs": {
+        "p50": 1.05,
+        "p95": 2.1,
+        "p99": 2.39
+      },
+      "ttfbMs": {
+        "p50": 1.05,
+        "p95": 2.1,
+        "p99": 2.38
+      }
+    },
+    {
+      "name": "List notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 26792,
+      "elapsedMs": 3001,
+      "sustainedRps": 8928.65,
+      "peakRps": 8000,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 26792
+      },
+      "latencyMs": {
+        "p50": 0.81,
+        "p95": 1.76,
+        "p99": 2.06
+      },
+      "ttfbMs": {
+        "p50": 0.8,
+        "p95": 1.76,
+        "p99": 2.05
+      }
+    },
+    {
+      "name": "Create notification",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 20240,
+      "elapsedMs": 3000,
+      "sustainedRps": 6745.57,
+      "peakRps": 7532.07,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 20240
+      },
+      "latencyMs": {
+        "p50": 1.06,
+        "p95": 2.19,
+        "p99": 2.48
+      },
+      "ttfbMs": {
+        "p50": 1.06,
+        "p95": 2.18,
+        "p99": 2.47
+      }
+    },
+    {
+      "name": "Upload file",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 13296,
+      "elapsedMs": 3001,
+      "sustainedRps": 4430.82,
+      "peakRps": 4981.58,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "201": 13296
+      },
+      "latencyMs": {
+        "p50": 1.61,
+        "p95": 2.98,
+        "p99": 3.38
+      },
+      "ttfbMs": {
+        "p50": 1.6,
+        "p95": 2.97,
+        "p99": 3.37
+      }
+    },
+    {
+      "name": "Search",
+      "method": "GET",
+      "path": "/api/search?q=marketplace%20dashboard%20node",
+      "requests": 25880,
+      "elapsedMs": 3001,
+      "sustainedRps": 8624.84,
+      "peakRps": 8000,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 25880
+      },
+      "latencyMs": {
+        "p50": 0.84,
+        "p95": 1.81,
+        "p99": 2.08
+      },
+      "ttfbMs": {
+        "p50": 0.83,
+        "p95": 1.8,
+        "p99": 2.07
+      }
+    },
+    {
+      "name": "Admin metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 20001,
+      "elapsedMs": 3001,
+      "sustainedRps": 6664.89,
+      "peakRps": 7339.73,
+      "errorRatePct": 0,
+      "statusCodes": {
+        "200": 20001
+      },
+      "latencyMs": {
+        "p50": 1.09,
+        "p95": 2.18,
+        "p99": 2.55
+      },
+      "ttfbMs": {
+        "p50": 1.08,
+        "p95": 2.17,
+        "p99": 2.53
+      }
+    }
+  ],
+  "gates": [
+    {
+      "endpoint": "POST /api/auth/register",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 4.02,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.61,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/auth/oauth/github/callback",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.01,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/auth/refresh",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.34,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/users",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 1.97,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/users",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.35,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/jobs",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.15,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/jobs",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.63,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 3.42,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/proposals",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.43,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/payments",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.57,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 1.99,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/reviews",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.51,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.14,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/messages",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.39,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.06,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/notifications",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.48,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "POST /api/uploads",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 1200,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 3.38,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/search?q=marketplace%20dashboard%20node",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.08,
+        "errorRatePct": 0
+      }
+    },
+    {
+      "endpoint": "GET /api/admin/metrics",
+      "pass": true,
+      "threshold": {
+        "maxP99Ms": 500,
+        "maxErrorRatePct": 0
+      },
+      "observed": {
+        "p99Ms": 2.55,
+        "errorRatePct": 0
+      }
+    }
+  ]
+}
