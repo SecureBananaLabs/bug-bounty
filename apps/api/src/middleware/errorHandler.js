@@ -4,8 +4,10 @@ export function errorHandler(err, req, res, next) {
     return next(err);
   }
 
-  return res.status(500).json({
+  const status = err.name === "ZodError" ? 400 : err.status ?? 500;
+
+  return res.status(status).json({
     success: false,
-    message: "Unexpected server error"
+    message: status === 500 ? "Unexpected server error" : err.message
   });
 }
