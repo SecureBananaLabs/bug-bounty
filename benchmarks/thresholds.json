@@ -1,0 +1,14 @@
+{
+  "smoke": {
+    "minRequestsPerEndpoint": 1,
+    "maxErrorRate": 0.05,
+    "maxP99Ms": 2500
+  },
+  "full": {
+    "minRequestsPerEndpoint": 5,
+    "maxErrorRate": 0.02,
+    "readMaxP50Ms": 50,
+    "readMaxP95Ms": 150,
+    "allMaxP99Ms": 1000
+  }
+}
