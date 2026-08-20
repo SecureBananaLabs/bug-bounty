@@ -1,0 +1,463 @@
+{
+  "generatedAt": "2026-05-27T15:29:51.825Z",
+  "mode": "full",
+  "targetUrl": "http://127.0.0.1:55883",
+  "settings": {
+    "durationMs": 1200,
+    "concurrency": 4,
+    "warmupRequests": 3,
+    "maxRequestsPerEndpoint": 6
+  },
+  "environment": {
+    "platform": "Darwin 25.5.0 arm64",
+    "cpu": "Apple M3 Max",
+    "logicalCores": 14,
+    "totalMemoryBytes": 103079215104,
+    "freeMemoryBytes": 13386760192,
+    "node": "v25.2.1"
+  },
+  "endpoints": [
+    {
+      "id": "health.get",
+      "method": "GET",
+      "path": "/health",
+      "description": "Service health check",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 1401.56,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 1.91,
+        "p95": 3.8,
+        "p99": 3.8
+      },
+      "ttfbMs": {
+        "p50": 1.85,
+        "p95": 3.75,
+        "p99": 3.75
+      }
+    },
+    {
+      "id": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "description": "Register a benchmark client",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 1784.9,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 1.52,
+        "p95": 2.11,
+        "p99": 2.11
+      },
+      "ttfbMs": {
+        "p50": 1.5,
+        "p95": 2.07,
+        "p99": 2.07
+      }
+    },
+    {
+      "id": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "description": "Login with benchmark credentials",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 2135.3,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 1.47,
+        "p95": 1.99,
+        "p99": 1.99
+      },
+      "ttfbMs": {
+        "p50": 1.41,
+        "p95": 1.97,
+        "p99": 1.97
+      }
+    },
+    {
+      "id": "auth.oauth.github",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "description": "OAuth callback acknowledgement",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3013.43,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 1.11,
+        "p95": 1.34,
+        "p99": 1.34
+      },
+      "ttfbMs": {
+        "p50": 1.04,
+        "p95": 1.32,
+        "p99": 1.32
+      }
+    },
+    {
+      "id": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "description": "Refresh access token",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3211.7,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.98,
+        "p95": 1.22,
+        "p99": 1.22
+      },
+      "ttfbMs": {
+        "p50": 0.93,
+        "p95": 1.18,
+        "p99": 1.18
+      }
+    },
+    {
+      "id": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "description": "List jobs",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3798.27,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.76,
+        "p95": 0.88,
+        "p99": 0.88
+      },
+      "ttfbMs": {
+        "p50": 0.72,
+        "p95": 0.86,
+        "p99": 0.86
+      }
+    },
+    {
+      "id": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "description": "Create a representative job",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 2859.13,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 1.12,
+        "p95": 1.49,
+        "p99": 1.49
+      },
+      "ttfbMs": {
+        "p50": 1.09,
+        "p95": 1.47,
+        "p99": 1.47
+      }
+    },
+    {
+      "id": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "description": "List users",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 4625.76,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.63,
+        "p95": 0.81,
+        "p99": 0.81
+      },
+      "ttfbMs": {
+        "p50": 0.57,
+        "p95": 0.79,
+        "p99": 0.79
+      }
+    },
+    {
+      "id": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "description": "Create a benchmark user",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3140.47,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.99,
+        "p95": 1.34,
+        "p99": 1.34
+      },
+      "ttfbMs": {
+        "p50": 0.96,
+        "p95": 1.32,
+        "p99": 1.32
+      }
+    },
+    {
+      "id": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "description": "List proposals",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 2901.35,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.61,
+        "p95": 1.39,
+        "p99": 1.39
+      },
+      "ttfbMs": {
+        "p50": 0.59,
+        "p95": 1.31,
+        "p99": 1.31
+      }
+    },
+    {
+      "id": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "description": "Create a representative proposal",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3665.06,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.84,
+        "p95": 1.11,
+        "p99": 1.11
+      },
+      "ttfbMs": {
+        "p50": 0.82,
+        "p95": 1.09,
+        "p99": 1.09
+      }
+    },
+    {
+      "id": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "description": "Create a payment intent stub payload",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3687.01,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.86,
+        "p95": 1.1,
+        "p99": 1.1
+      },
+      "ttfbMs": {
+        "p50": 0.83,
+        "p95": 1.08,
+        "p99": 1.08
+      }
+    },
+    {
+      "id": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "description": "List reviews",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 4648.16,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.63,
+        "p95": 0.8,
+        "p99": 0.8
+      },
+      "ttfbMs": {
+        "p50": 0.61,
+        "p95": 0.78,
+        "p99": 0.78
+      }
+    },
+    {
+      "id": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "description": "Create a representative review",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3833.15,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.79,
+        "p95": 1.08,
+        "p99": 1.08
+      },
+      "ttfbMs": {
+        "p50": 0.76,
+        "p95": 1.06,
+        "p99": 1.06
+      }
+    },
+    {
+      "id": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "description": "List messages",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 4238.91,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.76,
+        "p95": 0.89,
+        "p99": 0.89
+      },
+      "ttfbMs": {
+        "p50": 0.72,
+        "p95": 0.87,
+        "p99": 0.87
+      }
+    },
+    {
+      "id": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "description": "Create a representative message",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3280.26,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.94,
+        "p95": 1.23,
+        "p99": 1.23
+      },
+      "ttfbMs": {
+        "p50": 0.93,
+        "p95": 1.22,
+        "p99": 1.22
+      }
+    },
+    {
+      "id": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "description": "List notifications",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 5512.81,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.52,
+        "p95": 0.69,
+        "p99": 0.69
+      },
+      "ttfbMs": {
+        "p50": 0.49,
+        "p95": 0.67,
+        "p99": 0.67
+      }
+    },
+    {
+      "id": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "description": "Create a representative notification",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3716.51,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.9,
+        "p95": 1.11,
+        "p99": 1.11
+      },
+      "ttfbMs": {
+        "p50": 0.87,
+        "p95": 1.09,
+        "p99": 1.09
+      }
+    },
+    {
+      "id": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "description": "Upload a small proof artifact",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 1814.72,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 1.76,
+        "p95": 2.21,
+        "p99": 2.21
+      },
+      "ttfbMs": {
+        "p50": 1.73,
+        "p95": 2.19,
+        "p99": 2.19
+      }
+    },
+    {
+      "id": "search.get",
+      "method": "GET",
+      "path": "/api/search?q=security%20dashboard",
+      "description": "Search with a representative query",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 3948.23,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.83,
+        "p95": 0.94,
+        "p99": 0.94
+      },
+      "ttfbMs": {
+        "p50": 0.81,
+        "p95": 0.92,
+        "p99": 0.92
+      }
+    },
+    {
+      "id": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "description": "Fetch admin metrics with benchmark token",
+      "requests": 6,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "sustainedRps": 2962.48,
+      "peakRps": 6,
+      "latencyMs": {
+        "p50": 0.93,
+        "p95": 1.17,
+        "p99": 1.17
+      },
+      "ttfbMs": {
+        "p50": 0.9,
+        "p95": 1.15,
+        "p99": 1.15
+      }
+    }
+  ],
+  "thresholdFailures": []
+}
