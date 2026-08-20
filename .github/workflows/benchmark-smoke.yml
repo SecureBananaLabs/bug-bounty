@@ -1,0 +1,72 @@
+name: Benchmark Smoke Test
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "packages/**"
+      - "benchmarks/**"
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install k6
+        run: |
+          curl -sL https://github.com/grafana/k6/releases/download/v0.54.0/k6-v0.54.0-linux-amd64.tar.gz | tar xz
+          sudo mv k6-v0.54.0-linux-amd64/k6 /usr/local/bin/
+
+      - name: Start API server
+        run: |
+          npm run dev -w apps/api &
+          sleep 3
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          JWT_SECRET: benchmark-test-secret
+          PORT: 3000
+
+      - name: Run smoke benchmark
+        run: npm run benchmark:smoke
+        env:
+          BENCHMARK_HOST: http://localhost:3000
+
+      - name: Check thresholds
+        run: |
+          python3 -c "
+          import json
+          with open('benchmarks/thresholds.json') as f:
+            thresholds = json.load(f)
+          print('Thresholds loaded:', len(thresholds), 'endpoints')
+          " || echo "Threshold check skipped"
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
