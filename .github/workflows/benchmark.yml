@@ -1,0 +1,57 @@
+name: API Benchmark Smoke Gate
+
+on:
+  pull_request:
+    paths:
+      - 'apps/api/**'
+      - 'benchmarks/**'
+  workflow_dispatch:
+
+jobs:
+  benchmark-smoke:
+    name: Benchmark Smoke Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start API server
+        run: npm run dev -w apps/api &
+        env:
+          NODE_ENV: test
+          PORT: 3000
+
+      - name: Wait for API to be ready
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:3000/health && break
+            echo "Waiting for API... ($i/30)"
+            sleep 2
+          done
+
+      - name: Run smoke benchmark
+        run: npm run benchmark
+        env:
+          BENCHMARK_HOST: http://localhost:3000
+          BENCHMARK_DURATION: 5
+          BENCHMARK_CONNECTIONS: 2
+          BENCHMARK_AUTH_TOKEN: ${{ secrets.BENCHMARK_AUTH_TOKEN }}
+          BENCHMARK_ADMIN_TOKEN: ${{ secrets.BENCHMARK_ADMIN_TOKEN }}
+          BENCHMARK_RESULTS_DIR: benchmarks/results
+
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
