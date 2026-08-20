@@ -4,3 +4,417 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #41517f;
+  background: #20305f;
+  color: #f7f9ff;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #2b3f78;
+  border-color: #6f86d6;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid #334268;
+  border-radius: 8px;
+  background: #10172b;
+  color: #f2f5ff;
+  padding: 0.55rem 0.7rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.audit-table {
+  min-width: 0;
+  table-layout: fixed;
+}
+
+th,
+td {
+  border-bottom: 1px solid #263456;
+  overflow-wrap: anywhere;
+  padding: 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+td span {
+  display: block;
+  color: #aebbea;
+  margin-top: 0.15rem;
+}
+
+.admin-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-header,
+.admin-shell,
+.admin-panel,
+.metric-card,
+.queue-card,
+.control-card,
+.detail-panel,
+.admin-denied {
+  background: #141d35;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+}
+
+.admin-header h2,
+.admin-panel h3,
+.queue-card h4,
+.control-card h3 {
+  margin: 0;
+}
+
+.eyebrow {
+  color: #8ec5ff;
+  font-size: 0.78rem;
+  letter-spacing: 0;
+  margin: 0 0 0.25rem;
+  text-transform: uppercase;
+}
+
+.session-badge {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 190px;
+  border: 1px solid #365684;
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem;
+  background: #0f1728;
+}
+
+.session-badge span,
+.session-badge strong {
+  overflow-wrap: anywhere;
+}
+
+.session-badge span {
+  color: #aebbea;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 168px minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.admin-tabs {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  border-right: 1px solid #2a3765;
+  padding: 0.75rem;
+}
+
+.admin-tabs button {
+  background: transparent;
+  border-color: transparent;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.admin-tabs button.active,
+.admin-tabs button[aria-current="page"] {
+  background: #24416c;
+  border-color: #5a89bb;
+}
+
+.admin-content {
+  min-width: 0;
+  padding: 1rem;
+}
+
+.state-banner {
+  border: 1px solid #365684;
+  border-radius: 8px;
+  background: #0f1728;
+  color: #cfe3ff;
+  margin-bottom: 1rem;
+  padding: 0.75rem 0.85rem;
+}
+
+.state-error {
+  border-color: #8a3652;
+  color: #ffb3c7;
+}
+
+.metric-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.metric-card {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.85rem;
+}
+
+.metric-card span,
+.panel-heading span,
+.queue-card small,
+dt {
+  color: #aebbea;
+}
+
+.metric-card strong {
+  font-size: 1.45rem;
+}
+
+.split-grid,
+.queue-grid,
+.control-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.split-grid {
+  grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
+}
+
+.admin-panel,
+.queue-card,
+.control-card,
+.detail-panel,
+.admin-denied {
+  padding: 1rem;
+}
+
+.panel-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 130px 140px 145px 145px;
+  gap: 0.5rem;
+  width: min(100%, 840px);
+}
+
+.audit-filters {
+  grid-template-columns: repeat(4, minmax(130px, 1fr));
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.empty-state {
+  border: 1px dashed #40527f;
+  border-radius: 8px;
+  color: #aebbea;
+  padding: 0.85rem;
+}
+
+.detail-panel {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.detail-panel h4 {
+  margin: 0 0 0.2rem;
+}
+
+.detail-panel span {
+  color: #aebbea;
+}
+
+.detail-panel dl {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.detail-panel dd {
+  margin: 0;
+}
+
+.action-cell,
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.queue-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.queue-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.queue-card p {
+  color: #d6dcf7;
+  margin: 0;
+}
+
+.queue-card dl {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.queue-card dl div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.queue-card dd {
+  margin: 0;
+}
+
+.status-pill,
+.severity,
+.control-on,
+.control-off {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.78rem;
+  line-height: 1.2;
+}
+
+.status-active,
+.status-approved,
+.status-resolved,
+.control-on {
+  background: #173f35;
+  color: #89f2bf;
+}
+
+.status-suspended,
+.status-pending,
+.status-under-review,
+.severity-medium {
+  background: #4d3c16;
+  color: #ffdf8a;
+}
+
+.status-banned,
+.status-rejected,
+.severity-high,
+.control-off {
+  background: #4c1f2c;
+  color: #ff9db8;
+}
+
+.status-escalated {
+  background: #2c315f;
+  color: #b6c5ff;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.bar-row div {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #253252;
+}
+
+.bar-row i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #66d9a4, #74b8ff);
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.control-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 760px) {
+  main {
+    padding: 1rem;
+  }
+
+  .admin-header,
+  .header-actions,
+  .panel-heading,
+  .control-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-shell,
+  .split-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-right: 0;
+    border-bottom: 1px solid #2a3765;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}
