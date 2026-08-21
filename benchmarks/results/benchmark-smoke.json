@@ -1,0 +1,484 @@
+{
+  "generatedAt": "2026-05-25T10:21:16.004Z",
+  "mode": "smoke",
+  "baseUrl": "local ephemeral Express server",
+  "requestsPerEndpoint": 1,
+  "concurrency": 1,
+  "environment": {
+    "platform": "win32",
+    "release": "10.0.26200",
+    "arch": "x64",
+    "cpuModel": "AMD Ryzen 7 9800X3D 8-Core Processor",
+    "logicalCores": 16,
+    "totalMemoryGB": 61.59,
+    "freeMemoryGB": 32.58,
+    "node": "v22.18.0"
+  },
+  "routeCount": 21,
+  "apiRouteCount": 20,
+  "results": [
+    {
+      "endpoint": "GET /health",
+      "description": "API health check",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 2.98,
+        "p95": 2.98,
+        "p99": 2.98
+      },
+      "ttfbMs": {
+        "p50": 2.81,
+        "p95": 2.81,
+        "p99": 2.81
+      },
+      "rps": {
+        "sustained": 326.56,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/auth/register",
+      "description": "Client registration",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 3.51,
+        "p95": 3.51,
+        "p99": 3.51
+      },
+      "ttfbMs": {
+        "p50": 3.38,
+        "p95": 3.38,
+        "p99": 3.38
+      },
+      "rps": {
+        "sustained": 282.41,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "description": "Benchmark login token",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.97,
+        "p95": 1.97,
+        "p99": 1.97
+      },
+      "ttfbMs": {
+        "p50": 1.88,
+        "p95": 1.88,
+        "p99": 1.88
+      },
+      "rps": {
+        "sustained": 504.72,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/auth/oauth/github/callback",
+      "description": "OAuth callback receipt",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.41,
+        "p95": 1.41,
+        "p99": 1.41
+      },
+      "ttfbMs": {
+        "p50": 1.24,
+        "p95": 1.24,
+        "p99": 1.24
+      },
+      "rps": {
+        "sustained": 705.92,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/auth/refresh",
+      "description": "Access token refresh",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.79,
+        "p95": 1.79,
+        "p99": 1.79
+      },
+      "ttfbMs": {
+        "p50": 1.64,
+        "p95": 1.64,
+        "p99": 1.64
+      },
+      "rps": {
+        "sustained": 556.14,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/users",
+      "description": "List users",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.18,
+        "p95": 1.18,
+        "p99": 1.18
+      },
+      "ttfbMs": {
+        "p50": 1.02,
+        "p95": 1.02,
+        "p99": 1.02
+      },
+      "rps": {
+        "sustained": 842.53,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/users",
+      "description": "Create user profile",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.14,
+        "p95": 1.14,
+        "p99": 1.14
+      },
+      "ttfbMs": {
+        "p50": 1.07,
+        "p95": 1.07,
+        "p99": 1.07
+      },
+      "rps": {
+        "sustained": 835.49,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/jobs",
+      "description": "List jobs",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 2.21,
+        "p95": 2.21,
+        "p99": 2.21
+      },
+      "ttfbMs": {
+        "p50": 2.02,
+        "p95": 2.02,
+        "p99": 2.02
+      },
+      "rps": {
+        "sustained": 450.09,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/jobs",
+      "description": "Create job",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 2.25,
+        "p95": 2.25,
+        "p99": 2.25
+      },
+      "ttfbMs": {
+        "p50": 2.17,
+        "p95": 2.17,
+        "p99": 2.17
+      },
+      "rps": {
+        "sustained": 434.57,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "description": "List proposals",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.13,
+        "p95": 1.13,
+        "p99": 1.13
+      },
+      "ttfbMs": {
+        "p50": 1.01,
+        "p95": 1.01,
+        "p99": 1.01
+      },
+      "rps": {
+        "sustained": 870.32,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/proposals",
+      "description": "Create proposal",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.32,
+        "p95": 1.32,
+        "p99": 1.32
+      },
+      "ttfbMs": {
+        "p50": 1.25,
+        "p95": 1.25,
+        "p99": 1.25
+      },
+      "rps": {
+        "sustained": 673.58,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/payments",
+      "description": "Create payment intent",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.08,
+        "p95": 1.08,
+        "p99": 1.08
+      },
+      "ttfbMs": {
+        "p50": 1.02,
+        "p95": 1.02,
+        "p99": 1.02
+      },
+      "rps": {
+        "sustained": 887.63,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "description": "List reviews",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.04,
+        "p95": 1.04,
+        "p99": 1.04
+      },
+      "ttfbMs": {
+        "p50": 0.93,
+        "p95": 0.93,
+        "p99": 0.93
+      },
+      "rps": {
+        "sustained": 957.49,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/reviews",
+      "description": "Create review",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.14,
+        "p95": 1.14,
+        "p99": 1.14
+      },
+      "ttfbMs": {
+        "p50": 1.07,
+        "p95": 1.07,
+        "p99": 1.07
+      },
+      "rps": {
+        "sustained": 850.34,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "description": "List messages",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 0.77,
+        "p95": 0.77,
+        "p99": 0.77
+      },
+      "ttfbMs": {
+        "p50": 0.69,
+        "p95": 0.69,
+        "p99": 0.69
+      },
+      "rps": {
+        "sustained": 1296.51,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/messages",
+      "description": "Send message",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.57,
+        "p95": 1.57,
+        "p99": 1.57
+      },
+      "ttfbMs": {
+        "p50": 1.51,
+        "p95": 1.51,
+        "p99": 1.51
+      },
+      "rps": {
+        "sustained": 622.94,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "description": "List notifications",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.31,
+        "p95": 1.31,
+        "p99": 1.31
+      },
+      "ttfbMs": {
+        "p50": 1.25,
+        "p95": 1.25,
+        "p99": 1.25
+      },
+      "rps": {
+        "sustained": 761.27,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/notifications",
+      "description": "Create notification",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.63,
+        "p95": 1.63,
+        "p99": 1.63
+      },
+      "ttfbMs": {
+        "p50": 1.56,
+        "p95": 1.56,
+        "p99": 1.56
+      },
+      "rps": {
+        "sustained": 599.02,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "POST /api/uploads",
+      "description": "Upload portfolio file",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 4.23,
+        "p95": 4.23,
+        "p99": 4.23
+      },
+      "ttfbMs": {
+        "p50": 4.16,
+        "p95": 4.16,
+        "p99": 4.16
+      },
+      "rps": {
+        "sustained": 217.91,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/search",
+      "description": "Global search",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.4,
+        "p95": 1.4,
+        "p99": 1.4
+      },
+      "ttfbMs": {
+        "p50": 1.33,
+        "p95": 1.33,
+        "p99": 1.33
+      },
+      "rps": {
+        "sustained": 709.62,
+        "peak": 4
+      },
+      "sampleError": null
+    },
+    {
+      "endpoint": "GET /api/admin/metrics",
+      "description": "Admin metrics",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePercent": 0,
+      "latencyMs": {
+        "p50": 1.75,
+        "p95": 1.75,
+        "p99": 1.75
+      },
+      "ttfbMs": {
+        "p50": 1.67,
+        "p95": 1.67,
+        "p99": 1.67
+      },
+      "rps": {
+        "sustained": 567.99,
+        "peak": 4
+      },
+      "sampleError": null
+    }
+  ],
+  "thresholdFailures": []
+}
