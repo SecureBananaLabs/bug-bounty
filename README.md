@@ -89,3 +89,4 @@ Each app/package expects its own `.env` values for DB, auth, and integrations.
 # bounty-fix-ref: https://github.com/SecureBananaLabs/bug-bounty/issues/743
 # bounty-fix-ref: https://github.com/SecureBananaLabs/bug-bounty/issues/743
 # bounty-fix-ref: https://github.com/SecureBananaLabs/bug-bounty/issues/743
+# bounty-fix-ref: https://github.com/SecureBananaLabs/bug-bounty/issues/743
