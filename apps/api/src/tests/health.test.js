@@ -2,10 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
 
-test("GET /health returns ok payload", async () => {
+  it('returns 200 with the shared success envelope and service name', async () => {
   const app = createApp();
   const server = app.listen(0);
-
+    expect(res.body).toEqual({ success: true, data: { service: 'api' } });
   await new Promise((resolve, reject) => {
     server.once("listening", resolve);
     server.once("error", reject);
