@@ -1,10 +1,15 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
+  const parsedPayload = registerSchema.safeParse(req.body);
+
+  if (!parsedPayload.success) {
+    return fail(res, "Invalid registration payload");
+  }
+
+  const result = await registerUser(parsedPayload.data);
   return ok(res, result, 201);
 }
 
