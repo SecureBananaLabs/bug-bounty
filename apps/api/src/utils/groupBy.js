@@ -1,59 +1,38 @@
 /**
  * @file groupBy.js
- * Prototype-safe collection grouping utility.
- * Grouping transactions by currency, aggregating bounties by status, and clustering analytics logs.
+ * Prototype-safe collection grouper utility supporting property keys and iteratee functions.
  */
+
+'use strict';
 
 const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
 
 /**
- * Groups elements of a collection according to the string/symbol returned by iteratee.
- * 
- * @param {Array|Iterable|Object} collection - The collection to iterate over.
- * @param {Function|string|number|symbol} [iteratee] - The iteratee to transform keys or property name.
- * @returns {Object} Returns the composed aggregate object.
+ * Groups elements of an iterable/array based on a property key or iteratee function.
+ * Completely guarded against Prototype Pollution attacks.
+ *
+ * @param {Array|Iterable} collection - The collection to iterate over.
+ * @param {string|Function} iteratee - Property name or transformation function.
+ * @returns {Object} An object of grouped arrays.
  */
 export function groupBy(collection, iteratee) {
   const result = Object.create(null);
 
-  if (collection == null) {
-    return Object.assign({}, result);
+  if (!collection || typeof collection[Symbol.iterator] !== 'function') {
+    return {};
   }
 
-  // Resolve key getter function
-  let getKey;
-  if (typeof iteratee === 'function') {
-    getKey = iteratee;
-  } else if (typeof iteratee === 'string' || typeof iteratee === 'number' || typeof iteratee === 'symbol') {
-    getKey = (item) => (item != null ? item[iteratee] : undefined);
-  } else {
-    getKey = (item) => item;
-  }
+  const getKey = typeof iteratee === 'function'
+    ? iteratee
+    : (item) => (item != null ? item[iteratee] : undefined);
 
-  const entries = [];
-  if (Array.isArray(collection)) {
-    for (let i = 0; i < collection.length; i++) {
-      entries.push([collection[i], i]);
-    }
-  } else if (typeof collection[Symbol.iterator] === 'function' && typeof collection !== 'string') {
-    let index = 0;
-    for (const item of collection) {
-      entries.push([item, index++]);
-    }
-  } else if (typeof collection === 'object') {
-    for (const key of Object.keys(collection)) {
-      entries.push([collection[key], key]);
-    }
-  } else {
-    return Object.assign({}, result);
-  }
-
-  for (const [item, indexOrKey] of entries) {
-    const rawKey = getKey(item, indexOrKey, collection);
+  let index = 0;
+  for (const item of collection) {
+    const rawKey = getKey(item, index++);
     const key = String(rawKey);
 
     if (FORBIDDEN_KEYS.has(key)) {
-      // Safe assignment without prototype pollution
+      // Safely assign without prototype pollution
       if (!Object.prototype.hasOwnProperty.call(result, key)) {
         Object.defineProperty(result, key, {
           value: [],
@@ -62,14 +41,29 @@ export function groupBy(collection, iteratee) {
           configurable: true,
         });
       }
-      result[key].push(item);
     } else {
       if (!result[key]) {
         result[key] = [];
       }
-      result[key].push(item);
+    }
+
+    result[key].push(item);
+  }
+
+  // Return as a standard plain object with Object prototype but safe properties
+  const safeObj = {};
+  for (const [k, v] of Object.entries(result)) {
+    if (FORBIDDEN_KEYS.has(k)) {
+      Object.defineProperty(safeObj, k, {
+        value: v,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
+    } else {
+      safeObj[k] = v;
     }
   }
 
-  return Object.assign({}, result);
+  return safeObj;
 }

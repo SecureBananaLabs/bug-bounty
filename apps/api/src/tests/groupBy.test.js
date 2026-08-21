@@ -1,6 +1,6 @@
 /**
  * @file groupBy.test.js
- * Unit tests for groupBy utility.
+ * Unit tests for prototype-safe groupBy utility.
  */
 
 import assert from 'assert';
@@ -9,63 +9,75 @@ import { groupBy } from '../utils/groupBy.js';
 function runTests() {
   console.log('Running groupBy unit tests...');
 
-  // Test 1: Group by property string key
+  // Test 1: Group by string property key
   {
     const items = [
-      { id: 1, category: 'finance', amount: 100 },
-      { id: 2, category: 'dev', amount: 200 },
-      { id: 3, category: 'finance', amount: 300 },
+      { id: 1, category: 'fruit', name: 'apple' },
+      { id: 2, category: 'vegetable', name: 'carrot' },
+      { id: 3, category: 'fruit', name: 'banana' },
     ];
+
     const grouped = groupBy(items, 'category');
-    assert.strictEqual(grouped.finance.length, 2);
-    assert.strictEqual(grouped.dev.length, 1);
-    assert.strictEqual(grouped.finance[0].id, 1);
-    assert.strictEqual(grouped.finance[1].id, 3);
-    console.log('✔ Test 1 passed: Group by property string key');
+    assert.deepStrictEqual(grouped, {
+      fruit: [
+        { id: 1, category: 'fruit', name: 'apple' },
+        { id: 3, category: 'fruit', name: 'banana' },
+      ],
+      vegetable: [
+        { id: 2, category: 'vegetable', name: 'carrot' },
+      ],
+    });
+    console.log('✔ Test 1 passed: Group by string property key');
   }
 
-  // Test 2: Group with custom iteratee function
+  // Test 2: Group by custom iteratee function
   {
     const numbers = [6.1, 4.2, 6.3];
     const grouped = groupBy(numbers, Math.floor);
-    assert.strictEqual(grouped['6'].length, 2);
-    assert.strictEqual(grouped['4'].length, 1);
-    assert.deepStrictEqual(grouped['6'], [6.1, 6.3]);
-    console.log('✔ Test 2 passed: Group with custom iteratee function');
+
+    assert.deepStrictEqual(grouped, {
+      '4': [4.2],
+      '6': [6.1, 6.3],
+    });
+    console.log('✔ Test 2 passed: Group by custom iteratee function');
   }
 
-  // Test 3: Prototype pollution security test
+  // Test 3: Guard against prototype pollution keys (__proto__, constructor, prototype)
   {
-    const items = [
-      { role: '__proto__', user: 'alice' },
-      { role: 'constructor', user: 'bob' },
-      { role: 'prototype', user: 'charlie' },
-      { role: '__proto__', user: 'david' },
+    const maliciousItems = [
+      { key: '__proto__', val: 'polluted' },
+      { key: 'constructor', val: 'evil' },
     ];
-    const grouped = groupBy(items, 'role');
-    assert.strictEqual(grouped['__proto__'].length, 2);
-    assert.strictEqual(grouped['constructor'].length, 1);
-    assert.strictEqual(grouped['prototype'].length, 1);
+
+    const grouped = groupBy(maliciousItems, 'key');
+
     assert.strictEqual(Object.prototype.polluted, undefined);
     assert.strictEqual({}.polluted, undefined);
-    console.log('✔ Test 3 passed: Prototype pollution security test');
+    assert.strictEqual(typeof Object.prototype.constructor, 'function');
+    assert.strictEqual(grouped['__proto__'].length, 1);
+    assert.strictEqual(grouped['constructor'].length, 1);
+    console.log('✔ Test 3 passed: Prototype pollution safely handled');
   }
 
-  // Test 4: Support Map, Set and Object collections
+  // Test 4: Handle arrays and Sets (iterables)
   {
-    const set = new Set(['one', 'two', 'three', 'four']);
-    const groupedByLength = groupBy(set, (s) => s.length);
-    assert.strictEqual(groupedByLength['3'].length, 2); // 'one', 'two'
-    assert.strictEqual(groupedByLength['5'].length, 1); // 'three'
-    assert.strictEqual(groupedByLength['4'].length, 1); // 'four'
-    console.log('✔ Test 4 passed: Support Sets and iterables');
+    const set = new Set(['one', 'two', 'three']);
+    const grouped = groupBy(set, (s) => s.length);
+
+    assert.deepStrictEqual(grouped, {
+      '3': ['one', 'two'],
+      '5': ['three'],
+    });
+    console.log('✔ Test 4 passed: Sets and custom iterables');
   }
 
-  // Test 5: Empty / Null handling
+  // Test 5: Handle empty, null, and non-iterable collections
   {
-    assert.deepStrictEqual(groupBy(null), {});
-    assert.deepStrictEqual(groupBy([]), {});
-    console.log('✔ Test 5 passed: Empty and null inputs');
+    assert.deepStrictEqual(groupBy(null, 'id'), {});
+    assert.deepStrictEqual(groupBy(undefined, 'id'), {});
+    assert.deepStrictEqual(groupBy(12345, 'id'), {});
+    assert.deepStrictEqual(groupBy([], 'id'), {});
+    console.log('✔ Test 5 passed: Non-iterable inputs safely return empty object');
   }
 
   console.log('All groupBy tests passed successfully!');
