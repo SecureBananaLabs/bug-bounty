@@ -88,3 +88,4 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 Each app/package expects its own `.env` values for DB, auth, and integrations.
 # bounty-fix-ref: https://github.com/SecureBananaLabs/bug-bounty/issues/743
 # bounty-fix-ref: https://github.com/SecureBananaLabs/bug-bounty/issues/743
+# bounty-fix-ref: https://github.com/SecureBananaLabs/bug-bounty/issues/743
