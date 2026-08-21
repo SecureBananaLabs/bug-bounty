@@ -1,5 +1,5 @@
 const users = [];
-
+  return [...users];
 export async function listUsers() {
   return users;
 }
