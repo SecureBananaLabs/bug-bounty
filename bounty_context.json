@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1773",
+  "title": "User creation endpoint has no input validation",
+  "body": "## Bug: Missing Input Validation on User Creation\n\n**Description:** The `POST /api/users` endpoint does not validate input with Zod schema, unlike auth and job routes which use proper validation. This allows arbitrary data to be stored as user records.\n\n**File:** `apps/api/src/controllers/userController.js`\n\n**Current code:**\n```js\nexport async function postUser(req, res) {\n  return ok(res, await createUser(req.body), 201);\n}\n```\n\n**Expected behavior:** A Zod validation schema should be created for user creation (similar to `registerSchema` and `createJobSchema`) and applied before passing data to the service layer.\n\n**Impact:** Medium — allows malformed or malicious data to be persisted as user records.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
