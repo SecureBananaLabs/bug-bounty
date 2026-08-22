@@ -1,0 +1,18 @@
+# Benchmark Configuration Template
+# Copy this file to .env.benchmark and fill in values
+
+# Target server
+BENCHMARK_HOST=http://localhost:3000
+
+# Auth token for protected routes (JWT)
+BENCHMARK_TOKEN=your-jwt-token-here
+
+# Benchmark duration (seconds per endpoint)
+BENCHMARK_DURATION=10
+
+# Connections (concurrent requests)
+BENCHMARK_CONNECTIONS=50
+
+# Smoke test settings (for CI regression gate)
+BENCHMARK_SMOKE_DURATION=3
+BENCHMARK_SMOKE_CONNECTIONS=5
