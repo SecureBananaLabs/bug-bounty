@@ -4,3 +4,104 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.55; }
+
+.admin-panel { display: grid; gap: 1rem; }
+.admin-hero,
+.admin-card,
+.metric-card {
+  background: #151c35;
+  border: 1px solid #2a3765;
+  border-radius: 8px;
+}
+.admin-hero { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem; }
+.admin-hero h2, .admin-card h3 { margin: 0.2rem 0 0; }
+.eyebrow { margin: 0; color: #9fb2ff; font-size: 0.78rem; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+.admin-session, .admin-filters, .action-row, .pagination { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.admin-button,
+.admin-panel button {
+  border: 1px solid #5268ba;
+  border-radius: 6px;
+  background: #24346a;
+  color: #f2f5ff;
+  padding: 0.45rem 0.7rem;
+}
+.admin-button.secondary { background: transparent; }
+.admin-alert { margin: 0; border: 1px solid #76512d; border-radius: 8px; background: #2a1d19; color: #ffd3aa; padding: 0.75rem; }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; }
+.metric-card { padding: 0.85rem; }
+.metric-card span, .compact-item span, .admin-row span, .switch-row small, .audit-list span { color: #b8c2df; }
+.metric-card strong { display: block; margin-top: 0.3rem; font-size: 1.4rem; }
+.admin-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.9fr); gap: 1rem; align-items: start; }
+.admin-card { padding: 1rem; min-width: 0; }
+.admin-card.wide { grid-row: span 2; }
+.admin-card-header { display: grid; gap: 0.75rem; margin-bottom: 0.75rem; }
+.admin-filters input, .admin-filters select {
+  min-width: 150px;
+  border: 1px solid #3b4d89;
+  border-radius: 6px;
+  background: #0f1730;
+  color: #f2f5ff;
+  padding: 0.45rem 0.55rem;
+}
+.admin-table { display: grid; gap: 0.55rem; }
+.admin-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 90px 105px 80px;
+  gap: 0.65rem;
+  align-items: center;
+  border: 1px solid #27355f;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+.admin-row .action-row { grid-column: 1 / -1; justify-content: flex-end; }
+.admin-row div:first-child, .compact-item div { display: grid; gap: 0.2rem; min-width: 0; }
+.admin-row strong, .compact-item strong, .switch-row strong { overflow-wrap: anywhere; }
+.status-pill {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  border-radius: 999px;
+  background: #26365f;
+  color: #dbe5ff;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.82rem;
+}
+.status-pill.good { background: #154c3a; color: #baf8dd; }
+.status-pill.warn { background: #56351d; color: #ffd8a8; }
+.stack { display: grid; gap: 0.65rem; margin-top: 0.75rem; }
+.compact-item {
+  display: grid;
+  gap: 0.55rem;
+  border: 1px solid #27355f;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: 1px solid #27355f;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+.switch-row span { display: grid; gap: 0.25rem; }
+.switch-row input { width: 1.2rem; height: 1.2rem; accent-color: #7ca3ff; flex: 0 0 auto; }
+.audit-list { display: grid; gap: 0.6rem; margin: 0.75rem 0 0; padding-left: 1.25rem; }
+.audit-list li { padding-left: 0.25rem; }
+.audit-list span { display: block; margin-top: 0.15rem; }
+.empty-state { color: #b8c2df; border: 1px dashed #3b4d89; border-radius: 8px; padding: 1rem; }
+.pagination { justify-content: flex-end; margin-top: 0.75rem; color: #b8c2df; }
+
+@media (max-width: 860px) {
+  .admin-hero, .switch-row { align-items: stretch; flex-direction: column; }
+  .admin-layout { grid-template-columns: 1fr; }
+  .admin-card.wide { grid-row: auto; }
+  .admin-row { grid-template-columns: 1fr; }
+  .admin-session, .action-row, .pagination { align-items: stretch; }
+  .admin-panel button, .admin-filters input, .admin-filters select { width: 100%; }
+}
