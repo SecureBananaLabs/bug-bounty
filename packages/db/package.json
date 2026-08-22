@@ -1,9 +1,11 @@
 {
   "name": "@freelanceflow/db",
   "private": true,
+  "type": "module",
   "scripts": {
     "generate": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "test": "node --test tests/*.test.js"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0"
