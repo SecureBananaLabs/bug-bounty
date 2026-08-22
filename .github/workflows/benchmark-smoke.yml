@@ -1,0 +1,48 @@
+name: Benchmark Smoke
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npm test
+
+      - name: Verify benchmark endpoint coverage
+        run: npm run benchmark:coverage
+
+      - name: Run benchmark smoke gate
+        run: npm run benchmark:smoke
+
+      - name: Add benchmark summary
+        if: always()
+        run: |
+          if [ -f benchmarks/results/latest.md ]; then
+            cat benchmarks/results/latest.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload benchmark reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-reports
+          path: benchmarks/results/
