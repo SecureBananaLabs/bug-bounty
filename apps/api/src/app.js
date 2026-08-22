@@ -18,8 +18,44 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
+  // Hide framework fingerprint
+  app.disable("x-powered-by");
+
+  // Security headers via helmet (CSP, HSTS, X-Frame-Options, etc.)
   app.use(helmet());
-  app.use(cors());
+
+  // --- CORS: strict origin allowlist ---
+  // Only configured origins may make cross-origin requests from browsers.
+  // Non-browser clients (curl, server-to-server) pass through when Origin is absent.
+  const allowedOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(",").map((o) => o.trim())
+    : [];
+
+  app.use(
+    cors({
+      origin(origin, callback) {
+        // Non-browser requests (no Origin header) — allow
+        if (!origin) {
+          return callback(null, true);
+        }
+        // Browser request from a configured origin — allow
+        if (allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        // Unknown origin — reject
+        return callback(new Error("Not allowed by CORS"));
+      },
+      // Only expose the methods the API actually uses
+      methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      // Only allow headers the API consumes
+      allowedHeaders: ["Content-Type", "Authorization"],
+      // Reflect credentials (cookies, Authorization header) from allowed origins
+      credentials: true,
+      // Cache preflight responses for 10 minutes to reduce OPTIONS spam
+      maxAge: 600,
+    })
+  );
+
   app.use(express.json());
   app.use(apiLimiter);
 
@@ -27,6 +63,9 @@ export function createApp() {
     res.status(200).json({ ok: true, service: "api" });
   });
 
+  // --- Route mounting ---
+  // All mutation routes (POST/PUT/PATCH/DELETE) are protected by authMiddleware
+  // at the route level. See each route file for the applied middleware chain.
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
   app.use("/api/jobs", jobRoutes);
