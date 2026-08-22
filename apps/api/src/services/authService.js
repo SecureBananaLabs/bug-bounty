@@ -1,23 +1,14 @@
-import { signAccessToken } from "../utils/jwt.js";
-
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
-  };
-}
-
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
-
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
-}
+--- a/apps/api/src/services/authService.js
++++ b/apps/api/src/services/authService.js
+@@ -1,3 +1,5 @@
++const ALLOWED_REGISTRATION_ROLES = ['client', 'freelancer'];
++
+ const registerUser = async ({ email, password, name, role }) => {
++  // Defense-in-depth: never allow admin or any non-public role at registration
++  const safeRole = ALLOWED_REGISTRATION_ROLES.includes(role) ? role : 'client';
++
+   // ... existing user creation logic ...
+-  const user = await User.create({ email, password: hashedPassword, name, role: role || 'client' });
++  const user = await User.create({ email, password: hashedPassword, name, role: safeRole });
+   return user;
+ };
