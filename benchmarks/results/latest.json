@@ -1,0 +1,619 @@
+{
+  "generatedAt": "2026-05-31T16:50:47.547Z",
+  "benchmarkMode": "full",
+  "target": "http://127.0.0.1:51474",
+  "settings": {
+    "durationMs": 2000,
+    "concurrency": 4,
+    "warmupRequests": 1
+  },
+  "summary": {
+    "totalEndpoints": 20,
+    "totalRequests": 409854,
+    "totalErrors": 0,
+    "errorRate": 0,
+    "failedEndpoints": []
+  },
+  "endpoints": [
+    {
+      "name": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 14158,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.46,
+        "p95": 1.12,
+        "p99": 1.66
+      },
+      "ttfbMs": {
+        "p50": 0.45,
+        "p95": 1.11,
+        "p99": 1.65
+      },
+      "rps": {
+        "sustained": 7078.54,
+        "peak": 8052
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 14158
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 16695,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.42,
+        "p95": 1.09,
+        "p99": 1.39
+      },
+      "ttfbMs": {
+        "p50": 0.42,
+        "p95": 1.09,
+        "p99": 1.38
+      },
+      "rps": {
+        "sustained": 8345.56,
+        "peak": 8063
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 16695
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/auth/oauth/github/callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback?code=benchmark-code&state=benchmark-state",
+      "requests": 24632,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.29,
+        "p95": 0.39,
+        "p99": 1.03
+      },
+      "ttfbMs": {
+        "p50": 0.29,
+        "p95": 0.38,
+        "p99": 1.02
+      },
+      "rps": {
+        "sustained": 12314.56,
+        "peak": 12488
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 24632
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/auth/refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 17319,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.42,
+        "p95": 0.61,
+        "p99": 1.26
+      },
+      "ttfbMs": {
+        "p50": 0.42,
+        "p95": 0.6,
+        "p99": 1.25
+      },
+      "rps": {
+        "sustained": 8657.89,
+        "peak": 8660
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 17319
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 25772,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.28,
+        "p95": 0.34,
+        "p99": 1.04
+      },
+      "ttfbMs": {
+        "p50": 0.28,
+        "p95": 0.33,
+        "p99": 1.04
+      },
+      "rps": {
+        "sustained": 12885,
+        "peak": 12851
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 25772
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 19432,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.37,
+        "p95": 0.58,
+        "p99": 1.3
+      },
+      "ttfbMs": {
+        "p50": 0.36,
+        "p95": 0.57,
+        "p99": 1.29
+      },
+      "rps": {
+        "sustained": 9715.45,
+        "peak": 9656
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 19432
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 24352,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.29,
+        "p95": 0.48,
+        "p99": 1.2
+      },
+      "ttfbMs": {
+        "p50": 0.28,
+        "p95": 0.47,
+        "p99": 1.2
+      },
+      "rps": {
+        "sustained": 12175.2,
+        "peak": 11872
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 24352
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 18876,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.37,
+        "p95": 0.62,
+        "p99": 1.4
+      },
+      "ttfbMs": {
+        "p50": 0.37,
+        "p95": 0.61,
+        "p99": 1.39
+      },
+      "rps": {
+        "sustained": 9436.67,
+        "peak": 9525
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 18876
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 24772,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.29,
+        "p95": 0.37,
+        "p99": 1.24
+      },
+      "ttfbMs": {
+        "p50": 0.28,
+        "p95": 0.36,
+        "p99": 1.24
+      },
+      "rps": {
+        "sustained": 12385.43,
+        "peak": 12488
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 24772
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 19212,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.37,
+        "p95": 0.56,
+        "p99": 1.38
+      },
+      "ttfbMs": {
+        "p50": 0.36,
+        "p95": 0.55,
+        "p99": 1.37
+      },
+      "rps": {
+        "sustained": 9604.14,
+        "peak": 9613
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 19212
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 19300,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.37,
+        "p95": 0.59,
+        "p99": 1.34
+      },
+      "ttfbMs": {
+        "p50": 0.36,
+        "p95": 0.58,
+        "p99": 1.34
+      },
+      "rps": {
+        "sustained": 9648.76,
+        "peak": 9716
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 19300
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 24179,
+      "durationSec": 2.001,
+      "latencyMs": {
+        "p50": 0.29,
+        "p95": 0.46,
+        "p99": 1.2
+      },
+      "ttfbMs": {
+        "p50": 0.29,
+        "p95": 0.45,
+        "p99": 1.19
+      },
+      "rps": {
+        "sustained": 12082.88,
+        "peak": 11948
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 24179
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 19214,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.37,
+        "p95": 0.58,
+        "p99": 1.34
+      },
+      "ttfbMs": {
+        "p50": 0.37,
+        "p95": 0.57,
+        "p99": 1.33
+      },
+      "rps": {
+        "sustained": 9606.13,
+        "peak": 9662
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 19214
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 24824,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.29,
+        "p95": 0.36,
+        "p99": 1.2
+      },
+      "ttfbMs": {
+        "p50": 0.29,
+        "p95": 0.35,
+        "p99": 1.19
+      },
+      "rps": {
+        "sustained": 12411.24,
+        "peak": 12440
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 24824
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 18668,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.38,
+        "p95": 0.67,
+        "p99": 1.44
+      },
+      "ttfbMs": {
+        "p50": 0.37,
+        "p95": 0.66,
+        "p99": 1.43
+      },
+      "rps": {
+        "sustained": 9333.36,
+        "peak": 9321
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 18668
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 24535,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.29,
+        "p95": 0.35,
+        "p99": 1.26
+      },
+      "ttfbMs": {
+        "p50": 0.29,
+        "p95": 0.34,
+        "p99": 1.25
+      },
+      "rps": {
+        "sustained": 12266.07,
+        "peak": 12404
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 24535
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 18243,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.37,
+        "p95": 1.01,
+        "p99": 1.51
+      },
+      "ttfbMs": {
+        "p50": 0.37,
+        "p95": 1,
+        "p99": 1.5
+      },
+      "rps": {
+        "sustained": 9120.37,
+        "peak": 9177
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 18243
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "POST /api/uploads",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 12527,
+      "durationSec": 2.001,
+      "latencyMs": {
+        "p50": 0.54,
+        "p95": 1.51,
+        "p99": 1.85
+      },
+      "ttfbMs": {
+        "p50": 0.53,
+        "p95": 1.5,
+        "p99": 1.85
+      },
+      "rps": {
+        "sustained": 6260.61,
+        "peak": 6600
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "201": 12527
+      },
+      "threshold": {
+        "p99Ms": 2500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search?q=react%20payments%20dashboard",
+      "requests": 23832,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.3,
+        "p95": 0.35,
+        "p99": 1.23
+      },
+      "ttfbMs": {
+        "p50": 0.3,
+        "p95": 0.35,
+        "p99": 1.23
+      },
+      "rps": {
+        "sustained": 11915.27,
+        "peak": 12008
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 23832
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    },
+    {
+      "name": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 19312,
+      "durationSec": 2,
+      "latencyMs": {
+        "p50": 0.38,
+        "p95": 0.44,
+        "p99": 1.36
+      },
+      "ttfbMs": {
+        "p50": 0.37,
+        "p95": 0.44,
+        "p99": 1.36
+      },
+      "rps": {
+        "sustained": 9654.91,
+        "peak": 9631
+      },
+      "errorRate": 0,
+      "statusCounts": {
+        "200": 19312
+      },
+      "threshold": {
+        "p99Ms": 1500,
+        "errorRate": 0
+      },
+      "thresholdPassed": true
+    }
+  ]
+}
