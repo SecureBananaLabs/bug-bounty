@@ -1,41 +1,57 @@
 /**
  * @file review.js
- * Review creation validation schema and helpers enforcing targetUserId, rating bounds (1-5), and comment length bounds (5-1000 characters).
+ * Review creation validation schema and helpers enforcing rating bounds (1-5), comment length bounds (5-1000 chars), and self-review prevention.
  */
 
 'use strict';
 
 import { z } from 'zod';
 
-export const createReviewSchema = z.object({
-  targetUserId: z
-    .string({
-      required_error: 'targetUserId is required',
-      invalid_type_error: 'targetUserId must be a string',
-    })
-    .min(1, 'targetUserId is required')
-    .optional(),
-  freelancerId: z.string().min(1).optional(),
-  rating: z
-    .number({
-      required_error: 'rating is required',
-      invalid_type_error: 'rating must be an integer between 1 and 5',
-    })
-    .int('rating must be an integer between 1 and 5')
-    .min(1, 'rating must be an integer between 1 and 5')
-    .max(5, 'rating must be an integer between 1 and 5'),
-  comment: z
-    .string({
-      required_error: 'comment is required',
-      invalid_type_error: 'comment must be a string',
-    })
-    .min(5, 'Review comment must be between 5 and 1000 characters')
-    .max(1000, 'Review comment must be between 5 and 1000 characters'),
-  contractId: z.string().optional(),
-}).refine((data) => Boolean(data.targetUserId || data.freelancerId), {
-  message: 'targetUserId is required',
-  path: ['targetUserId'],
-});
+export const createReviewSchema = z
+  .object({
+    reviewerId: z.string().min(1).optional(),
+    revieweeId: z.string().min(1).optional(),
+    targetUserId: z
+      .string({
+        invalid_type_error: 'targetUserId must be a string',
+      })
+      .min(1, 'targetUserId is required')
+      .optional(),
+    freelancerId: z.string().min(1).optional(),
+    rating: z
+      .number({
+        required_error: 'rating is required',
+        invalid_type_error: 'rating must be an integer between 1 and 5',
+      })
+      .int('rating must be an integer between 1 and 5')
+      .min(1, 'rating must be an integer between 1 and 5')
+      .max(5, 'rating must be an integer between 1 and 5'),
+    comment: z
+      .string({
+        required_error: 'comment is required',
+        invalid_type_error: 'comment must be a string',
+      })
+      .min(5, 'Review comment must be between 5 and 1000 characters')
+      .max(1000, 'Review comment must be between 5 and 1000 characters'),
+    contractId: z.string().optional(),
+  })
+  .refine((data) => Boolean(data.targetUserId || data.freelancerId || data.revieweeId), {
+    message: 'targetUserId is required',
+    path: ['targetUserId'],
+  })
+  .refine(
+    (data) => {
+      const target = data.targetUserId || data.freelancerId || data.revieweeId;
+      if (data.reviewerId && target && data.reviewerId === target) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: 'Users cannot submit reviews for themselves',
+      path: ['reviewerId'],
+    }
+  );
 
 /**
  * Validates whether a review comment satisfies length bounds (5 to 1000 chars).
@@ -80,11 +96,14 @@ export function validateCreateReview(payload) {
   const result = createReviewSchema.safeParse(payload);
   if (result.success) {
     const data = result.data;
+    const target = data.targetUserId ?? data.freelancerId ?? data.revieweeId;
     const sanitized = {
       rating: data.rating,
       comment: data.comment.trim(),
-      targetUserId: data.targetUserId ?? data.freelancerId,
-      freelancerId: data.freelancerId ?? data.targetUserId,
+      targetUserId: target,
+      freelancerId: target,
+      revieweeId: target,
+      reviewerId: data.reviewerId ?? null,
       contractId: data.contractId ?? null,
     };
     return {
