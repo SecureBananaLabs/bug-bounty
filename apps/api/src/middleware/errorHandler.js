@@ -4,8 +4,9 @@ export function errorHandler(err, req, res, next) {
     return next(err);
   }
 
-  return res.status(500).json({
+  const statusCode = Number.isInteger(err.statusCode) ? err.statusCode : 500;
+  return res.status(statusCode).json({
     success: false,
-    message: "Unexpected server error"
+    message: statusCode < 500 ? err.message : "Unexpected server error"
   });
 }

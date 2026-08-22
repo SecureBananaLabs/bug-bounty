@@ -1,4 +1,5 @@
 import { signAccessToken } from "../utils/jwt.js";
+import { env } from "../config/env.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
@@ -15,6 +16,17 @@ export async function loginUser(payload) {
   return {
     email: payload.email,
     token: signAccessToken({ sub: "usr_existing", role: "client" })
+  };
+}
+
+export async function loginAdmin(payload) {
+  if (payload.email !== env.adminEmail || payload.password !== env.adminPassword) {
+    return null;
+  }
+
+  return {
+    email: payload.email,
+    token: signAccessToken({ sub: "admin-1", role: "ADMIN", email: payload.email })
   };
 }
 
