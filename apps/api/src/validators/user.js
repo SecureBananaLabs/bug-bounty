@@ -50,10 +50,17 @@ export function validateCreateUser(payload) {
     };
   }
 
+  if (role === 'admin') {
+    return {
+      valid: false,
+      error: 'Admin role assignment not permitted',
+    };
+  }
+
   const sanitized = {
     email: email.trim().toLowerCase(),
     name: typeof name === 'string' ? name.trim() : '',
-    role: role && ['client', 'freelancer', 'admin'].includes(role) ? role : 'client',
+    role: role && ['client', 'freelancer'].includes(role) ? role : 'client',
   };
 
   return {
