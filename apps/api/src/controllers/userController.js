@@ -1,10 +1,1 @@
-import { ok } from "../utils/response.js";
-import { createUser, listUsers } from "../services/userService.js";
-
-export async function getUsers(req, res) {
-  return ok(res, await listUsers());
-}
-
-export async function postUser(req, res) {
-  return ok(res, await createUser(req.body), 201);
-}
+import { ok } from "../utils/response.js";import { createUser, listUsers } from "../services/userService.js";export async function getUsers(req, res) {  return ok(res, await listUsers());}export async function postUser(req, res) {  const { email, role } = req.body || {};  if (!email || !role) {    return res.status(400).json({ error: "email and role are required" });  }  return ok(res, await createUser({ email, role }), 201);}
