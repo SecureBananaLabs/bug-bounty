@@ -3,7 +3,12 @@ import { createJobSchema } from "../validators/job.js";
 import { createJob, listJobs } from "../services/jobService.js";
 
 export async function getJobs(req, res) {
-  return ok(res, await listJobs());
+  const filters = {
+    status: req.query?.status,
+    categoryId: req.query?.categoryId,
+    minBudget: req.query?.minBudget,
+  };
+  return ok(res, await listJobs(filters));
 }
 
 export async function postJob(req, res) {
