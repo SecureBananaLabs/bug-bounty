@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const rejectBlankPassword=(req,res,next)=>{const p=req.body?.password;if(typeof p==="string"&&!p.trim())return fail(res,"Password cannot be blank or whitespace only",400);return next();};
