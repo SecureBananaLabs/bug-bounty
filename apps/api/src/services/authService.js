@@ -2,11 +2,14 @@ import { signAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
+  // Prevent admin role self-assignment 鈥?admins must be provisioned manually
+  const role = payload.role === "admin" ? "client" : payload.role;
+  const id = `usr_${Date.now()}`;
   return {
-    id: `usr_${Date.now()}`,
+    id,
     email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    role,
+    token: signAccessToken({ sub: id, role })
   };
 }
 
