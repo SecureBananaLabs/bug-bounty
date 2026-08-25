@@ -1,0 +1,1 @@
+export const userNoCallerId=(req,_,next)=>{delete req.body?.id;delete req.body?._id;delete req.body?.createdAt;return next();};
