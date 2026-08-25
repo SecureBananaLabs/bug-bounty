@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const noSelfReviewV2=(req,res,next)=>{const uid=String(req.user?.id||req.user?.sub||"");const target=String(req.body?.targetId||"");if(uid&&target&&uid===target)return fail(res,"Cannot review yourself",400);return next();};
