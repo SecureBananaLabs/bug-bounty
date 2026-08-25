@@ -1,10 +1,24 @@
-import { ok } from "../utils/response.js";
-import { createNotification, listNotifications } from "../services/notificationService.js";
+const notificationService = require('../services/notificationService');
+const { validateCreateNotification } = require('../validators/notification');
+const { Response } = require('express');
 
-export async function getNotifications(req, res) {
-  return ok(res, await listNotifications());
-}
+const postNotification = async (req, res, next) => {
+  try {
+    const validation = validateCreateNotification(req.body);
 
-export async function postNotification(req, res) {
-  return ok(res, await createNotification(req.body), 201);
-}
+    if (!validation.success) {
+      return res.status(400).json({
+        errors: validation.error.errors.map(err => ({ field: err.path[0], message: err.message }))
+      });
+    }
+
+    const notification = await notificationService.createNotification(req.body);
+    res.status(201).json(notification);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  postNotification,
+};
