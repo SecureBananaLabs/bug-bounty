@@ -1,0 +1,1 @@
+export const noClientId=(req,_,next)=>{["id","_id","createdAt","updatedAt"].forEach(f=>delete req.body?.[f]);return next();};
