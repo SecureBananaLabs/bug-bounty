@@ -1,0 +1,1 @@
+export const matchUserIdSub=(userId,tokenPayload)=>({...tokenPayload,sub:String(userId),id:String(userId),userId:String(userId)});
