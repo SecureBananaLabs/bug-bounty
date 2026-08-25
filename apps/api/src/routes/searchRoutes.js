@@ -1,6 +1,9 @@
-import { Router } from "express";
-import { search } from "../controllers/searchController.js";
+const express = require('express');
+const { search } = require('../controllers/searchController');
+const { validateSearchQuery } = require('../validators/search');
 
-export const searchRoutes = Router();
+const router = express.Router();
 
-searchRoutes.get("/", search);
+router.get('/', validateSearchQuery, search);
+
+module.exports = router;
