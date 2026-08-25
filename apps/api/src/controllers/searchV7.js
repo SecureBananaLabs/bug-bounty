@@ -1,0 +1,2 @@
+import{ok,fail}from"../utils/response.js";
+export async function searchV7(req,res){const q=String(req.query.q||"").trim();if(!q)return fail(res,"q required",400);return ok(res,{results:[],query:q.slice(0,200)});}
