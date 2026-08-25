@@ -1,6 +1,11 @@
-import { Router } from "express";
-import { search } from "../controllers/searchController.js";
+const express = require('express');
+const router = express.Router();
+const searchController = require('../controllers/searchController');
+const authMiddleware = require('../middleware/auth');
 
-export const searchRoutes = Router();
+// Apply auth middleware to all search routes
+router.use(authMiddleware);
 
-searchRoutes.get("/", search);
+router.get('/', searchController.search);
+
+module.exports = router;
