@@ -1,20 +1,36 @@
+import { randomUUID } from "node:crypto";
 import { signAccessToken } from "../utils/jwt.js";
 
+const registeredUsers = new Map();
+
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
-    id: `usr_${Date.now()}`,
+  const id = `usr_${randomUUID()}`;
+  const user = {
+    id,
     email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    password: payload.password,
+    role: payload.role
+  };
+
+  registeredUsers.set(user.email, user);
+
+  return {
+    id,
+    email: user.email,
+    role: user.role,
+    token: signAccessToken({ sub: id, role: user.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  const user = registeredUsers.get(payload.email);
+  if (!user || user.password !== payload.password) {
+    return null;
+  }
+
   return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    email: user.email,
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
