@@ -1,0 +1,2 @@
+import jwt from"jsonwebtoken";import{fail}from"../utils/response.js";
+export const requireAuthProfile=(req,res,next)=>{const h=req.headers.authorization;if(!h?.startsWith("Bearer "))return fail(res,"Authentication required",401);try{req.user=jwt.verify(h.slice(7),process.env.JWT_SECRET||"s");if(req.params.userId&&req.user.id!==req.params.userId)return fail(res,"Cannot access another user profile",403);return next();}catch{return fail(res,"Invalid token",401);}};
