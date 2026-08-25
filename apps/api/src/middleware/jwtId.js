@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const jwtId=(req,res,next)=>{if(!req.user)return fail(res,"Not authenticated",401);if(!req.user.sub&&!req.user.id)return fail(res,"Token missing identity",401);return next();};
