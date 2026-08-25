@@ -1,0 +1,1 @@
+export function toSnapshot(arr){return Array.isArray(arr)?arr.map(item=>item&&typeof item==="object"?{...item}:item):[];}
