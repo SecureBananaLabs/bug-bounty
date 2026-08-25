@@ -1,7 +1,8 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
-import { apiLimiter } from "./middleware/rateLimit.js";
+import { apiLimiter, authLimiter } from "./middleware/rateLimit.js";
+
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
@@ -19,15 +20,27 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  // IMPORTANT: cors() with no options allows ALL origins (*), which lets
+  // any website make cross-origin requests to this API — including with
+  // credentials if the client sets withCredentials=true.
+  // Restrict to known allowed origins; use env var for flexibility.
+  app.use(cors({
+    origin: process.env.ALLOWED_ORIGINS
+      ? process.env.ALLOWED_ORIGINS.split(",")
+      : ["http://localhost:3000"],
+    credentials: true
+  }));
   app.use(express.json());
   app.use(apiLimiter);
+
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
 
-  app.use("/api/auth", authRoutes);
+  // Auth routes get a stricter rate limit to prevent credential brute-force.
+  app.use("/api/auth", authLimiter, authRoutes);
+
   app.use("/api/users", userRoutes);
   app.use("/api/jobs", jobRoutes);
   app.use("/api/proposals", proposalRoutes);
