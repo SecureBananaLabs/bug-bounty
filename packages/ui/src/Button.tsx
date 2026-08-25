@@ -1,6 +1,9 @@
 import React from "react";
 
-export function Button({ children }: { children: React.ReactNode }) {
+export function Button({
+  children,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       style={{
@@ -11,6 +14,7 @@ export function Button({ children }: { children: React.ReactNode }) {
         padding: "0.6rem 0.9rem",
         cursor: "pointer"
       }}
+      {...props}
     >
       {children}
     </button>
