@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const budgetInvV7=(req,res,next)=>{const b=req.body?.budget;if(b&&typeof b.min==="number"&&typeof b.max==="number"&&b.min>=b.max)return fail(res,"budget.max must exceed budget.min",400);return next();};
