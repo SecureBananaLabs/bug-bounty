@@ -1,44 +1,35 @@
-import cors from "cors";
-import express from "express";
-import helmet from "helmet";
-import { apiLimiter } from "./middleware/rateLimit.js";
-import { errorHandler } from "./middleware/errorHandler.js";
-import { authRoutes } from "./routes/authRoutes.js";
-import { userRoutes } from "./routes/userRoutes.js";
-import { jobRoutes } from "./routes/jobRoutes.js";
-import { proposalRoutes } from "./routes/proposalRoutes.js";
-import { paymentRoutes } from "./routes/paymentRoutes.js";
-import { reviewRoutes } from "./routes/reviewRoutes.js";
-import { messageRoutes } from "./routes/messageRoutes.js";
-import { notificationRoutes } from "./routes/notificationRoutes.js";
-import { uploadRoutes } from "./routes/uploadRoutes.js";
-import { searchRoutes } from "./routes/searchRoutes.js";
-import { adminRoutes } from "./routes/adminRoutes.js";
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const env = require('./config/env');
+const errorHandler = require('./middleware/errorHandler');
+const routes = require('./routes');
 
-export function createApp() {
-  const app = express();
+const app = express();
 
-  app.use(helmet());
-  app.use(cors());
-  app.use(express.json());
-  app.use(apiLimiter);
+// Security middleware
+app.use(helmet());
+app.use(cors({
+  origin: env.corsOrigin,
+  credentials: true
+}));
+app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-  app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
-  });
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
 
-  app.use("/api/auth", authRoutes);
-  app.use("/api/users", userRoutes);
-  app.use("/api/jobs", jobRoutes);
-  app.use("/api/proposals", proposalRoutes);
-  app.use("/api/payments", paymentRoutes);
-  app.use("/api/reviews", reviewRoutes);
-  app.use("/api/messages", messageRoutes);
-  app.use("/api/notifications", notificationRoutes);
-  app.use("/api/uploads", uploadRoutes);
-  app.use("/api/search", searchRoutes);
-  app.use("/api/admin", adminRoutes);
+// Routes
+app.use('/api', routes);
 
-  app.use(errorHandler);
-  return app;
-}
+// Error handling
+app.use(errorHandler);
+
+module.exports = app;
