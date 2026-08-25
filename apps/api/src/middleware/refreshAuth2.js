@@ -1,0 +1,2 @@
+import jwt from"jsonwebtoken";import{fail}from"../utils/response.js";
+export const refreshAuth2=(req,res,next)=>{const rt=req.body?.refreshToken;if(!rt)return fail(res,"refreshToken required",400);try{const p=jwt.verify(rt,process.env.JWT_SECRET||"s");req.refreshPayload=p;req.userId=p.sub||p.id;return next();}catch{return fail(res,"Invalid refresh token",401);}};
