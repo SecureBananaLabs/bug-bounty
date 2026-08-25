@@ -1,0 +1,2 @@
+import React from"react";
+export default function BillingPage(){return(<main><h1>Billing &amp; Payments</h1><section><h2>Subscription</h2><p>Free tier</p><a href="/upgrade">Upgrade plan</a></section><section><h2>Payment Methods</h2><button type="button">Add payment method</button></section><section><h2>Invoices</h2><p>No invoices available.</p></section></main>);}
