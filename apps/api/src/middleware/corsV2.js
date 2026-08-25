@@ -1,0 +1,3 @@
+import cors from"cors";
+const allowed=(process.env.CORS_ORIGIN||"http://localhost:3000").split(",").map(s=>s.trim());
+export const corsV2=cors({origin:(o,cb)=>(!o||allowed.includes(o))?cb(null,true):cb(new Error("CORS blocked")),credentials:true});
