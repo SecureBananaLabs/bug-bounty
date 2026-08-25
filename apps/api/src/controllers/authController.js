@@ -15,10 +15,17 @@ export async function login(req, res) {
 }
 
 export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
+  try {
+    const { code, state } = req.query;
+    if (!code) {
+      return res.status(400).json({ error: "Missing OAuth authorization code" });
+    }
+    // Validate state parameter to prevent CSRF on OAuth callback
+    const result = await loginUser({ oauthProvider: req.params.provider, oauthCode: code, oauthState: state });
+    return ok(res, result);
+  } catch (err) {
+    return res.status(401).json({ error: "OAuth authentication failed" });
+  }
 }
 
 export async function refresh(req, res) {
