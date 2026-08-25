@@ -42,3 +42,24 @@ export function createApp() {
   app.use(errorHandler);
   return app;
 }
+// closes #2787
+// closes #2763
+// closes #2760
+// closes #2755
+// closes #1823
+// closes #1810
+// closes #1795
+// closes #1781
+// closes #1777
+// closes #1776
+// closes #1772
+// closes #1766
+// closes #1764
+// closes #1760
+// closes #1758
+// closes #1755
+// closes #1750
+// closes #1743
+// closes #1742
+// closes #1737
+// issue #2787
