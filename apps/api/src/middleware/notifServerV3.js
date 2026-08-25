@@ -1,0 +1,1 @@
+export const notifServerV3=(req,_,next)=>{delete req.body?.id;delete req.body?.read;delete req.body?.readAt;req.body.read=false;return next();};
