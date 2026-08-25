@@ -1,0 +1,1 @@
+export const TEST_CONFIG={pattern:"src/tests/**/*.test.js",runner:"node --test"};export const runTests=()=>`${TEST_CONFIG.runner} ${TEST_CONFIG.pattern}`;
