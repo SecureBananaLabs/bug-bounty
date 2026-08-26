@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { env } from "./config/env.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
@@ -18,8 +19,31 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
+  // Build the CORS allowlist from the CORS_ORIGINS env var (comma-separated).
+  const allowedOrigins = env.corsOrigins
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   app.use(helmet());
-  app.use(cors());
+  app.use(
+    cors({
+      // Reflect only explicitly allowed origins. Requests without an Origin
+      // header (same-origin, server-to-server, health checks) are permitted;
+      // any cross-origin request is denied unless its origin is in the
+      // allowlist. An empty allowlist denies ALL cross-origin traffic, which
+      // is the safe default for production.
+      origin(origin, callback) {
+        if (!origin) {
+          return callback(null, true);
+        }
+        if (allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        return callback(null, false);
+      },
+    }),
+  );
   app.use(express.json());
   app.use(apiLimiter);
 
