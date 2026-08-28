@@ -1,0 +1,13 @@
+--- apps/api/src/middleware/errorHandler.js
++++ b/apps/api/src/middleware/errorHandler.js
+@@ -1,4 +1,10 @@
+ export function errorHandler(err, req, res, next) {
++  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
++    return res.status(400).json({
++      success: false,
++      message: "Malformed JSON body"
++    });
++  }
+   console.error("Unhandled API error:", err);
+   if (res.headersSent) {
+     return next(err);
