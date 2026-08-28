@@ -1,3 +1,5 @@
+import crypto from "crypto";
+
 const jobs = [];
 
 export async function listJobs() {

@@ -1,0 +1,17 @@
+--- a/apps/api/src/services/jobService.js
++++ b/apps/api/src/services/jobService.js
+@@ -1,3 +1,5 @@
++import crypto from "crypto";
++
+ const jobs = [];
+ 
+ export async function listJobs() {
+   return jobs;
+ }
+ 
+ export async function createJob(payload) {
+-  const job = { id: `job_${Date.now()}`, status: "open", ...payload };
++  const job = { id: `job_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`, status: "open", ...payload };
+   jobs.push(job);
+   return job;
+ }
