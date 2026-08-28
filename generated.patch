@@ -1,0 +1,190 @@
+--- a/apps/api/src/controllers/adminController.js
++++ b/apps/api/src/controllers/adminController.js
+@@ -1,5 +1,12 @@
+ import { ok } from "../utils/response.js";
+-import { getAdminMetrics } from "../services/adminService.js";
++import { getAdminMetrics, benchmarkApi } from "../services/adminService.js";
+
+ export async function metrics(req, res) {
+   return ok(res, await getAdminMetrics());
+ }
++
++export async function benchmark(req, res) {
++  const url = req.body?.url || req.query?.url || `http://127.0.0.1:${req.socket?.localPort || 4000}/health`;
++  const options = req.body?.options || req.body || {};
++  return ok(res, await benchmarkApi(url, options));
++}
+--- a/apps/api/src/routes/adminRoutes.js
++++ b/apps/api/src/routes/adminRoutes.js
+@@ -1,8 +1,10 @@
+ import { Router } from "express";
+-import { metrics } from "../controllers/adminController.js";
++import { metrics, benchmark } from "../controllers/adminController.js";
+ import { authMiddleware } from "../middleware/auth.js";
+
+ export const adminRoutes = Router();
+
+ adminRoutes.use(authMiddleware);
+ adminRoutes.get("/metrics", metrics);
++adminRoutes.get("/benchmark", benchmark);
++adminRoutes.post("/benchmark", benchmark);
+--- a/apps/api/src/services/adminService.js
++++ b/apps/api/src/services/adminService.js
+@@ -1,8 +1,12 @@
++import { benchmarkApi } from "../utils/benchmark.js";
+
+ export async function getAdminMetrics() {
+   return {
+     openJobs: 42,
+     activeFreelancers: 185,
+     flaggedAccounts: 3,
+     monthlyVolume: 128900
+   };
+ }
++
++export { benchmarkApi };
+--- /dev/null
++++ b/apps/api/src/tests/benchmark.test.js
+@@ -0,0 +1,30 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { createApp } from "../app.js";
++import { benchmarkApi } from "../utils/benchmark.js";
+
++test("benchmarkApi returns latency metrics, RPS, error rate and TTFB", async () => {
++  const app = createApp();
++  const server = app.listen(0);
+
++  await new Promise((resolve, reject) => {
++    server.once("listening", resolve);
++    server.once("error", reject);
++  });
+
++  const { port } = server.address();
++  const url = `http://127.0.0.1:${port}/health`;
+
++  const results = await benchmarkApi(url, { requests: 5, concurrency: 2 });
+
++  assert.equal(typeof results.p50, "number");
++  assert.equal(typeof results.p95, "number");
++  assert.equal(typeof results.p99, "number");
++  assert.equal(typeof results.rps, "number");
++  assert.equal(typeof results.errorRate, "number");
++  assert.equal(typeof results.ttfb, "number");
++  assert.equal(results.errorRate, 0);
+
++  await new Promise((resolve, reject) => {
++    server.close((error) => (error ? reject(error) : resolve()));
++  });
++});
+--- /dev/null
++++ b/apps/api/src/utils/benchmark.js
+@@ -0,0 +1,88 @@
++import { env } from "../config/env.js";
+
++export async function benchmarkApi(url, options = {}) {
++  const {
++    iterations = 10,
++    requests = iterations,
++    concurrency = 1,
++    method = "GET",
++    headers = {},
++    body = null
++  } = options;
+
++  let targetUrl = url;
++  if (typeof targetUrl === "string" && targetUrl.startsWith("/")) {
++    targetUrl = `http://127.0.0.1:${env.port || 4000}${targetUrl}`;
++  }
+
++  const totalRequests = requests;
++  const latencies = [];
++  const ttfbs = [];
++  let failedRequests = 0;
+
++  const startTime = performance.now();
+
++  const runRequest = async () => {
++    const reqStart = performance.now();
++    let ttfbVal = 0;
++    let isError = false;
+
++    try {
++      const fetchOpts = { method, headers };
++      if (body && method !== "GET" && method !== "HEAD") {
++        fetchOpts.body = typeof body === "object" ? JSON.stringify(body) : body;
++        if (typeof body === "object" && !headers["Content-Type"] && !headers["content-type"]) {
++          fetchOpts.headers = { ...headers, "Content-Type": "application/json" };
++        }
++      }
+
++      const res = await fetch(targetUrl, fetchOpts);
++      ttfbVal = performance.now() - reqStart;
++      await res.arrayBuffer();
+
++      if (!res.ok) {
++        isError = true;
++      }
++    } catch {
++      ttfbVal = performance.now() - reqStart;
++      isError = true;
++    }
+
++    const totalLatency = performance.now() - reqStart;
+
++    if (isError) {
++      failedRequests++;
++    }
++    latencies.push(totalLatency);
++    ttfbs.push(ttfbVal);
++  };
+
++  const queue = Array.from({ length: totalRequests }, () => runRequest);
++  const workers = Array.from({ length: Math.min(concurrency, totalRequests) }, async () => {
++    while (queue.length > 0) {
++      const task = queue.shift();
++      if (task) await task();
++    }
++  });
+
++  await Promise.all(workers);
+
++  const totalDurationMs = performance.now() - startTime;
++  const totalDurationSec = totalDurationMs / 1000 || 0.001;
+
++  latencies.sort((a, b) => a - b);
++  ttfbs.sort((a, b) => a - b);
+
++  const getPercentile = (arr, p) => {
++    if (arr.length === 0) return 0;
++    const idx = Math.min(arr.length - 1, Math.floor((p / 100) * arr.length));
++    return arr[idx];
++  };
+
++  const p50 = getPercentile(latencies, 50);
++  const p95 = getPercentile(latencies, 95);
++  const p99 = getPercentile(latencies, 99);
+
++  const avgTTFB = ttfbs.length > 0 ? ttfbs.reduce((a, b) => a + b, 0) / ttfbs.length : 0;
++  const p50TTFB = getPercentile(ttfbs, 50);
+
++  const rps = totalRequests / totalDurationSec;
++  const errorRate = totalRequests > 0 ? failedRequests / totalRequests : 0;
+
++  return {
++    p50,
++    p95,
++    p99,
++    rps,
++    errorRate,
++    ttfb: p50TTFB || avgTTFB,
++    p50Latency: p50,
++    p95Latency: p95,
++    p99Latency: p99,
++    requestsPerSecond: rps,
++    avgTTFB,
++    totalRequests,
++    successfulRequests: totalRequests - failedRequests,
++    failedRequests
++  };
++}
