@@ -1,0 +1,28 @@
+--- apps/api/src/controllers/proposalController.js
++++ apps/api/src/controllers/proposalController.js
+@@ -1,11 +1,13 @@
+ import { ok } from "../utils/response.js";
+ import { createProposal, listProposals } from "../services/proposalService.js";
++import { createProposalSchema } from "../validators/proposal.js";
+ 
+ export async function getProposals(req, res) {
+   return ok(res, await listProposals());
+ }
+ 
+ export async function postProposal(req, res) {
+-  return ok(res, await createProposal(req.body), 201);
++  const payload = createProposalSchema.parse(req.body);
++  return ok(res, await createProposal(payload), 201);
+ }
+--- /dev/null
++++ apps/api/src/validators/proposal.js
+@@ -0,0 +1,9 @@
++import { z } from "zod";
++
++export const createProposalSchema = z.object({
++  jobId: z.string().min(1),
++  coverLetter: z.string().min(10),
++  bidAmount: z.number().nonnegative(),
++  estimatedDuration: z.string().min(1),
++});
++export const updateProposalSchema = createProposalSchema.partial();
