@@ -1,0 +1,68 @@
+--- apps/api/src/services/paymentService.js
++++ apps/api/src/services/paymentService.js
+@@ -1,9 +1,28 @@
++import Stripe from "stripe";
++import { env } from "../config/env.js";
++
++let stripeInstance = null;
++function getStripe() {
++  if (!stripeInstance && env.stripeSecretKey) {
++    stripeInstance = new Stripe(env.stripeSecretKey, { apiVersion: "2023-10-16" });
++  }
++  return stripeInstance;
++}
++
+ export async function createPaymentIntent(payload) {
+-  // TODO: integrate Stripe SDK and return client secret.
++  const stripe = getStripe();
++  const amount = payload.amount ?? 1000;
++  const currency = payload.currency ?? "usd";
++
++  if (stripe && env.stripeSecretKey) {
++    const intent = await stripe.paymentIntents.create({ amount, currency });
++    return { paymentId: intent.id, clientSecret: intent.client_secret, amount, currency, provider: "stripe" };
++  }
++
+   return {
+     paymentId: `pay_${Date.now()}`,
+-    amount: payload.amount,
+-    currency: payload.currency ?? "usd",
++    clientSecret: `pi_${Date.now()}_secret_placeholder`,
++    amount,
++    currency,
+     provider: "stripe"
+   };
+ }
+--- apps/api/src/controllers/paymentController.js
++++ apps/api/src/controllers/paymentController.js
+@@ -1,6 +1,8 @@
+ import { ok } from "../utils/response.js";
+ import { createPaymentIntent } from "../services/paymentService.js";
++import { paymentIntentSchema } from "../validators/payment.js";
+ 
+ export async function createPayment(req, res) {
+-  return ok(res, await createPaymentIntent(req.body), 201);
++  const payload = paymentIntentSchema.parse(req.body);
++  return ok(res, await createPaymentIntent(payload), 201);
+ }
+--- apps/api/src/routes/paymentRoutes.js
++++ apps/api/src/routes/paymentRoutes.js
+@@ -1,7 +1,9 @@
+ import { Router } from "express";
+ import { createPayment } from "../controllers/paymentController.js";
++import { authMiddleware } from "../middleware/auth.js";
+ 
+ export const paymentRoutes = Router();
+ 
++paymentRoutes.use(authMiddleware);
+ paymentRoutes.post("/", createPayment);
+--- apps/api/src/validators/payment.js
++++ apps/api/src/validators/payment.js
+@@ -0,5 +1,6 @@
+ import { z } from "zod";
+ 
+ export const paymentIntentSchema = z.object({
+-  amount: z.number().positive()
++  amount: z.number().positive(),
++  currency: z.string().optional().default("usd")
+ });
