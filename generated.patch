@@ -1,0 +1,21 @@
+--- a/apps/web/app/jobs/[id]/page.tsx
++++ b/apps/web/app/jobs/[id]/page.tsx
+@@ -0,0 +1,17 @@
++import { jobs } from "../../../lib/mock";
++import { notFound } from "next/navigation";
++
++interface JobDetailPageProps {
++  params: Promise<{ id: string }>;
++}
++
++export default async function JobDetailPage({ params }: JobDetailPageProps) {
++  const { id } = await params;
++  const job = jobs.find((j) => j.id === id);
++  if (!job) notFound();
++  return (
++    <section className="card">
++      <h2>{job.title}</h2>
++      <p>Budget: {job.budget}</p>
++    </section>
++  );
++}
