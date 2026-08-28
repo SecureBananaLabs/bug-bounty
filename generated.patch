@@ -1,0 +1,76 @@
+--- apps/web/app/admin/page.tsx
++++ b/apps/web/app/admin/page.tsx
+@@ -1,6 +1,65 @@
+-export default function AdminPanelPage() {
++"use client";
++
++import { useEffect, useState } from "react";
++
++interface Metrics {
++  openJobs: number;
++  activeFreelancers: number;
++  flaggedAccounts: number;
++  monthlyVolume: number;
++}
++
++export default function AdminPanelPage() {
++  const [metrics, setMetrics] = useState<Metrics | null>(null);
++  const [loading, setLoading] = useState(true);
++  const [error, setError] = useState("");
++
++  useEffect(() => {
++    fetch("http://localhost:4000/api/admin/metrics", {
++      headers: {
++        Authorization: "Bearer placeholder-token",
++      },
++    })
++      .then((res) => {
++        if (!res.ok) throw new Error("Failed to fetch admin metrics");
++        return res.json();
++      })
++      .then((json) => {
++        if (json.success) {
++          setMetrics(json.data);
++        } else {
++          setError(json.message || "Failed to load metrics");
++        }
++      })
++      .catch((err) => {
++        setError(err.message);
++      })
++      .finally(() => {
++        setLoading(false);
++      });
++  }, []);
++
+   return (
+     <section className="card">
+       <h2>Admin Panel</h2>
+       <p>Moderation queues, trust metrics, and platform controls are available here.</p>
++
++      {loading && <p>Loading metrics...</p>}
++      {error && <p style={{ color: "red" }}>Error: {error}</p>}
++
++      {metrics && (
++        <div className="grid" style={{ marginTop: "1rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
++          <div className="card" style={{ padding: "1rem" }}>
++            <h3>Open Jobs</h3>
++            <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{metrics.openJobs}</p>
++          </div>
++          <div className="card" style={{ padding: "1rem" }}>
++            <h3>Active Freelancers</h3>
++            <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{metrics.activeFreelancers}</p>
++          </div>
++          <div className="card" style={{ padding: "1rem" }}>
++            <h3>Flagged Accounts</h3>
++            <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{metrics.flaggedAccounts}</p>
++          </div>
++          <div className="card" style={{ padding: "1rem" }}>
++            <h3>Monthly Volume</h3>
++            <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>${metrics.monthlyVolume.toLocaleString()}</p>
++          </div>
++        </div>
++      )}
+     </section>
+   );
+ }
