@@ -1,0 +1,15 @@
+--- a/apps/api/src/services/notificationService.js
++++ b/apps/api/src/services/notificationService.js
+@@ -5,5 +5,10 @@
+ }
+ 
+ export async function createNotification(payload) {
+-  const notification = { id: `ntf_${Date.now()}`, read: false, ...payload };
++  const notification = {
++    id: payload.id ?? `ntf_${Date.now()}`,
++    read: payload.read ?? false,
++    ...payload
++  };
+   notifications.push(notification);
+   return notification;
+ }
