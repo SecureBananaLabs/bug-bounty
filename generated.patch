@@ -1,0 +1,13 @@
+--- a/apps/api/src/middleware/rateLimit.js
++++ b/apps/api/src/middleware/rateLimit.js
+@@ -4,5 +4,9 @@
+   windowMs: 15 * 60 * 1000,
+   limit: 200,
+   standardHeaders: "draft-7",
+-  legacyHeaders: false
++  legacyHeaders: false,
++  handler: (req, res, next, options) => {
++    res.setHeader("Retry-After", Math.ceil(options.windowMs / 1000));
++    return res.status(options.statusCode).json({ success: false, message: "Too many requests, please try again later." });
++  }
+ });
