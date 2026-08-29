@@ -1,8 +1,15 @@
-import { z } from "zod";
+const { z } = require('zod');
 
-export const registerSchema = z.object({
+exports.registerSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
+  name: z.string().min(1).optional(),
+});
+
+exports.loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
   role: z.enum(["client", "freelancer", "admin"]).default("client")
 });
 
