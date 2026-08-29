@@ -1,0 +1,25 @@
+name: Verify PR 12212
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-pr-12212.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/prevent-admin-self-registration
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node --test apps/api/src/tests/authValidator.test.js
