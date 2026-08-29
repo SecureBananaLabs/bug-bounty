@@ -1,5 +1,5 @@
 const reviews = [];
-
+  return [...reviews];
 export async function listReviews() {
   return reviews;
 }
