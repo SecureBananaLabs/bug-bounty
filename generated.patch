@@ -1,0 +1,25 @@
+--- /dev/null
++++ b/apps/api/src/validators/review.js
+@@ -0,0 +1,6 @@
++import { z } from "zod";
++
++export const createReviewSchema = z.object({
++  rating: z.number().min(1).max(5),
++  comment: z.string().min(1)
++});
+--- a/apps/api/src/controllers/reviewController.js
++++ b/apps/api/src/controllers/reviewController.js
+@@ -1,10 +1,12 @@
+ import { ok } from "../utils/response.js";
++import { createReviewSchema } from "../validators/review.js";
+ import { createReview, listReviews } from "../services/reviewService.js";
+
+ export async function getReviews(req, res) {
+   return ok(res, await listReviews());
+ }
+
+ export async function postReview(req, res) {
+-  return ok(res, await createReview(req.body), 201);
++  const payload = createReviewSchema.parse(req.body);
++  return ok(res, await createReview(payload), 201);
+ }
