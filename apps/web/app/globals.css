@@ -4,3 +4,37 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.eyebrow { margin: 0 0 0.5rem; color: #8aa1ff; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.settings-shell { display: grid; gap: 1rem; }
+.settings-hero { display: grid; gap: 1rem; }
+.settings-hero h2 { margin: 0; font-size: 1.8rem; }
+.settings-lead { margin: 0.75rem 0 0; max-width: 42rem; color: #c9d3ff; line-height: 1.55; }
+.settings-summary { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.settings-grid { align-items: start; }
+.settings-card { display: grid; gap: 1rem; }
+.settings-card h3 { margin: 0; font-size: 1.1rem; }
+.settings-card p { margin: 0.4rem 0 0; color: #b8c3ea; line-height: 1.5; }
+.settings-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; }
+.status-chip { display: inline-flex; align-items: center; border-radius: 999px; padding: 0.38rem 0.7rem; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
+.status-chip-success { background: rgba(48, 190, 120, 0.16); color: #88efb3; border: 1px solid rgba(88, 225, 147, 0.4); }
+.status-chip-warning { background: rgba(255, 183, 77, 0.14); color: #ffd28a; border: 1px solid rgba(255, 183, 77, 0.4); }
+.status-chip-muted { background: rgba(114, 135, 218, 0.14); color: #d7e0ff; border: 1px solid rgba(114, 135, 218, 0.35); }
+.settings-list { display: grid; gap: 0.8rem; margin: 0; }
+.settings-list-row { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid #243055; }
+.settings-list-row:last-child { padding-bottom: 0; border-bottom: none; }
+.settings-list-row dt { color: #8ea1d6; }
+.settings-list-row dd { margin: 0; text-align: right; color: #f4f7ff; font-weight: 600; }
+.settings-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+.settings-action-button { border: 1px solid #39539b; background: #1a2448; color: #f2f5ff; border-radius: 999px; padding: 0.65rem 0.95rem; font: inherit; font-weight: 600; cursor: pointer; }
+.settings-action-button:hover { background: #22305f; }
+
+@media (max-width: 640px) {
+  .settings-card-header,
+  .settings-list-row {
+    flex-direction: column;
+  }
+
+  .settings-list-row dd {
+    text-align: left;
+  }
+}
