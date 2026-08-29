@@ -1,10 +1,22 @@
-import { ok } from "../utils/response.js";
-import { createProposal, listProposals } from "../services/proposalService.js";
+const proposalService = require('../services/proposalService');
+const { createProposalSchema } = require('../validators/proposal');
 
-export async function getProposals(req, res) {
-  return ok(res, await listProposals());
-}
+const postProposal = async (req, res, next) => {
+  try {
+    const parsed = createProposalSchema.safeParse(req.body);
 
-export async function postProposal(req, res) {
-  return ok(res, await createProposal(req.body), 201);
-}
+    if (!parsed.success) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        details: parsed.error.issues,
+      });
+    }
+
+    const proposal = await proposalService.createProposal(parsed.data);
+    return res.status(201).json(proposal);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+module.exports = { postProposal };
