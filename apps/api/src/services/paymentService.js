@@ -7,3 +7,9 @@ export async function createPaymentIntent(payload) {
     provider: "stripe"
   };
 }
+  const paymentIntent = {
+    amount: payload.amount,
+    currency: (payload.currency ?? 'usd').toLowerCase(),
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+  };
