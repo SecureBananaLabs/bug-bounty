@@ -1,9 +1,15 @@
-export async function createPaymentIntent(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
+const createPaymentIntent = async (amount, currency) => {
+  // Placeholder for Stripe integration
+  // Currently returns a mock payment intent
   return {
-    paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
-    currency: payload.currency ?? "usd",
-    provider: "stripe"
+    id: `pi_mock_${Date.now()}`,
+    amount,
+    currency,
+    status: 'requires_payment_method',
+    created: new Date().toISOString()
   };
-}
+};
+
+module.exports = {
+  createPaymentIntent
+};
