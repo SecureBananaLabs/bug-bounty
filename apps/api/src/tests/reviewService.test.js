@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createReview } from "../services/reviewService.js";
+import { createReview, listReviews } from "../services/reviewService.js";
 
-test("createReview preserves generated ids", async () => {
+test("createReview preserves generated ids and stores normal review fields", async () => {
+  const beforeCount = (await listReviews()).length;
   const originalNow = Date.now;
   Date.now = () => 1710000000000;
 
@@ -20,6 +21,10 @@ test("createReview preserves generated ids", async () => {
     assert.equal(review.revieweeId, "usr_reviewee");
     assert.equal(review.rating, 5);
     assert.equal(review.comment, "Great work.");
+
+    const reviews = await listReviews();
+    assert.equal(reviews.length, beforeCount + 1);
+    assert.equal(reviews[reviews.length - 1], review);
   } finally {
     Date.now = originalNow;
   }
