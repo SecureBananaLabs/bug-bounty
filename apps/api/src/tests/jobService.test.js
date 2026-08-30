@@ -19,7 +19,8 @@ test("createJob preserves generated fields and normal payload attributes", async
       skills: ["nextjs", "css"]
     });
 
-    assert.equal(job.id, "job_1710000000000");
+    assert.match(job.id, /^job_1710000000000_[0-9a-f-]{36}$/);
+    assert.notEqual(job.id, "job_client_controlled");
     assert.equal(job.status, "open");
     assert.equal(job.title, "Build landing page");
     assert.equal(job.description, "Create a production-ready landing page.");
@@ -31,6 +32,25 @@ test("createJob preserves generated fields and normal payload attributes", async
     const jobs = await listJobs();
     assert.equal(jobs.length, beforeCount + 1);
     assert.equal(jobs[jobs.length - 1], job);
+  } finally {
+    Date.now = originalNow;
+  }
+});
+
+test("createJob generates unique ids for same-millisecond jobs", async () => {
+  const originalNow = Date.now;
+  Date.now = () => 1710000000000;
+
+  try {
+    const created = await Promise.all(
+      Array.from({ length: 20 }, (_, index) => createJob({ title: `Job ${index}` }))
+    );
+    const ids = created.map((job) => job.id);
+
+    assert.equal(new Set(ids).size, ids.length);
+    for (const id of ids) {
+      assert.match(id, /^job_1710000000000_[0-9a-f-]{36}$/);
+    }
   } finally {
     Date.now = originalNow;
   }
