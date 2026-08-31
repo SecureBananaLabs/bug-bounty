@@ -8,6 +8,12 @@ Patch target: `apps/farcaster-web/src/pages/wallet/WalletPage.tsx`
 
 Upstream snapshot inspected: commit `b6922e24036cac6f5e6d51904a59ff7cfcdd8483`.
 
+## Live proof demo
+
+https://plasma-rift-8hg9a9f.shipstatic.com
+
+The standalone proof demo exercises the same injected EIP-1193 flow as the Farcaster page implementation: connect wallet, show address/native balance/network, switch or add Base, copy the receive address, and request a native ETH send through the wallet provider.
+
 ## What this adds
 
 The open-source Farcaster client snapshot includes the Wallet route but the web page currently only says the Farcaster Wallet is available on mobile. This implementation replaces that placeholder with a functioning **injected EIP-1193 wallet UI**.
@@ -51,4 +57,8 @@ No transaction is sent without the wallet provider's confirmation.
 
 ## Bounty proof
 
-This directory is a self-contained patch/proof package. A literal GitHub fork still has to be created in GitHub before final submission if the bounty issuer requires the repository relationship itself rather than an upstream-targeted patch.
+- Source implementation: `apps/farcaster-web/src/pages/wallet/WalletPage.tsx` in this directory.
+- Live interactive proof: https://plasma-rift-8hg9a9f.shipstatic.com
+- Branch: `poidh-1337-farcaster-wallet`
+
+This is a self-contained upstream-targeted patch/proof package. A literal GitHub fork still has to be created in GitHub before final submission if the bounty issuer requires the repository relationship itself rather than a patch targeting the upstream tree.
