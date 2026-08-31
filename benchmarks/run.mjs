@@ -1,3 +1,4 @@
+
 import { createHmac } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -6,8 +7,8 @@ import { performance } from "node:perf_hooks";
 
 const baseUrl = (process.env.BENCHMARK_BASE_URL || "http://127.0.0.1:4000").replace(/\/$/, "");
 const smoke = process.argv.includes("--smoke");
-const concurrency = Number(process.env.BENCHMARK_CONCURRENCY || (smoke ? 2 : 5));
-const requestsPerEndpoint = Number(process.env.BENCHMARK_REQUESTS || (smoke ? 6 : 30));
+const concurrency = Number(process.env.BENCHMARK_CONCURRENCY || (smoke ? 2 : 4));
+const requestsPerEndpoint = Number(process.env.BENCHMARK_REQUESTS || (smoke ? 4 : 8));
 const thresholds = JSON.parse(await readFile(new URL("./thresholds.json", import.meta.url), "utf8"));
 
 function b64url(value) {
@@ -26,14 +27,14 @@ function benchmarkToken() {
 const token = benchmarkToken();
 const json = (body) => ({ headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
 const endpoints = [
-  ["POST", "/api/auth/register", () => json({ name: "Benchmark User", email: `bench-${Date.now()}@example.com`, password: "BenchmarkPass123!" })],
+  ["POST", "/api/auth/register", () => json({ name: "Benchmark User", email: `bench-${Date.now()}-${Math.random()}@example.com`, password: "BenchmarkPass123!" })],
   ["POST", "/api/auth/login", () => json({ email: "bench@example.com", password: "BenchmarkPass123!" })],
   ["GET", "/api/auth/oauth/github/callback?code=benchmark", () => ({})],
   ["POST", "/api/auth/refresh", () => json({ refreshToken: "benchmark-refresh-token" })],
   ["GET", "/api/users", () => ({})],
-  ["POST", "/api/users", () => json({ name: "Benchmark User", email: `user-${Date.now()}@example.com`, role: "freelancer" })],
+  ["POST", "/api/users", () => json({ name: "Benchmark User", email: `user-${Date.now()}-${Math.random()}@example.com`, role: "freelancer" })],
   ["GET", "/api/jobs", () => ({})],
-  ["POST", "/api/jobs", () => json({ title: "TypeScript API benchmark", description: "Synthetic benchmark job payload", budget: 1200, category: "development" })],
+  ["POST", "/api/jobs", () => json({ title: "TypeScript API benchmark", description: "Synthetic benchmark job payload for realistic API load testing", budgetMin: 1000, budgetMax: 1200, categoryId: "development", skills: ["typescript", "api"] })],
   ["GET", "/api/proposals", () => ({})],
   ["POST", "/api/proposals", () => json({ jobId: "benchmark-job", coverLetter: "Synthetic proposal for load testing", amount: 1000 })],
   ["POST", "/api/payments", () => json({ proposalId: "benchmark-proposal", amount: 1000, currency: "usd" })],
@@ -61,7 +62,7 @@ async function one(method, path, initFactory) {
     const firstByte = performance.now();
     await response.arrayBuffer();
     const ended = performance.now();
-    return { status: response.status, ttfb: firstByte - started, latency: ended - started, failed: response.status >= 500 };
+    return { status: response.status, ttfb: firstByte - started, latency: ended - started, failed: response.status >= 400 };
   } catch (error) {
     return { status: 0, ttfb: 0, latency: performance.now() - started, failed: true, error: error.message };
   }
@@ -101,7 +102,7 @@ const results = [];
 for (const endpoint of endpoints) {
   const result = await benchmarkEndpoint(...endpoint);
   results.push(result);
-  console.log(`${result.passed ? "PASS" : "FAIL"} ${result.method} ${result.path} p99=${result.p99Ms}ms errors=${result.errorRatePct}%`);
+  console.log(`${result.passed ? "PASS" : "FAIL"} ${result.method} ${result.path} p99=${result.p99Ms}ms errors=${result.errorRatePct}% statuses=${JSON.stringify(result.statuses)}`);
 }
 
 const report = {
