@@ -13,8 +13,12 @@ import { createNotification } from "./notificationService.js";
 // ---- Pagination helper (server-side, never full-table client fetches) ----
 export function paginate(items, page = 1, pageSize = 10) {
   const total = items.length;
-  const pageNum = Math.max(1, parseInt(page));
-  const size = Math.max(1, Math.min(parseInt(pageSize) ?? 10, 100));
+  const parsedPage = Number.parseInt(page, 10);
+  const parsedPageSize = Number.parseInt(pageSize, 10);
+  const pageNum = Number.isFinite(parsedPage) ? Math.max(1, parsedPage) : 1;
+  const size = Number.isFinite(parsedPageSize)
+    ? Math.max(1, Math.min(parsedPageSize, 100))
+    : 10;
   const totalPages = Math.max(1, Math.ceil(total / size));
   const normalizedPage = Math.min(pageNum, totalPages);
   const start = (normalizedPage - 1) * size;
