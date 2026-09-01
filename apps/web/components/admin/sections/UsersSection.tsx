@@ -22,6 +22,7 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("");
   const [status, setStatus] = useState("");
+  const [joinedBefore, setJoinedBefore] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [serverError, setServerError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
@@ -30,7 +31,7 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
   const combinedKey = refreshKey + localRefreshKey;
 
   const fetchPage = (page: number, size: number): Promise<PaginatedResult<UserRecord>> =>
-    api.users({ search, role, status, page, pageSize: size });
+    api.users({ search, role, status, joinedBefore, page, pageSize: size });
 
   const columns: Column<UserRecord>[] = [
     { key: "fullName", header: "Name" },
@@ -46,7 +47,11 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
       render: (u) => STATUS_LABELS[u.status] ?? u.status,
     },
     { key: "trustScore", header: "Trust" },
-    { key: "joinedAt", header: "Joined" },
+    {
+      key: "joinedAt",
+      header: "Joined",
+      render: (u) => new Date(u.joinedAt).toLocaleDateString(),
+    },
     {
       key: "actions",
       header: "Actions",
@@ -126,17 +131,18 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
 
   async function loadProfile(user: UserRecord) {
     try {
+      setServerError(null);
       const profile = await api.userProfile(user.id);
       setSelectedUser(profile);
     } catch (e) {
-      console.error(e);
+      setServerError(e instanceof ApiError ? e.message : "Failed to load profile");
     }
   }
 
-  // Reset to page 1 when filters change.
+  // Reset table state when filters change.
   useEffect(() => {
     setPageSize(10);
-  }, [search, role, status]);
+  }, [search, role, status, joinedBefore]);
 
   return (
     <section aria-labelledby="users-heading">
@@ -175,11 +181,33 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
           <option value="suspended">Suspended</option>
           <option value="banned">Banned</option>
         </select>
+        <label>
+          Joined on or before
+          <input
+            type="date"
+            value={joinedBefore}
+            onChange={(e) => setJoinedBefore(e.target.value)}
+            aria-label="Filter by join date"
+          />
+        </label>
+        {(search || role || status || joinedBefore) && (
+          <button
+            type="button"
+            onClick={() => {
+              setSearch("");
+              setRole("");
+              setStatus("");
+              setJoinedBefore("");
+            }}
+            aria-label="Clear user filters"
+          >
+            Clear filters
+          </button>
+        )}
       </div>
 
-      {/* key forces ServerTable remount (re-fetch) when filters or actions change */}
       <ServerTable<UserRecord>
-        key={`users-${JSON.stringify({ search, role, status, pageSize, refresh: combinedKey })}`}
+        key={`users-${JSON.stringify({ search, role, status, joinedBefore, pageSize, refresh: combinedKey })}`}
         columns={columns}
         fetchPage={fetchPage}
         initialPageSize={pageSize}
@@ -206,24 +234,12 @@ function UserProfileModal({ user, onClose }: { user: UserProfile; onClose: () =>
           ×
         </button>
         <h3>{user.fullName}</h3>
-        <p>
-          <strong>Email:</strong> {user.email}
-        </p>
-        <p>
-          <strong>Role:</strong> {user.role.toLowerCase()}
-        </p>
-        <p>
-          <strong>Status:</strong> {STATUS_LABELS[user.status] ?? user.status}
-        </p>
-        <p>
-          <strong>Trust score:</strong> {user.trustScore}
-        </p>
-        <p>
-          <strong>Active jobs:</strong> {user.activeJobs}
-        </p>
-        <p>
-          <strong>Dispute history ({user.disputeHistory.length}):</strong>
-        </p>
+        <p><strong>Email:</strong> {user.email}</p>
+        <p><strong>Role:</strong> {user.role.toLowerCase()}</p>
+        <p><strong>Status:</strong> {STATUS_LABELS[user.status] ?? user.status}</p>
+        <p><strong>Trust score:</strong> {user.trustScore}</p>
+        <p><strong>Active jobs:</strong> {user.activeJobs}</p>
+        <p><strong>Dispute history ({user.disputeHistory.length}):</strong></p>
         <ul>
           {user.disputeHistory.map((d) => (
             <li key={d.id}>
