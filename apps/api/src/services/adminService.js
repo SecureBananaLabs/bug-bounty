@@ -8,6 +8,7 @@ import {
   logAction,
   recomputeTrustDistribution,
 } from "./adminStore.js";
+import { createNotification } from "./notificationService.js";
 
 // ---- Pagination helper (server-side, never full-table client fetches) ----
 export function paginate(items, page = 1, pageSize = 10) {
@@ -45,7 +46,9 @@ export async function listUsers({ search, role, status, joinedBefore, page, page
   if (status) result = result.filter((u) => u.status === status.toUpperCase());
   if (joinedBefore) {
     const cutoff = new Date(joinedBefore);
-    result = result.filter((u) => new Date(u.joinedAt) < cutoff);
+    if (!Number.isNaN(cutoff.getTime())) {
+      result = result.filter((u) => new Date(u.joinedAt) <= cutoff);
+    }
   }
 
   return paginate(result, page, pageSize);
@@ -104,8 +107,18 @@ export async function moderateListing(adminId, jobId, decision, reason) {
     job.flagged = false;
     job.flagReason = reason;
     job.moderationStatus = "rejected";
-    // Trigger a notification to the posting user (service-layer side effect).
-    meta = { ...meta, notifiedUserId: job.clientId };
+    const notification = await createNotification({
+      userId: job.clientId,
+      type: "listing_rejected",
+      title: "Listing rejected",
+      message: reason
+        ? `Your listing \"${job.title}\" was rejected: ${reason}`
+        : `Your listing \"${job.title}\" was rejected.`,
+      jobId: job.id,
+      reason: reason ?? null,
+      createdAt: new Date().toISOString(),
+    });
+    meta = { ...meta, notificationId: notification.id, notifiedUserId: job.clientId };
   } else if (decision === "escalate") {
     job.moderationStatus = "escalated";
     meta.status = "escalated";
@@ -143,12 +156,35 @@ export async function resolveDispute(adminId, disputeId, ruling, { refund = fals
     dispute.status = "resolved";
     dispute.resolution = { inFavorOf: ruling, refund, reason, resolvedAt: new Date().toISOString() };
   }
+
+  const message = ruling === "escalate"
+    ? `Dispute ${dispute.id} was escalated to a senior admin${reason ? `: ${reason}` : "."}`
+    : `Dispute ${dispute.id} was resolved in favour of the ${ruling}${refund ? " with a refund" : ""}${reason ? `: ${reason}` : "."}`;
+
+  const notificationIds = [];
+  for (const userId of new Set([dispute.freelancerId, dispute.clientId])) {
+    const notification = await createNotification({
+      userId,
+      type: ruling === "escalate" ? "dispute_escalated" : "dispute_resolved",
+      title: ruling === "escalate" ? "Dispute escalated" : "Dispute resolved",
+      message,
+      disputeId: dispute.id,
+      ruling,
+      refund,
+      reason: reason ?? null,
+      createdAt: new Date().toISOString(),
+    });
+    notificationIds.push(notification.id);
+  }
+
   logAction(adminId, "dispute_resolution", disputeId, {
     from: prev,
     to: dispute.status,
     inFavorOf: ruling,
     refund,
     reason,
+    notifiedUserIds: [dispute.freelancerId, dispute.clientId],
+    notificationIds,
   });
   return dispute;
 }
