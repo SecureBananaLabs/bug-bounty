@@ -11,13 +11,6 @@ const STATUS_LABELS: Record<string, string> = {
   BANNED: "Banned",
 };
 
-/**
- * User management: searchable, filterable, server-side paginated table with
- * per-row status controls (suspend / reinstate / ban) and a profile modal.
- *
- * The `refreshKey` prop lets the parent (AdminLayout) force a reload after a
- * cross-section action. Internally the table re-fetches whenever filters change.
- */
 export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
   const [search, setSearch] = useState("");
   const [role, setRole] = useState("");
@@ -79,9 +72,7 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
                 }
               }}
             >
-              <button type="button" aria-label={`Suspend ${row.fullName}`}>
-                Suspend
-              </button>
+              <button type="button" aria-label={`Suspend ${row.fullName}`}>Suspend</button>
             </ConfirmDialog>
           )}
           {" "}
@@ -99,9 +90,7 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
                 }
               }}
             >
-              <button type="button" aria-label={`Reinstate ${row.fullName}`}>
-                Reinstate
-              </button>
+              <button type="button" aria-label={`Reinstate ${row.fullName}`}>Reinstate</button>
             </ConfirmDialog>
           )}
           {" "}
@@ -139,7 +128,6 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
     }
   }
 
-  // Reset table state when filters change.
   useEffect(() => {
     setPageSize(10);
   }, [search, role, status, joinedBefore]);
@@ -162,20 +150,12 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
           onChange={(e) => setSearch(e.target.value)}
           aria-label="Search users"
         />
-        <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          aria-label="Filter by role"
-        >
+        <select value={role} onChange={(e) => setRole(e.target.value)} aria-label="Filter by role">
           <option value="">All roles</option>
           <option value="client">Client</option>
           <option value="freelancer">Freelancer</option>
         </select>
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          aria-label="Filter by status"
-        >
+        <select value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Filter by status">
           <option value="">All statuses</option>
           <option value="active">Active</option>
           <option value="suspended">Suspended</option>
@@ -213,14 +193,14 @@ export function UsersSection({ refreshKey = 0 }: { refreshKey?: number }) {
         initialPageSize={pageSize}
       />
 
-      {selectedUser && (
-        <UserProfileModal user={selectedUser} onClose={() => setSelectedUser(null)} />
-      )}
+      {selectedUser && <UserProfileModal user={selectedUser} onClose={() => setSelectedUser(null)} />}
     </section>
   );
 }
 
 function UserProfileModal({ user, onClose }: { user: UserProfile; onClose: () => void }) {
+  const activeJobs = Array.isArray(user.activeJobs) ? user.activeJobs : [];
+
   return (
     <div
       className="confirm-backdrop"
@@ -230,23 +210,34 @@ function UserProfileModal({ user, onClose }: { user: UserProfile; onClose: () =>
       onKeyDown={(e) => e.key === "Escape" && onClose()}
     >
       <div className="card" style={{ maxWidth: "600px", width: "90%" }}>
-        <button onClick={onClose} aria-label="Close profile" style={{ float: "right" }}>
-          ×
-        </button>
+        <button onClick={onClose} aria-label="Close profile" style={{ float: "right" }}>×</button>
         <h3>{user.fullName}</h3>
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Role:</strong> {user.role.toLowerCase()}</p>
         <p><strong>Status:</strong> {STATUS_LABELS[user.status] ?? user.status}</p>
         <p><strong>Trust score:</strong> {user.trustScore}</p>
-        <p><strong>Active jobs:</strong> {user.activeJobs}</p>
-        <p><strong>Dispute history ({user.disputeHistory.length}):</strong></p>
-        <ul>
-          {user.disputeHistory.map((d) => (
-            <li key={d.id}>
-              {d.id} — {d.status} — ${d.amount}
-            </li>
-          ))}
-        </ul>
+
+        <h4>Active jobs ({activeJobs.length})</h4>
+        {activeJobs.length === 0 ? (
+          <p>No active jobs.</p>
+        ) : (
+          <ul>
+            {activeJobs.map((job: any) => (
+              <li key={job.id}>{job.title} — {job.status}</li>
+            ))}
+          </ul>
+        )}
+
+        <h4>Dispute history ({user.disputeHistory.length})</h4>
+        {user.disputeHistory.length === 0 ? (
+          <p>No disputes.</p>
+        ) : (
+          <ul>
+            {user.disputeHistory.map((d) => (
+              <li key={d.id}>{d.id} — {d.status} — ${d.amount}</li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
