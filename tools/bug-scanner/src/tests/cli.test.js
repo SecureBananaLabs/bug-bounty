@@ -58,6 +58,35 @@ test("CLI --export-dir writes issue drafts with the bounty clause", () => {
   }
 });
 
+test("CLI default markdown output includes the exact limitation clause", () => {
+  const result = runCli(["--root", repoRoot]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(
+    result.stdout,
+    new RegExp(ISSUE_LIMITATION_CLAUSE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+  );
+});
+
+test("CLI --create-issues dry-run returns a recursive issue plan in JSON", () => {
+  const result = runCli([
+    "--format",
+    "json",
+    "--root",
+    repoRoot,
+    "--create-issues",
+    "--max-issues",
+    "1"
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  const payload = JSON.parse(result.stdout);
+  assert.ok(Array.isArray(payload.created));
+  assert.equal(payload.created.length, 1);
+  assert.equal(payload.created[0].result.dryRun, true);
+  assert.match(payload.created[0].issue.body, /11398/);
+});
+
 test("root scan:bugs script invokes the scanner successfully", () => {
   const result = spawnSync("npm", ["run", "scan:bugs", "--", "--format", "json"], {
     encoding: "utf8",
