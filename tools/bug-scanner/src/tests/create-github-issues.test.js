@@ -64,6 +64,25 @@ test("createGitHubIssue execute requires GITHUB_TOKEN", async () => {
   );
 });
 
+test("createGitHubIssue surfaces GitHub API errors", async () => {
+  const fetchImpl = async () => ({
+    ok: false,
+    status: 422,
+    statusText: "Unprocessable Entity",
+    async json() {
+      return {
+        message: "Validation Failed",
+        errors: [{ field: "title", code: "invalid" }]
+      };
+    }
+  });
+
+  await assert.rejects(
+    () => createGitHubIssue(sampleIssue, { dryRun: false, fetchImpl }),
+    /GitHub issue creation failed \(422\): Validation Failed/
+  );
+});
+
 test("runRecursiveIssuePipeline dry-run creates one issue by default", async () => {
   const created = await runRecursiveIssuePipeline({
     rootDir: process.cwd(),

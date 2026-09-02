@@ -1,4 +1,5 @@
 import { ISSUE_LIMITATION_CLAUSE } from "./constants.js";
+import { githubHeaders, parseJsonResponse } from "./github-client.js";
 
 export function assertLimitationClause(body) {
   if (!body.includes(ISSUE_LIMITATION_CLAUSE)) {
@@ -29,17 +30,11 @@ export async function createGitHubIssue(
 
   const response = await fetchImpl(`https://api.github.com/repos/${owner}/${repo}/issues`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "Content-Type": "application/json",
-      "User-Agent": "freelanceflow-bug-scanner",
-      "X-GitHub-Api-Version": "2022-11-28"
-    },
+    headers: githubHeaders(token),
     body: JSON.stringify({ title, body, labels })
   });
 
-  const payload = await response.json();
+  const payload = await parseJsonResponse(response);
   if (!response.ok) {
     const message = payload?.message ?? response.statusText;
     throw new Error(`GitHub issue creation failed (${response.status}): ${message}`);

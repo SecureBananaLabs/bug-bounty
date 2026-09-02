@@ -87,6 +87,18 @@ test("CLI --create-issues dry-run returns a recursive issue plan in JSON", () =>
   assert.match(payload.created[0].issue.body, /11398/);
 });
 
+test("CLI --execute without GITHUB_TOKEN fails before remote issue creation", () => {
+  const result = runCli(
+    ["--create-issues", "--execute", "--format", "json", "--root", repoRoot, "--max-issues", "1"],
+    {
+      env: { ...process.env, GITHUB_TOKEN: "" }
+    }
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /GITHUB_TOKEN is required to verify repository star status/);
+});
+
 test("root scan:bugs script invokes the scanner successfully", () => {
   const result = spawnSync("npm", ["run", "scan:bugs", "--", "--format", "json"], {
     encoding: "utf8",
