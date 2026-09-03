@@ -1,4 +1,4 @@
-import cors from "cors";
+﻿import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
@@ -18,7 +18,17 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:"],
+        connectSrc: ["'self'"],
+      },
+    },
+  }));
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
