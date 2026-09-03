@@ -11,6 +11,8 @@ export default function FreelancerSearchPage() {
             <h3>{freelancer.username}</h3>
             <p>{freelancer.skills.join(" · ")}</p>
             <p>{freelancer.rate}</p>
+            <p>{freelancer.availability}</p>
+            <p>{freelancer.profileContext}</p>
             <Link href={`/freelancers/${freelancer.username}`}>Open profile</Link>
           </article>
         ))}
