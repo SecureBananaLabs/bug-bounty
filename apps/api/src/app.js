@@ -15,11 +15,25 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+const DEFAULT_CORS_ORIGINS = ["http://localhost:3000", "http://localhost:5173"];
+
+function getAllowedCorsOrigins() {
+  const configured = process.env.CORS_ORIGIN ?? process.env.FRONTEND_URL;
+  if (!configured) {
+    return DEFAULT_CORS_ORIGINS;
+  }
+
+  return configured
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors({ origin: getAllowedCorsOrigins() }));
   app.use(express.json());
   app.use(apiLimiter);
 
