@@ -1,7 +1,9 @@
+import { snapshotRecords } from "./snapshot.js";
+
 const messages = [];
 
 export async function listMessages() {
-  return messages;
+  return snapshotRecords(messages);
 }
 
 export async function sendMessage(payload) {
