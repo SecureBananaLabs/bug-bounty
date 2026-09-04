@@ -3,4 +3,5 @@ body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0b1020; co
 a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
+.nav-link[aria-current="page"] { background: #20304f; border-color: #9bb7ff; color: #ffffff; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
