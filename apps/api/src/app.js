@@ -14,9 +14,15 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { env } from "./config/env.js";
 
-export function createApp() {
+export function createApp(options = {}) {
+  const trustProxy = options.trustProxy ?? env.trustProxy;
   const app = express();
+
+  if (trustProxy !== false) {
+    app.set("trust proxy", trustProxy);
+  }
 
   app.use(helmet());
   app.use(cors());
