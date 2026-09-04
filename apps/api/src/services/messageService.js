@@ -1,7 +1,9 @@
+import { copyRecords } from "../utils/recordCopy.js";
+
 const messages = [];
 
 export async function listMessages() {
-  return messages;
+  return copyRecords(messages);
 }
 
 export async function sendMessage(payload) {
