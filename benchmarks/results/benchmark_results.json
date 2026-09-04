@@ -1,0 +1,20 @@
+{
+  "results": {
+    "/api/auth/login": {
+      "p50": 0,
+      "p95": 0,
+      "p99": 0,
+      "rps": 0,
+      "errorRate": 0,
+      "ttfb": 0
+    }
+  },
+  "errors": {
+    "/api/auth/login": null,
+    "/api/users": null,
+    "/api/jobs": null,
+    "/api/proposals": null,
+    "/api/payments": null,
+    "/api/reviews": null
+  }
+}
