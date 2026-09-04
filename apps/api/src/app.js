@@ -15,13 +15,30 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+const ALLOWED_PROVIDERS = ["github", "google", "linkedin"];
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+  : ["http://localhost:3000"];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS: origin ${origin} not allowed`));
+    }
+  },
+  credentials: true
+};
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(corsOptions));
+  app.use(apiLimiter);        // rate limit BEFORE body parsing
   app.use(express.json());
-  app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
