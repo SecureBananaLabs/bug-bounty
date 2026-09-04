@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="520" viewBox="0 0 920 520" role="img" aria-labelledby="title desc">
+  <title id="title">Search query normalization demo</title>
+  <desc id="desc">Before and after examples showing repeated and nested search query parameters normalized to stable strings.</desc>
+  <rect width="920" height="520" fill="#101827"/>
+  <text x="48" y="60" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28" font-weight="700">Search query normalization</text>
+  <text x="48" y="96" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="16">GET /api/search now returns a stable string in data.query.</text>
+
+  <rect x="48" y="132" width="824" height="132" rx="8" fill="#1f2937" stroke="#ef4444" stroke-width="2"/>
+  <text x="72" y="166" fill="#fca5a5" font-family="Arial, sans-serif" font-size="18" font-weight="700">Before</text>
+  <text x="72" y="202" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="15">/api/search?q=alpha&amp;q=beta</text>
+  <text x="72" y="234" fill="#fecaca" font-family="Menlo, Consolas, monospace" font-size="15">data.query: ["alpha", "beta"]</text>
+
+  <rect x="48" y="292" width="824" height="168" rx="8" fill="#1f2937" stroke="#22c55e" stroke-width="2"/>
+  <text x="72" y="326" fill="#86efac" font-family="Arial, sans-serif" font-size="18" font-weight="700">After</text>
+  <text x="72" y="362" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="15">/api/search?q=alpha&amp;q=beta</text>
+  <text x="72" y="394" fill="#bbf7d0" font-family="Menlo, Consolas, monospace" font-size="15">data.query: "alpha"</text>
+  <text x="72" y="426" fill="#e5e7eb" font-family="Menlo, Consolas, monospace" font-size="15">/api/search?q[term]=alpha</text>
+  <text x="72" y="458" fill="#bbf7d0" font-family="Menlo, Consolas, monospace" font-size="15">data.query: ""</text>
+</svg>
