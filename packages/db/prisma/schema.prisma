@@ -21,6 +21,14 @@ enum JobStatus {
   CANCELLED
 }
 
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+
 model User {
   id             String      @id @default(cuid())
   email          String      @unique
@@ -74,7 +82,7 @@ model Payment {
   id            String      @id @default(cuid())
   amount        Float
   currency      String      @default("USD")
-  status        String
+  status        PaymentStatus @default(PENDING)
   stripeRef     String?
   jobId         String
   job           Job         @relation(fields: [jobId], references: [id])
