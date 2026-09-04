@@ -1,0 +1,13 @@
+SecureBanana #5875 demo — real terminal output
+
+Demo for issue #5875 / parent #743
+1) Validate accepted and rejected budget ranges through createJobSchema
+valid range accepted: true
+inverted range accepted: false
+error path: budgetMax
+error message: budgetMax must be greater than or equal to budgetMin
+2) Run test suite
+> test
+> test
+> node --test src/tests/*.js
+✔ GET /health returns ok payload (58.397235ms)
