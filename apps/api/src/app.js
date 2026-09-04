@@ -24,7 +24,7 @@ export function createApp() {
   app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
+    res.set("Cache-Control", "no-store");`n    res.status(200).json({ ok: true, service: "api" });
   });
 
   app.use("/api/auth", authRoutes);
