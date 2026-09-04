@@ -1,6 +1,11 @@
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 import { globalSearch } from "../services/searchService.js";
 
+const MAX_QUERY_LENGTH = 200;
+
 export async function search(req, res) {
-  return ok(res, await globalSearch(req.query.q ?? ""));
+  const q = req.query.q ?? "";
+  if (typeof q !== "string") return fail(res, "Invalid query parameter", 400);
+  if (q.length > MAX_QUERY_LENGTH) return fail(res, `Query exceeds maximum length of ${MAX_QUERY_LENGTH} characters`, 400);
+  return ok(res, await globalSearch(q.trim()));
 }
