@@ -9,3 +9,13 @@ export async function createJob(payload) {
   jobs.push(job);
   return job;
 }
+
+export async function updateJob(id, payload) {
+  const index = jobs.findIndex((job) => job.id === id);
+  if (index === -1) {
+    return null;
+  }
+
+  jobs[index] = { ...jobs[index], ...payload, id };
+  return jobs[index];
+}
