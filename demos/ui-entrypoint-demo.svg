@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="320" viewBox="0 0 920 320" role="img" aria-labelledby="title desc">
+  <title id="title">@freelanceflow/ui direct import demo</title>
+  <desc id="desc">Animated terminal-style demo showing the package import command resolving Button and Card exports.</desc>
+  <rect width="920" height="320" fill="#101419"/>
+  <rect x="28" y="28" width="864" height="264" rx="12" fill="#151b22" stroke="#303946"/>
+  <circle cx="58" cy="58" r="7" fill="#ff5f57"/>
+  <circle cx="82" cy="58" r="7" fill="#ffbd2e"/>
+  <circle cx="106" cy="58" r="7" fill="#28c840"/>
+  <text x="48" y="105" fill="#9fb3c8" font-family="Consolas, 'Courier New', monospace" font-size="18">
+    $ node -e "import('@freelanceflow/ui').then((mod) =&gt; console.log(Object.keys(mod).sort().join(',')))"
+  </text>
+  <text x="48" y="150" fill="#e6edf3" font-family="Consolas, 'Courier New', monospace" font-size="22">
+    Button,Card
+    <animate attributeName="opacity" values="0;0;1;1" dur="3s" repeatCount="indefinite"/>
+  </text>
+  <text x="48" y="205" fill="#7ee787" font-family="Consolas, 'Courier New', monospace" font-size="18">
+    import resolved through dist/index.js
+    <animate attributeName="opacity" values="0;0;0;1;1" dur="3s" repeatCount="indefinite"/>
+  </text>
+  <text x="48" y="245" fill="#9fb3c8" font-family="Consolas, 'Courier New', monospace" font-size="16">
+    Before: package main pointed at TypeScript source with extensionless component re-exports.
+  </text>
+  <text x="48" y="270" fill="#9fb3c8" font-family="Consolas, 'Courier New', monospace" font-size="16">
+    After: package exports a JavaScript entrypoint plus TypeScript declarations.
+  </text>
+</svg>
