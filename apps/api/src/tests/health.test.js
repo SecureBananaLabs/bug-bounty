@@ -4,7 +4,7 @@ import { createApp } from "../app.js";
 
 test("GET /health returns ok payload", async () => {
   const app = createApp();
-  const server = app.listen(0);
+  const server = app.listen(0, "127.0.0.1");
 
   await new Promise((resolve, reject) => {
     server.once("listening", resolve);
