@@ -1,0 +1,17 @@
+{
+  "default": {
+    "p99LatencyMs": 500,
+    "errorRatePercent": 0
+  },
+  "endpoints": {
+    "auth-register": {
+      "p99LatencyMs": 750
+    },
+    "auth-login": {
+      "p99LatencyMs": 750
+    },
+    "uploads-create": {
+      "p99LatencyMs": 750
+    }
+  }
+}
