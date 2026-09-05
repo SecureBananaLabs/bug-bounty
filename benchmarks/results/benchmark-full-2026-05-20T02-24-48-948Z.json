@@ -1,0 +1,414 @@
+{
+  "startedAt": "2026-05-20T02:24:48.700Z",
+  "finishedAt": "2026-05-20T02:24:48.948Z",
+  "mode": "full",
+  "targetUrl": "http://127.0.0.1:50992",
+  "concurrency": 4,
+  "requestsPerRoute": 8,
+  "totalRequests": 168,
+  "totalErrors": 0,
+  "overallErrorRate": 0,
+  "routes": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 121,
+      "p50Ms": 19.24,
+      "p95Ms": 46.09,
+      "p99Ms": 46.09,
+      "ttfbP50Ms": 18.87,
+      "ttfbP95Ms": 44.66,
+      "ttfbP99Ms": 44.66,
+      "minMs": 6.7,
+      "maxMs": 46.09
+    },
+    {
+      "name": "auth_register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 202.39,
+      "p50Ms": 10.76,
+      "p95Ms": 26.57,
+      "p99Ms": 26.57,
+      "ttfbP50Ms": 10.67,
+      "ttfbP95Ms": 25.69,
+      "ttfbP99Ms": 25.69,
+      "minMs": 7.52,
+      "maxMs": 26.57
+    },
+    {
+      "name": "auth_login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 434.98,
+      "p50Ms": 8.33,
+      "p95Ms": 9.51,
+      "p99Ms": 9.51,
+      "ttfbP50Ms": 8.23,
+      "ttfbP95Ms": 9.45,
+      "ttfbP99Ms": 9.45,
+      "minMs": 5.94,
+      "maxMs": 9.51
+    },
+    {
+      "name": "auth_oauth_callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 762.09,
+      "p50Ms": 4.55,
+      "p95Ms": 7.31,
+      "p99Ms": 7.31,
+      "ttfbP50Ms": 4.51,
+      "ttfbP95Ms": 7.22,
+      "ttfbP99Ms": 7.22,
+      "minMs": 2.8,
+      "maxMs": 7.31
+    },
+    {
+      "name": "auth_refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 831.36,
+      "p50Ms": 4.18,
+      "p95Ms": 6.42,
+      "p99Ms": 6.42,
+      "ttfbP50Ms": 3.92,
+      "ttfbP95Ms": 6.32,
+      "ttfbP99Ms": 6.32,
+      "minMs": 2.66,
+      "maxMs": 6.42
+    },
+    {
+      "name": "users_list",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 895.2,
+      "p50Ms": 3.28,
+      "p95Ms": 6.09,
+      "p99Ms": 6.09,
+      "ttfbP50Ms": 3.23,
+      "ttfbP95Ms": 6.02,
+      "ttfbP99Ms": 6.02,
+      "minMs": 2.22,
+      "maxMs": 6.09
+    },
+    {
+      "name": "users_create",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 916.29,
+      "p50Ms": 4.09,
+      "p95Ms": 4.75,
+      "p99Ms": 4.75,
+      "ttfbP50Ms": 4.06,
+      "ttfbP95Ms": 4.69,
+      "ttfbP99Ms": 4.69,
+      "minMs": 3.11,
+      "maxMs": 4.75
+    },
+    {
+      "name": "jobs_list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1385.26,
+      "p50Ms": 2.43,
+      "p95Ms": 2.76,
+      "p99Ms": 2.76,
+      "ttfbP50Ms": 2.36,
+      "ttfbP95Ms": 2.72,
+      "ttfbP99Ms": 2.72,
+      "minMs": 2.24,
+      "maxMs": 2.76
+    },
+    {
+      "name": "jobs_create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1009.35,
+      "p50Ms": 3.05,
+      "p95Ms": 5.17,
+      "p99Ms": 5.17,
+      "ttfbP50Ms": 3,
+      "ttfbP95Ms": 5.12,
+      "ttfbP99Ms": 5.12,
+      "minMs": 2.25,
+      "maxMs": 5.17
+    },
+    {
+      "name": "proposals_list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1626.64,
+      "p50Ms": 2.24,
+      "p95Ms": 2.7,
+      "p99Ms": 2.7,
+      "ttfbP50Ms": 2.18,
+      "ttfbP95Ms": 2.67,
+      "ttfbP99Ms": 2.67,
+      "minMs": 1.9,
+      "maxMs": 2.7
+    },
+    {
+      "name": "proposals_create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1165.69,
+      "p50Ms": 2.51,
+      "p95Ms": 4.69,
+      "p99Ms": 4.69,
+      "ttfbP50Ms": 2.45,
+      "ttfbP95Ms": 4.65,
+      "ttfbP99Ms": 4.65,
+      "minMs": 1.88,
+      "maxMs": 4.69
+    },
+    {
+      "name": "payments_create",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 830.59,
+      "p50Ms": 3.89,
+      "p95Ms": 6.07,
+      "p99Ms": 6.07,
+      "ttfbP50Ms": 3.12,
+      "ttfbP95Ms": 5.99,
+      "ttfbP99Ms": 5.99,
+      "minMs": 2.73,
+      "maxMs": 6.07
+    },
+    {
+      "name": "reviews_list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1602.12,
+      "p50Ms": 2.19,
+      "p95Ms": 2.62,
+      "p99Ms": 2.62,
+      "ttfbP50Ms": 2.15,
+      "ttfbP95Ms": 2.55,
+      "ttfbP99Ms": 2.55,
+      "minMs": 1.97,
+      "maxMs": 2.62
+    },
+    {
+      "name": "reviews_create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1399.73,
+      "p50Ms": 2.46,
+      "p95Ms": 3.34,
+      "p99Ms": 3.34,
+      "ttfbP50Ms": 2.4,
+      "ttfbP95Ms": 3.27,
+      "ttfbP99Ms": 3.27,
+      "minMs": 1.98,
+      "maxMs": 3.34
+    },
+    {
+      "name": "messages_list",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1692.27,
+      "p50Ms": 2.12,
+      "p95Ms": 2.41,
+      "p99Ms": 2.41,
+      "ttfbP50Ms": 2.09,
+      "ttfbP95Ms": 2.35,
+      "ttfbP99Ms": 2.35,
+      "minMs": 1.86,
+      "maxMs": 2.41
+    },
+    {
+      "name": "messages_create",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1188.2,
+      "p50Ms": 2.72,
+      "p95Ms": 3.89,
+      "p99Ms": 3.89,
+      "ttfbP50Ms": 2.62,
+      "ttfbP95Ms": 3.84,
+      "ttfbP99Ms": 3.84,
+      "minMs": 2.06,
+      "maxMs": 3.89
+    },
+    {
+      "name": "notifications_list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1906.48,
+      "p50Ms": 1.88,
+      "p95Ms": 2.12,
+      "p99Ms": 2.12,
+      "ttfbP50Ms": 1.82,
+      "ttfbP95Ms": 2.09,
+      "ttfbP99Ms": 2.09,
+      "minMs": 1.59,
+      "maxMs": 2.12
+    },
+    {
+      "name": "notifications_create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1683.12,
+      "p50Ms": 2.05,
+      "p95Ms": 2.64,
+      "p99Ms": 2.64,
+      "ttfbP50Ms": 2.02,
+      "ttfbP95Ms": 2.59,
+      "ttfbP99Ms": 2.59,
+      "minMs": 1.71,
+      "maxMs": 2.64
+    },
+    {
+      "name": "uploads_create_empty",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 8,
+      "statuses": {
+        "201": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1279.33,
+      "p50Ms": 2.77,
+      "p95Ms": 3.99,
+      "p99Ms": 3.99,
+      "ttfbP50Ms": 2.71,
+      "ttfbP95Ms": 3.96,
+      "ttfbP99Ms": 3.96,
+      "minMs": 2.05,
+      "maxMs": 3.99
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1351.5,
+      "p50Ms": 2.16,
+      "p95Ms": 3.95,
+      "p99Ms": 3.95,
+      "ttfbP50Ms": 2.11,
+      "ttfbP95Ms": 3.92,
+      "ttfbP99Ms": 3.92,
+      "minMs": 1.69,
+      "maxMs": 3.95
+    },
+    {
+      "name": "admin_metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 8,
+      "statuses": {
+        "200": 8
+      },
+      "errorRate": 0,
+      "requestsPerSecond": 1551.16,
+      "p50Ms": 2.19,
+      "p95Ms": 3.14,
+      "p99Ms": 3.14,
+      "ttfbP50Ms": 2.15,
+      "ttfbP95Ms": 3.11,
+      "ttfbP99Ms": 3.11,
+      "minMs": 1.75,
+      "maxMs": 3.14
+    }
+  ],
+  "jsonPath": "/Users/josemendieta/Documents/Playground/bounty-work/securebanana-bug-bounty/benchmarks/results/benchmark-full-2026-05-20T02-24-48-948Z.json",
+  "markdownPath": "/Users/josemendieta/Documents/Playground/bounty-work/securebanana-bug-bounty/benchmarks/results/benchmark-full-2026-05-20T02-24-48-948Z.md"
+}
