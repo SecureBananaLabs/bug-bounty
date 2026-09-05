@@ -1,0 +1,101 @@
+{
+  "_comment": "Target URL for the API server (default: http://localhost:4000)",
+  "target": "http://localhost:4000",
+  "_comment_concurrency": "Number of concurrent connections (CI uses 2, full uses 10)",
+  "concurrency": 10,
+  "_comment_duration": "Benchmark duration in seconds per endpoint (CI: 5, full: 20)",
+  "duration": 20,
+  "ciConcurrency": 2,
+  "ciDuration": 5,
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/health",
+      "description": "Health check",
+      "skipInCi": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "description": "User registration",
+      "body": { "email": "bench@test.com", "password": "Bench123!", "name": "Benchmark User" },
+      "skipInCi": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "description": "User login",
+      "body": { "email": "bench@test.com", "password": "Bench123!" },
+      "skipInCi": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/users",
+      "description": "List users",
+      "auth": true,
+      "skipInCi": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/jobs",
+      "description": "List jobs",
+      "skipInCi": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/jobs",
+      "description": "Create job",
+      "auth": true,
+      "body": { "title": "Benchmark Job", "description": "A benchmark job posting for load testing.", "budgetMin": 50, "budgetMax": 200, "categoryId": "cat_bench", "skills": ["testing"] },
+      "skipInCi": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/proposals",
+      "description": "List proposals",
+      "auth": true,
+      "skipInCi": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/payments",
+      "description": "Create payment intent",
+      "auth": true,
+      "body": { "amount": 2000, "currency": "usd" },
+      "skipInCi": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/reviews",
+      "description": "List reviews",
+      "skipInCi": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/messages",
+      "description": "List messages",
+      "auth": true,
+      "skipInCi": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/notifications",
+      "description": "List notifications",
+      "auth": true,
+      "skipInCi": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/search?q=test",
+      "description": "Search",
+      "skipInCi": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "description": "Admin metrics",
+      "auth": true,
+      "skipInCi": true
+    }
+  ]
+}
