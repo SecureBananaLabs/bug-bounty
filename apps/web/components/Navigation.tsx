@@ -10,10 +10,12 @@ const links = [
   ["/admin", "Admin"]
 ];
 
-export function Navigation() {
+export function Navigation({ role }: { role?: string } = {}) {
+  const visibleLinks = links.filter(([href]) => href !== "/admin" || role === "admin");
+
   return (
     <nav style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
-      {links.map(([href, label]) => (
+      {visibleLinks.map(([href, label]) => (
         <Link key={href} href={href} className="card" style={{ padding: "0.5rem 0.8rem" }}>
           {label}
         </Link>
