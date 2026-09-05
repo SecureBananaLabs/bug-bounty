@@ -14,3 +14,12 @@ export function authMiddleware(req, res, next) {
     return fail(res, "Invalid token", 401);
   }
 }
+
+export function adminOnly(req, res, next) {
+  const role = String(req.user?.role ?? "").toUpperCase();
+  if (role !== "ADMIN") {
+    return fail(res, "Forbidden: admin access required", 403);
+  }
+
+  return next();
+}
