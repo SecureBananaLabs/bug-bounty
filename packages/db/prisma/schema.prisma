@@ -45,8 +45,8 @@ model Job {
   id            String      @id @default(cuid())
   title         String
   description   String
-  budgetMin     Float
-  budgetMax     Float
+  budgetMin     Decimal     @db.Decimal(12, 2)
+  budgetMax     Decimal     @db.Decimal(12, 2)
   status        JobStatus   @default(OPEN)
   clientId      String
   client        User        @relation("ClientJobs", fields: [clientId], references: [id])
@@ -61,7 +61,7 @@ model Job {
 model Proposal {
   id            String      @id @default(cuid())
   coverLetter   String
-  bidAmount     Float
+  bidAmount     Decimal     @db.Decimal(12, 2)
   estDuration   String
   jobId         String
   job           Job         @relation(fields: [jobId], references: [id])
@@ -72,7 +72,7 @@ model Proposal {
 
 model Payment {
   id            String      @id @default(cuid())
-  amount        Float
+  amount        Decimal     @db.Decimal(12, 2)
   currency      String      @default("USD")
   status        String
   stripeRef     String?
