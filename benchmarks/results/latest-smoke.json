@@ -1,0 +1,619 @@
+{
+  "generatedAt": "2026-05-22T21:41:18.494Z",
+  "profile": "smoke",
+  "baseUrl": "http://127.0.0.1:4010",
+  "environment": {
+    "profile": "smoke",
+    "baseUrl": "http://127.0.0.1:4010",
+    "target": "local",
+    "hardware": {
+      "cpuModel": "13th Gen Intel(R) Core(TM) i5-13600K",
+      "coreCount": 20,
+      "ramTotalGb": 31.75,
+      "ramFreeGb": 13.79,
+      "storageType": "unknown",
+      "networkInterface": "loopback",
+      "machineType": "local workstation"
+    },
+    "runtime": {
+      "nodeVersion": "v22.18.0",
+      "os": "win32 10.0.26200",
+      "resourceLimits": "none declared",
+      "backgroundProcesses": "unknown"
+    },
+    "aiAgent": {
+      "toolName": "Codex",
+      "model": "GPT-5",
+      "provider": "OpenAI",
+      "orchestration": "Codex desktop",
+      "executionMode": "fully autonomous",
+      "shellAccess": true,
+      "internetAccess": true,
+      "benchmarkExecutedByAgent": true,
+      "knownConstraints": "No GitHub CLI in PATH; some authenticated payout pages are browser-policy limited."
+    }
+  },
+  "results": [
+    {
+      "name": "auth-register",
+      "routePath": "/api/auth/register",
+      "path": "/api/auth/register",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 90,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 1.64,
+        "p95": 16.71,
+        "p99": 16.82,
+        "average": 2.59
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 3.57,
+        "p95Ms": 10.04,
+        "maxMs": 10.04
+      }
+    },
+    {
+      "name": "auth-login",
+      "routePath": "/api/auth/login",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 71,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 1.45,
+        "p95": 3.06,
+        "p99": 3.1,
+        "average": 1.17
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.92,
+        "p95Ms": 2.87,
+        "maxMs": 2.87
+      }
+    },
+    {
+      "name": "auth-oauth-callback",
+      "routePath": "/api/auth/oauth/github/callback",
+      "path": "/api/auth/oauth/github/callback",
+      "method": "GET",
+      "authProtected": false,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 0.54,
+        "p95": 1.82,
+        "p99": 1.92,
+        "average": 0.09
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 2.36,
+        "p95Ms": 5.6,
+        "maxMs": 5.6
+      }
+    },
+    {
+      "name": "auth-refresh",
+      "routePath": "/api/auth/refresh",
+      "path": "/api/auth/refresh",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 2,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 2.26,
+        "p95": 4.56,
+        "p99": 4.61,
+        "average": 2.17
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.97,
+        "p95Ms": 3.21,
+        "maxMs": 3.21
+      }
+    },
+    {
+      "name": "users-list",
+      "routePath": "/api/users",
+      "path": "/api/users",
+      "method": "GET",
+      "authProtected": false,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 0.95,
+        "p95": 2.48,
+        "p99": 2.69,
+        "average": 0.55
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.24,
+        "p95Ms": 2.08,
+        "maxMs": 2.08
+      }
+    },
+    {
+      "name": "users-create",
+      "routePath": "/api/users",
+      "path": "/api/users",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 352,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 1.19,
+        "p95": 2.46,
+        "p99": 2.5,
+        "average": 1
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.67,
+        "p95Ms": 3.79,
+        "maxMs": 3.79
+      }
+    },
+    {
+      "name": "jobs-list",
+      "routePath": "/api/jobs",
+      "path": "/api/jobs",
+      "method": "GET",
+      "authProtected": false,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 0.97,
+        "p95": 2.65,
+        "p99": 2.65,
+        "average": 0.67
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.11,
+        "p95Ms": 1.75,
+        "maxMs": 1.75
+      }
+    },
+    {
+      "name": "jobs-create",
+      "routePath": "/api/jobs",
+      "path": "/api/jobs",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 673,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 1.77,
+        "p95": 3.24,
+        "p99": 3.25,
+        "average": 1.63
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.04,
+        "p95Ms": 1.35,
+        "maxMs": 1.35
+      }
+    },
+    {
+      "name": "proposals-list",
+      "routePath": "/api/proposals",
+      "path": "/api/proposals",
+      "method": "GET",
+      "authProtected": false,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 0.81,
+        "p95": 4.28,
+        "p99": 4.31,
+        "average": 0.63
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 0.95,
+        "p95Ms": 1.62,
+        "maxMs": 1.62
+      }
+    },
+    {
+      "name": "proposals-create",
+      "routePath": "/api/proposals",
+      "path": "/api/proposals",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 552,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 1.16,
+        "p95": 3.32,
+        "p99": 3.32,
+        "average": 1.09
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 2.94,
+        "p95Ms": 8.64,
+        "maxMs": 8.64
+      }
+    },
+    {
+      "name": "payments-create",
+      "routePath": "/api/payments",
+      "path": "/api/payments",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 34,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 1.24,
+        "p95": 3.22,
+        "p99": 3.24,
+        "average": 1.17
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 3.34,
+        "p95Ms": 9.22,
+        "maxMs": 9.22
+      }
+    },
+    {
+      "name": "reviews-list",
+      "routePath": "/api/reviews",
+      "path": "/api/reviews",
+      "method": "GET",
+      "authProtected": false,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 1.1,
+        "p95": 3.68,
+        "p99": 3.7,
+        "average": 0.84
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 0.92,
+        "p95Ms": 1.74,
+        "maxMs": 1.74
+      }
+    },
+    {
+      "name": "reviews-create",
+      "routePath": "/api/reviews",
+      "path": "/api/reviews",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 376,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 1.5,
+        "p95": 3.33,
+        "p99": 3.71,
+        "average": 1.34
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.55,
+        "p95Ms": 3.18,
+        "maxMs": 3.18
+      }
+    },
+    {
+      "name": "messages-list",
+      "routePath": "/api/messages",
+      "path": "/api/messages",
+      "method": "GET",
+      "authProtected": false,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 1.02,
+        "p95": 3.34,
+        "p99": 3.34,
+        "average": 0.92
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 0.91,
+        "p95Ms": 1.38,
+        "maxMs": 1.38
+      }
+    },
+    {
+      "name": "messages-create",
+      "routePath": "/api/messages",
+      "path": "/api/messages",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 357,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 1.05,
+        "p95": 4.49,
+        "p99": 5.13,
+        "average": 1
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.67,
+        "p95Ms": 4.28,
+        "maxMs": 4.28
+      }
+    },
+    {
+      "name": "notifications-list",
+      "routePath": "/api/notifications",
+      "path": "/api/notifications",
+      "method": "GET",
+      "authProtected": false,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 0.87,
+        "p95": 2.22,
+        "p99": 2.25,
+        "average": 0.46
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 0.98,
+        "p95Ms": 1.84,
+        "maxMs": 1.84
+      }
+    },
+    {
+      "name": "notifications-create",
+      "routePath": "/api/notifications",
+      "path": "/api/notifications",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "json",
+      "payloadBytes": 311,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 0.93,
+        "p95": 2.36,
+        "p99": 2.39,
+        "average": 0.42
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.2,
+        "p95Ms": 1.78,
+        "maxMs": 1.78
+      }
+    },
+    {
+      "name": "uploads-create",
+      "routePath": "/api/uploads",
+      "path": "/api/uploads",
+      "method": "POST",
+      "authProtected": false,
+      "payloadType": "multipart",
+      "payloadBytes": 150,
+      "requestsSent": 24,
+      "statusCodes": {
+        "201": 24
+      },
+      "latencyMs": {
+        "p50": 1.67,
+        "p95": 7.79,
+        "p99": 7.8,
+        "average": 1.59
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.16,
+        "p95Ms": 1.6,
+        "maxMs": 1.6
+      }
+    },
+    {
+      "name": "search-query",
+      "routePath": "/api/search",
+      "path": "/api/search?q=marketplace+payout+benchmark+plan",
+      "method": "GET",
+      "authProtected": false,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 0.9,
+        "p95": 3.02,
+        "p99": 3.07,
+        "average": 0.5
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.26,
+        "p95Ms": 2.8,
+        "maxMs": 2.8
+      }
+    },
+    {
+      "name": "admin-metrics",
+      "routePath": "/api/admin/metrics",
+      "path": "/api/admin/metrics",
+      "method": "GET",
+      "authProtected": true,
+      "payloadType": "none",
+      "payloadBytes": 0,
+      "requestsSent": 24,
+      "statusCodes": {
+        "200": 24
+      },
+      "latencyMs": {
+        "p50": 2.27,
+        "p95": 12.41,
+        "p99": 12.73,
+        "average": 3
+      },
+      "throughput": {
+        "sustainedRps": 24,
+        "peakRps": 24
+      },
+      "errorRatePct": 0,
+      "ttfbMs": {
+        "averageMs": 1.48,
+        "p95Ms": 1.81,
+        "maxMs": 1.81
+      }
+    }
+  ],
+  "thresholdFailures": []
+}
