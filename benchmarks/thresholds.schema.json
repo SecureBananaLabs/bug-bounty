@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["defaults"],
+  "properties": {
+    "defaults": {
+      "type": "object",
+      "required": ["p99LatencyMs", "ttfbMs", "errorRatePct"],
+      "properties": {
+        "p99LatencyMs": { "type": "number", "minimum": 1 },
+        "ttfbMs": { "type": "number", "minimum": 1 },
+        "errorRatePct": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "endpoints": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "p99LatencyMs": { "type": "number", "minimum": 1 },
+          "ttfbMs": { "type": "number", "minimum": 1 },
+          "errorRatePct": { "type": "number", "minimum": 0, "maximum": 100 }
+        }
+      }
+    }
+  }
+}
