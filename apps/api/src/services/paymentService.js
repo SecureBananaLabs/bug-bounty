@@ -1,9 +1,18 @@
+function normalizeCurrency(currency) {
+  if (typeof currency !== "string") {
+    return "usd";
+  }
+
+  const normalizedCurrency = currency.trim().toLowerCase();
+  return normalizedCurrency || "usd";
+}
+
 export async function createPaymentIntent(payload) {
   // TODO: integrate Stripe SDK and return client secret.
   return {
     paymentId: `pay_${Date.now()}`,
     amount: payload.amount,
-    currency: payload.currency ?? "usd",
+    currency: normalizeCurrency(payload.currency),
     provider: "stripe"
   };
 }
