@@ -1,6 +1,50 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0b1020; color: #f2f5ff; }
 a { color: inherit; text-decoration: none; }
-main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+main { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+/* ---- Admin panel ---- */
+.summary-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+.summary-card { .stat { font-size: 2rem; font-weight: 700; color: #63b3ff; } .label { color: #8a93b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; } }
+
+/* Tables */
+.server-table table { width: 100%; border-collapse: collapse; }
+.server-table th, .server-table td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #2a3765; }
+.server-table th { color: #8a93b8; font-weight: 600; }
+.server-table tbody tr:hover { background: #1d2745; }
+.server-table .toolbar { margin-bottom: 0.5rem; }
+.server-table .filter-bar { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+.server-table .filter-bar input, .server-table .filter-bar select { background: #0b1020; border: 1px solid #2a3765; color: #f2f5ff; padding: 0.3rem 0.5rem; border-radius: 6px; }
+
+/* Pagination */
+.pagination { display: flex; align-items: center; gap: 0.25rem; flex-wrap: wrap; padding: 0.5rem 0; }
+.pagination button { background: #0b1020; border: 1px solid #2a3765; color: #f2f5ff; padding: 0.25rem 0.6rem; border-radius: 6px; cursor: pointer; }
+.pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
+.pagination button[aria-current="page"] { background: #2a3765; }
+.pagination span { color: #8a93b8; font-size: 0.85rem; }
+
+/* Trust chart */
+.trust-chart { display: flex; flex-direction: column; gap: 0.5rem; }
+.trust-row { display: grid; grid-template-columns: 80px 1fr 80px; align-items: center; gap: 0.5rem; }
+.trust-label { color: #8a93b8; font-size: 0.8rem; }
+.trust-track { background: #0b1020; border-radius: 999px; height: 1.2rem; overflow: hidden; }
+.trust-bar { background: linear-gradient(90deg, #63b3ff, #4299e1); height: 100%; transition: width 0.3s; }
+.trust-count { text-align: right; font-size: 0.85rem; }
+
+/* Confirm dialog */
+.confirm-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.confirm-dialog { max-width: 420px; width: 90%; }
+.confirm-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+
+/* Admin nav */
+.admin-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.admin-nav button, .admin-nav a { background: #0b1020; border: 1px solid #2a3765; color: #f2f5ff; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; }
+.admin-nav button[aria-current="page"], .admin-nav a.active { background: #2a3765; color: #63b3ff; }
+
+/* Toggle switch */
+.toggle { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; user-select: none; }
+.toggle input { width: 1.4rem; height: 0.8rem; }
+.refresh-btn { background: #0b1020; border: 1px solid #2a3765; color: #f2f5ff; padding: 0.3rem 0.8rem; border-radius: 6px; cursor: pointer; }
+.refresh-btn:disabled { opacity: 0.5; }
