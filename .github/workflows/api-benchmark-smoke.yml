@@ -1,0 +1,54 @@
+
+name: API benchmark smoke
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Start API for smoke gate
+        run: |
+          JWT_SECRET=development-secret PORT=4000 npm run dev -w apps/api > /tmp/api-smoke.log 2>&1 &
+          for i in {1..30}; do
+            curl --fail --silent http://127.0.0.1:4000/health && exit 0
+            sleep 1
+          done
+          cat /tmp/api-smoke.log
+          exit 1
+      - name: Run smoke benchmark gate
+        env:
+          BENCHMARK_BASE_URL: http://127.0.0.1:4000
+          JWT_SECRET: development-secret
+        run: npm run benchmark:smoke
+      - name: Start fresh API for full report
+        run: |
+          JWT_SECRET=development-secret PORT=4001 npm run dev -w apps/api > /tmp/api-full.log 2>&1 &
+          for i in {1..30}; do
+            curl --fail --silent http://127.0.0.1:4001/health && exit 0
+            sleep 1
+          done
+          cat /tmp/api-full.log
+          exit 1
+      - name: Run full benchmark and print report
+        env:
+          BENCHMARK_BASE_URL: http://127.0.0.1:4001
+          JWT_SECRET: development-secret
+        run: |
+          npm run benchmark
+          cat benchmarks/results/latest.md
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-benchmark-results
+          path: benchmarks/results/
