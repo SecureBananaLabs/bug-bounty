@@ -9,7 +9,7 @@ export default function FreelancerSearchPage() {
         {freelancers.map((freelancer) => (
           <article className="card" key={freelancer.username}>
             <h3>{freelancer.username}</h3>
-            <p>{freelancer.skills.join(" · ")}</p>
+            <p>{freelancer.skills.join(" / ")}</p>
             <p>{freelancer.rate}</p>
             <Link href={`/freelancers/${freelancer.username}`}>Open profile</Link>
           </article>
