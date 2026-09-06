@@ -19,7 +19,31 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors({
+  origin: function (origin, callback) {
+    // 允许没有 origin 的请求（比如移动端、Postman）
+    if (!origin) return callback(null, true);
+    
+    // 允许的域名白名单
+    const allowedOrigins = [
+      'https://securebananalabs.com',
+      'https://www.securebananalabs.com',
+      'https://app.securebananalabs.com',
+      'http://localhost:3000',  // 开发环境
+      'http://localhost:5173',  // Vite 开发服务器
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  maxAge: 86400  // 预检请求缓存 24 小时
+}));
   app.use(express.json());
   app.use(apiLimiter);
 
