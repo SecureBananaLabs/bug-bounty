@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { getUsers, postUser } from "../controllers/userController.js";
+const authMiddleware = require('../middleware/auth');
 
 export const userRoutes = Router();
+router.use(authMiddleware);
 
-userRoutes.get("/", getUsers);
+router.get('/', userController.getAllUsers);
+router.post('/', userController.createUser);
 userRoutes.post("/", postUser);
