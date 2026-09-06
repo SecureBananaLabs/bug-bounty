@@ -1,0 +1,31 @@
+{
+  "description": "Performance thresholds for CI benchmark gate",
+  "version": "1.0.0",
+  "lastUpdated": "2026-05-18",
+  "thresholds": {
+    "p99": {
+      "value": 500,
+      "unit": "ms",
+      "description": "p99 latency should be under 500ms"
+    },
+    "errorRate": {
+      "value": 1.0,
+      "unit": "percent",
+      "description": "Error rate should be under 1%"
+    },
+    "rps": {
+      "value": 100,
+      "unit": "requests_per_second",
+      "description": "Minimum sustained RPS"
+    }
+  },
+  "smoke": {
+    "concurrency": 5,
+    "duration": 5,
+    "description": "Low-concurrency smoke test params"
+  },
+  "ci": {
+    "failOnThresholdExceed": true,
+    "failOnHighErrorRate": true
+  }
+}
