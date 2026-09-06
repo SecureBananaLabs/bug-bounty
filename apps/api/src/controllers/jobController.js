@@ -3,7 +3,9 @@ import { createJobSchema } from "../validators/job.js";
 import { createJob, listJobs } from "../services/jobService.js";
 
 export async function getJobs(req, res) {
-  return ok(res, await listJobs());
+  const page = Math.max(1, parseInt(req.query.page) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+  return ok(res, await listJobs({ page, limit }));
 }
 
 export async function postJob(req, res) {
