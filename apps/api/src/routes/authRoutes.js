@@ -1,9 +1,24 @@
 import { Router } from "express";
-import { login, oauthCallback, refresh, register } from "../controllers/authController.js";
+import { refreshToken } from "../services/authService.js";
 
-export const authRoutes = Router();
+const router = Router();
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
-authRoutes.get("/oauth/:provider/callback", oauthCallback);
-authRoutes.post("/refresh", refresh);
+router.post("/refresh", (req, res) => {
+  const { refreshToken: token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ error: "Refresh token is required" });
+  }
+
+  try {
+    const tokens = refreshToken(token); // returns { accessToken, refreshToken? }
+    res.json(tokens);
+  } catch (error) {
+    if (error.message === "invalid token") {
+      return res.status(401).json({ error: "Invalid or expired refresh token" });
+    }
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+export { router as authRoutes };
