@@ -1,11 +1,17 @@
 export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
   if (res.headersSent) {
     return next(err);
   }
 
-  return res.status(500).json({
+  const isZodError = err?.name === "ZodError";
+  const status = isZodError ? 400 : 500;
+
+  if (status >= 500) {
+    console.error("Unhandled API error:", err);
+  }
+
+  return res.status(status).json({
     success: false,
-    message: "Unexpected server error"
+    message: isZodError ? "Invalid request" : "Unexpected server error"
   });
 }
