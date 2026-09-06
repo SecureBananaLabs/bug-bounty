@@ -24,6 +24,7 @@ export function createApp() {
   app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
+    res.set("Cache-Control", "no-store");
     res.status(200).json({ ok: true, service: "api" });
   });
 
@@ -38,6 +39,10 @@ export function createApp() {
   app.use("/api/uploads", uploadRoutes);
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
+
+  app.use("/api", (req, res) => {
+    res.status(404).json({ success: false, message: "Not found" });
+  });
 
   app.use(errorHandler);
   return app;
