@@ -1,7 +1,8 @@
-node_modules
-.next
-dist
+node_modules/
 .env
-.env.*
-coverage
 *.log
+.DS_Store
+dist/
+.next/
+turbo/
+benchmark-report.json
