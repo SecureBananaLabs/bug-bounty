@@ -1,0 +1,2 @@
+if(process.env.NODE_ENV==="production"&&!process.env.STRIPE_SECRET_KEY){console.error("FATAL: STRIPE_SECRET_KEY must be set in production");process.exit(1);}
+export const STRIPE_KEY=process.env.STRIPE_SECRET_KEY||"sk_test_placeholder";
