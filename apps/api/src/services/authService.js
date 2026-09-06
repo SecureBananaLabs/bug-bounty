@@ -18,6 +18,8 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(user) {
+  const sub = user?.sub || "usr_existing";
+  const role = user?.role || "client";
+  return { token: signAccessToken({ sub, role }) };
 }
