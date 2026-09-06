@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export function zodReturn400V2(err,req,res,next){if(err?.name==="ZodError"||Array.isArray(err?.issues))return fail(res,"Validation failed: "+err.issues?.[0]?.message,400);return next(err);}
