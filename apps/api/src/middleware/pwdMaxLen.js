@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const pwdMaxLen=(req,res,next)=>{const p=req.body?.password;if(typeof p==="string"){if(p.length>128)return fail(res,"Password cannot exceed 128 characters",400);if(!p.trim())return fail(res,"Password cannot be blank",400);}return next();};
