@@ -1,0 +1,1 @@
+export const stripMsgServerId=(req,_,next)=>{["id","messageId","createdAt","sentAt"].forEach(f=>delete req.body?.[f]);return next();};
