@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const rejectEmptyV4=(req,res,next)=>{if(!req.file)return fail(res,"File required",400);if(req.file.size===0)return fail(res,"File must not be empty",400);return next();};
