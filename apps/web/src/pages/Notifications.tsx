@@ -1,0 +1,1 @@
+import React from"react";export default function Notifications(){return(<main><h1>Notifications</h1><section><p>No notifications yet.</p><a href="/jobs">Browse Jobs</a></section></main>);}
