@@ -1,9 +1,8 @@
-import { Router } from "express";
-import multer from "multer";
-import { uploadFile } from "../controllers/uploadController.js";
+const express = require('express');
+const router = express.Router();
+const uploadController = require('../controllers/uploadController');
 
-const upload = multer({ storage: multer.memoryStorage() });
+// POST /api/uploads - Upload a file
+router.post('/', uploadController.uploadFile);
 
-export const uploadRoutes = Router();
-
-uploadRoutes.post("/", upload.single("file"), uploadFile);
+module.exports = router;
