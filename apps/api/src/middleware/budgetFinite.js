@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const budgetFinite=(req,res,next)=>{const b=req.body?.budget;if(b){if(typeof b.min==="number"&&!isFinite(b.min))return fail(res,"budget.min must be a finite number",400);if(typeof b.max==="number"&&!isFinite(b.max))return fail(res,"budget.max must be a finite number",400);if(typeof b.min==="number"&&typeof b.max==="number"&&b.min>=b.max)return fail(res,"budget.max must exceed budget.min",400);}return next();};
