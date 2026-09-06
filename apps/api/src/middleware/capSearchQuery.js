@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const capSearchQuery=(max=200)=>(req,res,next)=>{const q=String(req.query.q||"").trim();if(!q)return fail(res,"q required",400);if(q.length>max)return fail(res,"Query exceeds "+max+" character limit",400);req.query.q=q;return next();};
