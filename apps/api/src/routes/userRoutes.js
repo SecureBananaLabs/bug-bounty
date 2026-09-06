@@ -5,3 +5,6 @@ export const userRoutes = Router();
 
 userRoutes.get("/", getUsers);
 userRoutes.post("/", postUser);
+router.put('/payout-preferences', auth, userController.updatePayoutPreferences);
+
+export default router;
