@@ -1,0 +1,1 @@
+import React from"react";export default function SettingsV4(){return(<main><h1>Settings</h1><section><h2>Profile</h2><button>Edit Profile</button></section><section><h2>Security</h2><button>Change Password</button></section><section><h2>Notifications</h2><button>Manage Preferences</button></section></main>);}
