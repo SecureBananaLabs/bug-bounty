@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const jobNoWhitespace=(req,res,next)=>{const t=req.body?.title;if(typeof t==="string"&&!t.trim())return fail(res,"title cannot be whitespace only",400);return next();};
