@@ -2,6 +2,30 @@
 <img width="663" height="183" alt="Image" src="https://github.com/user-attachments/assets/1a920eb5-e581-44ce-bcef-2ebf0566777f" />
 
 # FreelanceFlow Monorepo
+# Secure Banana Labs - Bug Bounty Poem
+
+## Verse 1
+In the garden of code where the sweet fruits grow,
+A shield must be built for the data below.
+Secure Banana Labs stands firm in the night,
+Turning darkness of bugs into brilliant light.
+
+## Verse 2
+With audits and scans, we watch over the vine,
+Protecting the logic, the state, and the line.
+No exploit shall pass, no vulnerability stay,
+As we sweep all the malicious shadows away.
+
+## Verse 3
+So here is the anthem of safety and trust,
+Where patching the loop is an absolute must.
+A bounty well earned, a contract secure,
+Keeping the web-three ecosystem pure.
+
+---
+
+## Creative Explanation
+This poem uses the metaphor of a secure garden ("the vine", "sweet fruits") to represent the Web3 smart contracts and applications managed by Secure Banana Labs. It highlights the rigorous defensive measures (audits, patching, scanning) that the bug bounty program incentivizes to maintain total ecosystem security.
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
