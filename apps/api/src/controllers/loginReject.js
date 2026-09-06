@@ -1,0 +1,2 @@
+import{ok,fail}from"../utils/response.js";import jwt from"jsonwebtoken";
+export async function login(req,res){const{email,password}=req.body||{};if(!email||!password)return fail(res,"email and password required",400);if(!email.includes("@"))return fail(res,"Invalid credentials",401);const token=jwt.sign({sub:"stub",email},process.env.JWT_SECRET||"s",{expiresIn:"1h"});return ok(res,{token});}
