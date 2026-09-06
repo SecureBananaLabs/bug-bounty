@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const zodAsyncErrors=(fn)=>async(req,res,next)=>{try{await fn(req,res,next);}catch(err){if(err?.name==="ZodError"||err?.issues)return fail(res,"Validation failed: "+err.issues?.[0]?.message,400);return next(err);}};
