@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const searchNorm=(req,res,next)=>{if(!req.query.q)return fail(res,"q is required",400);req.query.q=String(req.query.q).trim().slice(0,200);if(!req.query.q)return fail(res,"q must not be blank",400);return next();};
