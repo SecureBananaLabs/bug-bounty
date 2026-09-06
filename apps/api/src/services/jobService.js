@@ -1,7 +1,7 @@
 const jobs = [];
 
 export async function listJobs() {
-  return jobs;
+  return [...jobs];
 }
 
 export async function createJob(payload) {
