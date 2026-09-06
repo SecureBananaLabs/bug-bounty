@@ -3,4 +3,6 @@ import { search } from "../controllers/searchController.js";
 
 export const searchRoutes = Router();
 
-searchRoutes.get("/", search);
+searchRoutes.get("/", (req, res, next) =>
+  Promise.resolve(search(req, res)).catch(next)
+);
