@@ -1,0 +1,35 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { loginSchema, registerSchema } from "../validators/auth.js";
+
+test("registerSchema rejects whitespace-only passwords", () => {
+  const result = registerSchema.safeParse({
+    email: "client@example.com",
+    password: "        ",
+    role: "client"
+  });
+
+  assert.equal(result.success, false);
+});
+
+test("loginSchema rejects whitespace-only passwords", () => {
+  const result = loginSchema.safeParse({
+    email: "client@example.com",
+    password: "        "
+  });
+
+  assert.equal(result.success, false);
+});
+
+test("auth schemas still accept non-blank passwords that meet the length requirement", () => {
+  assert.equal(registerSchema.safeParse({
+    email: "client@example.com",
+    password: "valid pass",
+    role: "client"
+  }).success, true);
+
+  assert.equal(loginSchema.safeParse({
+    email: "client@example.com",
+    password: "valid pass"
+  }).success, true);
+});
