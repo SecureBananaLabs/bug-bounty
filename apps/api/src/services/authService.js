@@ -1,20 +1,46 @@
+import { createHash } from "node:crypto";
 import { signAccessToken } from "../utils/jwt.js";
 
+const usersByEmail = new Map();
+
+function normalizeEmail(email) {
+  return email.toLowerCase();
+}
+
+function hashPassword(password) {
+  return createHash("sha256").update(password).digest("hex");
+}
+
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+  const id = `usr_${Date.now()}`;
+  const email = normalizeEmail(payload.email);
+  const user = {
+    id,
+    email,
+    passwordHash: hashPassword(payload.password),
+    role: payload.role
+  };
+
+  usersByEmail.set(email, user);
+
   return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    id,
+    email,
+    role: user.role,
+    token: signAccessToken({ sub: id, role: user.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  const user = usersByEmail.get(normalizeEmail(payload.email));
+
+  if (!user || user.passwordHash !== hashPassword(payload.password)) {
+    return null;
+  }
+
   return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    email: user.email,
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
