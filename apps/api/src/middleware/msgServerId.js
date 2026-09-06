@@ -1,0 +1,1 @@
+export const msgServerId=(req,_,next)=>{delete req.body?.id;delete req.body?.messageId;delete req.body?.createdAt;return next();};
