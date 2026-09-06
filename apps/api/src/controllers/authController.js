@@ -1,4 +1,4 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
+import { registerSchema, loginSchema, refreshSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
 import { ok } from "../utils/response.js";
 
@@ -22,6 +22,22 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  const result = refreshSchema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid refresh payload",
+      errors: result.error.errors
+    });
+  }
+
+  try {
+    const data = await refreshToken(result.data.refreshToken);
+    return ok(res, data);
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired refresh token"
+    });
+  }
 }
