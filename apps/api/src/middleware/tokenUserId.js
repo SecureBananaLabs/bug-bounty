@@ -1,0 +1,1 @@
+export const tokenUserId=(userId,payload)=>({...payload,sub:String(userId),id:String(userId),userId:String(userId)});
