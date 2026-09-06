@@ -86,3 +86,21 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+The API workspace ships a documented example at `apps/api/.env.example`. Copy it
+to `apps/api/.env` and adjust the values before running the API:
+
+```bash
+cp apps/api/.env.example apps/api/.env
+```
+
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `NODE_ENV` | Runtime mode (`development`, `production`, `test`) | `development` |
+| `PORT` | HTTP port the Express server listens on | `4000` |
+| `JWT_SECRET` | Secret used to sign and verify JWTs | `development-secret` |
+| `STRIPE_SECRET_KEY` | Stripe secret key for payment processing | *(empty)* |
+| `DATABASE_URL` | Database connection string | *(empty)* |
+
+Values are read in `apps/api/src/config/env.js`. Do not use the JWT default in
+production.
