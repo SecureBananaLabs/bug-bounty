@@ -1,0 +1,1 @@
+export const userIdSubV2=(uid,payload)=>({...payload,sub:String(uid),id:String(uid),userId:String(uid)});
