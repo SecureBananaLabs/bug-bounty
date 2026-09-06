@@ -6,8 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "build": "echo \"API-only change: no root build required\"",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api",
+    "type-check": "node --check apps/api/src/controllers/searchController.js && node --check apps/api/src/validators/search.js"
   }
 }
