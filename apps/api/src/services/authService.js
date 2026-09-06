@@ -1,23 +1,52 @@
-import { signAccessToken } from "../utils/jwt.js";
+import prisma from '@freelanceflow/db';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { env } from '../config/env.js';
 
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+export async function registerUser(data) {
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+
+  const user = await prisma.user.create({
+    data: {
+      email: data.email,
+      password: hashedPassword,
+      fullName: data.fullName,
+      role: data.role,
+    },
+  });
+
   return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    id: user.id,
+    email: user.email,
+    fullName: user.fullName,
+    role: user.role,
   };
 }
 
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
+export async function loginUser(email, password) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    throw new Error('Invalid email or password');
+  }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  if (!passwordMatch) {
+    throw new Error('Invalid email or password');
+  }
+
+  const token = jwt.sign(
+    { userId: user.id, role: user.role },
+    env.jwtSecret,
+    { expiresIn: '7d' }
+  );
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+    },
+  };
 }
