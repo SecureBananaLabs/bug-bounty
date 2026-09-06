@@ -1,7 +1,12 @@
 const proposals = [];
 
-export async function listProposals() {
-  return proposals;
+export async function listProposals(userId) {
+  return proposals
+    .filter(
+      (proposal) =>
+        proposal.freelancerId === userId || proposal.clientId === userId,
+    )
+    .map((proposal) => ({ ...proposal }));
 }
 
 export async function createProposal(payload) {
