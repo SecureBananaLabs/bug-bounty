@@ -1,0 +1,2 @@
+import{ok,fail}from"../utils/response.js";
+export async function searchValidated(req,res){const q=String(req.query.q||"").trim();if(!q)return fail(res,"Search query q is required",400);if(q.length>200)return fail(res,"Query exceeds 200 character limit",400);return ok(res,{results:[],query:q});}
