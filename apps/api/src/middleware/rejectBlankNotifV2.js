@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const rejectBlankNotifV2=(req,res,next)=>{const m=req.body?.message;if(!m||typeof m!=="string"||!m.trim())return fail(res,"message is required and must not be blank",400);return next();};
