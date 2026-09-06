@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const searchNoLimit=(req,res,next)=>{const q=String(req.query.q||" ").trim();if(!q)return fail(res,"q required",400);if(q.length>200)return fail(res,"q exceeds 200 char limit",400);req.query.q=q;return next();};
