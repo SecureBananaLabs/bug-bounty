@@ -5,6 +5,10 @@
 
 FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern TypeScript-first architecture.
 
+## Feature: PI Calculation
+
+A new `/api/pi` endpoint has been added to provide an approximate value of PI. Since PI is an irrational transcendental number, its exact value cannot be computed in finite time or space. The endpoint uses the Leibniz formula to produce a high-precision approximation. You can optionally pass an `iterations` query parameter to control the number of terms summed (default 1,000,000, max 10,000,000).
+
 ## Workspace Structure
 
 - `apps/web` — Next.js 14 App Router frontend
@@ -37,6 +41,7 @@ The API includes:
 - Reviews, messaging, notifications
 - File uploads and search
 - Admin routes
+- **PI calculation route** (`/api/pi`)
 
 Backend architecture follows:
 
