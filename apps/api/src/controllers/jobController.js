@@ -6,7 +6,11 @@ export async function getJobs(req, res) {
   return ok(res, await listJobs());
 }
 
-export async function postJob(req, res) {
-  const payload = createJobSchema.parse(req.body);
-  return ok(res, await createJob(payload), 201);
+export async function postJob(req, res, next) {
+  try {
+    const payload = createJobSchema.parse(req.body);
+    return ok(res, await createJob(payload), 201);
+  } catch (err) {
+    return next(err);
+  }
 }
