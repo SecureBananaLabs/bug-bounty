@@ -1,0 +1,2 @@
+import{z}from"zod";
+export const createJobSchema=z.object({title:z.string().min(1).max(200).trim(),budget:z.object({min:z.number().nonnegative(),max:z.number().positive()}).refine(b=>b.max>b.min,{message:"budget.max must exceed budget.min",path:["max"]})}).passthrough();
