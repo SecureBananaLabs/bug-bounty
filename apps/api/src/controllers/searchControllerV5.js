@@ -1,0 +1,2 @@
+import{ok,fail}from"../utils/response.js";
+export async function search(req,res){const q=(req.query.q??"").trim();if(!q)return fail(res,"Query parameter q must not be empty",400);return ok(res,{results:[],query:q.slice(0,200)});}
