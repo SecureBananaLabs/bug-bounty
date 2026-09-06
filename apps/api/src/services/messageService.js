@@ -1,11 +1,15 @@
 const messages = [];
 
 export async function listMessages() {
-  return messages;
+  return messages.map((m) => ({ ...m }));
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
+  const message = {
+    id: `msg_${Date.now()}`,
+    ...payload,
+    sentAt: new Date().toISOString()
+  };
   messages.push(message);
-  return message;
+  return { ...message };
 }
