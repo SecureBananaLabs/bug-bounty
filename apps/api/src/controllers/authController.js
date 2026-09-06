@@ -1,6 +1,6 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -22,6 +22,13 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  // Fix #5243: Pass token from request body to refreshToken service
+  const { token } = req.body;
+  try {
+    const result = await refreshToken(token);
+    return ok(res, result);
+  } catch (err) {
+    const status = err.statusCode || 500;
+    return fail(res, err.message, status);
+  }
 }
