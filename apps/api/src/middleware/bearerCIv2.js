@@ -1,0 +1,2 @@
+import jwt from"jsonwebtoken";import{fail}from"../utils/response.js";
+export const bearerCIv2=(req,res,next)=>{const h=(req.headers.authorization||"");const m=h.match(/^bearer\s+(.+)/i);if(!m)return fail(res,"Bearer token required",401);try{req.user=jwt.verify(m[1].trim(),process.env.JWT_SECRET||"s");return next();}catch{return fail(res,"Invalid token",401);}};
