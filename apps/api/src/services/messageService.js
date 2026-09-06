@@ -1,7 +1,7 @@
 const messages = [];
 
 export async function listMessages() {
-  return messages;
+  return [...messages].map(item => ({...item}));
 }
 
 export async function sendMessage(payload) {
