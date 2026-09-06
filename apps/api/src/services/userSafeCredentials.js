@@ -1,0 +1,1 @@
+export const stripCreds=(u)=>{if(!u)return null;const{password,passwordHash,salt,token,...safe}=u;return safe;};
