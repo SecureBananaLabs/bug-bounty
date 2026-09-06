@@ -5,7 +5,9 @@ export async function listReviews() {
 }
 
 export async function createReview(payload) {
-  const review = { id: `rev_${Date.now()}`, ...payload };
+  // Server-controlled id must come AFTER spread to prevent injection.
+  const review = { ...payload, id: `rev_${Date.now()}` };
   reviews.push(review);
   return review;
 }
+
