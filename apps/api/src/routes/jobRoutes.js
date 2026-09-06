@@ -1,7 +1,15 @@
-import { Router } from "express";
-import { getJobs, postJob } from "../controllers/jobController.js";
+const express = require('express');
+const router = express.Router();
+const jobController = require('../controllers/jobController');
+const { authenticate } = require('../middleware/auth');
 
-export const jobRoutes = Router();
+// Public routes (no authentication required)
+router.get('/', jobController.listJobs);
+router.get('/:id', jobController.getJob);
 
-jobRoutes.get("/", getJobs);
-jobRoutes.post("/", postJob);
+// Protected routes (authentication required)
+router.post('/', authenticate, jobController.createJob);
+router.put('/:id', authenticate, jobController.updateJob);
+router.delete('/:id', authenticate, jobController.deleteJob);
+
+module.exports = router;
