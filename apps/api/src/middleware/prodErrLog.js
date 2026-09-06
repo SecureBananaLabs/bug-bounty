@@ -1,0 +1,2 @@
+export function prodErrLog(err,req,res,next){const isProd=process.env.NODE_ENV==="production";const body=isProd?{success:false,message:"An internal error occurred"}:{success:false,message:err.message||"Internal error",stack:err.stack};
+res.status(err.status||500).json(body);}
