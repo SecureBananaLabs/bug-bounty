@@ -1,5 +1,17 @@
 {
   "name": "@freelanceflow/ui",
   "private": true,
-  "main": "src/index.ts"
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js",
+      "require": "./src/index.js",
+      "default": "./src/index.js"
+    }
+  },
+  "scripts": {
+    "test": "node --test \"src/tests/**/*.test.js\""
+  }
 }
