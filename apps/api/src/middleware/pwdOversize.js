@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const pwdOversize=(req,res,next)=>{const p=req.body?.password;if(typeof p==="string"&&p.length>128)return fail(res,"Password exceeds maximum allowed length",400);return next();};
