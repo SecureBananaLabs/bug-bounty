@@ -1,0 +1,27 @@
+name: Bug Report
+about: Create a report to help us fix a bug
+title: '[BUG] '
+labels: bug
+assignees: ''
+
+body: |
+  Please provide detailed information about the bug you encountered.
+
+  Steps to reproduce:
+  1.
+  2.
+  3.
+
+  Expected behavior:
+  - 
+
+  Actual behavior:
+  - 
+
+  Environment:
+  - OS:
+  - Browser:
+  - Version:
+
+  Screenshots (if applicable):
+  -
