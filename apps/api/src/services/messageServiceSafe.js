@@ -1,0 +1,2 @@
+const messages=[];
+export const messageService={list:()=>messages.map(m=>({...m})),get:(id)=>{const m=messages.find(x=>x.id===id);return m?{...m}:null;},create:(data)=>{const{id:_,...safe}=data;const m={...safe,id:crypto.randomUUID(),createdAt:new Date()};messages.push(m);return{...m};}};
