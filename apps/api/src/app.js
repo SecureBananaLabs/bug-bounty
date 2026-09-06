@@ -18,8 +18,19 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
-  app.use(helmet());
-  app.use(cors());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "https:"],
+      }
+    }
+  }));
+  app.use(cors({
+    origin: process.env.FRONTEND_URL ?? "http://localhost:3000"
+  }));
   app.use(express.json());
   app.use(apiLimiter);
 
