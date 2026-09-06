@@ -1,0 +1,1 @@
+export const normalizeCurrencyLower=(req,_,next)=>{if(req.body?.currency&&typeof req.body.currency==="string")req.body.currency=req.body.currency.toLowerCase().trim();return next();};
