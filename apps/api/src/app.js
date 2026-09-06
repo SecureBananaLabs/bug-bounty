@@ -19,7 +19,25 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+
+  // Configure CORS with strict origin control
+  const allowedOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(",").map((o) => o.trim())
+    : [];
+  const corsOptions = {
+    origin: function (origin, callback) {
+      // Allow requests with no origin (e.g., server-to-server, mobile apps)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.length === 0 || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
+
   app.use(express.json());
   app.use(apiLimiter);
 
