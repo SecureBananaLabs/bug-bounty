@@ -1,10 +1,13 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
+  const parsed = registerSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return fail(res, parsed.error.issues, 422);
+  }
+  const result = await registerUser(parsed.data);
   return ok(res, result, 201);
 }
 
