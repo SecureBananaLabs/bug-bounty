@@ -6,3 +6,8 @@ export const apiLimiter = rateLimit({
   standardHeaders: "draft-7",
   legacyHeaders: false
 });
+
+export function malformedJsonPreLimiter(req, res, next) {
+  const ip = req.ip || req.socket?.remoteAddress || "unknown";
+  return apiLimiter(req, res, next);
+}
