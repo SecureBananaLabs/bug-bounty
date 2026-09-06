@@ -3,7 +3,9 @@ import { login, oauthCallback, refresh, register } from "../controllers/authCont
 
 export const authRoutes = Router();
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
+const wrap = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
+
+authRoutes.post("/register", wrap(register));
+authRoutes.post("/login", wrap(login));
 authRoutes.get("/oauth/:provider/callback", oauthCallback);
-authRoutes.post("/refresh", refresh);
+authRoutes.post("/refresh", wrap(refresh));
