@@ -1,0 +1,1 @@
+export const stripUserServerFields=(req,_,next)=>{["id","verified","createdAt","updatedAt","role"].forEach(f=>delete req.body?.[f]);return next();};
