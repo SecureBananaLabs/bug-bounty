@@ -15,11 +15,28 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+function parseCorsOrigins(rawOrigins) {
+  return rawOrigins
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
+function buildCorsOptions() {
+  const configuredOrigins = parseCorsOrigins(process.env.CORS_ORIGINS ?? "");
+
+  if (configuredOrigins.length > 0) {
+    return { origin: configuredOrigins };
+  }
+
+  return { origin: process.env.NODE_ENV === "production" ? false : true };
+}
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(buildCorsOptions()));
   app.use(express.json());
   app.use(apiLimiter);
 
