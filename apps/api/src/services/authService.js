@@ -1,23 +1,66 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { prisma } from '@freelanceflow/db';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { env } from '../config/env.js';
 
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+export async function registerUser({ email, password, role, fullName }) {
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (existing) {
+    throw new Error('Email already in use');
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+      role,
+      fullName,
+    },
+  });
+
+  const token = jwt.sign(
+    { userId: user.id, email: user.email },
+    env.jwtSecret,
+    { expiresIn: '7d' }
+  );
+
   return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    user: {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      fullName: user.fullName,
+    },
+    token,
   };
 }
 
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
+export async function loginUser({ email, password }) {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    throw new Error('Invalid credentials');
+  }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) {
+    throw new Error('Invalid credentials');
+  }
+
+  const token = jwt.sign(
+    { userId: user.id, email: user.email },
+    env.jwtSecret,
+    { expiresIn: '7d' }
+  );
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      fullName: user.fullName,
+    },
+    token,
+  };
 }
