@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const jobClientIdV2=(req,res,next)=>{const id=req.user?.id||req.user?.sub;if(!id)return fail(res,"Authenticated user required",401);req.body.clientId=String(id);return next();};
