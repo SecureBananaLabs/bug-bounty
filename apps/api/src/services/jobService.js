@@ -1,3 +1,5 @@
+import { generateId } from '../utils/id.js';
+
 const jobs = [];
 
 export async function listJobs() {
@@ -5,7 +7,8 @@ export async function listJobs() {
 }
 
 export async function createJob(payload) {
-  const job = { id: `job_${Date.now()}`, status: "open", ...payload };
+  const job = { id: generateId('job_'), status: "open", ...payload };
   jobs.push(job);
   return job;
 }
+
