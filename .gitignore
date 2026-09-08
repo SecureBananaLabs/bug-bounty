@@ -3,5 +3,9 @@ node_modules
 dist
 .env
 .env.*
+# La plantilla del benchmark si se versiona: es documentacion, no un
+# secreto, y el issue la pide para que un contribuidor pueda configurar
+# el host objetivo.
+!benchmarks/.env.benchmark.example
 coverage
 *.log
