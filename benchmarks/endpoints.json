@@ -1,0 +1,169 @@
+[
+  {
+    "name": "auth-register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "bodyType": "json",
+    "body": {
+      "email": "benchmark-register@example.com",
+      "password": "benchmark-password",
+      "role": "client"
+    }
+  },
+  {
+    "name": "auth-login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "bodyType": "json",
+    "body": {
+      "email": "benchmark-login@example.com",
+      "password": "benchmark-password"
+    }
+  },
+  {
+    "name": "auth-oauth-callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback"
+  },
+  {
+    "name": "auth-refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "bodyType": "json",
+    "body": {}
+  },
+  {
+    "name": "users-list",
+    "method": "GET",
+    "path": "/api/users"
+  },
+  {
+    "name": "users-create",
+    "method": "POST",
+    "path": "/api/users",
+    "bodyType": "json",
+    "body": {
+      "email": "benchmark-user@example.com",
+      "name": "Benchmark User",
+      "role": "client"
+    }
+  },
+  {
+    "name": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs"
+  },
+  {
+    "name": "jobs-create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "bodyType": "json",
+    "body": {
+      "title": "Benchmark API job",
+      "description": "A realistic benchmark payload for job creation.",
+      "budgetMin": 100,
+      "budgetMax": 500,
+      "categoryId": "benchmark-category",
+      "skills": ["node", "api", "benchmarking"]
+    }
+  },
+  {
+    "name": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals"
+  },
+  {
+    "name": "proposals-create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "bodyType": "json",
+    "body": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark_freelancer",
+      "coverLetter": "Benchmark proposal body with realistic text.",
+      "bidAmount": 250
+    }
+  },
+  {
+    "name": "payments-create",
+    "method": "POST",
+    "path": "/api/payments",
+    "bodyType": "json",
+    "body": {
+      "jobId": "job_benchmark",
+      "amount": 250,
+      "currency": "usd"
+    }
+  },
+  {
+    "name": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews"
+  },
+  {
+    "name": "reviews-create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "bodyType": "json",
+    "body": {
+      "revieweeId": "usr_benchmark_freelancer",
+      "rating": 5,
+      "comment": "Benchmark review payload."
+    }
+  },
+  {
+    "name": "messages-list",
+    "method": "GET",
+    "path": "/api/messages"
+  },
+  {
+    "name": "messages-create",
+    "method": "POST",
+    "path": "/api/messages",
+    "bodyType": "json",
+    "body": {
+      "conversationId": "conv_benchmark",
+      "senderId": "usr_benchmark_client",
+      "body": "Benchmark message payload."
+    }
+  },
+  {
+    "name": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications"
+  },
+  {
+    "name": "notifications-create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "bodyType": "json",
+    "body": {
+      "userId": "usr_benchmark_client",
+      "type": "benchmark",
+      "message": "Benchmark notification payload."
+    }
+  },
+  {
+    "name": "uploads-create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "bodyType": "multipart-file",
+    "file": {
+      "field": "file",
+      "filename": "benchmark.txt",
+      "contentType": "text/plain",
+      "content": "benchmark upload payload"
+    }
+  },
+  {
+    "name": "search",
+    "method": "GET",
+    "path": "/api/search?q=benchmark"
+  },
+  {
+    "name": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": true
+  }
+]
