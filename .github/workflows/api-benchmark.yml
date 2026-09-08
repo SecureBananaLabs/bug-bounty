@@ -1,0 +1,29 @@
+name: API benchmark
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  api-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test
+
+      - name: Run API benchmark smoke test
+        run: npm run benchmark:api -- --duration 5 --warmup 1 --concurrency 4 --thresholds benchmarks/thresholds.json
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-benchmark-results
+          path: benchmarks/results/
