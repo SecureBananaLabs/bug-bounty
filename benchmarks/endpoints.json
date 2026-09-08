@@ -1,0 +1,189 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health",
+    "description": "Service health endpoint"
+  },
+  {
+    "name": "auth-register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "description": "Register a client account with a realistic email/password payload",
+    "body": {
+      "email": "benchmark.client@example.com",
+      "password": "benchmark-password-123",
+      "role": "client"
+    }
+  },
+  {
+    "name": "auth-login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "description": "Log in with a benchmark user payload",
+    "body": {
+      "email": "benchmark.client@example.com",
+      "password": "benchmark-password-123"
+    }
+  },
+  {
+    "name": "auth-oauth-callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback",
+    "description": "OAuth callback route for GitHub provider"
+  },
+  {
+    "name": "auth-refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "description": "Refresh token endpoint"
+  },
+  {
+    "name": "users-list",
+    "method": "GET",
+    "path": "/api/users",
+    "description": "List users"
+  },
+  {
+    "name": "users-create",
+    "method": "POST",
+    "path": "/api/users",
+    "description": "Create a freelancer profile-shaped user payload",
+    "body": {
+      "email": "benchmark.freelancer@example.com",
+      "name": "Benchmark Freelancer",
+      "role": "freelancer",
+      "skills": ["node.js", "react", "api performance"],
+      "hourlyRate": 95
+    }
+  },
+  {
+    "name": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs",
+    "description": "List jobs"
+  },
+  {
+    "name": "jobs-create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "description": "Create a realistic platform job payload",
+    "body": {
+      "title": "Build API benchmark dashboard",
+      "description": "Create a dashboard that reports API latency, throughput, and error-rate trends across releases.",
+      "budgetMin": 1500,
+      "budgetMax": 4500,
+      "categoryId": "cat_engineering",
+      "skills": ["node.js", "performance", "observability"]
+    }
+  },
+  {
+    "name": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals",
+    "description": "List proposals"
+  },
+  {
+    "name": "proposals-create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "description": "Create a proposal payload with bid and timeline fields",
+    "body": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark_freelancer",
+      "coverLetter": "I can deliver a benchmark suite with JSON reports, markdown summaries, and a smoke gate.",
+      "bidAmount": 3200,
+      "estimatedDays": 5
+    }
+  },
+  {
+    "name": "payments-create",
+    "method": "POST",
+    "path": "/api/payments",
+    "description": "Create a payment intent placeholder",
+    "body": {
+      "amount": 3200,
+      "currency": "usd",
+      "jobId": "job_benchmark",
+      "proposalId": "prp_benchmark"
+    }
+  },
+  {
+    "name": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews",
+    "description": "List reviews"
+  },
+  {
+    "name": "reviews-create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "description": "Create a review payload",
+    "body": {
+      "jobId": "job_benchmark",
+      "reviewerId": "usr_benchmark_client",
+      "revieweeId": "usr_benchmark_freelancer",
+      "rating": 5,
+      "comment": "Delivered the benchmark suite on time with useful regression reports."
+    }
+  },
+  {
+    "name": "messages-list",
+    "method": "GET",
+    "path": "/api/messages",
+    "description": "List messages"
+  },
+  {
+    "name": "messages-create",
+    "method": "POST",
+    "path": "/api/messages",
+    "description": "Create a realistic message payload",
+    "body": {
+      "fromUserId": "usr_benchmark_client",
+      "toUserId": "usr_benchmark_freelancer",
+      "body": "Can you include p95 and p99 latency in the weekly benchmark report?"
+    }
+  },
+  {
+    "name": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications",
+    "description": "List notifications"
+  },
+  {
+    "name": "notifications-create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "description": "Create a notification payload",
+    "body": {
+      "userId": "usr_benchmark_client",
+      "type": "proposal.received",
+      "message": "A freelancer submitted a proposal for your benchmark dashboard project."
+    }
+  },
+  {
+    "name": "uploads-create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "description": "Upload a small benchmark attachment through multipart form data",
+    "multipart": {
+      "field": "file",
+      "filename": "benchmark-note.txt",
+      "contentType": "text/plain",
+      "content": "Benchmark attachment payload for API upload route."
+    }
+  },
+  {
+    "name": "search-global",
+    "method": "GET",
+    "path": "/api/search?q=api%20benchmark",
+    "description": "Global search route with a realistic query"
+  },
+  {
+    "name": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "description": "Authenticated admin metrics route",
+    "auth": "admin"
+  }
+]
