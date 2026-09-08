@@ -1,0 +1,174 @@
+{
+  "target": "http://127.0.0.1:3001",
+  "generated_at": "2026-07-03T19:47:26.892Z",
+  "node": "v20.19.5",
+  "concurrency": 1,
+  "iterations": 2,
+  "endpoints": [
+    {
+      "endpoint": "health",
+      "method": "GET",
+      "path": "/health",
+      "requests": 2,
+      "p50_ms": 2.42,
+      "p95_ms": 29.4,
+      "p99_ms": 29.4,
+      "ttfb_p50_ms": 2.21,
+      "rps": 62.74,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 2,
+      "p50_ms": 2.34,
+      "p95_ms": 10.69,
+      "p99_ms": 10.69,
+      "ttfb_p50_ms": 2.18,
+      "rps": 153.41,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 2,
+      "p50_ms": 1.22,
+      "p95_ms": 1.44,
+      "p99_ms": 1.44,
+      "ttfb_p50_ms": 1.09,
+      "rps": 749.41,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 2,
+      "p50_ms": 1.13,
+      "p95_ms": 1.45,
+      "p99_ms": 1.45,
+      "ttfb_p50_ms": 1.04,
+      "rps": 753.04,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 2,
+      "p50_ms": 1.56,
+      "p95_ms": 1.7,
+      "p99_ms": 1.7,
+      "ttfb_p50_ms": 1.35,
+      "rps": 611.29,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "payments-list",
+      "method": "GET",
+      "path": "/api/payments",
+      "requests": 2,
+      "p50_ms": 1.24,
+      "p95_ms": 1.72,
+      "p99_ms": 1.72,
+      "ttfb_p50_ms": 1.12,
+      "rps": 672.04,
+      "error_rate_percent": 0,
+      "statuses": {
+        "404": 2
+      }
+    },
+    {
+      "endpoint": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 2,
+      "p50_ms": 0.98,
+      "p95_ms": 1.23,
+      "p99_ms": 1.23,
+      "ttfb_p50_ms": 0.89,
+      "rps": 901.32,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 2,
+      "p50_ms": 0.94,
+      "p95_ms": 1.13,
+      "p99_ms": 1.13,
+      "ttfb_p50_ms": 0.88,
+      "rps": 962,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 2,
+      "p50_ms": 0.62,
+      "p95_ms": 0.73,
+      "p99_ms": 0.73,
+      "ttfb_p50_ms": 0.57,
+      "rps": 1476.74,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "requests": 2,
+      "p50_ms": 0.86,
+      "p95_ms": 1.39,
+      "p99_ms": 1.39,
+      "ttfb_p50_ms": 0.81,
+      "rps": 885.82,
+      "error_rate_percent": 0,
+      "statuses": {
+        "200": 2
+      }
+    },
+    {
+      "endpoint": "admin",
+      "method": "GET",
+      "path": "/api/admin",
+      "requests": 2,
+      "p50_ms": 0.67,
+      "p95_ms": 0.87,
+      "p99_ms": 0.87,
+      "ttfb_p50_ms": 0.61,
+      "rps": 1290.29,
+      "error_rate_percent": 0,
+      "statuses": {
+        "401": 2
+      }
+    }
+  ]
+}
