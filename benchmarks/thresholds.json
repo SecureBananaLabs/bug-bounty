@@ -1,0 +1,11 @@
+{
+  "defaults": {
+    "p99LatencyMs": 2000,
+    "errorRatePercent": 0
+  },
+  "routes": {
+    "/api/uploads": {
+      "p99LatencyMs": 3000
+    }
+  }
+}
