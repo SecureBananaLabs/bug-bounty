@@ -1,0 +1,20 @@
+{
+  "comment": "p99 latency thresholds in milliseconds per endpoint. CI fails if exceeded.",
+  "default": 500,
+  "routes": {
+    "GET /health":              50,
+    "POST /api/auth/register": 300,
+    "POST /api/auth/login":    300,
+    "GET /api/jobs":           200,
+    "POST /api/jobs":          300,
+    "GET /api/search":         200,
+    "POST /api/payments":      400,
+    "GET /api/users":          200,
+    "POST /api/users":         300,
+    "GET /api/proposals":      200,
+    "POST /api/proposals":     300,
+    "GET /api/messages":       200,
+    "GET /api/notifications":  200,
+    "GET /api/admin/metrics":  300
+  }
+}
