@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
 
-test("GET /health returns ok payload", async () => {
+async function withServer(run) {
   const app = createApp();
   const server = app.listen(0);
 
@@ -12,13 +12,30 @@ test("GET /health returns ok payload", async () => {
   });
 
   const { port } = server.address();
-  const response = await fetch(`http://127.0.0.1:${port}/health`);
-  const payload = await response.json();
+  try {
+    await run(port);
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
+}
 
-  assert.equal(response.status, 200);
-  assert.deepEqual(payload, { ok: true, service: "api" });
+test("GET /health returns ok payload", async () => {
+  await withServer(async (port) => {
+    const response = await fetch(`http://127.0.0.1:${port}/health`);
+    const payload = await response.json();
 
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
+    assert.equal(response.status, 200);
+    assert.deepEqual(payload, { ok: true, service: "api" });
+  });
+});
+
+test("GET /health bypasses the global API rate limit", async () => {
+  await withServer(async (port) => {
+    for (let index = 0; index < 205; index += 1) {
+      const response = await fetch(`http://127.0.0.1:${port}/health`);
+      assert.equal(response.status, 200);
+    }
   });
 });
