@@ -1,0 +1,164 @@
+[
+  {
+    "name": "auth_register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "body": {
+      "email": "benchmark.freelancer@example.com",
+      "password": "benchmark-password",
+      "role": "freelancer"
+    }
+  },
+  {
+    "name": "auth_login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "body": {
+      "email": "benchmark.freelancer@example.com",
+      "password": "benchmark-password"
+    }
+  },
+  {
+    "name": "auth_oauth_callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback"
+  },
+  {
+    "name": "auth_refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "body": {}
+  },
+  {
+    "name": "users_list",
+    "method": "GET",
+    "path": "/api/users"
+  },
+  {
+    "name": "users_create",
+    "method": "POST",
+    "path": "/api/users",
+    "body": {
+      "email": "benchmark.client@example.com",
+      "fullName": "Benchmark Client",
+      "role": "client",
+      "status": "active"
+    }
+  },
+  {
+    "name": "jobs_list",
+    "method": "GET",
+    "path": "/api/jobs"
+  },
+  {
+    "name": "jobs_create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "body": {
+      "title": "Build a benchmark dashboard",
+      "description": "Create a performance dashboard with API latency and throughput reporting.",
+      "budgetMin": 1200,
+      "budgetMax": 2400,
+      "categoryId": "analytics",
+      "skills": ["node", "express", "performance"]
+    }
+  },
+  {
+    "name": "proposals_list",
+    "method": "GET",
+    "path": "/api/proposals"
+  },
+  {
+    "name": "proposals_create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "body": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark",
+      "coverLetter": "I can deliver a reproducible benchmark report with regression gates.",
+      "bidAmount": 1800,
+      "estimatedDuration": "5 days"
+    }
+  },
+  {
+    "name": "payments_create",
+    "method": "POST",
+    "path": "/api/payments",
+    "body": {
+      "amount": 1800,
+      "currency": "usd",
+      "jobId": "job_benchmark"
+    }
+  },
+  {
+    "name": "reviews_list",
+    "method": "GET",
+    "path": "/api/reviews"
+  },
+  {
+    "name": "reviews_create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "body": {
+      "jobId": "job_benchmark",
+      "reviewerId": "usr_client",
+      "revieweeId": "usr_freelancer",
+      "rating": 5,
+      "comment": "Clear delivery with reproducible evidence."
+    }
+  },
+  {
+    "name": "messages_list",
+    "method": "GET",
+    "path": "/api/messages"
+  },
+  {
+    "name": "messages_create",
+    "method": "POST",
+    "path": "/api/messages",
+    "body": {
+      "threadId": "thread_benchmark",
+      "senderId": "usr_client",
+      "recipientId": "usr_freelancer",
+      "body": "Please share the latest benchmark summary."
+    }
+  },
+  {
+    "name": "notifications_list",
+    "method": "GET",
+    "path": "/api/notifications"
+  },
+  {
+    "name": "notifications_create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "body": {
+      "userId": "usr_client",
+      "type": "benchmark_ready",
+      "message": "The API benchmark report is ready."
+    }
+  },
+  {
+    "name": "uploads_create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "bodyType": "multipart",
+    "fileField": "file",
+    "fileName": "benchmark.txt",
+    "fileContent": "benchmark upload payload"
+  },
+  {
+    "name": "search_query",
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "q": "node performance"
+    }
+  },
+  {
+    "name": "admin_metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "authenticated": true
+  }
+]
