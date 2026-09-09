@@ -23,10 +23,21 @@ export function createApp() {
   app.use(express.json());
   app.use(apiLimiter);
 
+  // Existing health check
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
 
+  // New PI approximation endpoint
+  app.get("/api/pi", (req, res) => {
+    const piApproximation = 3.141592653589793; // 15 decimal places
+    res.json({
+      value: piApproximation,
+      note: "π is irrational; this is a 15-decimal approximation."
+    });
+  });
+
+  // Existing routes
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
   app.use("/api/jobs", jobRoutes);
