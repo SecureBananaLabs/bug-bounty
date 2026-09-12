@@ -6,6 +6,7 @@ const links = [
   ["/freelancers/search", "Find Freelancers"],
   ["/dashboard/client", "Client Dashboard"],
   ["/dashboard/freelancer", "Freelancer Dashboard"],
+  ["/billing", "Billing"],
   ["/messaging", "Messaging"],
   ["/admin", "Admin"]
 ];
