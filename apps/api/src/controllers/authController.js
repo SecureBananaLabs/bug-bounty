@@ -1,6 +1,6 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -17,11 +17,14 @@ export async function login(req, res) {
 export async function oauthCallback(req, res) {
   return ok(res, {
     provider: req.params.provider,
-    status: "callback-received"
+    status: "callback-received",
   });
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  if (!req.user || !req.user.sub) {
+    return fail(res, "Authentication required", 401);
+  }
+  const result = await refreshToken(req.user);
   return ok(res, result);
 }
