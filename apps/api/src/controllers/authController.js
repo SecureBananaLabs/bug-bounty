@@ -3,8 +3,17 @@ import { loginUser, refreshToken, registerUser } from "../services/authService.j
 import { ok } from "../utils/response.js";
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
+  const parsed = registerSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed",
+      errors: parsed.error.errors
+    });
+  }
+
+  const result = await registerUser(parsed.data);
   return ok(res, result, 201);
 }
 
