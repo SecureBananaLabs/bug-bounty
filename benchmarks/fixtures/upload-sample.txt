@@ -1,0 +1,2 @@
+FreelanceFlow benchmark upload fixture.
+This file exercises multipart form uploads with realistic file content.
