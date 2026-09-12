@@ -10,7 +10,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: leaderboard-json-update
+  group: leaderboard-json-update-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:
@@ -31,36 +31,4 @@ jobs:
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
           PR_USER: ${{ github.event.pull_request.user.login }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          set -euo pipefail
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-
-          git checkout "${DEFAULT_BRANCH}"
-          git pull --ff-only origin "${DEFAULT_BRANCH}"
-
-          if git --no-pager log --format=%s --grep="^chore: update leaderboard for PR #${PR_NUMBER}$" -n 1 | grep -q .; then
-            echo "PR #${PR_NUMBER} already counted."
-            exit 0
-          fi
-
-          if [ ! -f leaderboard.json ]; then
-            printf '{}\n' > leaderboard.json
-          fi
-
-          tmp_file="$(mktemp)"
-          jq --arg user "${PR_USER}" '.[$user] = ((.[$user] // 0) + 1)' leaderboard.json > "${tmp_file}"
-          mv "${tmp_file}" leaderboard.json
-
-          git add leaderboard.json
-
-          if git diff --cached --quiet -- leaderboard.json; then
-            echo "No leaderboard changes to commit."
-            exit 0
-          fi
-
-          git commit -m "chore: update leaderboard for PR #${PR_NUMBER}"
-          git pull --rebase origin "${DEFAULT_BRANCH}"
-          git push origin "HEAD:${DEFAULT_BRANCH}"
+        run: node .github/scripts/update-pr-leaderboard.mjs
