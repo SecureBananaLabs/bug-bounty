@@ -86,3 +86,8 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+The payment service reads `STRIPE_SECRET_KEY` at runtime and never hardcodes a
+credential. The normal test suite uses a mocked Stripe client. To opt into the
+live Stripe test-mode smoke test, set both `STRIPE_SECRET_KEY` and
+`RUN_STRIPE_INTEGRATION_TESTS=1` before running `npm test`.
