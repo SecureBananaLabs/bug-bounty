@@ -1,0 +1,12 @@
+{
+  "defaults": {
+    "p99Ms": 1000,
+    "errorRatePercent": 5
+  },
+  "endpoints": {
+    "uploads.create": {
+      "p99Ms": 1500,
+      "errorRatePercent": 5
+    }
+  }
+}
