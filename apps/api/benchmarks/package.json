@@ -1,0 +1,10 @@
+{
+  "name": "@freelanceflow/benchmarks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "benchmark": "node benchmark.js",
+    "benchmark:summary": "node benchmark.js --summary"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,19 @@
+{
+  "p99_latency_ms": {
+    "/health": 50,
+    "/api/auth": 200,
+    "/api/users": 300,
+    "/api/jobs": 300,
+    "/api/proposals": 300,
+    "/api/payments": 300,
+    "/api/reviews": 300,
+    "/api/messages": 300,
+    "/api/notifications": 300,
+    "/api/uploads": 500,
+    "/api/search": 300,
+    "/api/admin": 500
+  },
+  "error_rate_pct": 5,
+  "min_rps": 50,
+  "description": "Per-endpoint p99 latency thresholds in milliseconds. CI smoke benchmark fails if any endpoint exceeds these values under low concurrency (5 concurrent, 100 requests). Update these values based on production observations or infrastructure changes."
+}
