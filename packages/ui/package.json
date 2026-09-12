@@ -1,5 +1,23 @@
 {
   "name": "@freelanceflow/ui",
   "private": true,
-  "main": "src/index.ts"
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "require": "./src/index.js",
+      "default": "./src/index.js"
+    },
+    "./Button": {
+      "types": "./src/Button.d.ts",
+      "require": "./src/Button.js",
+      "default": "./src/Button.js"
+    },
+    "./Card": {
+      "types": "./src/Card.d.ts",
+      "require": "./src/Card.js",
+      "default": "./src/Card.js"
+    }
+  }
 }
