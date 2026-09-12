@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">API benchmark demo for PR #834</title>
+  <desc id="desc">Animated demo artifact summarizing the benchmark runner, validation commands, final results, and bounty claim status for issue #30.</desc>
+  <style>
+    .bg { fill: #111827; }
+    .panel { fill: #ffffff; stroke: #99f6e4; stroke-width: 3; }
+    .title { font: 700 52px Arial, sans-serif; fill: #111827; }
+    .line { font: 32px Arial, sans-serif; fill: #374151; }
+    .foot { font: 24px Arial, sans-serif; fill: #0f766e; }
+    .slide { opacity: 0; animation: show 16s infinite; }
+    .s1 { animation-delay: 0s; }
+    .s2 { animation-delay: 4s; }
+    .s3 { animation-delay: 8s; }
+    .s4 { animation-delay: 12s; }
+    @keyframes show {
+      0% { opacity: 0; }
+      4% { opacity: 1; }
+      23% { opacity: 1; }
+      27% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+  </style>
+  <rect class="bg" width="1280" height="720" />
+  <path d="M0 720 L1280 0 L1280 720 Z" fill="#0f766e" opacity="0.55" />
+  <rect class="panel" x="72" y="72" width="1136" height="576" rx="18" />
+
+  <g class="slide s1">
+    <text class="title" x="120" y="160">API benchmark suite for #30</text>
+    <text class="line" x="150" y="270">PR #834 adds benchmarks/run-benchmark.mjs</text>
+    <text class="line" x="150" y="345">Covers /health and every mounted /api route</text>
+    <text class="line" x="150" y="420">Writes JSON and Markdown reports under benchmarks/results</text>
+    <text class="foot" x="120" y="585">Slide 1/4 - implementation scope</text>
+  </g>
+
+  <g class="slide s2">
+    <text class="title" x="120" y="160">Validation run</text>
+    <text class="line" x="150" y="270">npm test: 1 test passed</text>
+    <text class="line" x="150" y="345">PORT=4108 RATE_LIMIT_MAX=10000000</text>
+    <text class="line" x="150" y="420">BENCHMARK_TARGET_URL=http://127.0.0.1:4108 npm run benchmark:smoke</text>
+    <text class="foot" x="120" y="585">Slide 2/4 - commands run locally</text>
+  </g>
+
+  <g class="slide s3">
+    <text class="title" x="120" y="160">Final benchmark result</text>
+    <text class="line" x="150" y="270">All configured thresholds passed</text>
+    <text class="line" x="150" y="345">All endpoints completed with 0% error rate</text>
+    <text class="line" x="150" y="420">Report: benchmark-2026-05-27T15-45-36-519Z.md</text>
+    <text class="foot" x="120" y="585">Slide 3/4 - committed evidence</text>
+  </g>
+
+  <g class="slide s4">
+    <text class="title" x="120" y="160">Bounty claim evidence</text>
+    <text class="line" x="150" y="270">/claim #30 is in the PR body</text>
+    <text class="line" x="150" y="345">Algora Bounty claim label is present</text>
+    <text class="line" x="150" y="420">Current claim status: Pending, Total paid $0</text>
+    <text class="foot" x="120" y="585">Slide 4/4 - current status</text>
+  </g>
+</svg>
