@@ -1,0 +1,185 @@
+[
+  {
+    "id": "health",
+    "method": "GET",
+    "path": "/health",
+    "description": "Service health endpoint"
+  },
+  {
+    "id": "auth-register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "description": "Client registration payload from auth validator",
+    "json": {
+      "email": "benchmark.client@example.com",
+      "password": "benchmark-password",
+      "role": "client"
+    }
+  },
+  {
+    "id": "auth-login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "description": "Login payload from auth validator",
+    "json": {
+      "email": "benchmark.client@example.com",
+      "password": "benchmark-password"
+    }
+  },
+  {
+    "id": "auth-oauth-callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback",
+    "description": "OAuth callback route"
+  },
+  {
+    "id": "auth-refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "description": "Refresh token route"
+  },
+  {
+    "id": "users-list",
+    "method": "GET",
+    "path": "/api/users",
+    "description": "List users"
+  },
+  {
+    "id": "users-create",
+    "method": "POST",
+    "path": "/api/users",
+    "description": "Create user with realistic profile fields",
+    "json": {
+      "name": "Benchmark Client",
+      "email": "benchmark.user@example.com",
+      "role": "client",
+      "company": "Benchmark Studio"
+    }
+  },
+  {
+    "id": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs",
+    "description": "List jobs"
+  },
+  {
+    "id": "jobs-create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "description": "Create job payload from job validator",
+    "json": {
+      "title": "Build a marketplace dashboard",
+      "description": "Create a responsive dashboard for clients to review proposals and payments.",
+      "budgetMin": 1500,
+      "budgetMax": 4500,
+      "categoryId": "cat_web_app",
+      "skills": ["nextjs", "node", "stripe"]
+    }
+  },
+  {
+    "id": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals",
+    "description": "List proposals"
+  },
+  {
+    "id": "proposals-create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "description": "Create proposal payload",
+    "json": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_freelancer",
+      "bidAmount": 2200,
+      "coverLetter": "I can deliver the dashboard with milestones, tests, and payment status visibility."
+    }
+  },
+  {
+    "id": "payments-create",
+    "method": "POST",
+    "path": "/api/payments",
+    "description": "Create payment intent payload",
+    "json": {
+      "amount": 9900,
+      "currency": "usd",
+      "jobId": "job_benchmark"
+    }
+  },
+  {
+    "id": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews",
+    "description": "List reviews"
+  },
+  {
+    "id": "reviews-create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "description": "Create review payload",
+    "json": {
+      "jobId": "job_benchmark",
+      "reviewerId": "usr_client",
+      "rating": 5,
+      "comment": "Delivered the scoped work with clear validation notes."
+    }
+  },
+  {
+    "id": "messages-list",
+    "method": "GET",
+    "path": "/api/messages",
+    "description": "List messages"
+  },
+  {
+    "id": "messages-create",
+    "method": "POST",
+    "path": "/api/messages",
+    "description": "Create message payload",
+    "json": {
+      "conversationId": "conv_benchmark",
+      "senderId": "usr_client",
+      "body": "Please attach the deployment notes and latest invoice."
+    }
+  },
+  {
+    "id": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications",
+    "description": "List notifications"
+  },
+  {
+    "id": "notifications-create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "description": "Create notification payload",
+    "json": {
+      "userId": "usr_client",
+      "type": "proposal_submitted",
+      "message": "A freelancer submitted a proposal for your benchmark job."
+    }
+  },
+  {
+    "id": "uploads-create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "description": "Upload a small text attachment through multipart form-data",
+    "multipart": {
+      "field": "file",
+      "filename": "benchmark-note.txt",
+      "contentType": "text/plain",
+      "content": "benchmark attachment for FreelanceFlow upload route"
+    }
+  },
+  {
+    "id": "search",
+    "method": "GET",
+    "path": "/api/search?q=dashboard",
+    "description": "Global search route"
+  },
+  {
+    "id": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": true,
+    "description": "Auth-protected admin metrics with benchmark JWT"
+  }
+]
