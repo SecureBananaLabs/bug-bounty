@@ -1,5 +1,53 @@
 {
   "name": "@freelanceflow/ui",
+  "main": "dist/index.js",
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "declaration": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"]
+}
+export { default as Button } from './Button';
+export { default as Card } from './Card';
+import React from 'react';
+
+export interface ButtonProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+const Button: React.FC<ButtonProps> = ({ children, onClick }) => {
+  return <button onClick={onClick}>{children}</button>;
+};
+
+export default Button;
+import React from 'react';
+
+export interface CardProps {
+  children: React.ReactNode;
+}
+
+const Card: React.FC<CardProps> = ({ children }) => {
+  return <div className="card">{children}</div>;
+};
+
+export default Card;
+  "types": "dist/index.d.ts",
+  "version": "0.0.1",
   "private": true,
-  "main": "src/index.ts"
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
 }
