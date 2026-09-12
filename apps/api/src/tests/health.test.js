@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
 
-test("GET /health returns ok payload", async () => {
+test("GET /health returns the shared success envelope", async () => {
   const app = createApp();
   const server = app.listen(0);
 
@@ -16,7 +16,12 @@ test("GET /health returns ok payload", async () => {
   const payload = await response.json();
 
   assert.equal(response.status, 200);
-  assert.deepEqual(payload, { ok: true, service: "api" });
+  assert.deepEqual(payload, {
+    success: true,
+    data: {
+      service: "api"
+    }
+  });
 
   await new Promise((resolve, reject) => {
     server.close((error) => (error ? reject(error) : resolve()));
