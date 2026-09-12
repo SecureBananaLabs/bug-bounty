@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1764",
+  "title": "Bug: Missing admin role authorization check on admin metrics endpoint",
+  "body": "## Description\n\nThe admin routes in `apps/api/src/routes/adminRoutes.js` currently only use `authMiddleware` which verifies that the JWT is valid, but they do not perform any role-based authorization check to ensure the user has the `admin` role. This allows any authenticated client or freelancer to access the admin metrics endpoint at `/api/admin/metrics`.\n\n## Expected Behavior\nAccess to `/api/admin/metrics` should be restricted to users with the `admin` role. An authorization check or middleware should be added to verify `req.user.role === 'admin'`.\n\n---\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
