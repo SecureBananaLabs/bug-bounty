@@ -1,0 +1,42 @@
+name: Pixel art asset smoke
+
+on:
+  pull_request:
+    paths:
+      - "assets/pixel-art/**"
+      - ".github/workflows/pixel-art-asset-smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-pixel-art:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate invoice stamp asset
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import struct
+          from pathlib import Path
+
+          asset = Path("assets/pixel-art/invoice-stamp-press.png")
+          data = asset.read_bytes()
+
+          assert data.startswith(b"\x89PNG\r\n\x1a\n"), "asset must be a PNG"
+          width, height, bit_depth, color_type = struct.unpack(">IIBB", data[16:26])
+          assert (width, height) == (128, 128), (width, height)
+          assert bit_depth == 8, bit_depth
+          assert color_type == 6, color_type
+
+          digest = hashlib.sha256(data).hexdigest()
+          expected = (
+              "24f7ab3954f2d84063ac2cabe04d9fd079758f865769036f7c56df70907899f6"
+          )
+          assert digest == expected, digest
+          print(f"{asset}: 128x128 RGBA PNG, sha256={digest}")
+          PY
