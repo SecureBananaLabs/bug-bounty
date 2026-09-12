@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Admin operations panel demo</title>
+  <desc id="desc">Demo summary for the admin panel implementation.</desc>
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect x="54" y="54" width="1172" height="612" rx="22" fill="#121a30"/>
+  <rect x="54" y="54" width="1172" height="10" fill="#8df0b3"/>
+  <text x="90" y="132" fill="#ffffff" font-family="Arial, sans-serif" font-size="46" font-weight="700">
+    Admin operations panel demo
+  </text>
+  <text x="90" y="206" fill="#d9e6ff" font-family="Arial, sans-serif" font-size="30">
+    Server-side admin guard on every /api/admin route
+  </text>
+  <text x="90" y="268" fill="#d9e6ff" font-family="Arial, sans-serif" font-size="30">
+    Paginated users, moderation, disputes, settings, and audit data
+  </text>
+  <text x="90" y="330" fill="#d9e6ff" font-family="Arial, sans-serif" font-size="30">
+    Account actions, listing decisions, dispute rulings, and toggle audits
+  </text>
+  <rect x="90" y="394" width="760" height="92" rx="12" fill="#0d1728"/>
+  <text x="125" y="452" fill="#8df0b3" font-family="Menlo, Consolas, monospace" font-size="30">
+    npm test -w apps/api
+  </text>
+  <text x="90" y="545" fill="#8df0b3" font-family="Arial, sans-serif" font-size="30">
+    7 admin/API tests passed
+  </text>
+  <text x="90" y="602" fill="#9fb1c8" font-family="Arial, sans-serif" font-size="24">
+    npm run build -w apps/web completed successfully
+  </text>
+</svg>
