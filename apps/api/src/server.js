@@ -10,4 +10,7 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+  console.error("Fatal: server failed to start:", err);
+  process.exit(1);
+});
