@@ -1,0 +1,405 @@
+{
+  "generatedAt": "2026-05-27T20:18:02.648Z",
+  "mode": "full",
+  "target": {
+    "baseUrl": "http://127.0.0.1:52237",
+    "localServerStarted": true
+  },
+  "config": {
+    "concurrency": 4,
+    "durationMs": 1500,
+    "warmupRequests": 2,
+    "requestTimeoutMs": 5000,
+    "outputDir": "benchmarks/results",
+    "thresholdsPath": "benchmarks/thresholds.json"
+  },
+  "environment": {
+    "node": "v25.0.0",
+    "platform": "win32",
+    "arch": "x64",
+    "rateLimitDisabled": true
+  },
+  "endpoints": [
+    {
+      "name": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "samples": 2718,
+      "durationMs": 1500.82,
+      "p50LatencyMs": 1.94,
+      "p95LatencyMs": 3.52,
+      "p99LatencyMs": 5.43,
+      "p50TtfbMs": 1.91,
+      "p95TtfbMs": 3.46,
+      "p99TtfbMs": 5.36,
+      "sustainedRps": 1811.01,
+      "peakRps": 1686,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 2718
+      }
+    },
+    {
+      "name": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "samples": 3487,
+      "durationMs": 1500.52,
+      "p50LatencyMs": 1.61,
+      "p95LatencyMs": 1.98,
+      "p99LatencyMs": 5.58,
+      "p50TtfbMs": 1.59,
+      "p95TtfbMs": 1.96,
+      "p99TtfbMs": 5.51,
+      "sustainedRps": 2323.85,
+      "peakRps": 2303,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 3487
+      }
+    },
+    {
+      "name": "auth.oauthCallback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "samples": 7584,
+      "durationMs": 1500.22,
+      "p50LatencyMs": 0.69,
+      "p95LatencyMs": 1.09,
+      "p99LatencyMs": 1.85,
+      "p50TtfbMs": 0.68,
+      "p95TtfbMs": 1.07,
+      "p99TtfbMs": 1.81,
+      "sustainedRps": 5055.26,
+      "peakRps": 4942,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 7584
+      }
+    },
+    {
+      "name": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "samples": 5000,
+      "durationMs": 1500.32,
+      "p50LatencyMs": 1.09,
+      "p95LatencyMs": 1.51,
+      "p99LatencyMs": 2.29,
+      "p50TtfbMs": 1.08,
+      "p95TtfbMs": 1.49,
+      "p99TtfbMs": 2.27,
+      "sustainedRps": 3332.63,
+      "peakRps": 3336,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 5000
+      }
+    },
+    {
+      "name": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "samples": 9439,
+      "durationMs": 1500.38,
+      "p50LatencyMs": 0.56,
+      "p95LatencyMs": 0.86,
+      "p99LatencyMs": 1.22,
+      "p50TtfbMs": 0.55,
+      "p95TtfbMs": 0.85,
+      "p99TtfbMs": 1.21,
+      "sustainedRps": 6291.08,
+      "peakRps": 6160,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 9439
+      }
+    },
+    {
+      "name": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "samples": 5484,
+      "durationMs": 1500.34,
+      "p50LatencyMs": 0.98,
+      "p95LatencyMs": 1.3,
+      "p99LatencyMs": 5.42,
+      "p50TtfbMs": 0.97,
+      "p95TtfbMs": 1.28,
+      "p99TtfbMs": 5.41,
+      "sustainedRps": 3655.18,
+      "peakRps": 3646,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 5484
+      }
+    },
+    {
+      "name": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "samples": 9922,
+      "durationMs": 1500.28,
+      "p50LatencyMs": 0.53,
+      "p95LatencyMs": 0.82,
+      "p99LatencyMs": 1.25,
+      "p50TtfbMs": 0.52,
+      "p95TtfbMs": 0.8,
+      "p99TtfbMs": 1.23,
+      "sustainedRps": 6613.44,
+      "peakRps": 6616,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 9922
+      }
+    },
+    {
+      "name": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "samples": 5356,
+      "durationMs": 1500.59,
+      "p50LatencyMs": 1.02,
+      "p95LatencyMs": 1.33,
+      "p99LatencyMs": 4.98,
+      "p50TtfbMs": 1.01,
+      "p95TtfbMs": 1.32,
+      "p99TtfbMs": 4.96,
+      "sustainedRps": 3569.25,
+      "peakRps": 3574,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 5356
+      }
+    },
+    {
+      "name": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "samples": 10085,
+      "durationMs": 1500.24,
+      "p50LatencyMs": 0.53,
+      "p95LatencyMs": 0.73,
+      "p99LatencyMs": 1.22,
+      "p50TtfbMs": 0.52,
+      "p95TtfbMs": 0.72,
+      "p99TtfbMs": 1.2,
+      "sustainedRps": 6722.25,
+      "peakRps": 6686,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 10085
+      }
+    },
+    {
+      "name": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "samples": 5488,
+      "durationMs": 1500.57,
+      "p50LatencyMs": 0.98,
+      "p95LatencyMs": 1.31,
+      "p99LatencyMs": 5.56,
+      "p50TtfbMs": 0.96,
+      "p95TtfbMs": 1.3,
+      "p99TtfbMs": 5.54,
+      "sustainedRps": 3657.29,
+      "peakRps": 3677,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 5488
+      }
+    },
+    {
+      "name": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "samples": 5827,
+      "durationMs": 1500.46,
+      "p50LatencyMs": 0.92,
+      "p95LatencyMs": 1.23,
+      "p99LatencyMs": 4.28,
+      "p50TtfbMs": 0.91,
+      "p95TtfbMs": 1.21,
+      "p99TtfbMs": 4.26,
+      "sustainedRps": 3883.48,
+      "peakRps": 3912,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 5827
+      }
+    },
+    {
+      "name": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "samples": 10148,
+      "durationMs": 1503.67,
+      "p50LatencyMs": 0.53,
+      "p95LatencyMs": 0.73,
+      "p99LatencyMs": 1.14,
+      "p50TtfbMs": 0.52,
+      "p95TtfbMs": 0.72,
+      "p99TtfbMs": 1.13,
+      "sustainedRps": 6748.83,
+      "peakRps": 6640,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 10148
+      }
+    },
+    {
+      "name": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "samples": 5804,
+      "durationMs": 1500.17,
+      "p50LatencyMs": 0.93,
+      "p95LatencyMs": 1.24,
+      "p99LatencyMs": 3.41,
+      "p50TtfbMs": 0.92,
+      "p95TtfbMs": 1.23,
+      "p99TtfbMs": 3.4,
+      "sustainedRps": 3868.89,
+      "peakRps": 3829,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 5804
+      }
+    },
+    {
+      "name": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "samples": 9936,
+      "durationMs": 1500.11,
+      "p50LatencyMs": 0.53,
+      "p95LatencyMs": 0.82,
+      "p99LatencyMs": 1.24,
+      "p50TtfbMs": 0.52,
+      "p95TtfbMs": 0.81,
+      "p99TtfbMs": 1.23,
+      "sustainedRps": 6623.53,
+      "peakRps": 6520,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 9936
+      }
+    },
+    {
+      "name": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "samples": 5575,
+      "durationMs": 1500.42,
+      "p50LatencyMs": 0.96,
+      "p95LatencyMs": 1.32,
+      "p99LatencyMs": 4.47,
+      "p50TtfbMs": 0.95,
+      "p95TtfbMs": 1.3,
+      "p99TtfbMs": 4.44,
+      "sustainedRps": 3715.61,
+      "peakRps": 3680,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 5575
+      }
+    },
+    {
+      "name": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "samples": 10020,
+      "durationMs": 1500.26,
+      "p50LatencyMs": 0.53,
+      "p95LatencyMs": 0.79,
+      "p99LatencyMs": 1.23,
+      "p50TtfbMs": 0.52,
+      "p95TtfbMs": 0.78,
+      "p99TtfbMs": 1.2,
+      "sustainedRps": 6678.86,
+      "peakRps": 6628,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 10020
+      }
+    },
+    {
+      "name": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "samples": 5628,
+      "durationMs": 1500.47,
+      "p50LatencyMs": 0.94,
+      "p95LatencyMs": 1.31,
+      "p99LatencyMs": 3.56,
+      "p50TtfbMs": 0.93,
+      "p95TtfbMs": 1.29,
+      "p99TtfbMs": 3.52,
+      "sustainedRps": 3750.82,
+      "peakRps": 3814,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 5628
+      }
+    },
+    {
+      "name": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "samples": 3084,
+      "durationMs": 1500.37,
+      "p50LatencyMs": 1.73,
+      "p95LatencyMs": 2.54,
+      "p99LatencyMs": 7.73,
+      "p50TtfbMs": 1.72,
+      "p95TtfbMs": 2.51,
+      "p99TtfbMs": 7.69,
+      "sustainedRps": 2055.49,
+      "peakRps": 1968,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "201": 3084
+      }
+    },
+    {
+      "name": "search.global",
+      "method": "GET",
+      "path": "/api/search?q=full-stack%20marketplace%20node%20benchmark",
+      "samples": 8288,
+      "durationMs": 1500.28,
+      "p50LatencyMs": 0.64,
+      "p95LatencyMs": 0.93,
+      "p99LatencyMs": 1.36,
+      "p50TtfbMs": 0.63,
+      "p95TtfbMs": 0.92,
+      "p99TtfbMs": 1.34,
+      "sustainedRps": 5524.28,
+      "peakRps": 5402,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 8288
+      }
+    },
+    {
+      "name": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "samples": 5130,
+      "durationMs": 1500.55,
+      "p50LatencyMs": 1.08,
+      "p95LatencyMs": 1.41,
+      "p99LatencyMs": 1.77,
+      "p50TtfbMs": 1.07,
+      "p95TtfbMs": 1.4,
+      "p99TtfbMs": 1.76,
+      "sustainedRps": 3418.74,
+      "peakRps": 3372,
+      "errorRatePercent": 0,
+      "statusCounts": {
+        "200": 5130
+      }
+    }
+  ],
+  "failures": []
+}
