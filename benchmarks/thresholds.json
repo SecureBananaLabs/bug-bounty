@@ -1,0 +1,9 @@
+{
+  "defaults": {
+    "p99LatencyMs": 2000,
+    "p95TtfbMs": 1500,
+    "errorRate": 0,
+    "non2xxRate": 0
+  },
+  "endpoints": {}
+}
