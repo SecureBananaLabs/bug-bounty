@@ -1,6 +1,6 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
+import { registerSchema, loginSchema, oauthCallbackSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -15,8 +15,17 @@ export async function login(req, res) {
 }
 
 export async function oauthCallback(req, res) {
-  return ok(res, {
+  const payload = oauthCallbackSchema.safeParse({
     provider: req.params.provider,
+    code: req.query.code
+  });
+
+  if (!payload.success) {
+    return fail(res, payload.error.issues[0]?.message ?? "Invalid OAuth callback", 400);
+  }
+
+  return ok(res, {
+    provider: payload.data.provider,
     status: "callback-received"
   });
 }
