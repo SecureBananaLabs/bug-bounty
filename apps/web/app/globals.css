@@ -4,3 +4,202 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #77d8b5;
+  background: #102a33;
+  color: #f7fff9;
+  border-radius: 8px;
+  padding: 0.48rem 0.7rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+input, select {
+  min-height: 2.35rem;
+  border: 1px solid #31436d;
+  border-radius: 8px;
+  background: #10172d;
+  color: #f2f5ff;
+  padding: 0.45rem 0.6rem;
+}
+
+.admin-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-header, .section-heading, .two-column {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-header {
+  align-items: end;
+  grid-template-columns: 1fr auto;
+}
+
+.admin-header h1, .admin-section h2, .admin-guard h1 {
+  margin: 0;
+}
+
+.admin-header p, .admin-guard p {
+  margin: 0.35rem 0 0;
+  color: #b9c6e8;
+}
+
+.admin-section, .admin-guard {
+  border: 1px solid #293a66;
+  border-radius: 8px;
+  background: #121a31;
+  padding: 1rem;
+}
+
+.admin-guard {
+  max-width: 560px;
+}
+
+.admin-guard label {
+  display: grid;
+  gap: 0.45rem;
+  margin: 1rem 0;
+}
+
+.metric-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.metric-card {
+  border: 1px solid #31436d;
+  border-radius: 8px;
+  background: #10182e;
+  padding: 0.85rem;
+}
+
+.metric-card span, td span, .switch-row small {
+  display: block;
+  color: #aebce0;
+  font-size: 0.82rem;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1.55rem;
+}
+
+.filter-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.table-wrap {
+  margin-top: 0.8rem;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+th, td {
+  border-bottom: 1px solid #243357;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: #d7e3ff;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
+.action-cell {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.status-pill {
+  display: inline-block;
+  min-width: 5.5rem;
+  border: 1px solid #6da7ff;
+  border-radius: 999px;
+  color: #dceaff;
+  padding: 0.2rem 0.5rem;
+  text-align: center;
+}
+
+.status-pill.suspended, .status-pill.flagged, .status-pill.under-review {
+  border-color: #f3c76e;
+  color: #ffe6a3;
+}
+
+.status-pill.banned, .status-pill.rejected {
+  border-color: #ff8c8c;
+  color: #ffd7d7;
+}
+
+.status-pill.active, .status-pill.approved, .status-pill.resolved {
+  border-color: #77d8b5;
+  color: #d8ffed;
+}
+
+.two-column {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.bars {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+}
+
+.bars div, .switch-row {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 5rem 1fr auto;
+  align-items: center;
+}
+
+meter {
+  width: 100%;
+  height: 1rem;
+}
+
+.control-list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+}
+
+.switch-row {
+  grid-template-columns: 1fr auto;
+}
+
+.switch-row input {
+  width: 1.25rem;
+  min-height: 1.25rem;
+}
+
+.admin-error, .empty-state {
+  border: 1px solid #ff8c8c;
+  border-radius: 8px;
+  color: #ffd7d7;
+  background: #351925;
+  padding: 0.8rem;
+}
