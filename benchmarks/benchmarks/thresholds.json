@@ -1,0 +1,13 @@
+{
+  "latency": {
+    "p50_ms": 200,
+    "p95_ms": 500,
+    "p99_ms": 1000
+  },
+  "throughput": {
+    "min_rps": 10
+  },
+  "errors": {
+    "max_error_rate_percent": 5
+  }
+}
