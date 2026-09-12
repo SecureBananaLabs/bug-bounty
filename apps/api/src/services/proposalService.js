@@ -9,3 +9,5 @@ export async function createProposal(payload) {
   proposals.push(proposal);
   return proposal;
 }
+  return [...proposals];
+}

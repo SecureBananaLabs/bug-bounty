@@ -9,3 +9,6 @@ export async function createNotification(payload) {
   notifications.push(notification);
   return notification;
 }
+function getNotifications() {
+  return [...notifications];
+}
