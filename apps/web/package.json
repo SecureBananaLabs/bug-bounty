@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start -p 3000"
+    "start": "node scripts/start.mjs"
   },
   "devDependencies": {
     "@types/node": "22.15.19",
