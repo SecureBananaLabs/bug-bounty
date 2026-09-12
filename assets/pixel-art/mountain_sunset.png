@@ -1,0 +1,149 @@
+# Fix for Issue #80: Pixel Art Creation with high Creative Thinking
+
+#!/usr/bin/env python3
+"""
+Pixel Art Generator - Mountain Sunset Scene
+Generates a 64x64 pixel art image programmatically
+"""
+
+from PIL import Image
+
+def create_mountain_sunset():
+    # Create 64x64 image with RGBA
+    width, height = 64, 64
+    img = Image.new('RGBA', (width, height))
+    pixels = img.load()
+    
+    # Color palette (retro sunset theme)
+    sky_gradient = [
+        (255, 94, 77),    # Deep orange-red (top)
+        (255, 127, 80),   # Coral
+        (255, 165, 79),   # Light orange
+        (255, 200, 100),  # Golden yellow
+        (255, 220, 150),  # Pale yellow (horizon)
+    ]
+    
+    sun_color = (255, 236, 139)
+    sun_highlight = (255, 255, 200)
+    mountain_dark = (45, 35, 55)
+    mountain_mid = (65, 50, 75)
+    mountain_light = (85, 65, 95)
+    tree_color = (25, 20, 30)
+    ground_color = (35, 28, 40)
+    
+    # Draw sky gradient
+    for y in range(height):
+        gradient_idx = min(int(y / height * len(sky_gradient)), len(sky_gradient) - 1)
+        blend = (y % (height // len(sky_gradient))) / (height // len(sky_gradient))
+        
+        if gradient_idx < len(sky_gradient) - 1:
+            c1 = sky_gradient[gradient_idx]
+            c2 = sky_gradient[gradient_idx + 1]
+            color = tuple(int(c1[i] + (c2[i] - c1[i]) * blend) for i in range(3)) + (255,)
+        else:
+            color = sky_gradient[-1] + (255,)
+        
+        for x in range(width):
+            pixels[x, y] = color
+    
+    # Draw sun (centered, near horizon)
+    sun_x, sun_y = 32, 38
+    sun_radius = 8
+    for y in range(height):
+        for x in range(width):
+            dist = ((x - sun_x) ** 2 + (y - sun_y) ** 2) ** 0.5
+            if dist < sun_radius - 2:
+                pixels[x, y] = sun_highlight + (255,)
+            elif dist < sun_radius:
+                pixels[x, y] = sun_color + (255,)
+    
+    # Draw distant mountain (back)
+    mountain1_points = [
+        (0, 50), (8, 42), (18, 48), (28, 35), (38, 42), (48, 38), (58, 45), (64, 48)
+    ]
+    for x in range(width):
+        # Interpolate mountain height
+        for i in range(len(mountain1_points) - 1):
+            if mountain1_points[i][0] <= x <= mountain1_points[i+1][0]:
+                x1, y1 = mountain1_points[i]
+                x2, y2 = mountain1_points[i+1]
+                if x2 != x1:
+                    mountain_y = int(y1 + (y2 - y1) * (x - x1) / (x2 - x1))
+                else:
+                    mountain_y = y1
+                for y in range(mountain_y, height):
+                    if y < mountain_y + 2:
+                        pixels[x, y] = mountain_light + (255,)
+                    else:
+                        pixels[x, y] = mountain_mid + (255,)
+                break
+    
+    # Draw front mountain
+    mountain2_points = [
+        (0, 55), (12, 45), (22, 52), (35, 42), (45, 50), (55, 44), (64, 52)
+    ]
+    for x in range(width):
+        for i in range(len(mountain2_points) - 1):
+            if mountain2_points[i][0] <= x <= mountain2_points[i+1][0]:
+                x1, y1 = mountain2_points[i]
+                x2, y2 = mountain2_points[i+1]
+                if x2 != x1:
+                    mountain_y = int(y1 + (y2 - y1) * (x - x1) / (x2 - x1))
+                else:
+                    mountain_y = y1
+                for y in range(mountain_y, height):
+                    pixels[x, y] = mountain_dark + (255,)
+                break
+    
+    # Draw ground
+    for x in range(width):
+        for y in range(56, height):
+            pixels[x, y] = ground_color + (255,)
+    
+    # Draw lone tree silhouette
+    tree_x = 18
+    tree_base = 55
+    
+    # Trunk
+    for y in range(tree_base - 12, tree_base + 1):
+        pixels[tree_x, y] = tree_color + (255,)
+        if y > tree_base - 4:
+            pixels[tree_x - 1, y] = tree_color + (255,)
+    
+    # Branches/foliage (simple pine shape)
+    foliage = [
+        (tree_x, tree_base - 14),
+        (tree_x - 1, tree_base - 12), (tree_x, tree_base - 12), (tree_x + 1, tree_base - 12),
+        (tree_x - 2, tree_base - 10), (tree_x - 1, tree_base - 10), (tree_x, tree_base - 10), 
+        (tree_x + 1, tree_base - 10), (tree_x + 2, tree_base - 10),
+        (tree_x - 3, tree_base - 8), (tree_x - 2, tree_base - 8), (tree_x - 1, tree_base - 8),
+        (tree_x, tree_base - 8), (tree_x + 1, tree_base - 8), (tree_x + 2, tree_base - 8), 
+        (tree_x + 3, tree_base - 8),
+        (tree_x - 2, tree_base - 6), (tree_x - 1, tree_base - 6), (tree_x, tree_base - 6),
+        (tree_x + 1, tree_base - 6), (tree_x + 2, tree_base - 6),
+    ]
+    
+    for fx, fy in foliage:
+        if 0 <= fx < width and 0 <= fy < height:
+            pixels[fx, fy] = tree_color + (255,)
+    
+    # Add a few stars
+    stars = [(5, 8), (52, 5), (45, 12), (10, 15), (58, 18), (25, 6)]
+    star_color = (255, 255, 255, 200)
+    for sx, sy in stars:
+        if 0 <= sx < width and 0 <= sy < height:
+            pixels[sx, sy] = star_color
+    
+    return img
+
+if __name__ == "__main__":
+    import os
+    
+    # Ensure directory exists
+    os.makedirs("assets/pixel-art", exist_ok=True)
+    
+    # Generate and save the image
+    img = create_mountain_sunset()
+    img.save("assets/pixel-art/mountain_sunset.png", "PNG")
+    print("Created: assets/pixel-art/mountain_sunset.png")
+    print(f"Size: {img.size[0]}x{img.size[1]} pixels")
