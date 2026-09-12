@@ -9,5 +9,8 @@
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
+  },
+  "overrides": {
+    "qs": "6.15.2"
   }
 }
