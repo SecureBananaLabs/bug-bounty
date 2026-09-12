@@ -1,0 +1,23 @@
+name: benchmark-smoke
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  api-benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run benchmark:smoke
+        env:
+          JWT_SECRET: benchmark-smoke-secret
+          BENCHMARK_P99_THRESHOLD_MS: 1500
+          BENCHMARK_ERROR_RATE_THRESHOLD: 5
