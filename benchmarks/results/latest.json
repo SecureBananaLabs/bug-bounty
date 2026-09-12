@@ -1,0 +1,842 @@
+{
+  "generatedAt": "2026-05-17T06:07:51.819Z",
+  "mode": "full",
+  "target": "http://127.0.0.1:4000",
+  "config": {
+    "connections": 2,
+    "requestsPerEndpoint": 8,
+    "timeoutSeconds": 10,
+    "failOnThreshold": true
+  },
+  "environment": {
+    "cpuModel": "Apple M5 Pro",
+    "cpuCores": 18,
+    "totalMemoryGb": 48,
+    "freeMemoryGb": 7.15,
+    "platform": "darwin",
+    "release": "25.4.0",
+    "nodeVersion": "v25.9.0"
+  },
+  "endpoints": [
+    {
+      "id": "POST /api/auth/register",
+      "name": "Register user",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 6.17,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/auth/login",
+      "name": "Login user",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 1.39,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/auth/oauth/github/callback",
+      "name": "OAuth callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 2.41,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/auth/refresh",
+      "name": "Refresh token",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 2.67,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 2,
+        "p99": 2,
+        "max": 2
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/users",
+      "name": "List users",
+      "method": "GET",
+      "path": "/api/users",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 2.67,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/users",
+      "name": "Create user",
+      "method": "POST",
+      "path": "/api/users",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 3.84,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 2,
+        "p99": 2,
+        "max": 2
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/jobs",
+      "name": "List jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 2.71,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/jobs",
+      "name": "Create job",
+      "method": "POST",
+      "path": "/api/jobs",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 3.59,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 2,
+        "p99": 2,
+        "max": 2
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/proposals",
+      "name": "List proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 2.91,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/proposals",
+      "name": "Create proposal",
+      "method": "POST",
+      "path": "/api/proposals",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 3.39,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/payments",
+      "name": "Create payment",
+      "method": "POST",
+      "path": "/api/payments",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 3.73,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/reviews",
+      "name": "List reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 2.76,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/reviews",
+      "name": "Create review",
+      "method": "POST",
+      "path": "/api/reviews",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 2.16,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/messages",
+      "name": "List messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 2.33,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/messages",
+      "name": "Send message",
+      "method": "POST",
+      "path": "/api/messages",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 2.6,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/notifications",
+      "name": "List notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 2.48,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/notifications",
+      "name": "Create notification",
+      "method": "POST",
+      "path": "/api/notifications",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 0.99,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "POST /api/uploads",
+      "name": "Upload file",
+      "method": "POST",
+      "path": "/api/uploads",
+      "expectedStatuses": [
+        201
+      ],
+      "statusCode": 201,
+      "ttfbMs": 8.16,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "201": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 2500,
+        "ttfbMs": 1500,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/search?q=typescript%20benchmark",
+      "name": "Global search",
+      "method": "GET",
+      "path": "/api/search?q=typescript%20benchmark",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 3.82,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1,
+        "max": 1
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": false,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    },
+    {
+      "id": "GET /api/admin/metrics",
+      "name": "Admin metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "expectedStatuses": [
+        200
+      ],
+      "statusCode": 200,
+      "ttfbMs": 4.04,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 2,
+        "p99": 2,
+        "max": 2
+      },
+      "requestsPerSecond": {
+        "sustained": 8,
+        "peak": 8
+      },
+      "errorRatePct": 0,
+      "totals": {
+        "requests": 8,
+        "errors": 0,
+        "timeouts": 0,
+        "non2xx": 0
+      },
+      "statusCodes": {
+        "200": {
+          "count": 8
+        }
+      },
+      "auth": true,
+      "thresholds": {
+        "p99LatencyMs": 1500,
+        "ttfbMs": 1000,
+        "errorRatePct": 1,
+        "passed": true,
+        "failures": []
+      }
+    }
+  ]
+}
