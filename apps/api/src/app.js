@@ -11,11 +11,11 @@ import { paymentRoutes } from "./routes/paymentRoutes.js";
 import { reviewRoutes } from "./routes/reviewRoutes.js";
 import { messageRoutes } from "./routes/messageRoutes.js";
 import { notificationRoutes } from "./routes/notificationRoutes.js";
-import { uploadRoutes } from "./routes/uploadRoutes.js";
+import { createUploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
-export function createApp() {
+export function createApp(options = {}) {
   const app = express();
 
   app.use(helmet());
@@ -35,7 +35,9 @@ export function createApp() {
   app.use("/api/reviews", reviewRoutes);
   app.use("/api/messages", messageRoutes);
   app.use("/api/notifications", notificationRoutes);
-  app.use("/api/uploads", uploadRoutes);
+  app.use("/api/uploads", createUploadRoutes({
+    maxFileSizeBytes: options.uploadMaxFileSizeBytes
+  }));
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
 
