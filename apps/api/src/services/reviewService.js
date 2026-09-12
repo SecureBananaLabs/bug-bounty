@@ -1,3 +1,5 @@
+import { createEntityId } from "../utils/ids.js";
+
 const reviews = [];
 
 export async function listReviews() {
@@ -5,7 +7,7 @@ export async function listReviews() {
 }
 
 export async function createReview(payload) {
-  const review = { id: `rev_${Date.now()}`, ...payload };
+  const review = { id: createEntityId("rev"), ...payload };
   reviews.push(review);
   return review;
 }
