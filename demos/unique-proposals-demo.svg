@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Duplicate proposal prevention demo</title>
+  <desc id="desc">A static API flow demo showing the first proposal accepted and the duplicate proposal rejected with HTTP 409.</desc>
+  <rect width="960" height="540" fill="#0f172a"/>
+  <rect x="56" y="48" width="848" height="444" rx="14" fill="#111827" stroke="#334155" stroke-width="2"/>
+  <text x="88" y="96" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28" font-weight="700">Duplicate proposal guard</text>
+  <text x="88" y="128" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="16">Same freelancer, same job: store one proposal and reject the duplicate.</text>
+
+  <rect x="88" y="168" width="784" height="104" rx="10" fill="#172554" stroke="#2563eb" stroke-width="2"/>
+  <text x="112" y="203" fill="#bfdbfe" font-family="Consolas, monospace" font-size="18">POST /api/proposals</text>
+  <text x="112" y="233" fill="#e0f2fe" font-family="Consolas, monospace" font-size="16">{ jobId: "job_42", freelancerId: "usr_7", bidAmount: 250 }</text>
+  <text x="724" y="233" fill="#86efac" font-family="Arial, sans-serif" font-size="20" font-weight="700">201 Created</text>
+
+  <path d="M480 286 L480 320" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+  <path d="M468 309 L480 324 L492 309" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="88" y="336" width="784" height="104" rx="10" fill="#450a0a" stroke="#dc2626" stroke-width="2"/>
+  <text x="112" y="371" fill="#fecaca" font-family="Consolas, monospace" font-size="18">POST /api/proposals</text>
+  <text x="112" y="401" fill="#fee2e2" font-family="Consolas, monospace" font-size="16">{ jobId: "job_42", freelancerId: "usr_7", bidAmount: 300 }</text>
+  <text x="724" y="401" fill="#fca5a5" font-family="Arial, sans-serif" font-size="20" font-weight="700">409 Conflict</text>
+  <text x="112" y="456" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="15">Result: listProposals() still contains one matching job/freelancer proposal.</text>
+</svg>
