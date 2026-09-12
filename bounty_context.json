@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1771",
+  "title": "Upload endpoint lacks authentication — unauthenticated file uploads allowed",
+  "body": "## Bug: Missing Authentication on Upload Route\n\n**Description:** The `/api/uploads` route does not apply `authMiddleware`, meaning anyone can upload files without being authenticated.\n\n**File:** `apps/api/src/routes/uploadRoutes.js`\n\n**Current code:**\n```js\nuploadRoutes.post(\"/\", upload.single(\"file\"), uploadFile);\n```\n\n**Expected behavior:** The upload route should require authentication via `authMiddleware`.\n\n**Impact:** Medium — unauthorized file uploads could lead to storage abuse or potential security vulnerabilities.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
