@@ -11,7 +11,12 @@ export default function FreelancerSearchPage() {
             <h3>{freelancer.username}</h3>
             <p>{freelancer.skills.join(" · ")}</p>
             <p>{freelancer.rate}</p>
-            <Link href={`/freelancers/${freelancer.username}`}>Open profile</Link>
+            <Link
+              href={`/freelancers/${freelancer.username}`}
+              aria-label={`Open profile for ${freelancer.username}`}
+            >
+              Open profile
+            </Link>
           </article>
         ))}
       </div>
