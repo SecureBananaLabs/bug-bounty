@@ -1,6 +1,6 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
+import { registerSchema, loginSchema, refreshSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -22,6 +22,12 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  try {
+    const { token } = refreshSchema.parse(req.body);
+    const result = await refreshToken(token);
+    return ok(res, result);
+  } catch (err) {
+    const message = err?.issues?.[0]?.message || err.message || "Invalid refresh request";
+    return fail(res, message, 400);
+  }
 }
