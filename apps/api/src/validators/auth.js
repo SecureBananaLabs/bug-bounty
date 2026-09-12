@@ -10,3 +10,9 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8)
 });
+
+export const createUserSchema = z.object({
+  email: z.string().email(),
+  name: z.string().min(1).max(100),
+  role: z.enum(["client", "freelancer"]).default("client")
+});
