@@ -1,0 +1,12 @@
+{
+  "name": "api-benchmarks",
+  "version": "1.0.0",
+  "description": "API Benchmarks",
+  "scripts": {
+    "benchmark": "node run-benchmarks.js"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0",
+    "dotenv": "^16.4.5"
+  }
+}

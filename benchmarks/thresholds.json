@@ -1,0 +1,4 @@
+{
+  "p99_latency_ms": 500,
+  "max_error_rate_pct": 1.0
+}
