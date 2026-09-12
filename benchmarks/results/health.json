@@ -1,0 +1,26 @@
+{
+  "label": "Health",
+  "url": "GET /health",
+  "duration": 10,
+  "connections": 10,
+  "latency": {
+    "p50": 0,
+    "p95": 0,
+    "p99": 1,
+    "avg": 0.07,
+    "max": 7
+  },
+  "requestsPerSecond": {
+    "avg": 17248.41,
+    "total": 172480,
+    "sent": 172490
+  },
+  "throughput": {
+    "avg": 14763622.4,
+    "total": 147642880
+  },
+  "errors": 0,
+  "timeouts": 0,
+  "non2xx": 172480,
+  "errorRatePct": 100
+}

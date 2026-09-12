@@ -1,0 +1,26 @@
+{
+  "label": "List Users",
+  "url": "GET /api/users",
+  "duration": 10,
+  "connections": 10,
+  "latency": {
+    "p50": 0,
+    "p95": 0,
+    "p99": 1,
+    "avg": 0.07,
+    "max": 8
+  },
+  "requestsPerSecond": {
+    "avg": 17276.8,
+    "total": 172753,
+    "sent": 172763
+  },
+  "throughput": {
+    "avg": 14788198.4,
+    "total": 147876568
+  },
+  "errors": 0,
+  "timeouts": 0,
+  "non2xx": 172753,
+  "errorRatePct": 100
+}
