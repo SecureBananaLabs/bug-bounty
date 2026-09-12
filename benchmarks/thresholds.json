@@ -1,0 +1,11 @@
+{
+  "default": {
+    "p99Ms": 2000,
+    "errorRatePct": 1
+  },
+  "smoke": {
+    "p99Ms": 3000,
+    "errorRatePct": 1
+  },
+  "endpoints": {}
+}
