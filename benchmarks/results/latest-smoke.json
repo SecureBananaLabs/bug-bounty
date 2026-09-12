@@ -1,0 +1,453 @@
+{
+  "mode": "smoke",
+  "target": "local",
+  "generated_at": "2026-05-24T03:05:38.748Z",
+  "iterations": 1,
+  "results": [
+    {
+      "name": "health check",
+      "method": "GET",
+      "path": "/health",
+      "tags": [
+        "health"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 2.27,
+      "p95_ms": 2.27,
+      "p99_ms": 2.27,
+      "ttfb_p95_ms": 2.14,
+      "requests_per_second": 439.69,
+      "sustained_requests_per_second": 439.69,
+      "peak_requests_per_second": 441.47,
+      "error_rate": 0
+    },
+    {
+      "name": "register client",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "tags": [
+        "auth",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 1.78,
+      "p95_ms": 1.78,
+      "p99_ms": 1.78,
+      "ttfb_p95_ms": 1.67,
+      "requests_per_second": 561.98,
+      "sustained_requests_per_second": 561.98,
+      "peak_requests_per_second": 562.88,
+      "error_rate": 0
+    },
+    {
+      "name": "login client",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "tags": [
+        "auth",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 1.24,
+      "p95_ms": 1.24,
+      "p99_ms": 1.24,
+      "ttfb_p95_ms": 1.18,
+      "requests_per_second": 807.02,
+      "sustained_requests_per_second": 807.02,
+      "peak_requests_per_second": 808.76,
+      "error_rate": 0
+    },
+    {
+      "name": "oauth callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "tags": [
+        "auth",
+        "oauth"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 0.85,
+      "p95_ms": 0.85,
+      "p99_ms": 0.85,
+      "ttfb_p95_ms": 0.76,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 1179.36,
+      "error_rate": 0
+    },
+    {
+      "name": "refresh token",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "tags": [
+        "auth",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 1.08,
+      "p95_ms": 1.08,
+      "p99_ms": 1.08,
+      "ttfb_p95_ms": 0.8,
+      "requests_per_second": 915.79,
+      "sustained_requests_per_second": 915.79,
+      "peak_requests_per_second": 921.73,
+      "error_rate": 0
+    },
+    {
+      "name": "list users",
+      "method": "GET",
+      "path": "/api/users",
+      "tags": [
+        "users",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 1.44,
+      "p95_ms": 1.44,
+      "p99_ms": 1.44,
+      "ttfb_p95_ms": 1.12,
+      "requests_per_second": 693.34,
+      "sustained_requests_per_second": 693.34,
+      "peak_requests_per_second": 695.07,
+      "error_rate": 0
+    },
+    {
+      "name": "create user",
+      "method": "POST",
+      "path": "/api/users",
+      "tags": [
+        "users",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 0.95,
+      "p95_ms": 0.95,
+      "p99_ms": 0.95,
+      "ttfb_p95_ms": 0.91,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 1049.78,
+      "error_rate": 0
+    },
+    {
+      "name": "list jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "tags": [
+        "jobs",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 2.06,
+      "p95_ms": 2.06,
+      "p99_ms": 2.06,
+      "ttfb_p95_ms": 1.88,
+      "requests_per_second": 483.49,
+      "sustained_requests_per_second": 483.49,
+      "peak_requests_per_second": 484.58,
+      "error_rate": 0
+    },
+    {
+      "name": "create job",
+      "method": "POST",
+      "path": "/api/jobs",
+      "tags": [
+        "jobs",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 1.15,
+      "p95_ms": 1.15,
+      "p99_ms": 1.15,
+      "ttfb_p95_ms": 1.1,
+      "requests_per_second": 871.36,
+      "sustained_requests_per_second": 871.36,
+      "peak_requests_per_second": 872.66,
+      "error_rate": 0
+    },
+    {
+      "name": "list proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "tags": [
+        "proposals",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 0.46,
+      "p95_ms": 0.46,
+      "p99_ms": 0.46,
+      "ttfb_p95_ms": 0.43,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 2177.86,
+      "error_rate": 0
+    },
+    {
+      "name": "create proposal",
+      "method": "POST",
+      "path": "/api/proposals",
+      "tags": [
+        "proposals",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 0.53,
+      "p95_ms": 0.53,
+      "p99_ms": 0.53,
+      "ttfb_p95_ms": 0.5,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 1901.59,
+      "error_rate": 0
+    },
+    {
+      "name": "create payment",
+      "method": "POST",
+      "path": "/api/payments",
+      "tags": [
+        "payments",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 0.51,
+      "p95_ms": 0.51,
+      "p99_ms": 0.51,
+      "ttfb_p95_ms": 0.48,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 1975.14,
+      "error_rate": 0
+    },
+    {
+      "name": "list reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "tags": [
+        "reviews",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 0.45,
+      "p95_ms": 0.45,
+      "p99_ms": 0.45,
+      "ttfb_p95_ms": 0.37,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 2210.97,
+      "error_rate": 0
+    },
+    {
+      "name": "create review",
+      "method": "POST",
+      "path": "/api/reviews",
+      "tags": [
+        "reviews",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 0.64,
+      "p95_ms": 0.64,
+      "p99_ms": 0.64,
+      "ttfb_p95_ms": 0.6,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 1572.12,
+      "error_rate": 0
+    },
+    {
+      "name": "list messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "tags": [
+        "messages",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 0.36,
+      "p95_ms": 0.36,
+      "p99_ms": 0.36,
+      "ttfb_p95_ms": 0.33,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 2747.88,
+      "error_rate": 0
+    },
+    {
+      "name": "create message",
+      "method": "POST",
+      "path": "/api/messages",
+      "tags": [
+        "messages",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 1.83,
+      "p95_ms": 1.83,
+      "p99_ms": 1.83,
+      "ttfb_p95_ms": 1.79,
+      "requests_per_second": 547.22,
+      "sustained_requests_per_second": 547.22,
+      "peak_requests_per_second": 547.82,
+      "error_rate": 0
+    },
+    {
+      "name": "list notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "tags": [
+        "notifications",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 0.43,
+      "p95_ms": 0.43,
+      "p99_ms": 0.43,
+      "ttfb_p95_ms": 0.4,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 2300.61,
+      "error_rate": 0
+    },
+    {
+      "name": "create notification",
+      "method": "POST",
+      "path": "/api/notifications",
+      "tags": [
+        "notifications",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 1.24,
+      "p95_ms": 1.24,
+      "p99_ms": 1.24,
+      "ttfb_p95_ms": 1.12,
+      "requests_per_second": 803.45,
+      "sustained_requests_per_second": 803.45,
+      "peak_requests_per_second": 806.99,
+      "error_rate": 0
+    },
+    {
+      "name": "upload file",
+      "method": "POST",
+      "path": "/api/uploads",
+      "tags": [
+        "uploads",
+        "write"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "201": 1
+      },
+      "p50_ms": 3.25,
+      "p95_ms": 3.25,
+      "p99_ms": 3.25,
+      "ttfb_p95_ms": 3.22,
+      "requests_per_second": 307,
+      "sustained_requests_per_second": 307,
+      "peak_requests_per_second": 307.24,
+      "error_rate": 0
+    },
+    {
+      "name": "global search",
+      "method": "GET",
+      "path": "/api/search?q=contract",
+      "tags": [
+        "search",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 0.81,
+      "p95_ms": 0.81,
+      "p99_ms": 0.81,
+      "ttfb_p95_ms": 0.77,
+      "requests_per_second": 1000,
+      "sustained_requests_per_second": 1000,
+      "peak_requests_per_second": 1228.75,
+      "error_rate": 0
+    },
+    {
+      "name": "admin metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "tags": [
+        "admin",
+        "read"
+      ],
+      "iterations": 1,
+      "statuses": {
+        "200": 1
+      },
+      "p50_ms": 1.47,
+      "p95_ms": 1.47,
+      "p99_ms": 1.47,
+      "ttfb_p95_ms": 1.4,
+      "requests_per_second": 676.61,
+      "sustained_requests_per_second": 676.61,
+      "peak_requests_per_second": 678.37,
+      "error_rate": 0
+    }
+  ],
+  "summary": {
+    "max_p99_ms": 3.25,
+    "max_error_rate": 0,
+    "endpoint_count": 21
+  }
+}
