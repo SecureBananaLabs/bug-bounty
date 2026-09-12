@@ -1,7 +1,9 @@
+import { snapshotList } from "./listSnapshot.js";
+
 const messages = [];
 
 export async function listMessages() {
-  return messages;
+  return snapshotList(messages);
 }
 
 export async function sendMessage(payload) {

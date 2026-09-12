@@ -1,7 +1,9 @@
+import { snapshotList } from "./listSnapshot.js";
+
 const jobs = [];
 
 export async function listJobs() {
-  return jobs;
+  return snapshotList(jobs);
 }
 
 export async function createJob(payload) {
