@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createJobSchema = z.object({
+const jobFields = z.object({
   title: z.string().min(4),
   description: z.string().min(10),
   budgetMin: z.number().nonnegative(),
@@ -9,4 +9,9 @@ export const createJobSchema = z.object({
   skills: z.array(z.string().min(1)).default([])
 });
 
-export const updateJobSchema = createJobSchema.partial();
+export const createJobSchema = jobFields.refine(data => data.budgetMin <= data.budgetMax, {
+  message: "budgetMin must not exceed budgetMax",
+  path: ["budgetMax"]
+});
+
+export const updateJobSchema = jobFields.partial();
