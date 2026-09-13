@@ -1,0 +1,16 @@
+SecureBananaLabs/bug-bounty #30
+API benchmark suite demo
+
+Commands:
+npm run benchmark:smoke
+npm run benchmark
+
+Coverage:
+/health plus all mounted /api routes
+JSON and Markdown reports under benchmarks/results
+p50/p95/p99 latency, TTFB, RPS, error rate
+
+Local full run:
+168 measured requests
+0% total error rate
+Report: benchmarks/results/latest.md
