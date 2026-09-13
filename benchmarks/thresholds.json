@@ -1,0 +1,11 @@
+{
+  "default": {
+    "p99Ms": 500,
+    "errorRatePct": 0
+  },
+  "overrides": {
+    "GET /api/jobs": { "p99Ms": 750 },
+    "POST /api/payments": { "p99Ms": 750 },
+    "POST /api/uploads": { "p99Ms": 750 }
+  }
+}
