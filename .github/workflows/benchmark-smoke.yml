@@ -1,0 +1,44 @@
+name: Benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package*.json"
+      - ".github/workflows/benchmark-smoke.yml"
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Start API
+        run: |
+          npm run dev -w apps/api &
+          echo $! > api.pid
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:4000/health; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "API did not become ready"
+          exit 1
+      - name: Run benchmark smoke gate
+        env:
+          BENCHMARK_BASE_URL: http://127.0.0.1:4000
+          BENCHMARK_DURATION_SECONDS: 3
+          BENCHMARK_CONCURRENCY: 2
+        run: npm run benchmark
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
