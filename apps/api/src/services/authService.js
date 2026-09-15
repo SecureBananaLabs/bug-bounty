@@ -1,20 +1,47 @@
 import { signAccessToken } from "../utils/jwt.js";
+import { createUser, findUserByEmail } from "./userService.js";
 
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
-    id: `usr_${Date.now()}`,
+  if (payload.role === "admin") {
+    const err = new Error("Admin role cannot be self-assigned");
+    err.status = 400;
+    throw err;
+  }
+
+  const existing = await findUserByEmail(payload.email);
+  if (existing) {
+    const err = new Error("User with this email already exists");
+    err.status = 400;
+    throw err;
+  }
+
+  const user = await createUser({
     email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    password: payload.password,
+    role: payload.role || "client"
+  });
+
+  return {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  const user = await findUserByEmail(payload.email);
+  if (!user || user.password !== payload.password) {
+    const err = new Error("Invalid email or password");
+    err.status = 401;
+    throw err;
+  }
+
   return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    token: signAccessToken({ sub: user.id, role: user.role })
   };
 }
 
