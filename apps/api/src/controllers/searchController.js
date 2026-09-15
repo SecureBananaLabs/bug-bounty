@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ok } from "../utils/response.js";
+import { globalSearch } from "../services/searchService.js";
 
 const searchSchema = z.object({
   q: z.string().max(200).optional()
@@ -15,6 +16,5 @@ export async function search(req, res) {
     });
   }
   const { q } = validated.data;
-  // TODO: implement actual search against database
-  return ok(res, { query: q, results: [] });
+  return ok(res, await globalSearch(q ?? ""));
 }
