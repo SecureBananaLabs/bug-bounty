@@ -1,6 +1,9 @@
 import { signAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
+  if (payload.role === "admin") {
+    throw new Error("Admin role cannot be self-assigned");
+  }
   // TODO: persist new user via Prisma
   return {
     id: `usr_${Date.now()}`,
