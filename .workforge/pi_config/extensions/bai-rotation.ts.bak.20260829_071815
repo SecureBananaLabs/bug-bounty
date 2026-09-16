@@ -1,0 +1,193 @@
+/**
+ * B.AI rotation — internal free-provider failover behind (b-ai) glm-5.3-flash.
+ * Direct API dispatch (no ModelRuntime dependency).
+ */
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import type { AssistantMessageEventStream, Context, Model, SimpleStreamOptions } from "@earendil-works/pi-ai";
+
+type Api = Model<any>["api"];
+const ZERO = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 };
+
+class Cooldown {
+  private m = new Map<string, number>();
+  constructor(private ms: number = 300_000) {}
+  mark(k: string) { this.m.set(k, Date.now() + this.ms); }
+  isAvailable(k: string): boolean {
+    const v = this.m.get(k);
+    if (v === undefined) return true;
+    if (Date.now() >= v) { this.m.delete(k); return true; }
+    return false;
+  }
+}
+const cooldown = new Cooldown();
+const NON_RETRY = /GoUsageLimitError|FreeUsageLimitError|Monthly usage limit|available balance|insufficient_quota|out of budget|quota exceeded|\bbilling\b|authentication|unauthorized|invalid_api_key|invalid_request|malformed|invalid parameter|authorization/i;
+const IMMEDIATE = /model not found|model unavailable|unknown model|does not exist|not supported|provider returned error.*model|thinking.*must be passed back/i;
+const RETRYABLE = /overloaded|rate.?limit|too many requests|\b429\b|\b500\b|\b502\b|\b503\b|\b504\b|\b524\b|service.?unavailable|server.?error|internal.?error|provider.?returned.?error|network.?error|connection|fetch failed|timeout|timed.? out|terminated|stream ended|ended without|reset before headers|socket hang up/i;
+function classify(msg: string): string {
+  if (!msg) return "retryable";
+  if (NON_RETRY.test(msg)) { if (IMMEDIATE.test(msg)) return "immediate_failover"; return "non_retryable"; }
+  if (IMMEDIATE.test(msg)) return "immediate_failover";
+  if (RETRYABLE.test(msg)) return "retryable";
+  return "retryable";
+}
+function hasImage(ctx: Context): boolean {
+  for (const m of (ctx as any).messages ?? []) {
+    const c = (m as any).content;
+    if (Array.isArray(c) && c.some((x: any) => x?.type === "image")) return true;
+  }
+  return false;
+}
+function resolveKey(spec: string | undefined): string | undefined {
+  if (!spec) return undefined;
+  if (spec.startsWith("$")) {
+    const name = spec.slice(1).replace(/^\{|\}$/g, "");
+    return process.env[name];
+  }
+  return spec;
+}
+const PROVIDERS: Array<{ name: string; baseUrl?: string; api?: string; apiKeySpec?: string; models: Array<{ id: string; name: string; api?: string; reasoning: boolean; input: ("text"|"image")[]; contextWindow: number; maxTokens: number; cost: typeof ZERO; compat?: any }> }> = [
+  { name: "gemini-failover", baseUrl: "https://generativelanguage.googleapis.com", api: "google-generative-ai", apiKeySpec: "$GEMINI_API_KEY", models: [{ id: "gemini-2.5-flash-lite", name: "Gemini 2.5 Flash Lite (failover)", reasoning: false, input: ["text","image"], contextWindow: 1048576, maxTokens: 8192, cost: ZERO }] },
+  { name: "groq-failover", baseUrl: "https://api.groq.com/openai/v1", api: "openai-completions", apiKeySpec: "$GROQ_API_KEY", models: [{ id: "openai/gpt-oss-20b", name: "Groq gpt-oss-20b (failover)", reasoning: false, input: ["text"], contextWindow: 131072, maxTokens: 8192, cost: ZERO, compat: { supportsStore: false, supportsDeveloperRole: false } }] },
+  { name: "cerebras-failover", baseUrl: "https://api.cerebras.ai/v1", api: "openai-completions", apiKeySpec: "$CEREBRAS_API_KEY", models: [{ id: "llama3.1-8b", name: "Cerebras llama3.1-8b (failover)", reasoning: false, input: ["text"], contextWindow: 131072, maxTokens: 8192, cost: ZERO, compat: { supportsStore: false } }] },
+  { name: "mistral-failover", baseUrl: "https://api.mistral.ai/v1", api: "mistral-conversations", apiKeySpec: "$MISTRAL_API_KEY", models: [{ id: "mistral-medium-3.5", name: "Mistral Medium 3.5 (failover)", reasoning: false, input: ["text","image"], contextWindow: 128000, maxTokens: 8192, cost: ZERO }] },
+  { name: "sambanova-failover", baseUrl: "https://api.sambanova.ai/v1", api: "openai-completions", apiKeySpec: "$SAMBANOVA_API_KEY", models: [{ id: "Qwen3-32B", name: "SambaNova Qwen3-32B (failover)", reasoning: false, input: ["text"], contextWindow: 32768, maxTokens: 4096, cost: ZERO }] },
+  { name: "cloudflare-failover", baseUrl: "https://api.cloudflare.com/client/v4/accounts/0774053f5451363f412b5ff74554e983/ai/v1", api: "openai-completions", apiKeySpec: "$CLOUDFLARE_API_KEY", models: [{ id: "@cf/zai-org/glm-4.7-flash", name: "Cloudflare GLM 4.7 Flash (failover)", reasoning: false, input: ["text"], contextWindow: 131072, maxTokens: 8192, cost: ZERO }] },
+  { name: "vercel-failover", baseUrl: "https://ai-gateway.vercel.sh/v1", api: "openai-completions", apiKeySpec: "$VERCEL_API_KEY", models: [{ id: "poolside/laguna-s-2.1-free", name: "Vercel Laguna 2.1 Free (failover)", reasoning: false, input: ["text"], contextWindow: 131072, maxTokens: 8192, cost: ZERO }] },
+  { name: "openrouter-failover", baseUrl: "https://openrouter.ai/api/v1", api: "openai-completions", apiKeySpec: "$OPENROUTER_API_KEY", models: [{ id: "openrouter/free", name: "OpenRouter Free Router (failover)", reasoning: false, input: ["text","image"], contextWindow: 200000, maxTokens: 4096, cost: ZERO }] },
+];
+const reportedSkip = new Set<string>();
+function buildCandidates(primary: Model<any>): Model<any>[] {
+  const out: Model<any>[] = [primary];
+  for (const p of PROVIDERS) {
+    for (const m of p.models) {
+      out.push({ provider: p.name, id: m.id, api: (m.api ?? p.api) as Api, baseUrl: p.baseUrl, name: m.name, reasoning: m.reasoning, input: m.input, contextWindow: m.contextWindow, maxTokens: m.maxTokens, cost: ZERO, compat: (m as any).compat } as any);
+    }
+  }
+  const seen = new Set<string>();
+  return out.filter(c => { const k = c.provider + "/" + c.id; if (seen.has(k)) return false; seen.add(k); return true; });
+}
+async function getApiModule(api: string): Promise<any> {
+  const path = require("path");
+  const base = path.dirname(require.resolve("@earendil-works/pi-ai"));
+  const map: Record<string, string> = {
+    "openai-completions": path.join(base, "api/openai-completions.js"),
+    "anthropic-messages": path.join(base, "api/anthropic-messages.js"),
+    "google-generative-ai": path.join(base, "api/google-generative-ai.js"),
+    "mistral-conversations": path.join(base, "api/mistral-conversations.js"),
+  };
+  const p = map[api] ?? map["openai-completions"];
+  return await import(p);
+}
+export default function(pi: ExtensionAPI) {
+  for (const p of PROVIDERS) {
+    try { pi.registerProvider(p.name, { baseUrl: p.baseUrl, api: p.api as any, apiKey: p.apiKeySpec, models: p.models as any }); } catch (e) { console.error("[bai-rotation] register", p.name, (e as Error).message); }
+  }
+  const rotationStream = (model: Model<any>, ctx: Context, opts?: SimpleStreamOptions): AssistantMessageEventStream => {
+    let outer: AssistantMessageEventStream;
+    try {
+      const piAi: any = require("@earendil-works/pi-ai");
+      outer = piAi.createAssistantMessageEventStream();
+    } catch (e) {
+      console.error("[bai-rotation] outer stream create failed", (e as Error).message);
+      outer = { push() {}, end() {}, [Symbol.asyncIterator]() { return { next: async () => ({ done: true, value: undefined }) }; } } as any;
+    }
+    (async () => {
+      const candidates = buildCandidates(model);
+      const imagePresent = hasImage(ctx);
+      let lastError = "";
+      let lastCat: string | undefined;
+      const attempted: string[] = [];
+      for (const cand of candidates) {
+        const key = cand.provider + "/" + cand.id;
+        if (!cooldown.isAvailable(key)) continue;
+        if (imagePresent && !(cand as any).input?.includes?.("image")) {
+          if (!reportedSkip.has(key)) { reportedSkip.add(key); try { (pi as any).appendEntry?.("bai_rotation_skip", { provider: cand.provider, model: cand.id, reason: "image_input_not_supported" }); } catch {} }
+          continue;
+        }
+        // resolve apiKey for candidate (primary uses its own model apiKey via opts/apiKey if provided)
+        const isPrimary = cand.provider === model.provider && cand.id === model.id;
+        let apiKey: string | undefined;
+        if (isPrimary) {
+          apiKey = (opts as any)?.apiKey ?? resolveKey("$B_AI_API_KEY") ?? process.env.B_AI_API_KEY;
+          if (!apiKey) apiKey = (cand as any).apiKey ?? "";
+        } else {
+          const spec = PROVIDERS.find(p => p.name === cand.provider)?.apiKeySpec;
+          apiKey = resolveKey(spec);
+        }
+        if (!apiKey && !isPrimary) {
+          if (!reportedSkip.has(key)) { reportedSkip.add(key); try { (pi as any).appendEntry?.("bai_rotation_skip", { provider: cand.provider, model: cand.id, reason: "auth_not_configured" }); } catch {} console.error("[bai-rotation] skip " + key + " auth_not_configured"); }
+          continue;
+        }
+        attempted.push(key);
+        let stream: AssistantMessageEventStream | null = null;
+        try {
+          const mod = await getApiModule(cand.api as string);
+          const maxTok = Math.min((opts as any)?.maxTokens ?? cand.maxTokens, cand.maxTokens);
+          const o: SimpleStreamOptions = { ...(opts as any), apiKey, maxTokens: maxTok } as any;
+          // ensure baseUrl on model is set (jiti model already has it)
+          stream = mod.streamSimple(cand as any, ctx as any, o as any) as AssistantMessageEventStream;
+        } catch (e: any) {
+          lastError = String(e?.message ?? e);
+          lastCat = classify(lastError);
+          cooldown.mark(key);
+          try { (pi as any).appendEntry?.("bai_rotation", { attempted, failed: key, error: lastError.slice(0, 300), category: lastCat }); } catch {}
+          continue;
+        }
+        if (!stream) { lastError = "no stream"; lastCat = "retryable"; cooldown.mark(key); continue; }
+        let emittedContent = false;
+        let buffered: any[] = [];
+        let flushed = false;
+        const flush = () => { if (flushed) return; flushed = true; for (const ev of buffered) (outer as any).push(ev); buffered = []; };
+        let termErr: string | null = null;
+        let termCat: string | null = null;
+        let aborted = false;
+        try {
+          for await (const ev of stream as any) {
+            const t = (ev as any)?.type;
+            if ((opts as any)?.signal?.aborted) aborted = true;
+            const isContent = t === "text_start" || t === "text_delta" || t === "text_end" || t === "thinking_start" || t === "thinking_delta" || t === "thinking_end" || t === "toolcall_start" || t === "toolcall_delta" || t === "toolcall_end";
+            if (!flushed && (isContent || t === "done")) { flush(); if (isContent) emittedContent = true; }
+            if (flushed) (outer as any).push(ev); else buffered.push(ev);
+            if (t === "error") {
+              termErr = String((ev as any)?.error?.errorMessage ?? (ev as any)?.reason ?? "provider error");
+              termCat = classify(termErr);
+              if ((ev as any)?.error?.stopReason === "aborted" || aborted || termErr.toLowerCase().includes("aborted")) { flush(); (outer as any).end?.(); return; }
+              break;
+            }
+            if (t === "done") { if (!flushed) flush(); try { (pi as any).appendEntry?.("bai_rotation_success", { provider: cand.provider, model: cand.id, attempted }); } catch {} (outer as any).end?.(); return; }
+            if (isContent) emittedContent = true;
+          }
+        } catch (e: any) { termErr = String(e?.message ?? e); termCat = classify(termErr); }
+        lastError = termErr ?? "stream ended without terminal event";
+        lastCat = termCat ?? classify(lastError);
+        if (emittedContent || flushed) {
+          if (!flushed) for (const ev of buffered) (outer as any).push(ev);
+          (outer as any).end?.();
+          try { (pi as any).appendEntry?.("bai_rotation", { attempted, failed: key, error: lastError.slice(0, 300), category: lastCat, emittedContent }); } catch {}
+          return;
+        }
+        cooldown.mark(key);
+        try { (pi as any).appendEntry?.("bai_rotation", { attempted: [...attempted], failed: key, error: lastError.slice(0, 300), category: lastCat, next: candidates[candidates.indexOf(cand) + 1] ? candidates[candidates.indexOf(cand) + 1].provider + "/" + candidates[candidates.indexOf(cand) + 1].id : null }); } catch {}
+        console.error("[bai-rotation] failover " + key + " -> " + lastCat + ": " + lastError.slice(0, 180));
+      }
+      if (attempted.length === 0) {
+        const msg = "bai-rotation: no candidate available (all in cooldown or auth missing)";
+        try { (outer as any).push({ type: "error", reason: "error", error: { role: "assistant", content: [{ type: "text", text: msg }], api: model.api, provider: model.provider, model: model.id, stopReason: "error", errorMessage: msg } } as any); } catch {}
+        (outer as any).end?.(); return;
+      }
+      const finalMsg = "bai-rotation: all candidates failed; last=" + lastError.slice(0, 400);
+      try { (outer as any).push({ type: "error", reason: "error", error: { role: "assistant", content: [{ type: "text", text: finalMsg }], api: model.api, provider: model.provider, model: model.id, stopReason: "error", errorMessage: finalMsg } } as any); } catch {}
+      (outer as any).end?.();
+    })().catch((e: any) => {
+      try { (outer as any).push({ type: "error", reason: "error", error: { role: "assistant", content: [{ type: "text", text: String(e?.message ?? e) }], api: model.api, provider: model.provider, model: model.id, stopReason: "error", errorMessage: String(e?.message ?? e) } } as any); (outer as any).end?.(); } catch {}
+    });
+    return outer;
+  };
+  try {
+    pi.registerProvider("b-ai", { api: "anthropic-messages" as any, streamSimple: rotationStream as any });
+    console.error("[bai-rotation] b-ai streamSimple wrapper registered with 8 failover providers");
+  } catch (e) { console.error("[bai-rotation] failed to wrap b-ai", (e as Error).message); }
+  pi.on("session_start", () => {
+    try { (pi as any).appendEntry?.("bai_rotation_loaded", { providers: PROVIDERS.map(p => p.name + "/" + p.models[0].id), primary: "b-ai/glm-5.3-flash", at: new Date().toISOString() }); } catch {}
+  });
+}

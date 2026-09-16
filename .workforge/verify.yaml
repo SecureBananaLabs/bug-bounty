@@ -1,0 +1,4 @@
+verify:
+- cmd:
+  - npm
+  - test

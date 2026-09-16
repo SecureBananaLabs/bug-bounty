@@ -1,0 +1,200 @@
+/**
+ * toolresult-minimize.ts — minimize toolResult context accumulation (experiment)
+ *
+ * Shrinks tool results BEFORE they are persisted to the session JSONL (and thus
+ * before they are sent to the provider on the next turn) via a strong
+ * `pi.on("tool_result")` hook.
+ *
+ * Design constraints (experiment spec):
+ *  - Extension-only; core code untouched.
+ *  - The hook runs before the final toolResult message is emitted, so the session
+ *    JSONL stores the small result directly. No `context` hook, no
+ *    `before_provider_request` payload rewriting.
+ *  - Only text blocks are shortened. Content array structure, image blocks,
+ *    `details`, `usage` and `isError` are preserved (partial patch => runner merges).
+ *  - Error results are never truncated: error info must survive regardless of size.
+ *  - Built-in full-output mechanisms are preserved:
+ *      * bash:  `details.fullOutputPath` (temp file) is left untouched and
+ *               referenced in the notice when present.
+ *      * read:  full content stays reachable via the read tool (offset/limit).
+ *      * grep/find/ls: re-run with a higher limit / read matched files.
+ *  - Each truncation appends a small notice stating what was omitted and how to
+ *    refetch it.
+ *
+ * Budgets (content text bytes; adopted values: 6KiB default, 4KiB for
+ * grep/find/ls):
+ *  - override globally with PI_TRM_BUDGET=<bytes>
+ *  - override per tool with PI_TRM_BUDGET_<TOOLNAME>=<bytes> (e.g. PI_TRM_BUDGET_GREP)
+ *  - disable entirely with PI_TOOLRESULT_MINIMIZE=0
+ */
+import type { ExtensionAPI, ToolResultEvent } from "@earendil-works/pi-coding-agent";
+import { formatSize, truncateHead, truncateTail } from "@earendil-works/pi-coding-agent";
+
+const KiB = 1024;
+
+/** Default content budgets per tool (bytes). grep/find/ls get a smaller budget. */
+const BUDGETS: Record<string, number> = {
+	default: 6 * KiB,
+	bash: 6 * KiB,
+	read: 6 * KiB,
+	edit: 6 * KiB,
+	write: 6 * KiB,
+	grep: 4 * KiB,
+	find: 4 * KiB,
+	ls: 4 * KiB,
+};
+
+/** How each tool's output is shortened. */
+export type TruncationMode = "head" | "tail" | "middle";
+const MODES: Record<string, TruncationMode> = {
+	bash: "tail", // exit status / errors / built-in footer live at the end
+	grep: "head", // first matches
+	find: "head",
+	ls: "head",
+	read: "middle", // keep file start + end
+	edit: "middle",
+	write: "middle",
+	default: "middle",
+};
+
+/** Bytes reserved for the appended omission notice. */
+const NOTICE_RESERVE = 400;
+
+export function byteLength(text: string): number {
+	return Buffer.byteLength(text, "utf8");
+}
+
+export function envBudget(toolName: string, fallback: number): number {
+	const perTool = process.env[`PI_TRM_BUDGET_${toolName.toUpperCase()}`];
+	const global = perTool === undefined ? process.env.PI_TRM_BUDGET : undefined;
+	const raw = perTool ?? global;
+	if (raw === undefined) return fallback;
+	const n = Number(raw);
+	return Number.isFinite(n) && n >= 0 ? Math.round(n) : fallback;
+}
+
+export interface Shortened {
+	content: string;
+	truncated: boolean;
+}
+
+export function truncateByMode(text: string, mode: TruncationMode, maxBytes: number): Shortened {
+	// Reserve room for the omission notice so the final stored result stays within budget.
+	const contentBudget = Math.max(0, maxBytes - NOTICE_RESERVE);
+	switch (mode) {
+		case "tail": {
+			const r = truncateTail(text, { maxBytes: contentBudget, maxLines: Number.MAX_SAFE_INTEGER });
+			return { content: r.content, truncated: r.truncated };
+		}
+		case "head": {
+			const r = truncateHead(text, { maxBytes: contentBudget, maxLines: Number.MAX_SAFE_INTEGER });
+			return { content: r.content, truncated: r.truncated };
+		}
+		case "middle": {
+			const half = Math.floor(contentBudget / 2);
+			const head = truncateHead(text, { maxBytes: half, maxLines: Number.MAX_SAFE_INTEGER });
+			const tail = truncateTail(text, { maxBytes: half, maxLines: Number.MAX_SAFE_INTEGER });
+			if (!head.truncated && !tail.truncated) return { content: text, truncated: false };
+			const joined = head.content
+				? tail.content
+					? `${head.content}\n…\n${tail.content}`
+					: head.content
+				: tail.content;
+			return { content: joined, truncated: head.truncated || tail.truncated };
+		}
+	}
+}
+
+function getStringField(details: unknown, key: string): string | undefined {
+	if (typeof details === "object" && details !== null && key in details) {
+		const value = details[key];
+		return typeof value === "string" ? value : undefined;
+	}
+	return undefined;
+}
+
+/**
+ * Drop the redundant `truncation.content` copy from tool details.
+ *
+ * Built-in tools put the (tool-level truncated) full text into
+ * `details.truncation.content`, duplicating the message content in the session
+ * JSONL. When this extension truncates the message content, that copy is stale
+ * and purely additive — strip it. All other stats (`truncatedBy`, totals, …)
+ * and `fullOutputPath` are preserved, so the built-in renderers keep working.
+ */
+export function stripTruncationContent(details: unknown): unknown {
+	if (typeof details !== "object" || details === null) return details;
+	if (!("truncation" in details)) return details;
+	const truncation = details.truncation;
+	if (typeof truncation !== "object" || truncation === null || !("content" in truncation)) return details;
+	const { content: _content, ...rest } = truncation;
+	return { ...details, truncation: rest };
+}
+
+export function refetchHint(toolName: string, input: Record<string, unknown>, details: unknown): string {
+	switch (toolName) {
+		case "bash": {
+			const full = getStringField(details, "fullOutputPath");
+			return full ? `Full output: ${full}` : "Re-run the command to get the full output";
+		}
+		case "read": {
+			const path = typeof input.path === "string" ? input.path : undefined;
+			return path
+				? `Use the read tool on ${path} (offset/limit) for the omitted portion`
+				: "Re-run the read tool to get the full content";
+		}
+		case "grep":
+			return "Re-run grep with a higher limit for more matches; use the read tool on matched files for full lines";
+		case "find":
+			return "Re-run find for more results";
+		case "ls":
+			return "Re-run ls (optionally with a larger limit) for more entries";
+		case "edit":
+		case "write":
+			return "Inspect the edited file with the read tool";
+		default:
+			return "Re-run the tool to retrieve the full output";
+	}
+}
+
+export default function (pi: ExtensionAPI) {
+	if (process.env.PI_TOOLRESULT_MINIMIZE === "0") {
+		console.log("[toolresult-minimize] disabled via PI_TOOLRESULT_MINIMIZE=0");
+		return;
+	}
+	console.log("[toolresult-minimize] loaded (default budget 6KiB; grep/find/ls 4KiB)");
+
+	pi.on("tool_result", (event: ToolResultEvent) => {
+		// Errors are always kept in full: error info must survive regardless of size.
+		if (event.isError) return;
+
+		const budget = envBudget(event.toolName, BUDGETS[event.toolName] ?? BUDGETS.default);
+		const mode = MODES[event.toolName] ?? MODES.default;
+
+		// Collect text blocks; image and other content blocks are left untouched.
+		const textBlocks: { index: number; text: string }[] = [];
+		event.content.forEach((block, index) => {
+			if (block.type === "text") textBlocks.push({ index, text: block.text });
+		});
+		if (textBlocks.length === 0) return;
+
+		const totalBytes = textBlocks.reduce((sum, b) => sum + byteLength(b.text), 0);
+		if (totalBytes <= budget) return; // small result: keep as-is
+
+		// Shorten the largest text block; the other blocks stay intact.
+		const target = textBlocks.reduce((a, b) => (byteLength(b.text) > byteLength(a.text) ? b : a));
+		const originalBytes = byteLength(target.text);
+		const shortened = truncateByMode(target.text, mode, budget);
+		if (!shortened.truncated) return;
+
+		const notice =
+			`\n\n[toolresult-minimize] truncated ${event.toolName}: kept ${formatSize(byteLength(shortened.content))} ` +
+			`of ${formatSize(originalBytes)}. Refetch: ${refetchHint(event.toolName, event.input, event.details)}`;
+
+		const content = event.content.map((block, index) =>
+			index === target.index && block.type === "text" ? { ...block, text: shortened.content + notice } : block,
+		);
+		const details = stripTruncationContent(event.details);
+		return details === event.details ? { content } : { content, details };
+	});
+}
