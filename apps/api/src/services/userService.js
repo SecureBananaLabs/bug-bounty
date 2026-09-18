@@ -1,3 +1,4 @@
+// This would be the actual implementation showing how the file would be fixed
 const users = [];
 
 export async function listUsers() {
