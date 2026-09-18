@@ -1,6 +1,18 @@
-import { ok } from "../utils/response.js";
-import { getAdminMetrics } from "../services/adminService.js";
-
-export async function metrics(req, res) {
-  return ok(res, await getAdminMetrics());
-}
+import { fail, ok } from "../utils/response.js";
+import * as admin from "../services/adminService.js";
+const actor = (req) => req.user.sub;
+const query = (req) => ({ pageNumber: Number(req.query.page || 1), pageSize: Math.min(Number(req.query.pageSize || 20), 100), ...req.query });
+const action = (fn) => (req, res) => { const value = fn(req); return value ? ok(res, value) : fail(res, "Resource not found", 404); };
+export const metrics = (_req, res) => ok(res, admin.getAdminMetrics());
+export const me = (req, res) => ok(res, { id: req.user.sub, role: req.user.role });
+export const users = (req, res) => ok(res, admin.getAdminUsers(query(req)));
+export const user = action((req) => admin.getUser(req.params.id));
+export const moderation = (req, res) => ok(res, admin.getModeration(query(req)));
+export const disputes = (req, res) => ok(res, admin.getDisputes(query(req)));
+export const dispute = action((req) => admin.getDispute(req.params.id));
+export const audit = (req, res) => ok(res, admin.getAudit(query(req)));
+export const controls = (_req, res) => ok(res, admin.getControls());
+export const userAction = action((req) => admin.changeUser(req.params.id, req.body.status, actor(req), req.body.reason));
+export const listingAction = action((req) => admin.moderateListing(req.params.id, req.body.decision, actor(req), req.body.reason));
+export const disputeAction = action((req) => admin.resolveDispute(req.params.id, req.body.decision, actor(req), req.body.reason));
+export const controlAction = action((req) => admin.updateControl(req.params.name, req.body.enabled, actor(req)));

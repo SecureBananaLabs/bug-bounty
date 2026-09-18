@@ -1,8 +1,20 @@
 import { Router } from "express";
-import { metrics } from "../controllers/adminController.js";
 import { authMiddleware } from "../middleware/auth.js";
+import { adminOnly } from "../middleware/admin.js";
+import { metrics, me, users, user, moderation, disputes, dispute, audit, controls, userAction, listingAction, disputeAction, controlAction } from "../controllers/adminController.js";
 
 export const adminRoutes = Router();
-
-adminRoutes.use(authMiddleware);
+adminRoutes.use(authMiddleware, adminOnly);
+adminRoutes.get("/me", me);
 adminRoutes.get("/metrics", metrics);
+adminRoutes.get("/users", users);
+adminRoutes.get("/users/:id", user);
+adminRoutes.get("/moderation", moderation);
+adminRoutes.get("/disputes", disputes);
+adminRoutes.get("/disputes/:id", dispute);
+adminRoutes.get("/audit", audit);
+adminRoutes.get("/controls", controls);
+adminRoutes.patch("/users/:id", userAction);
+adminRoutes.patch("/moderation/:id", listingAction);
+adminRoutes.patch("/disputes/:id", disputeAction);
+adminRoutes.patch("/controls/:name", controlAction);
