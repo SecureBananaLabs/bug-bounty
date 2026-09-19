@@ -1,44 +1,52 @@
-import cors from "cors";
-import express from "express";
-import helmet from "helmet";
-import { apiLimiter } from "./middleware/rateLimit.js";
-import { errorHandler } from "./middleware/errorHandler.js";
-import { authRoutes } from "./routes/authRoutes.js";
-import { userRoutes } from "./routes/userRoutes.js";
-import { jobRoutes } from "./routes/jobRoutes.js";
-import { proposalRoutes } from "./routes/proposalRoutes.js";
-import { paymentRoutes } from "./routes/paymentRoutes.js";
-import { reviewRoutes } from "./routes/reviewRoutes.js";
-import { messageRoutes } from "./routes/messageRoutes.js";
-import { notificationRoutes } from "./routes/notificationRoutes.js";
-import { uploadRoutes } from "./routes/uploadRoutes.js";
-import { searchRoutes } from "./routes/searchRoutes.js";
-import { adminRoutes } from "./routes/adminRoutes.js";
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
 
-export function createApp() {
-  const app = express();
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const jobRoutes = require('./routes/jobRoutes');
+const proposalRoutes = require('./routes/proposalRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const searchRoutes = require('./routes/searchRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
-  app.use(helmet());
-  app.use(cors());
-  app.use(express.json());
-  app.use(apiLimiter);
+const errorHandler = require('./middleware/errorHandler');
+const rateLimit = require('./middleware/rateLimit');
 
-  app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
-  });
+const app = express();
 
-  app.use("/api/auth", authRoutes);
-  app.use("/api/users", userRoutes);
-  app.use("/api/jobs", jobRoutes);
-  app.use("/api/proposals", proposalRoutes);
-  app.use("/api/payments", paymentRoutes);
-  app.use("/api/reviews", reviewRoutes);
-  app.use("/api/messages", messageRoutes);
-  app.use("/api/notifications", notificationRoutes);
-  app.use("/api/uploads", uploadRoutes);
-  app.use("/api/search", searchRoutes);
-  app.use("/api/admin", adminRoutes);
+// Global middlewares
+app.use(cors());
+app.use(helmet());
+app.use(express.json());
+app.use(morgan('dev'));
+app.use(rateLimit);
 
-  app.use(errorHandler);
-  return app;
-}
+// Route registrations
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/proposals', proposalRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/admin', adminRoutes);
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+// Error handling middleware (must be after routes)
+app.use(errorHandler);
+
+// Export the configured Express app (do NOT start the server here)
+module.exports = app;
