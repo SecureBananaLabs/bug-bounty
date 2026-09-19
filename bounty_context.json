@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1772",
+  "title": "Payment endpoint lacks authentication — unauthenticated payment creation",
+  "body": "## Bug: Missing Authentication on Payment Route\n\n**Description:** The `/api/payments` route does not require authentication. Anyone can create payment intents without being logged in.\n\n**File:** `apps/api/src/routes/paymentRoutes.js`\n\n**Current code:**\n```js\npaymentRoutes.post(\"/\", createPayment);\n```\n\n**Expected behavior:** The payment route should require `authMiddleware` to ensure only authenticated users can initiate payments.\n\n**Impact:** High — financial endpoint exposed without authentication.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
