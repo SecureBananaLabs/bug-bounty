@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Navigation } from "../components/Navigation";
+import { currentUser } from "../lib/mock";
 
 export const metadata = {
   title: "FreelanceFlow",
@@ -12,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <main>
           <h1>FreelanceFlow</h1>
-          <Navigation />
+          <Navigation currentUserRole={currentUser.role} />
           {children}
         </main>
       </body>
