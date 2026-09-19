@@ -4,3 +4,73 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.listing-stack { display: grid; gap: 1rem; }
+.listing-header { align-items: center; display: flex; gap: 1rem; justify-content: space-between; }
+.listing-header h2 { margin: 0 0 0.4rem; }
+.listing-header p { color: #c8d2f1; margin: 0; }
+.primary-link {
+  background: #2d6cdf;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.7rem 0.9rem;
+}
+.toolbar {
+  background: #151c35;
+  border: 1px solid #2a3765;
+  border-radius: 12px;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1.5fr 0.8fr;
+  padding: 1rem;
+}
+.toolbar label { display: grid; gap: 0.4rem; }
+.toolbar span { color: #c8d2f1; font-size: 0.9rem; font-weight: 700; }
+.toolbar input,
+.toolbar select {
+  background: #0f1730;
+  border: 1px solid #31416f;
+  border-radius: 8px;
+  color: #f2f5ff;
+  font: inherit;
+  min-height: 44px;
+  padding: 0.65rem 0.75rem;
+}
+.summary-row { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.summary-card {
+  background: #0f1730;
+  border: 1px solid #31416f;
+  border-radius: 8px;
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem;
+}
+.summary-card strong { font-size: 1.35rem; }
+.summary-card span { color: #c8d2f1; }
+.job-card { display: grid; gap: 0.8rem; }
+.job-card h3 { margin: 0; }
+.job-card p { color: #c8d2f1; margin: 0.4rem 0 0; }
+.eyebrow { color: #93c5fd; font-size: 0.8rem; font-weight: 700; margin: 0 0 0.4rem; text-transform: uppercase; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.tag-row span {
+  background: #0f1730;
+  border: 1px solid #31416f;
+  border-radius: 999px;
+  color: #dbe6ff;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.5rem;
+}
+.empty-state { margin-bottom: 0; }
+
+@media (max-width: 720px) {
+  .listing-header,
+  .toolbar,
+  .summary-row {
+    grid-template-columns: 1fr;
+  }
+
+  .listing-header {
+    align-items: stretch;
+    display: grid;
+  }
+}
