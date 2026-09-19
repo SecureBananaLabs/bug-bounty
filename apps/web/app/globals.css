@@ -4,3 +4,32 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+button, select { background: #24304f; border: 1px solid #526185; color: #f2f5ff; border-radius: 6px; padding: 0.45rem 0.65rem; }
+button { cursor: pointer; }
+button:hover, select:hover { border-color: #8ea2d7; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border-bottom: 1px solid #2a3765; padding: 0.65rem; text-align: left; vertical-align: top; }
+th { color: #aebbe0; font-size: 0.82rem; text-transform: uppercase; }
+td span, .admin-row span, .admin-metric span { color: #aebbe0; font-size: 0.86rem; }
+.admin-page { display: grid; gap: 1rem; }
+.admin-header, .admin-section-heading { align-items: center; display: flex; gap: 1rem; justify-content: space-between; }
+.admin-header p { color: #c4cbea; margin: 0.25rem 0 0; max-width: 680px; }
+.admin-metrics, .admin-columns { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.admin-metric, .admin-section { background: #151c35; border: 1px solid #2a3765; border-radius: 8px; padding: 1rem; }
+.admin-metric { display: grid; gap: 0.35rem; }
+.admin-metric strong { font-size: 1.45rem; }
+.admin-section { overflow-x: auto; }
+.admin-section h3 { margin-top: 0; }
+.admin-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.admin-row { border-top: 1px solid #2a3765; display: grid; gap: 0.45rem; padding: 0.75rem 0; }
+.admin-row p { color: #d8def3; margin: 0; }
+.admin-row div, td:last-child { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.admin-toggle { align-items: center; display: flex; gap: 0.5rem; margin: 0.75rem 0; }
+.admin-audit { color: #d8def3; margin: 0; padding-left: 1.25rem; }
+.admin-audit li { margin-bottom: 0.45rem; }
+
+@media (max-width: 720px) {
+  main { padding: 1rem; }
+  .admin-header, .admin-section-heading { align-items: stretch; flex-direction: column; }
+}
