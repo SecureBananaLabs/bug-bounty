@@ -1,0 +1,57 @@
+[
+  {
+    "id": "race-register-user-id",
+    "severity": "medium",
+    "title": "registerUser generates id and JWT sub from separate Date.now() calls",
+    "description": "## Bug\n\n`registerUser()` in `apps/api/src/services/authService.js` calls `Date.now()` twice:\nonce for the returned `id` field and once for the JWT `sub` claim.\n\nWhen the two calls cross a millisecond boundary, the API returns one\nuser id while signing the access token for a different subject.\n\n## Expected fix\n\nGenerate the user id once, return it, and sign the access token with the\nsame id as `sub`. Add focused service test coverage.\n\n## Scope\n\nLimited to `apps/api/src/services/authService.js` and corresponding service tests.\n\n---\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #11398 for more information.\n\nParent bounty: #11398",
+    "files": [
+      "apps/api/src/services/authService.js"
+    ]
+  },
+  {
+    "id": "auth-refresh-bypass",
+    "severity": "high",
+    "title": "auth refresh endpoint ignores request payload and issues hard-coded tokens",
+    "description": "## Bug\n\n`refresh()` in `apps/api/src/controllers/authController.js` calls `refreshToken()` without passing\nthe refresh token from the request body. The service also signs a token\nfor the hard-coded subject `\"usr_existing\"` with role `\"client\"`.\n\n## Expected fix\n\n- Extract the refresh token from `req.body`.\n- Pass it to `refreshToken()`.\n- Verify the token belongs to the requesting user before issuing a new one.\n- Sign the refreshed token for the authenticated subject and role.\n\n## Scope\n\nLimited to auth controller/service behavior and focused API tests.\n\n---\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #11398 for more information.\n\nParent bounty: #11398",
+    "files": [
+      "apps/api/src/controllers/authController.js",
+      "apps/api/src/services/authService.js"
+    ]
+  },
+  {
+    "id": "search-no-validation",
+    "severity": "medium",
+    "title": "search endpoint passes raw query string without validation or length limit",
+    "description": "## Bug\n\n`search()` in `apps/api/src/controllers/searchController.js` passes `req.query.q` directly to the\nsearch service without trimming, length-limiting, or validating the input\nshape.\n\nAn attacker can send extremely long query strings to consume server\nresources or trigger unexpected behavior in the search service.\n\n## Expected fix\n\nAdd input validation: trim the query string, enforce a maximum length\n(e.g. 200 characters), and reject non-string values.\n\n## Scope\n\nLimited to `apps/api/src/controllers/searchController.js` and focused API tests.\n\n---\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #11398 for more information.\n\nParent bounty: #11398",
+    "files": [
+      "apps/api/src/controllers/searchController.js"
+    ]
+  },
+  {
+    "id": "register-admin-role",
+    "severity": "high",
+    "title": "registerSchema allows admin role self-assignment",
+    "description": "## Bug\n\n`registerSchema` in `apps/api/src/validators/auth.js` includes `\"admin\"` in the\nallowed role enum. Any unauthenticated caller can register with\n`role: \"admin\"` and receive an admin token.\n\n## Expected fix\n\nRemove `\"admin\"` from the register schema role enum.\nRegistration should only allow `[\"client\", \"freelancer\"]`.\n\n## Scope\n\nLimited to `apps/api/src/validators/auth.js`.\n\n---\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #11398 for more information.\n\nParent bounty: #11398",
+    "files": [
+      "apps/api/src/validators/auth.js"
+    ]
+  },
+  {
+    "id": "unprotected-job-create",
+    "severity": "medium",
+    "title": "job creation endpoint is missing authentication middleware",
+    "description": "## Bug\n\n`POST /api/jobs` in `apps/api/src/routes/jobRoutes.js` is registered without\n`authMiddleware`. Anyone can create job listings anonymously.\n\n## Expected fix\n\nAdd the existing `authMiddleware` to the POST route so only\nauthenticated users can create jobs.\n\n## Scope\n\nLimited to `apps/api/src/routes/jobRoutes.js` and focused API tests.\n\n---\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #11398 for more information.\n\nParent bounty: #11398",
+    "files": [
+      "apps/api/src/routes/jobRoutes.js"
+    ]
+  },
+  {
+    "id": "unprotected-payment-create",
+    "severity": "medium",
+    "title": "payment creation endpoint is missing authentication middleware",
+    "description": "## Bug\n\n`POST /api/payments` in `apps/api/src/routes/paymentRoutes.js` is registered without\n`authMiddleware`. Anyone can create payment intent records anonymously.\n\n## Expected fix\n\nAdd the existing `authMiddleware` to the POST route so only\nauthenticated users can create payment records.\n\n## Scope\n\nLimited to `apps/api/src/routes/paymentRoutes.js` and focused API tests.\n\n---\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #11398 for more information.\n\nParent bounty: #11398",
+    "files": [
+      "apps/api/src/routes/paymentRoutes.js"
+    ]
+  }
+]
