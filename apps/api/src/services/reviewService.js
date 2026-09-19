@@ -5,7 +5,11 @@ export async function listReviews() {
 }
 
 export async function createReview(payload) {
-  const review = { id: `rev_${Date.now()}`, ...payload };
+  const review = {
+    ...payload,
+    id: `rev_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    createdAt: new Date().toISOString(),
+  };
   reviews.push(review);
   return review;
 }
