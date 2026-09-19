@@ -1,0 +1,16 @@
+{
+  "default": {
+    "maxErrorRate": 0.02,
+    "maxP99Ms": 1000,
+    "minRequestsPerSecond": 1
+  },
+  "smoke": {
+    "maxErrorRate": 0.05,
+    "maxP99Ms": 1500,
+    "minRequestsPerSecond": 0.25
+  },
+  "scenarios": {
+    "health": { "maxP99Ms": 500, "maxErrorRate": 0.01 },
+    "admin_metrics": { "maxP99Ms": 1000, "maxErrorRate": 0.02 }
+  }
+}
