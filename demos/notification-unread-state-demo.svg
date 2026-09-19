@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#0f172a"/>
+  <rect x="48" y="44" width="864" height="452" rx="10" fill="#111827" stroke="#334155"/>
+  <circle cx="76" cy="72" r="7" fill="#ef4444"/>
+  <circle cx="100" cy="72" r="7" fill="#f59e0b"/>
+  <circle cx="124" cy="72" r="7" fill="#22c55e"/>
+  <text x="56" y="120" fill="#93c5fd" font-family="Consolas, monospace" font-size="22">POST /api/notifications</text>
+  <text x="56" y="164" fill="#e5e7eb" font-family="Consolas, monospace" font-size="19">{ "userId": "usr_123", "message": "New proposal received", "read": true }</text>
+  <text x="56" y="220" fill="#34d399" font-family="Consolas, monospace" font-size="22">201 Created</text>
+  <text x="56" y="264" fill="#e5e7eb" font-family="Consolas, monospace" font-size="19">{</text>
+  <text x="82" y="300" fill="#e5e7eb" font-family="Consolas, monospace" font-size="19">"success": true,</text>
+  <text x="82" y="336" fill="#e5e7eb" font-family="Consolas, monospace" font-size="19">"data": {</text>
+  <text x="108" y="372" fill="#e5e7eb" font-family="Consolas, monospace" font-size="19">"id": "ntf_...",</text>
+  <text x="108" y="408" fill="#e5e7eb" font-family="Consolas, monospace" font-size="19">"message": "New proposal received",</text>
+  <text x="108" y="444" fill="#facc15" font-family="Consolas, monospace" font-size="19">"read": false</text>
+  <text x="82" y="480" fill="#e5e7eb" font-family="Consolas, monospace" font-size="19">}</text>
+  <text x="56" y="516" fill="#e5e7eb" font-family="Consolas, monospace" font-size="19">}</text>
+</svg>
