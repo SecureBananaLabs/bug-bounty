@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
-import { apiLimiter } from "./middleware/rateLimit.js";
+import { apiLimiter, authLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
@@ -20,14 +20,19 @@ export function createApp() {
 
   app.use(helmet());
   app.use(cors());
-  app.use(express.json());
-  app.use(apiLimiter);
 
+  // Health checks bypass rate limiting to prevent false-negative liveness probes
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
 
-  app.use("/api/auth", authRoutes);
+  // Run rate limiter before JSON body parsing to protect against large payload parsing DOS
+  app.use(apiLimiter);
+  app.use(express.json());
+
+  // Dedicated stricter rate limit on auth endpoints to prevent brute-force attacks
+  app.use("/api/auth", authLimiter, authRoutes);
+
   app.use("/api/users", userRoutes);
   app.use("/api/jobs", jobRoutes);
   app.use("/api/proposals", proposalRoutes);
