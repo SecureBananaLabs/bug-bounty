@@ -1,0 +1,11 @@
+SecureBananaLabs bounty #80 demo
+
+PR: feat/pixel-art-codex-signal-grove
+File added: assets/pixel-art/codex-signal-grove.png
+
+Validation shown in this demo:
+1) Asset exists at the required path
+2) Image is original and 128x128
+3) Scope is a single non-destructive asset change
+
+Short proof artifact for bounty reviewer.
