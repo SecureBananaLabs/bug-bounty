@@ -1,0 +1,30 @@
+{
+  "p99_latency_ms": {
+    "GET /health": 150,
+    "POST /api/auth/register": 300,
+    "POST /api/auth/login": 300,
+    "GET /api/users/me": 150,
+    "GET /api/jobs": 300,
+    "POST /api/jobs": 400,
+    "GET /api/jobs/:id": 300,
+    "GET /api/proposals": 300,
+    "POST /api/proposals": 400,
+    "GET /api/payments": 300,
+    "POST /api/payments": 400,
+    "GET /api/reviews": 300,
+    "POST /api/reviews": 400,
+    "GET /api/messages": 300,
+    "POST /api/messages": 400,
+    "GET /api/notifications": 300,
+    "POST /api/notifications": 400,
+    "POST /api/uploads": 500,
+    "GET /api/search": 300,
+    "GET /api/admin/stats": 300
+  },
+  "max_error_rate_pct": 5.0,
+  "smoke_connections": 4,
+  "smoke_duration_s": 3,
+  "full_connections": 20,
+  "full_duration_s": 5,
+  "note": "Thresholds are CI smoke-gate defaults; raise for slower CI runners via thresholds.json."
+}
