@@ -1,3 +1,4 @@
+import { connectDb } from "./config/db.js";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
@@ -25,6 +26,18 @@ export function createApp() {
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
+  });
+
+  app.get("/ready", async (req, res) => {
+    try {
+      const dbStatus = await connectDb();
+      if (!dbStatus || dbStatus.connected !== true) {
+        return res.status(503).json({ ok: false, service: "api", error: "Database not connected" });
+      }
+      return res.status(200).json({ ok: true, service: "api", database: "connected" });
+    } catch (err) {
+      return res.status(503).json({ ok: false, service: "api", error: err.message });
+    }
   });
 
   app.use("/api/auth", authRoutes);
