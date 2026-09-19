@@ -36,7 +36,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
 
           git checkout "${DEFAULT_BRANCH}"
           git pull --ff-only origin "${DEFAULT_BRANCH}"
@@ -63,4 +63,5 @@ jobs:
 
           git commit -m "chore: update leaderboard for PR #${PR_NUMBER}"
           git pull --rebase origin "${DEFAULT_BRANCH}"
-          git push origin "HEAD:${DEFAULT_BRANCH}"
+          auth_header="$(printf 'x-access-token:%s' "${GH_TOKEN}" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" push origin "HEAD:${DEFAULT_BRANCH}"
