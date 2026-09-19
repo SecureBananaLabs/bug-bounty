@@ -1,0 +1,8 @@
+{
+  "defaultP99Ms": 1000,
+  "endpoints": {
+    "GET /api/jobs": 800,
+    "GET /api/users": 800,
+    "GET /api/search": 900
+  }
+}
