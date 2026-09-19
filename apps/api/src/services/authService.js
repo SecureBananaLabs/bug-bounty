@@ -11,6 +11,13 @@ export async function registerUser(payload) {
 }
 
 export async function loginUser(payload) {
+  if (payload.status === "DISABLED" || payload.isDisabled === true) {
+    const error = new Error("Account is disabled");
+    error.status = 403;
+    error.code = "ACCOUNT_DISABLED";
+    throw error;
+  }
+
   // TODO: verify password hash against stored user record
   return {
     email: payload.email,
