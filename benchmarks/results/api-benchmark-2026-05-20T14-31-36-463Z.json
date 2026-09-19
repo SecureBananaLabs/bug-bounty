@@ -1,0 +1,593 @@
+{
+  "runId": "2026-05-20T14-31-36-463Z",
+  "startedAt": "2026-05-20T14:31:36.463Z",
+  "finishedAt": "2026-05-20T14:31:36.766Z",
+  "smoke": false,
+  "targetMode": "local-app",
+  "targetUrl": "http://127.0.0.1:53919",
+  "config": {
+    "concurrency": 4,
+    "requestsPerEndpoint": 8,
+    "timeoutMs": 10000
+  },
+  "environment": {
+    "cpuModel": "Apple M4",
+    "cpuCount": 10,
+    "totalMemoryGiB": 32,
+    "freeMemoryGiB": 1.78,
+    "platform": "darwin",
+    "release": "25.3.0",
+    "arch": "arm64",
+    "node": "v25.9.0"
+  },
+  "routeCoverage": {
+    "discoveredRoutes": 21,
+    "configuredEndpoints": 21,
+    "coveredRoutes": 21,
+    "missing": []
+  },
+  "thresholds": {
+    "global": {
+      "maxP99Ms": 1000,
+      "maxErrorRatePercent": 0,
+      "maxUnexpectedStatusPercent": 0
+    },
+    "endpoints": {
+      "uploads-create": {
+        "maxP99Ms": 1500,
+        "maxErrorRatePercent": 0,
+        "maxUnexpectedStatusPercent": 0
+      }
+    }
+  },
+  "endpoints": [
+    {
+      "id": "health",
+      "method": "GET",
+      "path": "/health",
+      "description": "Service liveness check",
+      "requests": 8,
+      "elapsedMs": 68.14,
+      "latencyMs": {
+        "p50": 7.56,
+        "p95": 59.81,
+        "p99": 59.81
+      },
+      "ttfbMs": {
+        "p95": 58.44
+      },
+      "rps": {
+        "sustained": 117.4,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "description": "Client registration with JWT issuance",
+      "requests": 8,
+      "elapsedMs": 22.38,
+      "latencyMs": {
+        "p50": 5.22,
+        "p95": 15.02,
+        "p99": 15.02
+      },
+      "ttfbMs": {
+        "p95": 14.79
+      },
+      "rps": {
+        "sustained": 357.4,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "description": "Password login with JWT issuance",
+      "requests": 8,
+      "elapsedMs": 5.82,
+      "latencyMs": {
+        "p50": 2.51,
+        "p95": 3.42,
+        "p99": 3.42
+      },
+      "ttfbMs": {
+        "p95": 3.36
+      },
+      "rps": {
+        "sustained": 1374.54,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "description": "OAuth provider callback acknowledgement",
+      "requests": 8,
+      "elapsedMs": 4.11,
+      "latencyMs": {
+        "p50": 1.77,
+        "p95": 2.42,
+        "p99": 2.42
+      },
+      "ttfbMs": {
+        "p95": 2.38
+      },
+      "rps": {
+        "sustained": 1944.58,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "description": "Access-token refresh endpoint",
+      "requests": 8,
+      "elapsedMs": 4.76,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 2.75,
+        "p99": 2.75
+      },
+      "ttfbMs": {
+        "p95": 2.69
+      },
+      "rps": {
+        "sustained": 1681.81,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "description": "User directory listing",
+      "requests": 8,
+      "elapsedMs": 3.53,
+      "latencyMs": {
+        "p50": 1.46,
+        "p95": 1.94,
+        "p99": 1.94
+      },
+      "ttfbMs": {
+        "p95": 1.9
+      },
+      "rps": {
+        "sustained": 2264.18,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "users-create",
+      "method": "POST",
+      "path": "/api/users",
+      "description": "Create user profile",
+      "requests": 8,
+      "elapsedMs": 5.65,
+      "latencyMs": {
+        "p50": 2.45,
+        "p95": 3.19,
+        "p99": 3.19
+      },
+      "ttfbMs": {
+        "p95": 3.15
+      },
+      "rps": {
+        "sustained": 1416.88,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "description": "Open jobs listing",
+      "requests": 8,
+      "elapsedMs": 2.82,
+      "latencyMs": {
+        "p50": 1.18,
+        "p95": 1.48,
+        "p99": 1.48
+      },
+      "ttfbMs": {
+        "p95": 1.45
+      },
+      "rps": {
+        "sustained": 2841.83,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "jobs-create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "description": "Create job post with realistic budget and skills",
+      "requests": 8,
+      "elapsedMs": 5.88,
+      "latencyMs": {
+        "p50": 2.41,
+        "p95": 3.52,
+        "p99": 3.52
+      },
+      "ttfbMs": {
+        "p95": 3.46
+      },
+      "rps": {
+        "sustained": 1361.04,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "description": "Proposal inbox listing",
+      "requests": 8,
+      "elapsedMs": 2.96,
+      "latencyMs": {
+        "p50": 1.27,
+        "p95": 1.55,
+        "p99": 1.55
+      },
+      "ttfbMs": {
+        "p95": 1.51
+      },
+      "rps": {
+        "sustained": 2704.22,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "proposals-create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "description": "Create freelancer proposal",
+      "requests": 8,
+      "elapsedMs": 3.54,
+      "latencyMs": {
+        "p50": 1.55,
+        "p95": 2.04,
+        "p99": 2.04
+      },
+      "ttfbMs": {
+        "p95": 2.01
+      },
+      "rps": {
+        "sustained": 2257.5,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "payments-create",
+      "method": "POST",
+      "path": "/api/payments",
+      "description": "Create payment intent",
+      "requests": 8,
+      "elapsedMs": 5.2,
+      "latencyMs": {
+        "p50": 1.8,
+        "p95": 3.4,
+        "p99": 3.4
+      },
+      "ttfbMs": {
+        "p95": 3.36
+      },
+      "rps": {
+        "sustained": 1537.86,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "description": "Marketplace review listing",
+      "requests": 8,
+      "elapsedMs": 3.38,
+      "latencyMs": {
+        "p50": 1.34,
+        "p95": 2,
+        "p99": 2
+      },
+      "ttfbMs": {
+        "p95": 1.98
+      },
+      "rps": {
+        "sustained": 2370.17,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "reviews-create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "description": "Create project review",
+      "requests": 8,
+      "elapsedMs": 3.9,
+      "latencyMs": {
+        "p50": 1.74,
+        "p95": 2.37,
+        "p99": 2.37
+      },
+      "ttfbMs": {
+        "p95": 2.34
+      },
+      "rps": {
+        "sustained": 2053.04,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "description": "Project message thread listing",
+      "requests": 8,
+      "elapsedMs": 2.38,
+      "latencyMs": {
+        "p50": 1,
+        "p95": 1.29,
+        "p99": 1.29
+      },
+      "ttfbMs": {
+        "p95": 1.25
+      },
+      "rps": {
+        "sustained": 3355,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "messages-create",
+      "method": "POST",
+      "path": "/api/messages",
+      "description": "Send project message",
+      "requests": 8,
+      "elapsedMs": 3.12,
+      "latencyMs": {
+        "p50": 1.38,
+        "p95": 1.79,
+        "p99": 1.79
+      },
+      "ttfbMs": {
+        "p95": 1.75
+      },
+      "rps": {
+        "sustained": 2567.22,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "description": "Notification feed listing",
+      "requests": 8,
+      "elapsedMs": 2.3,
+      "latencyMs": {
+        "p50": 0.98,
+        "p95": 1.18,
+        "p99": 1.18
+      },
+      "ttfbMs": {
+        "p95": 1.16
+      },
+      "rps": {
+        "sustained": 3481.67,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "notifications-create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "description": "Create notification event",
+      "requests": 8,
+      "elapsedMs": 4.54,
+      "latencyMs": {
+        "p50": 1.46,
+        "p95": 3.06,
+        "p99": 3.06
+      },
+      "ttfbMs": {
+        "p95": 3.02
+      },
+      "rps": {
+        "sustained": 1762.13,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "uploads-create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "description": "Upload a small project attachment",
+      "requests": 8,
+      "elapsedMs": 11.77,
+      "latencyMs": {
+        "p50": 3.02,
+        "p95": 7.87,
+        "p99": 7.87
+      },
+      "ttfbMs": {
+        "p95": 7.84
+      },
+      "rps": {
+        "sustained": 679.55,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "201": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "search-global",
+      "method": "GET",
+      "path": "/api/search",
+      "description": "Global marketplace search",
+      "requests": 8,
+      "elapsedMs": 4.84,
+      "latencyMs": {
+        "p50": 1.5,
+        "p95": 2.92,
+        "p99": 2.92
+      },
+      "ttfbMs": {
+        "p95": 2.89
+      },
+      "rps": {
+        "sustained": 1652.11,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    },
+    {
+      "id": "admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "description": "Protected admin metric summary",
+      "requests": 8,
+      "elapsedMs": 4.45,
+      "latencyMs": {
+        "p50": 1.52,
+        "p95": 2.85,
+        "p99": 2.85
+      },
+      "ttfbMs": {
+        "p95": 2.82
+      },
+      "rps": {
+        "sustained": 1798.92,
+        "peak": 8
+      },
+      "errorRatePercent": 0,
+      "unexpectedStatusPercent": 0,
+      "statusCounts": {
+        "200": 8
+      },
+      "sampleErrors": []
+    }
+  ],
+  "passed": true,
+  "violations": []
+}
