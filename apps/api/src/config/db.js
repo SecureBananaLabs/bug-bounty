@@ -1,4 +1,17 @@
+import { PrismaClient } from "@prisma/client";
+
+let prisma;
+
 export async function connectDb() {
-  // TODO: wire Prisma client from @freelanceflow/db package
-  return { connected: true, driver: "prisma-placeholder" };
+  if (!prisma) {
+    prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
+    });
+    await prisma.$connect();
+  }
+  return prisma;
 }
