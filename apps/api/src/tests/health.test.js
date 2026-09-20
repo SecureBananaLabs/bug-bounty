@@ -1,24 +1,58 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { once } from "node:events";
 import { createApp } from "../app.js";
 
-test("GET /health returns ok payload", async () => {
+async function withServer(callback) {
   const app = createApp();
   const server = app.listen(0);
 
-  await new Promise((resolve, reject) => {
-    server.once("listening", resolve);
-    server.once("error", reject);
-  });
+  await once(server, "listening");
 
   const { port } = server.address();
-  const response = await fetch(`http://127.0.0.1:${port}/health`);
-  const payload = await response.json();
+  try {
+    await callback(`http://127.0.0.1:${port}`);
+  } finally {
+    server.close();
+    await once(server, "close");
+  }
+}
 
-  assert.equal(response.status, 200);
-  assert.deepEqual(payload, { ok: true, service: "api" });
+test("GET /health returns ok payload", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/health`);
+    const payload = await response.json();
 
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
+    assert.equal(response.status, 200);
+    assert.deepEqual(payload, { ok: true, service: "api" });
+  });
+});
+
+test("POST /api/uploads rejects requests without a file", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/uploads`, { method: "POST" });
+    const payload = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.deepEqual(payload, { success: false, message: "A file is required" });
+  });
+});
+
+test("POST /api/uploads accepts a file", async () => {
+  await withServer(async (baseUrl) => {
+    const form = new FormData();
+    form.append("file", new Blob(["hello"]), "hello.txt");
+
+    const response = await fetch(`${baseUrl}/api/uploads`, {
+      method: "POST",
+      body: form
+    });
+    const payload = await response.json();
+
+    assert.equal(response.status, 201);
+    assert.deepEqual(payload, {
+      success: true,
+      data: { filename: "hello.txt", status: "uploaded" }
+    });
   });
 });
