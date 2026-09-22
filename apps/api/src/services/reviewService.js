@@ -1,7 +1,7 @@
 const reviews = [];
 
 export async function listReviews() {
-  return reviews;
+  return reviews.slice();
 }
 
 export async function createReview(payload) {
