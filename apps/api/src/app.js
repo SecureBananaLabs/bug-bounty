@@ -15,11 +15,34 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+const defaultCorsOrigins = ["http://localhost:3000"];
+
+function getCorsOrigins() {
+  return (process.env.CORS_ORIGINS ?? defaultCorsOrigins.join(","))
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
+function createCorsOptions() {
+  const allowedOrigins = new Set(getCorsOrigins());
+
+  return {
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(null, false);
+    }
+  };
+}
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(createCorsOptions()));
   app.use(express.json());
   app.use(apiLimiter);
 
