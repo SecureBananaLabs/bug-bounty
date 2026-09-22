@@ -1,4 +1,4 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, verifyAccessToken } from "../utils/jwt.js";
 
 export async function registerUser(payload) {
   // TODO: persist new user via Prisma
@@ -18,6 +18,18 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(token) {
+  if (!token) {
+    const error = new Error("Missing refresh token");
+    error.status = 401;
+    throw error;
+  }
+  try {
+    const payload = verifyAccessToken(token);
+    return { token: signAccessToken({ sub: payload.sub || "usr_existing", role: payload.role || "client" }) };
+  } catch {
+    const error = new Error("Invalid or expired refresh token");
+    error.status = 401;
+    throw error;
+  }
 }
