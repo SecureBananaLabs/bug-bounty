@@ -1,5 +1,5 @@
 export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
+  console.error("Unhandled API error:", err?.name ?? "Error");
   if (res.headersSent) {
     return next(err);
   }
