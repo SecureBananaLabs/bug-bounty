@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { methodNotAllowed } from "./middleware/methodNotAllowed.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import { jobRoutes } from "./routes/jobRoutes.js";
@@ -38,6 +39,16 @@ export function createApp() {
   app.use("/api/uploads", uploadRoutes);
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
+
+  app.all("/api/users", methodNotAllowed(["GET", "POST"]));
+  app.all("/api/jobs", methodNotAllowed(["GET", "POST"]));
+  app.all("/api/proposals", methodNotAllowed(["GET", "POST"]));
+  app.all("/api/payments", methodNotAllowed(["POST"]));
+  app.all("/api/reviews", methodNotAllowed(["GET", "POST"]));
+  app.all("/api/messages", methodNotAllowed(["GET", "POST"]));
+  app.all("/api/notifications", methodNotAllowed(["GET", "POST"]));
+  app.all("/api/uploads", methodNotAllowed(["POST"]));
+  app.all("/api/search", methodNotAllowed(["GET"]));
 
   app.use(errorHandler);
   return app;
