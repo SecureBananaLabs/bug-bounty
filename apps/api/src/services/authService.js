@@ -18,6 +18,7 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
+export async function refreshToken(token) {
+  // TODO: verify the provided refresh token before issuing a new one
   return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
 }
