@@ -1,13 +1,35 @@
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "name": "bug-bounty",
+  "version": "1.0.1",
+  "description": "Freelance marketplace monorepo",
+  "main": "index.js",
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
-  }
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo \"Error: no build required\" && exit 1",
+    "start": "echo \"Error: no start command specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "test": "echo \"Error: no test specified\"",
+    "build": "echo \"Error: no build required\"",
+    "start": "echo \"Error: no entry point\""
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    #################################################################################
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SecureBananaLabs/bug-bounty.git"
+  },
+  "author": "SecureBanana Labs",
+  "license": "MIT"
 }
