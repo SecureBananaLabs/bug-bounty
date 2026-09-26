@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Billing overview demo</title>
+  <desc id="desc">Demo of the updated billing route with invoice summary, payout method, actions, and recent activity.</desc>
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect x="120" y="62" width="1040" height="596" rx="18" fill="#111832" stroke="#2a3765" stroke-width="2"/>
+  <text x="160" y="126" fill="#f2f5ff" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700">FreelanceFlow Billing</text>
+  <text x="160" y="170" fill="#b9c3e6" font-family="Inter, Arial, sans-serif" font-size="22">Invoice health, payout timing, and account funding are visible from one workspace.</text>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="160" y="218" width="280" height="130" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="184" y="258" fill="#b9c3e6" font-size="20">Open invoices</text>
+    <text x="184" y="306" fill="#f2f5ff" font-size="38" font-weight="700">2</text>
+    <text x="184" y="334" fill="#b9c3e6" font-size="18">$4,300 awaiting payment</text>
+
+    <rect x="500" y="218" width="280" height="130" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="524" y="258" fill="#b9c3e6" font-size="20">Next payout</text>
+    <text x="524" y="306" fill="#f2f5ff" font-size="38" font-weight="700">$1,850</text>
+    <text x="524" y="334" fill="#b9c3e6" font-size="18">Scheduled for Friday</text>
+
+    <rect x="840" y="218" width="280" height="130" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="864" y="258" fill="#b9c3e6" font-size="20">Escrow balance</text>
+    <text x="864" y="306" fill="#f2f5ff" font-size="38" font-weight="700">$7,200</text>
+    <text x="864" y="334" fill="#b9c3e6" font-size="18">Across 4 active milestones</text>
+
+    <rect x="160" y="390" width="460" height="130" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="184" y="430" fill="#f2f5ff" font-size="26" font-weight="700">Payout method</text>
+    <text x="184" y="468" fill="#b9c3e6" font-size="20">Wise USD account ending in 2841</text>
+    <rect x="184" y="486" width="198" height="38" rx="8" fill="#f2f5ff"/>
+    <text x="206" y="512" fill="#0b1020" font-size="16" font-weight="700">Update payout method</text>
+
+    <rect x="660" y="390" width="460" height="130" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="684" y="430" fill="#f2f5ff" font-size="26" font-weight="700">Billing actions</text>
+    <rect x="684" y="456" width="178" height="38" rx="8" fill="#f2f5ff"/>
+    <text x="706" y="482" fill="#0b1020" font-size="16" font-weight="700">Send reminder</text>
+    <rect x="880" y="456" width="172" height="38" rx="8" fill="#f2f5ff"/>
+    <text x="902" y="482" fill="#0b1020" font-size="16" font-weight="700">Download invoices</text>
+
+    <rect x="160" y="550" width="960" height="74" rx="12" fill="#151c35" stroke="#2a3765"/>
+    <text x="184" y="595" fill="#f2f5ff" font-size="22" font-weight="700">INV-1039</text>
+    <text x="380" y="595" fill="#b9c3e6" font-size="20">Mosaic Studio</text>
+    <text x="700" y="595" fill="#ffb4b4" font-size="20">Overdue</text>
+    <text x="990" y="595" fill="#f2f5ff" font-size="22" font-weight="700">$1,500</text>
+  </g>
+</svg>
