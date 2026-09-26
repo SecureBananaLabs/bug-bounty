@@ -1,0 +1,189 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "auth.register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "expectedStatuses": [201],
+    "json": {
+      "email": "benchmark+{{runId}}@example.com",
+      "password": "benchmark-password",
+      "role": "client"
+    }
+  },
+  {
+    "name": "auth.login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "expectedStatuses": [200],
+    "json": {
+      "email": "benchmark@example.com",
+      "password": "benchmark-password"
+    }
+  },
+  {
+    "name": "auth.oauthCallback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "auth.refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "expectedStatuses": [200],
+    "json": {}
+  },
+  {
+    "name": "users.list",
+    "method": "GET",
+    "path": "/api/users",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "users.create",
+    "method": "POST",
+    "path": "/api/users",
+    "expectedStatuses": [201],
+    "json": {
+      "email": "freelancer+{{runId}}@example.com",
+      "displayName": "Benchmark Freelancer",
+      "role": "freelancer",
+      "skills": ["node", "api", "benchmark"]
+    }
+  },
+  {
+    "name": "jobs.list",
+    "method": "GET",
+    "path": "/api/jobs",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "jobs.create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "expectedStatuses": [201],
+    "json": {
+      "title": "Benchmark API integration",
+      "description": "Reproducible benchmark payload for API performance checks.",
+      "budgetMin": 500,
+      "budgetMax": 1500,
+      "categoryId": "software",
+      "skills": ["node", "express", "performance"]
+    }
+  },
+  {
+    "name": "proposals.list",
+    "method": "GET",
+    "path": "/api/proposals",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "proposals.create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "expectedStatuses": [201],
+    "json": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark",
+      "coverLetter": "Benchmark proposal payload used for load testing.",
+      "bidAmount": 900
+    }
+  },
+  {
+    "name": "payments.create",
+    "method": "POST",
+    "path": "/api/payments",
+    "expectedStatuses": [201],
+    "json": {
+      "proposalId": "proposal_benchmark",
+      "amount": 900,
+      "currency": "usd"
+    }
+  },
+  {
+    "name": "reviews.list",
+    "method": "GET",
+    "path": "/api/reviews",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "reviews.create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "expectedStatuses": [201],
+    "json": {
+      "jobId": "job_benchmark",
+      "reviewerId": "usr_client",
+      "revieweeId": "usr_freelancer",
+      "rating": 5,
+      "comment": "Benchmark review payload."
+    }
+  },
+  {
+    "name": "messages.list",
+    "method": "GET",
+    "path": "/api/messages",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "messages.create",
+    "method": "POST",
+    "path": "/api/messages",
+    "expectedStatuses": [201],
+    "json": {
+      "threadId": "thread_benchmark",
+      "senderId": "usr_client",
+      "recipientId": "usr_freelancer",
+      "body": "Benchmark message payload."
+    }
+  },
+  {
+    "name": "notifications.list",
+    "method": "GET",
+    "path": "/api/notifications",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "notifications.create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "expectedStatuses": [201],
+    "json": {
+      "userId": "usr_benchmark",
+      "type": "proposal_received",
+      "message": "Benchmark notification payload."
+    }
+  },
+  {
+    "name": "uploads.create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "expectedStatuses": [201],
+    "multipart": {
+      "file": {
+        "filename": "benchmark.txt",
+        "contentType": "text/plain",
+        "content": "benchmark upload payload\n"
+      }
+    }
+  },
+  {
+    "name": "search.query",
+    "method": "GET",
+    "path": "/api/search?q=benchmark",
+    "expectedStatuses": [200]
+  },
+  {
+    "name": "admin.metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "auth": true,
+    "expectedStatuses": [200]
+  }
+]
