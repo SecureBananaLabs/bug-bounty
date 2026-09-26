@@ -1,17 +1,31 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { AuthError, loginUser, registerUser } from "../services/authService.js";
+import { fail, ok } from "../utils/response.js";
 
-export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
+export async function register(req, res, next) {
+  const parsed = registerSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return fail(res, "Invalid request body", 400, parsed.error.issues);
+  }
+
+  try {
+    return ok(res, await registerUser(parsed.data), 201);
+  } catch (error) {
+    return handleAuthError(error, res, next);
+  }
 }
 
-export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
+export async function login(req, res, next) {
+  const parsed = loginSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return fail(res, "Invalid request body", 400, parsed.error.issues);
+  }
+
+  try {
+    return ok(res, await loginUser(parsed.data));
+  } catch (error) {
+    return handleAuthError(error, res, next);
+  }
 }
 
 export async function oauthCallback(req, res) {
@@ -22,6 +36,13 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  return fail(res, "Refresh tokens are not configured", 501);
+}
+
+function handleAuthError(error, res, next) {
+  if (error instanceof AuthError) {
+    return fail(res, error.message, error.status);
+  }
+
+  return next(error);
 }

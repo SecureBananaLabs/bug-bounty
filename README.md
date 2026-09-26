@@ -31,7 +31,7 @@ The web app includes pages for:
 
 The API includes:
 
-- Auth routes (register, login, OAuth callback, JWT refresh)
+- Auth routes (register and login); refresh is disabled until refresh-token storage is implemented
 - CRUD routes for users, jobs, and proposals
 - Payments routes (Stripe-focused service placeholder)
 - Reviews, messaging, notifications
@@ -83,6 +83,14 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 - Categories
 - Skills
 
+Apply the committed database migrations before starting the API:
+
+```bash
+npm run migrate:deploy --workspace=@freelanceflow/db
+```
+
+The current migration creates the `User` table required for authentication. Other Prisma models remain schema-only until their migrations are added.
+
 ## Environment Variables
 
-Each app/package expects its own `.env` values for DB, auth, and integrations.
+The API requires `DATABASE_URL` for PostgreSQL and a `JWT_SECRET` of at least 32 bytes. Do not commit either value. The API fails to start if either setting is missing or invalid.
