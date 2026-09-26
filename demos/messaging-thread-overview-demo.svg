@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#0b1020"/>
+  <text x="56" y="72" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="34" font-weight="700">Messaging</text>
+  <rect x="56" y="104" width="248" height="96" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <rect x="332" y="104" width="248" height="96" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <rect x="608" y="104" width="248" height="96" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <text x="80" y="146" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="20">Open threads</text>
+  <text x="80" y="176" fill="#93c5fd" font-family="Arial, sans-serif" font-size="18">3 active conversations</text>
+  <text x="356" y="146" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="20">Needs reply</text>
+  <text x="356" y="176" fill="#facc15" font-family="Arial, sans-serif" font-size="18">1 unread client update</text>
+  <text x="632" y="146" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="20">Average response</text>
+  <text x="632" y="176" fill="#86efac" font-family="Arial, sans-serif" font-size="18">38 minutes</text>
+  <rect x="56" y="232" width="520" height="252" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <text x="80" y="274" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="22" font-weight="700">Conversation Queue</text>
+  <text x="80" y="318" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="18">Maya Chen</text>
+  <text x="80" y="346" fill="#93c5fd" font-family="Arial, sans-serif" font-size="16">AI customer support widget</text>
+  <text x="80" y="374" fill="#facc15" font-family="Arial, sans-serif" font-size="16">Response needed · 12 min ago</text>
+  <text x="80" y="422" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="18">Jordan Lee</text>
+  <text x="80" y="450" fill="#93c5fd" font-family="Arial, sans-serif" font-size="16">SaaS onboarding flows · In review</text>
+  <rect x="608" y="232" width="296" height="252" rx="8" fill="#151c35" stroke="#2a3765"/>
+  <text x="632" y="274" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="22" font-weight="700">Quick Reply</text>
+  <rect x="632" y="308" width="248" height="104" rx="6" fill="#0f172a" stroke="#334155"/>
+  <text x="648" y="346" fill="#e5e7eb" font-family="Arial, sans-serif" font-size="15">Thanks for the update...</text>
+  <rect x="632" y="432" width="112" height="34" rx="6" fill="#2563eb"/>
+  <text x="656" y="455" fill="#ffffff" font-family="Arial, sans-serif" font-size="15">Save draft</text>
+</svg>
