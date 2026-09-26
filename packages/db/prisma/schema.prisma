@@ -68,6 +68,8 @@ model Proposal {
   freelancerId  String
   freelancer    User        @relation(fields: [freelancerId], references: [id])
   createdAt     DateTime    @default(now())
+
+  @@unique([jobId, freelancerId])
 }
 
 model Payment {
