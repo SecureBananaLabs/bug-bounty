@@ -1,16 +1,27 @@
 import Link from "next/link";
 
-const links = [
+const publicLinks = [
   ["/", "Home"],
   ["/jobs", "Jobs"],
+  ["/jobs/post", "Post a Job"],
   ["/freelancers/search", "Find Freelancers"],
   ["/dashboard/client", "Client Dashboard"],
   ["/dashboard/freelancer", "Freelancer Dashboard"],
   ["/messaging", "Messaging"],
-  ["/admin", "Admin"]
+  ["/billing", "Billing"],
+  ["/notifications", "Notifications"],
+  ["/settings", "Settings"]
 ];
 
-export function Navigation() {
+interface NavigationProps {
+  currentUserRole?: string;
+}
+
+export function Navigation({ currentUserRole }: NavigationProps = {}) {
+  const links = currentUserRole === "admin"
+    ? [...publicLinks, ["/admin", "Admin"]]
+    : publicLinks;
+
   return (
     <nav style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
       {links.map(([href, label]) => (
