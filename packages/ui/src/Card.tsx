@@ -1,8 +1,25 @@
-import React from "react";
+import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 
-export function Card({ title, children }: { title: string; children: React.ReactNode }) {
+type CardProps = HTMLAttributes<HTMLElement> & {
+  title: string;
+  children: ReactNode;
+};
+
+const defaultCardStyle: CSSProperties = {
+  border: "1px solid #ddd",
+  borderRadius: 8,
+  padding: "1rem"
+};
+
+export function Card({ title, children, style, ...props }: CardProps) {
   return (
-    <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: "1rem" }}>
+    <section
+      {...props}
+      style={{
+        ...defaultCardStyle,
+        ...style
+      }}
+    >
       <h3>{title}</h3>
       <div>{children}</div>
     </section>
