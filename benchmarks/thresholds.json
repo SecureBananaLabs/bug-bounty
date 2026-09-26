@@ -1,0 +1,7 @@
+{
+  "global": {
+    "maxP99LatencyMs": 2000,
+    "maxErrorRatePercent": 0
+  },
+  "endpoints": {}
+}
