@@ -1,11 +1,13 @@
+import { cloneRecord, cloneRecords } from "../utils/records.js";
+
 const proposals = [];
 
 export async function listProposals() {
-  return proposals;
+  return cloneRecords(proposals);
 }
 
 export async function createProposal(payload) {
   const proposal = { id: `prp_${Date.now()}`, ...payload };
   proposals.push(proposal);
-  return proposal;
+  return cloneRecord(proposal);
 }
