@@ -1,0 +1,19 @@
+{
+  "smoke": {
+    "overall": {
+      "maxErrorRate": 0.01,
+      "minRps": 10,
+      "maxTtfbP95Ms": 250
+    },
+    "routes": {
+      "GET /health": {
+        "maxTtfbP95Ms": 100,
+        "maxErrorRate": 0
+      },
+      "GET /api/admin/metrics": {
+        "maxTtfbP95Ms": 250,
+        "maxErrorRate": 0
+      }
+    }
+  }
+}
