@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Upload route input limits demo</title>
+  <desc id="desc">Animated API demo showing allowed uploads, unsupported file type rejection, and oversized file rejection.</desc>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+    .bg { fill: #f7f9fc; }
+    .panel { fill: #fff; stroke: #d7dee8; stroke-width: 2; rx: 8; }
+    .heading { fill: #162233; font-size: 30px; font-weight: 700; }
+    .subtle { fill: #607086; font-size: 17px; }
+    .label { fill: #26354a; font-size: 20px; font-weight: 700; }
+    .code { font-family: Consolas, "Courier New", monospace; fill: #142033; font-size: 18px; }
+    .ok { fill: #0f7b43; }
+    .bad { fill: #b2242f; }
+    .card { fill: #f3f6fb; stroke: #d7dee8; rx: 8; }
+    .bar { fill: #d9e2ef; }
+    .bar.ok { fill: #bfe9d1; }
+    .bar.bad { fill: #ffd3d7; }
+    .step { opacity: 0; animation: showStep 9s infinite; }
+    .step2 { animation-delay: 3s; }
+    .step3 { animation-delay: 6s; }
+    @keyframes showStep {
+      0%, 4% { opacity: 0; }
+      8%, 31% { opacity: 1; }
+      35%, 100% { opacity: 0; }
+    }
+  </style>
+  <rect class="bg" width="960" height="540"/>
+  <rect class="panel" x="48" y="40" width="864" height="460"/>
+  <text class="heading" x="86" y="92">POST /api/uploads input guard</text>
+  <text class="subtle" x="86" y="124">The upload route now accepts only JPEG, PNG, GIF, and PDF files up to 5 MB.</text>
+
+  <rect class="card" x="86" y="158" width="788" height="270"/>
+  <text class="label" x="122" y="206">Request</text>
+  <text class="label" x="560" y="206">Response</text>
+  <line x1="520" y1="182" x2="520" y2="404" stroke="#d7dee8" stroke-width="2"/>
+
+  <g class="step step1">
+    <rect class="bar ok" x="122" y="236" width="330" height="54" rx="7"/>
+    <text class="code" x="146" y="270">file: demo.png, image/png</text>
+    <rect class="bar ok" x="560" y="236" width="250" height="54" rx="7"/>
+    <text class="code ok" x="584" y="270">201 uploaded</text>
+    <text class="subtle" x="122" y="345">Allowlisted image files pass through to the controller.</text>
+  </g>
+
+  <g class="step step2">
+    <rect class="bar bad" x="122" y="236" width="330" height="54" rx="7"/>
+    <text class="code" x="146" y="270">file: script.sh, text/x-shellscript</text>
+    <rect class="bar bad" x="560" y="236" width="250" height="54" rx="7"/>
+    <text class="code bad" x="584" y="270">400 unsupported type</text>
+    <text class="subtle" x="122" y="345">The multer file filter rejects non-allowlisted MIME types.</text>
+  </g>
+
+  <g class="step step3">
+    <rect class="bar bad" x="122" y="236" width="330" height="54" rx="7"/>
+    <text class="code" x="146" y="270">file: large.png, 5 MB + 1 byte</text>
+    <rect class="bar bad" x="560" y="236" width="250" height="54" rx="7"/>
+    <text class="code bad" x="584" y="270">413 too large</text>
+    <text class="subtle" x="122" y="345">The memory upload middleware enforces the 5 MB limit before storage.</text>
+  </g>
+
+  <rect x="86" y="448" width="788" height="1" fill="#d7dee8"/>
+  <text class="subtle" x="86" y="476">Validated by node --test apps/api/src/tests/uploadRoutes.test.js</text>
+</svg>
