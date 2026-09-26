@@ -1,10 +1,11 @@
 import { ok } from "../utils/response.js";
 import { createUser, listUsers } from "../services/userService.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
-export async function getUsers(req, res) {
+export const getUsers = asyncHandler(async (req, res) => {
   return ok(res, await listUsers());
-}
+});
 
-export async function postUser(req, res) {
+export const postUser = asyncHandler(async (req, res) => {
   return ok(res, await createUser(req.body), 201);
-}
+});
