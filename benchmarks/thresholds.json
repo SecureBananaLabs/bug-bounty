@@ -1,0 +1,25 @@
+{
+  "_comment": "Regression thresholds for CI smoke benchmarks. If p99 latency exceeds these values, CI will fail.",
+  "endpoints": {
+    "GET /health": { "p99": 100 },
+    "POST /api/auth/register": { "p99": 300 },
+    "POST /api/auth/login": { "p99": 300 },
+    "POST /api/auth/refresh": { "p99": 300 },
+    "GET /api/users": { "p99": 200 },
+    "POST /api/users": { "p99": 300 },
+    "GET /api/jobs": { "p99": 200 },
+    "POST /api/jobs": { "p99": 300 },
+    "GET /api/proposals": { "p99": 200 },
+    "POST /api/proposals": { "p99": 300 },
+    "POST /api/payments": { "p99": 300 },
+    "GET /api/reviews": { "p99": 200 },
+    "POST /api/reviews": { "p99": 300 },
+    "GET /api/messages": { "p99": 200 },
+    "POST /api/messages": { "p99": 300 },
+    "GET /api/notifications": { "p99": 200 },
+    "POST /api/notifications": { "p99": 300 },
+    "POST /api/uploads": { "p99": 500 },
+    "GET /api/search": { "p99": 200 },
+    "GET /api/admin/metrics": { "p99": 300 }
+  }
+}
