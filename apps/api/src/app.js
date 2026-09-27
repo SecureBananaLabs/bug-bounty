@@ -14,6 +14,7 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { healthRoutes } from "./routes/healthRoutes.js";
 
 export function createApp() {
   const app = express();
@@ -21,11 +22,12 @@ export function createApp() {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use(apiLimiter);
 
-  app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
-  });
+  // Mounted before the rate limiter: an orchestrator probes readiness on a
+  // schedule, and those probes must not be throttled with user traffic.
+  app.use("/health", healthRoutes);
+
+  app.use(apiLimiter);
 
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
