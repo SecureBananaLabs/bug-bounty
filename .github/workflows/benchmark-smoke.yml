@@ -1,0 +1,73 @@
+name: API Benchmark Smoke Test
+
+on:
+  pull_request:
+    paths:
+      - 'apps/api/**'
+      - 'benchmarks/**'
+      - 'package.json'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+
+    services:
+      # Start the API server for benchmarking
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: benchmark
+          POSTGRES_PASSWORD: benchmark
+          POSTGRES_DB: benchmark
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install autocannon (benchmark runner)
+        run: npm install --no-save autocannon
+
+      - name: Start API server in background
+        run: |
+          npm run dev -w apps/api &
+          echo "Waiting for API to start..."
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:4000/api/jobs > /dev/null 2>&1; then
+              echo "API is ready!"
+              break
+            fi
+            sleep 1
+          done
+
+      - name: Run benchmark smoke test
+        run: node benchmarks/runner.js --smoke
+        env:
+          BENCHMARK_HOST: http://localhost:4000
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
+          retention-days: 7

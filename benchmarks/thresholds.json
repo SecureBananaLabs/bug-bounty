@@ -1,0 +1,7 @@
+{
+  "default": {
+    "p99MaxMs": 500,
+    "errorRateMax": 0.01,
+    "description": "Default thresholds: p99 < 500ms, error rate < 1%"
+  }
+}
