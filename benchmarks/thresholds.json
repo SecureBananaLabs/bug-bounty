@@ -1,0 +1,6 @@
+{
+  "default": {
+    "p99LatencyMs": 1000,
+    "errorRatePercent": 5
+  }
+}
