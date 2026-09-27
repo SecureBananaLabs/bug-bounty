@@ -1,7 +1,22 @@
-export const env = {
-  nodeEnv: process.env.NODE_ENV ?? "development",
-  port: Number(process.env.PORT ?? 4000),
-  jwtSecret: process.env.JWT_SECRET ?? "development-secret",
-  stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
-  databaseUrl: process.env.DATABASE_URL ?? ""
-};
+function readOptionalValue(value) {
+  return value?.trim() ?? "";
+}
+
+export function resolveEnv(source = process.env) {
+  const nodeEnv = source.NODE_ENV ?? "development";
+  const databaseUrl = readOptionalValue(source.DATABASE_URL);
+
+  if (nodeEnv === "production" && !databaseUrl) {
+    throw new Error("DATABASE_URL is required in production");
+  }
+
+  return {
+    nodeEnv,
+    port: Number(source.PORT ?? 4000),
+    jwtSecret: source.JWT_SECRET ?? "development-secret",
+    stripeSecretKey: source.STRIPE_SECRET_KEY ?? "",
+    databaseUrl
+  };
+}
+
+export const env = resolveEnv();
