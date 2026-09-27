@@ -1,0 +1,19 @@
+{
+  "defaults": {
+    "p99LatencyMs": 500,
+    "ttfbP95Ms": 500,
+    "errorRate": 0.05
+  },
+  "endpoints": {
+    "auth.register": {
+      "p99LatencyMs": 1000
+    },
+    "auth.login": {
+      "p99LatencyMs": 1000
+    },
+    "uploads.create": {
+      "p99LatencyMs": 1000,
+      "ttfbP95Ms": 1000
+    }
+  }
+}
