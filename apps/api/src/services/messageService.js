@@ -5,7 +5,13 @@ export async function listMessages() {
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
+  const message = {
+    id: `msg_${Date.now()}`,
+    senderId: payload.senderId,
+    receiverId: payload.receiverId,
+    body: payload.body,
+    sentAt: new Date().toISOString()
+  };
   messages.push(message);
   return message;
 }
