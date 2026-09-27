@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { freelancers } from "../../../lib/mock";
 
+const SKILL_SEPARATOR = " \u00b7 ";
+
 export default function FreelancerSearchPage() {
   return (
     <section>
@@ -9,7 +11,7 @@ export default function FreelancerSearchPage() {
         {freelancers.map((freelancer) => (
           <article className="card" key={freelancer.username}>
             <h3>{freelancer.username}</h3>
-            <p>{freelancer.skills.join(" · ")}</p>
+            <p>{freelancer.skills.join(SKILL_SEPARATOR)}</p>
             <p>{freelancer.rate}</p>
             <Link href={`/freelancers/${freelancer.username}`}>Open profile</Link>
           </article>
