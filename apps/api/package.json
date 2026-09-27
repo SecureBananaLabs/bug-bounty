@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "node --test src/tests",
+    "benchmark": "node ../../benchmarks/run-api-benchmark.js",
+    "benchmark:smoke": "node ../../benchmarks/run-api-benchmark.js --smoke --check-thresholds"
   },
   "dependencies": {
     "cors": "^2.8.5",
