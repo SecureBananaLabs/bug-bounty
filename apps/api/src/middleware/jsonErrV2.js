@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export function jsonErrV2(err,req,res,next){if(err instanceof SyntaxError&&"body"in err)return fail(res,"Malformed JSON",400);if(err?.type==="entity.too.large")return fail(res,"Payload too large",413);return next(err);}
