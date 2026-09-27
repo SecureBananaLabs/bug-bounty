@@ -7,6 +7,14 @@ export const createJobSchema = z.object({
   budgetMax: z.number().nonnegative(),
   categoryId: z.string().min(1),
   skills: z.array(z.string().min(1)).default([])
+}).superRefine((value, ctx) => {
+  if (value.budgetMax < value.budgetMin) {
+    ctx.addIssue({
+      path: ["budgetMax"],
+      code: "custom",
+      message: "budgetMax must be greater than or equal to budgetMin"
+    });
+  }
 });
 
 export const updateJobSchema = createJobSchema.partial();
