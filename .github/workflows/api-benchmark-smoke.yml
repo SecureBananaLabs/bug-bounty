@@ -1,0 +1,44 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/api-benchmark-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npm test
+
+      - name: Verify benchmark route coverage
+        run: npm run benchmark:coverage
+
+      - name: Run smoke benchmark gate
+        run: npm run benchmark:smoke
+
+      - name: Upload smoke benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-benchmark-smoke-results
+          path: benchmarks/results/smoke-latest.*
