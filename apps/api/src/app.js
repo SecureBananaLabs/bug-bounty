@@ -39,6 +39,11 @@ export function createApp() {
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
 
+  // Fallback for unknown API routes
+  app.use((req, res) => {
+    res.status(404).json({ success: false, error: "Not Found" });
+  });
+
   app.use(errorHandler);
   return app;
 }
