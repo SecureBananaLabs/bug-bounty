@@ -1,4 +1,21 @@
+import { ZodError } from "zod";
+
 export function errorHandler(err, req, res, next) {
+  if (err instanceof ZodError) {
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed",
+      errors: err.errors
+    });
+  }
+
+  if (err.message === "Admin role cannot be self-assigned") {
+    return res.status(400).json({
+      success: false,
+      message: err.message
+    });
+  }
+
   console.error("Unhandled API error:", err);
   if (res.headersSent) {
     return next(err);
