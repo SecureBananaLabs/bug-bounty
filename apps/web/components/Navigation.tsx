@@ -3,10 +3,14 @@ import Link from "next/link";
 const links = [
   ["/", "Home"],
   ["/jobs", "Jobs"],
+  ["/jobs/post", "Post Job"],
   ["/freelancers/search", "Find Freelancers"],
   ["/dashboard/client", "Client Dashboard"],
   ["/dashboard/freelancer", "Freelancer Dashboard"],
   ["/messaging", "Messaging"],
+  ["/notifications", "Notifications"],
+  ["/billing", "Billing"],
+  ["/settings", "Settings"],
   ["/admin", "Admin"]
 ];
 
