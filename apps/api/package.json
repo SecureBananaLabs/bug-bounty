@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "test:integration": "node scripts/payment-postgres-integration.mjs"
   },
   "dependencies": {
     "@prisma/client": "^5.17.0",
