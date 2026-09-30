@@ -1,0 +1,19 @@
+{
+  "defaults": {
+    "p99LatencyMs": 1000,
+    "errorRatePct": 0
+  },
+  "smoke": {
+    "p99LatencyMs": 1500,
+    "errorRatePct": 0
+  },
+  "full": {
+    "p99LatencyMs": 1000,
+    "errorRatePct": 0
+  },
+  "endpoints": {
+    "uploads.create": {
+      "p99LatencyMs": 1500
+    }
+  }
+}
