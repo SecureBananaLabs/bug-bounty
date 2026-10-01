@@ -10,3 +10,4 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8)
 });
+// force rebuild Wed Jun 17 14:59:44 CAT 2026
