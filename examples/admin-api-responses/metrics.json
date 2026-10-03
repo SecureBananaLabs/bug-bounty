@@ -1,0 +1,22 @@
+{
+  "endpoint": "GET /api/admin/metrics",
+  "description": "Dashboard metrics for admin panel",
+  "response": {
+    "totalUsers": 1247,
+    "activeUsers": 892,
+    "totalJobs": 345,
+    "openJobs": 128,
+    "totalProposals": 892,
+    "pendingDisputes": 7,
+    "trustDistribution": {
+      "high": 420,
+      "medium": 612,
+      "low": 215
+    },
+    "recentActivity": {
+      "newUsers24h": 23,
+      "newJobs24h": 8,
+      "newProposals24h": 45
+    }
+  }
+}

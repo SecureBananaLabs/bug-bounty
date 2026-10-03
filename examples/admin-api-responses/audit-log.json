@@ -1,0 +1,14 @@
+{
+  "endpoint": "GET /api/admin/audit-log",
+  "description": "Admin action audit log",
+  "response": {
+    "entries": [
+      { "id": "log_001", "action": "user.suspend", "target": "usr_xyz789", "admin": "admin_001", "timestamp": "2026-05-22T09:15:00Z", "details": "Spam violations" },
+      { "id": "log_002", "action": "job.approve", "target": "job_042", "admin": "admin_001", "timestamp": "2026-05-22T10:30:00Z", "details": "Meets guidelines" },
+      { "id": "log_003", "action": "dispute.rule", "target": "dsp_015", "admin": "admin_001", "timestamp": "2026-05-22T11:00:00Z", "details": "Ruled in favor of freelancer" }
+    ],
+    "total": 3,
+    "page": 1,
+    "perPage": 20
+  }
+}
