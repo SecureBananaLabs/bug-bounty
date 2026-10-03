@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
 
-test("GET /health returns ok payload", async () => {
+async function withServer(fn) {
   const app = createApp();
   const server = app.listen(0);
 
@@ -11,14 +11,33 @@ test("GET /health returns ok payload", async () => {
     server.once("error", reject);
   });
 
-  const { port } = server.address();
-  const response = await fetch(`http://127.0.0.1:${port}/health`);
-  const payload = await response.json();
+  try {
+    const { port } = server.address();
+    await fn(`http://127.0.0.1:${port}`);
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
+}
 
-  assert.equal(response.status, 200);
-  assert.deepEqual(payload, { ok: true, service: "api" });
+test("GET /health returns ok payload", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/health`);
+    const payload = await response.json();
 
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
+    assert.equal(response.status, 200);
+    assert.deepEqual(payload, { ok: true, service: "api" });
+  });
+});
+
+test("unknown API routes return JSON 404 payloads", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/not-a-real-route`);
+    const payload = await response.json();
+
+    assert.equal(response.status, 404);
+    assert.match(response.headers.get("content-type"), /^application\/json\b/);
+    assert.deepEqual(payload, { success: false, message: "Not found" });
   });
 });
