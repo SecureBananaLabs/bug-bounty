@@ -10,4 +10,7 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+bootstrap().catch(() => {
+  console.error("API startup failed. Check JWT_SECRET, DATABASE_URL, and database connectivity.");
+  process.exitCode = 1;
+});
