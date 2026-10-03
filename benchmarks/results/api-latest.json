@@ -1,0 +1,562 @@
+{
+  "metadata": {
+    "generatedAt": "2026-05-19T11:30:23.177Z",
+    "baseUrl": "http://127.0.0.1:60906",
+    "selfHosted": true,
+    "concurrency": 2,
+    "requestsPerEndpoint": 6,
+    "endpointCount": 20
+  },
+  "summary": {
+    "totalEndpoints": 20,
+    "totalRequests": 120,
+    "totalFailures": 0,
+    "errorRate": 0,
+    "slowestP95Endpoint": "auth.register",
+    "slowestP95Ms": 9.93,
+    "highestErrorRateEndpoint": "auth.register",
+    "highestErrorRate": 0
+  },
+  "endpoints": [
+    {
+      "name": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 284.3332385555875,
+      "sustainedRps": 284.3332385555875,
+      "peakRps": 284.3332385555875,
+      "latencyMs": {
+        "p50": 6.55,
+        "p95": 9.93,
+        "p99": 9.93,
+        "max": 9.925599999999974
+      },
+      "ttfbMs": {
+        "p50": 6.44,
+        "p95": 9.7,
+        "p99": 9.7,
+        "max": 9.696100000000001
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 671.7495717596449,
+      "sustainedRps": 671.7495717596449,
+      "peakRps": 671.7495717596449,
+      "latencyMs": {
+        "p50": 2.86,
+        "p95": 3.51,
+        "p99": 3.51,
+        "max": 3.510599999999954
+      },
+      "ttfbMs": {
+        "p50": 2.74,
+        "p95": 3.42,
+        "p99": 3.42,
+        "max": 3.4191999999999894
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "auth.oauthCallback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 937.514648666385,
+      "sustainedRps": 937.514648666385,
+      "peakRps": 937.514648666385,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 2.57,
+        "p99": 2.57,
+        "max": 2.565999999999974
+      },
+      "ttfbMs": {
+        "p50": 1.92,
+        "p95": 2.41,
+        "p99": 2.41,
+        "max": 2.4144999999999754
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 944.4505658832924,
+      "sustainedRps": 944.4505658832924,
+      "peakRps": 944.4505658832924,
+      "latencyMs": {
+        "p50": 1.7,
+        "p95": 2.92,
+        "p99": 2.92,
+        "max": 2.9155000000000086
+      },
+      "ttfbMs": {
+        "p50": 1.64,
+        "p95": 2.82,
+        "p99": 2.82,
+        "max": 2.8238000000000056
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1499.2503748126114,
+      "sustainedRps": 1499.2503748126114,
+      "peakRps": 1499.2503748126114,
+      "latencyMs": {
+        "p50": 1.21,
+        "p95": 1.48,
+        "p99": 1.48,
+        "max": 1.4799999999999613
+      },
+      "ttfbMs": {
+        "p50": 1.16,
+        "p95": 1.43,
+        "p99": 1.43,
+        "max": 1.4302999999999884
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1069.1185117870318,
+      "sustainedRps": 1069.1185117870318,
+      "peakRps": 1069.1185117870318,
+      "latencyMs": {
+        "p50": 1.63,
+        "p95": 2.11,
+        "p99": 2.11,
+        "max": 2.109199999999987
+      },
+      "ttfbMs": {
+        "p50": 1.57,
+        "p95": 2.06,
+        "p99": 2.06,
+        "max": 2.055499999999995
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1678.9321991213444,
+      "sustainedRps": 1678.9321991213444,
+      "peakRps": 1678.9321991213444,
+      "latencyMs": {
+        "p50": 1.1,
+        "p95": 1.29,
+        "p99": 1.29,
+        "max": 1.294900000000041
+      },
+      "ttfbMs": {
+        "p50": 1.05,
+        "p95": 1.25,
+        "p99": 1.25,
+        "max": 1.2461999999999875
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 998.9511013435875,
+      "sustainedRps": 998.9511013435875,
+      "peakRps": 998.9511013435875,
+      "latencyMs": {
+        "p50": 1.76,
+        "p95": 2.27,
+        "p99": 2.27,
+        "max": 2.268699999999967
+      },
+      "ttfbMs": {
+        "p50": 1.7,
+        "p95": 2.22,
+        "p99": 2.22,
+        "max": 2.2169000000000096
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1359.8966478547602,
+      "sustainedRps": 1359.8966478547602,
+      "peakRps": 1359.8966478547602,
+      "latencyMs": {
+        "p50": 1.22,
+        "p95": 1.65,
+        "p99": 1.65,
+        "max": 1.6546999999999912
+      },
+      "ttfbMs": {
+        "p50": 1.16,
+        "p95": 1.56,
+        "p99": 1.56,
+        "max": 1.5631999999999948
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 842.1525418970905,
+      "sustainedRps": 842.1525418970905,
+      "peakRps": 842.1525418970905,
+      "latencyMs": {
+        "p50": 2.22,
+        "p95": 2.54,
+        "p99": 2.54,
+        "max": 2.542599999999993
+      },
+      "ttfbMs": {
+        "p50": 2.14,
+        "p95": 2.45,
+        "p99": 2.45,
+        "max": 2.448699999999974
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 808.668930939673,
+      "sustainedRps": 808.668930939673,
+      "peakRps": 808.668930939673,
+      "latencyMs": {
+        "p50": 2.28,
+        "p95": 2.83,
+        "p99": 2.83,
+        "max": 2.826599999999985
+      },
+      "ttfbMs": {
+        "p50": 2.19,
+        "p95": 2.77,
+        "p99": 2.77,
+        "max": 2.7719999999999914
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1623.0692239023901,
+      "sustainedRps": 1623.0692239023901,
+      "peakRps": 1623.0692239023901,
+      "latencyMs": {
+        "p50": 1.1,
+        "p95": 1.41,
+        "p99": 1.41,
+        "max": 1.4096000000000117
+      },
+      "ttfbMs": {
+        "p50": 1.05,
+        "p95": 1.36,
+        "p99": 1.36,
+        "max": 1.359800000000007
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1351.2296189532442,
+      "sustainedRps": 1351.2296189532442,
+      "peakRps": 1351.2296189532442,
+      "latencyMs": {
+        "p50": 1.39,
+        "p95": 1.68,
+        "p99": 1.68,
+        "max": 1.6820999999999913
+      },
+      "ttfbMs": {
+        "p50": 1.33,
+        "p95": 1.64,
+        "p99": 1.64,
+        "max": 1.6358000000000175
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1691.9519485646613,
+      "sustainedRps": 1691.9519485646613,
+      "peakRps": 1691.9519485646613,
+      "latencyMs": {
+        "p50": 1.09,
+        "p95": 1.27,
+        "p99": 1.27,
+        "max": 1.272100000000023
+      },
+      "ttfbMs": {
+        "p50": 1.05,
+        "p95": 1.23,
+        "p99": 1.23,
+        "max": 1.227200000000039
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1159.263481268233,
+      "sustainedRps": 1159.263481268233,
+      "peakRps": 1159.263481268233,
+      "latencyMs": {
+        "p50": 1.45,
+        "p95": 1.95,
+        "p99": 1.95,
+        "max": 1.949200000000019
+      },
+      "ttfbMs": {
+        "p50": 1.4,
+        "p95": 1.89,
+        "p99": 1.89,
+        "max": 1.8880000000000337
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1542.9320852727246,
+      "sustainedRps": 1542.9320852727246,
+      "peakRps": 1542.9320852727246,
+      "latencyMs": {
+        "p50": 1.22,
+        "p95": 1.4,
+        "p99": 1.4,
+        "max": 1.4003000000000156
+      },
+      "ttfbMs": {
+        "p50": 1.16,
+        "p95": 1.35,
+        "p99": 1.35,
+        "max": 1.353400000000022
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1291.1278001334101,
+      "sustainedRps": 1291.1278001334101,
+      "peakRps": 1291.1278001334101,
+      "latencyMs": {
+        "p50": 1.47,
+        "p95": 1.63,
+        "p99": 1.63,
+        "max": 1.6263999999999896
+      },
+      "ttfbMs": {
+        "p50": 1.43,
+        "p95": 1.58,
+        "p99": 1.58,
+        "max": 1.5827999999999633
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 428.75824466374644,
+      "sustainedRps": 428.75824466374644,
+      "peakRps": 428.75824466374644,
+      "latencyMs": {
+        "p50": 2.97,
+        "p95": 6.92,
+        "p99": 6.92,
+        "max": 6.916300000000035
+      },
+      "ttfbMs": {
+        "p50": 2.93,
+        "p95": 6.87,
+        "p99": 6.87,
+        "max": 6.8673
+      },
+      "statuses": {
+        "201": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "search.global",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1338.8673182487591,
+      "sustainedRps": 1338.8673182487591,
+      "peakRps": 1338.8673182487591,
+      "latencyMs": {
+        "p50": 1.17,
+        "p95": 2.06,
+        "p99": 2.06,
+        "max": 2.0615000000000236
+      },
+      "ttfbMs": {
+        "p50": 1.11,
+        "p95": 1.98,
+        "p99": 1.98,
+        "max": 1.9816999999999894
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    },
+    {
+      "name": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "requests": 6,
+      "failures": 0,
+      "errorRate": 0,
+      "rps": 1050.5121246607719,
+      "sustainedRps": 1050.5121246607719,
+      "peakRps": 1050.5121246607719,
+      "latencyMs": {
+        "p50": 1.49,
+        "p95": 2.71,
+        "p99": 2.71,
+        "max": 2.706899999999962
+      },
+      "ttfbMs": {
+        "p50": 1.44,
+        "p95": 2.65,
+        "p99": 2.65,
+        "max": 2.6451000000000136
+      },
+      "statuses": {
+        "200": 6
+      },
+      "sampleErrors": []
+    }
+  ]
+}
