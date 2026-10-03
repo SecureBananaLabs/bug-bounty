@@ -1,9 +1,29 @@
-import { Router } from "express";
-import multer from "multer";
-import { uploadFile } from "../controllers/uploadController.js";
+<content>
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const authMiddleware = require('../middleware/authMiddleware');
+const uploadController = require('../controllers/uploadController');
 
-const upload = multer({ storage: multer.memoryStorage() });
+const router = express.Router();
 
-export const uploadRoutes = Router();
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
 
-uploadRoutes.post("/", upload.single("file"), uploadFile);
+const upload = multer({ storage: storage });
+
+// Apply authentication middleware to all routes in this router
+router.use(authMiddleware);
+
+// POST /api/uploads - Handle file uploads
+router.post('/', upload.single('file'), uploadController.handleUpload);
+
+module.exports = router;
+</content>
