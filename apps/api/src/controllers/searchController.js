@@ -1,6 +1,9 @@
-import { ok } from "../utils/response.js";
-import { globalSearch } from "../services/searchService.js";
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
-export async function search(req, res) {
-  return ok(res, await globalSearch(req.query.q ?? ""));
-}
+// ... existing controller code ...
+
+export const search = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+// ... other search controller methods ...

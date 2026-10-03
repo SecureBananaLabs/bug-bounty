@@ -1,10 +1,13 @@
-import { ok } from "../utils/response.js";
-import { createReview, listReviews } from "../services/reviewService.js";
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
-export async function getReviews(req, res) {
-  return ok(res, await listReviews());
-}
+// ... existing controller code ...
 
-export async function postReview(req, res) {
-  return ok(res, await createReview(req.body), 201);
-}
+export const createReview = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+export const getReviews = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+// ... other review controller methods ...

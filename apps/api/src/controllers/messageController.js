@@ -1,10 +1,13 @@
-import { ok } from "../utils/response.js";
-import { listMessages, sendMessage } from "../services/messageService.js";
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
-export async function getMessages(req, res) {
-  return ok(res, await listMessages());
-}
+// ... existing controller code ...
 
-export async function postMessage(req, res) {
-  return ok(res, await sendMessage(req.body), 201);
-}
+export const sendMessage = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+export const getMessages = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+// ... other message controller methods ...

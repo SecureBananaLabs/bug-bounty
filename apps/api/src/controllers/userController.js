@@ -1,10 +1,13 @@
-import { ok } from "../utils/response.js";
-import { createUser, listUsers } from "../services/userService.js";
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
-export async function getUsers(req, res) {
-  return ok(res, await listUsers());
-}
+// ... existing controller code ...
 
-export async function postUser(req, res) {
-  return ok(res, await createUser(req.body), 201);
-}
+export const createUser = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+export const getUser = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+// ... other user controller methods ...

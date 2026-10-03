@@ -1,10 +1,13 @@
-import { ok } from "../utils/response.js";
-import { createNotification, listNotifications } from "../services/notificationService.js";
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
-export async function getNotifications(req, res) {
-  return ok(res, await listNotifications());
-}
+// ... existing controller code ...
 
-export async function postNotification(req, res) {
-  return ok(res, await createNotification(req.body), 201);
-}
+export const createNotification = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+export const getNotifications = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+// ... other notification controller methods ...
