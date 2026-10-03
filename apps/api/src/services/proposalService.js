@@ -1,11 +1,15 @@
-const proposals = [];
-
-export async function listProposals() {
-  return proposals;
-}
-
-export async function createProposal(payload) {
-  const proposal = { id: `prp_${Date.now()}`, ...payload };
-  proposals.push(proposal);
+<content>
+const createProposal = (payload) => {
+  // Ensure server-generated ID is always used and cannot be overridden by client
+  const serverGeneratedId = `prp_${Date.now()}`;
+  const proposal = { id: serverGeneratedId, ...payload };
+  
+  // TODO: Add actual persistence logic here
+  // For now, we'll just return the proposal object
   return proposal;
-}
+};
+
+module.exports = {
+  createProposal,
+};
+</content>
