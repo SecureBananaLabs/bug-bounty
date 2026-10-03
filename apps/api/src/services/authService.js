@@ -1,23 +1,33 @@
-import { signAccessToken } from "../utils/jwt.js";
+<content>
+const scrypt = require('scryptsy');
+const jwt = require('jsonwebtoken');
+const { users } = require('../models');
+const { JWT_SECRET } = require('../config');
 
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
-  };
+async function loginUser(email, password) {
+  // Find user by email
+  const user = await users.findByEmail(email);
+  if (!user) {
+    throw new Error('Unauthorized');
+  }
+
+  // Verify password against stored hash
+  const isValidPassword = scrypt.verify(password, user.passwordHash);
+  if (!isValidPassword) {
+    throw new Error('Unauthorized');
+  }
+
+  // Sign JWT with user's actual subject and role
+  const token = jwt.sign(
+    { sub: user.id, role: user.role },
+    JWT_SECRET,
+    { expiresIn: '15m' }
+  );
+
+  return token;
 }
 
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
-
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
-}
+module.exports = {
+  loginUser,
+};
+</content>
