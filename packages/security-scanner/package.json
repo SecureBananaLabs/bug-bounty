@@ -1,0 +1,30 @@
+{
+  "name": "@securebanana/security-scanner",
+  "version": "1.0.0",
+  "description": "Automated security scanner for low-hanging fruit vulnerabilities",
+  "main": "src/index.js",
+  "bin": {
+    "security-scan": "./src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "security",
+    "scanner",
+    "vulnerability",
+    "bug-bounty",
+    "auth",
+    "jwt",
+    "payment"
+  ],
+  "author": "SecureBananaLabs",
+  "license": "MIT",
+  "dependencies": {
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "jest": "^29.6.2"
+  }
+}
