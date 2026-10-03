@@ -1,12 +1,10 @@
-import { z } from "zod";
+<content>
+import Joi from 'joi';
 
-export const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  role: z.enum(["client", "freelancer", "admin"]).default("client")
+export const registerUserSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+  role: Joi.string().valid('USER', 'ADMIN').required(),
+  fullName: Joi.string().min(2).max(50).required().trim(),
 });
-
-export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8)
-});
+</content>
