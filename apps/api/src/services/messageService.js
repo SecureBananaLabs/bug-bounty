@@ -1,7 +1,7 @@
 const messages = [];
 
-export async function listMessages() {
-  return messages;
+export async function listMessages({ skip = 0, limit = 20 } = {}) {
+  return { items: messages.slice(skip, skip + limit), total: messages.length };
 }
 
 export async function sendMessage(payload) {
