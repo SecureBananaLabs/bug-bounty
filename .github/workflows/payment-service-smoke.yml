@@ -1,0 +1,32 @@
+name: Payment service smoke
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/payment-service-smoke.yml"
+      - "apps/api/**"
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+
+jobs:
+  payment-service-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run API tests
+        run: npm test -w apps/api
