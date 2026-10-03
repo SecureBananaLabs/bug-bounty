@@ -1,4 +1,5 @@
 import cors from "cors";
+const { ok } = require('./utils/response');
 import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
@@ -13,9 +14,7 @@ import { messageRoutes } from "./routes/messageRoutes.js";
 import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
-import { adminRoutes } from "./routes/adminRoutes.js";
-
-export function createApp() {
+app.get('/health', (req, res) => ok(res, { service: 'api' }));
   const app = express();
 
   app.use(helmet());
