@@ -1,11 +1,11 @@
-const reviews = [];
-
-export async function listReviews() {
-  return reviews;
-}
-
-export async function createReview(payload) {
+<content>
+const createReview = (payload) => {
   const review = { id: `rev_${Date.now()}`, ...payload };
-  reviews.push(review);
+  // ... rest of the implementation
   return review;
-}
+};
+
+module.exports = {
+  createReview,
+};
+</content>
