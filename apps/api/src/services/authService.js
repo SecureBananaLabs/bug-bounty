@@ -1,12 +1,15 @@
 import { signAccessToken } from "../utils/jwt.js";
+import { createPrefixedId } from "../utils/id.js";
 
 export async function registerUser(payload) {
+  const id = createPrefixedId("usr");
+
   // TODO: persist new user via Prisma
   return {
-    id: `usr_${Date.now()}`,
+    id,
     email: payload.email,
     role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    token: signAccessToken({ sub: id, role: payload.role })
   };
 }
 
