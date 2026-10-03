@@ -1,0 +1,14 @@
+API benchmark suite demo
+
+npm run benchmark:smoke
+- 5 endpoints
+- 10 requests
+- 0 errors
+- p99 under threshold
+
+npm run benchmark
+- 21 endpoints
+- 105 requests
+- 0 errors
+- max p99 latency 19.07 ms
+- max p99 TTFB 18.47 ms
