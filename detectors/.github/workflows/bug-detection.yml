@@ -1,0 +1,43 @@
+<content>
+name: Bug Detection
+
+on:
+  schedule:
+    # Run every day at 2 AM UTC
+    - cron: '0 2 * * *'
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  detect-bugs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Run bug detection
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPO: ${{ github.repository }}
+        SCAN_PATHS: .
+      run: node detectors/bug-detector.js
+      
+    - name: Create issues report
+      if: always()
+      run: |
+        echo "## Bug Detection Report" >> $GITHUB_STEP_SUMMARY
+        echo "Run completed at $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "Check the issues tab for any new bugs detected." >> $GITHUB_STEP_SUMMARY
+</content>

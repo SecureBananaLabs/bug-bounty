@@ -1,0 +1,27 @@
+<content>
+{
+  "name": "bug-detector",
+  "version": "1.0.0",
+  "description": "Automated bug detection system for codebases",
+  "main": "bug-detector.js",
+  "scripts": {
+    "start": "node bug-detector.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@octokit/rest": "^19.0.13",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "security",
+    "bug-detection",
+    "code-analysis",
+    "automation"
+  ],
+  "author": "SecureBananaLabs",
+  "license": "MIT"
+}
+</content>
