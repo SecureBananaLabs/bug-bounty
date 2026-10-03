@@ -1,0 +1,26 @@
+{
+  "label": "Load Health",
+  "url": "GET /health",
+  "duration": 20,
+  "connections": 50,
+  "latency": {
+    "p50": 6,
+    "p95": 7,
+    "p99": 10,
+    "avg": 6.5,
+    "max": 70
+  },
+  "requestsPerSecond": {
+    "avg": 14219.6,
+    "total": 284374,
+    "sent": 284474
+  },
+  "throughput": {
+    "avg": 14475264,
+    "total": 289492732
+  },
+  "errors": 0,
+  "timeouts": 0,
+  "non2xx": 0,
+  "errorRatePct": 0
+}
