@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Health Check",
+    "path": "/health",
+    "method": "GET",
+    "p50": 1,
+    "p99": 3,
+    "rps": 3206,
+    "errorRate": 0,
+    "ttfb": 1,
+    "passed": true
+  },
+  {
+    "name": "Get Users",
+    "path": "/api/users",
+    "method": "GET",
+    "p50": 1,
+    "p99": 3,
+    "rps": 3174,
+    "errorRate": 0,
+    "ttfb": 1,
+    "passed": true
+  },
+  {
+    "name": "Get Jobs",
+    "path": "/api/jobs",
+    "method": "GET",
+    "p50": 1,
+    "p99": 4,
+    "rps": 3090,
+    "errorRate": 0,
+    "ttfb": 1,
+    "passed": true
+  },
+  {
+    "name": "Search",
+    "path": "/api/search?q=test",
+    "method": "GET",
+    "p50": 0,
+    "p99": 2,
+    "rps": 5169.5,
+    "errorRate": 0,
+    "ttfb": 1,
+    "passed": true
+  },
+  {
+    "name": "Admin Metrics",
+    "path": "/api/admin/metrics",
+    "method": "GET",
+    "p50": 0,
+    "p99": 1,
+    "rps": 8785,
+    "errorRate": 0,
+    "ttfb": 1,
+    "passed": true
+  },
+  {
+    "name": "Post Job",
+    "path": "/api/jobs",
+    "method": "POST",
+    "p50": 2,
+    "p99": 8,
+    "rps": 1976.5,
+    "errorRate": 0,
+    "ttfb": 1,
+    "passed": true
+  }
+]
