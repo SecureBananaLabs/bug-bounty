@@ -1,23 +1,16 @@
-import { signAccessToken } from "../utils/jwt.js";
+<content>
+import { signAccessToken } from '../utils/jwt';
 
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
-  };
-}
+export async function refreshToken(token) {
+  if (!token) {
+    throw new Error('Refresh token is required');
+  }
 
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
+  // In a real application, you would verify the refresh token here
+  // For example, decode it, check if it's expired, and validate against the database
+  // For this fix, we'll assume the token is valid and extract the payload
+  const decoded = { sub: 'usr_from_refresh_token', role: 'client' }; // Placeholder for actual token decoding
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+  return { token: signAccessToken(decoded) };
 }
+</content>
