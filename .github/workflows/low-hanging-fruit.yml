@@ -1,0 +1,57 @@
+name: Low Hanging Fruit Scan
+
+on:
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    # Allow manual triggering
+    inputs:
+      reason:
+        description: 'Reason for running the scan'
+        required: false
+        default: 'Manual trigger'
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run low hanging fruit scan
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NODE_ENV: production
+      run: |
+        node -e "
+        const LowHangingFruitService = require('./apps/api/src/services/lowHangingFruitService');
+        const service = new LowHangingFruitService();
+        service.run().then(issues => {
+          console.log(\`Created \${issues.length} issues\`);
+        }).catch(err => {
+          console.error('Error running scan:', err);
+          process.exit(1);
+        });
+        "
+        
+    - name: Create summary
+      run: |
+        echo "# Low Hanging Fruit Scan Summary" >> $GITHUB_STEP_SUMMARY
+        echo "This workflow scans the codebase for common security issues, bugs, and TODO comments." >> $GITHUB_STEP_SUMMARY
+        echo "Issues found are automatically created as GitHub issues with appropriate labels." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## Next Steps" >> $GITHUB_STEP_SUMMARY
+        echo "Review the created issues and prioritize them based on severity." >> $GITHUB_STEP_SUMMARY
+        echo "Each issue is limited to the creator who initiated the scan." >> $GITHUB_STEP_SUMMARY
+        echo "If you'd like to work on an issue, create a new one with the same content and reference issue #743." >> $GITHUB_STEP_SUMMARY
