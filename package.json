@@ -1,13 +1,22 @@
+<content>
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "name": "bug-bounty",
+  "version": "1.0.0",
+  "description": "Bug bounty platform",
+  "main": "index.js",
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "start": "node apps/api/src/index.js",
+    "test": "node --test apps/api/src/config/env.test.js",
+    "test:watch": "node --test apps/api/src/config/env.test.js --watch",
+    "validate:jwt": "node scripts/validate-jwt-secret.js",
+    "prestart": "npm run validate:jwt",
+    "prepublish": "npm run validate:jwt"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "node:test": "^18.18.0"
   }
 }
+</content>
