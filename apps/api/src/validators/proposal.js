@@ -1,0 +1,8 @@
+import { z } from "zod";
+
+export const createProposalSchema = z.object({
+  coverLetter: z.string().min(1),
+  bidAmount: z.number().positive(),
+  estDuration: z.string().min(1),
+  jobId: z.string().min(1)
+});
