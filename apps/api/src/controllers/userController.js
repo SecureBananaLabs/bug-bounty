@@ -1,4 +1,4 @@
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 import { createUser, listUsers } from "../services/userService.js";
 
 export async function getUsers(req, res) {
@@ -6,5 +6,9 @@ export async function getUsers(req, res) {
 }
 
 export async function postUser(req, res) {
-  return ok(res, await createUser(req.body), 201);
+  const result = await createUser(req.body);
+  if (result.__validationError) {
+    return fail(res, result.__validationError, 400);
+  }
+  return ok(res, result, 201);
 }
