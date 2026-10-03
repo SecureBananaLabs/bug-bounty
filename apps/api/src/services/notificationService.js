@@ -1,5 +1,5 @@
 const notifications = [];
-
+  return [...notifications];
 export async function listNotifications() {
   return notifications;
 }
