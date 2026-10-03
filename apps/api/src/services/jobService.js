@@ -9,3 +9,6 @@ export async function createJob(payload) {
   jobs.push(job);
   return job;
 }
+function getJobs() {
+  return [...jobs];
+}
