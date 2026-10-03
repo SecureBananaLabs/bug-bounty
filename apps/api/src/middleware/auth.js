@@ -1,16 +1,19 @@
-import { fail } from "../utils/response.js";
-import { verifyAccessToken } from "../utils/jwt.js";
+<content>
+import { config } from '../config';
 
-export function authMiddleware(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith("Bearer ")) {
-    return fail(res, "Unauthorized", 401);
+export const authenticate = (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access denied. No token provided.' });
   }
 
   try {
-    req.user = verifyAccessToken(authHeader.slice(7));
-    return next();
-  } catch {
-    return fail(res, "Invalid token", 401);
+    const decoded = jwt.verify(token, config.jwt.secret);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token.' });
   }
-}
+};
+</content>

@@ -1,7 +1,13 @@
-export const env = {
-  nodeEnv: process.env.NODE_ENV ?? "development",
-  port: Number(process.env.PORT ?? 4000),
-  jwtSecret: process.env.JWT_SECRET ?? "development-secret",
-  stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
-  databaseUrl: process.env.DATABASE_URL ?? ""
-};
+<content>
+import { z } from 'zod';
+
+const envSchema = z.object({
+  JWT_SECRET: z.string().min(32, {
+    message: "JWT_SECRET is required and must be at least 32 characters long",
+  }),
+});
+
+const env = envSchema.parse(process.env);
+
+export { env };
+</content>
