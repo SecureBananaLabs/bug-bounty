@@ -3,7 +3,7 @@ name: Update PR leaderboard
 on:
   pull_request_target:
     types:
-      - opened
+      - closed
 
 permissions:
   contents: write
@@ -16,6 +16,7 @@ concurrency:
 jobs:
   update-leaderboard:
     runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
 
     steps:
       - name: Checkout default branch (trusted code only)
@@ -25,7 +26,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Increment PR count in leaderboard.json
+      - name: Increment merged PR count in leaderboard.json
         env:
           GH_TOKEN: ${{ github.token }}
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
@@ -41,7 +42,8 @@ jobs:
           git checkout "${DEFAULT_BRANCH}"
           git pull --ff-only origin "${DEFAULT_BRANCH}"
 
-          if git --no-pager log --format=%s --grep="^chore: update leaderboard for PR #${PR_NUMBER}$" -n 1 | grep -q .; then
+          if git --no-pager log --format=%s --grep="^chore: update leaderboard for PR #${PR_NUMBER}$" -n 1 | grep -q . ||
+             git --no-pager log --format=%s --grep="^chore: update leaderboard for merged PR #${PR_NUMBER}$" -n 1 | grep -q .; then
             echo "PR #${PR_NUMBER} already counted."
             exit 0
           fi
@@ -61,6 +63,6 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: update leaderboard for PR #${PR_NUMBER}"
+          git commit -m "chore: update leaderboard for merged PR #${PR_NUMBER}"
           git pull --rebase origin "${DEFAULT_BRANCH}"
           git push origin "HEAD:${DEFAULT_BRANCH}"
