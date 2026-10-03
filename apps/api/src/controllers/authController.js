@@ -22,6 +22,11 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ success: false, message: "Refresh token is required" });
+  }
+  const token = authHeader.slice(7);
+  const result = await refreshToken(token);
   return ok(res, result);
 }
