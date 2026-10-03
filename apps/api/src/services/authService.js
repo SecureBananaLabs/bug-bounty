@@ -1,23 +1,43 @@
-import { signAccessToken } from "../utils/jwt.js";
+<content>
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { User } = require('../models');
 
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
-  };
-}
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
+/**
+ * Logs in a user by verifying credentials and signing a JWT
+ * @param {string} email - User's email
+ * @param {string} password - User's password
+ * @returns {Promise<string>} - Signed JWT token
+ * @throws {Error} - If authentication fails
+ */
+const loginUser = async (email, password) => {
+  // Find user by email
+  const user = await User.findOne({ where: { email } });
+  
+  if (!user) {
+    throw new Error('Authentication failed: Invalid credentials');
+  }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
-}
+  // Verify password against stored hash
+  const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
+  
+  if (!isPasswordValid) {
+    throw new Error('Authentication failed: Invalid credentials');
+  }
+
+  // Sign JWT with user's subject and role
+  const token = jwt.sign(
+    { sub: user.id, role: user.role },
+    JWT_SECRET,
+    { expiresIn: '15m' }
+  );
+
+  return token;
+};
+
+module.exports = {
+  loginUser,
+};
+</content>
