@@ -1,0 +1,79 @@
+name: Bug Detection and Issue Creation
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  detect-bugs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Run bug detection
+        run: node -e "
+          const BugDetectionService = require('./apps/api/src/services/bugDetectionService');
+          const controller = new BugDetectionService();
+          
+          controller.scanForIssues().then(issues => {
+            console.log('Found ' + issues.length + ' potential issues');
+            
+            if (issues.length > 0) {
+              // Create GitHub issue
+              const issueTitle = 'Low-hanging fruit bug fix opportunity';
+              const issueBody = \`## Bug Detection Report
+
+Automated scan found \${issues.length} potential issues that could be good candidates for bug fixes.
+
+### Issues Found:
+\${issues.map(issue => \`- \${issue.severity.toUpperCase()}: \${issue.description} (\${issue.file}:\${issue.line})\`).join('\\n')}
+
+This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #11398 for more information.\`;
+
+              // Create issue using GitHub CLI
+              const { execSync } = require('child_process');
+              try {
+                execSync('gh issue create --title \"' + issueTitle + '\" --body \"' + issueBody + '\"', { stdio: 'inherit' });
+                console.log('GitHub issue created successfully');
+              } catch (error) {
+                console.error('Failed to create GitHub issue:', error.message);
+              }
+            } else {
+              console.log('No issues found to create GitHub issue for');
+            }
+          }).catch(error => {
+            console.error('Error during bug detection:', error);
+          });
+        "
+        
+      - name: Generate bug detection report
+        run: |
+          node -e "
+            const BugDetectionService = require('./apps/api/src/services/bugDetectionService');
+            const controller = new BugDetectionService();
+            
+            controller.scanForIssues().then(issues => {
+              const report = controller.generateIssueReport();
+              require('fs').writeFileSync('bug-detection-report.md', report);
+              console.log('Bug detection report saved to bug-detection-report.md');
+            }).catch(error => {
+              console.error('Error generating report:', error);
+            });
+          "
+          
+      - name: Upload bug detection report
+        uses: actions/upload-artifact@v3
+        with:
+          name: bug-detection-report
+          path: bug-detection-report.md
