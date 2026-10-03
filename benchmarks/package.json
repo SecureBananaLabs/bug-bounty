@@ -1,0 +1,17 @@
+{
+  "name": "@bug-bounty/benchmarks",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "benchmark": "node run-benchmarks.js",
+    "benchmark:smoke": "node run-benchmarks.js --smoke",
+    "benchmark:report": "node generate-report.js"
+  },
+  "devDependencies": {
+    "autocannon": "^7.15.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
