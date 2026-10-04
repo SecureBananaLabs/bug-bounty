@@ -1,7 +1,14 @@
-import { Router } from "express";
-import { getNotifications, postNotification } from "../controllers/notificationController.js";
+<content>
+const express = require('express');
+const router = express.Router();
+const notificationController = require('../controllers/notificationController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-export const notificationRoutes = Router();
+// Apply authentication middleware to all routes in this router
+router.use(authMiddleware);
 
-notificationRoutes.get("/", getNotifications);
-notificationRoutes.post("/", postNotification);
+router.get('/', notificationController.getNotifications);
+router.post('/', notificationController.createNotification);
+
+module.exports = router;
+</content>
