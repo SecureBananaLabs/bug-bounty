@@ -1,19 +1,28 @@
+<content>
 {
-  "name": "@freelanceflow/api",
+  "name": "api",
+  "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "node src/server.js",
-    "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "node --test src/tests/**/*.test.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "express-rate-limit": "^7.4.0",
-    "helmet": "^7.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^2.1.1",
-    "zod": "^3.23.8"
+    "@fastify/cors": "^9.0.0",
+    "@fastify/jwt": "^7.0.0",
+    "@fastify/multipart": "^8.0.0",
+    "@fastify/static": "^6.0.0",
+    "@fastify/type-provider-typebox": "^4.0.0",
+    "dotenv": "^16.0.0",
+    "fastify": "^4.0.0",
+    "flotiq-sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@fastify/esbuild": "^4.0.0",
+    "@types/node": "^20.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^5.0.0"
   }
 }
+</content>
