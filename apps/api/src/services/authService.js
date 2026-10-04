@@ -1,23 +1,44 @@
-import { signAccessToken } from "../utils/jwt.js";
+<content>
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
-export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
+/**
+ * Generates a unique identifier for a user.
+ * @returns {string} A unique identifier.
+ */
+function generateUserId() {
+  return crypto.randomUUID();
+}
+
+/**
+ * Registers a new user.
+ * @param {object} userData - The user data.
+ * @returns {Promise<object>} The registered user data with an access token.
+ */
+async function registerUser(userData) {
+  // Generate a single user ID to be used for both the user object and the token
+  const userId = generateUserId();
+
+  // Create the user object with the generated ID
+  const user = {
+    id: userId,
+    ...userData,
+  };
+
+  // Generate JWT with the same ID as the subject
+  const accessToken = jwt.sign(
+    { sub: userId, iat: Math.floor(Date.now() / 1000) },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+  );
+
   return {
-    id: `usr_${Date.now()}`,
-    email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    user,
+    accessToken,
   };
 }
 
-export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
-}
-
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
-}
+module.exports = {
+  registerUser,
+};
+</content>
