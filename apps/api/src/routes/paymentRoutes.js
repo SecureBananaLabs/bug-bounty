@@ -1,6 +1,15 @@
-import { Router } from "express";
-import { createPayment } from "../controllers/paymentController.js";
+<content>
+const express = require('express');
+const router = express.Router();
+const paymentController = require('../controllers/paymentController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-export const paymentRoutes = Router();
+// Apply authentication middleware to all payment routes
+router.use(authMiddleware);
 
-paymentRoutes.post("/", createPayment);
+router.post('/', paymentController.createPayment);
+router.get('/', paymentController.getPayments);
+router.get('/:id', paymentController.getPaymentById);
+
+module.exports = router;
+</content>
