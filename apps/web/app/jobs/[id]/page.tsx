@@ -1,9 +1,23 @@
-export default function JobDetailPage({ params }: { params: { id: string } }) {
+import { notFound } from 'next/navigation';
+import { mockJobs } from '@/lib/mock';
+
+interface JobDetailPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function JobDetailPage({ params }: JobDetailPageProps) {
+  const job = mockJobs.find(j => j.id === params.id);
+
+  if (!job) {
+    notFound();
+  }
+
   return (
-    <section className="card">
-      <h2>Job Detail</h2>
-      <p>Viewing details for <strong>{params.id}</strong>.</p>
-      <p>Responsibilities, milestones, and proposals would be shown here.</p>
-    </section>
+    <div>
+      <h1>{job.title}</h1>
+      <p>Budget: ${job.budget}</p>
+    </div>
   );
 }
