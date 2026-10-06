@@ -1,10 +1,13 @@
-import { ok } from "../utils/response.js";
-import { createProposal, listProposals } from "../services/proposalService.js";
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
-export async function getProposals(req, res) {
-  return ok(res, await listProposals());
-}
+// ... existing controller code ...
 
-export async function postProposal(req, res) {
-  return ok(res, await createProposal(req.body), 201);
-}
+export const createProposal = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+export const getProposals = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+// ... other proposal controller methods ...

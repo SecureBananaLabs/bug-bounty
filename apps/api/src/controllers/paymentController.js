@@ -1,6 +1,13 @@
-import { ok } from "../utils/response.js";
-import { createPaymentIntent } from "../services/paymentService.js";
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
-export async function createPayment(req, res) {
-  return ok(res, await createPaymentIntent(req.body), 201);
-}
+// ... existing controller code ...
+
+export const createPayment = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+export const getPayment = asyncHandler(async (req, res) => {
+  // ... existing implementation ...
+});
+
+// ... other payment controller methods ...
