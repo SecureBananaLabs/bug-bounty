@@ -1,13 +1,24 @@
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "name": "bug-bounty",
+  "version": "1.0.0",
+  "description": "Bug Bounty API - Job validation with budget range checks",
+  "main": "src/index.js",
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/__tests__/**/*.test.js"]
   }
 }
