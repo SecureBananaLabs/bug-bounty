@@ -1,7 +1,5 @@
-node_modules
-.next
-dist
+node_modules/
+dist/
 .env
-.env.*
-coverage
 *.log
+.DS_Store
