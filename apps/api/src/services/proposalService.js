@@ -1,7 +1,9 @@
 const proposals = [];
 
 export async function listProposals() {
-  return proposals;
+  // Callers trim and sort the list in place, so they must not be handed the
+  // module array itself and end up rewriting stored state.
+  return [...proposals];
 }
 
 export async function createProposal(payload) {
