@@ -1,0 +1,11 @@
+diff --git a/apps/api/src/routes/paymentRoutes.js b/apps/api/src/routes/paymentRoutes.js
+--- a/apps/api/src/routes/paymentRoutes.js
++++ b/apps/api/src/routes/paymentRoutes.js
+@@ -1,5 +1,5 @@
+ import express from 'express';
+ import createPayment from '../controllers/paymentController';
+-import paymentRoutes from './paymentRoutes';
++import paymentRoutes from './paymentRoutes';
++import authMiddleware from '../middleware/authMiddleware';
+ 
+ paymentRoutes.post("/", authMiddleware, createPayment);
