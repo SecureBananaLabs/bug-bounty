@@ -1,7 +1,8 @@
 const reviews = [];
 
 export async function listReviews() {
-  return reviews;
+  // Return an independent snapshot so callers cannot mutate the stored collection.
+  return [...reviews];
 }
 
 export async function createReview(payload) {
