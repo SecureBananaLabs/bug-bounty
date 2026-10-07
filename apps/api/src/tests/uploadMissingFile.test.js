@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
+import { signAccessToken } from "../utils/jwt.js";
 
 function listen(app) {
   return new Promise((resolve, reject) => {
@@ -16,12 +17,14 @@ function close(server) {
 test("upload without a file is rejected instead of reported as created", async () => {
   const app = createApp();
   const server = await listen(app);
+  const token = signAccessToken({ sub: "usr_7", role: "freelancer" });
   try {
     const form = new FormData();
     form.append("note", "no attachment here");
 
     const res = await fetch(`http://127.0.0.1:${server.address().port}/api/uploads`, {
       method: "POST",
+      headers: { authorization: `Bearer ${token}` },
       body: form
     });
 
@@ -35,12 +38,14 @@ test("upload without a file is rejected instead of reported as created", async (
 test("upload with a file is reported as created", async () => {
   const app = createApp();
   const server = await listen(app);
+  const token = signAccessToken({ sub: "usr_7", role: "freelancer" });
   try {
     const form = new FormData();
     form.append("file", new Blob(["hello"]), "hello.txt");
 
     const res = await fetch(`http://127.0.0.1:${server.address().port}/api/uploads`, {
       method: "POST",
+      headers: { authorization: `Bearer ${token}` },
       body: form
     });
 
