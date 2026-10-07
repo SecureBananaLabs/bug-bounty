@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "lib": ["ES2022"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
+<<<ENDFILE>>
+
+Now I understand the project structure. I need to:
+
+1. Update `package.json` to use `express ^4.22.3` (and potentially update body-parser if needed, but express 4.22.3 should pull in the fixed transitive dependencies)
+2. Regenerate `package-lock.json` by running `npm install`
+3. Add a deterministic dependency-boundary regression test
+4. Run tests to verify everything works
+5. Verify `npm audit --omit=dev --json` shows no vulnerabilities for these packages
+
+Let me first update the package.json and then create the regression test. The regression test should verify that the locked versions are the patched ones.
+
+Let me create the updated files:Now I understand the project structure. Let me update the dependencies and create the regression test.
+
+First, let me update the `package.json` to use `express ^4.22.3`:
