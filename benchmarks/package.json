@@ -1,0 +1,12 @@
+{
+  "name": "freelanceflow-benchmarks",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "benchmark": "node run-benchmark.js",
+    "report": "node generate-report.js"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0"
+  }
+}
