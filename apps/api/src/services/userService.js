@@ -1,7 +1,9 @@
 const users = [];
 
 export async function listUsers() {
-  return users;
+  // Callers sort or splice what they receive, so the shared array has to be
+  // handed over as an independent snapshot.
+  return [...users];
 }
 
 export async function createUser(payload) {
