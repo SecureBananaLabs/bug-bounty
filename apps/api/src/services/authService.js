@@ -18,6 +18,8 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(claims) {
+  // The refreshed token belongs to whoever presented the current one, so the
+  // verified subject and role have to be carried over instead of hardcoded.
+  return { token: signAccessToken({ sub: claims.sub, role: claims.role }) };
 }
