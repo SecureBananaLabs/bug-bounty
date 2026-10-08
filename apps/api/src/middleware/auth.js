@@ -14,3 +14,13 @@ export function authMiddleware(req, res, next) {
     return fail(res, "Invalid token", 401);
   }
 }
+
+// authMiddleware only proves that a token is valid; the admin surface also has
+// to check which account that token belongs to.
+export function requireAdminRole(req, res, next) {
+  if (req.user?.role !== "admin") {
+    return fail(res, "Forbidden", 403);
+  }
+
+  return next();
+}
