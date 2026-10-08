@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { metrics } from "../controllers/adminController.js";
-import { authMiddleware } from "../middleware/auth.js";
+const express = require('express');
+const router = express.Router();
+const { authMiddleware, adminAuthorizationMiddleware } = require('../middleware');
+const { getAdminMetrics } = require('../controllers/adminController');
 
-export const adminRoutes = Router();
+router.get('/api/admin/metrics', authMiddleware, adminAuthorizationMiddleware, getAdminMetrics);
 
-adminRoutes.use(authMiddleware);
-adminRoutes.get("/metrics", metrics);
+module.exports = router;
