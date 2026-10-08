@@ -1,0 +1,12 @@
+API Benchmark Suite #30
+
+npm test passed
+benchmark smoke covered 21 endpoints
+benchmark full ran 168 requests with 0 percent errors
+
+Outputs:
+benchmarks/results/latest.json
+benchmarks/results/latest.md
+
+Synthetic local loopback run.
+No production secrets or customer data.
