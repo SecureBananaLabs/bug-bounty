@@ -18,6 +18,10 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(payload) {
+  const { sub, role } = payload || {};
+  if (!sub || !role) {
+    throw new Error("Invalid token payload");
+  }
+  return { token: signAccessToken({ sub, role }) };
 }
