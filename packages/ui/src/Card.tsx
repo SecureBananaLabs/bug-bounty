@@ -1,9 +1,19 @@
 import React from "react";
 
-export function Card({ title, children }: { title: string; children: React.ReactNode }) {
+export type CardProps = React.HTMLAttributes<HTMLElement> & {
+  title?: string;
+};
+
+const baseStyle: React.CSSProperties = {
+  border: "1px solid #ddd",
+  borderRadius: 8,
+  padding: "1rem"
+};
+
+export function Card({ title, children, className, style, ...rest }: CardProps) {
   return (
-    <section style={{ border: "1px solid #ddd", borderRadius: 8, padding: "1rem" }}>
-      <h3>{title}</h3>
+    <section {...rest} className={className} style={{ ...baseStyle, ...style }}>
+      {title ? <h3>{title}</h3> : null}
       <div>{children}</div>
     </section>
   );
