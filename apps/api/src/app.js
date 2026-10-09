@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { env } from "./config/env.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
@@ -19,7 +20,7 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors({ origin: corsOptions() }));
   app.use(express.json());
   app.use(apiLimiter);
 
@@ -41,4 +42,18 @@ export function createApp() {
 
   app.use(errorHandler);
   return app;
+}
+
+function corsOptions() {
+  const allowlist = env.corsOrigins;
+  if (allowlist.length === 0) {
+    return true;
+  }
+  return (origin, callback) => {
+    if (!origin || allowlist.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+    callback(null, false);
+  };
 }
