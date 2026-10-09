@@ -1,13 +1,1 @@
-{
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
-  }
-}
+[{"name":"package.json","children":[{"name":"name","value":"bug-bounty"},{"version":"1.0.0","description":""},{"main":"src/index.js","dependencies":{"express":"^4.18.2","jsonwebtoken":"^9.0.0"}}]}]
