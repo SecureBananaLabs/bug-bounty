@@ -1,0 +1,21 @@
+{
+  "default_p99_ms": 250,
+  "health": 60,
+  "search": 120,
+  "list-users": 120,
+  "list-jobs": 150,
+  "list-proposals": 150,
+  "list-reviews": 150,
+  "list-messages": 150,
+  "list-notifications": 150,
+  "admin-metrics": 120,
+  "register": 250,
+  "login": 250,
+  "create-job": 200,
+  "create-proposal": 200,
+  "create-payment": 200,
+  "create-review": 200,
+  "create-message": 200,
+  "create-notification": 200,
+  "upload-file": 250
+}
