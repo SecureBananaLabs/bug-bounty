@@ -1,6 +1,9 @@
-import { ok } from "../utils/response.js";
-import { createPaymentIntent } from "../services/paymentService.js";
+import { createPaymentIntentSchema } from '../validators/payment';
+import { createPaymentIntent } from '../services/paymentService';
+import { ok } from '../utils/response';
 
-export async function createPayment(req, res) {
-  return ok(res, await createPaymentIntent(req.body), 201);
-}
+export const createPayment = async (req, res) => {
+  const validatedData = createPaymentIntentSchema.parse(req.body);
+  const intent = await createPaymentIntent(validatedData);
+  return ok(res, intent, 201);
+};
