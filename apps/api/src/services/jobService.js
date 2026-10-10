@@ -1,7 +1,9 @@
+import { copyRecords } from "../utils/recordCopy.js";
+
 const jobs = [];
 
 export async function listJobs() {
-  return jobs;
+  return copyRecords(jobs);
 }
 
 export async function createJob(payload) {

@@ -1,7 +1,9 @@
+import { copyRecords } from "../utils/recordCopy.js";
+
 const users = [];
 
 export async function listUsers() {
-  return users;
+  return copyRecords(users);
 }
 
 export async function createUser(payload) {
