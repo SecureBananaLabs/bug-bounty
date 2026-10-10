@@ -1,6 +1,10 @@
 import React from "react";
 
-export function Button({ children }: { children: React.ReactNode }) {
+type ButtonProps = React.ComponentPropsWithoutRef<"button"> & {
+  children: React.ReactNode;
+};
+
+export function Button({ children, style, ...rest }: ButtonProps) {
   return (
     <button
       style={{
@@ -9,8 +13,10 @@ export function Button({ children }: { children: React.ReactNode }) {
         border: "none",
         borderRadius: 8,
         padding: "0.6rem 0.9rem",
-        cursor: "pointer"
+        cursor: "pointer",
+        ...style
       }}
+      {...rest}
     >
       {children}
     </button>
