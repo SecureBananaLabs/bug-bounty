@@ -6,6 +6,10 @@ export const registerSchema = z.object({
   role: z.enum(["client", "freelancer", "admin"]).default("client")
 });
 
+export const refreshSchema = z.object({
+  token: z.string().trim().min(1)
+});
+
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8)
