@@ -1,7 +1,9 @@
 const notifications = [];
 
 export async function listNotifications() {
-  return notifications;
+  // Callers sort or splice what they receive, so the shared array has to be
+  // handed over as an independent snapshot.
+  return [...notifications];
 }
 
 export async function createNotification(payload) {
