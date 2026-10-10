@@ -86,3 +86,15 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+The API reads every value it needs in `apps/api/src/config/env.js`:
+
+| Variable | Required | Description | Default |
+| --- | --- | --- | --- |
+| `NODE_ENV` | optional | Runtime mode, for example `development` or `production`. | `development` |
+| `PORT` | optional | Port the Express API listens on. | `4000` |
+| `JWT_SECRET` | required | Secret used to sign and verify access tokens. | `development-secret` |
+| `STRIPE_SECRET_KEY` | required for payments | Secret Stripe key used by the payments service. | empty string |
+| `DATABASE_URL` | required for persistence | Connection string used by the Prisma client in `packages/db`. | empty string |
+
+A commented template is available in `apps/api/.env.example`; copy it to
+`apps/api/.env` before running `npm run dev -w apps/api`.
