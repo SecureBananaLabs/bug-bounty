@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
+import { requestId } from "./middleware/requestId.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
@@ -19,6 +20,7 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
+  app.use(requestId);
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
