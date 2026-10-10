@@ -18,6 +18,10 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(user) {
+  // The refresh route is protected by authMiddleware, so `user` is the
+  // verified payload of the caller's bearer token. Sign the refreshed
+  // access token for that authenticated subject and role instead of a
+  // hard-coded identity.
+  return { token: signAccessToken({ sub: user.sub, role: user.role }) };
 }
