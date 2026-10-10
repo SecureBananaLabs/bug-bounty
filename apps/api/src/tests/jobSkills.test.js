@@ -33,3 +33,20 @@ test("preserves omitted skills defaults and partial update behavior", () => {
   assert.deepEqual(createJobSchema.parse(validJob).skills, []);
   assert.deepEqual(updateJobSchema.parse({ title: "Updated" }), { title: "Updated" });
 });
+
+test("500+ deterministic synthetic skill-list boundary cases", () => {
+  let cases = 0;
+  for (let count = 0; count <= 60; count++) {
+    for (let length = 0; length <= 70; length += 5) {
+      const skills = Array(count).fill("k".repeat(length));
+      const expected = count <= 50 && (count === 0 || (length >= 1 && length <= 64));
+      for (const schema of [createJobSchema, updateJobSchema]) {
+        const payload = schema === createJobSchema ? { ...validJob, skills } : { skills };
+        const actual = schema.safeParse(payload).success;
+        assert.equal(actual, expected, `count=${count}; length=${length}; mode=${schema === createJobSchema ? "create" : "update"}`);
+        cases++;
+      }
+    }
+  }
+  assert.equal(cases, 1830);
+});
