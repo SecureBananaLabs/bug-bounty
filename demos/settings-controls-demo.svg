@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Settings account controls demo</title>
+  <desc id="desc">Demo preview of the settings page with account, notification, security, billing, payout, status, and action controls.</desc>
+  <style>
+    .bg { fill: #0b1020; }
+    .panel { fill: #151c35; stroke: #2a3765; stroke-width: 1.5; }
+    .button { fill: #202a4f; stroke: #3a4a82; stroke-width: 1.2; }
+    .primary { fill: #f2f5ff; }
+    .text { fill: #f2f5ff; font-family: Inter, Arial, sans-serif; }
+    .muted { fill: #b8c5ec; font-family: Inter, Arial, sans-serif; }
+    .label { fill: #9fb0da; font-family: Inter, Arial, sans-serif; }
+    .dark { fill: #0b1020; font-family: Inter, Arial, sans-serif; }
+    .dot { fill: #47d18c; }
+    .chip-green { fill: none; stroke: #47d18c; stroke-width: 1.5; }
+    .chip-blue { fill: none; stroke: #8bc5ff; stroke-width: 1.5; }
+    .chip-amber { fill: none; stroke: #ffcf6e; stroke-width: 1.5; }
+    .chip-lime { fill: none; stroke: #b6f06f; stroke-width: 1.5; }
+    .green { fill: #47d18c; font-family: Inter, Arial, sans-serif; }
+    .blue { fill: #8bc5ff; font-family: Inter, Arial, sans-serif; }
+    .amber { fill: #ffcf6e; font-family: Inter, Arial, sans-serif; }
+    .lime { fill: #b6f06f; font-family: Inter, Arial, sans-serif; }
+  </style>
+  <rect class="bg" width="1200" height="760"/>
+  <text x="120" y="92" class="text" font-size="32" font-weight="800">FreelanceFlow</text>
+  <g>
+    <rect x="120" y="122" width="68" height="36" rx="9" class="button"/>
+    <text x="137" y="145" class="text" font-size="15">Home</text>
+    <rect x="200" y="122" width="64" height="36" rx="9" class="button"/>
+    <text x="219" y="145" class="text" font-size="15">Jobs</text>
+    <rect x="276" y="122" width="148" height="36" rx="9" class="button"/>
+    <text x="293" y="145" class="text" font-size="15">Find Freelancers</text>
+    <rect x="436" y="122" width="154" height="36" rx="9" class="button"/>
+    <text x="453" y="145" class="text" font-size="15">Client Dashboard</text>
+    <rect x="602" y="122" width="190" height="36" rx="9" class="button"/>
+    <text x="619" y="145" class="text" font-size="15">Freelancer Dashboard</text>
+  </g>
+
+  <text x="120" y="214" class="label" font-size="14" font-weight="800">WORKSPACE SETTINGS</text>
+  <text x="120" y="252" class="text" font-size="34" font-weight="800">Account controls</text>
+  <rect x="900" y="214" width="126" height="44" rx="9" class="primary"/>
+  <text x="926" y="241" class="dark" font-size="14" font-weight="800">Save changes</text>
+
+  <rect x="120" y="284" width="906" height="70" rx="8" class="panel"/>
+  <text x="140" y="313" class="label" font-size="12">Account owner</text>
+  <text x="140" y="337" class="text" font-size="17" font-weight="800">Maya Chen</text>
+  <text x="440" y="313" class="label" font-size="12">Plan</text>
+  <text x="440" y="337" class="text" font-size="17" font-weight="800">Creator Pro</text>
+  <text x="742" y="313" class="label" font-size="12">Payout status</text>
+  <text x="742" y="337" class="text" font-size="17" font-weight="800">Verified</text>
+
+  <g transform="translate(120 374)">
+    <rect width="288" height="218" rx="8" class="panel"/>
+    <text x="18" y="36" class="text" font-size="18" font-weight="800">Account</text>
+    <rect x="188" y="18" width="82" height="28" rx="14" class="chip-green"/>
+    <text x="202" y="37" class="green" font-size="13" font-weight="800">Profile 86%</text>
+    <text x="18" y="74" class="text" font-size="17">FreelanceFlow Studio</text>
+    <circle cx="22" cy="102" r="4" class="dot"/>
+    <text x="36" y="107" class="muted" font-size="15">Public freelancer profile</text>
+    <circle cx="22" cy="126" r="4" class="dot"/>
+    <text x="36" y="131" class="muted" font-size="15">Primary email verified</text>
+    <circle cx="22" cy="150" r="4" class="dot"/>
+    <text x="36" y="155" class="muted" font-size="15">Portfolio visible to clients</text>
+    <rect x="18" y="168" width="252" height="40" rx="7" class="button"/>
+    <text x="94" y="193" class="text" font-size="15" font-weight="800">Review profile</text>
+  </g>
+
+  <g transform="translate(424 374)">
+    <rect width="288" height="218" rx="8" class="panel"/>
+    <text x="18" y="36" class="text" font-size="18" font-weight="800">Notifications</text>
+    <rect x="198" y="18" width="72" height="28" rx="14" class="chip-blue"/>
+    <text x="211" y="37" class="blue" font-size="13" font-weight="800">3 enabled</text>
+    <text x="18" y="74" class="text" font-size="17">Project and payout alerts</text>
+    <circle cx="22" cy="102" r="4" class="dot"/>
+    <text x="36" y="107" class="muted" font-size="15">Email project updates</text>
+    <circle cx="22" cy="126" r="4" class="dot"/>
+    <text x="36" y="131" class="muted" font-size="15">Weekly opportunity digest</text>
+    <circle cx="22" cy="150" r="4" class="dot"/>
+    <text x="36" y="155" class="muted" font-size="15">SMS disabled</text>
+    <rect x="18" y="168" width="252" height="40" rx="7" class="button"/>
+    <text x="106" y="193" class="text" font-size="15" font-weight="800">Edit alerts</text>
+  </g>
+
+  <g transform="translate(728 374)">
+    <rect width="288" height="218" rx="8" class="panel"/>
+    <text x="18" y="36" class="text" font-size="18" font-weight="800">Security</text>
+    <rect x="176" y="18" width="94" height="28" rx="14" class="chip-amber"/>
+    <text x="188" y="37" class="amber" font-size="13" font-weight="800">Action needed</text>
+    <text x="18" y="74" class="text" font-size="17">Password updated 42 days ago</text>
+    <circle cx="22" cy="102" r="4" class="dot"/>
+    <text x="36" y="107" class="muted" font-size="15">Two-factor authentication off</text>
+    <circle cx="22" cy="126" r="4" class="dot"/>
+    <text x="36" y="131" class="muted" font-size="15">Trusted devices: 2</text>
+    <circle cx="22" cy="150" r="4" class="dot"/>
+    <text x="36" y="155" class="muted" font-size="15">Session review recommended</text>
+    <rect x="18" y="168" width="252" height="40" rx="7" class="button"/>
+    <text x="93" y="193" class="text" font-size="15" font-weight="800">Secure account</text>
+  </g>
+
+  <g transform="translate(120 612)">
+    <rect width="288" height="116" rx="8" class="panel"/>
+    <text x="18" y="36" class="text" font-size="18" font-weight="800">Billing</text>
+    <rect x="218" y="18" width="52" height="28" rx="14" class="chip-lime"/>
+    <text x="229" y="37" class="lime" font-size="13" font-weight="800">Ready</text>
+    <text x="18" y="74" class="text" font-size="17">ACH payouts to Mercury</text>
+    <rect x="18" y="88" width="252" height="18" rx="7" class="button"/>
+    <text x="100" y="102" class="text" font-size="11" font-weight="800">Manage payout</text>
+  </g>
+</svg>
