@@ -1,0 +1,590 @@
+{
+  "generatedAt": "2026-09-21T04:12:14.983Z",
+  "mode": "smoke",
+  "baseUrl": "http://127.0.0.1:4100",
+  "units": {
+    "latency": "ms",
+    "ttfb": "ms",
+    "rps": "req/s",
+    "errorRate": "%"
+  },
+  "definitions": {
+    "latencyMs": "time from request start to last response byte",
+    "ttfbMs": "time from request start to first response data chunk",
+    "rpsSustained": "completed requests divided by wall-clock seconds"
+  },
+  "config": {
+    "requestsPerEndpoint": 1,
+    "concurrency": 1
+  },
+  "endpoints": [
+    {
+      "id": "health",
+      "method": "GET",
+      "path": "/health",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 50,
+      "latencyMs": {
+        "p50": 20.18,
+        "p95": 20.18,
+        "p99": 20.18,
+        "mean": 20.18
+      },
+      "ttfbMs": {
+        "p50": 20.04,
+        "p95": 20.04,
+        "p99": 20.04
+      },
+      "threshold": {
+        "id": "health",
+        "p99LatencyMs": 500,
+        "p99TtfbMs": 400,
+        "pass": true
+      }
+    },
+    {
+      "id": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 29.41,
+      "latencyMs": {
+        "p50": 33.52,
+        "p95": 33.52,
+        "p99": 33.52,
+        "mean": 33.52
+      },
+      "ttfbMs": {
+        "p50": 33.44,
+        "p95": 33.44,
+        "p99": 33.44
+      },
+      "threshold": {
+        "id": "auth-register",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 50,
+      "latencyMs": {
+        "p50": 19.44,
+        "p95": 19.44,
+        "p99": 19.44,
+        "mean": 19.44
+      },
+      "ttfbMs": {
+        "p50": 19.35,
+        "p95": 19.35,
+        "p99": 19.35
+      },
+      "threshold": {
+        "id": "auth-login",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 14.08,
+      "latencyMs": {
+        "p50": 70.45,
+        "p95": 70.45,
+        "p99": 70.45,
+        "mean": 70.45
+      },
+      "ttfbMs": {
+        "p50": 70.32,
+        "p95": 70.32,
+        "p99": 70.32
+      },
+      "threshold": {
+        "id": "auth-oauth-callback",
+        "p99LatencyMs": 800,
+        "p99TtfbMs": 600,
+        "pass": true
+      }
+    },
+    {
+      "id": "auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 142.86,
+      "latencyMs": {
+        "p50": 7.28,
+        "p95": 7.28,
+        "p99": 7.28,
+        "mean": 7.28
+      },
+      "ttfbMs": {
+        "p50": 7.17,
+        "p95": 7.17,
+        "p99": 7.17
+      },
+      "threshold": {
+        "id": "auth-refresh",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "users-list",
+      "method": "GET",
+      "path": "/api/users/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 142.86,
+      "latencyMs": {
+        "p50": 6.08,
+        "p95": 6.08,
+        "p99": 6.08,
+        "mean": 6.08
+      },
+      "ttfbMs": {
+        "p50": 5.88,
+        "p95": 5.88,
+        "p99": 5.88
+      },
+      "threshold": {
+        "id": "users-list",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "users-create",
+      "method": "POST",
+      "path": "/api/users/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 28.57,
+      "latencyMs": {
+        "p50": 34.85,
+        "p95": 34.85,
+        "p99": 34.85,
+        "mean": 34.85
+      },
+      "ttfbMs": {
+        "p50": 34.62,
+        "p95": 34.62,
+        "p99": 34.62
+      },
+      "threshold": {
+        "id": "users-create",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 76.92,
+      "latencyMs": {
+        "p50": 12.28,
+        "p95": 12.28,
+        "p99": 12.28,
+        "mean": 12.28
+      },
+      "ttfbMs": {
+        "p50": 12.23,
+        "p95": 12.23,
+        "p99": 12.23
+      },
+      "threshold": {
+        "id": "jobs-list",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "jobs-create",
+      "method": "POST",
+      "path": "/api/jobs/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 20.83,
+      "latencyMs": {
+        "p50": 47.55,
+        "p95": 47.55,
+        "p99": 47.55,
+        "mean": 47.55
+      },
+      "ttfbMs": {
+        "p50": 47.46,
+        "p95": 47.46,
+        "p99": 47.46
+      },
+      "threshold": {
+        "id": "jobs-create",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 71.43,
+      "latencyMs": {
+        "p50": 13.86,
+        "p95": 13.86,
+        "p99": 13.86,
+        "mean": 13.86
+      },
+      "ttfbMs": {
+        "p50": 13.78,
+        "p95": 13.78,
+        "p99": 13.78
+      },
+      "threshold": {
+        "id": "proposals-list",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "proposals-create",
+      "method": "POST",
+      "path": "/api/proposals/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 52.63,
+      "latencyMs": {
+        "p50": 18.77,
+        "p95": 18.77,
+        "p99": 18.77,
+        "mean": 18.77
+      },
+      "ttfbMs": {
+        "p50": 18.71,
+        "p95": 18.71,
+        "p99": 18.71
+      },
+      "threshold": {
+        "id": "proposals-create",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "payments-create",
+      "method": "POST",
+      "path": "/api/payments/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 58.82,
+      "latencyMs": {
+        "p50": 15.9,
+        "p95": 15.9,
+        "p99": 15.9,
+        "mean": 15.9
+      },
+      "ttfbMs": {
+        "p50": 15.84,
+        "p95": 15.84,
+        "p99": 15.84
+      },
+      "threshold": {
+        "id": "payments-create",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 52.63,
+      "latencyMs": {
+        "p50": 18.77,
+        "p95": 18.77,
+        "p99": 18.77,
+        "mean": 18.77
+      },
+      "ttfbMs": {
+        "p50": 18.71,
+        "p95": 18.71,
+        "p99": 18.71
+      },
+      "threshold": {
+        "id": "reviews-list",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "reviews-create",
+      "method": "POST",
+      "path": "/api/reviews/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 41.67,
+      "latencyMs": {
+        "p50": 24.54,
+        "p95": 24.54,
+        "p99": 24.54,
+        "mean": 24.54
+      },
+      "ttfbMs": {
+        "p50": 24.46,
+        "p95": 24.46,
+        "p99": 24.46
+      },
+      "threshold": {
+        "id": "reviews-create",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "messages-list",
+      "method": "GET",
+      "path": "/api/messages/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 20,
+      "latencyMs": {
+        "p50": 50.42,
+        "p95": 50.42,
+        "p99": 50.42,
+        "mean": 50.42
+      },
+      "ttfbMs": {
+        "p50": 50.35,
+        "p95": 50.35,
+        "p99": 50.35
+      },
+      "threshold": {
+        "id": "messages-list",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "messages-create",
+      "method": "POST",
+      "path": "/api/messages/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 58.82,
+      "latencyMs": {
+        "p50": 16.99,
+        "p95": 16.99,
+        "p99": 16.99,
+        "mean": 16.99
+      },
+      "ttfbMs": {
+        "p50": 16.93,
+        "p95": 16.93,
+        "p99": 16.93
+      },
+      "threshold": {
+        "id": "messages-create",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 58.82,
+      "latencyMs": {
+        "p50": 17.26,
+        "p95": 17.26,
+        "p99": 17.26,
+        "mean": 17.26
+      },
+      "ttfbMs": {
+        "p50": 17.2,
+        "p95": 17.2,
+        "p99": 17.2
+      },
+      "threshold": {
+        "id": "notifications-list",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "notifications-create",
+      "method": "POST",
+      "path": "/api/notifications/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 15.63,
+      "latencyMs": {
+        "p50": 63.29,
+        "p95": 63.29,
+        "p99": 63.29,
+        "mean": 63.29
+      },
+      "ttfbMs": {
+        "p50": 63.23,
+        "p95": 63.23,
+        "p99": 63.23
+      },
+      "threshold": {
+        "id": "notifications-create",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "uploads-create",
+      "method": "POST",
+      "path": "/api/uploads/",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 8.26,
+      "latencyMs": {
+        "p50": 121.13,
+        "p95": 121.13,
+        "p99": 121.13,
+        "mean": 121.13
+      },
+      "ttfbMs": {
+        "p50": 121.04,
+        "p95": 121.04,
+        "p99": 121.04
+      },
+      "threshold": {
+        "id": "uploads-create",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "search",
+      "method": "GET",
+      "path": "/api/search/?q=landing+page",
+      "auth": "public",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 66.67,
+      "latencyMs": {
+        "p50": 14.24,
+        "p95": 14.24,
+        "p99": 14.24,
+        "mean": 14.24
+      },
+      "ttfbMs": {
+        "p50": 14.18,
+        "p95": 14.18,
+        "p99": 14.18
+      },
+      "threshold": {
+        "id": "search",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    },
+    {
+      "id": "admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "auth": "required",
+      "requests": 1,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rpsSustained": 66.67,
+      "latencyMs": {
+        "p50": 14.67,
+        "p95": 14.67,
+        "p99": 14.67,
+        "mean": 14.67
+      },
+      "ttfbMs": {
+        "p50": 14.6,
+        "p95": 14.6,
+        "p99": 14.6
+      },
+      "threshold": {
+        "id": "admin-metrics",
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1200,
+        "pass": true
+      }
+    }
+  ],
+  "thresholdBreaches": []
+}

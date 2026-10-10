@@ -1,0 +1,14 @@
+{
+  "$schema": "benchmark thresholds for SecureBananaLabs/bug-bounty#30",
+  "comment": "p99 ceilings in milliseconds, evaluated per endpoint by benchmarks/run.mjs. Values are local-loopback smoke baselines measured on a shared CI-class runner plus headroom; tighten after the first production-baseline run.",
+  "units": { "latency": "ms", "ttfb": "ms" },
+  "defaults": { "p99LatencyMs": 1500, "p99TtfbMs": 1200 },
+  "endpoints": {
+    "health": { "p99LatencyMs": 500, "p99TtfbMs": 400 },
+    "auth-register": { "p99LatencyMs": 1500, "p99TtfbMs": 1200 },
+    "auth-login": { "p99LatencyMs": 1500, "p99TtfbMs": 1200 },
+    "auth-oauth-callback": { "p99LatencyMs": 800, "p99TtfbMs": 600 },
+    "auth-refresh": { "p99LatencyMs": 1500, "p99TtfbMs": 1200 },
+    "admin-metrics": { "p99LatencyMs": 1500, "p99TtfbMs": 1200 }
+  }
+}
