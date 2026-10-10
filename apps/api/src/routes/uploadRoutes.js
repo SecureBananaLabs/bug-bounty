@@ -1,9 +1,7 @@
 import { Router } from "express";
-import multer from "multer";
 import { uploadFile } from "../controllers/uploadController.js";
-
-const upload = multer({ storage: multer.memoryStorage() });
+import { uploadMiddleware } from "../middleware/upload.js";
 
 export const uploadRoutes = Router();
 
-uploadRoutes.post("/", upload.single("file"), uploadFile);
+uploadRoutes.post("/", uploadMiddleware, uploadFile);
