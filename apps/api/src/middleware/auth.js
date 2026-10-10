@@ -14,3 +14,13 @@ export function authMiddleware(req, res, next) {
     return fail(res, "Invalid token", 401);
   }
 }
+
+// Mounted after authMiddleware: a valid token is not enough for the admin
+// surface, the caller also has to carry the admin role.
+export function adminMiddleware(req, res, next) {
+  if (req.user?.role !== "admin") {
+    return fail(res, "Forbidden", 403);
+  }
+
+  return next();
+}
