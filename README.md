@@ -7,7 +7,7 @@ FreelanceFlow is a full-stack freelance marketplace monorepo built with a modern
 
 ## Workspace Structure
 
-- `apps/web` — Next.js 14 App Router frontend
+- `apps/web` — Next.js App Router frontend
 - `apps/api` — Express.js backend with layered REST API
 - `packages/db` — Prisma schema and database package
 - `packages/ui` — Shared UI components
