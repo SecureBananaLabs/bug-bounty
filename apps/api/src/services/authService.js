@@ -6,6 +6,7 @@ export async function registerUser(payload) {
     id: `usr_${Date.now()}`,
     email: payload.email,
     role: payload.role,
+    fullName: payload.fullName,
     token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
   };
 }
