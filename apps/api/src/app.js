@@ -15,17 +15,21 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+  : ["http://localhost:3000"];
+
 export function createApp() {
   const app = express();
-
   app.use(helmet());
-  app.use(cors());
-  app.use(express.json());
+  app.use(cors({
+    origin: (origin, cb) => (!origin || allowedOrigins.includes(origin) ? cb(null, true) : cb(new Error("CORS blocked"))),
+    credentials: true
+  }));
   app.use(apiLimiter);
+  app.use(express.json());
 
-  app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true, service: "api" });
-  });
+  app.get("/health", (req, res) => res.status(200).json({ ok: true, service: "api" }));
 
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
@@ -38,7 +42,6 @@ export function createApp() {
   app.use("/api/uploads", uploadRoutes);
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
-
   app.use(errorHandler);
   return app;
 }
