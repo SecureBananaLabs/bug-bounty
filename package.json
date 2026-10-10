@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
+    "lint": "node -e \"const fs=require('fs');const cp=require('child_process');const files=cp.execSync('find apps/api/src -name \\\"*.js\\\" -type f').toString().trim().split('\\n');let ok=true;files.forEach(f=>{try{new Function(fs.readFileSync(f,'utf8'))}catch(e){console.error(f+': '+e.message);ok=false}});if(!ok)process.exit(1);console.log('All JS files pass syntax check')\"",
     "test": "npm run test -w apps/api"
   }
 }
