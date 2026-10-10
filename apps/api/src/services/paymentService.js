@@ -1,9 +1,15 @@
-export async function createPaymentIntent(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
+let paymentCounter = 0;
+
+function generatePaymentId() {
+  paymentCounter++;
+  return `pay_${Date.now()}_${paymentCounter}`;
+}
+
+export async function createPaymentIntent(payload = {}) {
   return {
-    paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
+    ...payload,
+    paymentId: generatePaymentId(),
     currency: payload.currency ?? "usd",
-    provider: "stripe"
+    provider: "stripe",
   };
 }
