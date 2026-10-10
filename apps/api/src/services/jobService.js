@@ -1,7 +1,9 @@
 const jobs = [];
 
 export async function listJobs() {
-  return jobs;
+  // Callers sort or trim the result, so hand them a snapshot rather than the
+  // array this service keeps appending to.
+  return [...jobs];
 }
 
 export async function createJob(payload) {
