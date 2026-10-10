@@ -1,7 +1,9 @@
 const notifications = [];
 
 export async function listNotifications() {
-  return notifications;
+  // Callers mark notifications read on the array they receive, so hand them a
+  // snapshot instead of the array the service itself keeps appending to.
+  return [...notifications];
 }
 
 export async function createNotification(payload) {
