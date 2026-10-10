@@ -1,0 +1,35 @@
+{
+  "issue": 80,
+  "pr": 12788,
+  "source_head": "03040011f84f3c4bc852932376125ce00c71ce1e",
+  "source_path": "assets/pixel-art/escrow-lighthouse.png",
+  "source_git_blob_sha": "25ed0f7dba959f550d1077b983515220ad165a71",
+  "source_sha256": "f35e3d577172f709994db5678491246d4bf19ba5eae21f9e6dcf0adbe213befa",
+  "source_bytes": 1177,
+  "source_bytes_unchanged": true,
+  "verified_at_utc": "2026-10-03T16:45:01.404472+00:00",
+  "demo_kind": "literal artifact presentation, not a screen recording or provider execution",
+  "ai_assisted": true,
+  "creator_approval_confirmed": false,
+  "award_confirmed": false,
+  "validation": {
+    "format": "PNG",
+    "width": 128,
+    "height": 128,
+    "minimum_64_by_64_passed": true,
+    "asset_path_confirmed": true,
+    "creative_note_in_pr": true
+  },
+  "video": {
+    "file": "demo.mp4",
+    "sha256": "cf97eb7d0ab4d6929750ecc9fa5f53bc93a7f51717c5f8530f77394597580de1",
+    "codec": "h264",
+    "width": 960,
+    "height": 540,
+    "duration_seconds": 20.0,
+    "bytes": 61278,
+    "audio": false,
+    "ffmpeg_exit": 0,
+    "ffprobe_exit": 0
+  }
+}
