@@ -18,6 +18,10 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
+export async function refreshToken(refreshTokenValue) {
+  if (!refreshTokenValue) {
+    throw Object.assign(new Error("Refresh token is required"), { statusCode: 400 });
+  }
+  // TODO: verify refresh token against stored records and extract user identity
   return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
 }
