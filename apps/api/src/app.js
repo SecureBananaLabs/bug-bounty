@@ -38,6 +38,12 @@ export function createApp() {
   app.use("/api/uploads", uploadRoutes);
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
+  app.use("/api", (req, res) => {
+    res.status(404).json({
+      success: false,
+      message: "Route not found"
+    });
+  });
 
   app.use(errorHandler);
   return app;
