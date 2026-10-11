@@ -1,11 +1,13 @@
+import { generateId } from "../utils/id.js";
+
 const messages = [];
 
 export async function listMessages() {
-  return messages;
+  return [...messages];
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
+  const message = { id: generateId("msg"), ...payload, sentAt: new Date().toISOString() };
   messages.push(message);
   return message;
 }
