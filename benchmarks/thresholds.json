@@ -1,0 +1,10 @@
+{
+  "smoke": {
+    "maxP99Ms": 1000,
+    "maxErrorRate": 0.05
+  },
+  "full": {
+    "maxP99Ms": 750,
+    "maxErrorRate": 0.02
+  }
+}
