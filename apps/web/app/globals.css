@@ -1,6 +1,32 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0b1020; color: #f2f5ff; }
 a { color: inherit; text-decoration: none; }
-main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
+main { max-width: 1180px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.admin-shell { display: grid; gap: 1rem; }
+.admin-header, .section-heading, .two-column { display: grid; gap: 1rem; }
+.admin-header { grid-template-columns: 1fr auto; align-items: end; }
+.admin-header p, .panel p, td span, .queue-item span, .audit-list span { color: #aab6dd; display: block; }
+.metric-grid { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.metric-card, .panel { background: #151c35; border: 1px solid #2a3765; border-radius: 8px; padding: 1rem; }
+.metric-card strong { display: block; font-size: 1.65rem; margin-top: .35rem; }
+.two-column { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.filter-row { display: flex; gap: .5rem; flex-wrap: wrap; }
+input, select, button { border: 1px solid #354579; border-radius: 6px; background: #0f1730; color: #f2f5ff; padding: .5rem .65rem; }
+button, .button { cursor: pointer; background: #244a8f; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border-bottom: 1px solid #2a3765; padding: .75rem; text-align: left; vertical-align: top; }
+.actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+.actions button { font-size: .8rem; padding: .35rem .5rem; }
+.badge { display: inline-flex; border-radius: 999px; padding: .25rem .55rem; background: #24375f; color: #d8e2ff; text-transform: capitalize; }
+.badge.active, .badge.approved { background: #164734; }
+.badge.suspended, .badge.flagged, .badge.open { background: #5a3f18; }
+.badge.banned, .badge.rejected { background: #5a1d2b; }
+.queue-item { display: grid; gap: .65rem; padding: .85rem 0; border-bottom: 1px solid #2a3765; }
+.toggle { display: flex; align-items: center; gap: .5rem; margin: .75rem 0; }
+.audit-list { padding-left: 1rem; }
+@media (max-width: 720px) {
+  .admin-header { grid-template-columns: 1fr; }
+  table { display: block; overflow-x: auto; }
+}
