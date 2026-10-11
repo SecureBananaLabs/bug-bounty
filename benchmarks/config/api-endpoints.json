@@ -1,0 +1,184 @@
+{
+  "endpoints": [
+    {
+      "name": "Health readiness",
+      "method": "GET",
+      "path": "/health"
+    },
+    {
+      "name": "Register user",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "bodyType": "json",
+      "body": {
+        "email": "benchmark.client@example.com",
+        "password": "benchmark-password",
+        "role": "client"
+      }
+    },
+    {
+      "name": "Login user",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "bodyType": "json",
+      "body": {
+        "email": "benchmark.client@example.com",
+        "password": "benchmark-password"
+      }
+    },
+    {
+      "name": "OAuth callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback"
+    },
+    {
+      "name": "Refresh token",
+      "method": "POST",
+      "path": "/api/auth/refresh"
+    },
+    {
+      "name": "List users",
+      "method": "GET",
+      "path": "/api/users"
+    },
+    {
+      "name": "Create user",
+      "method": "POST",
+      "path": "/api/users",
+      "bodyType": "json",
+      "body": {
+        "name": "Benchmark Client",
+        "email": "benchmark.user@example.com",
+        "role": "client"
+      }
+    },
+    {
+      "name": "List jobs",
+      "method": "GET",
+      "path": "/api/jobs"
+    },
+    {
+      "name": "Create job",
+      "method": "POST",
+      "path": "/api/jobs",
+      "bodyType": "json",
+      "body": {
+        "title": "Benchmark API build",
+        "description": "Build a representative benchmark payload for API latency testing.",
+        "budgetMin": 500,
+        "budgetMax": 1500,
+        "categoryId": "software",
+        "skills": ["node", "api", "benchmarking"]
+      }
+    },
+    {
+      "name": "List proposals",
+      "method": "GET",
+      "path": "/api/proposals"
+    },
+    {
+      "name": "Create proposal",
+      "method": "POST",
+      "path": "/api/proposals",
+      "bodyType": "json",
+      "body": {
+        "jobId": "job_benchmark",
+        "freelancerId": "usr_benchmark_freelancer",
+        "coverLetter": "I can complete this benchmark task with clear delivery milestones.",
+        "bidAmount": 900
+      }
+    },
+    {
+      "name": "Create payment",
+      "method": "POST",
+      "path": "/api/payments",
+      "bodyType": "json",
+      "body": {
+        "amount": 2500,
+        "currency": "usd",
+        "metadata": {
+          "benchmark": "api-suite"
+        }
+      }
+    },
+    {
+      "name": "List reviews",
+      "method": "GET",
+      "path": "/api/reviews"
+    },
+    {
+      "name": "Create review",
+      "method": "POST",
+      "path": "/api/reviews",
+      "bodyType": "json",
+      "body": {
+        "jobId": "job_benchmark",
+        "reviewerId": "usr_benchmark_client",
+        "revieweeId": "usr_benchmark_freelancer",
+        "rating": 5,
+        "comment": "Benchmark payload for completed freelance work."
+      }
+    },
+    {
+      "name": "List messages",
+      "method": "GET",
+      "path": "/api/messages"
+    },
+    {
+      "name": "Create message",
+      "method": "POST",
+      "path": "/api/messages",
+      "bodyType": "json",
+      "body": {
+        "senderId": "usr_benchmark_client",
+        "recipientId": "usr_benchmark_freelancer",
+        "body": "Benchmark message payload with realistic conversation text."
+      }
+    },
+    {
+      "name": "List notifications",
+      "method": "GET",
+      "path": "/api/notifications"
+    },
+    {
+      "name": "Create notification",
+      "method": "POST",
+      "path": "/api/notifications",
+      "bodyType": "json",
+      "body": {
+        "userId": "usr_benchmark_client",
+        "type": "job.update",
+        "message": "Benchmark notification for an updated job."
+      }
+    },
+    {
+      "name": "Upload file",
+      "method": "POST",
+      "path": "/api/uploads",
+      "bodyType": "multipart",
+      "form": [
+        {
+          "type": "file",
+          "name": "file",
+          "fileName": "benchmark.txt",
+          "contentType": "text/plain",
+          "content": "Benchmark upload payload\n"
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "method": "GET",
+      "path": "/api/search",
+      "query": {
+        "q": "node benchmark"
+      }
+    },
+    {
+      "name": "Admin metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "auth": true
+    }
+  ]
+}
