@@ -4,3 +4,34 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.admin-shell { display: grid; gap: 1rem; }
+.admin-header, .panel-head, .action-row, .filter-row, .toggle-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.admin-header { justify-content: space-between; background: #121a2e; border: 1px solid #31415f; border-radius: 8px; padding: 1rem; }
+.admin-header h2, .admin-panel h3 { margin: 0; }
+.eyebrow { margin: 0 0 0.25rem; color: #9cc9ff; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0; }
+.admin-auth, .status { border: 1px solid #49607f; border-radius: 999px; padding: 0.25rem 0.55rem; font-size: 0.78rem; white-space: nowrap; }
+.metric-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.metric-card, .admin-panel { background: #151c35; border: 1px solid #2a3765; border-radius: 8px; padding: 1rem; }
+.metric-card span { color: #cbd5e1; display: block; font-size: 0.85rem; }
+.metric-card strong { display: block; font-size: 1.55rem; margin-top: 0.25rem; }
+.admin-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.wide-panel { grid-column: 1 / -1; }
+.admin-panel { overflow-x: auto; }
+.panel-head { justify-content: space-between; margin-bottom: 0.75rem; }
+.filter-row { color: #b8c4d8; font-size: 0.82rem; }
+table { width: 100%; border-collapse: collapse; min-width: 520px; }
+th, td { border-bottom: 1px solid #2a3765; padding: 0.65rem 0.5rem; text-align: left; vertical-align: top; }
+th { color: #b8c4d8; font-weight: 600; }
+button { background: #243b5e; color: #f8fafc; border: 1px solid #4d6d9a; border-radius: 6px; padding: 0.45rem 0.65rem; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid #fbbf24; outline-offset: 2px; }
+.queue-item { display: grid; gap: 0.75rem; border: 1px solid #2a3765; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem; }
+.queue-item span { color: #b8c4d8; display: block; margin-top: 0.2rem; }
+.status-active { background: #123c32; color: #99f6e4; border-color: #2dd4bf; }
+.status-suspended, .status-under_review, .status-flagged { background: #3a2b10; color: #fde68a; border-color: #f59e0b; }
+.status-banned, .status-rejected { background: #3b1720; color: #fecdd3; border-color: #fb7185; }
+.status-open, .status-escalated { background: #18243d; color: #bfdbfe; border-color: #60a5fa; }
+.status-approved, .status-resolved { background: #123c32; color: #99f6e4; border-color: #2dd4bf; }
+.toggle-row { justify-content: space-between; border: 1px solid #2a3765; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.75rem; }
+.toggle-row input { width: 1.1rem; height: 1.1rem; }
+.trust-bars { display: grid; gap: 0.5rem; margin-top: 1rem; }
+.trust-bars span { display: block; min-width: 4rem; max-width: 100%; background: #2f7d68; color: #ecfeff; border-radius: 6px; padding: 0.35rem 0.5rem; }
