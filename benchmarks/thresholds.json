@@ -1,0 +1,15 @@
+{
+  "defaults": {
+    "p99Ms": 750,
+    "errorRate": 0.05,
+    "minSustainedRps": 5
+  },
+  "routes": {
+    "POST /api/uploads": {
+      "p99Ms": 1000
+    },
+    "GET /api/admin/metrics": {
+      "p99Ms": 900
+    }
+  }
+}
