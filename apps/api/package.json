@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "test": "node --test src/tests"
+    "test": "node --test \"src/tests/**/*.test.js\""
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -14,6 +14,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.1.1",
+    "stripe": "^16.12.0",
     "zod": "^3.23.8"
   }
 }
