@@ -1,0 +1,29 @@
+[
+  {
+    "endpoint": "Health Check",
+    "path": "/api/health",
+    "latency_p50": 8,
+    "latency_p99": 21,
+    "rps": 1116.8,
+    "error_rate_pct": 100,
+    "ttfb_approx": 1
+  },
+  {
+    "endpoint": "Get Users",
+    "path": "/api/users",
+    "latency_p50": 7,
+    "latency_p99": 16,
+    "rps": 1249,
+    "error_rate_pct": 100,
+    "ttfb_approx": 1
+  },
+  {
+    "endpoint": "Create User",
+    "path": "/api/users",
+    "latency_p50": 8,
+    "latency_p99": 20,
+    "rps": 1060,
+    "error_rate_pct": 100,
+    "ttfb_approx": 2
+  }
+]
