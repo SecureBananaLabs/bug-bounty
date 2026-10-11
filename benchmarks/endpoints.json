@@ -1,0 +1,198 @@
+[
+  {
+    "name": "health",
+    "method": "GET",
+    "path": "/health",
+    "description": "Service health check",
+    "includeInApiCoverage": false
+  },
+  {
+    "name": "auth-register",
+    "method": "POST",
+    "path": "/api/auth/register",
+    "description": "Register a freelancer account",
+    "json": {
+      "email": "benchmark.freelancer@example.com",
+      "password": "benchmark-pass-123",
+      "role": "freelancer"
+    }
+  },
+  {
+    "name": "auth-login",
+    "method": "POST",
+    "path": "/api/auth/login",
+    "description": "Log in an existing client",
+    "json": {
+      "email": "benchmark.client@example.com",
+      "password": "benchmark-pass-123"
+    }
+  },
+  {
+    "name": "auth-oauth-callback",
+    "method": "GET",
+    "path": "/api/auth/oauth/github/callback",
+    "coveragePath": "/api/auth/oauth/:provider/callback",
+    "description": "OAuth provider callback"
+  },
+  {
+    "name": "auth-refresh",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "description": "Refresh an access token"
+  },
+  {
+    "name": "users-list",
+    "method": "GET",
+    "path": "/api/users",
+    "description": "List users"
+  },
+  {
+    "name": "users-create",
+    "method": "POST",
+    "path": "/api/users",
+    "description": "Create a user profile",
+    "json": {
+      "email": "benchmark.user@example.com",
+      "name": "Benchmark User",
+      "role": "client",
+      "company": "Benchmark Studio"
+    }
+  },
+  {
+    "name": "jobs-list",
+    "method": "GET",
+    "path": "/api/jobs",
+    "description": "List jobs"
+  },
+  {
+    "name": "jobs-create",
+    "method": "POST",
+    "path": "/api/jobs",
+    "description": "Create a job with realistic payload size",
+    "json": {
+      "title": "Build a secure onboarding dashboard",
+      "description": "Benchmark payload for a medium-sized marketplace job brief with scope, acceptance criteria, milestones, and preferred collaboration details.",
+      "budgetMin": 1500,
+      "budgetMax": 4200,
+      "categoryId": "cat_web_apps",
+      "skills": ["node", "express", "react", "security-review", "performance"]
+    }
+  },
+  {
+    "name": "proposals-list",
+    "method": "GET",
+    "path": "/api/proposals",
+    "description": "List proposals"
+  },
+  {
+    "name": "proposals-create",
+    "method": "POST",
+    "path": "/api/proposals",
+    "description": "Create a proposal",
+    "json": {
+      "jobId": "job_benchmark",
+      "freelancerId": "usr_benchmark_freelancer",
+      "coverLetter": "I can deliver a secure dashboard with clear milestones, weekly demos, and performance baselines.",
+      "bidAmount": 2800,
+      "estimatedDays": 14
+    }
+  },
+  {
+    "name": "payments-create",
+    "method": "POST",
+    "path": "/api/payments",
+    "description": "Create a payment intent",
+    "json": {
+      "jobId": "job_benchmark",
+      "amount": 50000,
+      "currency": "usd",
+      "milestone": "deposit"
+    }
+  },
+  {
+    "name": "reviews-list",
+    "method": "GET",
+    "path": "/api/reviews",
+    "description": "List reviews"
+  },
+  {
+    "name": "reviews-create",
+    "method": "POST",
+    "path": "/api/reviews",
+    "description": "Create a review",
+    "json": {
+      "jobId": "job_benchmark",
+      "rating": 5,
+      "comment": "Clear communication, secure delivery, and strong documentation.",
+      "reviewerId": "usr_benchmark_client",
+      "revieweeId": "usr_benchmark_freelancer"
+    }
+  },
+  {
+    "name": "messages-list",
+    "method": "GET",
+    "path": "/api/messages",
+    "description": "List messages"
+  },
+  {
+    "name": "messages-create",
+    "method": "POST",
+    "path": "/api/messages",
+    "description": "Send a project message",
+    "json": {
+      "threadId": "thread_benchmark",
+      "senderId": "usr_benchmark_client",
+      "recipientId": "usr_benchmark_freelancer",
+      "body": "Can you confirm the milestone handoff checklist and next demo date?"
+    }
+  },
+  {
+    "name": "notifications-list",
+    "method": "GET",
+    "path": "/api/notifications",
+    "description": "List notifications"
+  },
+  {
+    "name": "notifications-create",
+    "method": "POST",
+    "path": "/api/notifications",
+    "description": "Create a notification",
+    "json": {
+      "userId": "usr_benchmark_freelancer",
+      "type": "milestone_due",
+      "message": "Your benchmark milestone is due tomorrow.",
+      "metadata": {
+        "jobId": "job_benchmark",
+        "severity": "info"
+      }
+    }
+  },
+  {
+    "name": "uploads-create",
+    "method": "POST",
+    "path": "/api/uploads",
+    "description": "Upload a small handoff document",
+    "multipart": {
+      "fieldName": "file",
+      "filename": "benchmark-handoff.txt",
+      "contentType": "text/plain",
+      "content": "Benchmark upload payload for the freelance marketplace API.\nIncludes milestone notes and delivery checklist.\n"
+    }
+  },
+  {
+    "name": "search",
+    "method": "GET",
+    "path": "/api/search",
+    "description": "Search jobs and users",
+    "query": {
+      "q": "secure react dashboard"
+    }
+  },
+  {
+    "name": "admin-metrics",
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "description": "Read admin metrics with a benchmark token",
+    "auth": "benchmarkToken"
+  }
+]
