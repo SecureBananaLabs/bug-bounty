@@ -1,0 +1,14 @@
+{
+  "defaults": {
+    "p99LatencyMs": 1000,
+    "errorRatePercent": 0
+  },
+  "endpoints": {
+    "POST /api/auth/register": {
+      "p99LatencyMs": 1500
+    },
+    "POST /api/uploads": {
+      "p99LatencyMs": 1500
+    }
+  }
+}
