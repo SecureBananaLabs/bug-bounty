@@ -14,12 +14,15 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { config } from "./config/env.js";
 
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors({
+    origin: config.CORS_ORIGIN || "http://localhost:3000"
+  }));
   app.use(express.json());
   app.use(apiLimiter);
 
