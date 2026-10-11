@@ -13,12 +13,45 @@ enum UserRole {
   ADMIN
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
 enum JobStatus {
   DRAFT
   OPEN
   IN_PROGRESS
   COMPLETED
   CANCELLED
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+}
+
+enum FlagReason {
+  SPAM
+  HARASSMENT
+  OFF_TOPIC
+  POLICY_VIOLATION
+}
+
+enum AuditAction {
+  BAN_USER
+  SUSPEND_USER
+  REINSTATE_USER
+  APPROVE_JOB
+  REJECT_JOB
+  ESCALATE_JOB
+  RULE_FREELANCER
+  RULE_CLIENT
+  TRIGGER_REFUND
+  TOGGLE_REGISTRATION
+  TOGGLE_JOB_POSTING
 }
 
 model User {
@@ -28,6 +61,7 @@ model User {
   fullName       String
   bio            String?
   role           UserRole    @default(CLIENT)
+  status         UserStatus  @default(ACTIVE)
   isVerified     Boolean     @default(false)
   skills         Skill[]
   postedJobs     Job[]       @relation("ClientJobs")
@@ -37,6 +71,7 @@ model User {
   reviewsGiven   Review[]    @relation("Reviewer")
   reviewsGot     Review[]    @relation("Reviewee")
   notifications  Notification[]
+  auditLogs      AuditLog[]  @relation("AdminActions")
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
@@ -48,12 +83,15 @@ model Job {
   budgetMin     Float
   budgetMax     Float
   status        JobStatus   @default(OPEN)
+  isFlagged     Boolean     @default(false)
+  flagReason    FlagReason?
   clientId      String
   client        User        @relation("ClientJobs", fields: [clientId], references: [id])
   categoryId    String
   category      Category    @relation(fields: [categoryId], references: [id])
   proposals     Proposal[]
   payments      Payment[]
+  disputes      Dispute[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -124,4 +162,37 @@ model Notification {
   body          String
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
+}
+
+model Dispute {
+  id            String         @id @default(cuid())
+  jobId         String
+  job           Job            @relation(fields: [jobId], references: [id])
+  freelancerId  String
+  clientId      String
+  status        DisputeStatus  @default(OPEN)
+  adminId       String?
+  ruling        String?
+  reason        String?
+  evidenceUrl   String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model AuditLog {
+  id            String      @id @default(cuid())
+  action        AuditAction
+  targetId      String
+  targetType    String
+  adminId       String
+  admin         User        @relation("AdminActions", fields: [adminId], references: [id])
+  details       String?
+  createdAt     DateTime    @default(now())
+}
+
+model PlatformSetting {
+  id                   String   @id @default(cuid())
+  key                  String   @unique
+  value                Boolean  @default(true)
+  updatedAt            DateTime @updatedAt
 }
