@@ -1,0 +1,10 @@
+{
+  "endpoint": "POST /api/payments/intent",
+  "description": "Create a Stripe Payment Intent - success",
+  "request": { "amount": 5000, "currency": "usd", "metadata": { "orderId": "ord_12345" } },
+  "response": {
+    "clientSecret": "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YZwv5rJ6v9bKx8mN2pL4qR7",
+    "paymentId": "pi_3MtwBwLkdIwHu7ix28a3tqPa",
+    "status": "requires_confirmation"
+  }
+}
