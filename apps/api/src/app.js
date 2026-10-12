@@ -21,7 +21,12 @@ export function createApp() {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use(apiLimiter);
+  // Benchmark mode: BENCHMARK_DISABLE_LIMITER=true disables the API rate
+  // limiter so high-concurrency benchmark runs measure real throughput
+  // instead of being dominated by 429 responses. Never set in production.
+  if (process.env.BENCHMARK_DISABLE_LIMITER !== "true") {
+    app.use(apiLimiter);
+  }
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
