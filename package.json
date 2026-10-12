@@ -1,13 +1,17 @@
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "name": "bug-bounty",
+  "version": "1.0.0",
+  "description": "SecureBananaLabs Bug Bounty Repository",
+  "main": "index.js",
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "jest",
+    "test:integration": "STRIPE_INTEGRATION_TEST=true jest --testPathPattern=integration"
+  },
+  "dependencies": {
+    "stripe": "^14.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "dotenv": "^16.0.0"
   }
 }
