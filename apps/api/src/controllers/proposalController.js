@@ -1,4 +1,5 @@
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
+import { validateCreateProposal } from "../validators/proposal.js";
 import { createProposal, listProposals } from "../services/proposalService.js";
 
 export async function getProposals(req, res) {
@@ -6,5 +7,11 @@ export async function getProposals(req, res) {
 }
 
 export async function postProposal(req, res) {
-  return ok(res, await createProposal(req.body), 201);
+  const { valid, data, message } = validateCreateProposal(req.body);
+
+  if (!valid) {
+    return fail(res, message, 400);
+  }
+
+  return ok(res, await createProposal(data), 201);
 }
