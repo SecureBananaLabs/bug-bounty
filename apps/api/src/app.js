@@ -3,6 +3,7 @@ import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { checkReadiness } from "./utils/readiness.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import { jobRoutes } from "./routes/jobRoutes.js";
@@ -25,6 +26,16 @@ export function createApp() {
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
+  });
+
+  // Readiness must depend on a real dependency check so orchestrators stop
+  // routing traffic while the database is unreachable.
+  app.get("/ready", async (req, res) => {
+    const ready = await checkReadiness();
+
+    res
+      .status(ready ? 200 : 503)
+      .json({ ok: ready, service: "api", ready });
   });
 
   app.use("/api/auth", authRoutes);
