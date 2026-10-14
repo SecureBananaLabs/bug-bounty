@@ -1,0 +1,2 @@
+const jobs=[];
+export const jobService={list:()=>jobs.map(j=>({...j})),get:(id)=>{const j=jobs.find(x=>x.id===id);return j?{...j}:null;},create:(data)=>{const{id:_,status:__,...safe}=data;const j={...safe,id:crypto.randomUUID(),status:"OPEN",createdAt:new Date()};jobs.push(j);return{...j};}};
