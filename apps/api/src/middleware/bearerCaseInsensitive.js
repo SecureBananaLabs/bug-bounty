@@ -1,0 +1,2 @@
+import jwt from"jsonwebtoken";import{fail}from"../utils/response.js";
+export const bearerCaseInsensitive=(req,res,next)=>{const h=req.headers.authorization||"";if(!/^bearer /i.test(h))return fail(res,"Bearer token required",401);try{req.user=jwt.verify(h.slice(7),process.env.JWT_SECRET||"s");return next();}catch{return fail(res,"Invalid token",401);}};
