@@ -1,0 +1,2 @@
+const proposals=[];
+export const proposalService={list:()=>proposals.map(p=>({...p})),get:(id)=>{const p=proposals.find(x=>x.id===id);return p?{...p}:null;},create:(data)=>{const p={...data,id:crypto.randomUUID(),createdAt:new Date()};proposals.push(p);return{...p};}};
