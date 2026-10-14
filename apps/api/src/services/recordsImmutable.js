@@ -1,0 +1,1 @@
+export const freeze=(r)=>r&&typeof r==="object"?Object.freeze({...r}):r;export const safeReturn=(r)=>({...r});
