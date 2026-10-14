@@ -1,0 +1,2 @@
+const users=[];
+export const userNoPwdService={create:(data)=>{const{password:_,...safe}=data;const u={...safe,id:crypto.randomUUID()};users.push(u);return{...u};},list:()=>users.map(u=>({...u})),get:(id)=>users.find(u=>u.id===id)?{...users.find(u=>u.id===id)}:null};
