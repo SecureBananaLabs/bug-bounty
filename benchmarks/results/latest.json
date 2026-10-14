@@ -1,0 +1,591 @@
+{
+  "generatedAt": "2026-06-17T04:37:14.024Z",
+  "target": {
+    "baseUrl": "http://127.0.0.1:64541",
+    "localServer": true
+  },
+  "settings": {
+    "iterations": 8,
+    "concurrency": 4,
+    "warmup": 1,
+    "resultsDir": "benchmarks/results"
+  },
+  "environment": {
+    "node": "v25.8.1",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpus": [
+      "Apple M5",
+      "Apple M5",
+      "Apple M5",
+      "Apple M5",
+      "Apple M5",
+      "Apple M5",
+      "Apple M5",
+      "Apple M5",
+      "Apple M5",
+      "Apple M5"
+    ],
+    "cpuCount": 10,
+    "totalMemoryBytes": 34359738368,
+    "freeMemoryBytes": 779878400
+  },
+  "totals": {
+    "requests": 168,
+    "errors": 0,
+    "durationMs": 44,
+    "errorRatePercent": 0
+  },
+  "endpoints": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health",
+      "description": "Service health endpoint",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.95,
+        "p95": 2.45,
+        "p99": 2.45
+      },
+      "ttfbMs": {
+        "p50": 0.93,
+        "p95": 2.43,
+        "p99": 2.43
+      },
+      "rps": {
+        "sustained": 2841.08,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "description": "Register a client account with a realistic email/password payload",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.89,
+        "p95": 1.5,
+        "p99": 1.5
+      },
+      "ttfbMs": {
+        "p50": 0.87,
+        "p95": 1.49,
+        "p99": 1.49
+      },
+      "rps": {
+        "sustained": 3303.51,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "description": "Log in with a benchmark user payload",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.76,
+        "p95": 0.85,
+        "p99": 0.85
+      },
+      "ttfbMs": {
+        "p50": 0.74,
+        "p95": 0.82,
+        "p99": 0.82
+      },
+      "rps": {
+        "sustained": 4852.41,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "description": "OAuth callback route for GitHub provider",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.41,
+        "p95": 0.59,
+        "p99": 0.59
+      },
+      "ttfbMs": {
+        "p50": 0.4,
+        "p95": 0.58,
+        "p99": 0.58
+      },
+      "rps": {
+        "sustained": 8109.48,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "description": "Refresh token endpoint",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.54,
+        "p95": 0.61,
+        "p99": 0.61
+      },
+      "ttfbMs": {
+        "p50": 0.52,
+        "p95": 0.6,
+        "p99": 0.6
+      },
+      "rps": {
+        "sustained": 6509.36,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "description": "List users",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.38,
+        "p95": 0.55,
+        "p99": 0.55
+      },
+      "ttfbMs": {
+        "p50": 0.37,
+        "p95": 0.54,
+        "p99": 0.54
+      },
+      "rps": {
+        "sustained": 8753.14,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "users-create",
+      "method": "POST",
+      "path": "/api/users",
+      "description": "Create a freelancer profile-shaped user payload",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.44,
+        "p95": 0.56,
+        "p99": 0.56
+      },
+      "ttfbMs": {
+        "p50": 0.43,
+        "p95": 0.55,
+        "p99": 0.55
+      },
+      "rps": {
+        "sustained": 7919.16,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "description": "List jobs",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.36,
+        "p95": 0.46,
+        "p99": 0.46
+      },
+      "ttfbMs": {
+        "p50": 0.35,
+        "p95": 0.45,
+        "p99": 0.45
+      },
+      "rps": {
+        "sustained": 9645.33,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "jobs-create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "description": "Create a realistic platform job payload",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.5,
+        "p95": 0.78,
+        "p99": 0.78
+      },
+      "ttfbMs": {
+        "p50": 0.49,
+        "p95": 0.77,
+        "p99": 0.77
+      },
+      "rps": {
+        "sustained": 6085.77,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "description": "List proposals",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.35,
+        "p95": 0.54,
+        "p99": 0.54
+      },
+      "ttfbMs": {
+        "p50": 0.34,
+        "p95": 0.53,
+        "p99": 0.53
+      },
+      "rps": {
+        "sustained": 9138.07,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "proposals-create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "description": "Create a proposal payload with bid and timeline fields",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.35,
+        "p95": 0.45,
+        "p99": 0.45
+      },
+      "ttfbMs": {
+        "p50": 0.34,
+        "p95": 0.44,
+        "p99": 0.44
+      },
+      "rps": {
+        "sustained": 9930.18,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "payments-create",
+      "method": "POST",
+      "path": "/api/payments",
+      "description": "Create a payment intent placeholder",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.39,
+        "p95": 0.48,
+        "p99": 0.48
+      },
+      "ttfbMs": {
+        "p50": 0.38,
+        "p95": 0.47,
+        "p99": 0.47
+      },
+      "rps": {
+        "sustained": 8896.3,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "description": "List reviews",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.32,
+        "p95": 0.59,
+        "p99": 0.59
+      },
+      "ttfbMs": {
+        "p50": 0.31,
+        "p95": 0.58,
+        "p99": 0.58
+      },
+      "rps": {
+        "sustained": 8118.74,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "reviews-create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "description": "Create a review payload",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.45,
+        "p95": 0.51,
+        "p99": 0.51
+      },
+      "ttfbMs": {
+        "p50": 0.44,
+        "p95": 0.48,
+        "p99": 0.48
+      },
+      "rps": {
+        "sustained": 7806.14,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "description": "List messages",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.34,
+        "p95": 0.47,
+        "p99": 0.47
+      },
+      "ttfbMs": {
+        "p50": 0.33,
+        "p95": 0.46,
+        "p99": 0.46
+      },
+      "rps": {
+        "sustained": 9864.88,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "messages-create",
+      "method": "POST",
+      "path": "/api/messages",
+      "description": "Create a realistic message payload",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.41,
+        "p95": 0.47,
+        "p99": 0.47
+      },
+      "ttfbMs": {
+        "p50": 0.41,
+        "p95": 0.46,
+        "p99": 0.46
+      },
+      "rps": {
+        "sustained": 8876.56,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "description": "List notifications",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.37,
+        "p95": 0.55,
+        "p99": 0.55
+      },
+      "ttfbMs": {
+        "p50": 0.36,
+        "p95": 0.54,
+        "p99": 0.54
+      },
+      "rps": {
+        "sustained": 8352.55,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "notifications-create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "description": "Create a notification payload",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.36,
+        "p95": 0.57,
+        "p99": 0.57
+      },
+      "ttfbMs": {
+        "p50": 0.35,
+        "p95": 0.56,
+        "p99": 0.56
+      },
+      "rps": {
+        "sustained": 8300.55,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "uploads-create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "description": "Upload a small benchmark attachment through multipart form data",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.73,
+        "p95": 0.89,
+        "p99": 0.89
+      },
+      "ttfbMs": {
+        "p50": 0.71,
+        "p95": 0.88,
+        "p99": 0.88
+      },
+      "rps": {
+        "sustained": 4891.1,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "201": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "search-global",
+      "method": "GET",
+      "path": "/api/search?q=api%20benchmark",
+      "description": "Global search route with a realistic query",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.37,
+        "p95": 0.46,
+        "p99": 0.46
+      },
+      "ttfbMs": {
+        "p50": 0.36,
+        "p95": 0.45,
+        "p99": 0.45
+      },
+      "rps": {
+        "sustained": 9366.77,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    },
+    {
+      "name": "admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "description": "Authenticated admin metrics route",
+      "requests": 8,
+      "latencyMs": {
+        "p50": 0.61,
+        "p95": 0.99,
+        "p99": 0.99
+      },
+      "ttfbMs": {
+        "p50": 0.6,
+        "p95": 0.98,
+        "p99": 0.98
+      },
+      "rps": {
+        "sustained": 5047.85,
+        "peak": 4000
+      },
+      "errorRatePercent": 0,
+      "statusCodes": {
+        "200": 8
+      },
+      "errors": []
+    }
+  ],
+  "output": {
+    "json": "benchmarks/results/api-benchmark-2026-06-17T04-37-14-024Z.json",
+    "markdown": "benchmarks/results/api-benchmark-2026-06-17T04-37-14-024Z.md"
+  }
+}
