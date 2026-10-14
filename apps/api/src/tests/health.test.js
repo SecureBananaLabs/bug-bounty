@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createApp } from "../app.js";
 
-test("GET /health returns ok payload", async () => {
+async function withServer(run) {
   const app = createApp();
   const server = app.listen(0);
 
@@ -11,14 +11,32 @@ test("GET /health returns ok payload", async () => {
     server.once("error", reject);
   });
 
-  const { port } = server.address();
-  const response = await fetch(`http://127.0.0.1:${port}/health`);
-  const payload = await response.json();
+  try {
+    const { port } = server.address();
+    return await run(`http://127.0.0.1:${port}`);
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
+}
 
-  assert.equal(response.status, 200);
-  assert.deepEqual(payload, { ok: true, service: "api" });
+test("GET /health returns ok payload", async () => {
+  await withServer(async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/health`);
+    const payload = await response.json();
 
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+    assert.deepEqual(payload, { ok: true, service: "api" });
+  });
+});
+
+test("GET /health is not counted by the API rate limiter", async () => {
+  await withServer(async (baseUrl) => {
+    for (let index = 0; index < 205; index += 1) {
+      const response = await fetch(`${baseUrl}/health`);
+      assert.equal(response.status, 200);
+    }
   });
 });
