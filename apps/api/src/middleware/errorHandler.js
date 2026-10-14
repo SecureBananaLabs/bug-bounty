@@ -1,11 +1,17 @@
 export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
   if (res.headersSent) {
     return next(err);
   }
 
-  return res.status(500).json({
+  const isUnexpectedFile = err?.code === "LIMIT_UNEXPECTED_FILE";
+  const status = isUnexpectedFile ? 400 : 500;
+
+  if (status >= 500) {
+    console.error("Unhandled API error:", err);
+  }
+
+  return res.status(status).json({
     success: false,
-    message: "Unexpected server error"
+    message: isUnexpectedFile ? "Unexpected file field" : "Unexpected server error"
   });
 }
