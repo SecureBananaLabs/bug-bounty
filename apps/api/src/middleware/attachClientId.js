@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const attachClientId=(req,res,next)=>{const id=req.user?.id||req.user?.sub;if(!id)return fail(res,"Authenticated user id required",401);req.body.clientId=String(id);return next();};
