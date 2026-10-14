@@ -1,0 +1,640 @@
+{
+  "mode": "full",
+  "target": "local in-process API server",
+  "generatedAt": "2026-06-05T07:33:33.831Z",
+  "tool": "autocannon",
+  "settings": {
+    "concurrency": 3,
+    "requestCount": 6
+  },
+  "environment": {
+    "cpu": "Intel(R) Core(TM) i5-8350U CPU @ 1.70GHz",
+    "cores": 8,
+    "totalRamGb": 15.86,
+    "platform": "win32",
+    "release": "10.0.26100",
+    "node": "v24.16.0"
+  },
+  "endpoints": [
+    {
+      "id": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 5,
+        "p95": 56,
+        "p99": 56
+      },
+      "ttfbMs": {
+        "p50": 34.88,
+        "p95": 87.34,
+        "p99": 87.34
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 6,
+        "p95": 11,
+        "p99": 11
+      },
+      "ttfbMs": {
+        "p50": 5.68,
+        "p95": 5.85,
+        "p99": 5.85
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 6,
+        "p99": 6
+      },
+      "ttfbMs": {
+        "p50": 13.59,
+        "p95": 14.78,
+        "p99": 14.78
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 4,
+        "p95": 13,
+        "p99": 13
+      },
+      "ttfbMs": {
+        "p50": 7.93,
+        "p95": 8.32,
+        "p99": 8.32
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 7,
+        "p95": 12,
+        "p99": 12
+      },
+      "ttfbMs": {
+        "p50": 4.79,
+        "p95": 5.46,
+        "p99": 5.46
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "users-create",
+      "method": "POST",
+      "path": "/api/users",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 6,
+        "p99": 6
+      },
+      "ttfbMs": {
+        "p50": 16.99,
+        "p95": 17.3,
+        "p99": 17.3
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 7,
+        "p99": 7
+      },
+      "ttfbMs": {
+        "p50": 2.27,
+        "p95": 2.29,
+        "p99": 2.29
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "jobs-create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 6,
+        "p99": 6
+      },
+      "ttfbMs": {
+        "p50": 6.43,
+        "p95": 6.78,
+        "p99": 6.78
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 1,
+        "p95": 4,
+        "p99": 4
+      },
+      "ttfbMs": {
+        "p50": 5.07,
+        "p95": 5.41,
+        "p99": 5.41
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "proposals-create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 3,
+        "p95": 7,
+        "p99": 7
+      },
+      "ttfbMs": {
+        "p50": 5.78,
+        "p95": 5.98,
+        "p99": 5.98
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "payments-create",
+      "method": "POST",
+      "path": "/api/payments",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 4,
+        "p95": 8,
+        "p99": 8
+      },
+      "ttfbMs": {
+        "p50": 6.35,
+        "p95": 6.58,
+        "p99": 6.58
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 4,
+        "p99": 4
+      },
+      "ttfbMs": {
+        "p50": 3.94,
+        "p95": 4.58,
+        "p99": 4.58
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "reviews-create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 4,
+        "p95": 7,
+        "p99": 7
+      },
+      "ttfbMs": {
+        "p50": 5.43,
+        "p95": 5.54,
+        "p99": 5.54
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 5,
+        "p99": 5
+      },
+      "ttfbMs": {
+        "p50": 4.48,
+        "p95": 4.92,
+        "p99": 4.92
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "messages-create",
+      "method": "POST",
+      "path": "/api/messages",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 3,
+        "p95": 7,
+        "p99": 7
+      },
+      "ttfbMs": {
+        "p50": 9.27,
+        "p95": 9.46,
+        "p99": 9.46
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 1,
+        "p95": 5,
+        "p99": 5
+      },
+      "ttfbMs": {
+        "p50": 6.38,
+        "p95": 7.38,
+        "p99": 7.38
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "notifications-create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 1,
+        "p95": 11,
+        "p99": 11
+      },
+      "ttfbMs": {
+        "p50": 4.18,
+        "p95": 4.51,
+        "p99": 4.51
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "uploads-create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "protected": false,
+      "expectedStatuses": [
+        201
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 4,
+        "p95": 12,
+        "p99": 12
+      },
+      "ttfbMs": {
+        "p50": 8.27,
+        "p95": 8.28,
+        "p99": 8.28
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "201": 6
+      }
+    },
+    {
+      "id": "search",
+      "method": "GET",
+      "path": "/api/search?q=api%20benchmark",
+      "protected": false,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 2,
+        "p95": 6,
+        "p99": 6
+      },
+      "ttfbMs": {
+        "p50": 8.32,
+        "p95": 8.43,
+        "p99": 8.43
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    },
+    {
+      "id": "admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "protected": true,
+      "expectedStatuses": [
+        200
+      ],
+      "tool": "autocannon",
+      "requestCount": 6,
+      "okCount": 6,
+      "errorCount": 0,
+      "errorRatePct": 0,
+      "latencyMs": {
+        "p50": 6,
+        "p95": 22,
+        "p99": 22
+      },
+      "ttfbMs": {
+        "p50": 4.07,
+        "p95": 4.2,
+        "p99": 4.2
+      },
+      "rps": {
+        "sustained": 6,
+        "peak": 6
+      },
+      "statuses": {
+        "200": 6
+      }
+    }
+  ]
+}
