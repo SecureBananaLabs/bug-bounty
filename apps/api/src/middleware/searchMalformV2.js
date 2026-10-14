@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const searchMalformV2=(req,res,next)=>{const q=req.query.q;if(!q||typeof q!=="string"||!q.trim())return fail(res,"q must be a non-empty string",400);if(q.length>200)return fail(res,"q must not exceed 200 characters",400);req.query.q=q.trim();return next();};
