@@ -1,3 +1,5 @@
+import crypto from "node:crypto";
+
 const reviews = [];
 
 export async function listReviews() {
@@ -5,7 +7,8 @@ export async function listReviews() {
 }
 
 export async function createReview(payload) {
-  const review = { id: `rev_${Date.now()}`, ...payload };
+  const { id: _clientProvidedId, ...rest } = payload;
+  const review = { id: `rev_${crypto.randomUUID()}`, ...rest };
   reviews.push(review);
   return review;
 }
