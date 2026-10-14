@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const requireStripe=(req,res,next)=>{if(process.env.NODE_ENV==="production"&&!process.env.STRIPE_SECRET_KEY)return fail(res,"Payment service not configured",503);return next();};
