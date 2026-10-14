@@ -1,0 +1,1 @@
+export const encodeUsername=(req,res,next)=>{if(req.params?.username)req.params.username=encodeURIComponent(decodeURIComponent(req.params.username));return next();};
