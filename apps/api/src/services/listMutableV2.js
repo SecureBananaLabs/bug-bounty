@@ -1,0 +1,1 @@
+export const safeCopy=(a)=>Array.isArray(a)?[...a.map(i=>i&&typeof i==="object"?{...i}:i)]:[];
