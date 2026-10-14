@@ -1,7 +1,7 @@
 const proposals = [];
 
 export async function listProposals() {
-  return proposals;
+  return proposals.map((proposal) => ({ ...proposal }));
 }
 
 export async function createProposal(payload) {
