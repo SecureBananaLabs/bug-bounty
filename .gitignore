@@ -3,5 +3,9 @@ node_modules
 dist
 .env
 .env.*
+!.env.benchmark.example
+!benchmarks/.env.benchmark.example
 coverage
 *.log
+benchmarks/results/*
+!benchmarks/results/.gitkeep
