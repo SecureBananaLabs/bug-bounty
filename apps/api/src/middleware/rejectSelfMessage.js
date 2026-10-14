@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const rejectSelfMessage=(req,res,next)=>{if(req.user&&req.body?.receiverId&&String(req.body.receiverId)===String(req.user.id||req.user.sub))return fail(res,"Cannot send a message to yourself",400);return next();};
