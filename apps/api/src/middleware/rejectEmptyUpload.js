@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const rejectEmptyUpload=(req,res,next)=>{if(!req.file&&(!req.files||req.files.length===0))return fail(res,"No file provided in upload request",400);return next();};
