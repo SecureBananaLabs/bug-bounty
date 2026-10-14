@@ -1,11 +1,19 @@
-const notifications = [];
-
-export async function listNotifications() {
-  return notifications;
-}
+let nextId = 1;
 
 export async function createNotification(payload) {
-  const notification = { id: `ntf_${Date.now()}`, read: false, ...payload };
-  notifications.push(notification);
+  const notification = {
+    id: `notif_${nextId++}`,
+    createdAt: new Date().toISOString(),
+    read: false,
+    ...payload,
+  };
   return notification;
+}
+
+export async function getNotifications() {
+  return [];
+}
+
+export async function markAsRead(notificationId) {
+  return { id: notificationId, read: true };
 }
