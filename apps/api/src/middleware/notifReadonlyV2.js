@@ -1,0 +1,1 @@
+export const notifReadonlyV2=(req,_,next)=>{delete req.body?.read;delete req.body?.readAt;delete req.body?.id;return next();};
