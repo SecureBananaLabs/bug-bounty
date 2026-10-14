@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const loginBypass=(req,res,next)=>{const{email,password}=req.body||{};if(!email||typeof email!=="string"||!email.includes("@"))return fail(res,"Invalid credentials",401);if(!password||typeof password!=="string"||!password.trim())return fail(res,"Invalid credentials",401);return next();};
