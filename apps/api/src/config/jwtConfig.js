@@ -1,0 +1,1 @@
+export const JWT_CONFIG={accessTokenExpiry:"1h",refreshTokenExpiry:"7d",secret:process.env.JWT_SECRET||"dev-secret",issuer:"freelanceflow-api"};
