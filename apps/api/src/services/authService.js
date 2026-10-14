@@ -18,6 +18,11 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(user) {
+  const sub = user?.sub ?? user?.id;
+  const role = user?.role ?? "client";
+  if (!sub) {
+    throw new Error("Authenticated user subject is required");
+  }
+  return { token: signAccessToken({ sub, role }) };
 }
