@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const uploadNotEmpty=(req,res,next)=>{if(!req.file)return fail(res,"No file uploaded — include a file in the request",400);return next();};
