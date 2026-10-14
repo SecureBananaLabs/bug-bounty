@@ -1,0 +1,23 @@
+{
+  "name": "@freelanceflow/pi",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "High-precision PI calculation using the Chudnovsky algorithm",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "calc": "node dist/index.js",
+    "calc:pi": "node dist/index.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}
