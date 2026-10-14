@@ -1,13 +1,9 @@
-import { connectDb } from "./config/db.js";
-import { env } from "./config/env.js";
-import { createApp } from "./app.js";
-
-async function bootstrap() {
-  await connectDb();
-  const app = createApp();
-  app.listen(env.port, () => {
-    console.log(`API listening on http://localhost:${env.port}`);
-  });
-}
-
-bootstrap();
+import{createApp}from"./app.js";
+const app=createApp();
+const server=app.listen(parseInt(process.env.PORT||"0",10),()=>{
+  const a=server.address();
+  const port=typeof a==="object"?a?.port:process.env.PORT;
+  console.log("API listening on port "+port);
+});
+import{gracefulShutdown}from"./lib/gracefulShutdown.js";
+gracefulShutdown(server);
