@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const whitespaceV2=(req,res,next)=>{const p=req.body?.password;if(typeof p==="string"&&!p.trim())return fail(res,"Password cannot be whitespace only",400);return next();};
