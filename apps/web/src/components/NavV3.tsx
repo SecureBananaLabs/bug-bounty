@@ -1,0 +1,1 @@
+import React from"react";const LINKS=[{href:"/",l:"Home"},{href:"/jobs",l:"Jobs"},{href:"/messages",l:"Messages"},{href:"/billing",l:"Billing"},{href:"/notifications",l:"Notifications"},{href:"/settings",l:"Settings"}];export function NavV3(){return<nav>{LINKS.map(({href,l})=><a key={href} href={href}>{l}</a>)}</nav>;}
