@@ -1,0 +1,39 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - ".github/workflows/api-benchmark-smoke.yml"
+
+jobs:
+  api-benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Start API server
+        run: |
+          PORT=3001 JWT_SECRET=ci-benchmark-secret npm run start -w apps/api > /tmp/api.log 2>&1 &
+          echo $! > /tmp/api.pid
+          for i in {1..20}; do
+            curl -sf http://127.0.0.1:3001/health >/dev/null && break
+            sleep 0.5
+          done
+          curl -sf http://127.0.0.1:3001/health >/dev/null
+      - name: Run smoke benchmark
+        env:
+          BENCHMARK_TARGET: http://127.0.0.1:3001
+          BENCHMARK_TOKEN: ci-benchmark-token
+          BENCHMARK_CONCURRENCY: 1
+          BENCHMARK_ITERATIONS: 2
+        run: npm run benchmark
+      - name: Stop API server
+        if: always()
+        run: |
+          if [ -f /tmp/api.pid ]; then kill $(cat /tmp/api.pid) || true; fi
