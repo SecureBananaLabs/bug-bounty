@@ -6,5 +6,12 @@ export async function getNotifications(req, res) {
 }
 
 export async function postNotification(req, res) {
-  return ok(res, await createNotification(req.body), 201);
+  return ok(
+    res,
+    await createNotification({
+      ...req.body,
+      userId: req.user.sub
+    }),
+    201
+  );
 }
