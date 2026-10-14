@@ -1,0 +1,1 @@
+export const payJobId2b=(req,_,next)=>{const jid=req.body?.jobId;delete req.body?.id;if(jid)req.body.jobId=String(jid);return next();};
