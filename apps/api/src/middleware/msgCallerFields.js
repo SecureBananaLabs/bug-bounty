@@ -1,0 +1,1 @@
+export const msgCallerFields=(req,_,next)=>{["id","read","readAt","sentAt","createdAt"].forEach(f=>delete req.body?.[f]);return next();};
