@@ -1,10 +1,8 @@
-import { ok } from "../utils/response.js";
-import { createProposal, listProposals } from "../services/proposalService.js";
-
-export async function getProposals(req, res) {
-  return ok(res, await listProposals());
+import{ok,fail}from"../utils/response.js";
+function snapshot(p){return p?{...p}:null;}
+export async function listProposals(req,res){
+  return ok(res,{proposals:[].map(snapshot)});
 }
-
-export async function postProposal(req, res) {
-  return ok(res, await createProposal(req.body), 201);
+export async function getProposal(req,res){
+  return ok(res,{proposal:snapshot({id:req.params.id})});
 }
