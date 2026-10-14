@@ -1,0 +1,1 @@
+export const notifIgnoreV3=(req,_,next)=>{delete req.body?.id;delete req.body?.read;delete req.body?.readAt;return next();};
