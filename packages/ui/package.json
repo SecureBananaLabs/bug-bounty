@@ -1,5 +1,14 @@
 {
   "name": "@freelanceflow/ui",
-  "private": true,
-  "main": "src/index.ts"
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
 }
