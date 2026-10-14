@@ -1,0 +1,1 @@
+export const notifFieldsV2=(req,_,next)=>{["id","read","readAt","createdAt","updatedAt"].forEach(f=>delete req.body?.[f]);return next();};
