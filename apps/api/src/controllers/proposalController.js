@@ -6,5 +6,5 @@ export async function getProposals(req, res) {
 }
 
 export async function postProposal(req, res) {
-  return ok(res, await createProposal(req.body), 201);
+  return ok(res, await createProposal(req.body, req.user), 201);
 }
