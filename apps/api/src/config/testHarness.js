@@ -1,0 +1,1 @@
+export const TEST_CONFIG={pattern:"src/tests/*.test.js",host:"127.0.0.1",port:parseInt(process.env.TEST_PORT||"4001",10)};
