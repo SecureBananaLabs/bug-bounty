@@ -1,0 +1,1 @@
+export const TEST_GLOB="src/tests/**/*.test.js";export const TEST_CMD=`node --test ${TEST_GLOB}`;
