@@ -1,6 +1,20 @@
 import { z } from "zod";
 
-export const createJobSchema = z.object({
+function validateBudgetRange(payload, ctx) {
+  if (
+    payload.budgetMin !== undefined &&
+    payload.budgetMax !== undefined &&
+    payload.budgetMax < payload.budgetMin
+  ) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "budgetMax must be greater than or equal to budgetMin",
+      path: ["budgetMax"]
+    });
+  }
+}
+
+const jobSchema = z.object({
   title: z.string().min(4),
   description: z.string().min(10),
   budgetMin: z.number().nonnegative(),
@@ -9,4 +23,5 @@ export const createJobSchema = z.object({
   skills: z.array(z.string().min(1)).default([])
 });
 
-export const updateJobSchema = createJobSchema.partial();
+export const createJobSchema = jobSchema.superRefine(validateBudgetRange);
+export const updateJobSchema = jobSchema.partial().superRefine(validateBudgetRange);
