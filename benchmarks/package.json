@@ -1,0 +1,19 @@
+{
+  "name": "@bug-bounty/benchmarks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API benchmark suite for bug-bounty platform",
+  "type": "module",
+  "scripts": {
+    "benchmark": "node run.mjs",
+    "benchmark:smoke": "BENCHMARK_MODE=smoke node run.mjs",
+    "benchmark:full": "BENCHMARK_MODE=full node run.mjs"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
