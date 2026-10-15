@@ -15,13 +15,13 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
-export function createApp() {
+export function createApp({ rateLimiter = apiLimiter } = {}) {
   const app = express();
 
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use(apiLimiter);
+  app.use(rateLimiter);
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
