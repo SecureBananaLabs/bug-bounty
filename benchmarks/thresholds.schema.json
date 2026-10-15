@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Benchmark thresholds",
+  "type": "object",
+  "required": ["defaults", "endpoints"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "defaults": { "$ref": "#/definitions/threshold" },
+    "endpoints": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/definitions/threshold" }
+    }
+  },
+  "definitions": {
+    "threshold": {
+      "type": "object",
+      "properties": {
+        "p99LatencyMs": { "type": "number", "minimum": 0 },
+        "p95LatencyMs": { "type": "number", "minimum": 0 },
+        "errorRatePct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "ttfbMs": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  }
+}
