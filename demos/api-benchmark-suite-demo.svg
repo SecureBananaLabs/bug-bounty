@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#101820"/>
+  <rect x="44" y="44" width="1192" height="632" rx="18" fill="#142230" stroke="#2a455d" stroke-width="2"/>
+  <text x="72" y="112" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="46" font-weight="700">API Benchmark Suite</text>
+  <text x="72" y="158" fill="#7dd3fc" font-family="Arial, Helvetica, sans-serif" font-size="26">SecureBananaLabs/bug-bounty #30</text>
+
+  <text x="72" y="230" fill="#e5edf5" font-family="Menlo, Consolas, monospace" font-size="26">npm test                -> 2 tests passed</text>
+  <text x="72" y="282" fill="#e5edf5" font-family="Menlo, Consolas, monospace" font-size="26">benchmark:smoke         -> 21 endpoints</text>
+  <text x="72" y="334" fill="#e5edf5" font-family="Menlo, Consolas, monospace" font-size="26">benchmark               -> full report</text>
+
+  <text x="72" y="420" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Full run summary</text>
+  <text x="72" y="472" fill="#d8f5df" font-family="Menlo, Consolas, monospace" font-size="30">168 requests, 0% errors</text>
+  <text x="72" y="524" fill="#d8f5df" font-family="Menlo, Consolas, monospace" font-size="30">0% non-2xx responses</text>
+  <text x="72" y="576" fill="#d8f5df" font-family="Menlo, Consolas, monospace" font-size="30">Max p99: 18.24 ms</text>
+  <text x="72" y="628" fill="#d8f5df" font-family="Menlo, Consolas, monospace" font-size="30">Thresholds: no failures</text>
+
+  <text x="72" y="672" fill="#9fb6c8" font-family="Menlo, Consolas, monospace" font-size="22">Report: benchmarks/results/latest.md</text>
+</svg>
