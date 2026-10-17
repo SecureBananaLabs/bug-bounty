@@ -1,7 +1,9 @@
 const messages = [];
 
 export async function listMessages() {
-  return messages;
+  // Callers trim or reorder the list they receive; hand back an independent
+  // snapshot so the shared module array keeps every stored message.
+  return [...messages];
 }
 
 export async function sendMessage(payload) {
