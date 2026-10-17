@@ -9,3 +9,6 @@ export async function sendMessage(payload) {
   messages.push(message);
   return message;
 }
+function getMessages() {
+  return [...messages];
+}
