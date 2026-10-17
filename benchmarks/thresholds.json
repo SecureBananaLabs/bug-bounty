@@ -1,0 +1,20 @@
+{
+  "_comment": "Regression thresholds for the CI smoke benchmark. Values are deliberately generous: the smoke run uses low concurrency on shared CI hardware, and a gate that fails on noise gets disabled by maintainers. Tighten only with evidence from repeated runs.",
+  "default": {
+    "p99": 1500,
+    "p95": 800,
+    "errorRatePct": 5,
+    "minRps": 1
+  },
+  "endpoints": {
+    "health":            { "p99": 200,  "p95": 120,  "errorRatePct": 0, "minRps": 50 },
+    "jobs.list":         { "p99": 800,  "p95": 400,  "errorRatePct": 0, "minRps": 20 },
+    "jobs.create":       { "p99": 1200, "p95": 600,  "errorRatePct": 0, "minRps": 10 },
+    "users.list":        { "p99": 800,  "p95": 400,  "errorRatePct": 0, "minRps": 20 },
+    "search.query":      { "p99": 1000, "p95": 500,  "errorRatePct": 0, "minRps": 10 },
+    "auth.login":        { "p99": 1200, "p95": 600,  "errorRatePct": 0, "minRps": 10 },
+    "auth.register":     { "p99": 1200, "p95": 600,  "errorRatePct": 0, "minRps": 10 },
+    "admin.metrics":     { "p99": 1000, "p95": 500,  "errorRatePct": 0, "minRps": 10 },
+    "uploads.create":    { "p99": 2000, "p95": 1000, "errorRatePct": 0, "minRps": 5 }
+  }
+}
