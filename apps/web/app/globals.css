@@ -4,3 +4,13 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.muted { color: #aeb8df; }
+.button-link { display: inline-flex; align-items: center; justify-content: center; min-height: 2.5rem; padding: 0 1rem; border-radius: 8px; background: #eef2ff; color: #10172f; font-weight: 700; }
+.toolbar { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 1rem; }
+.toolbar label { display: grid; gap: 0.4rem; color: #cbd5ff; }
+.toolbar input, .toolbar select { width: 100%; border: 1px solid #2a3765; border-radius: 8px; background: #111832; color: #f2f5ff; padding: 0.7rem 0.8rem; }
+.summary-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin-bottom: 1rem; color: #cbd5ff; }
+.summary-row strong { color: #ffffff; }
+.text-link { color: #9bb0ff; font-weight: 700; }
+.empty-state { border: 1px dashed #3a4a80; border-radius: 8px; padding: 1rem; color: #cbd5ff; }
