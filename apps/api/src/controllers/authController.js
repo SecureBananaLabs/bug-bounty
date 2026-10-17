@@ -1,6 +1,7 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
+import { z } from "zod";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -22,6 +23,17 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  const schema = z.object({ refreshToken: z.string().min(1) });
+
+  try {
+    const payload = schema.parse(req.body);
+    const result = await refreshToken(payload.refreshToken);
+    return ok(res, result);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return fail(res, "Missing refresh token", 401);
+    }
+
+    return fail(res, "Invalid refresh token", 401);
+  }
 }
