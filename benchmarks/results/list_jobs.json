@@ -1,0 +1,26 @@
+{
+  "label": "List Jobs",
+  "url": "GET /api/jobs",
+  "duration": 10,
+  "connections": 10,
+  "latency": {
+    "p50": 0,
+    "p95": 0,
+    "p99": 1,
+    "avg": 0.06,
+    "max": 3
+  },
+  "requestsPerSecond": {
+    "avg": 17553.6,
+    "total": 175534,
+    "sent": 175544
+  },
+  "throughput": {
+    "avg": 15027404.8,
+    "total": 150257104
+  },
+  "errors": 0,
+  "timeouts": 0,
+  "non2xx": 175534,
+  "errorRatePct": 100
+}
