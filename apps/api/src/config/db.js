@@ -1,4 +1,9 @@
+import { PrismaClient } from "@prisma/client";
+
+// Singleton Prisma client - one instance per process, reused across requests.
+export const prisma = new PrismaClient();
+
 export async function connectDb() {
-  // TODO: wire Prisma client from @freelanceflow/db package
-  return { connected: true, driver: "prisma-placeholder" };
+  await prisma.$connect();
+  return { connected: true, driver: "prisma" };
 }
