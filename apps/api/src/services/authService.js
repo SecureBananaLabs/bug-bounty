@@ -12,6 +12,10 @@ export async function registerUser(payload) {
 
 export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
+  // Stub: reject empty or obviously invalid passwords
+  if (!payload.password || payload.password.length < 8) {
+    throw new Error("Invalid email or password");
+  }
   return {
     email: payload.email,
     token: signAccessToken({ sub: "usr_existing", role: "client" })
