@@ -9,3 +9,7 @@ export async function createReview(payload) {
   reviews.push(review);
   return review;
 }
+
+export async function listReviewsByJob(jobId) {
+  return reviews.filter((r) => r.jobId === jobId);
+}
