@@ -1,0 +1,14 @@
+{
+  "defaults": {
+    "maxP99Ms": 1000,
+    "maxP99TtfbMs": 1000,
+    "maxErrorRatePercent": 0
+  },
+  "endpoints": {
+    "uploads.create": {
+      "maxP99Ms": 1500,
+      "maxP99TtfbMs": 1500,
+      "maxErrorRatePercent": 0
+    }
+  }
+}
