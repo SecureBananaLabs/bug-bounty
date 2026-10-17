@@ -1,0 +1,132 @@
+{
+  "format": "timestamped-terminal-output-v1",
+  "title": "SecureBanana API endpoint benchmark",
+  "startedAt": "2026-10-15T22:40:51.731937+00:00",
+  "command": [
+    "npm",
+    "run",
+    "benchmark"
+  ],
+  "elapsedSeconds": 17.37039023300167,
+  "exitCode": 0,
+  "events": [
+    {
+      "seconds": 1.8309362980071455,
+      "text": "\n"
+    },
+    {
+      "seconds": 1.8309940800536424,
+      "text": "> benchmark\n"
+    },
+    {
+      "seconds": 1.8310033769812435,
+      "text": "> node benchmarks/run.mjs\n"
+    },
+    {
+      "seconds": 1.8310079369693995,
+      "text": "\n"
+    },
+    {
+      "seconds": 2.6983981110388413,
+      "text": "Benchmarking 20 API endpoints; 200 requests each; concurrency 4; isolated local API\n"
+    },
+    {
+      "seconds": 3.6441403720527887,
+      "text": "POST /api/auth/register: p99=87.82ms, errors=0/200\n"
+    },
+    {
+      "seconds": 4.774140745983459,
+      "text": "POST /api/auth/login: p99=121.42ms, errors=0/200\n"
+    },
+    {
+      "seconds": 5.139163144980557,
+      "text": "GET /api/auth/oauth/:provider/callback: p99=24.08ms, errors=0/200\n"
+    },
+    {
+      "seconds": 5.73044914402999,
+      "text": "POST /api/auth/refresh: p99=37.23ms, errors=0/200\n"
+    },
+    {
+      "seconds": 6.970342352986336,
+      "text": "POST /api/users: p99=62.85ms, errors=0/200\n"
+    },
+    {
+      "seconds": 7.528083828045055,
+      "text": "GET /api/users: p99=27.99ms, errors=0/200\n"
+    },
+    {
+      "seconds": 7.912934225983918,
+      "text": "POST /api/jobs: p99=34.37ms, errors=0/200\n"
+    },
+    {
+      "seconds": 9.445051886024885,
+      "text": "GET /api/jobs: p99=120.40ms, errors=0/200\n"
+    },
+    {
+      "seconds": 9.814824579982087,
+      "text": "POST /api/proposals: p99=18.13ms, errors=0/200\n"
+    },
+    {
+      "seconds": 10.856371770030819,
+      "text": "GET /api/proposals: p99=85.58ms, errors=0/200\n"
+    },
+    {
+      "seconds": 11.559108561021276,
+      "text": "POST /api/payments: p99=27.51ms, errors=0/200\n"
+    },
+    {
+      "seconds": 12.17959375306964,
+      "text": "POST /api/reviews: p99=49.80ms, errors=0/200\n"
+    },
+    {
+      "seconds": 12.690365093993023,
+      "text": "GET /api/reviews: p99=36.46ms, errors=0/200\n"
+    },
+    {
+      "seconds": 13.039115129038692,
+      "text": "POST /api/messages: p99=17.60ms, errors=0/200\n"
+    },
+    {
+      "seconds": 14.910339651978575,
+      "text": "GET /api/messages: p99=140.67ms, errors=0/200\n"
+    },
+    {
+      "seconds": 15.155390494968742,
+      "text": "POST /api/notifications: p99=14.88ms, errors=0/200\n"
+    },
+    {
+      "seconds": 15.555744874058291,
+      "text": "GET /api/notifications: p99=16.98ms, errors=0/200\n"
+    },
+    {
+      "seconds": 16.40227614203468,
+      "text": "POST /api/uploads: p99=58.14ms, errors=0/200\n"
+    },
+    {
+      "seconds": 16.760409048991278,
+      "text": "GET /api/search: p99=41.97ms, errors=0/200\n"
+    },
+    {
+      "seconds": 17.084054120001383,
+      "text": "GET /api/admin/metrics: p99=16.25ms, errors=0/200\n"
+    },
+    {
+      "seconds": 17.09035622596275,
+      "text": "Regression gate: PASS. Results: benchmarks/results/full.{json,md}\n"
+    },
+    {
+      "seconds": 17.37039023300167,
+      "text": "\nProcess exited with status 0\n"
+    }
+  ],
+  "execution": {
+    "runtime": "Node 22.23.3 / npm 10.9.9 / Debian 12",
+    "cpuLimit": 1,
+    "memoryLimitBytes": 536870912,
+    "pidsLimit": 64,
+    "network": "none; isolated loopback API only",
+    "credentialEnvironment": "empty environment except PATH and temporary HOME",
+    "containerRootFilesystem": "read-only",
+    "note": "Full Docker host mount paths omitted; command is the actual in-container invocation."
+  }
+}
