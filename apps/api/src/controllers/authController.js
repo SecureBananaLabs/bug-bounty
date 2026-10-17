@@ -1,6 +1,6 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -22,6 +22,10 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
+  if (!req.user) {
+    return fail(res, "Unauthorized", 401);
+  }
+
+  const result = await refreshToken(req.user);
   return ok(res, result);
 }
