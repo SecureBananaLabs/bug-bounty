@@ -1,13 +1,9 @@
-import { connectDb } from "./config/db.js";
-import { env } from "./config/env.js";
-import { createApp } from "./app.js";
+// Add at top
+import cron from 'node-cron';
+import { detectAndCreateIssues } from './services/bugDetection';
 
-async function bootstrap() {
-  await connectDb();
-  const app = createApp();
-  app.listen(env.port, () => {
-    console.log(`API listening on http://localhost:${env.port}`);
-  });
-}
-
-bootstrap();
+// Add before app.listen()
+cron.schedule('0 3 * * *', () => { // Daily at 3 AM
+  console.log('Starting automated bug detection...');
+  detectAndCreateIssues();
+});
