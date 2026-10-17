@@ -1,0 +1,12 @@
+{
+  "health": { "p99_ms": 50, "max_error_rate": 0.01 },
+  "auth": { "p99_ms": 200, "max_error_rate": 0.01 },
+  "users": { "p99_ms": 200, "max_error_rate": 0.01 },
+  "jobs": { "p99_ms": 300, "max_error_rate": 0.01 },
+  "proposals": { "p99_ms": 300, "max_error_rate": 0.01 },
+  "payments": { "p99_ms": 300, "max_error_rate": 0.01 },
+  "reviews": { "p99_ms": 200, "max_error_rate": 0.01 },
+  "messages": { "p99_ms": 200, "max_error_rate": 0.01 },
+  "notifications": { "p99_ms": 200, "max_error_rate": 0.01 },
+  "search": { "p99_ms": 500, "max_error_rate": 0.02 }
+}
