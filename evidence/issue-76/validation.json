@@ -1,0 +1,34 @@
+{
+  "issue": 76,
+  "pr": 12787,
+  "source_head": "2e5cb33e0134fa54a40737d050a15d4bd89a83fb",
+  "source_path": "POEM.md",
+  "source_git_blob_sha": "8881b600f6a61b8c4dfabe515bdd743ad350529a",
+  "source_sha256": "b5c55ca6283075037e6c910510f0004de177aec88303250954e86021a03f573e",
+  "source_bytes": 894,
+  "source_bytes_unchanged": true,
+  "verified_at_utc": "2026-10-03T16:45:00.297364+00:00",
+  "demo_kind": "literal artifact presentation, not a screen recording or provider execution",
+  "ai_assisted": true,
+  "creator_approval_confirmed": false,
+  "award_confirmed": false,
+  "validation": {
+    "title": "Merge Window",
+    "stanzas": 5,
+    "lines": 20,
+    "root_path_confirmed": true,
+    "creative_note_in_pr": true
+  },
+  "video": {
+    "file": "demo.mp4",
+    "sha256": "68bb737178eb0060d4539046f0e72f11a42a473562204c41cf4c76184b105bfe",
+    "codec": "h264",
+    "width": 960,
+    "height": 540,
+    "duration_seconds": 31.0,
+    "bytes": 123926,
+    "audio": false,
+    "ffmpeg_exit": 0,
+    "ffprobe_exit": 0
+  }
+}
