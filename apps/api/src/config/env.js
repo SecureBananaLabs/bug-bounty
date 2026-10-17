@@ -1,7 +1,18 @@
-export const env = {
-  nodeEnv: process.env.NODE_ENV ?? "development",
-  port: Number(process.env.PORT ?? 4000),
-  jwtSecret: process.env.JWT_SECRET ?? "development-secret",
-  stripeSecretKey: process.env.STRIPE_SECRET_KEY ?? "",
-  databaseUrl: process.env.DATABASE_URL ?? ""
-};
+export function loadEnv(source = process.env) {
+  const nodeEnv = source.NODE_ENV ?? "development";
+  const jwtSecret = source.JWT_SECRET ?? (nodeEnv === "development" ? "development-secret" : undefined);
+
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET is required outside development");
+  }
+
+  return {
+    nodeEnv,
+    port: Number(source.PORT ?? 4000),
+    jwtSecret,
+    stripeSecretKey: source.STRIPE_SECRET_KEY ?? "",
+    databaseUrl: source.DATABASE_URL ?? ""
+  };
+}
+
+export const env = loadEnv();
