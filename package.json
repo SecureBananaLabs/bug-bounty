@@ -10,4 +10,9 @@
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
   }
+{
+  "scripts": {
+    "build:ui": "tsc -p packages/ui/tsconfig.json"
+  }
+}
 }
