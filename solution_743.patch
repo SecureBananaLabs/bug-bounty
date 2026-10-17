@@ -1,0 +1,13 @@
+diff --git a/src/utils/validation.js b/src/utils/validation.js
+index 1234567..89abcde 100644
+--- a/src/utils/validation.js
++++ b/src/utils/validation.js
+@@ -15,7 +15,7 @@ function validateInput(input) {
+     if (!input) {
+         return { valid: false, message: 'Input is required' };
+     }
+-    if (!input.match(/\d+/)) {
++    if (!input.match(/\d+/g)) {
+         return { valid: false, message: 'Input must contain at least one digit' };
+     }
+     return { valid: true, message: 'Input is valid' };
