@@ -7,7 +7,10 @@
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "benchmark": "node benchmarks/run.mjs",
+    "benchmark:smoke": "node benchmarks/run.mjs --smoke",
+    "benchmark:test": "node --test benchmarks/tests/manifest.test.mjs benchmarks/tests/report.test.mjs",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api && npm run benchmark:test"
   }
 }
