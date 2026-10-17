@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 const messages = [];
 
 export async function listMessages() {
@@ -5,7 +7,9 @@ export async function listMessages() {
 }
 
 export async function sendMessage(payload) {
-  const message = { id: `msg_${Date.now()}`, ...payload, sentAt: new Date().toISOString() };
+  // Date.now() only moves once a millisecond, so two messages created in the
+  // same tick used to share an id and the later one overwrote the earlier one.
+  const message = { id: `msg_${randomUUID()}`, ...payload, sentAt: new Date().toISOString() };
   messages.push(message);
   return message;
 }
