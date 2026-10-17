@@ -86,3 +86,5 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+For the API, `JWT_SECRET` is required outside the `development` and `test` environments. Production and staging startup fail if the value is missing, blank, or set to the built-in `development-secret` fallback. Configure `JWT_SECRET` with a strong random secret before starting a non-local deployment.
