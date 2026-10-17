@@ -4,8 +4,11 @@ export function errorHandler(err, req, res, next) {
     return next(err);
   }
 
-  return res.status(500).json({
+  const status = err.status ?? err.statusCode ?? 500;
+  const message = err.expose || status < 500 ? err.message : "Unexpected server error";
+
+  return res.status(status).json({
     success: false,
-    message: "Unexpected server error"
+    message
   });
 }
