@@ -27,6 +27,11 @@ export function createApp() {
     res.status(200).json({ ok: true, service: "api" });
   });
 
+  app.get("/ready", (req, res) => {
+    // Check that the server is ready to accept requests
+    res.status(200).json({ ready: true, service: "api", uptime: process.uptime() });
+  });
+
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
   app.use("/api/jobs", jobRoutes);
