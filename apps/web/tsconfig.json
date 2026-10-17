@@ -18,6 +18,9 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "esModuleInterop": true,
+    "paths": {
+      "@/*": ["./*"]
+    },
     "plugins": [
       {
         "name": "next"
