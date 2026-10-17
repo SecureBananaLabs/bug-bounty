@@ -3,7 +3,13 @@ export async function createPaymentIntent(payload) {
   return {
     paymentId: `pay_${Date.now()}`,
     amount: payload.amount,
-    currency: payload.currency ?? "usd",
+    currency: normalizeCurrency(payload.currency),
     provider: "stripe"
   };
+}
+
+function normalizeCurrency(currency) {
+  return typeof currency === "string" && currency.length > 0
+    ? currency.toUpperCase()
+    : "USD";
 }
