@@ -22,6 +22,15 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+    const result = await refreshToken(token);
+    return ok(res, result);
+  } catch (e) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or missing token",
+    });
+  }
 }
