@@ -7,6 +7,15 @@ export async function getJobs(req, res) {
 }
 
 export async function postJob(req, res) {
-  const payload = createJobSchema.parse(req.body);
-  return ok(res, await createJob(payload), 201);
+  const parsed = createJobSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed",
+      errors: parsed.error.errors
+    });
+  }
+
+  return ok(res, await createJob(parsed.data), 201);
 }
