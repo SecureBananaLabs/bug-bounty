@@ -1,8 +1,21 @@
-import { Router } from "express";
-import { metrics } from "../controllers/adminController.js";
-import { authMiddleware } from "../middleware/auth.js";
+import express from 'express';
+import { adminGuard } from '../middleware/adminGuard.js';
+import { 
+  getUsers, 
+  suspendUser, 
+  getFlaggedJobs, 
+  resolveJobFlag 
+} from '../controllers/adminController.js';
 
-export const adminRoutes = Router();
+export const adminRoutes = express.Router();
 
-adminRoutes.use(authMiddleware);
-adminRoutes.get("/metrics", metrics);
+// Apply admin guard to all routes
+adminRoutes.use(adminGuard);
+
+// User management
+adminRoutes.get('/users', getUsers);
+adminRoutes.put('/users/:userId/suspend', suspendUser);
+
+// Job moderation
+adminRoutes.get('/jobs/flagged', getFlaggedJobs);
+adminRoutes.put('/jobs/:jobId/resolve', resolveJobFlag);
