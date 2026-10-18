@@ -1,16 +1,18 @@
-import { fail } from "../utils/response.js";
-import { verifyAccessToken } from "../utils/jwt.js";
+import jwt from 'jsonwebtoken';
+import { env } from '../config/env.js';
 
-export function authMiddleware(req, res, next) {
+export function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith("Bearer ")) {
-    return fail(res, "Unauthorized", 401);
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Missing or malformed authorization header' });
   }
 
+  const token = authHeader.split(' ')[1];
   try {
-    req.user = verifyAccessToken(authHeader.slice(7));
-    return next();
-  } catch {
-    return fail(res, "Invalid token", 401);
+    const decoded = jwt.verify(token, env.jwtSecret);
+    req.user = { id: decoded.sub, role: decoded.role };
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid token' });
   }
 }
