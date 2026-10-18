@@ -18,6 +18,9 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
+export async function refreshToken(refreshToken) {
+  // In a real implementation we'd validate the passed refresh token and
+  // look up the user it belongs to. For now accept the token param
+  // but continue returning a signed access token (mock behavior).
   return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
 }
