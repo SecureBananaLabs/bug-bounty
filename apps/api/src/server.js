@@ -1,8 +1,9 @@
-import { connectDb } from "./config/db.js";
-import { env } from "./config/env.js";
+﻿import { connectDb } from "./config/db.js";
+import { env, validateEnv } from "./config/env.js";
 import { createApp } from "./app.js";
 
 async function bootstrap() {
+  validateEnv();
   await connectDb();
   const app = createApp();
   app.listen(env.port, () => {
