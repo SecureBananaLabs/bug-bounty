@@ -1,13 +1,17 @@
 {
-  "name": "freelance-platform-monorepo",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "name": "bug-bounty",
+  "version": "1.0.0",
+  "description": "Secure payment gateway and payment service",
+  "main": "src/paymentService.js",
+  "type": "module",
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "node --test",
+    "test:integration": "RUN_STRIPE_INTEGRATION_TESTS=true node --test test/paymentService.integration.test.js"
+  },
+  "dependencies": {
+    "stripe": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
