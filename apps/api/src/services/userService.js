@@ -5,7 +5,8 @@ export async function listUsers() {
 }
 
 export async function createUser(payload) {
-  const user = { id: `usr_${Date.now()}`, ...payload };
+  const { password, passwordHash, ...profile } = payload;
+  const user = { id: `usr_${Date.now()}`, ...profile };
   users.push(user);
   return user;
 }
