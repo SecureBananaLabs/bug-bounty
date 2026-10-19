@@ -27,6 +27,15 @@ export function createApp() {
     res.status(200).json({ ok: true, service: "api" });
   });
 
+  // Container orchestration probes (Kubernetes-compatible)
+  app.get("/healthz", (req, res) => {
+    res.status(200).json({ status: "ok" });
+  });
+
+  app.get("/readyz", (req, res) => {
+    res.status(200).json({ status: "ready" });
+  });
+
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
   app.use("/api/jobs", jobRoutes);
