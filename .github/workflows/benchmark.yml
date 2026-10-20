@@ -1,0 +1,34 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --workspace apps/api --include-workspace-root --ignore-scripts --no-audit --no-fund
+      - run: npm test
+      - name: Benchmark all real API routes and enforce p99/error gates
+        run: npm run benchmark
+        env:
+          BENCH_REQUESTS: "60"
+          BENCH_WARMUP: "5"
+          BENCH_CONCURRENCY: "2"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-benchmark-results
+          path: benchmarks/results/latest.*
+          if-no-files-found: error
