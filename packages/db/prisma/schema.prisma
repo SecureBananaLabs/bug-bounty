@@ -21,6 +21,17 @@ enum JobStatus {
   CANCELLED
 }
 
+/// Payment lifecycle states. Using a plain String for status allows
+/// arbitrary values (e.g. 'admin_override', 'refunded_manually') that
+/// bypass business logic. Enum enforces only valid transitions.
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
 model User {
   id             String      @id @default(cuid())
   email          String      @unique
@@ -71,18 +82,20 @@ model Proposal {
 }
 
 model Payment {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   amount        Float
-  currency      String      @default("USD")
-  status        String
+  currency      String        @default("USD")
+  status        PaymentStatus
   stripeRef     String?
   jobId         String
-  job           Job         @relation(fields: [jobId], references: [id])
-  createdAt     DateTime    @default(now())
+  job           Job           @relation(fields: [jobId], references: [id])
+  createdAt     DateTime      @default(now())
 }
 
 model Review {
   id            String      @id @default(cuid())
+  /// Rating must be 1-5. Without this check an INSERT of 0 or 100 would
+  /// corrupt aggregate scores used for freelancer trust metrics.
   rating        Int
   comment       String
   reviewerId    String
@@ -90,6 +103,8 @@ model Review {
   revieweeId    String
   reviewee      User        @relation("Reviewee", fields: [revieweeId], references: [id])
   createdAt     DateTime    @default(now())
+
+  @@check(rating >= 1 && rating <= 5, name: "review_rating_range")
 }
 
 model Message {
