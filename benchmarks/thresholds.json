@@ -1,0 +1,65 @@
+{
+  "$schema": "./thresholds.schema.json",
+  "defaults": {
+    "p99LatencyMs": 500,
+    "p95LatencyMs": 250,
+    "errorRatePct": 1.0,
+    "ttfbMs": 300
+  },
+  "endpoints": {
+    "GET /api/health": {
+      "p99LatencyMs": 100,
+      "p95LatencyMs": 50,
+      "errorRatePct": 0.1,
+      "ttfbMs": 50
+    },
+    "GET /api/users": {
+      "p99LatencyMs": 400,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1.0,
+      "ttfbMs": 250
+    },
+    "GET /api/users/:id": {
+      "p99LatencyMs": 400,
+      "p95LatencyMs": 200,
+      "errorRatePct": 1.0,
+      "ttfbMs": 250
+    },
+    "POST /api/users": {
+      "p99LatencyMs": 800,
+      "p95LatencyMs": 400,
+      "errorRatePct": 1.0,
+      "ttfbMs": 400
+    },
+    "GET /api/bounties": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 250,
+      "errorRatePct": 1.0,
+      "ttfbMs": 300
+    },
+    "GET /api/bounties/:id": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 250,
+      "errorRatePct": 1.0,
+      "ttfbMs": 300
+    },
+    "POST /api/bounties": {
+      "p99LatencyMs": 900,
+      "p95LatencyMs": 450,
+      "errorRatePct": 1.0,
+      "ttfbMs": 450
+    },
+    "GET /api/reports": {
+      "p99LatencyMs": 500,
+      "p95LatencyMs": 250,
+      "errorRatePct": 1.0,
+      "ttfbMs": 300
+    },
+    "POST /api/reports": {
+      "p99LatencyMs": 900,
+      "p95LatencyMs": 450,
+      "errorRatePct": 1.0,
+      "ttfbMs": 450
+    }
+  }
+}
