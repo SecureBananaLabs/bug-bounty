@@ -1,0 +1,65 @@
+Benchmark document: Synthetic project delivery brief
+====================================================
+
+This document is a synthetic project attachment for an API performance fixture. It contains no personal records, customer information, credentials, or confidential material. The names, references, requirements, dates, and examples describe a fictional reporting dashboard. Its purpose is to exercise multipart request parsing and an in-memory file upload with a representative text document instead of an empty request body.
+
+1. Project context
+------------------
+
+The fictional client operates a small distributed team that manages several independent design and development projects. Team members need a shared view of current milestones, upcoming reviews, outstanding invoices, and recent conversations. Today they gather those details from separate sample spreadsheets and mock email threads. The dashboard brings those summaries together so a client can understand project progress before opening a detailed discussion.
+
+The principal workflow begins with a list of active projects. A client selects a project, checks its next milestone, reviews a delivery note, and opens the associated conversation. A freelancer uses the same information to prepare a concise handoff. The first release focuses on that workflow and deliberately keeps configuration small. All demonstrations use fabricated names and records, including the reserved example.invalid domain for illustrative email addresses.
+
+2. Delivery goals
+-----------------
+
+The first goal is a clear overview that helps a user identify what needs attention. A project card should show the project title, current phase, next review date, and a short progress description. Status must be conveyed through text as well as color. A user should be able to move from a summary to its detail view without losing the surrounding navigation or having to repeat the same filtering choices after returning to the list.
+
+The second goal is a dependable review process. Milestone details include the requested outcome, submitted work, feedback, and the next agreed action. A delivery note should be readable on a narrow screen and useful without downloading an additional file. Attachments remain available when a walkthrough or sample export provides useful context. This document represents one such attachment and includes enough content to exercise a realistic multipart upload.
+
+3. Dashboard information
+------------------------
+
+The overview contains a project table, a milestone summary, an invoice summary, and a short list of unread conversations. Each section has a descriptive heading and a visible path to its full detail view. The project table supports a simple text filter and a status selector. Sorting is limited to title, review date, and progress so the behavior stays understandable. Filter controls remain available when there are no matching results.
+
+The milestone summary distinguishes upcoming reviews from completed delivery. An upcoming item includes the project title, owner label, review date, and a short statement of the expected outcome. A completed item adds the recorded decision and any follow-up work. Dates are displayed consistently, with their timezone made clear where a specific time matters. Sample records should cover projects with one milestone and projects with several completed and pending milestones.
+
+4. Accessible interaction
+-------------------------
+
+Every interactive element must be reachable with a keyboard. Focus should remain visible against the surrounding surface, including when a button appears inside a table row. Opening a detail panel places focus at a useful heading or introductory control, and closing the panel returns focus to the element that opened it. Controls need labels that explain their purpose without relying on nearby decorative icons or placeholder text alone.
+
+Tables require meaningful column headings and predictable reading order. Narrow layouts may present each project as a labeled list of fields when a complete table would force excessive scrolling. Any layout change must preserve the relationship between labels and values. Progress indicators include a textual summary, such as two of three milestones complete. Error messages identify the affected field or action and explain how the user can recover.
+
+5. Representative records
+-------------------------
+
+The fixture set includes a synthetic client, a synthetic freelancer, and a dashboard project with three milestones. The project budget spans an agreed minimum and maximum, while the proposal contains a specific bid and an estimated duration. Review comments refer to concrete delivery details, such as keyboard navigation and setup notes. Conversation messages contain a short request or decision so the interface can demonstrate useful wrapping and preview behavior.
+
+Each fixture has a stable descriptive reference where an entity relationship needs to be illustrated. These references do not identify real database records. A sample notification explains that the client reviewed a project table and requested accessibility notes for the next handoff. Example payment information contains an amount, a currency label, and a synthetic project reference. No payment instrument, bank account, or live payment credential is included in the fixtures.
+
+6. Implementation approach
+--------------------------
+
+Start with a small collection of reusable components: a page heading, project summary, status label, empty state, error notice, and labeled form control. Components should expose only the inputs needed by the current workflow. Keep the first implementation easy to inspect and explain. Shared formatting functions can handle amounts and dates, while the main view remains responsible for arranging the information in a useful order for the client.
+
+Place data access behind a service interface that returns explicit request and response shapes. During interface development, this boundary reads the synthetic fixtures. When a backend becomes available, the same boundary can call the appropriate endpoints. Loading and failure states should be exercised through representative scenarios. Avoid assuming that every collection contains records or that every network response arrives before the user changes their selection.
+
+7. Review and acceptance
+------------------------
+
+The first review checks navigation, layout, and the project table using desktop and narrow viewport examples. The second review checks milestone detail, invoice summaries, and conversation previews. The final review covers keyboard interaction, accessible labels, loading and error states, and the handoff documentation. Each review produces a short list of concrete observations with an owner and a proposed resolution, keeping feedback connected to the delivered behavior.
+
+Acceptance requires a user to locate a project, understand its next milestone, review the associated delivery note, and open its conversation. A reviewer should complete that path with a keyboard and inspect the same information on a narrow viewport. A sample invoice export must contain the correct project reference and currency label. Document any incomplete integration clearly so a future developer can distinguish a working interface from a placeholder service.
+
+8. Handoff contents
+--------------------
+
+The handoff includes source code, setup instructions, a description of the fixture set, and focused interaction checks. The setup notes identify the supported runtime and explain how to start the local demonstration. A component index shows where the reusable interface elements live. A short service-contract section describes the fields consumed by each view and identifies which responses are currently supplied by a stub or an in-memory collection.
+
+Known limitations are recorded alongside their practical effect. For example, an in-memory collection is cleared when its process restarts, and a placeholder payment response does not represent a completed charge. A search screen backed by empty fixture results cannot demonstrate ranking quality. Recording these facts makes the demonstration useful while avoiding claims about work that has not been implemented. The next developer can then choose a specific integration task.
+
+9. Final fixture note
+---------------------
+
+This attachment is intentionally plain UTF-8 text. It can be inspected with a text editor, transmitted in a multipart file field, and compared byte for byte after parsing. The complete document must appear in the upload request under the filename document.txt. A successful HTTP status without a file does not meet that requirement. The benchmark checks the response for an uploaded status and the expected filename after sending these actual document bytes.
