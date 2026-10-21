@@ -1,11 +1,19 @@
-const jobs = [];
+let jobs = [];
 
 export async function listJobs() {
-  return jobs;
+  return [...jobs];
+}
+
+export async function getJobById(id) {
+  return jobs.find((j) => j.id === id) || null;
 }
 
 export async function createJob(payload) {
   const job = { id: `job_${Date.now()}`, status: "open", ...payload };
   jobs.push(job);
   return job;
+}
+
+export function _resetJobs() {
+  jobs = [];
 }
