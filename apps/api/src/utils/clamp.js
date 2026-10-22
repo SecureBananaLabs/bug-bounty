@@ -17,6 +17,10 @@ export function toFiniteNumber(val) {
     const num = Number(trimmed);
     return Number.isFinite(num) ? (num === 0 ? 0 : num) : null;
   }
+  if (typeof val === 'bigint') {
+    const num = Number(val);
+    return Number.isFinite(num) ? (num === 0 ? 0 : num) : null;
+  }
   if (typeof val === 'object') {
     if (val instanceof Number || val instanceof String) {
       return toFiniteNumber(val.valueOf());
@@ -46,14 +50,8 @@ function resolveBounds(min, max) {
   let lower = toFiniteNumber(min);
   let upper = toFiniteNumber(max);
 
-  if (lower === null && upper === null) {
-    lower = 0;
-    upper = 1;
-  } else if (lower === null) {
-    lower = upper < 0 ? upper : 0;
-  } else if (upper === null) {
-    upper = lower > 1 ? lower : 1;
-  }
+  if (lower === null) lower = 0;
+  if (upper === null) upper = 1;
 
   // Auto-swap inverted bounds (min > max)
   if (lower > upper) {

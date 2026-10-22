@@ -360,3 +360,57 @@ test("clamp - export structure and compatibility", async (t) => {
     assert.equal(clamp.isNumeric("123"), isNumeric("123"));
   });
 });
+
+test("clamp - advanced edge cases and robustness hardening", async (t) => {
+  await t.test("supports BigInt values safely across clamp and clampInt", () => {
+    assert.equal(clamp(10n, 0, 20), 10);
+    assert.equal(clamp(50n, 0, 20), 20);
+    assert.equal(clamp(-10n, 0, 20), 0);
+    assert.equal(clamp(15, 0n, 10n), 10);
+    assert.equal(clamp(5, 10n, 0n), 5);
+    assert.equal(clamp(NaN, 0, 20, 15n), 15);
+    assert.equal(clampInt(42n, 0, 100), 42);
+    assert.equal(toFiniteNumber(100n), 100);
+    assert.equal(isNumeric(100n), true);
+  });
+
+  await t.test("safely handles null/undefined bounds without degenerate point collapse", () => {
+    // clamp(5, 10, null) should use bounds [1, 10] after auto-swap, not collapse to [10, 10]
+    assert.equal(clamp(5, 10, null), 5);
+    assert.equal(clamp(15, 10, null), 10);
+    assert.equal(clamp(0, 10, null), 1);
+
+    // clamp(-2, null, -5) should use bounds [-5, 0] after auto-swap, not collapse to [-5, -5]
+    assert.equal(clamp(-2, null, -5), -2);
+    assert.equal(clamp(-10, null, -5), -5);
+    assert.equal(clamp(5, null, -5), 0);
+  });
+
+  await t.test("handles clampInt with fractional bounds containing no integers", () => {
+    // Bounds [2.4, 2.6] contain no integers strictly inside; should clamp to nearest rounded boundary integer
+    assert.equal(clampInt(2.5, 2.4, 2.6), 3);
+    assert.equal(clampInt(2.1, 2.4, 2.6), 2);
+    assert.equal(clampInt(2.9, 2.4, 2.6), 3);
+    assert.equal(clampInt(NaN, 2.4, 2.6), 2);
+  });
+
+  await t.test("handles extremely large numbers within IEEE-754 range", () => {
+    assert.equal(clamp(1e20, 0, 1e10), 1e10);
+    assert.equal(clamp(-1e20, -1e10, 0), -1e10);
+    assert.equal(clamp(5e9, 0, 1e10), 5e9);
+    assert.equal(clampInt(Number.MAX_SAFE_INTEGER, 0, 1e16), Number.MAX_SAFE_INTEGER);
+  });
+
+  await t.test("ensures clamp01 and clampInt normalize -0 to +0", () => {
+    const res01 = clamp01(-0);
+    assert.equal(res01, 0);
+    assert.equal(Object.is(res01, 0), true);
+    assert.equal(Object.is(res01, -0), false);
+
+    const resInt = clampInt(-0.2, -5, 5);
+    assert.equal(resInt, 0);
+    assert.equal(Object.is(resInt, 0), true);
+    assert.equal(Object.is(resInt, -0), false);
+  });
+});
+
