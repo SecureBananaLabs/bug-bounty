@@ -1,6 +1,6 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -9,9 +9,13 @@ export async function register(req, res) {
 }
 
 export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
+  try {
+    const payload = loginSchema.parse(req.body);
+    const result = await loginUser(payload);
+    return ok(res, result);
+  } catch (err) {
+    return fail(res, err.message || "Invalid credentials", 401);
+  }
 }
 
 export async function oauthCallback(req, res) {
