@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import vm from "node:vm";
 import { deepMerge, isPlainObject, isUnsafeKey, cloneDeep } from "../utils/deepMerge.js";
 
 test("deepMerge - basic plain object merging", async (t) => {
@@ -178,6 +179,38 @@ test("deepMerge - prototype pollution mitigation (CWE-1321)", async (t) => {
     assert.equal(typeof ({}).toString, "function");
     assert.equal(typeof ({}).valueOf, "function");
   });
+
+  await t.test("prevents Prototype Setter Hijacking when target prototype has a setter", () => {
+    let setterInvoked = false;
+    const proto = {
+      set compromised(val) {
+        setterInvoked = true;
+      }
+    };
+    const target = Object.create(proto);
+    const source = { compromised: "safe_value" };
+
+    const result = deepMerge(target, source);
+
+    assert.equal(setterInvoked, false);
+    assert.equal(Object.prototype.hasOwnProperty.call(result, "compromised"), true);
+    assert.equal(result.compromised, "safe_value");
+  });
+
+  await t.test("assigns own property without throwing when target prototype has inherited getter", () => {
+    const proto = {
+      get readOnlyProp() {
+        return "inherited_value";
+      }
+    };
+    const target = Object.create(proto);
+    const source = { readOnlyProp: "merged_value" };
+
+    const result = deepMerge(target, source);
+
+    assert.equal(Object.prototype.hasOwnProperty.call(result, "readOnlyProp"), true);
+    assert.equal(result.readOnlyProp, "merged_value");
+  });
 });
 
 test("deepMerge - array handling", async (t) => {
@@ -223,6 +256,22 @@ test("deepMerge - array handling", async (t) => {
     const result = deepMerge(arr1, arr2);
 
     assert.deepEqual(result, [3, 4]);
+  });
+
+  await t.test("passes options consistently to custom arrayMerge in nested object structures", () => {
+    let receivedOptions;
+    const customMerger = (targetArr, sourceArr, opts) => {
+      receivedOptions = opts;
+      return [...targetArr, ...sourceArr];
+    };
+    const target = { deep: { items: [1] } };
+    const source = { deep: { items: [2] } };
+    const opts = { arrayMerge: customMerger, customFlag: true };
+
+    const result = deepMerge(target, source, opts);
+    assert.deepEqual(result.deep.items, [1, 2]);
+    assert.equal(typeof receivedOptions, "object");
+    assert.equal(receivedOptions.arrayMerge, customMerger);
   });
 });
 
@@ -371,6 +420,51 @@ test("deepMerge - advanced edge cases and robustness", async (t) => {
     });
   });
 
+  await t.test("deepMerge.all does not mutate elements of the input array", () => {
+    const first = { a: 1, nested: { count: 10 } };
+    const second = { b: 2, nested: { count: 20 } };
+    const input = [first, second];
+
+    const result = deepMerge.all(input);
+
+    assert.notEqual(result, first);
+    assert.deepEqual(first, { a: 1, nested: { count: 10 } });
+    assert.deepEqual(second, { b: 2, nested: { count: 20 } });
+    assert.deepEqual(result, { a: 1, b: 2, nested: { count: 20 } });
+  });
+
+  await t.test("correctly merges data objects having option-like keys with non-boolean values", () => {
+    const target = { service: "api" };
+    const src = { clone: "production", inPlace: 42 };
+
+    const result = deepMerge(target, src);
+
+    assert.equal(result.service, "api");
+    assert.equal(result.clone, "production");
+    assert.equal(result.inPlace, 42);
+  });
+
+  await t.test("clones cross-realm Date and RegExp objects into independent host instances", () => {
+    const context = vm.createContext();
+    const script = new vm.Script(`
+      const d = new Date(1700000000000);
+      const r = /cross_realm/gi;
+      [d, r];
+    `);
+    const [vmDate, vmRegExp] = script.runInContext(context);
+
+    const target = {};
+    const result = deepMerge(target, { date: vmDate, regex: vmRegExp });
+
+    assert.equal(result.date instanceof Date, true);
+    assert.equal(result.date.getTime(), vmDate.getTime());
+    assert.notEqual(result.date, vmDate);
+    assert.equal(result.regex instanceof RegExp, true);
+    assert.equal(result.regex.source, "cross_realm");
+    assert.equal(result.regex.flags, "gi");
+    assert.notEqual(result.regex, vmRegExp);
+  });
+
   await t.test("merges enumerable symbol properties safely", () => {
     const sym1 = Symbol("sym1");
     const sym2 = Symbol("sym2");
@@ -422,6 +516,13 @@ test("utility helpers - isPlainObject and isUnsafeKey", async (t) => {
     assert.equal(isPlainObject(() => {}), false);
   });
 
+  await t.test("isPlainObject rejects objects created with multi-level null prototype hierarchy", () => {
+    const nullProto = Object.create(null);
+    const inheritedFromNull = Object.create(nullProto);
+    assert.equal(isPlainObject(nullProto), true);
+    assert.equal(isPlainObject(inheritedFromNull), false);
+  });
+
   await t.test("isUnsafeKey correctly flags dangerous property keys", () => {
     assert.equal(isUnsafeKey("__proto__"), true);
     assert.equal(isUnsafeKey("__PROTO__"), true);
@@ -437,5 +538,12 @@ test("utility helpers - isPlainObject and isUnsafeKey", async (t) => {
     assert.equal(isUnsafeKey("name"), false);
     assert.equal(isUnsafeKey(Symbol("sym")), false);
     assert.equal(isUnsafeKey(123), false);
+  });
+
+  await t.test("isUnsafeKey handles String wrapper objects safely", () => {
+    assert.equal(isUnsafeKey(new String("__proto__")), true);
+    assert.equal(isUnsafeKey(new String("constructor")), true);
+    assert.equal(isUnsafeKey(new String("prototype")), true);
+    assert.equal(isUnsafeKey(new String("safeKey")), false);
   });
 });

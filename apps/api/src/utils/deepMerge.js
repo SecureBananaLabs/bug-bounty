@@ -11,21 +11,22 @@ const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
  * @returns {boolean} True if the key is dangerous
  */
 export function isUnsafeKey(key) {
-  if (typeof key !== 'string') return false;
-  const lower = key.toLowerCase();
-  return FORBIDDEN_KEYS.has(key) || FORBIDDEN_KEYS.has(lower);
+  if (typeof key !== 'string' && !(key instanceof String)) return false;
+  const str = String(key);
+  const lower = str.toLowerCase();
+  return FORBIDDEN_KEYS.has(str) || FORBIDDEN_KEYS.has(lower);
 }
 
 /**
  * Checks whether an input value is a plain JavaScript object (created with {} or Object.create(null)).
  * Correctly distinguishes plain objects from null, primitives, arrays, Dates, RegExps,
- * Maps, Sets, Errors, Promises, and custom class instances across execution realms.
+ * Maps, Sets, Errors, Promises, custom class instances, and multi-level inherited null prototypes.
  *
  * @param {unknown} value - Value to check
  * @returns {boolean} True if the value is a plain object
  */
 export function isPlainObject(value) {
-  if (value === null || typeof value !== 'object') {
+  if (value === null || typeof value !== 'object' || Object.prototype.toString.call(value) !== '[object Object]') {
     return false;
   }
   if (Array.isArray(value)) {
@@ -35,11 +36,11 @@ export function isPlainObject(value) {
   if (proto === null) {
     return true;
   }
-  let baseProto = proto;
-  while (Object.getPrototypeOf(baseProto) !== null) {
-    baseProto = Object.getPrototypeOf(baseProto);
+  let root = proto;
+  while (Object.getPrototypeOf(root) !== null) {
+    root = Object.getPrototypeOf(root);
   }
-  return proto === baseProto;
+  return proto === root && typeof root.constructor === 'function' && root.constructor.name === 'Object';
 }
 
 /**
@@ -53,10 +54,10 @@ export function cloneDeep(value, visited = new WeakMap()) {
   if (value === null || typeof value !== 'object') {
     return value;
   }
-  if (value instanceof Date) {
+  if (value instanceof Date || Object.prototype.toString.call(value) === '[object Date]') {
     return new Date(value.getTime());
   }
-  if (value instanceof RegExp) {
+  if (value instanceof RegExp || Object.prototype.toString.call(value) === '[object RegExp]') {
     return new RegExp(value.source, value.flags);
   }
   if (visited.has(value)) {
@@ -102,7 +103,9 @@ export function cloneDeep(value, visited = new WeakMap()) {
 }
 
 /**
- * Safely assigns a property to a target object, ignoring non-writable properties.
+ * Safely assigns an own property to a target object using Object.defineProperty.
+ * Immunizes against Prototype Setter Hijacking and prototype read-only shadowing.
+ * Gracefully ignores target non-configurable read-only properties.
  *
  * @param {object} target
  * @param {string|symbol} key
@@ -110,13 +113,22 @@ export function cloneDeep(value, visited = new WeakMap()) {
  */
 function safeAssign(target, key, val) {
   const desc = Object.getOwnPropertyDescriptor(target, key);
-  if (desc && desc.writable === false && desc.set === undefined) {
+  if (desc && desc.configurable === false && desc.writable === false) {
     return;
   }
   try {
-    target[key] = val;
+    Object.defineProperty(target, key, {
+      value: val,
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
   } catch {
-    // Gracefully handle sealed or non-configurable descriptors
+    try {
+      target[key] = val;
+    } catch {
+      // Gracefully handle sealed or non-extensible descriptors
+    }
   }
 }
 
@@ -200,7 +212,7 @@ function mergeTwo(target, source, options, visited) {
     if (Array.isArray(sourceVal)) {
       if (Array.isArray(targetVal)) {
         if (typeof options.arrayMerge === 'function') {
-          safeAssign(outTarget, key, options.arrayMerge(targetVal, sourceVal, key));
+          safeAssign(outTarget, key, options.arrayMerge(targetVal, sourceVal, options));
         } else if (options.arrayMode === 'concat') {
           safeAssign(outTarget, key, targetVal.concat(cloneDeep(sourceVal, visited)));
         } else {
@@ -227,15 +239,29 @@ function mergeTwo(target, source, options, visited) {
 
 /**
  * Checks if an object is purely a configuration options bag for deepMerge.
+ * Validates known option keys and ensures values match expected option types,
+ * preventing data objects with option-like keys from being dropped.
  *
  * @param {unknown} obj
  * @returns {boolean}
  */
 function isMergeOptions(obj) {
   if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return false;
-  const knownKeys = ['arrayMode', 'arrayMerge', 'clone', 'ignoreUndefined', 'inPlace', 'freezeSafe'];
+  const knownKeys = new Set(['arrayMode', 'arrayMerge', 'clone', 'ignoreUndefined', 'inPlace', 'freezeSafe']);
   const keys = Object.keys(obj);
-  return keys.length > 0 && keys.every(k => knownKeys.includes(k));
+  if (keys.length === 0) return false;
+  let hasKnownOption = false;
+  for (let i = 0; i < keys.length; i++) {
+    const k = keys[i];
+    if (knownKeys.has(k)) {
+      const val = obj[k];
+      if (k === 'arrayMode' && val !== 'replace' && val !== 'concat') return false;
+      if (k === 'arrayMerge' && typeof val !== 'function') return false;
+      if ((k === 'clone' || k === 'ignoreUndefined' || k === 'inPlace' || k === 'freezeSafe') && typeof val !== 'boolean') return false;
+      hasKnownOption = true;
+    }
+  }
+  return hasKnownOption;
 }
 
 /**
@@ -290,19 +316,21 @@ export function deepMerge(target, ...args) {
 }
 
 /**
- * Merges an array of objects in sequence using deepMerge.
+ * Merges an array of objects in sequence using deepMerge without mutating input items.
  *
  * @param {object[]} items - Array of objects to merge
  * @param {object} [options={}] - Merge options
- * @returns {object}
+ * @returns {object} Merged object
  */
 deepMerge.all = function all(items, options = {}) {
   if (!Array.isArray(items) || items.length === 0) {
     return {};
   }
-  let result = items[0];
+  let result = items[0] !== null && typeof items[0] === 'object' ? cloneDeep(items[0]) : {};
   for (let i = 1; i < items.length; i++) {
-    result = deepMerge(result, items[i], options);
+    const item = items[i];
+    if (item === null || typeof item !== 'object') continue;
+    result = mergeTwo(result, item, options, new WeakMap());
   }
   return result;
 };
