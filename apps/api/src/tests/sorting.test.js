@@ -87,8 +87,11 @@ test("Safe query sorting utility test suite", async (t) => {
     assert.equal(normalizeOrder("DESC"), "desc");
     assert.equal(normalizeOrder("Ascending"), "asc");
     assert.equal(normalizeOrder("descending"), "desc");
+    assert.equal(normalizeOrder("ascend"), "asc");
+    assert.equal(normalizeOrder("descend"), "desc");
     assert.equal(normalizeOrder("1"), "asc");
     assert.equal(normalizeOrder("-1"), "desc");
+    assert.equal(normalizeOrder("+1"), "asc");
     assert.equal(normalizeOrder(1), "asc");
     assert.equal(normalizeOrder(-1), "desc");
 
@@ -129,6 +132,9 @@ test("Safe query sorting utility test suite", async (t) => {
       "createdAt"
     );
     assert.equal(proto2.field, "createdAt");
+
+    const proto3 = parseSorting({ sortBy: "toString" }, allowed, "createdAt");
+    assert.equal(proto3.field, "createdAt");
   });
 
   await t.test("Matches allowed fields case-insensitively and returns canonical casing", () => {
@@ -169,8 +175,30 @@ test("Safe query sorting utility test suite", async (t) => {
     assert.equal(comma.order, "asc");
   });
 
-  await t.test("Parses raw string queries directly", () => {
-    const allowed = ["price", "date"];
+  await t.test("Handles combined prefix and suffix notations", () => {
+    const allowed = ["title", "createdAt"];
+    const res1 = parseSorting({ sortBy: "-createdAt desc" }, allowed);
+    assert.equal(res1.field, "createdAt");
+    assert.equal(res1.order, "desc");
+
+    const res2 = parseSorting({ sortBy: "+title asc" }, ["budget", "title"]);
+    assert.equal(res2.field, "title");
+    assert.equal(res2.order, "asc");
+  });
+
+  await t.test("Handles comma-separated multi-field strings by parsing primary sort", () => {
+    const allowed = ["id", "title", "createdAt"];
+    const res1 = parseSorting({ sortBy: "-title, +createdAt" }, allowed);
+    assert.equal(res1.field, "title");
+    assert.equal(res1.order, "desc");
+
+    const res2 = parseSorting({ sortBy: "createdAt asc, title desc" }, allowed);
+    assert.equal(res2.field, "createdAt");
+    assert.equal(res2.order, "asc");
+  });
+
+  await t.test("Parses raw string queries directly and handles all alias keys in URL format", () => {
+    const allowed = ["price", "date", "title"];
 
     const str1 = parseSorting("-price", allowed);
     assert.equal(str1.field, "price");
@@ -180,12 +208,27 @@ test("Safe query sorting utility test suite", async (t) => {
     assert.equal(str2.field, "price");
     assert.equal(str2.order, "asc");
 
-    const urlParams = parseSorting(
+    const urlParams1 = parseSorting(
       "sortBy=price&sortOrder=desc",
       allowed
     );
-    assert.equal(urlParams.field, "price");
-    assert.equal(urlParams.order, "desc");
+    assert.equal(urlParams1.field, "price");
+    assert.equal(urlParams1.order, "desc");
+
+    // URL parameter aliases without leading '?' or '&'
+    const urlParams2 = parseSorting(
+      "orderBy=title",
+      ["budget", "title"]
+    );
+    assert.equal(urlParams2.field, "title");
+    assert.equal(urlParams2.order, "asc");
+
+    const urlParams3 = parseSorting(
+      "?order_by=price&order=desc",
+      allowed
+    );
+    assert.equal(urlParams3.field, "price");
+    assert.equal(urlParams3.order, "desc");
   });
 
   await t.test("Supports allowedFields passed as a Set or Object", () => {
@@ -216,14 +259,44 @@ test("Safe query sorting utility test suite", async (t) => {
     assert.equal(res.order, "desc");
   });
 
-  await t.test("Handles array query parameters gracefully", () => {
+  await t.test("Handles array query parameters gracefully with uppercase/varied directions and array orders", () => {
     const allowed = ["title", "createdAt"];
-    const res = parseSorting(
+
+    const res1 = parseSorting(
       { sortBy: ["title", "desc"] },
       allowed
     );
-    assert.equal(res.field, "title");
-    assert.equal(res.order, "desc");
+    assert.equal(res1.field, "title");
+    assert.equal(res1.order, "desc");
+
+    // Uppercase 'DESC' in array parameter
+    const res2 = parseSorting(
+      { sortBy: ["title", "DESC"] },
+      allowed
+    );
+    assert.equal(res2.field, "title");
+    assert.equal(res2.order, "desc");
+
+    // Numeric direction in array parameter
+    const res3 = parseSorting(
+      { sortBy: ["title", -1] },
+      allowed
+    );
+    assert.equal(res3.field, "title");
+    assert.equal(res3.order, "desc");
+
+    // Array sortOrder parameter
+    const res4 = parseSorting(
+      { sortBy: "title", sortOrder: ["desc"] },
+      allowed
+    );
+    assert.equal(res4.field, "title");
+    assert.equal(res4.order, "desc");
+
+    // Query itself passed as array
+    const res5 = parseSorting(["title", "desc"], allowed);
+    assert.equal(res5.field, "title");
+    assert.equal(res5.order, "desc");
   });
 
   await t.test("Handles empty allowedFields by safely returning defaultField", () => {
@@ -238,10 +311,11 @@ test("Safe query sorting utility test suite", async (t) => {
       parseSorting(true, undefined, undefined, "invalidOrder");
       parseSorting({ sortBy: 999 }, ["999"]);
       parseSorting({}, [], 42, -1);
+      parseSorting([], null);
+      parseSorting({}, [null, undefined, ""]);
     });
     const resNum = parseSorting({}, [], 42, -1);
     assert.equal(resNum.field, "42");
     assert.equal(resNum.order, "desc");
   });
 });
-
