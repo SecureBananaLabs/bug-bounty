@@ -15,11 +15,29 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+const allowedOrigins = (process.env.CORS_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const corsOptions = {
+  origin(origin, callback) {
+    // Non-browser clients do not send an Origin header.
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.length > 0) {
+      return callback(null, allowedOrigins.includes(origin));
+    }
+    // With no allowlist configured, deny cross-origin browser calls in production.
+    if (process.env.NODE_ENV === "production") return callback(null, false);
+    return callback(null, true);
+  }
+};
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(apiLimiter);
 
