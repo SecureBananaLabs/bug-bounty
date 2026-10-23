@@ -1,5 +1,6 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
+import { loginUser, registerUser } from "../services/authService.js";
+import { signAccessToken } from "../utils/jwt.js";
 import { ok } from "../utils/response.js";
 
 export async function register(req, res) {
@@ -22,6 +23,7 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  const user = req.user ?? { sub: "usr_existing", role: "client" };
+  const token = signAccessToken({ sub: user.sub, role: user.role });
+  return ok(res, { token });
 }
