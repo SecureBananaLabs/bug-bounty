@@ -50,6 +50,9 @@ test('chunk - returns empty array on invalid, zero, or negative sizes', () => {
   assert.deepEqual(chunk(input, Infinity), []);
   assert.deepEqual(chunk(input, -Infinity), []);
   assert.deepEqual(chunk(input, 'invalid'), []);
+  assert.deepEqual(chunk(input, '-2'), []);
+  assert.deepEqual(chunk(input, '0'), []);
+  assert.deepEqual(chunk(input, '2'), [[1, 2], [3]]);
 });
 
 test('chunk - returns empty array on non-array or empty inputs', () => {
