@@ -149,6 +149,37 @@ test('debounce - flush() immediately executes pending call and returns result', 
   assert.equal(callCount, 1, 'Timer should not re-invoke after flush');
 });
 
+test('debounce - flush() clears underlying timer handle preventing timer collision on subsequent call', async () => {
+  const executions = [];
+  const fn = debounce((v) => {
+    executions.push({ v, time: Date.now() });
+  }, 60);
+
+  fn('call-1');
+  const res = fn.flush();
+  assert.deepEqual(executions.map((e) => e.v), ['call-1']);
+
+  // Call again within the original 60ms window
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  fn('call-2');
+
+  // At +40ms from call-2 (+60ms from start, when call-1 timer would have fired if orphan):
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  assert.deepEqual(
+    executions.map((e) => e.v),
+    ['call-1'],
+    'call-2 should NOT have fired early due to orphan timer from call-1'
+  );
+
+  // At +50ms more (+80ms from call-2), call-2 should cleanly fire
+  await new Promise((resolve) => setTimeout(resolve, 50));
+  assert.deepEqual(
+    executions.map((e) => e.v),
+    ['call-1', 'call-2'],
+    'call-2 should have executed after its full wait window'
+  );
+});
+
 test('debounce - preserves `this` context and arguments', async () => {
   const contextObj = {
     multiplier: 3,

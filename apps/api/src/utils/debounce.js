@@ -105,6 +105,7 @@ export function debounce(func, wait = 0, options = {}) {
     if (timerId === undefined) {
       return result;
     }
+    clearTimeout(timerId);
     return trailingEdge(Date.now());
   }
 
