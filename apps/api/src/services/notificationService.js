@@ -7,7 +7,9 @@ export async function listNotifications() {
 }
 
 export async function createNotification(payload = {}) {
-  const { id: _ignoredId, ...rest } = payload ?? {};
+  const safePayload =
+    payload !== null && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  const { id: _ignoredId, ...rest } = safePayload;
   const notification = {
     read: false,
     ...rest,

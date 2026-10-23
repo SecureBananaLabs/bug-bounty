@@ -7,7 +7,9 @@ export async function listReviews() {
 }
 
 export async function createReview(payload = {}) {
-  const { id: _ignoredId, ...rest } = payload ?? {};
+  const safePayload =
+    payload !== null && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  const { id: _ignoredId, ...rest } = safePayload;
   const review = {
     ...rest,
     id: `rev_${crypto.randomUUID()}`

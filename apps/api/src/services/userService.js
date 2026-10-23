@@ -7,7 +7,9 @@ export async function listUsers() {
 }
 
 export async function createUser(payload = {}) {
-  const { id: _ignoredId, ...rest } = payload ?? {};
+  const safePayload =
+    payload !== null && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  const { id: _ignoredId, ...rest } = safePayload;
   const user = {
     ...rest,
     id: `usr_${crypto.randomUUID()}`

@@ -7,7 +7,9 @@ export async function listMessages() {
 }
 
 export async function sendMessage(payload = {}) {
-  const { id: _ignoredId, ...rest } = payload ?? {};
+  const safePayload =
+    payload !== null && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  const { id: _ignoredId, ...rest } = safePayload;
   const message = {
     ...rest,
     id: `msg_${crypto.randomUUID()}`,

@@ -44,4 +44,17 @@ describe("Collision-Resistant Cryptographic Entity IDs (#13079, #2262)", () => {
       Date.now = originalNow;
     }
   });
+
+  it("ignores caller-supplied id overrides and handles non-plain-object payloads safely", async () => {
+    const ntf = await createNotification({ id: "ntf_fake", message: "Alert" });
+    const msg = await sendMessage("not-an-object");
+    const rev = await createReview(["invalid"]);
+    const usr = await createUser(null);
+
+    assert.notEqual(ntf.id, "ntf_fake");
+    assert.match(msg.id, /^msg_[0-9a-f-]{36}$/);
+    assert.equal(Object.prototype.hasOwnProperty.call(msg, "0"), false);
+    assert.equal(Object.prototype.hasOwnProperty.call(rev, "0"), false);
+    assert.match(usr.id, /^usr_[0-9a-f-]{36}$/);
+  });
 });
