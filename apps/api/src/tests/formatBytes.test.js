@@ -17,6 +17,18 @@ test("formatBytes - standard byte thresholds (base 1024)", () => {
   assert.equal(formatBytes(1024 * 1024 * 1024 * 1024 * 1024), "1 PB");
 });
 
+test("formatBytes - sub-unit fractional bytes and rollover handling", () => {
+  // Fractional bytes below 1 B should not evaluate negative log or undefined unit
+  assert.equal(formatBytes(0.5), "0.5 B");
+  assert.equal(formatBytes(0.1), "0.1 B");
+  assert.equal(formatBytes(0.75, 1), "0.8 B");
+
+  // Rounding rollover: near boundary values rounding up to next unit
+  assert.equal(formatBytes(1048575, 0), "1 MB"); // 1023.999 KB -> 1 MB at 0 decimals
+  assert.equal(formatBytes(1073741823, 0), "1 GB"); // 1023.999 MB -> 1 GB at 0 decimals
+  assert.equal(formatBytes(1023.999, 0), "1 KB"); // 1023.999 B -> 1 KB at 0 decimals
+});
+
 test("formatBytes - decimals and precision configuration", () => {
   const bytes = 1536; // 1.5 KB
   assert.equal(formatBytes(bytes, 0), "2 KB");
@@ -85,6 +97,12 @@ test("parseBytes - converts formatted string back to byte count", () => {
   assert.equal(parseBytes("1.5 MB"), 1572864);
   assert.equal(parseBytes("2 GB"), 2147483648);
   assert.equal(parseBytes("1 TB"), 1099511627776);
+
+  // IEC standard binary units
+  assert.equal(parseBytes("10 KiB"), 10240);
+  assert.equal(parseBytes("5 MiB"), 5242880);
+  assert.equal(parseBytes("1 GiB"), 1073741824);
+  assert.equal(parseBytes("2 TiB"), 2199023255552);
 
   // Case insensitive and compact units
   assert.equal(parseBytes("500kb"), 512000);
