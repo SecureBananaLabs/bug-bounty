@@ -1,0 +1,62 @@
+[
+  {
+    "endpoint": "/api/health",
+    "method": "GET",
+    "totalRequests": 1567,
+    "sustainedRps": 520.77,
+    "peakRps": 595,
+    "errorRate": 0,
+    "p50_ms": 8.43,
+    "p95_ms": 13.69,
+    "p99_ms": 24.85,
+    "ttfb_p50_ms": 8.33,
+    "ttfb_p99_ms": 24.78,
+    "passed": true,
+    "threshold": {
+      "max_p99_ms": 50,
+      "max_p95_ms": 25,
+      "max_error_rate_pct": 0,
+      "min_rps": 500
+    }
+  },
+  {
+    "endpoint": "/api/auth/login",
+    "method": "POST",
+    "totalRequests": 10523,
+    "sustainedRps": 3501.83,
+    "peakRps": 4238,
+    "errorRate": 0,
+    "p50_ms": 0.9,
+    "p95_ms": 3.04,
+    "p99_ms": 5.9,
+    "ttfb_p50_ms": 0.88,
+    "ttfb_p99_ms": 5.86,
+    "passed": true,
+    "threshold": {
+      "max_p99_ms": 400,
+      "max_p95_ms": 200,
+      "max_error_rate_pct": 2,
+      "min_rps": 100
+    }
+  },
+  {
+    "endpoint": "/api/items",
+    "method": "GET",
+    "totalRequests": 1477,
+    "sustainedRps": 491.19,
+    "peakRps": 518,
+    "errorRate": 0,
+    "p50_ms": 9.36,
+    "p95_ms": 17.81,
+    "p99_ms": 23.03,
+    "ttfb_p50_ms": 9.29,
+    "ttfb_p99_ms": 22.92,
+    "passed": true,
+    "threshold": {
+      "max_p99_ms": 250,
+      "max_p95_ms": 120,
+      "max_error_rate_pct": 0.5,
+      "min_rps": 200
+    }
+  }
+]
