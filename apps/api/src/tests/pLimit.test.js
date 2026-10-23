@@ -60,6 +60,7 @@ test('pLimit - strictly serializes tasks when concurrency is 1', async () => {
 test('pLimit - accurately reports activeCount and pendingCount metrics', async () => {
   const limit = pLimit(2);
 
+  assert.equal(limit.concurrency, 2);
   assert.equal(limit.activeCount, 0);
   assert.equal(limit.pendingCount, 0);
 

@@ -55,6 +55,9 @@ export function pLimit(concurrency) {
   };
 
   Object.defineProperties(limit, {
+    concurrency: {
+      get: () => concurrency
+    },
     activeCount: {
       get: () => activeCount
     },
