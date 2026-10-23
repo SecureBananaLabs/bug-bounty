@@ -1,13 +1,28 @@
 /**
+ * Windows reserved device names that cannot be used as filenames.
+ */
+const WINDOWS_RESERVED_REGEX = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(\..*)?$/i;
+
+/**
+ * Unicode directional formatting and Right-to-Left Override (RTLO) characters:
+ * - U+200E (Left-to-Right Mark)
+ * - U+200F (Right-to-Left Mark)
+ * - U+202A - U+202E (Embedding and Override controls)
+ * - U+2066 - U+2069 (Isolate controls)
+ */
+const DIRECTIONAL_CHARS_REGEX = /[\u200E\u200F\u202A-\u202E\u2066-\u2069]/g;
+
+/**
  * Sanitizes an uploaded filename to prevent path traversal, control character injection,
- * and metadata overflow.
+ * RTLO spoofing, Windows reserved device names, and metadata overflow.
  *
  * Requirements (Issue #5859):
  * 1. Normalize uploaded filenames before returning them (Unicode NFC).
  * 2. Strip path separators (both POSIX '/' and Windows '\') and keep only the final segment.
- * 3. Remove control characters (ASCII 0x00-0x1F, 0x7F-0x9F) and trim surrounding whitespace.
+ * 3. Remove control characters (ASCII 0x00-0x1F, 0x7F-0x9F), RTLO characters, and trim whitespace.
  * 4. Cap returned filename length to a small metadata-safe size (default: 100 chars).
  * 5. Handle path traversal attempts (e.g., '..', '../secret.txt', '..\\secret.txt').
+ * 6. Sanitize Windows device names (CON, PRN, AUX, NUL, COM1-9, LPT1-9).
  *
  * @param {string} rawFilename - The input filename to sanitize
  * @param {object} [options={}] - Custom configuration options
@@ -34,8 +49,9 @@ export function sanitizeFilename(rawFilename, options = {}) {
     // If normalize fails on exotic strings, proceed with raw string
   }
 
-  // 2. Remove null bytes and control characters (ASCII 0x00-0x1F and 0x7F-0x9F)
+  // 2. Remove null bytes, control characters (ASCII 0x00-0x1F and 0x7F-0x9F), and RTLO characters
   name = name.replace(/[\x00-\x1F\x7F-\x9F]/g, "");
+  name = name.replace(DIRECTIONAL_CHARS_REGEX, "");
 
   // 3. Strip Windows drive letters (e.g., 'C:\' or 'D:')
   name = name.replace(/^[a-zA-Z]:[/\\]*/, "");
@@ -63,6 +79,11 @@ export function sanitizeFilename(rawFilename, options = {}) {
     return fallback;
   }
 
+  // Handle Windows reserved device names (e.g., CON, PRN, AUX, NUL, COM1-9, LPT1-9)
+  if (WINDOWS_RESERVED_REGEX.test(segment)) {
+    segment = `_${segment}`;
+  }
+
   // 7. Cap length to metadata-safe size
   if (segment.length > maxLength) {
     if (preserveExtension) {
@@ -72,16 +93,17 @@ export function sanitizeFilename(rawFilename, options = {}) {
         const ext = segment.slice(lastDotIndex);
         if (ext.length < maxLength) {
           const allowedBaseLength = maxLength - ext.length;
-          const base = segment.slice(0, allowedBaseLength);
-          segment = base + ext;
+          let base = segment.slice(0, allowedBaseLength);
+          base = base.replace(/[.\s]+$/, "");
+          segment = (base ? base : "file") + ext;
         } else {
-          segment = segment.slice(0, maxLength);
+          segment = segment.slice(0, maxLength).replace(/[.\s]+$/, "");
         }
       } else {
-        segment = segment.slice(0, maxLength);
+        segment = segment.slice(0, maxLength).replace(/[.\s]+$/, "");
       }
     } else {
-      segment = segment.slice(0, maxLength);
+      segment = segment.slice(0, maxLength).replace(/[.\s]+$/, "");
     }
   }
 
@@ -103,12 +125,24 @@ export function isValidFilename(filename, maxLength = 100) {
   if (/[\x00-\x1F\x7F-\x9F]/.test(filename)) {
     return false;
   }
+  // Check for Unicode directional / RTLO spoofing characters
+  if (DIRECTIONAL_CHARS_REGEX.test(filename)) {
+    return false;
+  }
   // Check for path separators or unsafe filesystem chars
   if (/[/\\<>:"|?*]/.test(filename)) {
     return false;
   }
   // Check for path traversal tokens
   if (filename === "." || filename === ".." || filename.startsWith("../") || filename.startsWith("..\\")) {
+    return false;
+  }
+  // Check for Windows reserved device names
+  if (WINDOWS_RESERVED_REGEX.test(filename)) {
+    return false;
+  }
+  // Check for trailing dots or spaces
+  if (/[.\s]$/.test(filename)) {
     return false;
   }
   return true;

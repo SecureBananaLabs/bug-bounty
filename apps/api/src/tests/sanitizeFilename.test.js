@@ -35,7 +35,7 @@ test("sanitizeFilename - path traversal and path separators", () => {
   assert.equal(sanitizeFilename("..\\"), "file");
 });
 
-test("sanitizeFilename - control characters and null bytes", () => {
+test("sanitizeFilename - control characters, null bytes, and RTLO spoofing", () => {
   // Null byte injection
   assert.equal(sanitizeFilename("evil\0file.txt"), "evilfile.txt");
 
@@ -46,6 +46,24 @@ test("sanitizeFilename - control characters and null bytes", () => {
   assert.equal(sanitizeFilename("test\x07bell.txt"), "testbell.txt");
   assert.equal(sanitizeFilename("ansi\x1b[31mcolor.png"), "ansi[31mcolor.png");
   assert.equal(sanitizeFilename("control\x1f\x7f\x80test.pdf"), "controltest.pdf");
+
+  // Unicode Right-to-Left Override (RTLO) and directional marks spoofing
+  assert.equal(sanitizeFilename("test\u202Efdp.exe"), "testfdp.exe");
+  assert.equal(sanitizeFilename("report\u200E\u200F\u202A\u202B\u202C\u202D\u202E.doc"), "report.doc");
+});
+
+test("sanitizeFilename - Windows reserved device names", () => {
+  // DOS / Windows reserved names should be prepended with underscore to prevent OS collision
+  assert.equal(sanitizeFilename("CON.png"), "_CON.png");
+  assert.equal(sanitizeFilename("con.txt"), "_con.txt");
+  assert.equal(sanitizeFilename("PRN.pdf"), "_PRN.pdf");
+  assert.equal(sanitizeFilename("AUX"), "_AUX");
+  assert.equal(sanitizeFilename("NUL"), "_NUL");
+  assert.equal(sanitizeFilename("nul.tar.gz"), "_nul.tar.gz");
+  assert.equal(sanitizeFilename("COM1.jpg"), "_COM1.jpg");
+  assert.equal(sanitizeFilename("com9.bin"), "_com9.bin");
+  assert.equal(sanitizeFilename("LPT1.doc"), "_LPT1.doc");
+  assert.equal(sanitizeFilename("lpt8"), "_lpt8");
 });
 
 test("sanitizeFilename - whitespace and trailing characters", () => {
@@ -115,6 +133,15 @@ test("isValidFilename - validation utility", () => {
   assert.equal(isValidFilename(""), false);
   assert.equal(isValidFilename(null), false);
   assert.equal(isValidFilename(undefined), false);
+
+  // Windows device names and RTLO
+  assert.equal(isValidFilename("CON.png"), false);
+  assert.equal(isValidFilename("nul"), false);
+  assert.equal(isValidFilename("aux.txt"), false);
+  assert.equal(isValidFilename("COM1.pdf"), false);
+  assert.equal(isValidFilename("test\u202Efdp.exe"), false);
+  assert.equal(isValidFilename("file.txt."), false);
+  assert.equal(isValidFilename("file.txt "), false);
 });
 
 test("uploadController - integration with sanitized filenames", async () => {
@@ -203,6 +230,36 @@ test("uploadController - integration with sanitized filenames", async () => {
       success: true,
       data: {
         filename: "file",
+        status: "uploaded"
+      }
+    });
+  }
+
+  // Case 6: Windows reserved device name in upload
+  {
+    const req = { file: { originalname: "CON.pdf" } };
+    const res = createMockRes();
+    await uploadFile(req, res);
+    assert.equal(res.statusCode, 201);
+    assert.deepEqual(res.body, {
+      success: true,
+      data: {
+        filename: "_CON.pdf",
+        status: "uploaded"
+      }
+    });
+  }
+
+  // Case 7: RTLO character spoofing in upload
+  {
+    const req = { file: { originalname: "document\u202Egpj.pdf" } };
+    const res = createMockRes();
+    await uploadFile(req, res);
+    assert.equal(res.statusCode, 201);
+    assert.deepEqual(res.body, {
+      success: true,
+      data: {
+        filename: "documentgpj.pdf",
         status: "uploaded"
       }
     });
