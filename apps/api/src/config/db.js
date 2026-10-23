@@ -9,8 +9,9 @@ let dbState = {
 };
 
 export async function connectDb(options = {}) {
-  const rawUrl = options.databaseUrl ?? env.databaseUrl ?? "";
-  const nodeEnv = options.nodeEnv ?? env.nodeEnv ?? "development";
+  const safeOptions = options !== null && typeof options === "object" ? options : {};
+  const rawUrl = safeOptions.databaseUrl ?? process.env.DATABASE_URL ?? env.databaseUrl ?? "";
+  const nodeEnv = safeOptions.nodeEnv ?? process.env.NODE_ENV ?? env.nodeEnv ?? "development";
   const trimmedUrl = typeof rawUrl === "string" ? rawUrl.trim() : "";
 
   if (!trimmedUrl) {
@@ -36,10 +37,27 @@ export async function connectDb(options = {}) {
     throw new Error(`Unsupported database protocol: ${parsed.protocol}`);
   }
 
+  if (!parsed.hostname) {
+    throw new Error("Invalid DATABASE_URL format: missing database host");
+  }
+
+  const dbName = parsed.pathname ? parsed.pathname.replace(/^\/+/, "").trim() : "";
+  if (!dbName) {
+    throw new Error("Invalid DATABASE_URL format: missing database name");
+  }
+
+  if (parsed.port) {
+    const portNum = Number(parsed.port);
+    if (!Number.isInteger(portNum) || portNum < 1 || portNum > 65535) {
+      throw new Error("Invalid DATABASE_URL format: invalid port");
+    }
+  }
+
   dbState = {
     connected: true,
     driver: "prisma-postgresql",
     host: parsed.hostname,
+    database: dbName,
     connectedAt: new Date().toISOString()
   };
 

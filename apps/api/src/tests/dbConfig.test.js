@@ -27,10 +27,22 @@ describe("Database Connection Lifecycle & Validation (#5268, #4333)", () => {
     );
   });
 
-  it("rejects malformed or unsupported database URL protocols", async () => {
+  it("rejects malformed, hostless, databaseless, or unsupported database URL protocols", async () => {
     await assert.rejects(
       () => connectDb({ databaseUrl: "not-a-valid-url" }),
       /Invalid DATABASE_URL format/
+    );
+    await assert.rejects(
+      () => connectDb({ databaseUrl: "postgresql://" }),
+      /missing database host/
+    );
+    await assert.rejects(
+      () => connectDb({ databaseUrl: "postgresql:///mydb" }),
+      /missing database host/
+    );
+    await assert.rejects(
+      () => connectDb({ databaseUrl: "postgresql://localhost:5432/" }),
+      /missing database name/
     );
     await assert.rejects(
       () => connectDb({ databaseUrl: "http://localhost:5432/db" }),
@@ -38,7 +50,10 @@ describe("Database Connection Lifecycle & Validation (#5268, #4333)", () => {
     );
   });
 
-  it("disconnectDb resets connection state cleanly", async () => {
+  it("handles null options safely and disconnectDb resets connection state cleanly", async () => {
+    const fallbackStatus = await connectDb(null);
+    assert.equal(fallbackStatus.connected, true);
+
     await connectDb({ databaseUrl: "postgres://user:pass@localhost:5432/app" });
     const afterDisconnect = await disconnectDb();
     assert.equal(afterDisconnect.connected, false);
