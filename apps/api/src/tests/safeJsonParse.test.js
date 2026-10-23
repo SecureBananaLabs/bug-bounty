@@ -51,4 +51,22 @@ describe("safeJsonParse & safeJsonStringify Utility (CWE-1321)", () => {
       self: "[Circular]"
     });
   });
+
+  it("safeJsonStringify preserves non-circular shared object references (DAGs) without false [Circular] markers", () => {
+    const shared = { price: 100 };
+    const dag = { first: shared, second: shared };
+
+    const serialized = safeJsonStringify(dag);
+    assert.deepEqual(JSON.parse(serialized), {
+      first: { price: 100 },
+      second: { price: 100 }
+    });
+  });
+
+  it("enforces maxDepth guard against deeply nested JSON payloads", () => {
+    const deepJson = '{"a":'.repeat(80) + "1" + "}".repeat(80);
+    assert.equal(safeJsonParse(deepJson, "too_deep"), "too_deep");
+    assert.equal(safeJsonParse('{"a":{"b":{"c":1}}}', "too_deep", { maxDepth: 2 }), "too_deep");
+    assert.deepEqual(safeJsonParse('{"a":{"b":1}}', "too_deep", { maxDepth: 2 }), { a: { b: 1 } });
+  });
 });
