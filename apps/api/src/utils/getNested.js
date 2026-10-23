@@ -1,4 +1,13 @@
 const FORBIDDEN_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
+const BUILTIN_PROTOS = [
+  Object.prototype,
+  Array.prototype,
+  Function.prototype,
+  String.prototype,
+  Number.prototype,
+  Boolean.prototype
+];
+
 
 /**
  * Normalizes a path string or array into an array of path keys.
@@ -66,8 +75,13 @@ export function getNested(object, path, defaultValue = undefined) {
     }
 
     const currentObj = Object(current);
-    if (!(key in currentObj)) {
-      return defaultValue;
+    const isOwnProperty = Object.hasOwn(currentObj, key);
+
+    if (!isOwnProperty) {
+      const isBuiltinProto = BUILTIN_PROTOS.some((proto) => key in proto);
+      if (isBuiltinProto || !(key in currentObj)) {
+        return defaultValue;
+      }
     }
 
     current = current[key];

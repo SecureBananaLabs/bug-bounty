@@ -92,6 +92,18 @@ test('getNested - strictly prevents prototype pollution and prototype leakage', 
   assert.equal(getNested(data, 'prototype', 'safe'), 'safe');
   assert.equal(getNested(data, ['__proto__'], 'safe'), 'safe');
   assert.equal(getNested(data, ['constructor', 'name'], 'safe'), 'safe');
+
+  // Attempts to leak built-in prototype methods without own property
+  assert.equal(getNested(data, 'toString', 'safe'), 'safe');
+  assert.equal(getNested(data, 'valueOf', 'safe'), 'safe');
+  assert.equal(getNested(data, 'hasOwnProperty', 'safe'), 'safe');
+  assert.equal(getNested(data, 'isPrototypeOf', 'safe'), 'safe');
+  assert.equal(getNested(data, 'toString.call', 'safe'), 'safe');
+  assert.equal(getNested([1, 2], 'slice', 'safe'), 'safe');
+  assert.equal(getNested([1, 2], 'map', 'safe'), 'safe');
+
+  // Explicit own property with prototype method name is preserved
+  assert.equal(getNested({ toString: 'custom' }, 'toString', 'safe'), 'custom');
 });
 
 test('getNested - handles null, undefined, and primitive object targets safely', () => {
