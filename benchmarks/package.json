@@ -1,0 +1,14 @@
+{
+  "name": "@freelanceflow/benchmarks",
+  "private": true,
+  "type": "module",
+  "description": "Reproducible API load benchmarks for the FreelanceFlow platform",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node cli.js",
+    "smoke": "node cli.js --smoke",
+    "test": "node --test tests/"
+  }
+}
