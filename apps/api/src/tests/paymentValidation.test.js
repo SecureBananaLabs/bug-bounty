@@ -12,31 +12,33 @@ test("POST /api/payments with valid payload returns 201", async () => {
     server.once("error", reject);
   });
 
-  const { port } = server.address();
-  const validPayload = {
-    amount: 500,
-    currency: "USD",
-    jobId: "job_98765",
-    recipientId: "usr_freelancer_1"
-  };
+  try {
+    const { port } = server.address();
+    const validPayload = {
+      amount: 500,
+      currency: "USD",
+      jobId: "job_98765",
+      recipientId: "usr_freelancer_1"
+    };
 
-  const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(validPayload)
-  });
-  const data = await response.json();
+    const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(validPayload)
+    });
+    const data = await response.json();
 
-  assert.equal(response.status, 201);
-  assert.equal(data.success, true);
-  assert.equal(data.data.amount, 500);
-  assert.equal(data.data.currency, "usd");
-  assert.equal(data.data.provider, "stripe");
-  assert.ok(data.data.paymentId);
-
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
+    assert.equal(response.status, 201);
+    assert.equal(data.success, true);
+    assert.equal(data.data.amount, 500);
+    assert.equal(data.data.currency, "usd");
+    assert.equal(data.data.provider, "stripe");
+    assert.ok(data.data.paymentId);
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
 });
 
 test("POST /api/payments with default currency returns 201", async () => {
@@ -48,26 +50,28 @@ test("POST /api/payments with default currency returns 201", async () => {
     server.once("error", reject);
   });
 
-  const { port } = server.address();
-  const validPayload = {
-    amount: 150.75
-  };
+  try {
+    const { port } = server.address();
+    const validPayload = {
+      amount: 150.75
+    };
 
-  const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(validPayload)
-  });
-  const data = await response.json();
+    const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(validPayload)
+    });
+    const data = await response.json();
 
-  assert.equal(response.status, 201);
-  assert.equal(data.success, true);
-  assert.equal(data.data.amount, 150.75);
-  assert.equal(data.data.currency, "usd");
-
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
+    assert.equal(response.status, 201);
+    assert.equal(data.success, true);
+    assert.equal(data.data.amount, 150.75);
+    assert.equal(data.data.currency, "usd");
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
+    });
+  }
 });
 
 test("POST /api/payments rejects non-positive amount with HTTP 400", async () => {
@@ -79,25 +83,27 @@ test("POST /api/payments rejects non-positive amount with HTTP 400", async () =>
     server.once("error", reject);
   });
 
-  const { port } = server.address();
+  try {
+    const { port } = server.address();
 
-  for (const invalidAmount of [-50, 0, -0.01]) {
-    const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: invalidAmount })
+    for (const invalidAmount of [-50, 0, -0.01, -Infinity]) {
+      const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: invalidAmount })
+      });
+      const data = await response.json();
+
+      assert.equal(response.status, 400);
+      assert.equal(data.success, false);
+      assert.equal(data.message, "Validation failed");
+      assert.ok(Array.isArray(data.errors));
+    }
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
     });
-    const data = await response.json();
-
-    assert.equal(response.status, 400);
-    assert.equal(data.success, false);
-    assert.equal(data.message, "Validation failed");
-    assert.ok(Array.isArray(data.errors));
   }
-
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
 });
 
 test("POST /api/payments rejects missing amount with HTTP 400", async () => {
@@ -109,25 +115,27 @@ test("POST /api/payments rejects missing amount with HTTP 400", async () => {
     server.once("error", reject);
   });
 
-  const { port } = server.address();
+  try {
+    const { port } = server.address();
 
-  for (const emptyPayload of [{}, { currency: "usd" }, { jobId: "job_1" }]) {
-    const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(emptyPayload)
+    for (const emptyPayload of [{}, { currency: "usd" }, { jobId: "job_1" }]) {
+      const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(emptyPayload)
+      });
+      const data = await response.json();
+
+      assert.equal(response.status, 400);
+      assert.equal(data.success, false);
+      assert.equal(data.message, "Validation failed");
+      assert.ok(Array.isArray(data.errors));
+    }
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
     });
-    const data = await response.json();
-
-    assert.equal(response.status, 400);
-    assert.equal(data.success, false);
-    assert.equal(data.message, "Validation failed");
-    assert.ok(Array.isArray(data.errors));
   }
-
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
 });
 
 test("POST /api/payments rejects invalid currency with HTTP 400", async () => {
@@ -139,24 +147,27 @@ test("POST /api/payments rejects invalid currency with HTTP 400", async () => {
     server.once("error", reject);
   });
 
-  const { port } = server.address();
+  try {
+    const { port } = server.address();
 
-  for (const badCurrency of ["us", "a", "toolongcurrencyname"]) {
-    const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: 100, currency: badCurrency })
+    for (const badCurrency of ["us", "a", "toolongcurrencyname", "   ", "  ", ""]) {
+      const response = await fetch(`http://127.0.0.1:${port}/api/payments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: 100, currency: badCurrency })
+      });
+      const data = await response.json();
+
+      assert.equal(response.status, 400);
+      assert.equal(data.success, false);
+      assert.equal(data.message, "Validation failed");
+      assert.ok(Array.isArray(data.errors));
+    }
+  } finally {
+    await new Promise((resolve, reject) => {
+      server.close((error) => (error ? reject(error) : resolve()));
     });
-    const data = await response.json();
-
-    assert.equal(response.status, 400);
-    assert.equal(data.success, false);
-    assert.equal(data.message, "Validation failed");
   }
-
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
-  });
 });
 
 test("createPaymentSchema unit tests - validation and transformations", () => {
@@ -178,6 +189,13 @@ test("createPaymentSchema unit tests - validation and transformations", () => {
   assert.equal(parsed2.jobId, "job_xyz");
   assert.equal(parsed2.recipientId, "usr_abc");
 
+  // Currency trimming & lowercasing
+  const parsed3 = createPaymentSchema.parse({
+    amount: 50,
+    currency: "  gBp  "
+  });
+  assert.equal(parsed3.currency, "gbp");
+
   // Rejections
   assert.throws(() => createPaymentSchema.parse({ amount: -1 }), /positive/i);
   assert.throws(() => createPaymentSchema.parse({ amount: 0 }), /positive/i);
@@ -185,9 +203,11 @@ test("createPaymentSchema unit tests - validation and transformations", () => {
   assert.throws(() => createPaymentSchema.parse({ amount: "invalid" }));
   assert.throws(() => createPaymentSchema.parse({ amount: 10, currency: "ab" }));
   assert.throws(() => createPaymentSchema.parse({ amount: 10, currency: "waytoolongcurrencystring" }));
+  assert.throws(() => createPaymentSchema.parse({ amount: 10, currency: "   " }));
+  assert.throws(() => createPaymentSchema.parse({ amount: Infinity }), /finite/i);
 
   // Partial update schema
-  const partial = updatePaymentSchema.parse({ currency: "GBP" });
+  const partial = updatePaymentSchema.parse({ currency: "  GBP " });
   assert.equal(partial.currency, "gbp");
   assert.equal(partial.amount, undefined);
 });
