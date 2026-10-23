@@ -7,7 +7,9 @@ export async function listProposals() {
 }
 
 export async function createProposal(payload = {}) {
-  const { id: _ignoredId, ...rest } = payload ?? {};
+  const safePayload =
+    payload !== null && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  const { id: _ignoredId, ...rest } = safePayload;
   const proposal = {
     ...rest,
     id: `prp_${crypto.randomUUID()}`

@@ -48,4 +48,14 @@ describe("Same-Millisecond Unique Job & Proposal IDs (#12173, #12179)", () => {
     assert.ok(allJobs.some((j) => j.id === job.id));
     assert.ok(allProposals.some((p) => p.id === proposal.id));
   });
+
+  it("handles null, primitive, and array payloads safely without spreading index keys", async () => {
+    const jobFromNull = await createJob(null);
+    const jobFromString = await createJob("invalid");
+    const propFromArray = await createProposal(["x", "y"]);
+
+    assert.match(jobFromNull.id, /^job_[0-9a-f-]{36}$/);
+    assert.equal(Object.prototype.hasOwnProperty.call(jobFromString, "0"), false);
+    assert.equal(Object.prototype.hasOwnProperty.call(propFromArray, "0"), false);
+  });
 });

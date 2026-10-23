@@ -7,7 +7,9 @@ export async function listJobs() {
 }
 
 export async function createJob(payload = {}) {
-  const { id: _ignoredId, ...rest } = payload ?? {};
+  const safePayload =
+    payload !== null && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  const { id: _ignoredId, ...rest } = safePayload;
   const job = {
     status: "open",
     ...rest,
