@@ -1,7 +1,7 @@
 const reviews = [];
 
 export async function listReviews() {
-  return reviews;
+  return reviews.map((review) => ({ ...review }));
 }
 
 export async function createReview(payload) {
