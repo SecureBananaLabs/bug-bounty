@@ -168,131 +168,147 @@ function isDefaultsOptions(obj) {
  * @param {object} target
  * @param {object} source
  * @param {object} options
- * @param {WeakMap} visited
+ * @param {WeakMap} sourceToTarget
+ * @param {WeakSet} activeStack
  * @returns {object}
  */
-function applySourceDefaults(target, source, options, visited) {
+function applySourceDefaults(target, source, options, sourceToTarget = new WeakMap(), activeStack = new WeakSet()) {
   if (source === null || typeof source !== 'object') {
     return target;
   }
 
-  if (visited.has(source)) {
-    return target;
-  }
-  visited.set(source, target);
-
-  const {
-    deep = false,
-    dangerAction = 'skip',
-    includeSymbols = true,
-    ownOnly = true,
-    arrayMerge = 'replace',
-    customizer,
-  } = options;
-
-  // Gather string keys
-  let stringKeys;
-  if (ownOnly) {
-    stringKeys = Object.keys(source);
-  } else {
-    stringKeys = [];
-    for (const k in source) {
-      stringKeys.push(k);
-    }
+  // Circular reference detection on active call stack
+  if (activeStack.has(source)) {
+    return sourceToTarget.get(source) || target;
   }
 
-  // Gather symbol keys if enabled
-  let symbolKeys = [];
-  if (includeSymbols) {
-    const allSymbols = Object.getOwnPropertySymbols(source);
-    for (let i = 0; i < allSymbols.length; i++) {
-      const sym = allSymbols[i];
-      if (!ownOnly || Object.prototype.propertyIsEnumerable.call(source, sym)) {
-        symbolKeys.push(sym);
-      }
-    }
+  activeStack.add(source);
+  if (target && typeof target === 'object') {
+    sourceToTarget.set(source, target);
   }
 
-  const allKeys = [...stringKeys, ...symbolKeys];
+  try {
+    const {
+      deep = false,
+      dangerAction = 'skip',
+      includeSymbols = true,
+      ownOnly = true,
+      arrayMerge = 'replace',
+      customizer,
+    } = options;
 
-  for (let i = 0; i < allKeys.length; i++) {
-    const key = allKeys[i];
-
-    // Prototype pollution defense (CWE-1321)
-    if (isUnsafeKey(key)) {
-      if (dangerAction === 'throw') {
-        const SecurityErr = typeof SecurityError !== 'undefined' ? SecurityError : Error;
-        throw new SecurityErr(`[defaults] Disallowed dangerous prototype key: ${String(key)}`);
-      }
-      // 'skip' dangerous key
-      continue;
-    }
-
-    if (ownOnly && !Object.prototype.hasOwnProperty.call(source, key)) {
-      continue;
-    }
-
-    let sourceVal;
-    try {
-      sourceVal = source[key];
-    } catch {
-      continue;
-    }
-
-    // Determine current value in target
-    let targetVal;
-    let hasTargetProp = false;
-    try {
-      hasTargetProp = Object.prototype.hasOwnProperty.call(target, key);
-      targetVal = target[key];
-    } catch {
-      targetVal = undefined;
-      hasTargetProp = false;
-    }
-
-    // Allow user customizer callback: (targetVal, sourceVal, key, target, source) => customVal
-    if (typeof customizer === 'function') {
-      const customVal = customizer(targetVal, sourceVal, key, target, source);
-      if (customVal !== undefined) {
-        safeAssign(target, key, customVal);
-        continue;
+    // Gather string keys
+    let stringKeys;
+    if (ownOnly) {
+      stringKeys = Object.keys(source);
+    } else {
+      stringKeys = [];
+      for (const k in source) {
+        stringKeys.push(k);
       }
     }
 
-    // Nested defaults recursion (deep mode)
-    if (deep && isPlainObject(sourceVal)) {
-      if (isPlainObject(targetVal)) {
-        applySourceDefaults(targetVal, sourceVal, options, visited);
-        continue;
-      } else if (targetVal === undefined) {
-        const proto = Object.getPrototypeOf(sourceVal) === null ? null : Object.prototype;
-        const newNested = Object.create(proto);
-        applySourceDefaults(newNested, sourceVal, options, visited);
-        safeAssign(target, key, newNested);
-        continue;
-      }
-    }
-
-    // Array handling in deep mode
-    if (deep && Array.isArray(sourceVal)) {
-      if (Array.isArray(targetVal)) {
-        if (typeof arrayMerge === 'function') {
-          safeAssign(target, key, arrayMerge(targetVal, sourceVal, key));
-        } else if (arrayMerge === 'concat') {
-          safeAssign(target, key, targetVal.concat(cloneValue(sourceVal, visited)));
+    // Gather symbol keys if enabled
+    let symbolKeys = [];
+    if (includeSymbols) {
+      const allSymbols = Object.getOwnPropertySymbols(source);
+      for (let i = 0; i < allSymbols.length; i++) {
+        const sym = allSymbols[i];
+        if (!ownOnly || Object.prototype.propertyIsEnumerable.call(source, sym)) {
+          symbolKeys.push(sym);
         }
-        // Default 'replace': keep targetVal since it is already defined
-        continue;
       }
     }
 
-    // Standard defaults behavior: assign if target has no own property or targetVal is undefined
-    if (!hasTargetProp || targetVal === undefined) {
-      safeAssign(target, key, deep ? cloneValue(sourceVal, visited) : sourceVal);
-    }
-  }
+    const allKeys = [...stringKeys, ...symbolKeys];
 
-  return target;
+    for (let i = 0; i < allKeys.length; i++) {
+      const key = allKeys[i];
+
+      // Prototype pollution defense (CWE-1321)
+      if (isUnsafeKey(key)) {
+        if (dangerAction === 'throw') {
+          const SecurityErr = typeof SecurityError !== 'undefined' ? SecurityError : Error;
+          throw new SecurityErr(`[defaults] Disallowed dangerous prototype key: ${String(key)}`);
+        }
+        // 'skip' dangerous key
+        continue;
+      }
+
+      if (ownOnly && !Object.prototype.hasOwnProperty.call(source, key)) {
+        continue;
+      }
+
+      let sourceVal;
+      try {
+        sourceVal = source[key];
+      } catch {
+        continue;
+      }
+
+      // Determine current value in target
+      let targetVal;
+      let hasTargetProp = false;
+      try {
+        hasTargetProp = Object.prototype.hasOwnProperty.call(target, key);
+        targetVal = target[key];
+      } catch {
+        targetVal = undefined;
+        hasTargetProp = false;
+      }
+
+      // Allow user customizer callback: (targetVal, sourceVal, key, target, source) => customVal
+      if (typeof customizer === 'function') {
+        const customVal = customizer(targetVal, sourceVal, key, target, source);
+        if (customVal !== undefined) {
+          safeAssign(target, key, customVal);
+          continue;
+        }
+      }
+
+      // Nested defaults recursion (deep mode)
+      if (deep && isPlainObject(sourceVal)) {
+        // Check if sourceVal is an ancestor cycle
+        if (activeStack.has(sourceVal)) {
+          safeAssign(target, key, sourceToTarget.get(sourceVal) || target);
+          continue;
+        }
+
+        if (isPlainObject(targetVal)) {
+          applySourceDefaults(targetVal, sourceVal, options, sourceToTarget, activeStack);
+          continue;
+        } else if (targetVal === undefined) {
+          const proto = Object.getPrototypeOf(sourceVal) === null ? null : Object.prototype;
+          const newNested = Object.create(proto);
+          applySourceDefaults(newNested, sourceVal, options, sourceToTarget, activeStack);
+          safeAssign(target, key, newNested);
+          continue;
+        }
+      }
+
+      // Array handling in deep mode
+      if (deep && Array.isArray(sourceVal)) {
+        if (Array.isArray(targetVal)) {
+          if (typeof arrayMerge === 'function') {
+            safeAssign(target, key, arrayMerge(targetVal, sourceVal, key));
+          } else if (arrayMerge === 'concat') {
+            safeAssign(target, key, targetVal.concat(cloneValue(sourceVal)));
+          }
+          // Default 'replace': keep targetVal since it is already defined
+          continue;
+        }
+      }
+
+      // Standard defaults behavior: assign if target has no own property or targetVal is undefined
+      if (!hasTargetProp || targetVal === undefined) {
+        safeAssign(target, key, deep ? cloneValue(sourceVal) : sourceVal);
+      }
+    }
+
+    return target;
+  } finally {
+    activeStack.delete(source);
+  }
 }
 
 /**
@@ -310,9 +326,14 @@ export function defaults(target, ...args) {
 
   if (args.length >= 1) {
     const last = args[args.length - 1];
-    if (isDefaultsOptions(last)) {
-      options = last;
-      sources = args.slice(0, -1);
+    if (last && typeof last === 'object' && !Array.isArray(last)) {
+      if (last._isDefaultsOptions === true) {
+        options = last;
+        sources = args.slice(0, -1);
+      } else if (args.length >= 2 && isDefaultsOptions(last)) {
+        options = last;
+        sources = args.slice(0, -1);
+      }
     }
   }
 
@@ -338,14 +359,15 @@ export function defaults(target, ...args) {
     result = target;
   }
 
-  const visited = new WeakMap();
+  const sourceToTarget = new WeakMap();
+  const activeStack = new WeakSet();
 
   for (let i = 0; i < sources.length; i++) {
     const source = sources[i];
     if (source === null || typeof source !== 'object') {
       continue;
     }
-    applySourceDefaults(result, source, options, visited);
+    applySourceDefaults(result, source, options, sourceToTarget, activeStack);
   }
 
   return result;

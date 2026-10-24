@@ -264,4 +264,32 @@ describe('defaults defensive utility (ref #743)', () => {
     assert.strictEqual(isPlainObject('str'), false);
     assert.strictEqual(isPlainObject(new Date()), false);
   });
+
+  it('correctly treats a single source with option-like keys as data rather than options', () => {
+    const res1 = defaults({}, { deep: true });
+    assert.deepStrictEqual(res1, { deep: true });
+
+    const res2 = defaults({}, { ownOnly: false, nullPrototype: true });
+    assert.deepStrictEqual(res2, { ownOnly: false, nullPrototype: true });
+  });
+
+  it('correctly defaults shared DAG sub-objects across distinct branches without omitting data', () => {
+    const sharedConfig = { timeout: 1000, retry: 3 };
+    const target = {};
+    defaults(target, { db: sharedConfig }, { api: sharedConfig }, { deep: true });
+
+    assert.deepStrictEqual(target.db, { timeout: 1000, retry: 3 });
+    assert.deepStrictEqual(target.api, { timeout: 1000, retry: 3 });
+  });
+
+  it('resolves circular references back to target ancestor without infinite loops', () => {
+    const cyclicSource = { name: 'root', child: {} };
+    cyclicSource.child.parent = cyclicSource;
+
+    const target = {};
+    defaults(target, cyclicSource, { deep: true });
+
+    assert.strictEqual(target.name, 'root');
+    assert.strictEqual(target.child.parent, target);
+  });
 });
