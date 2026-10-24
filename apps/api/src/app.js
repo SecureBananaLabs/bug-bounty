@@ -18,8 +18,17 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
+  const allowedOrigins = process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(",").map((o) => o.trim())
+    : [];
+
   app.use(helmet());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: allowedOrigins.length > 0 ? allowedOrigins : false,
+      credentials: true
+    })
+  );
   app.use(express.json());
   app.use(apiLimiter);
 
