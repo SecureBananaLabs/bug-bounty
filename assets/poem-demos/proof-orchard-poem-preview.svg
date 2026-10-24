@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">The Proof Orchard poem preview</title>
+  <desc id="desc">Animated preview card for the POEM.md contribution.</desc>
+  <rect width="960" height="540" fill="#101620"/>
+  <rect x="52" y="48" width="856" height="444" rx="18" fill="#172232" stroke="#6ee7b7" stroke-width="2"/>
+  <text x="96" y="112" fill="#6ee7b7" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="34" font-weight="700">The Proof Orchard</text>
+  <text x="96" y="168" fill="#f8fafc" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="23">In the brief there is a seed,</text>
+  <text x="96" y="208" fill="#f8fafc" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="23">small as a line item, plain as noon.</text>
+  <text x="96" y="268" fill="#cbd5e1" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="21">A maker brings careful hands.</text>
+  <text x="96" y="308" fill="#cbd5e1" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="21">Reviewers walk the rows at dusk.</text>
+  <text x="96" y="368" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">Then the merge gate opens quietly,</text>
+  <text x="96" y="404" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">and trust becomes something countable.</text>
+  <circle cx="814" cy="124" r="10" fill="#6ee7b7">
+    <animate attributeName="opacity" values="0.35;1;0.35" dur="2.4s" repeatCount="indefinite"/>
+  </circle>
+  <path d="M714 426 C758 374 804 374 848 426" fill="none" stroke="#6ee7b7" stroke-width="3" stroke-linecap="round">
+    <animate attributeName="stroke-dasharray" values="1 180;180 1;1 180" dur="4s" repeatCount="indefinite"/>
+  </path>
+  <text x="704" y="468" fill="#6ee7b7" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">POEM.md preview</text>
+</svg>
