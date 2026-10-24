@@ -18,8 +18,25 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
+  const allowedOrigins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(",").map((origin) => origin.trim())
+    : ["http://localhost:3000"];
+
+  const corsOptions = {
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes("*")) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  };
+
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(express.json());
   app.use(apiLimiter);
 
@@ -28,7 +45,7 @@ export function createApp() {
   });
 
   app.use("/api/auth", authRoutes);
-  app.use("/api/users", userRoutes);
+  app.use(/api/users", userRoutes);
   app.use("/api/jobs", jobRoutes);
   app.use("/api/proposals", proposalRoutes);
   app.use("/api/payments", paymentRoutes);
