@@ -232,5 +232,45 @@ describe('concurrencyPool utility', () => {
       () => concurrencyPool(['not-a-fn'], 2),
       TypeError
     );
+    await assert.rejects(
+      () => concurrencyPool.all([() => 1], 2, 'invalid-options'),
+      TypeError
+    );
+    await assert.rejects(
+      () => concurrencyPool.allSettled([() => 1], 2, 'invalid-options'),
+      TypeError
+    );
+    await assert.rejects(
+      () => concurrencyPool.map([1, 2], (x) => x, 2, 'invalid-options'),
+      TypeError
+    );
+  });
+
+  it('settles tasks as rejected in allSettled mode when signal is pre-aborted', async () => {
+    const controller = new AbortController();
+    controller.abort(new Error('Pre-aborted settle test'));
+
+    const tasks = [() => 'a', () => 'b'];
+    const results = await concurrencyPool(tasks, 2, {
+      signal: controller.signal,
+      mode: 'allSettled',
+    });
+
+    assert.strictEqual(results.length, 2);
+    assert.strictEqual(results[0].status, 'rejected');
+    assert.strictEqual(results[0].reason.message, 'Pre-aborted settle test');
+    assert.strictEqual(results[1].status, 'rejected');
+    assert.strictEqual(results[1].reason.message, 'Pre-aborted settle test');
+  });
+
+  it('supports custom iterable generators as task sources seamlessly', async () => {
+    function* taskGen() {
+      yield () => 'gen-1';
+      yield () => 'gen-2';
+      yield () => 'gen-3';
+    }
+
+    const results = await concurrencyPool(taskGen(), 2);
+    assert.deepStrictEqual(results, ['gen-1', 'gen-2', 'gen-3']);
   });
 });

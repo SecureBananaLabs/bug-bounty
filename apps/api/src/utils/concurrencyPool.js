@@ -68,17 +68,20 @@ export function concurrencyPool(tasks, limit, options = {}) {
     );
   }
 
-  // Check if already aborted
-  if (signal?.aborted) {
-    const reason = signal.reason !== undefined ? signal.reason : new Error('This operation was aborted');
-    return Promise.reject(reason);
-  }
-
   const taskList = Array.from(tasks);
   const total = taskList.length;
 
   if (total === 0) {
     return Promise.resolve([]);
+  }
+
+  // Check if already aborted
+  if (signal?.aborted) {
+    const reason = signal.reason !== undefined ? signal.reason : new Error('This operation was aborted');
+    if (mode === 'allSettled') {
+      return Promise.resolve(taskList.map(() => ({ status: 'rejected', reason })));
+    }
+    return Promise.reject(reason);
   }
 
   // Validate that all items in taskList are callable functions
@@ -240,6 +243,11 @@ export function concurrencyPool(tasks, limit, options = {}) {
  * Concurrency pool specialized for Promise.all semantics (firstRejection).
  */
 concurrencyPool.all = function poolAll(tasks, limit, options = {}) {
+  if (options !== null && options !== undefined && typeof options !== 'object') {
+    return Promise.reject(
+      new TypeError(`[concurrencyPool.all] Expected options to be an object, received ${typeof options}`)
+    );
+  }
   return concurrencyPool(tasks, limit, { ...options, mode: 'firstRejection' });
 };
 
@@ -247,6 +255,11 @@ concurrencyPool.all = function poolAll(tasks, limit, options = {}) {
  * Concurrency pool specialized for Promise.allSettled semantics.
  */
 concurrencyPool.allSettled = function poolAllSettled(tasks, limit, options = {}) {
+  if (options !== null && options !== undefined && typeof options !== 'object') {
+    return Promise.reject(
+      new TypeError(`[concurrencyPool.allSettled] Expected options to be an object, received ${typeof options}`)
+    );
+  }
   return concurrencyPool(tasks, limit, { ...options, mode: 'allSettled' });
 };
 
@@ -266,6 +279,11 @@ concurrencyPool.map = function poolMap(items, mapper, limit, options = {}) {
   }
   if (typeof mapper !== 'function') {
     return Promise.reject(new TypeError('[concurrencyPool.map] Expected mapper to be a function'));
+  }
+  if (options !== null && options !== undefined && typeof options !== 'object') {
+    return Promise.reject(
+      new TypeError(`[concurrencyPool.map] Expected options to be an object, received ${typeof options}`)
+    );
   }
   const tasks = items.map((item, index) => () => mapper(item, index));
   return concurrencyPool(tasks, limit, options);
