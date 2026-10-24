@@ -38,16 +38,15 @@ export function flatten(array, depth = 1, options = {}) {
     return [];
   }
 
-  if (array.length === 0) {
-    return [];
-  }
-
   const validActions = ['preserve', 'skip', 'throw'];
   if (!validActions.includes(onCircular)) {
     throw new TypeError(`[flatten] Invalid onCircular option: "${onCircular}". Expected one of: ${validActions.join(', ')}`);
   }
 
   const rawMaxDepth = Number(maxDepth);
+  if (strict && (!Number.isFinite(rawMaxDepth) || rawMaxDepth < 0)) {
+    throw new RangeError(`[flatten] Expected maxDepth to be a non-negative number, received ${maxDepth}`);
+  }
   const safeMaxDepth = (!Number.isFinite(rawMaxDepth) || rawMaxDepth < 0)
     ? 1000
     : Math.floor(rawMaxDepth);
@@ -61,8 +60,12 @@ export function flatten(array, depth = 1, options = {}) {
     return copyArray(array, skipHoles);
   }
 
-  if (strict && rawDepth > safeMaxDepth) {
+  if (strict && Number.isFinite(rawDepth) && rawDepth > safeMaxDepth) {
     throw new RangeError(`[flatten] Requested depth ${rawDepth} exceeds maximum configured recursion limit of ${safeMaxDepth}`);
+  }
+
+  if (array.length === 0) {
+    return [];
   }
 
   if (rawDepth <= 0) {

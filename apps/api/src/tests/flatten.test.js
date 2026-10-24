@@ -173,4 +173,18 @@ test('flatten: options parameter validation', () => {
   assert.throws(() => flatten([1, 2], 1, null), TypeError);
   assert.throws(() => flatten([1, 2], 1, 'invalid'), TypeError);
   assert.throws(() => flatten([1, 2], 1, { onCircular: 'unknown' }), TypeError);
+  assert.throws(() => flatten([], 1, { onCircular: 'unknown' }), TypeError);
+  assert.throws(() => flatten([1, 2], 1, { maxDepth: -5, strict: true }), RangeError);
+  assert.throws(() => flatten([], 'not-a-num', { strict: true }), TypeError);
 });
+
+test('flattenDeep: supports strict mode without false RangeError recursion depth rejection', () => {
+  const input = [1, [2, [3, [4, [5]]]]];
+  const result = flattenDeep(input, { strict: true });
+  assert.deepEqual(result, [1, 2, 3, 4, 5]);
+
+  const simple = [1, 2, 3];
+  assert.deepEqual(flattenDeep(simple, { strict: true }), [1, 2, 3]);
+  assert.deepEqual(flattenDeep([], { strict: true }), []);
+});
+
