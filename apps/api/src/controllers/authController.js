@@ -1,6 +1,6 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { registerSchema, loginSchema, adminLoginSchema } from "../validators/auth.js";
+import { loginAdmin, loginUser, refreshToken, registerUser } from "../services/authService.js";
+import { fail, ok } from "../utils/response.js";
 
 export async function register(req, res) {
   const payload = registerSchema.parse(req.body);
@@ -11,6 +11,13 @@ export async function register(req, res) {
 export async function login(req, res) {
   const payload = loginSchema.parse(req.body);
   const result = await loginUser(payload);
+  return ok(res, result);
+}
+
+export async function adminLogin(req, res) {
+  const payload = adminLoginSchema.parse(req.body);
+  const result = await loginAdmin(payload);
+  if (!result) return fail(res, "Invalid admin credentials", 401);
   return ok(res, result);
 }
 
