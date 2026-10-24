@@ -1,0 +1,20 @@
+{
+  "defaults": {
+    "p99LatencyMs": 250,
+    "p99TtfbMs": 200,
+    "maxErrorRate": 0,
+    "minSustainedRps": 20
+  },
+  "smoke": {
+    "p99LatencyMs": 1000,
+    "p99TtfbMs": 900,
+    "maxErrorRate": 0,
+    "minSustainedRps": 1
+  },
+  "overrides": {
+    "uploads.create": {
+      "p99LatencyMs": 500,
+      "p99TtfbMs": 400
+    }
+  }
+}
