@@ -196,4 +196,90 @@ describe('keyBy utility', () => {
     assert.throws(() => keyBy([], 'id', { collisionStrategy: 'invalid' }), TypeError);
     assert.throws(() => keyBy([], 'id', { dangerAction: 'invalid' }), TypeError);
   });
+
+  it('supports 2-argument signature keyBy(array, options) with default identity iteratee', () => {
+    const items = ['apple', 'apple', 'banana'];
+    const resKeep = keyBy(items, { collisionStrategy: 'keepFirst' });
+    assert.deepStrictEqual(resKeep, {
+      apple: 'apple',
+      banana: 'banana',
+    });
+  });
+
+  it('collects multiple suppressed errors in an array without collision exceptions', () => {
+    const items = [
+      { id: 'first' },
+      { fail: 1 },
+      { fail: 2 },
+      { id: 'second' },
+      { fail: 3 },
+    ];
+    const iteratee = (item) => {
+      if (item.fail) throw new Error(`Fail ${item.fail}`);
+      return item.id;
+    };
+
+    const res = keyBy(items, iteratee, {
+      suppressErrors: true,
+      collisionStrategy: 'error',
+    });
+
+    assert.strictEqual(res.first, items[0]);
+    assert.strictEqual(res.second, items[3]);
+    assert.deepStrictEqual(res.__errors__, [items[1], items[2], items[4]]);
+  });
+
+  it('safely defines own properties without triggering prototype setters or crashing on read-only prototype properties', () => {
+    let setterInvoked = false;
+    Object.defineProperty(Object.prototype, 'customTrapSetterKey', {
+      get() { return 'trap'; },
+      set() { setterInvoked = true; },
+      configurable: true,
+    });
+    Object.defineProperty(Object.prototype, 'customReadOnlyKey', {
+      value: 'readOnly',
+      writable: false,
+      configurable: true,
+    });
+
+    try {
+      const items = [
+        { id: 'customTrapSetterKey', val: 100 },
+        { id: 'customReadOnlyKey', val: 200 },
+      ];
+      const res = keyBy(items, 'id');
+
+      assert.strictEqual(setterInvoked, false);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(res, 'customTrapSetterKey'), true);
+      assert.strictEqual(res.customTrapSetterKey, items[0]);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(res, 'customReadOnlyKey'), true);
+      assert.strictEqual(res.customReadOnlyKey, items[1]);
+    } finally {
+      delete Object.prototype.customTrapSetterKey;
+      delete Object.prototype.customReadOnlyKey;
+    }
+  });
+
+  it('efficiently traverses sparse arrays with skipHoles: true without resource exhaustion (CWE-400)', () => {
+    const sparse = [];
+    sparse[1000000] = { id: 'far' };
+
+    const start = Date.now();
+    const res = keyBy(sparse, 'id', { skipHoles: true });
+    const duration = Date.now() - start;
+
+    assert.strictEqual(res.far, sparse[1000000]);
+    assert.strictEqual(duration < 200, true);
+  });
+
+  it('safely handles throwing Symbol.toStringTag getters without uncaught crash', () => {
+    const evilKey = Object.create(null);
+    Object.defineProperty(evilKey, Symbol.toStringTag, {
+      get() { throw new Error('toStringTag trap'); }
+    });
+
+    const items = [{ id: evilKey, name: 'safeItem' }];
+    const res = keyBy(items, 'id');
+    assert.strictEqual(res['[object Object]'], items[0]);
+  });
 });

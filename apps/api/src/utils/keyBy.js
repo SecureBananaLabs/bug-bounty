@@ -31,8 +31,23 @@ const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
  * @returns {Record<string | symbol, T>} Returns the composed aggregate object.
  */
 export function keyBy(array, iteratee, options = {}) {
-  if (options !== undefined && (typeof options !== 'object' || options === null)) {
-    throw new TypeError(`[keyBy] Expected options to be an object, received ${options === null ? 'null' : typeof options}`);
+  let actualIteratee = iteratee;
+  let actualOptions = options;
+
+  // Support 2-argument signature: keyBy(array, options)
+  if (
+    iteratee !== null &&
+    typeof iteratee === 'object' &&
+    !Array.isArray(iteratee) &&
+    typeof iteratee[Symbol.iterator] !== 'function' &&
+    Object.keys(options).length === 0
+  ) {
+    actualOptions = iteratee;
+    actualIteratee = undefined;
+  }
+
+  if (actualOptions !== undefined && (typeof actualOptions !== 'object' || actualOptions === null)) {
+    throw new TypeError(`[keyBy] Expected options to be an object, received ${actualOptions === null ? 'null' : typeof actualOptions}`);
   }
 
   const {
@@ -43,7 +58,7 @@ export function keyBy(array, iteratee, options = {}) {
     suppressErrors = false,
     onError,
     thisArg,
-  } = options;
+  } = actualOptions;
 
   if (
     typeof collisionStrategy !== 'function' &&
@@ -82,23 +97,35 @@ export function keyBy(array, iteratee, options = {}) {
   }
 
   let getKey;
-  if (typeof iteratee === 'function') {
-    getKey = iteratee;
-  } else if (typeof iteratee === 'string' || typeof iteratee === 'symbol') {
-    getKey = (item) => (item !== null && item !== undefined ? item[iteratee] : undefined);
-  } else if (iteratee === undefined) {
+  if (typeof actualIteratee === 'function') {
+    getKey = actualIteratee;
+  } else if (typeof actualIteratee === 'string' || typeof actualIteratee === 'symbol') {
+    getKey = (item) => (item !== null && item !== undefined ? item[actualIteratee] : undefined);
+  } else if (actualIteratee === undefined) {
     getKey = (item) => item;
   } else {
     throw new TypeError(
-      `[keyBy] Expected iteratee to be a function, string, symbol, or undefined, received ${typeof iteratee}`
+      `[keyBy] Expected iteratee to be a function, string, symbol, or undefined, received ${typeof actualIteratee}`
     );
   }
 
   const result = createTarget();
   const len = items.length;
 
-  for (let i = 0; i < len; i++) {
-    const isOwn = Object.prototype.hasOwnProperty.call(items, i);
+  // Optimize iteration for sparse arrays when skipHoles is true (CWE-400 resource exhaustion defense)
+  const isSparseArray = Array.isArray(items) && skipHoles;
+  const loopIndices = isSparseArray
+    ? Object.keys(items)
+        .map(Number)
+        .filter((n) => Number.isInteger(n) && n >= 0)
+        .sort((a, b) => a - b)
+    : null;
+
+  const totalSteps = loopIndices ? loopIndices.length : len;
+
+  for (let step = 0; step < totalSteps; step++) {
+    const i = loopIndices ? loopIndices[step] : step;
+    const isOwn = isSparseArray ? true : Object.prototype.hasOwnProperty.call(items, i);
     if (!isOwn) {
       if (skipHoles) {
         continue;
@@ -107,6 +134,7 @@ export function keyBy(array, iteratee, options = {}) {
 
     let item = isOwn ? items[i] : undefined;
     let rawKey;
+    let isSuppressedError = false;
 
     try {
       rawKey = getKey.call(thisArg, item, i, items);
@@ -115,6 +143,7 @@ export function keyBy(array, iteratee, options = {}) {
         rawKey = onError(err, item, i, items);
       } else if (suppressErrors) {
         rawKey = '__errors__';
+        isSuppressedError = true;
       } else {
         const errMsg = err && typeof err === 'object' && typeof err.message === 'string'
           ? err.message
@@ -137,7 +166,11 @@ export function keyBy(array, iteratee, options = {}) {
       try {
         finalKey = String(rawKey);
       } catch {
-        finalKey = Object.prototype.toString.call(rawKey);
+        try {
+          finalKey = Object.prototype.toString.call(rawKey);
+        } catch {
+          finalKey = '[object Object]';
+        }
       }
     }
 
@@ -156,20 +189,56 @@ export function keyBy(array, iteratee, options = {}) {
       ? Object.prototype.hasOwnProperty.call(result, finalKey) || finalKey in result
       : Object.prototype.hasOwnProperty.call(result, finalKey);
 
+    // Suppressed error collection: collect without collision errors or silent data loss
+    if (isSuppressedError) {
+      if (!hasKey) {
+        Object.defineProperty(result, '__errors__', {
+          value: item,
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
+      } else {
+        const currentErrors = result.__errors__;
+        if (Array.isArray(currentErrors)) {
+          currentErrors.push(item);
+        } else {
+          result.__errors__ = [currentErrors, item];
+        }
+      }
+      continue;
+    }
+
     if (hasKey) {
       if (typeof collisionStrategy === 'function') {
-        result[finalKey] = collisionStrategy(result[finalKey], item, finalKey);
+        const resolvedVal = collisionStrategy(result[finalKey], item, finalKey);
+        Object.defineProperty(result, finalKey, {
+          value: resolvedVal,
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
       } else if (collisionStrategy === 'error') {
         throw new Error(`[keyBy] Collision detected for key: ${String(finalKey)}`);
       } else if (collisionStrategy === 'keepFirst' || collisionStrategy === 'ignore') {
         // preserve existing value
         continue;
       } else {
-        // 'overwrite'
-        result[finalKey] = item;
+        // 'overwrite' using defineProperty to prevent prototype setter invocation or read-only crashes
+        Object.defineProperty(result, finalKey, {
+          value: item,
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
       }
     } else {
-      result[finalKey] = item;
+      Object.defineProperty(result, finalKey, {
+        value: item,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
     }
   }
 
