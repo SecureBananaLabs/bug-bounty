@@ -248,6 +248,68 @@ describe('Defensive Partition Utility (partition)', () => {
       assert.deepEqual(omittedMatches, [2, 4]);
       assert.deepEqual(omittedNonMatches, [1]);
     });
+
+    it('handles thrown falsy and primitive values safely without secondary crashes', () => {
+      // Thrown null
+      assert.throws(
+        () => partition([1], () => { throw null; }),
+        (err) => {
+          assert.equal(err.name, 'Error');
+          assert.match(err.message, /\[partition\] Predicate evaluation threw an exception at index 0: null/);
+          assert.equal(err.cause, null);
+          return true;
+        }
+      );
+
+      // Thrown undefined
+      assert.throws(
+        () => partition([1], () => { throw undefined; }),
+        (err) => {
+          assert.equal(err.name, 'Error');
+          assert.match(err.message, /\[partition\] Predicate evaluation threw an exception at index 0: undefined/);
+          assert.equal(err.cause, undefined);
+          return true;
+        }
+      );
+
+      // Thrown primitive string
+      assert.throws(
+        () => partition([1], () => { throw 'network-timeout'; }),
+        (err) => {
+          assert.equal(err.name, 'Error');
+          assert.match(err.message, /\[partition\] Predicate evaluation threw an exception at index 0: network-timeout/);
+          assert.equal(err.cause, 'network-timeout');
+          return true;
+        }
+      );
+    });
+
+    it('handles array elements with throwing property getters safely', () => {
+      const arr = [10];
+      Object.defineProperty(arr, 1, {
+        configurable: true,
+        enumerable: true,
+        get() {
+          throw new Error('Getter access failure');
+        },
+      });
+      arr.length = 2;
+
+      // With default exception wrapping
+      assert.throws(
+        () => partition(arr, (n) => n > 5),
+        (err) => {
+          assert.equal(err.name, 'Error');
+          assert.match(err.message, /\[partition\] Predicate evaluation threw an exception at index 1: Getter access failure/);
+          return true;
+        }
+      );
+
+      // With suppressErrors: true
+      const [matches, nonMatches] = partition(arr, (n) => n > 5, { suppressErrors: true });
+      assert.deepEqual(matches, [10]);
+      assert.equal(nonMatches.length, 1);
+    });
   });
 
   it('leaves the original array unmodified (immutability)', () => {

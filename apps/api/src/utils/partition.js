@@ -58,10 +58,11 @@ export function partition(array, predicate = Boolean, options = {}) {
       }
     }
 
-    const item = isOwn ? array[i] : undefined;
+    let item;
     let isMatch = false;
 
     try {
+      item = isOwn ? array[i] : undefined;
       isMatch = Boolean(evaluator.call(thisArg, item, i, array));
     } catch (err) {
       if (typeof onError === 'function') {
@@ -76,8 +77,12 @@ export function partition(array, predicate = Boolean, options = {}) {
       } else if (suppressErrors) {
         isMatch = false;
       } else {
+        const errMsg =
+          err && typeof err === 'object' && typeof err.message === 'string'
+            ? err.message
+            : String(err);
         const wrappedError = new Error(
-          `[partition] Predicate evaluation threw an exception at index ${i}: ${err.message}`,
+          `[partition] Predicate evaluation threw an exception at index ${i}: ${errMsg}`,
           { cause: err }
         );
         throw wrappedError;
