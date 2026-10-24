@@ -31,12 +31,13 @@ export function once(fn, options = {}) {
     throw new TypeError(`[once] Expected options to be an object, received ${typeof options}`);
   }
 
+  const opts = options || {};
   const {
     rethrow = true,
     retryOnError = false,
     thisArg,
     freezeResult = false,
-  } = options;
+  } = opts;
 
   let called = false;
   let result;
@@ -159,6 +160,21 @@ once.strict = function strict(fn, customMessage) {
     configurable: false,
   });
 
+  Object.defineProperty(strictWrapper, 'result', {
+    get() {
+      return result;
+    },
+    enumerable: true,
+    configurable: false,
+  });
+
+  Object.defineProperty(strictWrapper, 'fn', {
+    value: fn,
+    writable: false,
+    enumerable: true,
+    configurable: false,
+  });
+
   strictWrapper.reset = function reset() {
     called = false;
     result = undefined;
@@ -181,7 +197,12 @@ once.async = function asyncOnce(fn, options = {}) {
     throw new TypeError(`[once.async] Expected a function, received ${fn === null ? 'null' : typeof fn}`);
   }
 
-  const { retryOnError = false, thisArg } = options;
+  if (options !== null && typeof options !== 'object') {
+    throw new TypeError(`[once.async] Expected options to be an object, received ${typeof options}`);
+  }
+
+  const opts = options || {};
+  const { retryOnError = false, thisArg } = opts;
   let promise = null;
   let called = false;
 
@@ -214,6 +235,21 @@ once.async = function asyncOnce(fn, options = {}) {
     get() {
       return called;
     },
+    enumerable: true,
+    configurable: false,
+  });
+
+  Object.defineProperty(asyncWrapper, 'promise', {
+    get() {
+      return promise;
+    },
+    enumerable: true,
+    configurable: false,
+  });
+
+  Object.defineProperty(asyncWrapper, 'fn', {
+    value: fn,
+    writable: false,
     enumerable: true,
     configurable: false,
   });

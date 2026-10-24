@@ -262,4 +262,33 @@ describe('once defensive utility (ref #743)', () => {
     assert.strictEqual(cached, 'recovered-data');
     assert.strictEqual(fetchAttempts, 2);
   });
+
+  it('tolerates null options gracefully across once and once.async', async () => {
+    const fn1 = once(() => 'ok-sync', null);
+    assert.strictEqual(fn1(), 'ok-sync');
+
+    const fn2 = once.async(async () => 'ok-async', null);
+    const res = await fn2();
+    assert.strictEqual(res, 'ok-async');
+  });
+
+  it('validates once.async options type', () => {
+    assert.throws(() => once.async(() => {}, 'invalid-string'), TypeError);
+    assert.throws(() => once.async(() => {}, 12345), TypeError);
+  });
+
+  it('exposes fn and result/promise consistently across strict and async wrappers', async () => {
+    const rawSync = () => 42;
+    const strictFn = once.strict(rawSync);
+    assert.strictEqual(strictFn.fn, rawSync);
+    assert.strictEqual(strictFn(), 42);
+    assert.strictEqual(strictFn.result, 42);
+
+    const rawAsync = async () => 99;
+    const asyncFn = once.async(rawAsync);
+    assert.strictEqual(asyncFn.fn, rawAsync);
+    const p = asyncFn();
+    assert.strictEqual(asyncFn.promise, p);
+    assert.strictEqual(await p, 99);
+  });
 });
