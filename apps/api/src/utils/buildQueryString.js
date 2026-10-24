@@ -9,17 +9,21 @@
  * - Runtime type errors on null/primitive inputs (CWE-1287)
  */
 
-const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+const FORBIDDEN_SEGMENTS = new Set(['__proto__', 'constructor', 'prototype']);
 
 function isForbiddenKey(key) {
   if (typeof key !== 'string') return false;
-  const normalized = key.toLowerCase();
-  return (
-    FORBIDDEN_KEYS.has(normalized) ||
-    normalized.startsWith('__proto__') ||
-    normalized.startsWith('constructor') ||
-    normalized.startsWith('prototype')
-  );
+  const lower = key.toLowerCase();
+  if (FORBIDDEN_SEGMENTS.has(lower)) return true;
+
+  // Screen segmented property paths (e.g. 'a[__proto__]', 'a.constructor', 'user[prototype][key]')
+  const segments = lower.split(/[\.\[\]\/\s]+/).filter(Boolean);
+  for (const seg of segments) {
+    if (FORBIDDEN_SEGMENTS.has(seg)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function defaultEncode(val) {
@@ -72,6 +76,18 @@ export function buildQueryString(params, options = {}) {
   if (!validArrayFormats.has(arrayFormat)) {
     throw new TypeError(
       `[buildQueryString] Invalid arrayFormat "${arrayFormat}". Expected one of: brackets, indices, repeat, comma`
+    );
+  }
+
+  if (sort !== true && sort !== false && typeof sort !== 'function') {
+    throw new TypeError(
+      `[buildQueryString] Expected sort to be a boolean or a comparator function, received ${typeof sort}`
+    );
+  }
+
+  if (prototypeProtection !== true && prototypeProtection !== false && prototypeProtection !== 'throw') {
+    throw new TypeError(
+      `[buildQueryString] Expected prototypeProtection to be a boolean or "throw", received ${typeof prototypeProtection}`
     );
   }
 
@@ -169,7 +185,13 @@ export function buildQueryString(params, options = {}) {
       }
 
       if (val instanceof Date) {
-        pairs.push(`${encodeKey(fullKey)}=${encodeVal(val.toISOString(), fullKey)}`);
+        if (Number.isNaN(val.getTime())) {
+          if (!skipEmptyString) {
+            pairs.push(`${encodeKey(fullKey)}=`);
+          }
+        } else {
+          pairs.push(`${encodeKey(fullKey)}=${encodeVal(val.toISOString(), fullKey)}`);
+        }
         continue;
       }
 
@@ -179,9 +201,17 @@ export function buildQueryString(params, options = {}) {
         }
 
         if (arrayFormat === 'comma') {
-          const encodedItems = val
-            .filter((item) => item !== undefined && (!skipNull || item !== null))
-            .map((item) => (item === null ? '' : encodeVal(item, fullKey)));
+          const filtered = val.filter((item) => {
+            if (item === undefined && skipUndefined) return false;
+            if (item === null && skipNull) return false;
+            return true;
+          });
+          if (filtered.length === 0) {
+            continue;
+          }
+          const encodedItems = filtered.map((item) =>
+            item === null || item === undefined ? '' : encodeVal(item, fullKey)
+          );
           const delimiter = encode === false ? ',' : (typeof encode === 'function' ? ',' : '%2C');
           pairs.push(`${encodeKey(fullKey)}=${encodedItems.join(delimiter)}`);
           continue;

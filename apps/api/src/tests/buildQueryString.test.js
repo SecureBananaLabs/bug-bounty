@@ -190,5 +190,61 @@ describe('buildQueryString utility', () => {
       () => buildQueryString({ a: 1 }, { arrayFormat: 'invalid_mode' }),
       TypeError
     );
+    assert.throws(
+      () => buildQueryString({ a: 1 }, { sort: 'not-valid' }),
+      TypeError
+    );
+    assert.throws(
+      () => buildQueryString({ a: 1 }, { prototypeProtection: 'invalid' }),
+      TypeError
+    );
+  });
+
+  it('screens segmented prototype pollution keys in bracket and dot notation', () => {
+    const malicious = {
+      'a[__proto__]': 'polluted',
+      'b.constructor': 'polluted',
+      'c[prototype][key]': 'polluted',
+      'user[constructor][name]': 'evil',
+      validKey: 'allowed',
+    };
+    const qs = buildQueryString(malicious);
+    assert.strictEqual(qs, 'validKey=allowed');
+
+    assert.throws(
+      () => buildQueryString({ 'a[__proto__]': 'evil' }, { prototypeProtection: 'throw' }),
+      /Prototype pollution key detected/
+    );
+    assert.throws(
+      () => buildQueryString({ 'user.constructor.prototype': 'evil' }, { prototypeProtection: 'throw' }),
+      /Prototype pollution key detected/
+    );
+  });
+
+  it('does not falsely strip valid keys starting with constructor or prototype substrings', () => {
+    const input = {
+      constructorName: 'MyClass',
+      prototypeChain: 'valid',
+      constructionYear: 2026,
+    };
+    const qs = buildQueryString(input);
+    assert.strictEqual(
+      qs,
+      'constructionYear=2026&constructorName=MyClass&prototypeChain=valid'
+    );
+  });
+
+  it('handles invalid Date objects gracefully without throwing RangeError', () => {
+    const invalidDate = new Date('invalid');
+    const qs = buildQueryString({ d: invalidDate, ok: 1 });
+    assert.strictEqual(qs, 'd=&ok=1');
+
+    const skipped = buildQueryString({ d: invalidDate, ok: 1 }, { skipEmptyString: true });
+    assert.strictEqual(skipped, 'ok=1');
+  });
+
+  it('omits comma array when all items are filtered out', () => {
+    const qs = buildQueryString({ tags: [undefined, undefined] }, { arrayFormat: 'comma' });
+    assert.strictEqual(qs, '');
   });
 });
