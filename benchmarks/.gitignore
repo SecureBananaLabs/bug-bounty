@@ -1,0 +1,4 @@
+benchmarks/results/_failed-runs/
+benchmarks/results/server.log
+.env.benchmark
+node_modules/

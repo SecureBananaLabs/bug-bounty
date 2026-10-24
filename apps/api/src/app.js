@@ -21,7 +21,12 @@ export function createApp() {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use(apiLimiter);
+  // Benchmark runs issue thousands of requests from one address; the limiter
+  // would 429 nearly all of them and report ~100% error. Disabled ONLY when the
+  // benchmark harness sets BENCHMARK_DISABLE_LIMITER=true — never in production.
+  if (process.env.BENCHMARK_DISABLE_LIMITER !== "true") {
+    app.use(apiLimiter);
+  }
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
