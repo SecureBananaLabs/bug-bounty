@@ -268,3 +268,39 @@ test('throttle: handles primitive/invalid options by falling back to defaults', 
   assert.equal(count, 2);
 });
 
+test('throttle: leading: false never executes synchronously even across multiple intervals', async () => {
+  let calls = 0;
+  const fn = () => ++calls;
+  const throttled = throttle(fn, 50, { leading: false });
+
+  // Interval 1
+  throttled();
+  assert.equal(calls, 0, 'Leading call must not execute synchronously');
+  await sleep(70);
+  assert.equal(calls, 1, 'Trailing call must execute after wait');
+
+  // Interval 2
+  throttled();
+  assert.equal(calls, 1, 'Second cycle must not execute synchronously');
+  await sleep(70);
+  assert.equal(calls, 2, 'Second trailing call must execute after wait');
+});
+
+test('throttle: supports optional onError callback for safe error interception', async () => {
+  let capturedError;
+  const faulty = () => {
+    throw new Error('Async error caught');
+  };
+  const throttled = throttle(faulty, 40, {
+    onError: (err) => {
+      capturedError = err;
+    }
+  });
+
+  throttled();
+  throttled();
+  await sleep(70);
+  assert.ok(capturedError);
+  assert.equal(capturedError.message, 'Async error caught');
+});
+

@@ -33,6 +33,7 @@ export function throttle(func, wait = 0, options = {}) {
   const opts = options && typeof options === 'object' ? options : {};
   const leading = 'leading' in opts ? Boolean(opts.leading) : true;
   const trailing = 'trailing' in opts ? Boolean(opts.trailing) : true;
+  const onError = typeof opts.onError === 'function' ? opts.onError : null;
 
   let lastArgs;
   let lastThis;
@@ -48,8 +49,16 @@ export function throttle(func, wait = 0, options = {}) {
     lastArgs = undefined;
     lastThis = undefined;
     lastInvokeTime = time;
-    result = func.apply(thisArg, args);
-    return result;
+    try {
+      result = func.apply(thisArg, args);
+      return result;
+    } catch (err) {
+      if (onError) {
+        onError(err);
+        return result;
+      }
+      throw err;
+    }
   }
 
   function leadingEdge(time) {
@@ -135,10 +144,10 @@ export function throttle(func, wait = 0, options = {}) {
       }
       clearTimeout(timerId);
       timerId = setTimeout(timerExpired, waitMs);
-      return invokeFunc(lastCallTime);
+      return leading ? invokeFunc(lastCallTime) : result;
     }
     if (timerId === undefined) {
-      timerId = setTimeout(timerExpired, waitMs);
+      timerId = setTimeout(timerExpired, Math.max(0, remainingWait(time)));
     }
     return result;
   }
