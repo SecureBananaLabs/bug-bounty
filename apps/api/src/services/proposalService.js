@@ -1,5 +1,5 @@
 const proposals = [];
-
+  return [...proposals];
 export async function listProposals() {
   return proposals;
 }
