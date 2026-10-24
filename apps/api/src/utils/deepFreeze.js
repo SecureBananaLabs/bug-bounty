@@ -79,12 +79,41 @@ export function deepFreeze(obj, seen = new WeakSet()) {
     });
   }
 
+  // Defend ArrayBuffer views (TypedArray, Buffer, DataView) against V8 engine TypeError on Object.freeze
+  if (ArrayBuffer.isView(obj)) {
+    if (obj.buffer && !seen.has(obj.buffer)) {
+      deepFreeze(obj.buffer, seen);
+    }
+    const propNames = Reflect.ownKeys(obj);
+    for (const name of propNames) {
+      if (typeof name === 'string' && /^\d+$/.test(name)) {
+        continue;
+      }
+      if (name === 'buffer' || name === 'byteLength' || name === 'byteOffset' || name === 'length') {
+        continue;
+      }
+      const desc = Object.getOwnPropertyDescriptor(obj, name);
+      if (desc && Object.prototype.hasOwnProperty.call(desc, 'value')) {
+        deepFreeze(desc.value, seen);
+      }
+    }
+    return obj;
+  }
+
   // Traverse all own property keys (including Symbols and non-enumerable properties)
   const propNames = Reflect.ownKeys(obj);
   for (const name of propNames) {
     const desc = Object.getOwnPropertyDescriptor(obj, name);
-    if (desc && Object.prototype.hasOwnProperty.call(desc, 'value')) {
-      deepFreeze(desc.value, seen);
+    if (desc) {
+      if (Object.prototype.hasOwnProperty.call(desc, 'value')) {
+        deepFreeze(desc.value, seen);
+      }
+      if (desc.get && typeof desc.get === 'function') {
+        deepFreeze(desc.get, seen);
+      }
+      if (desc.set && typeof desc.set === 'function') {
+        deepFreeze(desc.set, seen);
+      }
     }
   }
 

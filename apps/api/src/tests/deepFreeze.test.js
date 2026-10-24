@@ -184,3 +184,27 @@ test('deepFreeze handles getters without crashing or invoking setters', () => {
   // Getter should not have been called during property inspection
   assert.equal(counter, 0);
 });
+
+test('deepFreeze safely handles Buffer and TypedArray views without throwing V8 TypeError', () => {
+  const buf = Buffer.from('secret-key-material');
+  const uint8 = new Uint8Array([10, 20, 30, 40]);
+  uint8.metadata = { origin: 'crypto-stream' };
+
+  const container = {
+    authBuffer: buf,
+    signatureBytes: uint8,
+  };
+
+  assert.doesNotThrow(() => {
+    deepFreeze(container);
+  });
+
+  assert.ok(Object.isFrozen(container));
+  assert.ok(Object.isFrozen(uint8.buffer));
+  assert.ok(Object.isFrozen(uint8.metadata));
+
+  assert.throws(() => {
+    uint8.metadata.origin = 'mutated';
+  }, TypeError);
+});
+
