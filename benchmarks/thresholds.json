@@ -1,0 +1,19 @@
+{
+  "description": "Regression gate thresholds for API benchmark suite",
+  "globalMaxErrorRatePct": 1,
+  "globalMaxP99LatencyMs": 500,
+  "endpoints": {
+    "GET /api/health": {
+      "maxP99Ms": 150,
+      "maxErrorRatePct": 0
+    },
+    "GET /api/bounties": {
+      "maxP99Ms": 350,
+      "maxErrorRatePct": 0.5
+    },
+    "POST /api/submissions": {
+      "maxP99Ms": 450,
+      "maxErrorRatePct": 0.5
+    }
+  }
+}
