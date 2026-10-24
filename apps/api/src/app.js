@@ -21,11 +21,13 @@ export function createApp() {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use(apiLimiter);
 
+  // Health probes should not consume or be blocked by the API quota.
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
+
+  app.use(apiLimiter);
 
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
