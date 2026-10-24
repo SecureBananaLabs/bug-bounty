@@ -30,6 +30,12 @@ test('slugify - supports customizable options (custom separator and lowercase pr
   assert.equal(slugify('Web3 DeFi Liquidity', { separator: '.', lowercase: true }), 'web3.defi.liquidity');
 });
 
+test('slugify - handles custom and multi-character separators cleanly', () => {
+  assert.equal(slugify('Web3  DeFi   Liquidity', { separator: '::' }), 'web3::defi::liquidity');
+  assert.equal(slugify('  Web3   DeFi   Liquidity  ', { separator: '_' }), 'web3_defi_liquidity');
+  assert.equal(slugify('--Hello--World--', { separator: '--' }), 'hello--world');
+});
+
 test('slugify - defensively handles non-string inputs', () => {
   assert.equal(slugify(null), '');
   assert.equal(slugify(undefined), '');
@@ -44,4 +50,13 @@ test('slugify - handles optional maxLength truncation cleanly without dangling s
   const slug = slugify(longTitle, { maxLength: 20 });
   assert.ok(slug.length <= 20);
   assert.equal(slug, 'a-very-long-job-post');
+
+  // Zero and negative maxLength edge cases
+  assert.equal(slugify(longTitle, { maxLength: 0 }), '');
+  assert.equal(slugify(longTitle, { maxLength: -5 }), '');
+});
+
+test('slugify - handles strings with non-Latin characters and symbols gracefully', () => {
+  assert.equal(slugify('Hello 世界 2026'), 'hello-2026');
+  assert.equal(slugify('!@#$%^&*()_+'), '');
 });

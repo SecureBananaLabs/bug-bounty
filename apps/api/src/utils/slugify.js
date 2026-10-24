@@ -24,6 +24,9 @@ export function slugify(str, options = {}) {
 
   const sep = typeof separator === 'string' && separator.length > 0 ? separator : '-';
   const escapedSep = sep.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const charClassChars = Array.from(new Set(sep))
+    .map(c => c.replace(/[-\\^\]]/g, '\\$&'))
+    .join('');
 
   // 1. Normalize accents and diacritics using NFKD
   let result = str.normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
@@ -39,21 +42,27 @@ export function slugify(str, options = {}) {
   // 4. Replace spaces, tabs, newlines, and underscores with the separator
   result = result.replace(/[\s_]+/g, sep);
 
-  // 5. Remove non-alphanumeric characters except the separator
-  const nonAlphaNumRegex = new RegExp(`[^a-zA-Z0-9${escapedSep}]`, 'g');
+  // 5. Remove non-alphanumeric characters except the characters forming the separator
+  const nonAlphaNumRegex = new RegExp(`[^a-zA-Z0-9${charClassChars}]`, 'g');
   result = result.replace(nonAlphaNumRegex, '');
 
-  // 6. Collapse consecutive separators
-  const collapseRegex = new RegExp(`${escapedSep}+`, 'g');
+  // 6. Collapse consecutive separators using non-capturing group
+  const collapseRegex = new RegExp(`(?:${escapedSep})+`, 'g');
   result = result.replace(collapseRegex, sep);
 
   // 7. Strip leading and trailing separators
-  const trimRegex = new RegExp(`^${escapedSep}+|${escapedSep}+$`, 'g');
+  const trimRegex = new RegExp(`^(?:${escapedSep})+|(?:${escapedSep})+$`, 'g');
   result = result.replace(trimRegex, '');
 
   // 8. Optional length truncation without dangling trailing separator
-  if (typeof maxLength === 'number' && !isNaN(maxLength) && maxLength > 0 && result.length > maxLength) {
-    result = result.slice(0, maxLength).replace(new RegExp(`${escapedSep}+$`), '');
+  if (typeof maxLength === 'number' && Number.isFinite(maxLength)) {
+    const limit = Math.floor(maxLength);
+    if (limit <= 0) {
+      return '';
+    }
+    if (result.length > limit) {
+      result = result.slice(0, limit).replace(new RegExp(`(?:${escapedSep})+$`), '');
+    }
   }
 
   return result;
