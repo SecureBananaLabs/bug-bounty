@@ -1,0 +1,78 @@
+{
+  "defaults": {
+    "headers": {
+      "accept": "application/json"
+    },
+    "requiresAuth": true
+  },
+  "overrides": [
+    {
+      "match": "^POST /api/auth/(register|login)$",
+      "requiresAuth": false,
+      "body": {
+        "email": "benchmark.user@example.invalid",
+        "password": "Benchmark-Only-Password-42!",
+        "name": "Benchmark User"
+      }
+    },
+    {
+      "match": "^POST /api/users/?$",
+      "body": {
+        "email": "benchmark.user@example.invalid",
+        "password": "Benchmark-Only-Password-42!",
+        "name": "Benchmark User",
+        "role": "freelancer"
+      }
+    },
+    {
+      "match": "^POST /api/jobs/?$",
+      "body": {
+        "title": "Senior Distributed Systems Engineer",
+        "description": "Design and operate high-throughput, fault-tolerant routing systems with measurable latency and reliability objectives.",
+        "budget": 125000,
+        "category": "Engineering",
+        "skills": ["Node.js", "TypeScript", "Distributed Systems", "PostgreSQL"]
+      }
+    },
+    {
+      "match": "^POST /api/proposals/?$",
+      "body": {
+        "jobId": "benchmark-job-id",
+        "coverLetter": "Benchmark workload proposal with production-shaped request size.",
+        "bidAmount": 120000
+      }
+    },
+    {
+      "match": "^POST /api/messages/?$",
+      "body": {
+        "recipientId": "benchmark-recipient-id",
+        "content": "Benchmark message payload used only against an isolated benchmark environment."
+      }
+    },
+    {
+      "match": "^POST /api/reviews/?$",
+      "body": {
+        "revieweeId": "benchmark-reviewee-id",
+        "rating": 5,
+        "comment": "Benchmark review payload."
+      }
+    },
+    {
+      "match": "^POST /api/payments/?$",
+      "body": {
+        "proposalId": "benchmark-proposal-id",
+        "amount": 120000,
+        "currency": "USD"
+      }
+    },
+    {
+      "match": "^GET /api/search/?$",
+      "requiresAuth": false,
+      "query": {
+        "q": "distributed systems",
+        "page": "1",
+        "limit": "20"
+      }
+    }
+  ]
+}
