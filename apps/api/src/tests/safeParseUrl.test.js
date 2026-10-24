@@ -145,14 +145,26 @@ describe('safeParseUrl - Defensive URL Parsing & SSRF Hardening', () => {
     assert.strictEqual(safeParseUrl('http://[fc00::1]/admin'), null);
     assert.strictEqual(safeParseUrl('http://[fd00::1]/admin'), null);
 
+    // IPv6 Multicast (ff00::/8)
+    assert.strictEqual(safeParseUrl('http://[ff02::1]/multicast'), null);
+
     // IPv4-mapped IPv6
     assert.strictEqual(safeParseUrl('http://[::ffff:127.0.0.1]/secret'), null);
+
+    // IPv4-compatible IPv6
+    assert.strictEqual(safeParseUrl('http://[::127.0.0.1]/secret'), null);
+    assert.strictEqual(safeParseUrl('http://[::169.254.169.254]/metadata'), null);
   });
 
   it('detects and blocks obfuscated octal, hex, and DWORD IP SSRF bypasses', () => {
     // Octal representations of 127.0.0.1
     assert.strictEqual(safeParseUrl('http://0177.0.0.1'), null);
     assert.strictEqual(safeParseUrl('http://0177.0.0.01'), null);
+
+    // Octal and DWORD with user credentials (preventing userinfo bypass)
+    assert.strictEqual(safeParseUrl('http://user:pass@0177.0.0.1/'), null);
+    assert.strictEqual(safeParseUrl('http://user:pass@0177.0.0.1/', { allowPrivateIps: true }), null);
+    assert.strictEqual(safeParseUrl('http://foo@2130706433/'), null);
 
     // Hex representations
     assert.strictEqual(safeParseUrl('http://0x7f.0.0.1'), null);
@@ -189,6 +201,9 @@ describe('safeParseUrl - Defensive URL Parsing & SSRF Hardening', () => {
 
     const valid2 = safeParseUrl('https://sub.trusted.io/path', opts);
     assert.ok(valid2 instanceof URL);
+
+    const validApex = safeParseUrl('https://trusted.io/path', opts);
+    assert.ok(validApex instanceof URL);
 
     const invalid = safeParseUrl('https://evil.com/path', opts);
     assert.strictEqual(invalid, null);
@@ -238,6 +253,9 @@ describe('safeParseUrl - Defensive URL Parsing & SSRF Hardening', () => {
 
     // isPrivateIp
     assert.strictEqual(isPrivateIp('127.0.0.1'), true);
+    assert.strictEqual(isPrivateIp('127.0.0.1.'), true);
+    assert.strictEqual(isPrivateIp('::7f00:1'), true);
+    assert.strictEqual(isPrivateIp('ff02::1'), true);
     assert.strictEqual(isPrivateIp('10.0.0.1'), true);
     assert.strictEqual(isPrivateIp('172.20.0.1'), true);
     assert.strictEqual(isPrivateIp('192.168.1.5'), true);

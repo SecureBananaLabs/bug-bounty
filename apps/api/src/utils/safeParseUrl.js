@@ -181,15 +181,20 @@ export function isOctalOrHexIp(host) {
  */
 export function isPrivateIp(host) {
   if (typeof host !== 'string') return false;
-  const clean = host.replace(/^\[|\]$/g, '').trim().toLowerCase();
+  const clean = host.replace(/^\[|\]$/g, '').trim().toLowerCase().replace(/\.$/, '');
 
   // Localhost checks
-  if (clean === 'localhost' || clean.endsWith('.localhost') || clean === 'localhost.') {
+  if (clean === 'localhost' || clean.endsWith('.localhost')) {
     return true;
   }
 
   // IPv6 loopback and unspecified
   if (clean === '::1' || clean === '::' || clean === '0:0:0:0:0:0:0:1' || clean === '0:0:0:0:0:0:0:0') {
+    return true;
+  }
+
+  // IPv6 multicast (ff00::/8)
+  if (clean.startsWith('ff') && clean.includes(':')) {
     return true;
   }
 
@@ -215,6 +220,28 @@ export function isPrivateIp(host) {
       }
     }
     return true;
+  }
+
+  // IPv4-compatible IPv6 (e.g. ::127.0.0.1 or normalized ::7f00:1)
+  if (clean.startsWith('::') && !clean.slice(2).includes('::')) {
+    const sub = clean.slice(2);
+    if (sub.includes('.')) {
+      return isPrivateIp(sub);
+    }
+    const hexParts = sub.split(':');
+    if (hexParts.length === 2) {
+      const hi = parseInt(hexParts[0], 16);
+      const lo = parseInt(hexParts[1], 16);
+      if (!isNaN(hi) && !isNaN(lo)) {
+        const compatIpNum = (((hi & 0xffff) * 65536) + (lo & 0xffff)) >>> 0;
+        return isPrivateIpv4Num(compatIpNum);
+      }
+    } else if (hexParts.length === 1 && /^[0-9a-fA-F]+$/.test(hexParts[0])) {
+      const val = parseInt(hexParts[0], 16);
+      if (!isNaN(val)) {
+        return isPrivateIpv4Num(val >>> 0);
+      }
+    }
   }
 
   // IPv4 numerical evaluation
@@ -321,17 +348,31 @@ export function safeParseUrl(input, base, options) {
     return handleError('URL hostname is missing or empty');
   }
 
-  // Check for raw octal/hex/dword IP bypass attempts before or after WHATWG normalization
-  const rawInputForIp = rawString.replace(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//, '').split(/[/?#:]/)[0];
+  // Extract raw hostname from raw input before WHATWG normalization (to catch octal/hex/DWORD)
+  let rawHostCandidate = rawString.replace(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//, '');
+  rawHostCandidate = rawHostCandidate.split(/[/?#]/)[0];
+  const atIdx = rawHostCandidate.lastIndexOf('@');
+  if (atIdx !== -1) {
+    rawHostCandidate = rawHostCandidate.slice(atIdx + 1);
+  }
+  if (rawHostCandidate.startsWith('[')) {
+    const closeBracket = rawHostCandidate.indexOf(']');
+    if (closeBracket !== -1) {
+      rawHostCandidate = rawHostCandidate.slice(1, closeBracket);
+    }
+  } else {
+    rawHostCandidate = rawHostCandidate.split(':')[0];
+  }
+
   if (!allowOctalHexIps) {
-    if (isOctalOrHexIp(rawInputForIp) || isOctalOrHexIp(hostname)) {
+    if (isOctalOrHexIp(rawHostCandidate) || isOctalOrHexIp(hostname)) {
       return handleError('Octal, hexadecimal, or DWORD IPv4 representations are disallowed');
     }
   }
 
   // SSRF Protection: Check for private, loopback, link-local, multicast, or reserved IPs
   if (!allowPrivateIps) {
-    if (isPrivateIp(hostname) || isPrivateIp(rawInputForIp)) {
+    if (isPrivateIp(hostname) || isPrivateIp(rawHostCandidate)) {
       return handleError(`SSRF Protection: Access to private or loopback host "${hostname}" is disallowed`);
     }
   }
@@ -340,7 +381,8 @@ export function safeParseUrl(input, base, options) {
   if (Array.isArray(allowedHosts) && allowedHosts.length > 0) {
     const isAllowed = allowedHosts.some((pattern) => {
       const lowerPat = pattern.toLowerCase();
-      return hostname === lowerPat || (lowerPat.startsWith('.') && hostname.endsWith(lowerPat)) || hostname.endsWith(`.${lowerPat}`);
+      const apex = lowerPat.startsWith('.') ? lowerPat.slice(1) : lowerPat;
+      return hostname === apex || (lowerPat.startsWith('.') && hostname.endsWith(lowerPat)) || hostname.endsWith(`.${apex}`);
     });
     if (!isAllowed) {
       return handleError(`Hostname "${hostname}" is not in the allowed hosts list`);
@@ -350,7 +392,8 @@ export function safeParseUrl(input, base, options) {
   if (Array.isArray(blockedHosts) && blockedHosts.length > 0) {
     const isBlocked = blockedHosts.some((pattern) => {
       const lowerPat = pattern.toLowerCase();
-      return hostname === lowerPat || (lowerPat.startsWith('.') && hostname.endsWith(lowerPat)) || hostname.endsWith(`.${lowerPat}`);
+      const apex = lowerPat.startsWith('.') ? lowerPat.slice(1) : lowerPat;
+      return hostname === apex || (lowerPat.startsWith('.') && hostname.endsWith(lowerPat)) || hostname.endsWith(`.${apex}`);
     });
     if (isBlocked) {
       return handleError(`Hostname "${hostname}" matches blocked hosts list`);
