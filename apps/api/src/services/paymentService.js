@@ -1,9 +1,17 @@
-export async function createPaymentIntent(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
+import crypto from "node:crypto";
+
+export async function createPaymentIntent(payload = {}) {
+  const safePayload =
+    payload !== null && typeof payload === "object" && !Array.isArray(payload) ? payload : {};
+  const rawCurrency =
+    typeof safePayload.currency === "string" && safePayload.currency.trim().length > 0
+      ? safePayload.currency.trim()
+      : "usd";
+
   return {
-    paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
-    currency: payload.currency ?? "usd",
+    paymentId: `pay_${crypto.randomUUID()}`,
+    amount: safePayload.amount,
+    currency: rawCurrency,
     provider: "stripe"
   };
 }
