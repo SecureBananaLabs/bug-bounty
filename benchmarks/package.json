@@ -1,0 +1,13 @@
+{
+  "name": "api-benchmarks",
+  "version": "1.0.0",
+  "description": "Reproducible API performance benchmark suite",
+  "main": "run.js",
+  "scripts": {
+    "start": "node run.js"
+  },
+  "dependencies": {
+    "autocannon": "^7.15.0",
+    "dotenv": "^16.4.5"
+  }
+}
