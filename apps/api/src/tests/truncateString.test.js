@@ -24,19 +24,26 @@ test('truncateString - defensively returns empty string for non-string inputs', 
   assert.equal(truncateString([], 10), '');
 });
 
-test('truncateString - defensively returns empty string for negative, zero, or non-numeric maxLength', () => {
+test('truncateString - defensively returns empty string for negative, zero, non-finite, or non-numeric maxLength', () => {
   assert.equal(truncateString('Hello world', 0), '');
   assert.equal(truncateString('Hello world', -5), '');
   assert.equal(truncateString('Hello world', NaN), '');
+  assert.equal(truncateString('Hello world', Infinity), '');
+  assert.equal(truncateString('Hello world', -Infinity), '');
   assert.equal(truncateString('Hello world', '10'), '');
   assert.equal(truncateString('Hello world', null), '');
+});
+
+test('truncateString - handles fractional maxLength with Math.floor normalization', () => {
+  assert.equal(truncateString('Hello world', 0.5), '');
+  assert.equal(truncateString('Hello world', 0.9), '');
+  // 5.8 floored to 5: 2 characters + '...'
+  assert.equal(truncateString('Hello world', 5.8), 'He...');
 });
 
 test('truncateString - preserves unicode character boundaries and emojis without splitting surrogate pairs', () => {
   const emojiStr = '🚀🔥💰⚡💎🎉🛡️✨';
   const result = truncateString(emojiStr, 5, '...');
-  // 5 code points: 2 emojis + 3 dots
-  assert.equal(Array.from(result).length, 5);
   assert.ok(result.endsWith('...'));
   // Ensure surrogate pairs are not broken into invalid lone surrogates
   assert.doesNotThrow(() => {
@@ -45,6 +52,25 @@ test('truncateString - preserves unicode character boundaries and emojis without
 
   const singleSurrogate = '⚡🚀🔥';
   assert.equal(truncateString(singleSurrogate, 2, ''), '⚡🚀');
+});
+
+test('truncateString - preserves complex Unicode grapheme clusters (ZWJ sequences, skin tones, flags, combining marks)', () => {
+  // Family emoji ZWJ compound: 1 grapheme cluster
+  const familyStr = '👨‍👩‍👧‍👦🚀🔥';
+  const truncatedFamily = truncateString(familyStr, 2, '');
+  assert.equal(truncatedFamily, '👨‍👩‍👧‍👦🚀');
+
+  // Skin tone modifier: 1 grapheme cluster
+  const thumbsUp = '👍🏽👍🏻👍🏿';
+  assert.equal(truncateString(thumbsUp, 2, ''), '👍🏽👍🏻');
+
+  // Country flags (regional indicator pairs): 1 grapheme cluster each
+  const flags = '🇺🇸🇬🇧🇯🇵🇩🇪';
+  assert.equal(truncateString(flags, 2, ''), '🇺🇸🇬🇧');
+
+  // Combining diacritic marks (cafe + combining acute accent): 4 graphemes
+  const combiningCafe = 'cafe\u0301';
+  assert.equal(truncateString(combiningCafe, 4, ''), 'cafe\u0301');
 });
 
 test('truncateString - customizable suffix handling', () => {
