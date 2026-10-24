@@ -9,3 +9,7 @@ export async function sendMessage(payload) {
   messages.push(message);
   return message;
 }
+
+export async function getMessageById(id) {
+  return messages.find((m) => m.id === id) || null;
+}
