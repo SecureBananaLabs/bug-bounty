@@ -1,0 +1,30 @@
+name: Benchmark Smoke
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Start API server
+        run: npm run start -w apps/api &
+      - name: Wait for API health
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:4000/health >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "API did not become healthy in time" >&2
+          exit 1
+      - name: Run smoke benchmark
+        run: BENCHMARK_SMOKE=1 BENCHMARK_CONNECTIONS=2 BENCHMARK_DURATION=2 npm run benchmark
