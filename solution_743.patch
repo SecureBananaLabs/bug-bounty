@@ -1,0 +1,19 @@
+diff --git a/path/to/bug_detection_script.js b/path/to/bug_detection_script.js
+--- a/path/to/bug_detection_script.js
++++ b/path/to/bug_detection_script.js
+@@ -50,6 +50,15 @@ function detectBugs() {
+     // Logic to detect bugs
+     if (bugDetected) {
+         // Create a new issue
++        const axios = require('axios');
++        const repoOwner = 'SecureBananaLabs';
++        const repoName = 'bug-bounty';
++        const issueTitle = `Bug detected: ${bugDescription}`;
++        const issueBody = `This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information. Bug details: ${bugDetails}`;
++
++        const createIssueUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/issues`;
++        axios.post(createIssueUrl, { title: issueTitle, body: issueBody })
++            .then(response => console.log('Issue created:', response.data))
++            .catch(error => console.error('Error creating issue:', error));
+     }
+ }
