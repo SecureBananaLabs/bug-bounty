@@ -132,3 +132,38 @@ test('pipeAsync and composeAsync reject non-callable arguments', () => {
     message: '[composeAsync] Expected a callable function at index 0, received object',
   });
 });
+
+test('composeAsync rejects immediately when an intermediate step fails', async () => {
+  const step1 = async (x) => x + 1;
+  const step2 = async () => {
+    throw new Error('Composition stage failed');
+  };
+  const step3 = async (x) => x * 10;
+
+  // step1 runs first, then step2 fails
+  const pipeline = composeAsync(step3, step2, step1);
+
+  await assert.rejects(
+    async () => pipeline(5),
+    { message: 'Composition stage failed' }
+  );
+});
+
+test('pipelines correctly preserve `this` context binding', async () => {
+  const service = {
+    factor: 3,
+    syncPipe: pipe(
+      function(x) { return x + this.factor; },
+      function(x) { return x * this.factor; }
+    ),
+    asyncPipe: pipeAsync(
+      async function(x) { return x + this.factor; },
+      async function(x) { return x * this.factor; }
+    ),
+  };
+
+  // (2 + 3) * 3 = 15
+  assert.equal(service.syncPipe(2), 15);
+  assert.equal(await service.asyncPipe(2), 15);
+});
+
