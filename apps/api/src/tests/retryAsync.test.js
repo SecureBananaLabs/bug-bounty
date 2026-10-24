@@ -140,6 +140,21 @@ test('retryAsync validates inputs strictly', async () => {
     async () => retryAsync(async () => {}, { backoff: 0.5 }),
     { name: 'TypeError', message: 'backoff must be a number greater than or equal to 1' }
   );
+
+  await assert.rejects(
+    async () => retryAsync(async () => {}, { maxDelay: -5 }),
+    { name: 'TypeError', message: 'maxDelay must be a non-negative number' }
+  );
+
+  await assert.rejects(
+    async () => retryAsync(async () => {}, { shouldRetry: 'not-a-func' }),
+    { name: 'TypeError', message: 'shouldRetry must be a function' }
+  );
+
+  await assert.rejects(
+    async () => retryAsync(async () => {}, { onRetry: 123 }),
+    { name: 'TypeError', message: 'onRetry must be null or a function' }
+  );
 });
 
 test('retryAsync works with synchronous functions returning values or throwing', async () => {

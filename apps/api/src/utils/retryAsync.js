@@ -48,6 +48,18 @@ export async function retryAsync(fn, options = {}) {
     throw new TypeError('backoff must be a number greater than or equal to 1');
   }
 
+  if (typeof maxDelay !== 'number' || maxDelay < 0 || Number.isNaN(maxDelay)) {
+    throw new TypeError('maxDelay must be a non-negative number');
+  }
+
+  if (typeof shouldRetry !== 'function') {
+    throw new TypeError('shouldRetry must be a function');
+  }
+
+  if (onRetry !== null && typeof onRetry !== 'function') {
+    throw new TypeError('onRetry must be null or a function');
+  }
+
   let attempt = 0;
 
   while (true) {
