@@ -21,13 +21,13 @@ const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
  * @returns {Record<string | symbol, T[]>} Grouped dictionary object.
  */
 export function groupBy(array, iteratee, options = {}) {
+  if (options !== undefined && (typeof options !== 'object' || options === null)) {
+    throw new TypeError(`[groupBy] Expected options to be an object, received ${options === null ? 'null' : typeof options}`);
+  }
+
   // Empty input and non-array handling
   if (!Array.isArray(array)) {
     return options && options.nullPrototype ? Object.create(null) : {};
-  }
-
-  if (typeof options !== 'object' || options === null) {
-    throw new TypeError(`[groupBy] Expected options to be an object, received ${options === null ? 'null' : typeof options}`);
   }
 
   const {
@@ -64,10 +64,11 @@ export function groupBy(array, iteratee, options = {}) {
       }
     }
 
-    const item = isOwn ? array[i] : undefined;
+    let item;
     let rawKey;
 
     try {
+      item = isOwn ? array[i] : undefined;
       rawKey = getKey.call(thisArg, item, i, array);
     } catch (err) {
       if (typeof onError === 'function') {
@@ -75,19 +76,29 @@ export function groupBy(array, iteratee, options = {}) {
       } else if (suppressErrors) {
         rawKey = '__errors__';
       } else {
+        const errMsg =
+          err && typeof err === 'object' && typeof err.message === 'string'
+            ? err.message
+            : String(err);
         throw new Error(
-          `[groupBy] Iteratee threw an exception at index ${i}: ${err.message}`,
+          `[groupBy] Iteratee threw an exception at index ${i}: ${errMsg}`,
           { cause: err }
         );
       }
     }
 
-    // Key normalization: support Symbols directly; coerce other values to String
+    // Key normalization: support Symbols directly; coerce other values safely to String
     let finalKey;
     if (typeof rawKey === 'symbol') {
       finalKey = rawKey;
+    } else if (typeof rawKey === 'string') {
+      finalKey = rawKey;
     } else {
-      finalKey = String(rawKey);
+      try {
+        finalKey = String(rawKey);
+      } catch {
+        finalKey = Object.prototype.toString.call(rawKey);
+      }
     }
 
     // Prototype pollution defense (CWE-1321)

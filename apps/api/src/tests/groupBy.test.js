@@ -248,6 +248,86 @@ describe('Defensive Collection Grouping Utility (groupBy)', () => {
         }
       );
     });
+
+    it('handles thrown falsy and primitive values safely without secondary crashes', () => {
+      // Thrown null
+      assert.throws(
+        () => groupBy([1], () => { throw null; }),
+        (err) => {
+          assert.equal(err.name, 'Error');
+          assert.match(err.message, /\[groupBy\] Iteratee threw an exception at index 0: null/);
+          assert.equal(err.cause, null);
+          return true;
+        }
+      );
+
+      // Thrown undefined
+      assert.throws(
+        () => groupBy([1], () => { throw undefined; }),
+        (err) => {
+          assert.equal(err.name, 'Error');
+          assert.match(err.message, /\[groupBy\] Iteratee threw an exception at index 0: undefined/);
+          assert.equal(err.cause, undefined);
+          return true;
+        }
+      );
+
+      // Thrown primitive string
+      assert.throws(
+        () => groupBy([1], () => { throw 'network-timeout'; }),
+        (err) => {
+          assert.equal(err.name, 'Error');
+          assert.match(err.message, /\[groupBy\] Iteratee threw an exception at index 0: network-timeout/);
+          assert.equal(err.cause, 'network-timeout');
+          return true;
+        }
+      );
+    });
+
+    it('handles throwing array element getters safely', () => {
+      const arr = [10];
+      Object.defineProperty(arr, 1, {
+        configurable: true,
+        enumerable: true,
+        get() {
+          throw new Error('Getter access failure');
+        },
+      });
+      arr.length = 2;
+
+      // With default wrapping
+      assert.throws(
+        () => groupBy(arr, (n) => n > 5),
+        (err) => {
+          assert.equal(err.name, 'Error');
+          assert.match(err.message, /\[groupBy\] Iteratee threw an exception at index 1: Getter access failure/);
+          return true;
+        }
+      );
+
+      // With suppressErrors: true
+      const grouped = groupBy(arr, (n) => n > 5, { suppressErrors: true });
+      assert.equal(grouped.__errors__.length, 1);
+    });
+
+    it('handles keys with null prototype safely without throwing TypeError', () => {
+      const nullProtoKey = Object.create(null);
+      const items = [{ id: 1 }];
+      const grouped = groupBy(items, () => nullProtoKey);
+      assert.deepEqual(grouped['[object Object]'], [{ id: 1 }]);
+    });
+
+    it('validates options type strictly', () => {
+      assert.throws(() => groupBy([1, 2], undefined, null), {
+        name: 'TypeError',
+        message: '[groupBy] Expected options to be an object, received null',
+      });
+
+      assert.throws(() => groupBy([1, 2], undefined, 'invalid'), {
+        name: 'TypeError',
+        message: '[groupBy] Expected options to be an object, received string',
+      });
+    });
   });
 
   it('does not mutate the source array (immutability)', () => {
