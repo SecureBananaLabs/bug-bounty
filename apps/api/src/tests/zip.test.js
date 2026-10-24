@@ -199,3 +199,23 @@ test('zip: preserves object references, symbols, and null values in tuples', () 
   assert.equal(actual[1][0], obj);
   assert.equal(actual[1][1], undefined);
 });
+
+test('zipWith: supports Lodash standard trailing iteratee syntax', () => {
+  const nums1 = [1, 2];
+  const nums2 = [10, 20];
+  const actual = zipWith(nums1, nums2, (a, b) => a + b);
+  assert.deepEqual(actual, [11, 22]);
+});
+
+test('unzipWith: supports inverted argument order (iteratee, array)', () => {
+  const zipped = [[1, 10], [2, 20]];
+  const actual = unzipWith((a, b) => a + b, zipped);
+  assert.deepEqual(actual, [3, 30]);
+});
+
+test('zip: default export is both callable as a function and provides named properties', () => {
+  assert.equal(typeof zipModule, 'function');
+  assert.deepEqual(zipModule([1], [2]), [[1, 2]]);
+  assert.equal(typeof zipModule.zipWith, 'function');
+});
+

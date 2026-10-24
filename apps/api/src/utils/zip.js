@@ -121,15 +121,28 @@ export function unzip(array) {
 
 /**
  * Like `zip`, except that it accepts an iteratee to specify how grouped values
- * should be combined.
+ * should be combined. Supports both Lodash trailing iteratee syntax `zipWith(...arrays, iteratee)`
+ * and FP leading iteratee syntax `zipWith(iteratee, ...arrays)`.
  *
- * @param {Function} iteratee - The function to combine grouped values.
- * @param {...any[]} arrays - The arrays to process.
+ * @param {...any} args - The iteratees and arrays.
  * @returns {any[]} Returns the new array of grouped values.
  */
-export function zipWith(iteratee, ...arrays) {
-  if (typeof iteratee !== 'function') {
-    throw new TypeError(`[zipWith] Expected first argument to be a function, received ${iteratee === null ? 'null' : typeof iteratee}`);
+export function zipWith(...args) {
+  if (args.length === 0) {
+    throw new TypeError('[zipWith] Expected at least an iteratee function');
+  }
+
+  let iteratee;
+  let arrays;
+
+  if (typeof args[0] === 'function') {
+    iteratee = args[0];
+    arrays = args.slice(1);
+  } else if (typeof args[args.length - 1] === 'function') {
+    iteratee = args[args.length - 1];
+    arrays = args.slice(0, -1);
+  } else {
+    throw new TypeError(`[zipWith] Expected iteratee to be a function, received ${args[0] === null ? 'null' : typeof args[0]}`);
   }
 
   const zipped = zip(...arrays);
@@ -138,28 +151,37 @@ export function zipWith(iteratee, ...arrays) {
 
 /**
  * Like `unzip`, except that it accepts an iteratee to specify how regrouped values
- * should be combined.
+ * should be combined. Supports both `unzipWith(array, iteratee)` and `unzipWith(iteratee, array)`.
  *
- * @param {any[][]} array - The array of grouped elements to process.
- * @param {Function} iteratee - The function to combine regrouped values.
+ * @param {any} array - The array of grouped elements or iteratee function.
+ * @param {any} iteratee - The iteratee function or array.
  * @returns {any[]} Returns the new array of regrouped values.
  */
 export function unzipWith(array, iteratee) {
-  if (typeof iteratee !== 'function') {
-    throw new TypeError(`[unzipWith] Expected iteratee to be a function, received ${iteratee === null ? 'null' : typeof iteratee}`);
+  let arr = array;
+  let fn = iteratee;
+
+  if (typeof arr === 'function' && (Array.isArray(fn) || fn == null)) {
+    arr = fn;
+    fn = array;
   }
 
-  const unzipped = unzip(array);
-  return unzipped.map((group) => iteratee(...group));
+  if (typeof fn !== 'function') {
+    throw new TypeError(`[unzipWith] Expected iteratee to be a function, received ${fn === null ? 'null' : typeof fn}`);
+  }
+
+  const unzipped = unzip(arr);
+  return unzipped.map((group) => fn(...group));
 }
 
+zip.zip = zip;
 zip.unzip = unzip;
 zip.zipWith = zipWith;
 zip.unzipWith = unzipWith;
 
-export default {
+export default Object.assign(zip, {
   zip,
   unzip,
   zipWith,
   unzipWith
-};
+});
