@@ -18,6 +18,7 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(user) {
+  // Keep the caller's own identity instead of handing everyone the same subject.
+  return { token: signAccessToken({ sub: user.sub, role: user.role }) };
 }
