@@ -88,7 +88,11 @@ export function invert(obj, options = {}) {
       try {
         invertedKey = String(val);
       } catch {
-        invertedKey = Object.prototype.toString.call(val);
+        try {
+          invertedKey = Object.prototype.toString.call(val);
+        } catch {
+          invertedKey = '[object Object]';
+        }
       }
     }
 
@@ -113,15 +117,21 @@ export function invert(obj, options = {}) {
       } else if (collisionStrategy === 'group') {
         result[invertedKey].push(key);
       } else {
-        // 'overwrite'
-        result[invertedKey] = key;
+        // 'overwrite' using defineProperty to prevent prototype setter invocation or read-only crashes
+        Object.defineProperty(result, invertedKey, {
+          value: key,
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
       }
     } else {
-      if (collisionStrategy === 'group') {
-        result[invertedKey] = [key];
-      } else {
-        result[invertedKey] = key;
-      }
+      Object.defineProperty(result, invertedKey, {
+        value: collisionStrategy === 'group' ? [key] : key,
+        writable: true,
+        enumerable: true,
+        configurable: true,
+      });
     }
   }
 

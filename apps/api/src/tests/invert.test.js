@@ -149,4 +149,44 @@ describe('invert utility', () => {
     assert.strictEqual(result.ownValue, 'own');
     assert.strictEqual(result.shouldNotBeInverted, undefined);
   });
+
+  it('safely defines own properties without triggering prototype setters or crashing on read-only prototype properties', () => {
+    let setterInvoked = false;
+    Object.defineProperty(Object.prototype, 'customTrapSetter', {
+      get() { return 'trap'; },
+      set() { setterInvoked = true; },
+      configurable: true,
+    });
+    Object.defineProperty(Object.prototype, 'customReadOnlyProp', {
+      value: 'readOnly',
+      writable: false,
+      configurable: true,
+    });
+
+    try {
+      const res = invert({
+        k1: 'customTrapSetter',
+        k2: 'customReadOnlyProp',
+      });
+
+      assert.strictEqual(setterInvoked, false);
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(res, 'customTrapSetter'), true);
+      assert.strictEqual(res.customTrapSetter, 'k1');
+      assert.strictEqual(Object.prototype.hasOwnProperty.call(res, 'customReadOnlyProp'), true);
+      assert.strictEqual(res.customReadOnlyProp, 'k2');
+    } finally {
+      delete Object.prototype.customTrapSetter;
+      delete Object.prototype.customReadOnlyProp;
+    }
+  });
+
+  it('safely handles throwing Symbol.toStringTag getters without uncaught crash', () => {
+    const evil = Object.create(null);
+    Object.defineProperty(evil, Symbol.toStringTag, {
+      get() { throw new Error('toStringTag trap'); }
+    });
+
+    const res = invert({ sourceKey: evil });
+    assert.strictEqual(res['[object Object]'], 'sourceKey');
+  });
 });
