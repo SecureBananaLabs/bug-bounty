@@ -10,5 +10,9 @@
   },
   "devDependencies": {
     "prisma": "^5.17.0"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
   }
 }
