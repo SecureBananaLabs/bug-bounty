@@ -3,7 +3,7 @@ export async function createPaymentIntent(payload) {
   return {
     paymentId: `pay_${Date.now()}`,
     amount: payload.amount,
-    currency: payload.currency ?? "usd",
+    currency: (payload.currency ?? "usd").toLowerCase(),
     provider: "stripe"
   };
 }
