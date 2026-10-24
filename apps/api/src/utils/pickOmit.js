@@ -1,10 +1,11 @@
 const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
 
 /**
- * Normalizes keys input into an iterable collection of string or symbol keys.
+ * Normalizes keys input into an iterable collection of property keys.
+ * Supports strings, symbols, numbers, and custom iterables.
  *
  * @param {any} keys
- * @returns {(string | symbol)[]}
+ * @returns {(string | symbol | number | bigint | boolean)[]}
  */
 function normalizeKeys(keys) {
   if (keys === null || keys === undefined) {
@@ -13,7 +14,13 @@ function normalizeKeys(keys) {
   if (Array.isArray(keys)) {
     return keys;
   }
-  if (typeof keys === 'string' || typeof keys === 'symbol') {
+  if (
+    typeof keys === 'string' ||
+    typeof keys === 'symbol' ||
+    typeof keys === 'number' ||
+    typeof keys === 'bigint' ||
+    typeof keys === 'boolean'
+  ) {
     return [keys];
   }
   if (keys instanceof Set) {
@@ -26,15 +33,15 @@ function normalizeKeys(keys) {
 }
 
 /**
- * Defensively picks specified keys (strings or symbols) from a source object.
+ * Defensively picks specified keys from a source object or function.
  *
  * Implements strict defenses against Prototype Pollution (CWE-1321),
  * ignores inherited prototype properties (enforcing own-property isolation),
- * and safely returns an empty dictionary for non-object inputs.
+ * supports Symbol and numeric keys, and safely returns an empty dictionary for primitives.
  *
  * @template T
- * @param {T} obj - Source object to pick properties from.
- * @param {(string | symbol)[] | string | symbol | Set<string | symbol>} keys - Property keys to include.
+ * @param {T} obj - Source object or function to pick properties from.
+ * @param {(string | symbol | number)[] | string | symbol | number | Set<any>} keys - Property keys to include.
  * @param {object} [options={}] - Configuration options.
  * @param {boolean} [options.nullPrototype=false] - Whether to return an object with null prototype.
  * @param {'skip' | 'throw'} [options.dangerAction='skip'] - Action to take if dangerous keys are targeted.
@@ -48,19 +55,39 @@ export function pick(obj, keys, options = {}) {
   const { nullPrototype = false, dangerAction = 'skip' } = options;
   const result = nullPrototype ? Object.create(null) : {};
 
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || (typeof obj !== 'object' && typeof obj !== 'function')) {
     return result;
   }
 
   const keyList = normalizeKeys(keys);
 
-  for (const k of keyList) {
-    if (typeof k !== 'string' && typeof k !== 'symbol') {
+  for (const rawKey of keyList) {
+    if (typeof rawKey === 'symbol') {
+      const k = rawKey;
+      if (Object.prototype.hasOwnProperty.call(obj, k)) {
+        Object.defineProperty(result, k, {
+          value: obj[k],
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
+      }
       continue;
     }
 
+    if (
+      typeof rawKey !== 'string' &&
+      typeof rawKey !== 'number' &&
+      typeof rawKey !== 'bigint' &&
+      typeof rawKey !== 'boolean'
+    ) {
+      continue;
+    }
+
+    const k = String(rawKey);
+
     // Prototype pollution defense (CWE-1321)
-    if (typeof k === 'string' && DANGEROUS_KEYS.has(k)) {
+    if (DANGEROUS_KEYS.has(k)) {
       if (dangerAction === 'throw') {
         throw new TypeError(`[pick] Disallowed dangerous prototype key: ${k}`);
       }
@@ -82,15 +109,15 @@ export function pick(obj, keys, options = {}) {
 }
 
 /**
- * Defensively omits specified keys (strings or symbols) from a source object.
+ * Defensively omits specified keys from a source object or function.
  *
  * Implements strict defenses against Prototype Pollution (CWE-1321),
  * ignores inherited prototype properties (enforcing own-property isolation),
- * and safely returns an empty dictionary for non-object inputs.
+ * supports Symbol and numeric keys, and safely returns an empty dictionary for primitives.
  *
  * @template T
- * @param {T} obj - Source object to omit properties from.
- * @param {(string | symbol)[] | string | symbol | Set<string | symbol>} keys - Property keys to exclude.
+ * @param {T} obj - Source object or function to omit properties from.
+ * @param {(string | symbol | number)[] | string | symbol | number | Set<any>} keys - Property keys to exclude.
  * @param {object} [options={}] - Configuration options.
  * @param {boolean} [options.nullPrototype=false] - Whether to return an object with null prototype.
  * @param {'skip' | 'throw'} [options.dangerAction='skip'] - Action to take if dangerous keys are encountered.
@@ -104,15 +131,30 @@ export function omit(obj, keys, options = {}) {
   const { nullPrototype = false, dangerAction = 'skip' } = options;
   const result = nullPrototype ? Object.create(null) : {};
 
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || (typeof obj !== 'object' && typeof obj !== 'function')) {
     return result;
   }
 
   const rawKeyList = normalizeKeys(keys);
   const omitSet = new Set();
 
-  for (const k of rawKeyList) {
-    if (typeof k === 'string' && DANGEROUS_KEYS.has(k)) {
+  for (const rawKey of rawKeyList) {
+    if (typeof rawKey === 'symbol') {
+      omitSet.add(rawKey);
+      continue;
+    }
+
+    if (
+      typeof rawKey !== 'string' &&
+      typeof rawKey !== 'number' &&
+      typeof rawKey !== 'bigint' &&
+      typeof rawKey !== 'boolean'
+    ) {
+      continue;
+    }
+
+    const k = String(rawKey);
+    if (DANGEROUS_KEYS.has(k)) {
       if (dangerAction === 'throw') {
         throw new TypeError(`[omit] Disallowed dangerous prototype key in omit list: ${k}`);
       }
@@ -151,9 +193,9 @@ export function omit(obj, keys, options = {}) {
 }
 
 /**
- * Picks properties from an object that satisfy the predicate callback.
+ * Picks properties from an object or function that satisfy the predicate callback.
  *
- * @param {object} obj - Source object.
+ * @param {object|function} obj - Source object or function.
  * @param {(value: any, key: string | symbol, obj: object) => boolean} predicate - Predicate evaluator.
  * @param {object} [options={}]
  * @returns {Record<string | symbol, any>}
@@ -162,7 +204,7 @@ export function pickBy(obj, predicate, options = {}) {
   if (typeof predicate !== 'function') {
     throw new TypeError(`[pickBy] Expected predicate to be a function, received ${typeof predicate}`);
   }
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || (typeof obj !== 'object' && typeof obj !== 'function')) {
     return options && options.nullPrototype ? Object.create(null) : {};
   }
 
@@ -185,9 +227,9 @@ export function pickBy(obj, predicate, options = {}) {
 }
 
 /**
- * Omits properties from an object that satisfy the predicate callback.
+ * Omits properties from an object or function that satisfy the predicate callback.
  *
- * @param {object} obj - Source object.
+ * @param {object|function} obj - Source object or function.
  * @param {(value: any, key: string | symbol, obj: object) => boolean} predicate - Predicate evaluator.
  * @param {object} [options={}]
  * @returns {Record<string | symbol, any>}
@@ -196,7 +238,7 @@ export function omitBy(obj, predicate, options = {}) {
   if (typeof predicate !== 'function') {
     throw new TypeError(`[omitBy] Expected predicate to be a function, received ${typeof predicate}`);
   }
-  if (obj === null || typeof obj !== 'object') {
+  if (obj === null || (typeof obj !== 'object' && typeof obj !== 'function')) {
     return options && options.nullPrototype ? Object.create(null) : {};
   }
 

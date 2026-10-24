@@ -19,6 +19,12 @@ test('pick: supports single string or symbol key without array wrapper', () => {
   assert.equal(Object.getOwnPropertySymbols(symPick).length, 1);
 });
 
+test('pick: supports numeric keys and array-like objects', () => {
+  const source = { 0: 'zero', 1: 'one', 2: 'two' };
+  assert.deepEqual(pick(source, [0, 2]), { 0: 'zero', 2: 'two' });
+  assert.deepEqual(pick(source, 1), { 1: 'one' });
+});
+
 test('pick: supports Set and generic iterables as keys input', () => {
   const source = { a: 1, b: 2, c: 3 };
   const setKeys = new Set(['a', 'c']);
@@ -69,6 +75,15 @@ test('pick: enforces own-property isolation and ignores inherited prototype prop
   assert.equal(Object.prototype.hasOwnProperty.call(picked, 'toString'), false);
 });
 
+test('pick: handles functions with attached properties correctly', () => {
+  function handler() {}
+  handler.route = '/api';
+  handler.version = 1;
+
+  assert.deepEqual(pick(handler, ['route']), { route: '/api' });
+  assert.deepEqual(pick(handler, ['version']), { version: 1 });
+});
+
 test('pick: handles non-object, null, and undefined inputs safely', () => {
   assert.deepEqual(pick(null, ['a']), {});
   assert.deepEqual(pick(undefined, ['a']), {});
@@ -84,7 +99,6 @@ test('pick: handles empty or invalid keys arguments safely', () => {
   assert.deepEqual(pick(source, null), {});
   assert.deepEqual(pick(source, undefined), {});
   assert.deepEqual(pick(source, []), {});
-  assert.deepEqual(pick(source, 123), {});
 });
 
 test('pick: supports nullPrototype option', () => {
@@ -108,6 +122,12 @@ test('omit: supports single string or symbol without array wrapper', () => {
   assert.deepEqual(omit(source, 'a'), { [sym]: 'secret', b: 2 });
   const noSym = omit(source, sym);
   assert.deepEqual(noSym, { a: 1, b: 2 });
+});
+
+test('omit: supports numeric keys and array-like objects', () => {
+  const source = { 0: 'a', 1: 'b', 2: 'c' };
+  assert.deepEqual(omit(source, [1]), { 0: 'a', 2: 'c' });
+  assert.deepEqual(omit(source, 0), { 1: 'b', 2: 'c' });
 });
 
 test('omit: supports Set and generic iterables as keys input', () => {
@@ -146,6 +166,14 @@ test('omit: prototype pollution defense prevents injecting or copying dangerous 
   );
 });
 
+test('omit: handles functions with attached properties correctly', () => {
+  function handler() {}
+  handler.route = '/api';
+  handler.secret = 'xyz';
+
+  assert.deepEqual(omit(handler, ['secret']), { route: '/api' });
+});
+
 test('omit: handles non-object, null, and undefined inputs safely', () => {
   assert.deepEqual(omit(null, ['a']), {});
   assert.deepEqual(omit(undefined, ['a']), {});
@@ -160,7 +188,6 @@ test('omit: handles empty or invalid keys arguments safely', () => {
   assert.deepEqual(omit(source, null), { a: 1, b: 2 });
   assert.deepEqual(omit(source, undefined), { a: 1, b: 2 });
   assert.deepEqual(omit(source, []), { a: 1, b: 2 });
-  assert.deepEqual(omit(source, 456), { a: 1, b: 2 });
 });
 
 test('omit: supports nullPrototype option', () => {
