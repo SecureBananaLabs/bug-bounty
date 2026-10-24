@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#0b1220"/>
+  <rect x="56" y="56" width="1168" height="608" rx="18" fill="#111827" stroke="#2dd4bf" stroke-width="3"/>
+  <text x="96" y="132" fill="#f8fafc" font-family="Arial, sans-serif" font-size="44" font-weight="700">Issue #4223 plus #743 demo</text>
+  <text x="96" y="214" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="32">Input payload tries to override server-owned fields</text>
+  <text x="128" y="284" fill="#fca5a5" font-family="Menlo, monospace" font-size="30">id = job_attacker</text>
+  <text x="128" y="334" fill="#fca5a5" font-family="Menlo, monospace" font-size="30">status = closed</text>
+  <text x="96" y="430" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="32">createJob() now assigns trusted fields after payload data</text>
+  <text x="128" y="504" fill="#86efac" font-family="Menlo, monospace" font-size="30">id matches job_&lt;timestamp&gt;</text>
+  <text x="128" y="554" fill="#86efac" font-family="Menlo, monospace" font-size="30">status = open</text>
+  <text x="96" y="626" fill="#93c5fd" font-family="Arial, sans-serif" font-size="28">Validation: npm test -w apps/api passed</text>
+</svg>
