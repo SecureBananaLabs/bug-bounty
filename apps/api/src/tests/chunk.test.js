@@ -32,6 +32,13 @@ test('chunk: clamps floating point sizes to integer via Math.floor', () => {
   assert.deepEqual(result, [[1, 2], [3, 4], [5]]);
 });
 
+test('chunk: sub-unity floating sizes flooring to 0 return empty array', () => {
+  const input = [1, 2, 3];
+  assert.deepEqual(chunk(input, 0.5), []);
+  assert.deepEqual(chunk(input, 0.99), []);
+  assert.throws(() => chunk(input, 0.5, { strict: true }), TypeError);
+});
+
 test('chunk: handles empty array gracefully', () => {
   assert.deepEqual(chunk([]), []);
   assert.deepEqual(chunk([], 5), []);
@@ -86,10 +93,15 @@ test('chunk: skipHoles option filters out holes entirely', () => {
   assert.deepEqual(result, [['a', 'b'], ['c']]);
 });
 
-test('chunk: maxChunks option limits output chunk count', () => {
+test('chunk: maxChunks option limits output chunk count including 0', () => {
   const input = [1, 2, 3, 4, 5, 6, 7, 8];
   const result = chunk(input, 2, { maxChunks: 2 });
   assert.deepEqual(result, [[1, 2], [3, 4]]);
+
+  // maxChunks: 0 must return 0 chunks
+  assert.deepEqual(chunk(input, 2, { maxChunks: 0 }), []);
+  assert.deepEqual(chunk(input, 2, { maxChunks: -1 }), []);
+  assert.throws(() => chunk(input, 2, { maxChunks: -1, strict: true }), TypeError);
 });
 
 test('chunk: strict mode throws TypeError on non-array or invalid size', () => {
