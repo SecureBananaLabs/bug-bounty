@@ -61,6 +61,12 @@ describe('numberUtils - Defensive Number Clamping and Range Validation', () => {
       assert.strictEqual(clamp(75n, 100n, 50n), 75n);
       assert.strictEqual(clamp(20n, 100n, 50n), 50n);
       assert.strictEqual(clamp(150n, 100n, 50n), 100n);
+
+      // Unconstrained / NaN upper or lower bound
+      assert.strictEqual(clamp(100n, 5n, NaN), 100n);
+      assert.strictEqual(clamp(100n, 5n, undefined), 100n);
+      assert.strictEqual(clamp(100n, 5n, 'invalid'), 100n);
+      assert.strictEqual(clamp(2n, 5n, NaN), 5n);
     });
 
     it('safely coerces numeric strings in inputs and bounds', () => {
@@ -117,6 +123,12 @@ describe('numberUtils - Defensive Number Clamping and Range Validation', () => {
 
       // Inverted BigInt range
       assert.strictEqual(inRange(5n, 10n, 0n), true);
+
+      // BigInt NaN defense
+      assert.strictEqual(inRange(5n, 'invalid', 10n), false);
+      assert.strictEqual(inRange(5n, NaN, 10n), false);
+      assert.strictEqual(inRange(5n, 0n, 'invalid'), false);
+      assert.strictEqual(inRange(5n, 0n, NaN), false);
     });
   });
 

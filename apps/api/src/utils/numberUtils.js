@@ -68,18 +68,30 @@ export function safeParseNumber(val, fallback = 0) {
 export function clamp(number, lower, upper) {
   // BigInt handling
   if (typeof number === 'bigint') {
-    let bLower = typeof lower === 'bigint' ? lower : BigInt(safeParseNumber(lower, 0));
-    let bUpper = typeof upper === 'bigint' ? upper : BigInt(safeParseNumber(upper, 0));
+    let bLower = null;
+    let bUpper = null;
 
-    // Normalize inverted bounds
-    if (bLower > bUpper) {
+    if (typeof lower === 'bigint') {
+      bLower = lower;
+    } else if (isNumeric(lower)) {
+      try { bLower = BigInt(Math.trunc(Number(lower))); } catch (_) {}
+    }
+
+    if (typeof upper === 'bigint') {
+      bUpper = upper;
+    } else if (isNumeric(upper)) {
+      try { bUpper = BigInt(Math.trunc(Number(upper))); } catch (_) {}
+    }
+
+    // Normalize inverted bounds if both are present
+    if (bLower !== null && bUpper !== null && bLower > bUpper) {
       const temp = bLower;
       bLower = bUpper;
       bUpper = temp;
     }
 
-    if (number < bLower) return bLower;
-    if (number > bUpper) return bUpper;
+    if (bLower !== null && number < bLower) return bLower;
+    if (bUpper !== null && number > bUpper) return bUpper;
     return number;
   }
 
@@ -158,8 +170,25 @@ export function inRange(number, start, end, options) {
 
   // BigInt handling
   if (typeof number === 'bigint') {
-    let bStart = typeof rStart === 'bigint' ? rStart : BigInt(safeParseNumber(rStart, 0));
-    let bEnd = typeof rEnd === 'bigint' ? rEnd : BigInt(safeParseNumber(rEnd, 0));
+    let bStart = null;
+    let bEnd = null;
+
+    if (typeof rStart === 'bigint') {
+      bStart = rStart;
+    } else if (isNumeric(rStart)) {
+      try { bStart = BigInt(Math.trunc(Number(rStart))); } catch (_) {}
+    }
+
+    if (typeof rEnd === 'bigint') {
+      bEnd = rEnd;
+    } else if (isNumeric(rEnd)) {
+      try { bEnd = BigInt(Math.trunc(Number(rEnd))); } catch (_) {}
+    }
+
+    // NaN Defense: Reject if any bound evaluates to null/NaN/unparseable
+    if (bStart === null || bEnd === null) {
+      return false;
+    }
 
     if (bStart > bEnd) {
       const temp = bStart;
