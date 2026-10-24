@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { contentSecurityPolicy } from "./config/security.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
@@ -18,7 +19,7 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
-  app.use(helmet());
+  app.use(helmet({ contentSecurityPolicy }));
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
