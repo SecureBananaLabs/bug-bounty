@@ -212,3 +212,35 @@ test('memoize: input validations and strict mode', () => {
   assert.throws(() => memoize(() => {}, { maxSize: 0, strict: true }), TypeError);
   assert.throws(() => memoize(() => {}, { ttlMs: -10, strict: true }), TypeError);
 });
+
+test('memoize: distinguishes zero-arguments from undefined single-argument and fires onEvict on TTL size purge', async () => {
+  let calls = 0;
+  const fn = (...args) => {
+    calls++;
+    return args.length === 0 ? 'zero-args' : 'one-arg-undefined';
+  };
+
+  const evicted = [];
+  const memoized = memoize(fn, {
+    ttlMs: 30,
+    onEvict: (k, v) => evicted.push({ k, v })
+  });
+
+  assert.equal(memoized(), 'zero-args');
+  assert.equal(memoized(undefined), 'one-arg-undefined');
+  assert.equal(calls, 2);
+  assert.equal(memoized.cache.size, 2);
+
+  // Both should be cached separately
+  assert.equal(memoized(), 'zero-args');
+  assert.equal(memoized(undefined), 'one-arg-undefined');
+  assert.equal(calls, 2);
+
+  // Wait for TTL expiration
+  await new Promise((r) => setTimeout(r, 50));
+
+  // Accessing size purges expired entries and triggers onEvict
+  assert.equal(memoized.cache.size, 0);
+  assert.equal(evicted.length, 2);
+});
+
