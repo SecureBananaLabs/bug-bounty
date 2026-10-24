@@ -5,7 +5,11 @@ export async function listJobs() {
 }
 
 export async function createJob(payload) {
-  const job = { id: `job_${Date.now()}`, status: "open", ...payload };
+  const job = {
+    ...payload,
+    id: `job_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    status: "open",
+  };
   jobs.push(job);
   return job;
 }
