@@ -9,3 +9,7 @@ export async function createNotification(payload) {
   notifications.push(notification);
   return notification;
 }
+
+export async function getNotificationById(id) {
+  return notifications.find((n) => n.id === id) || null;
+}
