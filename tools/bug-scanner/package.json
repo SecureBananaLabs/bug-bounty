@@ -1,0 +1,10 @@
+{
+  "name": "@freelanceflow/bug-scanner",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "scan": "node src/cli.js",
+    "create-issues": "node src/cli.js --create-issues",
+    "test": "node --test src/tests/*.test.js"
+  }
+}
