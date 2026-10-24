@@ -16,6 +16,10 @@ function parsePath(path) {
     return path.map(segment => (typeof segment === 'symbol' ? segment : String(segment)));
   }
 
+  if (typeof path === 'number' || typeof path === 'symbol') {
+    return [path];
+  }
+
   if (typeof path !== 'string' || path.length === 0) {
     return [];
   }

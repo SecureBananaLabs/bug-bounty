@@ -93,3 +93,15 @@ test('safeGet stops safely when encountering primitive in the middle of path', (
   const record = { a: 42 };
   assert.equal(safeGet(record, 'a.b.c', 'stop'), 'stop');
 });
+
+test('safeGet supports direct numeric and symbol paths', () => {
+  const arr = ['alpha', 'beta', 'gamma'];
+  assert.equal(safeGet(arr, 0), 'alpha');
+  assert.equal(safeGet(arr, 1), 'beta');
+  assert.equal(safeGet(arr, 2), 'gamma');
+  assert.equal(safeGet(arr, 3, 'fallback'), 'fallback');
+
+  const sym = Symbol('secret');
+  const symObj = { [sym]: 'secure-value' };
+  assert.equal(safeGet(symObj, sym), 'secure-value');
+});
