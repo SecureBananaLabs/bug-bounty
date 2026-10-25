@@ -1,0 +1,28 @@
+{
+  "default": {
+    "max_p99_ms": 300,
+    "max_p95_ms": 150,
+    "max_error_rate_pct": 1.0,
+    "min_rps": 50
+  },
+  "endpoints": {
+    "/api/health": {
+      "max_p99_ms": 50,
+      "max_p95_ms": 25,
+      "max_error_rate_pct": 0.0,
+      "min_rps": 500
+    },
+    "/api/auth/login": {
+      "max_p99_ms": 400,
+      "max_p95_ms": 200,
+      "max_error_rate_pct": 2.0,
+      "min_rps": 100
+    },
+    "/api/items": {
+      "max_p99_ms": 250,
+      "max_p95_ms": 120,
+      "max_error_rate_pct": 0.5,
+      "min_rps": 200
+    }
+  }
+}
