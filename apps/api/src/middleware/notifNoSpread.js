@@ -1,0 +1,1 @@
+export const notifNoSpread=(req,_,next)=>{const{userId,type,message,data}=req.body||{};req.body={...(userId?{userId}:{}),type,message,...(data?{data}:{})};delete req.body?.id;return next();};
