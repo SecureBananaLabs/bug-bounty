@@ -19,6 +19,7 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
+  app.use((req, res, next) => { res.setHeader("X-XSS-Protection", "1; mode=block"); res.setHeader("X-Content-Type-Options", "nosniff"); next(); });
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
