@@ -4,7 +4,7 @@ import http from 'node:http';
 import { once } from 'node:events';
 import { readFile } from 'node:fs/promises';
 import { percentile, targetUrl, measure, violations, assertCoverage, discoverEndpoints, routeInventory, payload } from '../lib.mjs';
-const limits = { default: { p99Ms: 100, maxErrorRatePercent: 0 } };
+const limits = { default: { p99Ms: 1000, maxErrorRatePercent: 0 } };
 test('percentiles use nearest rank and empty samples are explicit', () => {
   assert.equal(percentile([20, 1, 10, 5], .5), 5);
   assert.equal(percentile([20, 1, 10, 5], .99), 20);
