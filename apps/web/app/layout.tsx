@@ -10,10 +10,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
         <main>
           <h1>FreelanceFlow</h1>
           <Navigation />
-          {children}
+          <section id="main-content" tabIndex={-1}>
+            {children}
+          </section>
         </main>
       </body>
     </html>
