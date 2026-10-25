@@ -1,0 +1,1 @@
+export const stripUserMassAssign=(req,_,next)=>{["id","role","isAdmin","createdAt","updatedAt"].forEach(f=>delete req.body?.[f]);return next();};
