@@ -1,0 +1,28 @@
+**Deliverable:**
+
+`POEM.md` file content:
+
+```markdown
+# The Silent Hunt
+
+In the labyrinth of code where shadows creep,  
+A silent hunt unfolds where secrets sleep,  
+Each line a vein, each function a trap,  
+We seek the flaws that darkness might snap.  
+
+With binary eyes, we scan the night,  
+Through firewalls' maze and ports that hold tight,  
+A cipher's whisper, a key's faint trace,  
+Exposing vulnerabilities' hidden face.  
+
+When breaches are sealed and systems grow wise,  
+From fragile to fortified, from lies to truths we rise,  
+The digital realm, once riddled with scars,  
+Now thrives where ethical hands mend the tears in its stars.  
+```
+
+**PR Description Note:**  
+*Chose a structured ABAB rhyme scheme and quatrains to mirror the precision of code, with a tone blending vigilance and hope to reflect ethical hacking's mission.*  
+
+---  
+**Repository starred:** https://github.com/SecureBananaLabs/bug-bounty
