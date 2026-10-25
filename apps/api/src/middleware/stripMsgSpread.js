@@ -1,0 +1,1 @@
+export const stripMsgSpread=(req,_,next)=>{const{id:_id,createdAt:_ca,updatedAt:_ua,...safe}=req.body||{};req.body=safe;return next();};
