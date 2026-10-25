@@ -22,6 +22,12 @@ export async function oauthCallback(req, res) {
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  try {
+    const token = req.body.refreshToken;
+    if (!token) return res.status(400).json({ success: false, message: "Missing refresh token" });
+    const result = await refreshToken(token);
+    return ok(res, result);
+  } catch (error) {
+    return res.status(401).json({ success: false, message: "Invalid refresh token" });
+  }
 }
