@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";const ALLOWED=new Set(["client","freelancer"]);export const noAdminV12=(req,res,next)=>{if(req.body?.role&&!ALLOWED.has(req.body.role))return fail(res,"Cannot assign role: "+req.body.role,400);return next();};
