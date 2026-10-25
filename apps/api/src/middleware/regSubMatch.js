@@ -1,0 +1,1 @@
+export const regSubMatch=(uid,payload)=>({...payload,sub:String(uid),id:String(uid)});
