@@ -4,3 +4,27 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.jobs-board { display: grid; gap: 1rem; }
+.jobs-header { align-items: center; display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr) minmax(180px, 0.35fr); }
+.jobs-header p { color: #bac7e8; max-width: 680px; }
+.jobs-eyebrow { color: #6ee7b7; font-size: 0.78rem; font-weight: 700; letter-spacing: 0; margin: 0 0 0.35rem; text-transform: uppercase; }
+.jobs-total { background: #0f172d; border: 1px solid #27365f; border-radius: 8px; display: grid; gap: 0.4rem; padding: 0.85rem; }
+.jobs-total span, .job-metric span, .job-metric small, .job-card p, .job-card-meta span { color: #bac7e8; }
+.jobs-total strong, .job-metric strong { font-size: 1.65rem; }
+.jobs-summary { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.job-metric { min-height: 116px; }
+.job-metric strong { display: block; margin: 0.45rem 0 0.2rem; }
+.jobs-toolbar { align-items: center; display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between; }
+.jobs-toolbar div { align-items: center; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.jobs-toolbar span { color: #f2f5ff; font-weight: 700; }
+.jobs-toolbar button { background: #0f172d; border: 1px solid #314164; border-radius: 8px; color: #dce6ff; padding: 0.55rem 0.75rem; }
+.jobs-list { display: grid; gap: 1rem; }
+.job-card { border-radius: 8px; display: grid; gap: 1rem; }
+.job-card h3 { margin: 0.5rem 0; }
+.job-card p { margin: 0; }
+.job-card-topline, .job-card-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.job-card-topline span { background: #0f172d; border: 1px solid #27365f; border-radius: 999px; color: #dce6ff; padding: 0.35rem 0.65rem; }
+.job-card-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.job-card-meta div { background: #0f172d; border: 1px solid #27365f; border-radius: 8px; display: grid; gap: 0.25rem; padding: 0.75rem; }
+.job-card a { color: #6ee7b7; font-weight: 700; }
+@media (max-width: 720px) { .jobs-header { grid-template-columns: 1fr; } .jobs-toolbar { align-items: stretch; } }
