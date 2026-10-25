@@ -1,17 +1,26 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
+const { success, error } = require('../utils/response');
+const { registerSchema, loginSchema } = require('../validators/auth');
 import { ok } from "../utils/response.js";
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
+    const validation = registerSchema.safeParse(req.body);
+    if (!validation.success) {
+      return error(res, validation.error.issues.map(i => ({ field: i.path.join('.'), message: i.message })), 400);
+    }
+    const user = await authService.register(validation.data);
+    return success(res, user, 'User registered successfully', 201);
   return ok(res, result, 201);
 }
 
 export async function login(req, res) {
   const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
+    const validation = loginSchema.safeParse(req.body);
+    if (!validation.success) {
+      return error(res, validation.error.issues.map(i => ({ field: i.path.join('.'), message: i.message })), 400);
+    }
+    const result = await authService.login(validation.data);
+    return success(res, result, 'Login successful');
 }
 
 export async function oauthCallback(req, res) {
