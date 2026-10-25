@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export const requireJwtClaims=(...claims)=>(req,res,next)=>{if(!req.user)return fail(res,"Not authenticated",401);for(const c of claims){if(!req.user[c])return fail(res,`JWT missing required claim: ${c}`,401);}return next();};
