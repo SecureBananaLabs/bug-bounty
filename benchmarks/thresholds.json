@@ -1,0 +1,27 @@
+{
+  "description": "API Performance Regression Thresholds for CI Gates",
+  "global": {
+    "max_p99_latency_ms": 250,
+    "max_p95_latency_ms": 150,
+    "max_error_rate_percent": 2.0,
+    "min_rps": 50
+  },
+  "endpoints": {
+    "/health": {
+      "max_p99_latency_ms": 50,
+      "max_error_rate_percent": 0.0
+    },
+    "/api/jobs": {
+      "max_p99_latency_ms": 200,
+      "max_error_rate_percent": 1.0
+    },
+    "/api/users": {
+      "max_p99_latency_ms": 200,
+      "max_error_rate_percent": 1.0
+    },
+    "/api/search": {
+      "max_p99_latency_ms": 250,
+      "max_error_rate_percent": 1.0
+    }
+  }
+}
