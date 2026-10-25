@@ -1,7 +1,18 @@
 import { signAccessToken } from "../utils/jwt.js";
 
+const registeredEmails = new Set();
+
 export async function registerUser(payload) {
+  const emailKey = payload.email.trim().toLowerCase();
+  if (registeredEmails.has(emailKey)) {
+    const error = new Error("Email already registered");
+    error.status = 409;
+    error.code = "AUTH_EMAIL_EXISTS";
+    throw error;
+  }
+
   // TODO: persist new user via Prisma
+  registeredEmails.add(emailKey);
   return {
     id: `usr_${Date.now()}`,
     email: payload.email,
