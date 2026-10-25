@@ -1,0 +1,1 @@
+export const listDefensive=(arr)=>Array.isArray(arr)?arr.map(i=>i&&typeof i==="object"?{...i}:i):[];
