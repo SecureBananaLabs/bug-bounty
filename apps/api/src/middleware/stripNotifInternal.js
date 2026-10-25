@@ -1,0 +1,1 @@
+export const stripNotifInternal=(req,_,next)=>{["id","read","readAt","createdAt"].forEach(f=>delete req.body?.[f]);return next();};
