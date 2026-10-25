@@ -8,5 +8,10 @@ export async function getJobs(req, res) {
 
 export async function postJob(req, res) {
   const payload = createJobSchema.parse(req.body);
+  
+  if (req.user && payload.clientId !== req.user.sub) {
+    return res.status(403).json({ success: false, error: "Forbidden: Cannot create job for another client" });
+  }
+
   return ok(res, await createJob(payload), 201);
 }
