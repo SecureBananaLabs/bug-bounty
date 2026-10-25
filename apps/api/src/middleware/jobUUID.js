@@ -1,0 +1,1 @@
+export const jobUUID=(req,_,next)=>{delete req.body?.id;req._genJobId=()=>crypto.randomUUID();return next();};
