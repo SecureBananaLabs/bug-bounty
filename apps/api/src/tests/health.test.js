@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createApp } from "../app.js";
 
 test("GET /health returns ok payload", async () => {
+  process.env.JWT_SECRET = "test-secret";
+  const { createApp } = await import("../app.js");
   const app = createApp();
   const server = app.listen(0);
 
