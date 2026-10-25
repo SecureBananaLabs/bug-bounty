@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";export const jobMaxLenV2=(req,res,next)=>{const t=req.body?.title;const d=req.body?.description;if(t&&t.length>200)return fail(res,"title max 200 chars",400);if(d&&d.length>5000)return fail(res,"description max 5000 chars",400);return next();};
