@@ -1,9 +1,25 @@
-export default function JobDetailPage({ params }: { params: { id: string } }) {
+import { notFound } from 'next/navigation';
+import { jobs } from '../../lib/mock';
+
+interface Props {
+  params: Promise<{ id: string }>;
+}
+
+export default async function JobDetailPage({ params }: Props) {
+  const { id } = await params;
+  const job = jobs.find(j => j.id === id);
+  if (!job) {
+    return (
+      <div style={{ padding: '2rem' }}>
+        <h1>Job Not Found</h1>
+        <p>The job with ID &quot;{id}&quot; could not be found.</p>
+      </div>
+    );
+  }
   return (
-    <section className="card">
-      <h2>Job Detail</h2>
-      <p>Viewing details for <strong>{params.id}</strong>.</p>
-      <p>Responsibilities, milestones, and proposals would be shown here.</p>
-    </section>
+    <div style={{ padding: '2rem' }}>
+      <h2>{job.title}</h2>
+      <p>Budget: ${job.budget}</p>
+    </div>
   );
 }
