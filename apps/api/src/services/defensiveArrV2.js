@@ -1,0 +1,1 @@
+export const defensiveArrV2=(a)=>Array.isArray(a)?a.map(i=>i&&typeof i==="object"?{...i}:i):[];
