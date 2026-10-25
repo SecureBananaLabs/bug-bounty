@@ -1,0 +1,1 @@
+export const reviewTimestamp=(req,_,next)=>{delete req.body?.createdAt;delete req.body?.updatedAt;delete req.body?.id;return next();};
