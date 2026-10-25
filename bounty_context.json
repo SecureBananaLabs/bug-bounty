@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1776",
+  "title": "Job creation endpoint lacks authentication — anyone can post jobs",
+  "body": "## Bug: Missing Authentication on Job Creation\n\n**Description:** The `POST /api/jobs` endpoint does not require authentication. Anyone can create job listings without being logged in.\n\n**File:** `apps/api/src/routes/jobRoutes.js`\n\n**Current code:**\n```js\njobRoutes.get(\"/\", getJobs);\njobRoutes.post(\"/\", postJob);\n```\n\n**Expected behavior:** The POST route should require `authMiddleware` to ensure only authenticated users can create jobs.\n\n**Impact:** Medium — spam or malicious job postings could flood the platform.\n\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
