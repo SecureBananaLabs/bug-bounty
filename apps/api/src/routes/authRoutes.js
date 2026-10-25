@@ -1,9 +1,20 @@
-import { Router } from "express";
-import { login, oauthCallback, refresh, register } from "../controllers/authController.js";
+import { Router } from 'express';
+import { registerSchema } from '../validation/authValidation.js';
+import { validate } from '../middleware/validate.js';
+import { registerUser, loginUser, refreshToken, logoutUser } from '../services/authService.js';
 
-export const authRoutes = Router();
+const router = Router();
 
-authRoutes.post("/register", register);
-authRoutes.post("/login", login);
-authRoutes.get("/oauth/:provider/callback", oauthCallback);
-authRoutes.post("/refresh", refresh);
+router.post('/register', validate(registerSchema), async (req, res, next) => {
+  try {
+    const { email, password, role, fullName } = req.body;
+    const user = await registerUser({ email, password, role, fullName });
+    res.status(201).json({ user });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// other routes unchanged...
+
+export { router as authRoutes };
