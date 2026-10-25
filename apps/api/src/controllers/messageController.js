@@ -6,5 +6,12 @@ export async function getMessages(req, res) {
 }
 
 export async function postMessage(req, res) {
-  return ok(res, await sendMessage(req.body), 201);
+  return ok(
+    res,
+    await sendMessage({
+      ...req.body,
+      senderId: req.user.sub
+    }),
+    201
+  );
 }
