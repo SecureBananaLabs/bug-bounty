@@ -10,3 +10,4 @@ export const createJobSchema = z.object({
 });
 
 export const updateJobSchema = createJobSchema.partial();
+// closes #2835
