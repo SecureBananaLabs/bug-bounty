@@ -1,0 +1,65 @@
+{
+  "endpoints": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/api/health",
+      "auth": false,
+      "body": null
+    },
+    {
+      "name": "list-programs",
+      "method": "GET",
+      "path": "/api/programs?limit=20",
+      "auth": true,
+      "body": null
+    },
+    {
+      "name": "get-program",
+      "method": "GET",
+      "path": "/api/programs/00000000-0000-0000-0000-000000000000",
+      "auth": true,
+      "body": null
+    },
+    {
+      "name": "list-reports",
+      "method": "GET",
+      "path": "/api/reports?limit=20",
+      "auth": true,
+      "body": null
+    },
+    {
+      "name": "create-report",
+      "method": "POST",
+      "path": "/api/reports",
+      "auth": true,
+      "body": {
+        "programId": "00000000-0000-0000-0000-000000000000",
+        "title": "Benchmark report",
+        "severity": "medium",
+        "description": "This is a benchmark payload used to measure API latency and throughput under realistic load conditions. It is intentionally sized to approximate a typical vulnerability report submission."
+      }
+    },
+    {
+      "name": "list-users",
+      "method": "GET",
+      "path": "/api/users?limit=20",
+      "auth": true,
+      "body": null
+    },
+    {
+      "name": "get-current-user",
+      "method": "GET",
+      "path": "/api/users/me",
+      "auth": true,
+      "body": null
+    },
+    {
+      "name": "list-payouts",
+      "method": "GET",
+      "path": "/api/payouts?limit=20",
+      "auth": true,
+      "body": null
+    }
+  ]
+}

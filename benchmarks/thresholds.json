@@ -1,0 +1,16 @@
+{
+  "default": {
+    "p99LatencyMs": 500,
+    "errorRatePct": 1
+  },
+  "endpoints": {
+    "health": { "p99LatencyMs": 100, "errorRatePct": 0.1 },
+    "list-programs": { "p99LatencyMs": 400, "errorRatePct": 1 },
+    "get-program": { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "list-reports": { "p99LatencyMs": 500, "errorRatePct": 1 },
+    "create-report": { "p99LatencyMs": 800, "errorRatePct": 1 },
+    "list-users": { "p99LatencyMs": 500, "errorRatePct": 1 },
+    "get-current-user": { "p99LatencyMs": 300, "errorRatePct": 1 },
+    "list-payouts": { "p99LatencyMs": 500, "errorRatePct": 1 }
+  }
+}
