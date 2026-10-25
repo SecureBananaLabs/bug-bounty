@@ -1,0 +1,25 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { registerUser } from "../services/authService.js";
+import { verifyAccessToken } from "../utils/jwt.js";
+
+test("registerUser signs the same subject as the returned id", async () => {
+  const originalNow = Date.now;
+  let current = 1700000000000;
+  Date.now = () => current++;
+
+  try {
+    const result = await registerUser({
+      email: "client@example.com",
+      password: "supersecret",
+      role: "client"
+    });
+    const decoded = verifyAccessToken(result.token);
+
+    assert.equal(result.id, "usr_1700000000000");
+    assert.equal(decoded.sub, result.id);
+    assert.equal(decoded.role, "client");
+  } finally {
+    Date.now = originalNow;
+  }
+});
