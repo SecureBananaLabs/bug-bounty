@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";const ALLOWED=new Set(["image/jpeg","image/png","image/webp","application/pdf"]);export const fileTypeValidation=(req,res,next)=>{if(!req.file)return fail(res,"File required",400);if(!ALLOWED.has(req.file.mimetype))return fail(res,`File type ${req.file.mimetype} not allowed`,400);return next();};
