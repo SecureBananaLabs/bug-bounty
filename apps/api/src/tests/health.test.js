@@ -17,6 +17,8 @@ test("GET /health returns ok payload", async () => {
 
   assert.equal(response.status, 200);
   assert.deepEqual(payload, { ok: true, service: "api" });
+  assert.equal(response.headers.has("ratelimit-limit"), false);
+  assert.equal(response.headers.has("ratelimit-remaining"), false);
 
   await new Promise((resolve, reject) => {
     server.close((error) => (error ? reject(error) : resolve()));
