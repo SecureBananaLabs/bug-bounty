@@ -1,0 +1,4 @@
+results/*.json
+results/*.md
+!results/baseline.json
+!results/baseline.md
