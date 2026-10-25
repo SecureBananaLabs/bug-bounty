@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";const reviews=new Map();export const reviewUniqueCheck=(req,res,next)=>{const key=`${req.user?.id||"anon"}:${req.body?.targetId}`;if(reviews.has(key))return fail(res,"You have already reviewed this user",409);reviews.set(key,true);return next();};
