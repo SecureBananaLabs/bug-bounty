@@ -1,0 +1,35 @@
+const endpoints = [
+  { name: 'POST /api/auth/register', method: 'POST', path: '/api/auth/register',
+    body: { email: 'benchmark@test.com', password: 'testpass123', role: 'freelancer' } },
+  { name: 'POST /api/auth/login', method: 'POST', path: '/api/auth/login',
+    body: { email: 'benchmark@test.com', password: 'testpass123' } },
+  { name: 'GET /api/jobs', method: 'GET', path: '/api/jobs' },
+  { name: 'POST /api/jobs', method: 'POST', path: '/api/jobs',
+    body: { title: 'Build a landing page with React', description: 'Need a responsive landing page with modern design, animations, and form integration.', budgetMin: 500, budgetMax: 2000, categoryId: 'cat_webdev', skills: ['react', 'tailwind', 'typescript'] } },
+  { name: 'GET /api/users', method: 'GET', path: '/api/users' },
+  { name: 'POST /api/users', method: 'POST', path: '/api/users',
+    body: { name: 'Benchmark User', email: 'bench-user@test.com', role: 'freelancer', skills: ['python', 'node'] } },
+  { name: 'GET /api/proposals', method: 'GET', path: '/api/proposals' },
+  { name: 'POST /api/proposals', method: 'POST', path: '/api/proposals',
+    body: { jobId: 'job_bench_001', coverLetter: 'I have extensive experience in this area.', bidAmount: 1500, estimatedDays: 7 } },
+  { name: 'POST /api/payment', method: 'POST', path: '/api/payment',
+    body: { amount: 5000, currency: 'usd', description: 'Payment for job_bench_001' } },
+  { name: 'GET /api/reviews', method: 'GET', path: '/api/reviews' },
+  { name: 'POST /api/reviews', method: 'POST', path: '/api/reviews',
+    body: { reviewerId: 'usr_bench_001', targetId: 'usr_bench_002', rating: 5, comment: 'Excellent work!' } },
+  { name: 'GET /api/messages', method: 'GET', path: '/api/messages' },
+  { name: 'POST /api/messages', method: 'POST', path: '/api/messages',
+    body: { receiverId: 'usr_bench_002', jobId: 'job_bench_001', content: 'When can you start?' } },
+  { name: 'GET /api/notifications', method: 'GET', path: '/api/notifications' },
+  { name: 'POST /api/notifications', method: 'POST', path: '/api/notifications',
+    body: { userId: 'usr_bench_001', type: 'new_proposal', title: 'New proposal received', message: 'A freelancer has submitted a proposal' } },
+  { name: 'GET /api/search?q=react', method: 'GET', path: '/api/search?q=react+developer' },
+  { name: 'GET /api/admin/metrics', method: 'GET', path: '/api/admin/metrics', authToken: 'benchmark-test-token' },
+];
+
+const perEndpointConfig = {
+  'POST /api/auth/register': { connections: 5, pipelining: 1 },
+  'POST /api/auth/login': { connections: 5, pipelining: 1 },
+  'GET /api/admin/metrics': { connections: 5, pipelining: 1 },
+};
+module.exports = { endpoints, perEndpointConfig };
