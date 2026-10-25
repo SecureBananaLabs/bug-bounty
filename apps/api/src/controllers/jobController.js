@@ -1,12 +1,19 @@
-import { ok } from "../utils/response.js";
-import { createJobSchema } from "../validators/job.js";
-import { createJob, listJobs } from "../services/jobService.js";
+import { listJobs, createJob } from "../services/jobService.js";
 
 export async function getJobs(req, res) {
-  return ok(res, await listJobs());
+  try {
+    const jobs = await listJobs();
+    res.status(200).json(jobs);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch jobs" });
+  }
 }
 
 export async function postJob(req, res) {
-  const payload = createJobSchema.parse(req.body);
-  return ok(res, await createJob(payload), 201);
+  try {
+    const job = await createJob(req.body);
+    res.status(201).json(job);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create job" });
+  }
 }
