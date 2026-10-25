@@ -1,0 +1,7 @@
+import{fail}from"../utils/response.js";
+export function validateBudget(req,res,next){
+  const b=req.body?.budget;
+  if(b&&typeof b.min==="number"&&typeof b.max==="number"&&b.min>=b.max)
+    return fail(res,"budget.max must be greater than budget.min",400);
+  return next();
+}
