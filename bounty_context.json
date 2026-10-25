@@ -1,0 +1,19 @@
+{
+  "owner": "SecureBananaLabs",
+  "repo": "bug-bounty",
+  "issueNumber": "1823",
+  "title": "Bug: Admin role self-assignment via registration endpoint",
+  "body": "### Bug Description\n1. The `registerSchema` in `apps/api/src/validators/auth.js` allows any user to register with `role: \"admin\"` by simply including it in the request body.\n2. `refreshToken()` in `authController.js` is called without arguments, so the refresh token from the request is never passed to the service, preventing proper user identification.\n\n### Expected Behavior\n1. The registerSchema role options must be restricted to `[\"client\", \"freelancer\"]`, removing `\"admin\"`.\n2. The `refresh` controller must extract `token` from `req.body` and pass it to `refreshToken()`.\n\n### Disclaimer\nThis issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.",
+  "labels": [
+    "bug",
+    "good first issue",
+    "help wanted",
+    "bug bounty",
+    "AI agent friendly",
+    "bounty",
+    "💎 Bounty",
+    "$430"
+  ],
+  "gitCloneUrl": "https://github.com/SecureBananaLabs/bug-bounty.git",
+  "repoDir": "/Users/macminim1/Documents/efe/bounty-hunter/temp/bug-bounty"
+}
