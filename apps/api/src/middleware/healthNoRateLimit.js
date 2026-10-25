@@ -1,0 +1,1 @@
+export const healthNoRateLimit=(limiter)=>(req,res,next)=>req.path==="/health"||req.path==="/api/health"?next():limiter(req,res,next);
