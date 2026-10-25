@@ -1,0 +1,2 @@
+import{fail}from"../utils/response.js";
+export function prodRedact(err,req,res,next){const p=process.env.NODE_ENV==="production";if(p){console.error("ERR:",err.message);return fail(res,"Internal error",err.status||500);}return next(err);}
