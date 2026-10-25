@@ -18,6 +18,16 @@ export async function loginUser(payload) {
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+/**
+ * Re-issue an access token for an already-authenticated user.
+ * The caller's identity comes from the verified JWT payload passed
+ * by authMiddleware — never from untrusted request body data.
+ *
+ * @param {{ sub: string; role: string }} user - Verified token claims.
+ */
+export async function refreshToken(user) {
+  if (!user?.sub) {
+    throw new Error("Cannot refresh: missing token subject");
+  }
+  return { token: signAccessToken({ sub: user.sub, role: user.role }) };
 }
