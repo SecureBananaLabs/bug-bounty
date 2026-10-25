@@ -1,8 +1,11 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
 
 export async function register(req, res) {
+  const { email } = req.body || {};
+  if (!email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) return fail(res, "Valid email is required.", 400);
+
   const payload = registerSchema.parse(req.body);
   const result = await registerUser(payload);
   return ok(res, result, 201);
