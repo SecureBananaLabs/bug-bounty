@@ -1,0 +1,1 @@
+export const reviewServerId=(req,_,next)=>{delete req.body?.id;delete req.body?.createdAt;return next();};
