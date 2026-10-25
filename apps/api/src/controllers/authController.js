@@ -1,27 +1,40 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import {
+  AuthenticationError,
+  loginUser,
+  refreshToken,
+  registerUser
+} from "../services/authService.js";
+
+function sendAuthError(res, error) {
+  if (error instanceof AuthenticationError) {
+    return res.status(error.statusCode).json({ error: error.message });
+  }
+
+  return res.status(500).json({ error: "Internal server error" });
+}
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
+  try {
+    const result = await registerUser(req.body);
+    return res.status(201).json(result);
+  } catch (error) {
+    return sendAuthError(res, error);
+  }
 }
 
 export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
-}
-
-export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
+  try {
+    const result = await loginUser(req.body);
+    return res.status(200).json(result);
+  } catch (error) {
+    return sendAuthError(res, error);
+  }
 }
 
 export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
+  try {
+    return res.status(200).json(await refreshToken(req.body));
+  } catch (error) {
+    return sendAuthError(res, error);
+  }
 }
