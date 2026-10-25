@@ -1,0 +1,1 @@
+export const listNoMutate=(arr)=>Array.isArray(arr)?arr.map(i=>Object.isFrozen(i)?i:{...i}):[];
