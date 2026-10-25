@@ -14,3 +14,13 @@ export function authMiddleware(req, res, next) {
     return fail(res, "Invalid token", 401);
   }
 }
+
+export function requireRole(role) {
+  return (req, res, next) => {
+    if (req.user?.role !== role) {
+      return fail(res, "Forbidden", 403);
+    }
+
+    return next();
+  };
+}
