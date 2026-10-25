@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";const PUB=new Set(["client","freelancer"]);export const noAdminV14=(req,res,next)=>{if(req.body?.role&&!PUB.has(req.body.role))return fail(res,"Cannot register as admin",400);return next();};
