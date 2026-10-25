@@ -1,0 +1,1 @@
+export const notifIgnoreV4=(req,_,next)=>{["id","read","readAt","createdAt"].forEach(f=>delete req.body?.[f]);req.body.read=false;return next();};
