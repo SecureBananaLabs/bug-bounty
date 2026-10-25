@@ -1,0 +1,1 @@
+import{fail}from"../utils/response.js";const PUB=new Set(["client","freelancer"]);export const noAdminRegV8=(req,res,next)=>{if(req.body?.role&&!PUB.has(req.body.role))return fail(res,"Admin role not allowed",400);return next();};
