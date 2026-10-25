@@ -70,6 +70,19 @@ npm run dev -w apps/web
 npm run dev -w apps/api
 ```
 
+The API handles `SIGTERM` and `SIGINT` by stopping new connections and allowing
+active HTTP requests up to 10 seconds to finish. It exits with status 1 if that
+deadline expires; repeated signals do not restart the deadline.
+
+Run the API tests from the repository root:
+
+```bash
+node --test apps/api/src/tests/health.test.js apps/api/src/tests/gracefulShutdown.test.js
+```
+
+The production signal tests run on Linux/macOS. On Windows, the helper tests
+dispatch its registered handlers without claiming to deliver POSIX signals.
+
 ## Database
 
 Prisma schema is available in `packages/db/prisma/schema.prisma` with models for:
