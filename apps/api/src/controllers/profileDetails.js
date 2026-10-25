@@ -1,0 +1,1 @@
+import{ok,fail}from"../utils/response.js";const P=new Map([["1",{id:"1",name:"Alice",skills:["React"],rating:4.9,contactUrl:"/messages/new?to=1"}]]);export async function getProfileDetails(req,res){const p=P.get(String(req.params.userId||req.params.id));if(!p)return fail(res,"Not found",404);return ok(res,{profile:p});}
