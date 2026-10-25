@@ -1,0 +1,1 @@
+import{ok}from"../utils/response.js";export async function getNotificationsPaged(req,res){const page=Math.max(1,parseInt(req.query.page||"1",10));const limit=Math.min(50,parseInt(req.query.limit||"20",10));const offset=(page-1)*limit;return ok(res,{notifications:[],page,limit,offset,total:0});}
