@@ -1,23 +1,52 @@
-import { signAccessToken } from "../utils/jwt.js";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
+
+const users = [];
 
 export async function registerUser(payload) {
-  // TODO: persist new user via Prisma
-  return {
+  const existing = users.find(u => u.email === payload.email);
+  if (existing) {
+    throw { status: 409, message: "User already exists" };
+  }
+  const user = {
     id: `usr_${Date.now()}`,
     email: payload.email,
-    role: payload.role,
-    token: signAccessToken({ sub: `usr_${Date.now()}`, role: payload.role })
+    password: payload.password,
+    role: payload.role
+  };
+  users.push(user);
+  return {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    token: signAccessToken({ sub: user.id, role: user.role }),
+    refreshToken: signRefreshToken({ sub: user.id, role: user.role })
   };
 }
 
 export async function loginUser(payload) {
-  // TODO: verify password hash against stored user record
+  const user = users.find(u => u.email === payload.email);
+  if (!user) {
+    throw { status: 401, message: "Invalid email or password" };
+  }
+  if (user.password !== payload.password) {
+    throw { status: 401, message: "Invalid email or password" };
+  }
   return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    email: user.email,
+    token: signAccessToken({ sub: user.id, role: user.role }),
+    refreshToken: signRefreshToken({ sub: user.id, role: user.role })
   };
 }
 
-export async function refreshToken() {
-  return { token: signAccessToken({ sub: "usr_existing", role: "client" }) };
+export async function refreshToken(refreshTokenValue) {
+  if (!refreshTokenValue) {
+    throw { status: 400, message: "Refresh token is required" };
+  }
+  let decoded;
+  try {
+    decoded = verifyRefreshToken(refreshTokenValue);
+  } catch {
+    throw { status: 401, message: "Invalid or expired refresh token" };
+  }
+  return { token: signAccessToken({ sub: decoded.sub, role: decoded.role }) };
 }
