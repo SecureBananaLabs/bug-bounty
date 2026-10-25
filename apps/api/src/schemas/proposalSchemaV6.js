@@ -1,0 +1,2 @@
+import{z}from"zod";
+export const proposalSchemaV6=z.object({jobId:z.string().min(1),description:z.string().min(20).max(2000).trim(),price:z.number().positive(),deliveryDays:z.number().int().positive(),estDuration:z.string().min(1).trim()});
