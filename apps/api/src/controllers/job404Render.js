@@ -1,0 +1,1 @@
+import{ok,fail}from"../utils/response.js";const JOBS=new Map([["1",{id:"1",title:"Senior Dev",status:"OPEN"}]]);export async function getJobSafe(req,res){const j=JOBS.get(String(req.params.id));if(!j)return fail(res,"Job not found",404);return ok(res,{job:j});}
