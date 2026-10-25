@@ -1,0 +1,1 @@
+import{NextResponse}from"next/server";export function middleware(){const r=NextResponse.next();r.headers.set("X-Frame-Options","DENY");r.headers.set("X-Content-Type-Options","nosniff");return r;}export const config={matcher:"/(.*)",};
