@@ -3,7 +3,7 @@
 Requires Node 22+. Install the API dependencies from the repository root:
 
 ```sh
-npm install --prefix apps/api --workspaces=false --ignore-scripts --package-lock=false
+npm ci --prefix apps/api --workspaces=false --ignore-scripts
 npm run benchmark
 ```
 
@@ -18,9 +18,9 @@ The server is stopped even if setup, preflight or the performance gate fails.
 `endpoints.json` supplies bodies based on `packages/db/prisma/schema.prisma` and
 the API validators: a 1.4 KBjob description,1.9 KBproposal, message/notification
 text and a 64 KiB multipart file. GET routes run against populated collections.
-The route inventory is checked before every run. Adding or removing an API
-route without updating its workload fails; update the inventory reader if route
-declaration syntax changes. Auth, OAuth callback and refresh routes are included.
+The live Express router inventory is checked before every run. Adding or removing
+an API route without updating its workload fails. Unsupported regex/parameterized
+router mounts fail explicitly and require a fixture-aware inventory extension. Auth, OAuth callback and refresh routes are included.
 
 Current services store arrays in memory; authentication, database, search and
 Stripe integrations include placeholders. The committed baseline measures this
@@ -49,7 +49,7 @@ volume and available API quota.
 
 Each run writes timestamped JSON and Markdown under `benchmarks/results/`.
 JSON includes status counts, response/body bytes, request count, duration,
-environment, commit and concurrency. The Markdown table reports p 50/p 95/p 99
+environment, commit, API dependency-lock hash and concurrency. The Markdown table reports p 50/p 95/p 99
 latency, sustained/peak RPS, error rate and p 50/p 95/p 99 TTFB.
 
 Latency spans request dispatch through response-body drain. TTFB spans dispatch

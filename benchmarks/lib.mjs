@@ -1,6 +1,5 @@
 import http from 'node:http';
 import https from 'node:https';
-import { readFile } from 'node:fs/promises';
 import { performance } from 'node:perf_hooks';
 
 export function positiveInteger(value, fallback, maximum) {
@@ -22,21 +21,40 @@ export function percentile(values, fraction) {
   return sorted[Math.max(0, Math.ceil(fraction * sorted.length) - 1)];
 }
 const normalize = path => path.replace(/\/$/, '');
-export async function discoverEndpoints(root) {
-  const app = await readFile(new URL('apps/api/src/app.js', root), 'utf8');
-  const mounts = new Map([...app.matchAll(/app\.use\("(\/api\/[^"\n]+)",\s*(\w+)\)/g)].map(m => [m[2], m[1]]));
-  if (!mounts.size) throw new Error('No API mounts discovered; update the inventory reader for changed route syntax');
-  const imports = new Map([...app.matchAll(/import\s*\{\s*(\w+)\s*\}\s*from\s*"(\.\/routes\/[^"\n]+)"/g)].map(m => [m[1], m[2]]));
-  const keys = [];
-  for (const [name, prefix] of mounts) {
-    if (!imports.has(name)) throw new Error(`Cannot resolve API router ${name}`);
-    const source = await readFile(new URL('apps/api/src/' + imports.get(name).slice(2), root), 'utf8');
-    const routes = [...source.matchAll(/\.((?:get|post|put|patch|delete|head|options))\("([^"\n]+)"/g)];
-    if (!routes.length) throw new Error(`No routes discovered for ${name}; inspect changed route syntax`);
-    keys.push(...routes.map(m => `${m[1].toUpperCase()} ${normalize(prefix + m[2])}`));
+export function routeInventory(app) {
+  if (!app._router?.stack) throw new Error('Unsupported router structure; update the inventory for this Express version');
+  const endpoints = [];
+  function visit(stack, prefix = '') {
+    for (const layer of stack) {
+      if (layer.route) {
+        for (const path of [].concat(layer.route.path)) {
+          if (typeof path !== 'string') throw new Error('Regex routes need explicit benchmark inventory support');
+          const full = normalize(prefix + path);
+          if (!full.startsWith('/api/')) continue;
+          for (const method of Object.keys(layer.route.methods)) {
+            if (method === '_all') throw new Error(`Define benchmark methods for all-method route ${full}`);
+            endpoints.push(`${method.toUpperCase()} ${full}`);
+          }
+        }
+      } else if (layer.handle?.stack) {
+        const source = layer.regexp.source;
+        const suffix = String.raw`\/?(?=\/|$)`;
+        if (layer.regexp.fast_slash) visit(layer.handle.stack, prefix);
+        else {
+          if (!source.startsWith('^') || !source.endsWith(suffix)) throw new Error(`Unsupported router mount: ${source}`);
+          const mount = source.slice(1, -suffix.length).replaceAll(String.raw`\/`, '/');
+          if ([...'[]()+*?:'].some(char => mount.includes(char))) throw new Error(`Parameterized router mount needs an explicit fixture: ${source}`);
+          visit(layer.handle.stack, prefix + mount);
+        }
+      }
+    }
   }
-  keys.push(...[...app.matchAll(/app\.(get|post|put|patch|delete|head|options)\("(\/api[^"\n]*)"/g)].map(m => `${m[1].toUpperCase()} ${normalize(m[2])}`));
-  return keys.sort();
+  visit(app._router.stack);
+  return endpoints.sort();
+}
+export async function discoverEndpoints(root) {
+  const { createApp } = await import(new URL('apps/api/src/app.js', root));
+  return routeInventory(createApp());
 }
 export function assertCoverage(endpoints, discovered) {
   const actual = endpoints.map(e => `${e.method} ${e.path}`).sort();

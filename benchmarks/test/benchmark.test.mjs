@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import http from 'node:http';
 import { once } from 'node:events';
 import { readFile } from 'node:fs/promises';
-import { percentile, targetUrl, measure, violations, assertCoverage, discoverEndpoints, payload } from '../lib.mjs';
+import { percentile, targetUrl, measure, violations, assertCoverage, discoverEndpoints, routeInventory, payload } from '../lib.mjs';
 const limits = { default: { p99Ms: 100, maxErrorRatePercent: 0 } };
 test('percentiles use nearest rank and empty samples are explicit', () => {
   assert.equal(percentile([20, 1, 10, 5], .5), 5);
@@ -15,6 +15,10 @@ test('manifest exactly covers current API routes and cannot silently drop a rout
   const discovered = await discoverEndpoints(new URL('../../', import.meta.url));
   assert.equal(discovered.length, 20);
   assertCoverage(endpoints, discovered);
+  const { createApp } = await import('../../apps/api/src/app.js');
+  const changed = createApp();
+  changed.get('/api/new-route', (_req, res) => res.end());
+  assert.throws(() => assertCoverage(endpoints, routeInventory(changed)));
   assert.throws(() => assertCoverage(endpoints.slice(1), discovered));
   assert.throws(() => assertCoverage([...endpoints, endpoints[0]], discovered));
   assert.equal(payload(endpoints.find(e => e.uploadBytes)).body.includes(Buffer.from('filename="benchmark.txt"')), true);

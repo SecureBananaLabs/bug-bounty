@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install --prefix apps/api --workspaces=false --ignore-scripts --package-lock=false --no-audit --no-fund
+      - run: npm ci --prefix apps/api --workspaces=false --ignore-scripts --no-audit --no-fund
       - run: npm test
       - run: npm run benchmark:test
       - run: npm run benchmark:smoke

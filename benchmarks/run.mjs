@@ -2,6 +2,7 @@ import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { fork, execFileSync } from 'node:child_process';
 import { once } from 'node:events';
 import os from 'node:os';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { positiveInteger, targetUrl, discoverEndpoints, assertCoverage, requestOnce, measure, violations, markdown } from './lib.mjs';
 
@@ -50,6 +51,7 @@ try {
     mode: smoke ? 'smoke' : 'baseline', targetKind: external ? 'configured isolated staging API' : 'isolated loopback API',
     runtimeDescription: external ? 'Metrics describe the configured staging target; fixture data and API quota are configured by its operator.' : 'Current Express API and middleware, with in-memory service arrays and placeholder database/search/payment integrations. Benchmark server limit:1,000,000requests/15min. Normal server default remains200. Each invocation starts a fresh process; collections are seeded with50records.',
     environment: { node: process.version, platform: os.platform(), release: os.release(), arch: os.arch(), cpu: os.cpus()[0]?.model, logicalCpus: os.cpus().length, totalMemoryBytes: os.totalmem(), freeMemoryBytesAtStart: os.freemem() },
+    dependencyLockSha256: createHash('sha256').update(await readFile(new URL('apps/api/package-lock.json', root))).digest('hex'),
     options, notes: 'Closed-loop fixed-count workload. Peak uses full one-second completion buckets; a subsecond run uses its overall rate. TTFB is time to parsed response headers. Latency includes body drain; timed-out/network/nonexpected-status requests count as errors. Other workstation activity was not isolated.',
     results: [], failures: []
   };
@@ -67,7 +69,7 @@ try {
   console.log(`Report: benchmarks/results/${name}.md\nGate: ${report.failures.length ? 'FAIL' : 'PASS'}`);
   if (report.failures.length) { console.error(report.failures.join('\n')); process.exitCode = 1; }
 } finally {
-  if (child && child.exitCode === null) {
+  if (child && child.exitCode === null && child.signalCode === null) {
     child.kill('SIGTERM');
     const timer = setTimeout(() => child.kill('SIGKILL'), 3000); timer.unref();
     await once(child, 'exit'); clearTimeout(timer);
