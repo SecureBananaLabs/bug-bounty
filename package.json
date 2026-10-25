@@ -1,6 +1,7 @@
 {
   "name": "freelance-platform-monorepo",
   "private": true,
+  "type": "module",
   "workspaces": [
     "apps/*",
     "packages/*"
