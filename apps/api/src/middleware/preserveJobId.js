@@ -1,0 +1,1 @@
+export const preserveJobId=(req,_,next)=>{const jobId=req.body?.jobId;delete req.body?.id;delete req.body?.createdAt;if(jobId)req.body.jobId=jobId;return next();};
