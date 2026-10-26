@@ -1,0 +1,12 @@
+{
+  "name": "@freelanceflow/benchmarks",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "benchmark": "node benchmark.js",
+    "benchmark:ci": "node benchmark.js --ci"
+  },
+  "dependencies": {
+    "autocannon": "^8.0.0"
+  }
+}
