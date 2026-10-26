@@ -7,6 +7,9 @@ const links = [
   ["/dashboard/client", "Client Dashboard"],
   ["/dashboard/freelancer", "Freelancer Dashboard"],
   ["/messaging", "Messaging"],
+  ["/notifications", "Notifications"],
+  ["/billing", "Billing"],
+  ["/settings", "Settings"],
   ["/admin", "Admin"]
 ];
 
