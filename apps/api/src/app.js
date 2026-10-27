@@ -40,5 +40,6 @@ export function createApp() {
   app.use("/api/admin", adminRoutes);
 
   app.use(errorHandler);
+
   return app;
 }
