@@ -6,3 +6,5 @@ export const adminRoutes = Router();
 
 adminRoutes.use(authMiddleware);
 adminRoutes.get("/metrics", metrics);
+
+// Add more routes for other APIs if needed
