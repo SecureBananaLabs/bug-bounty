@@ -86,3 +86,9 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+`apps/api` reads:
+
+| Variable | Purpose |
+| --- | --- |
+| `CORS_ORIGINS` | Comma-separated list of browser origins allowed to call the API, for example `https://app.example.com,https://admin.example.com`. Origins outside the list receive no CORS approval, and in production an empty list denies every cross-origin browser request. Unset in development keeps the API permissive for local tooling. |
