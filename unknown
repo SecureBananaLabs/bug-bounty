@@ -1,0 +1,3 @@
+// This file would need the actual fix to prevent admin role self-assignment
+// The controller would need to sanitize input to prevent users from registering with admin roles
+// This is where input validation/prevention logic would be added
