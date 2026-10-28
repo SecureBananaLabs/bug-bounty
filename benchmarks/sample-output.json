@@ -1,0 +1,238 @@
+{
+  "metadata": {
+    "benchmark": "SecureBananaLabs/bug-bounty API Suite",
+    "issue": "#30",
+    "target": "http://localhost:3000",
+    "timestamp": "2026-05-28T14:49:00.000Z",
+    "config": {
+      "vus": 20,
+      "duration": "60s",
+      "iterations": null
+    }
+  },
+  "thresholds": {
+    "passed": {
+      "http_req_duration_p95": [
+        {
+          "threshold": "p(95)<200",
+          "ok": true
+        }
+      ],
+      "http_req_duration_p99": [
+        {
+          "threshold": "p(99)<500",
+          "ok": true
+        }
+      ],
+      "error_rate": [
+        {
+          "threshold": "rate<0.01",
+          "ok": true
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "http_req_duration": {
+      "type": "trend",
+      "values": {
+        "min": 12.34,
+        "avg": 45.67,
+        "med": 42.10,
+        "p(50)": 42.10,
+        "p(90)": 98.76,
+        "p(95)": 124.56,
+        "p(99)": 210.89,
+        "max": 345.21,
+        "count": 8400
+      }
+    },
+    "http_req_duration_p95": {
+      "type": "trend",
+      "values": {
+        "p(95)": 124.56
+      }
+    },
+    "http_req_duration_p99": {
+      "type": "trend",
+      "values": {
+        "p(99)": 210.89
+      }
+    },
+    "ttfb": {
+      "type": "trend",
+      "values": {
+        "min": 2.10,
+        "avg": 18.45,
+        "med": 15.67,
+        "p(95)": 67.89,
+        "p(99)": 145.32,
+        "max": 267.40,
+        "count": 8400
+      }
+    },
+    "error_rate": {
+      "type": "rate",
+      "values": {
+        "rate": 0.0024,
+        "passes": 8380,
+        "fails": 20
+      }
+    },
+    "total_requests": {
+      "type": "counter",
+      "values": {
+        "count": 8400
+      }
+    },
+    "http_reqs": {
+      "type": "counter",
+      "values": {
+        "count": 8400,
+        "rate": 140.0
+      }
+    },
+    "http_req_failed": {
+      "type": "rate",
+      "values": {
+        "rate": 0.0024,
+        "passes": 8380,
+        "fails": 20
+      }
+    },
+    "iterations": {
+      "type": "counter",
+      "values": {
+        "count": 400
+      }
+    },
+    "vus": {
+      "type": "gauge",
+      "values": {
+        "value": 20
+      }
+    },
+    "group_duration": {
+      "01 - Health Check": {
+        "type": "trend",
+        "values": {
+          "avg": 15.23,
+          "med": 14.10,
+          "p(95)": 38.45,
+          "p(99)": 89.12,
+          "count": 400
+        }
+      },
+      "02 - Auth": {
+        "type": "trend",
+        "values": {
+          "avg": 185.60,
+          "med": 172.00,
+          "p(95)": 350.20,
+          "p(99)": 480.50,
+          "count": 400
+        }
+      },
+      "03 - Users": {
+        "type": "trend",
+        "values": {
+          "avg": 42.30,
+          "med": 38.00,
+          "p(95)": 95.70,
+          "p(99)": 180.20,
+          "count": 400
+        }
+      },
+      "04 - Jobs": {
+        "type": "trend",
+        "values": {
+          "avg": 55.80,
+          "med": 48.50,
+          "p(95)": 120.30,
+          "p(99)": 220.10,
+          "count": 400
+        }
+      },
+      "05 - Proposals": {
+        "type": "trend",
+        "values": {
+          "avg": 50.40,
+          "med": 44.00,
+          "p(95)": 110.50,
+          "p(99)": 195.80,
+          "count": 400
+        }
+      },
+      "06 - Payments": {
+        "type": "trend",
+        "values": {
+          "avg": 65.90,
+          "med": 58.00,
+          "p(95)": 140.20,
+          "p(99)": 250.30,
+          "count": 400
+        }
+      },
+      "07 - Reviews": {
+        "type": "trend",
+        "values": {
+          "avg": 48.10,
+          "med": 42.00,
+          "p(95)": 105.60,
+          "p(99)": 190.70,
+          "count": 400
+        }
+      },
+      "08 - Messages": {
+        "type": "trend",
+        "values": {
+          "avg": 44.70,
+          "med": 40.00,
+          "p(95)": 98.30,
+          "p(99)": 175.40,
+          "count": 400
+        }
+      },
+      "09 - Notifications": {
+        "type": "trend",
+        "values": {
+          "avg": 43.20,
+          "med": 39.00,
+          "p(95)": 95.10,
+          "p(99)": 170.60,
+          "count": 400
+        }
+      },
+      "10 - Uploads": {
+        "type": "trend",
+        "values": {
+          "avg": 95.30,
+          "med": 80.00,
+          "p(95)": 210.40,
+          "p(99)": 380.70,
+          "count": 400
+        }
+      },
+      "11 - Search": {
+        "type": "trend",
+        "values": {
+          "avg": 60.20,
+          "med": 52.00,
+          "p(95)": 135.80,
+          "p(99)": 245.10,
+          "count": 400
+        }
+      },
+      "12 - Admin": {
+        "type": "trend",
+        "values": {
+          "avg": 38.50,
+          "med": 35.00,
+          "p(95)": 85.20,
+          "p(99)": 160.40,
+          "count": 400
+        }
+      }
+    }
+  }
+}
