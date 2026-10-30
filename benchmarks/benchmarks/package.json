@@ -1,0 +1,10 @@
+{
+  "name": "bug-bounty-benchmarks",
+  "version": "1.0.0",
+  "description": "API benchmark suite",
+  "scripts": {
+    "benchmark": "k6 run script.js",
+    "benchmark:smoke": "k6 run --vus 10 --duration 30s script.js"
+  },
+  "keywords": ["benchmark", "k6", "performance", "api"]
+}
