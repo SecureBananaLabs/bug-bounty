@@ -5,8 +5,10 @@ import { createApp } from "./app.js";
 async function bootstrap() {
   await connectDb();
   const app = createApp();
-  app.listen(env.port, () => {
-    console.log(`API listening on http://localhost:${env.port}`);
+  const server = app.listen(env.port, () => {
+    const address = server.address();
+    const port = typeof address === "object" && address !== null ? address.port : env.port;
+    console.log(`API listening on http://localhost:${port}`);
   });
 }
 
