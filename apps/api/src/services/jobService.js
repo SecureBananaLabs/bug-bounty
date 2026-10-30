@@ -9,3 +9,13 @@ export async function createJob(payload) {
   jobs.push(job);
   return job;
 }
+
+export async function updateJobStatus(id, status) {
+  const job = jobs.find((item) => item.id === id);
+  if (!job) {
+    return null;
+  }
+
+  job.status = status;
+  return job;
+}
