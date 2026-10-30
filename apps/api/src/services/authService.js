@@ -14,7 +14,7 @@ export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
   return {
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    token: signAccessToken({ sub: "usr_existing", role: payload.role })
   };
 }
 
