@@ -1,0 +1,189 @@
+{
+  "timestamp": "2026-10-30T09:18:07.136Z",
+  "concurrency": 2,
+  "durationSec": 2,
+  "endpoints": [
+    {
+      "name": "Health Check",
+      "path": "/health",
+      "method": "GET",
+      "totalRequests": 428,
+      "rps": 213.65,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 5.92,
+        "p95": 40.3,
+        "p99": 52.66
+      },
+      "ttfbMs": 8.74
+    },
+    {
+      "name": "Auth Register",
+      "path": "/api/auth/register",
+      "method": "POST",
+      "totalRequests": 718,
+      "rps": 358.24,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 4.65,
+        "p95": 9.11,
+        "p99": 14.7
+      },
+      "ttfbMs": 5.37
+    },
+    {
+      "name": "Auth Login",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "totalRequests": 619,
+      "rps": 303.97,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 5.1,
+        "p95": 11.49,
+        "p99": 36.45
+      },
+      "ttfbMs": 6.36
+    },
+    {
+      "name": "List Jobs",
+      "path": "/api/jobs",
+      "method": "GET",
+      "totalRequests": 1025,
+      "rps": 512.01,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 3.29,
+        "p95": 6.94,
+        "p99": 10.03
+      },
+      "ttfbMs": 3.73
+    },
+    {
+      "name": "List Proposals",
+      "path": "/api/proposals",
+      "method": "GET",
+      "totalRequests": 1255,
+      "rps": 627.12,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 2.56,
+        "p95": 5.81,
+        "p99": 9.54
+      },
+      "ttfbMs": 3.06
+    },
+    {
+      "name": "List Users",
+      "path": "/api/users",
+      "method": "GET",
+      "totalRequests": 1244,
+      "rps": 621.13,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 2.51,
+        "p95": 6.2,
+        "p99": 9.83
+      },
+      "ttfbMs": 3.07
+    },
+    {
+      "name": "Payments Intent",
+      "path": "/api/payments/intent",
+      "method": "POST",
+      "totalRequests": 800,
+      "rps": 399.89,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 4.3,
+        "p95": 8.32,
+        "p99": 19.64
+      },
+      "ttfbMs": 4.85
+    },
+    {
+      "name": "List Reviews",
+      "path": "/api/reviews",
+      "method": "GET",
+      "totalRequests": 1258,
+      "rps": 628.7,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 2.48,
+        "p95": 6.01,
+        "p99": 8.06
+      },
+      "ttfbMs": 3.05
+    },
+    {
+      "name": "List Messages",
+      "path": "/api/messages",
+      "method": "GET",
+      "totalRequests": 1090,
+      "rps": 544.62,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 2.8,
+        "p95": 8.03,
+        "p99": 12.84
+      },
+      "ttfbMs": 3.49
+    },
+    {
+      "name": "List Notifications",
+      "path": "/api/notifications",
+      "method": "GET",
+      "totalRequests": 796,
+      "rps": 388.39,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 3.11,
+        "p95": 11.69,
+        "p99": 45.51
+      },
+      "ttfbMs": 4.94
+    },
+    {
+      "name": "Search Freelancers",
+      "path": "/api/search",
+      "method": "GET",
+      "totalRequests": 700,
+      "rps": 348.99,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 3.69,
+        "p95": 11,
+        "p99": 45.03
+      },
+      "ttfbMs": 5.41
+    },
+    {
+      "name": "Uploads Status",
+      "path": "/api/uploads",
+      "method": "GET",
+      "totalRequests": 1380,
+      "rps": 689.75,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 2.38,
+        "p95": 5.48,
+        "p99": 6.71
+      },
+      "ttfbMs": 2.79
+    },
+    {
+      "name": "Admin Stats",
+      "path": "/api/admin",
+      "method": "GET",
+      "totalRequests": 1429,
+      "rps": 714.15,
+      "errorRatePct": 0,
+      "latency": {
+        "p50": 2.29,
+        "p95": 5.19,
+        "p99": 6.84
+      },
+      "ttfbMs": 2.69
+    }
+  ]
+}
