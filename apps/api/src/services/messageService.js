@@ -1,5 +1,5 @@
 const messages = [];
-
+  return [...messages];
 export async function listMessages() {
   return messages;
 }
