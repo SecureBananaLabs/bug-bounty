@@ -1,0 +1,14 @@
+**Deliverable:**  
+A 64x64 pixel art image of a phoenix rising against a sunrise, saved as `phoenix.png` in `/assets/pixel-art/`.  
+
+**PR Description Note:**  
+"Created a pixel art phoenix rising against a sunrise, symbolizing rebirth and renewal through vibrant retro-style colors."  
+
+**Steps to Create:**  
+1. Use a pixel art tool (e.g., [Piskel](https://www.piskelapp.com/)) or code (e.g., Python PIL) to design a 64x64 canvas.  
+2. Sketch a phoenix with flame-like textures in red/orange/yellow, outlined in black for contrast.  
+3. Add a gradient sunrise background (orange → pink → light blue).  
+4. Export as `.png` with transparent background (optional).  
+5. Submit the file to `/assets/pixel-art/` and star the repository.  
+
+**Note:** The actual `.png` file must be generated and uploaded via a PR to the repository.
