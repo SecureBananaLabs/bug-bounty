@@ -1,0 +1,985 @@
+{
+  "meta": {
+    "startedAt": "2026-10-17T11:01:27.018Z",
+    "smoke": true,
+    "target": "http://127.0.0.1:4010",
+    "profile": {
+      "connections": 10,
+      "duration": 5,
+      "pipelining": 1
+    },
+    "node": "v26.4.0"
+  },
+  "gate": {
+    "available": true,
+    "breaches": []
+  },
+  "endpoints": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 415900,
+        "average": 69304
+      },
+      "rps": {
+        "peak": 71293,
+        "sustained": 69304
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 7,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.266,
+        "p95": 0.764,
+        "p99": 0.833,
+        "min": 0.08,
+        "max": 0.866
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.138,
+        "p95": 0.612,
+        "p99": 0.612,
+        "min": 0.069,
+        "max": 0.612
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 64744106.67
+      }
+    },
+    {
+      "name": "auth.register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 131137,
+        "average": 26228.8
+      },
+      "rps": {
+        "peak": 27154,
+        "sustained": 26228.8
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 8,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.353,
+        "p95": 0.692,
+        "p99": 0.76,
+        "min": 0.131,
+        "max": 0.877
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.161,
+        "p95": 0.657,
+        "p99": 0.657,
+        "min": 0.124,
+        "max": 0.657
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 31685017.6
+      }
+    },
+    {
+      "name": "auth.login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 138673,
+        "average": 27739.2
+      },
+      "rps": {
+        "peak": 29008,
+        "sustained": 27739.2
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 3,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.319,
+        "p95": 0.701,
+        "p99": 0.883,
+        "min": 0.083,
+        "max": 0.892
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.122,
+        "p95": 0.327,
+        "p99": 0.327,
+        "min": 0.073,
+        "max": 0.327
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 32009420.8
+      }
+    },
+    {
+      "name": "auth.refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 147327,
+        "average": 29464
+      },
+      "rps": {
+        "peak": 29841,
+        "sustained": 29464
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 1,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.24,
+        "p95": 0.55,
+        "p99": 0.745,
+        "min": 0.127,
+        "max": 0.762
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.128,
+        "p95": 0.354,
+        "p99": 0.354,
+        "min": 0.089,
+        "max": 0.354
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 33028505.6
+      }
+    },
+    {
+      "name": "auth.oauthCallBack",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 303698,
+        "average": 60739.2
+      },
+      "rps": {
+        "peak": 61181,
+        "sustained": 60739.2
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 1,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.185,
+        "p95": 0.445,
+        "p99": 0.471,
+        "min": 0.077,
+        "max": 0.481
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.066,
+        "p95": 0.302,
+        "p99": 0.302,
+        "min": 0.055,
+        "max": 0.302
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 59582054.4
+      }
+    },
+    {
+      "name": "jobs.list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 341683,
+        "average": 68345.61
+      },
+      "rps": {
+        "peak": 69026,
+        "sustained": 68345.61
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 1,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.214,
+        "p95": 0.39,
+        "p99": 0.489,
+        "min": 0.085,
+        "max": 0.552
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.085,
+        "p95": 0.325,
+        "p99": 0.325,
+        "min": 0.059,
+        "max": 0.325
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 63763251.2
+      }
+    },
+    {
+      "name": "jobs.create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 247253,
+        "average": 49456
+      },
+      "rps": {
+        "peak": 50659,
+        "sustained": 49456
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 2,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.188,
+        "p95": 0.371,
+        "p99": 0.475,
+        "min": 0.085,
+        "max": 0.519
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.075,
+        "p95": 0.292,
+        "p99": 0.292,
+        "min": 0.054,
+        "max": 0.292
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 59791769.6
+      }
+    },
+    {
+      "name": "users.list",
+      "method": "GET",
+      "path": "/api/users",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 333945,
+        "average": 66793.61
+      },
+      "rps": {
+        "peak": 68214,
+        "sustained": 66793.61
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 0,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.249,
+        "p95": 0.441,
+        "p99": 0.577,
+        "min": 0.089,
+        "max": 0.588
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.086,
+        "p95": 0.368,
+        "p99": 0.368,
+        "min": 0.058,
+        "max": 0.368
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 62321459.2
+      }
+    },
+    {
+      "name": "users.create",
+      "method": "POST",
+      "path": "/api/users",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 258193,
+        "average": 51638.4
+      },
+      "rps": {
+        "peak": 52828,
+        "sustained": 51638.4
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 3,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.201,
+        "p95": 0.446,
+        "p99": 0.482,
+        "min": 0.084,
+        "max": 0.509
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.079,
+        "p95": 0.294,
+        "p99": 0.294,
+        "min": 0.057,
+        "max": 0.294
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 53651046.4
+      }
+    },
+    {
+      "name": "proposals.list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 304599,
+        "average": 60924.8
+      },
+      "rps": {
+        "peak": 63790,
+        "sustained": 60924.8
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 1,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.195,
+        "p95": 0.363,
+        "p99": 0.509,
+        "min": 0.069,
+        "max": 0.515
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.082,
+        "p95": 0.392,
+        "p99": 0.392,
+        "min": 0.059,
+        "max": 0.392
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 56842649.6
+      }
+    },
+    {
+      "name": "proposals.create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 250176,
+        "average": 50044.8
+      },
+      "rps": {
+        "peak": 50575,
+        "sustained": 50044.8
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 4,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.267,
+        "p95": 0.722,
+        "p99": 0.964,
+        "min": 0.085,
+        "max": 0.965
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.08,
+        "p95": 0.309,
+        "p99": 0.309,
+        "min": 0.059,
+        "max": 0.309
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 53290598.4
+      }
+    },
+    {
+      "name": "reviews.list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 318697,
+        "average": 63753.6
+      },
+      "rps": {
+        "peak": 66310,
+        "sustained": 63753.6
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 1,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.18,
+        "p95": 0.471,
+        "p99": 0.529,
+        "min": 0.074,
+        "max": 0.535
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.059,
+        "p95": 0.271,
+        "p99": 0.271,
+        "min": 0.047,
+        "max": 0.271
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 59477196.8
+      }
+    },
+    {
+      "name": "reviews.create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 260861,
+        "average": 52176
+      },
+      "rps": {
+        "peak": 52647,
+        "sustained": 52176
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 3,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.192,
+        "p95": 0.438,
+        "p99": 0.477,
+        "min": 0.085,
+        "max": 0.478
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.064,
+        "p95": 0.291,
+        "p99": 0.291,
+        "min": 0.056,
+        "max": 0.291
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 54987980.8
+      }
+    },
+    {
+      "name": "messages.list",
+      "method": "GET",
+      "path": "/api/messages",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 338295,
+        "average": 67654.4
+      },
+      "rps": {
+        "peak": 68511,
+        "sustained": 67654.4
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 0,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.146,
+        "p95": 0.364,
+        "p99": 0.5,
+        "min": 0.069,
+        "max": 0.505
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.057,
+        "p95": 0.282,
+        "p99": 0.282,
+        "min": 0.05,
+        "max": 0.282
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 63120998.4
+      }
+    },
+    {
+      "name": "messages.create",
+      "method": "POST",
+      "path": "/api/messages",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 256238,
+        "average": 51241.6
+      },
+      "rps": {
+        "peak": 51931,
+        "sustained": 51241.6
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 3,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.186,
+        "p95": 0.424,
+        "p99": 0.466,
+        "min": 0.078,
+        "max": 0.474
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.06,
+        "p95": 0.276,
+        "p99": 0.276,
+        "min": 0.054,
+        "max": 0.276
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 55040409.6
+      }
+    },
+    {
+      "name": "notifications.list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 341462,
+        "average": 68281.61
+      },
+      "rps": {
+        "peak": 68594,
+        "sustained": 68281.61
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 0,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.144,
+        "p95": 0.409,
+        "p99": 0.458,
+        "min": 0.07,
+        "max": 0.459
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.058,
+        "p95": 0.275,
+        "p99": 0.275,
+        "min": 0.049,
+        "max": 0.275
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 63723929.6
+      }
+    },
+    {
+      "name": "notifications.create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 252412,
+        "average": 50486.4
+      },
+      "rps": {
+        "peak": 52873,
+        "sustained": 50486.4
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 1,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.272,
+        "p95": 0.953,
+        "p99": 1.23,
+        "min": 0.106,
+        "max": 1.233
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.072,
+        "p95": 0.298,
+        "p99": 0.298,
+        "min": 0.058,
+        "max": 0.298
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 53159526.4
+      }
+    },
+    {
+      "name": "payments.create",
+      "method": "POST",
+      "path": "/api/payments",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 255077,
+        "average": 51024
+      },
+      "rps": {
+        "peak": 52321,
+        "sustained": 51024
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 2,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.186,
+        "p95": 0.347,
+        "p99": 0.485,
+        "min": 0.084,
+        "max": 0.512
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.068,
+        "p95": 0.28,
+        "p99": 0.28,
+        "min": 0.055,
+        "max": 0.28
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 52084736
+      }
+    },
+    {
+      "name": "uploads.create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 172880,
+        "average": 34577.6
+      },
+      "rps": {
+        "peak": 36786,
+        "sustained": 34577.6
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 1,
+        "max": 9,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.241,
+        "p95": 0.536,
+        "p99": 0.636,
+        "min": 0.101,
+        "max": 0.696
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.077,
+        "p95": 0.496,
+        "p99": 0.496,
+        "min": 0.06,
+        "max": 0.496
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 33885388.8
+      }
+    },
+    {
+      "name": "search.query",
+      "method": "GET",
+      "path": "/api/search",
+      "auth": false,
+      "noData": false,
+      "requests": {
+        "total": 303791,
+        "average": 60758.4
+      },
+      "rps": {
+        "peak": 61518,
+        "sustained": 60758.4
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 0,
+        "max": 1,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.142,
+        "p95": 0.302,
+        "p99": 0.456,
+        "min": 0.061,
+        "max": 0.461
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.058,
+        "p95": 0.261,
+        "p99": 0.261,
+        "min": 0.047,
+        "max": 0.261
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 60145664
+      }
+    },
+    {
+      "name": "admin.metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "auth": true,
+      "noData": false,
+      "requests": {
+        "total": 137980,
+        "average": 27598.4
+      },
+      "rps": {
+        "peak": 28692,
+        "sustained": 27598.4
+      },
+      "latency": {
+        "p50": 0,
+        "p95": 0,
+        "p95_source": "autocannon latency.p97_5",
+        "p99": 1,
+        "max": 2,
+        "resolution": "integer ms — reads 0 when a request is sub-millisecond"
+      },
+      "latencyHiRes": {
+        "samples": 200,
+        "p50": 0.409,
+        "p95": 0.876,
+        "p99": 2.257,
+        "min": 0.15,
+        "max": 2.565
+      },
+      "ttfb": {
+        "samples": 20,
+        "p50": 0.126,
+        "p95": 0.415,
+        "p99": 0.415,
+        "min": 0.087,
+        "max": 0.415
+      },
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0,
+      "errorRatePct": 0,
+      "throughput": {
+        "avgBytesPerSec": 27982233.6
+      }
+    }
+  ]
+}
