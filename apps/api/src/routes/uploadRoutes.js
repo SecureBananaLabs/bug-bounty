@@ -1,8 +1,6 @@
 import { Router } from "express";
-import multer from "multer";
 import { uploadFile } from "../controllers/uploadController.js";
-
-const upload = multer({ storage: multer.memoryStorage() });
+import { upload } from "../middleware/uploadValidation.js";
 
 export const uploadRoutes = Router();
 
