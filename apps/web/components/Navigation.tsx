@@ -1,12 +1,16 @@
 import Link from "next/link";
 
-const links = [
+export const links = [
   ["/", "Home"],
   ["/jobs", "Jobs"],
+  ["/jobs/post", "Post a Job"],
   ["/freelancers/search", "Find Freelancers"],
   ["/dashboard/client", "Client Dashboard"],
   ["/dashboard/freelancer", "Freelancer Dashboard"],
+  ["/billing", "Billing"],
   ["/messaging", "Messaging"],
+  ["/notifications", "Notifications"],
+  ["/settings", "Settings"],
   ["/admin", "Admin"]
 ];
 
