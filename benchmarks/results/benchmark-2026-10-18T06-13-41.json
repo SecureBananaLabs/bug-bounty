@@ -1,0 +1,441 @@
+{
+  "startedAt": "2026-10-18T06:13:41.192Z",
+  "target": "http://localhost:4000",
+  "environment": {
+    "node": "v24.20.0",
+    "platform": "linux x64",
+    "autocannon": "7.x",
+    "rateLimiter": "disabled (BENCHMARK_MODE=1 on runner-managed server)",
+    "burst": {
+      "connections": 100,
+      "duration": 10
+    },
+    "sustained": {
+      "connections": 20,
+      "duration": 20
+    },
+    "ttfbSamples": 50
+  },
+  "endpoints": [
+    {
+      "endpoint": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "auth": "none",
+      "peakRps": 8401,
+      "sustainedRps": 11125.2,
+      "p50Ms": 1,
+      "p975Ms": 5,
+      "p99Ms": 8,
+      "maxLatencyMs": 63,
+      "errorRatePct": 0,
+      "totalRequests": 222506,
+      "ttfbMs": {
+        "p50": 1.5,
+        "p95": 14.88,
+        "p99": 52.16,
+        "max": 52.16
+      }
+    },
+    {
+      "endpoint": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "auth": "none",
+      "peakRps": 3776,
+      "sustainedRps": 4414.8,
+      "p50Ms": 3,
+      "p975Ms": 11,
+      "p99Ms": 16,
+      "maxLatencyMs": 113,
+      "errorRatePct": 0,
+      "totalRequests": 88286,
+      "ttfbMs": {
+        "p50": 0.63,
+        "p95": 1.17,
+        "p99": 2.99,
+        "max": 2.99
+      }
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "auth": "none",
+      "peakRps": 3733.8,
+      "sustainedRps": 4347.9,
+      "p50Ms": 3,
+      "p975Ms": 13,
+      "p99Ms": 20,
+      "maxLatencyMs": 103,
+      "errorRatePct": 0,
+      "totalRequests": 86951,
+      "ttfbMs": {
+        "p50": 0.78,
+        "p95": 1.59,
+        "p99": 3.95,
+        "max": 3.95
+      }
+    },
+    {
+      "endpoint": "GET /api/auth/oauth/:provider/callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback?code=bench_oauth_code_123",
+      "auth": "none",
+      "peakRps": 9371.4,
+      "sustainedRps": 11066.5,
+      "p50Ms": 1,
+      "p975Ms": 4,
+      "p99Ms": 6,
+      "maxLatencyMs": 94,
+      "errorRatePct": 0,
+      "totalRequests": 221327,
+      "ttfbMs": {
+        "p50": 0.41,
+        "p95": 1.66,
+        "p99": 2.52,
+        "max": 2.52
+      }
+    },
+    {
+      "endpoint": "POST /api/auth/refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "auth": "none",
+      "peakRps": 4911.6,
+      "sustainedRps": 3770.7,
+      "p50Ms": 3,
+      "p975Ms": 15,
+      "p99Ms": 22,
+      "maxLatencyMs": 144,
+      "errorRatePct": 0,
+      "totalRequests": 75404,
+      "ttfbMs": {
+        "p50": 0.52,
+        "p95": 1.26,
+        "p99": 2.24,
+        "max": 2.24
+      }
+    },
+    {
+      "endpoint": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs/",
+      "auth": "none",
+      "peakRps": 13750,
+      "sustainedRps": 10812.7,
+      "p50Ms": 1,
+      "p975Ms": 5,
+      "p99Ms": 8,
+      "maxLatencyMs": 60,
+      "errorRatePct": 0,
+      "totalRequests": 216239,
+      "ttfbMs": {
+        "p50": 0.31,
+        "p95": 1.68,
+        "p99": 3.02,
+        "max": 3.02
+      }
+    },
+    {
+      "endpoint": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs/",
+      "auth": "none",
+      "peakRps": 8397.4,
+      "sustainedRps": 6193.4,
+      "p50Ms": 2,
+      "p975Ms": 11,
+      "p99Ms": 18,
+      "maxLatencyMs": 127,
+      "errorRatePct": 0,
+      "totalRequests": 123859,
+      "ttfbMs": {
+        "p50": 0.35,
+        "p95": 1.57,
+        "p99": 15.26,
+        "max": 15.26
+      }
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals/",
+      "auth": "none",
+      "peakRps": 11971.2,
+      "sustainedRps": 9305.9,
+      "p50Ms": 1,
+      "p975Ms": 6,
+      "p99Ms": 9,
+      "maxLatencyMs": 44,
+      "errorRatePct": 0,
+      "totalRequests": 186109,
+      "ttfbMs": {
+        "p50": 0.4,
+        "p95": 0.56,
+        "p99": 4.28,
+        "max": 4.28
+      }
+    },
+    {
+      "endpoint": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals/",
+      "auth": "none",
+      "peakRps": 9757.4,
+      "sustainedRps": 8842.9,
+      "p50Ms": 1,
+      "p975Ms": 7,
+      "p99Ms": 11,
+      "maxLatencyMs": 138,
+      "errorRatePct": 0,
+      "totalRequests": 176853,
+      "ttfbMs": {
+        "p50": 0.57,
+        "p95": 1.63,
+        "p99": 4.91,
+        "max": 4.91
+      }
+    },
+    {
+      "endpoint": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments/",
+      "auth": "none",
+      "peakRps": 11123,
+      "sustainedRps": 9214.4,
+      "p50Ms": 1,
+      "p975Ms": 6,
+      "p99Ms": 9,
+      "maxLatencyMs": 50,
+      "errorRatePct": 0,
+      "totalRequests": 184272,
+      "ttfbMs": {
+        "p50": 0.56,
+        "p95": 2.92,
+        "p99": 23.56,
+        "max": 23.56
+      }
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews/",
+      "auth": "none",
+      "peakRps": 9845.2,
+      "sustainedRps": 10580.5,
+      "p50Ms": 1,
+      "p975Ms": 6,
+      "p99Ms": 9,
+      "maxLatencyMs": 36,
+      "errorRatePct": 0,
+      "totalRequests": 211610,
+      "ttfbMs": {
+        "p50": 0.39,
+        "p95": 1.66,
+        "p99": 9.41,
+        "max": 9.41
+      }
+    },
+    {
+      "endpoint": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews/",
+      "auth": "none",
+      "peakRps": 7512.8,
+      "sustainedRps": 7835.9,
+      "p50Ms": 1,
+      "p975Ms": 8,
+      "p99Ms": 12,
+      "maxLatencyMs": 78,
+      "errorRatePct": 0,
+      "totalRequests": 156700,
+      "ttfbMs": {
+        "p50": 1.61,
+        "p95": 6.03,
+        "p99": 39.71,
+        "max": 39.71
+      }
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages/",
+      "auth": "none",
+      "peakRps": 8037.3,
+      "sustainedRps": 11596.3,
+      "p50Ms": 1,
+      "p975Ms": 5,
+      "p99Ms": 8,
+      "maxLatencyMs": 50,
+      "errorRatePct": 0,
+      "totalRequests": 231916,
+      "ttfbMs": {
+        "p50": 0.15,
+        "p95": 1.61,
+        "p99": 3.72,
+        "max": 3.72
+      }
+    },
+    {
+      "endpoint": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages/",
+      "auth": "none",
+      "peakRps": 8497.6,
+      "sustainedRps": 8096.5,
+      "p50Ms": 1,
+      "p975Ms": 7,
+      "p99Ms": 10,
+      "maxLatencyMs": 126,
+      "errorRatePct": 0,
+      "totalRequests": 161917,
+      "ttfbMs": {
+        "p50": 0.45,
+        "p95": 1.66,
+        "p99": 9.83,
+        "max": 9.83
+      }
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications/",
+      "auth": "none",
+      "peakRps": 11138.4,
+      "sustainedRps": 11986.1,
+      "p50Ms": 1,
+      "p975Ms": 4,
+      "p99Ms": 7,
+      "maxLatencyMs": 165,
+      "errorRatePct": 0,
+      "totalRequests": 239706,
+      "ttfbMs": {
+        "p50": 0.29,
+        "p95": 0.76,
+        "p99": 3.48,
+        "max": 3.48
+      }
+    },
+    {
+      "endpoint": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications/",
+      "auth": "none",
+      "peakRps": 8895.6,
+      "sustainedRps": 7522,
+      "p50Ms": 1,
+      "p975Ms": 9,
+      "p99Ms": 15,
+      "maxLatencyMs": 155,
+      "errorRatePct": 0,
+      "totalRequests": 150430,
+      "ttfbMs": {
+        "p50": 2.99,
+        "p95": 8.9,
+        "p99": 12.76,
+        "max": 12.76
+      }
+    },
+    {
+      "endpoint": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users/",
+      "auth": "none",
+      "peakRps": 12268,
+      "sustainedRps": 10365.9,
+      "p50Ms": 1,
+      "p975Ms": 7,
+      "p99Ms": 12,
+      "maxLatencyMs": 71,
+      "errorRatePct": 0,
+      "totalRequests": 207309,
+      "ttfbMs": {
+        "p50": 0.22,
+        "p95": 0.6,
+        "p99": 2.75,
+        "max": 2.75
+      }
+    },
+    {
+      "endpoint": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users/",
+      "auth": "none",
+      "peakRps": 8478.9,
+      "sustainedRps": 8767,
+      "p50Ms": 1,
+      "p975Ms": 7,
+      "p99Ms": 11,
+      "maxLatencyMs": 173,
+      "errorRatePct": 0,
+      "totalRequests": 175334,
+      "ttfbMs": {
+        "p50": 0.22,
+        "p95": 1.07,
+        "p99": 2.28,
+        "max": 2.28
+      }
+    },
+    {
+      "endpoint": "POST /api/uploads",
+      "method": "POST",
+      "path": "/api/uploads/",
+      "auth": "none",
+      "peakRps": 3604.6,
+      "sustainedRps": 5001.2,
+      "p50Ms": 2,
+      "p975Ms": 18,
+      "p99Ms": 25,
+      "maxLatencyMs": 482,
+      "errorRatePct": 0,
+      "totalRequests": 100014,
+      "ttfbMs": {
+        "p50": 0.5,
+        "p95": 1.44,
+        "p99": 4.32,
+        "max": 4.32
+      }
+    },
+    {
+      "endpoint": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search/?q=react%20dashboard",
+      "auth": "none",
+      "peakRps": 10344,
+      "sustainedRps": 13128.8,
+      "p50Ms": 1,
+      "p975Ms": 3,
+      "p99Ms": 5,
+      "maxLatencyMs": 33,
+      "errorRatePct": 0,
+      "totalRequests": 262577,
+      "ttfbMs": {
+        "p50": 0.18,
+        "p95": 0.45,
+        "p99": 9.12,
+        "max": 9.12
+      }
+    },
+    {
+      "endpoint": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "auth": "admin",
+      "peakRps": 4123.7,
+      "sustainedRps": 4965.9,
+      "p50Ms": 3,
+      "p975Ms": 10,
+      "p99Ms": 15,
+      "maxLatencyMs": 128,
+      "errorRatePct": 0,
+      "totalRequests": 99310,
+      "ttfbMs": {
+        "p50": 0.56,
+        "p95": 1.59,
+        "p99": 3.16,
+        "max": 3.16
+      }
+    }
+  ]
+}
