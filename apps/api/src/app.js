@@ -15,11 +15,26 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+function createCorsOptions() {
+  const allowedOrigin = process.env.FRONTEND_ORIGIN?.trim();
+
+  return {
+    origin(origin, callback) {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      callback(null, Boolean(allowedOrigin && origin === allowedOrigin));
+    }
+  };
+}
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(createCorsOptions()));
   app.use(express.json());
   app.use(apiLimiter);
 
