@@ -1,3 +1,5 @@
+import { createPrefixedId } from "../utils/id.js";
+
 const jobs = [];
 
 export async function listJobs() {
@@ -5,7 +7,7 @@ export async function listJobs() {
 }
 
 export async function createJob(payload) {
-  const job = { id: `job_${Date.now()}`, status: "open", ...payload };
+  const job = { ...payload, id: createPrefixedId("job"), status: "open" };
   jobs.push(job);
   return job;
 }
