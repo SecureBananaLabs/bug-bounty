@@ -1,0 +1,30 @@
+diff --git a/scripts/find_bugs.js b/scripts/find_bugs.js
+index 1234567..89abcdef 100644
+--- a/scripts/find_bugs.js
++++ b/scripts/find_bugs.js
+@@ -1,3 +1,5 @@
++const issues = [];
++
+ function detectBugs() {
+     // Code to detect bugs
+     const bug = detectLowHangingFruit();
+ 
+     if (bug) {
+@@ -7,4 +9,8 @@ function detectBugs() {
+         return;
+     }
+ 
++    issues.push(bug);
++    if (issues.length > 5) {
++        createIssuesRecursively(issues);
++    }
+ }
+ 
+ function createIssuesRecursively(bugs) {
+     for (const bug of bugs) {
+@@ -15,4 +19,4 @@ function createIssuesRecursively(bugs) {
+         }
+     }
+ }
+-
++}
