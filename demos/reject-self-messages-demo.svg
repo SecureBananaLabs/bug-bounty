@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="520" viewBox="0 0 1080 520" role="img" aria-labelledby="title desc">
+  <title id="title">Self-directed message rejection demo</title>
+  <desc id="desc">A demo showing that POST /api/messages returns 400 when senderId and receiverId are the same.</desc>
+  <style>
+    .bg { fill: #0b1020; }
+    .panel { fill: #151c35; stroke: #2a3765; stroke-width: 1.5; }
+    .bad { fill: #ff6b6b; }
+    .good { fill: #47d18c; }
+    .text { fill: #f2f5ff; font-family: Inter, Arial, sans-serif; }
+    .muted { fill: #b8c5ec; font-family: Inter, Arial, sans-serif; }
+    .code { fill: #dbe4ff; font-family: Consolas, "Courier New", monospace; }
+  </style>
+  <rect class="bg" width="1080" height="520"/>
+  <text x="70" y="72" class="text" font-size="34" font-weight="800">Self-directed messages are rejected</text>
+  <text x="70" y="108" class="muted" font-size="17">Regression path for SecureBananaLabs/bug-bounty #4228</text>
+
+  <rect x="70" y="150" width="430" height="230" rx="10" class="panel"/>
+  <text x="100" y="190" class="text" font-size="20" font-weight="800">POST /api/messages</text>
+  <text x="100" y="232" class="code" font-size="17">{</text>
+  <text x="126" y="262" class="code" font-size="17">senderId: "usr_123",</text>
+  <text x="126" y="292" class="code" font-size="17">receiverId: "usr_123",</text>
+  <text x="126" y="322" class="code" font-size="17">body: "hello myself"</text>
+  <text x="100" y="352" class="code" font-size="17">}</text>
+  <circle cx="112" cy="382" r="7" class="bad"/>
+  <text x="132" y="389" class="muted" font-size="16">same participant on both sides</text>
+
+  <path d="M 515 266 L 565 266" stroke="#8bc5ff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 565 266 L 548 250 M 565 266 L 548 282" stroke="#8bc5ff" stroke-width="5" stroke-linecap="round"/>
+
+  <rect x="585" y="150" width="425" height="230" rx="10" class="panel"/>
+  <text x="615" y="190" class="text" font-size="20" font-weight="800">API response</text>
+  <circle cx="625" cy="232" r="7" class="bad"/>
+  <text x="645" y="238" class="code" font-size="17">HTTP 400</text>
+  <circle cx="625" cy="272" r="7" class="good"/>
+  <text x="645" y="278" class="code" font-size="17">success: false</text>
+  <circle cx="625" cy="312" r="7" class="good"/>
+  <text x="645" y="318" class="code" font-size="17">message: distinct sender/receiver</text>
+  <circle cx="625" cy="352" r="7" class="good"/>
+  <text x="645" y="358" class="code" font-size="17">message count unchanged</text>
+
+  <rect x="70" y="420" width="940" height="58" rx="10" fill="#10243a" stroke="#285d8f" stroke-width="1.5"/>
+  <text x="100" y="455" class="text" font-size="18" font-weight="800">Verified by node --test apps/api/src/tests/messageRoutes.self.test.js</text>
+</svg>
