@@ -125,3 +125,31 @@ model Notification {
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
 }
+
+model Dispute {
+  id            String   @id @default(cuid())
+  jobId         String
+  job           Job      @relation(fields: [jobId], references: [id])
+  complainantId String
+  complainant   User     @relation("Complainant", fields: [complainantId], references: [id])
+  respondentId  String
+  respondent    User     @relation("Respondent",  fields: [respondentId],  references: [id])
+  status        DisputeStatus @default(OPEN)
+  ruling        Ruling?
+  note          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+}
+
+enum Ruling {
+  CLIENT
+  FREELANCER
+  REFUND
+  ESCALATE
+}
