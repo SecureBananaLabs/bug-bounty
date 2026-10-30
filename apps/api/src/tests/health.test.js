@@ -16,6 +16,7 @@ test("GET /health returns ok payload", async () => {
   const payload = await response.json();
 
   assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
   assert.deepEqual(payload, { ok: true, service: "api" });
 
   await new Promise((resolve, reject) => {
