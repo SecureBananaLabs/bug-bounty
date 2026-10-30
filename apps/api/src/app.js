@@ -39,6 +39,11 @@ export function createApp() {
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
 
+  // JSON 404 for unknown routes
+  app.use((req, res) => {
+    res.status(404).json({ success: false, message: `Route not found: ${req.method} ${req.path}` });
+  });
+
   app.use(errorHandler);
   return app;
 }
