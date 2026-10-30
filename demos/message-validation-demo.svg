@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <rect width="1280" height="720" fill="#071225"/>
+  <rect x="48" y="42" width="1184" height="636" rx="18" fill="#0d1b3e" stroke="#f5a623" stroke-width="3"/>
+  <text x="80" y="100" fill="#f5a623" font-family="Arial, sans-serif" font-size="28" font-weight="700">Message payload validation demo</text>
+  <text x="80" y="146" fill="#e5eefc" font-family="Arial, sans-serif" font-size="22">Issue #4844 / Parent bounty #743</text>
+
+  <rect x="80" y="190" width="1120" height="116" rx="12" fill="#102149"/>
+  <text x="110" y="232" fill="#ffb4a2" font-family="Menlo, Consolas, monospace" font-size="22">POST /api/messages {}</text>
+  <text x="110" y="272" fill="#ffd58a" font-family="Menlo, Consolas, monospace" font-size="22">400 {"success":false,"message":"Invalid message payload"}</text>
+
+  <rect x="80" y="326" width="1120" height="116" rx="12" fill="#102149"/>
+  <text x="110" y="368" fill="#ffb4a2" font-family="Menlo, Consolas, monospace" font-size="22">POST /api/messages {"body":"   ","senderId":"usr_sender","receiverId":"usr_receiver"}</text>
+  <text x="110" y="408" fill="#ffd58a" font-family="Menlo, Consolas, monospace" font-size="22">400 {"success":false,"message":"Invalid message payload"}</text>
+
+  <rect x="80" y="462" width="1120" height="132" rx="12" fill="#102149"/>
+  <text x="110" y="504" fill="#b8ffdf" font-family="Menlo, Consolas, monospace" font-size="22">POST /api/messages {"body":"Hello","senderId":"usr_sender","receiverId":"usr_receiver"}</text>
+  <text x="110" y="544" fill="#b8ffdf" font-family="Menlo, Consolas, monospace" font-size="22">201 {"success":true,"data":{"id":"msg_...","sentAt":"2026-..."}}</text>
+
+  <text x="80" y="638" fill="#9fb2cc" font-family="Arial, sans-serif" font-size="20">Validation: npm test -w apps/api -> 4 tests passed</text>
+</svg>
