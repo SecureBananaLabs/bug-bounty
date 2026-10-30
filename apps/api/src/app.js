@@ -35,6 +35,7 @@ export function createApp() {
   app.use("/api/reviews", reviewRoutes);
   app.use("/api/messages", messageRoutes);
   app.use("/api/notifications", notificationRoutes);
+  app.use("/api/upload", uploadRoutes);
   app.use("/api/uploads", uploadRoutes);
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
