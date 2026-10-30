@@ -5,7 +5,9 @@ export async function listNotifications() {
 }
 
 export async function createNotification(payload) {
-  const notification = { id: `ntf_${Date.now()}`, read: false, ...payload };
+  const { id: _ignoredId, read: _ignoredRead, ...clientPayload } =
+    payload && typeof payload === "object" ? payload : {};
+  const notification = { ...clientPayload, id: `ntf_${Date.now()}`, read: false };
   notifications.push(notification);
   return notification;
 }
