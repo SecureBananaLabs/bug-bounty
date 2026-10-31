@@ -1,0 +1,14 @@
+{
+  "defaults": {
+    "p99Ms": 1500,
+    "ttfbP99Ms": 1000,
+    "errorRatePercent": 1
+  },
+  "endpoints": {
+    "uploads-create": {
+      "p99Ms": 2000,
+      "ttfbP99Ms": 1500,
+      "errorRatePercent": 1
+    }
+  }
+}

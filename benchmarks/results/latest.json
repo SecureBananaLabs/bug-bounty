@@ -1,0 +1,2054 @@
+{
+  "generatedAt": "2026-05-20T18:32:29.462Z",
+  "mode": "full",
+  "targetUrl": "http://127.0.0.1:50115",
+  "config": {
+    "mode": "full",
+    "requestsPerEndpoint": 8,
+    "concurrency": 2,
+    "warmupRequests": 1,
+    "failOnThreshold": true
+  },
+  "environment": {
+    "node": "v24.3.0",
+    "platform": "Darwin 25.4.0 arm64",
+    "cpu": "Apple M2 Pro",
+    "logicalCpus": 10,
+    "totalMemoryMb": 16384,
+    "freeMemoryMb": 201
+  },
+  "durationMs": 190.75,
+  "summary": {
+    "endpointCount": 21,
+    "requestCount": 168,
+    "failedRequests": 0,
+    "errorRatePercent": 0,
+    "maxP99LatencyMs": 5.5,
+    "maxP99TtfbMs": 5.45,
+    "slowestEndpoint": {
+      "id": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "p99LatencyMs": 5.5
+    }
+  },
+  "thresholdFailures": [],
+  "endpoints": [
+    {
+      "id": "health",
+      "name": "Health check",
+      "method": "GET",
+      "path": "/health",
+      "payloadProfile": "small health response",
+      "requestCount": 8,
+      "durationMs": 9.7,
+      "metrics": {
+        "latencyMs": {
+          "p50": 1.66,
+          "p95": 3.76,
+          "p99": 3.76
+        },
+        "ttfbMs": {
+          "p50": 1.59,
+          "p95": 3.68,
+          "p99": 3.68
+        },
+        "rps": {
+          "sustained": 824.93,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 216
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 3.49,
+          "ttfbMs": 3.34,
+          "bytes": 27
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 3.76,
+          "ttfbMs": 3.68,
+          "bytes": 27
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.47,
+          "ttfbMs": 2.37,
+          "bytes": 27
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.13,
+          "ttfbMs": 2.03,
+          "bytes": 27
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.66,
+          "ttfbMs": 1.59,
+          "bytes": 27
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.38,
+          "ttfbMs": 1.29,
+          "bytes": 27
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.38,
+          "ttfbMs": 1.3,
+          "bytes": 27
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1,
+          "ttfbMs": 0.88,
+          "bytes": 27
+        }
+      ]
+    },
+    {
+      "id": "auth-register",
+      "name": "Register user",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "payloadProfile": "client signup payload",
+      "requestCount": 8,
+      "durationMs": 10.85,
+      "metrics": {
+        "latencyMs": {
+          "p50": 1.28,
+          "p95": 5.5,
+          "p99": 5.5
+        },
+        "ttfbMs": {
+          "p50": 1.24,
+          "p95": 5.45,
+          "p99": 5.45
+        },
+        "rps": {
+          "sustained": 737.04,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 2528
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 5.5,
+          "ttfbMs": 5.43,
+          "bytes": 316
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 5.5,
+          "ttfbMs": 5.45,
+          "bytes": 316
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.54,
+          "ttfbMs": 2.48,
+          "bytes": 316
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.38,
+          "ttfbMs": 2.33,
+          "bytes": 316
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.28,
+          "ttfbMs": 1.24,
+          "bytes": 316
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.23,
+          "ttfbMs": 1.19,
+          "bytes": 316
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.2,
+          "ttfbMs": 1.16,
+          "bytes": 316
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1,
+          "ttfbMs": 0.97,
+          "bytes": 316
+        }
+      ]
+    },
+    {
+      "id": "auth-login",
+      "name": "Login user",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "payloadProfile": "existing user credential payload",
+      "requestCount": 8,
+      "durationMs": 7.87,
+      "metrics": {
+        "latencyMs": {
+          "p50": 1.05,
+          "p95": 4.8,
+          "p99": 4.8
+        },
+        "ttfbMs": {
+          "p50": 1.01,
+          "p95": 4.75,
+          "p99": 4.75
+        },
+        "rps": {
+          "sustained": 1015.95,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 2040
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.8,
+          "ttfbMs": 0.75,
+          "bytes": 255
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.1,
+          "ttfbMs": 1.06,
+          "bytes": 255
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.05,
+          "ttfbMs": 1.01,
+          "bytes": 255
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.94,
+          "ttfbMs": 0.89,
+          "bytes": 255
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 4.68,
+          "ttfbMs": 4.57,
+          "bytes": 255
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 4.8,
+          "ttfbMs": 4.75,
+          "bytes": 255
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.14,
+          "ttfbMs": 1.1,
+          "bytes": 255
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.92,
+          "ttfbMs": 0.88,
+          "bytes": 255
+        }
+      ]
+    },
+    {
+      "id": "auth-oauth-callback",
+      "name": "OAuth callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback?code=benchmark-code&state=benchmark-state",
+      "payloadProfile": "provider callback query",
+      "requestCount": 8,
+      "durationMs": 5.64,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.91,
+          "p95": 2.49,
+          "p99": 2.49
+        },
+        "ttfbMs": {
+          "p50": 0.86,
+          "p95": 2.45,
+          "p99": 2.45
+        },
+        "rps": {
+          "sustained": 1418.87,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 592
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.65,
+          "ttfbMs": 0.61,
+          "bytes": 74
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.77,
+          "ttfbMs": 0.73,
+          "bytes": 74
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.98,
+          "ttfbMs": 0.9,
+          "bytes": 74
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.91,
+          "ttfbMs": 0.86,
+          "bytes": 74
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.92,
+          "ttfbMs": 1.87,
+          "bytes": 74
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.48,
+          "ttfbMs": 2.43,
+          "bytes": 74
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.49,
+          "ttfbMs": 2.45,
+          "bytes": 74
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.57,
+          "ttfbMs": 0.47,
+          "bytes": 74
+        }
+      ]
+    },
+    {
+      "id": "auth-refresh",
+      "name": "Refresh token",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "payloadProfile": "empty refresh request",
+      "requestCount": 8,
+      "durationMs": 6.52,
+      "metrics": {
+        "latencyMs": {
+          "p50": 1.23,
+          "p95": 2.54,
+          "p99": 2.54
+        },
+        "ttfbMs": {
+          "p50": 1.19,
+          "p95": 2.37,
+          "p99": 2.37
+        },
+        "rps": {
+          "sustained": 1227.92,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 1704
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.54,
+          "ttfbMs": 2.34,
+          "bytes": 213
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.42,
+          "ttfbMs": 2.37,
+          "bytes": 213
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.23,
+          "ttfbMs": 1.19,
+          "bytes": 213
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.13,
+          "ttfbMs": 1.09,
+          "bytes": 213
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.74,
+          "ttfbMs": 1.61,
+          "bytes": 213
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.85,
+          "ttfbMs": 1.8,
+          "bytes": 213
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.81,
+          "ttfbMs": 0.77,
+          "bytes": 213
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.62,
+          "ttfbMs": 0.59,
+          "bytes": 213
+        }
+      ]
+    },
+    {
+      "id": "users-list",
+      "name": "List users",
+      "method": "GET",
+      "path": "/api/users",
+      "payloadProfile": "collection read",
+      "requestCount": 8,
+      "durationMs": 4.87,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.63,
+          "p95": 2.38,
+          "p99": 2.38
+        },
+        "ttfbMs": {
+          "p50": 0.59,
+          "p95": 2.34,
+          "p99": 2.34
+        },
+        "rps": {
+          "sustained": 1642.78,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 208
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.59,
+          "ttfbMs": 1.55,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.38,
+          "ttfbMs": 2.34,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.87,
+          "ttfbMs": 1.81,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.04,
+          "ttfbMs": 1,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.63,
+          "ttfbMs": 0.59,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.62,
+          "ttfbMs": 0.58,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.6,
+          "ttfbMs": 0.56,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.51,
+          "ttfbMs": 0.48,
+          "bytes": 26
+        }
+      ]
+    },
+    {
+      "id": "users-create",
+      "name": "Create user",
+      "method": "POST",
+      "path": "/api/users",
+      "payloadProfile": "freelancer profile payload",
+      "requestCount": 8,
+      "durationMs": 4.09,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.95,
+          "p95": 1.15,
+          "p99": 1.15
+        },
+        "ttfbMs": {
+          "p50": 0.79,
+          "p95": 1.11,
+          "p99": 1.11
+        },
+        "rps": {
+          "sustained": 1955.51,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 1664
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.65,
+          "ttfbMs": 0.61,
+          "bytes": 208
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.83,
+          "ttfbMs": 0.79,
+          "bytes": 208
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.11,
+          "ttfbMs": 1,
+          "bytes": 208
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.15,
+          "ttfbMs": 1.11,
+          "bytes": 208
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.06,
+          "ttfbMs": 1.01,
+          "bytes": 208
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.05,
+          "ttfbMs": 1.01,
+          "bytes": 208
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.79,
+          "ttfbMs": 0.75,
+          "bytes": 208
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.95,
+          "ttfbMs": 0.74,
+          "bytes": 208
+        }
+      ]
+    },
+    {
+      "id": "jobs-list",
+      "name": "List jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "payloadProfile": "collection read",
+      "requestCount": 8,
+      "durationMs": 2.35,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.54,
+          "p95": 0.67,
+          "p99": 0.67
+        },
+        "ttfbMs": {
+          "p50": 0.5,
+          "p95": 0.63,
+          "p99": 0.63
+        },
+        "rps": {
+          "sustained": 3404.98,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 208
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.45,
+          "ttfbMs": 0.41,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.55,
+          "ttfbMs": 0.51,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.53,
+          "ttfbMs": 0.48,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.54,
+          "ttfbMs": 0.5,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.65,
+          "ttfbMs": 0.6,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.67,
+          "ttfbMs": 0.63,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.58,
+          "ttfbMs": 0.54,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.51,
+          "ttfbMs": 0.48,
+          "bytes": 26
+        }
+      ]
+    },
+    {
+      "id": "jobs-create",
+      "name": "Create job",
+      "method": "POST",
+      "path": "/api/jobs",
+      "payloadProfile": "production-sized job brief",
+      "requestCount": 8,
+      "durationMs": 6.61,
+      "metrics": {
+        "latencyMs": {
+          "p50": 1.17,
+          "p95": 2.95,
+          "p99": 2.95
+        },
+        "ttfbMs": {
+          "p50": 1.13,
+          "p95": 2.88,
+          "p99": 2.88
+        },
+        "rps": {
+          "sustained": 1211.05,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 2808
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.91,
+          "ttfbMs": 0.88,
+          "bytes": 351
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.17,
+          "ttfbMs": 1.13,
+          "bytes": 351
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.84,
+          "ttfbMs": 0.8,
+          "bytes": 351
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.84,
+          "ttfbMs": 0.79,
+          "bytes": 351
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.59,
+          "ttfbMs": 1.37,
+          "bytes": 351
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.53,
+          "ttfbMs": 1.49,
+          "bytes": 351
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.93,
+          "ttfbMs": 2.88,
+          "bytes": 351
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.95,
+          "ttfbMs": 2.77,
+          "bytes": 351
+        }
+      ]
+    },
+    {
+      "id": "proposals-list",
+      "name": "List proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "payloadProfile": "collection read",
+      "requestCount": 8,
+      "durationMs": 3.79,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.9,
+          "p95": 1.26,
+          "p99": 1.26
+        },
+        "ttfbMs": {
+          "p50": 0.85,
+          "p95": 1.22,
+          "p99": 1.22
+        },
+        "rps": {
+          "sustained": 2108.41,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 208
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.13,
+          "ttfbMs": 1.09,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.26,
+          "ttfbMs": 1.22,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.89,
+          "ttfbMs": 0.85,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.9,
+          "ttfbMs": 0.85,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.61,
+          "ttfbMs": 0.58,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.54,
+          "ttfbMs": 0.49,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.02,
+          "ttfbMs": 0.99,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.95,
+          "ttfbMs": 0.92,
+          "bytes": 26
+        }
+      ]
+    },
+    {
+      "id": "proposals-create",
+      "name": "Create proposal",
+      "method": "POST",
+      "path": "/api/proposals",
+      "payloadProfile": "proposal submission payload",
+      "requestCount": 8,
+      "durationMs": 4.65,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.82,
+          "p95": 1.77,
+          "p99": 1.77
+        },
+        "ttfbMs": {
+          "p50": 0.79,
+          "p95": 1.73,
+          "p99": 1.73
+        },
+        "rps": {
+          "sustained": 1719,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 2160
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.82,
+          "ttfbMs": 0.79,
+          "bytes": 270
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.54,
+          "ttfbMs": 1.46,
+          "bytes": 270
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.26,
+          "ttfbMs": 1.22,
+          "bytes": 270
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.71,
+          "ttfbMs": 0.68,
+          "bytes": 270
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.66,
+          "ttfbMs": 0.62,
+          "bytes": 270
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.81,
+          "ttfbMs": 0.61,
+          "bytes": 270
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.77,
+          "ttfbMs": 1.73,
+          "bytes": 270
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.49,
+          "ttfbMs": 1.45,
+          "bytes": 270
+        }
+      ]
+    },
+    {
+      "id": "payments-create",
+      "name": "Create payment intent",
+      "method": "POST",
+      "path": "/api/payments",
+      "payloadProfile": "Stripe-style payment intent payload",
+      "requestCount": 8,
+      "durationMs": 3.75,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.65,
+          "p95": 1.34,
+          "p99": 1.34
+        },
+        "ttfbMs": {
+          "p50": 0.61,
+          "p95": 1.28,
+          "p99": 1.28
+        },
+        "rps": {
+          "sustained": 2136.16,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 880
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1,
+          "ttfbMs": 0.96,
+          "bytes": 110
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.2,
+          "ttfbMs": 1.16,
+          "bytes": 110
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.34,
+          "ttfbMs": 1.28,
+          "bytes": 110
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.29,
+          "ttfbMs": 1.26,
+          "bytes": 110
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.65,
+          "ttfbMs": 0.61,
+          "bytes": 110
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.63,
+          "ttfbMs": 0.6,
+          "bytes": 110
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.61,
+          "ttfbMs": 0.58,
+          "bytes": 110
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.49,
+          "ttfbMs": 0.47,
+          "bytes": 110
+        }
+      ]
+    },
+    {
+      "id": "reviews-list",
+      "name": "List reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "payloadProfile": "collection read",
+      "requestCount": 8,
+      "durationMs": 3.02,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.43,
+          "p95": 1.61,
+          "p99": 1.61
+        },
+        "ttfbMs": {
+          "p50": 0.4,
+          "p95": 1.55,
+          "p99": 1.55
+        },
+        "rps": {
+          "sustained": 2647.84,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 208
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.39,
+          "ttfbMs": 0.36,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.48,
+          "ttfbMs": 0.45,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.43,
+          "ttfbMs": 0.4,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.44,
+          "ttfbMs": 0.4,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.43,
+          "ttfbMs": 0.4,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.43,
+          "ttfbMs": 0.41,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.52,
+          "ttfbMs": 1.35,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.61,
+          "ttfbMs": 1.55,
+          "bytes": 26
+        }
+      ]
+    },
+    {
+      "id": "reviews-create",
+      "name": "Create review",
+      "method": "POST",
+      "path": "/api/reviews",
+      "payloadProfile": "completed contract review",
+      "requestCount": 8,
+      "durationMs": 6.57,
+      "metrics": {
+        "latencyMs": {
+          "p50": 1.5,
+          "p95": 2.81,
+          "p99": 2.81
+        },
+        "ttfbMs": {
+          "p50": 1.46,
+          "p95": 2.76,
+          "p99": 2.76
+        },
+        "rps": {
+          "sustained": 1218.37,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 2200
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.66,
+          "ttfbMs": 0.62,
+          "bytes": 275
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.85,
+          "ttfbMs": 0.82,
+          "bytes": 275
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.2,
+          "ttfbMs": 1.99,
+          "bytes": 275
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.81,
+          "ttfbMs": 2.76,
+          "bytes": 275
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.02,
+          "ttfbMs": 1.83,
+          "bytes": 275
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.28,
+          "ttfbMs": 2.24,
+          "bytes": 275
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.5,
+          "ttfbMs": 1.46,
+          "bytes": 275
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.54,
+          "ttfbMs": 0.51,
+          "bytes": 275
+        }
+      ]
+    },
+    {
+      "id": "messages-list",
+      "name": "List messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "payloadProfile": "collection read",
+      "requestCount": 8,
+      "durationMs": 2.06,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.45,
+          "p95": 0.67,
+          "p99": 0.67
+        },
+        "ttfbMs": {
+          "p50": 0.42,
+          "p95": 0.63,
+          "p99": 0.63
+        },
+        "rps": {
+          "sustained": 3880.36,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 208
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.57,
+          "ttfbMs": 0.53,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.67,
+          "ttfbMs": 0.63,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.49,
+          "ttfbMs": 0.46,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.49,
+          "ttfbMs": 0.46,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.45,
+          "ttfbMs": 0.42,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.43,
+          "ttfbMs": 0.4,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.42,
+          "ttfbMs": 0.38,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.39,
+          "ttfbMs": 0.35,
+          "bytes": 26
+        }
+      ]
+    },
+    {
+      "id": "messages-create",
+      "name": "Send message",
+      "method": "POST",
+      "path": "/api/messages",
+      "payloadProfile": "client/freelancer message",
+      "requestCount": 8,
+      "durationMs": 2.23,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.52,
+          "p95": 0.62,
+          "p99": 0.62
+        },
+        "ttfbMs": {
+          "p50": 0.49,
+          "p95": 0.59,
+          "p99": 0.59
+        },
+        "rps": {
+          "sustained": 3584.43,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 2272
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.48,
+          "ttfbMs": 0.44,
+          "bytes": 284
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.62,
+          "ttfbMs": 0.59,
+          "bytes": 284
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.59,
+          "ttfbMs": 0.56,
+          "bytes": 284
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.56,
+          "ttfbMs": 0.53,
+          "bytes": 284
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.52,
+          "ttfbMs": 0.49,
+          "bytes": 284
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.51,
+          "ttfbMs": 0.49,
+          "bytes": 284
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.53,
+          "ttfbMs": 0.51,
+          "bytes": 284
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.45,
+          "ttfbMs": 0.43,
+          "bytes": 284
+        }
+      ]
+    },
+    {
+      "id": "notifications-list",
+      "name": "List notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "payloadProfile": "collection read",
+      "requestCount": 8,
+      "durationMs": 2.05,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.44,
+          "p95": 0.69,
+          "p99": 0.69
+        },
+        "ttfbMs": {
+          "p50": 0.41,
+          "p95": 0.67,
+          "p99": 0.67
+        },
+        "rps": {
+          "sustained": 3900.46,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 208
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.36,
+          "ttfbMs": 0.33,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.44,
+          "ttfbMs": 0.41,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.57,
+          "ttfbMs": 0.52,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.69,
+          "ttfbMs": 0.67,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.53,
+          "ttfbMs": 0.5,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.41,
+          "ttfbMs": 0.38,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.47,
+          "ttfbMs": 0.43,
+          "bytes": 26
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.44,
+          "ttfbMs": 0.41,
+          "bytes": 26
+        }
+      ]
+    },
+    {
+      "id": "notifications-create",
+      "name": "Create notification",
+      "method": "POST",
+      "path": "/api/notifications",
+      "payloadProfile": "notification payload",
+      "requestCount": 8,
+      "durationMs": 6.27,
+      "metrics": {
+        "latencyMs": {
+          "p50": 1.25,
+          "p95": 2.92,
+          "p99": 2.92
+        },
+        "ttfbMs": {
+          "p50": 1.22,
+          "p95": 2.89,
+          "p99": 2.89
+        },
+        "rps": {
+          "sustained": 1276.77,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 1416
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.48,
+          "ttfbMs": 0.45,
+          "bytes": 177
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.6,
+          "ttfbMs": 0.57,
+          "bytes": 177
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.48,
+          "ttfbMs": 1.44,
+          "bytes": 177
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.11,
+          "ttfbMs": 2.08,
+          "bytes": 177
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.25,
+          "ttfbMs": 1.22,
+          "bytes": 177
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.74,
+          "ttfbMs": 0.62,
+          "bytes": 177
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.92,
+          "ttfbMs": 2.89,
+          "bytes": 177
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.67,
+          "ttfbMs": 2.64,
+          "bytes": 177
+        }
+      ]
+    },
+    {
+      "id": "uploads-create",
+      "name": "Upload file",
+      "method": "POST",
+      "path": "/api/uploads",
+      "payloadProfile": "multipart text attachment",
+      "requestCount": 8,
+      "durationMs": 7.71,
+      "metrics": {
+        "latencyMs": {
+          "p50": 1.13,
+          "p95": 3.24,
+          "p99": 3.24
+        },
+        "ttfbMs": {
+          "p50": 1.1,
+          "p95": 3.19,
+          "p99": 3.19
+        },
+        "rps": {
+          "sustained": 1037.13,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "201": 8
+        },
+        "bytesRead": 592
+      },
+      "samples": [
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 3.24,
+          "ttfbMs": 3.19,
+          "bytes": 74
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 3.06,
+          "ttfbMs": 3.02,
+          "bytes": 74
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2,
+          "ttfbMs": 1.96,
+          "bytes": 74
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.99,
+          "ttfbMs": 1.95,
+          "bytes": 74
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.13,
+          "ttfbMs": 1.1,
+          "bytes": 74
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.1,
+          "ttfbMs": 1.06,
+          "bytes": 74
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.1,
+          "ttfbMs": 1.07,
+          "bytes": 74
+        },
+        {
+          "status": 201,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.94,
+          "ttfbMs": 0.9,
+          "bytes": 74
+        }
+      ]
+    },
+    {
+      "id": "search",
+      "name": "Search marketplace",
+      "method": "GET",
+      "path": "/api/search?q=react%20api%20benchmark",
+      "payloadProfile": "search query",
+      "requestCount": 8,
+      "durationMs": 2.42,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.43,
+          "p95": 0.91,
+          "p99": 0.91
+        },
+        "ttfbMs": {
+          "p50": 0.4,
+          "p95": 0.48,
+          "p99": 0.48
+        },
+        "rps": {
+          "sustained": 3311.54,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 744
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.43,
+          "ttfbMs": 0.4,
+          "bytes": 93
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.5,
+          "ttfbMs": 0.48,
+          "bytes": 93
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.43,
+          "ttfbMs": 0.4,
+          "bytes": 93
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.44,
+          "ttfbMs": 0.41,
+          "bytes": 93
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.43,
+          "ttfbMs": 0.4,
+          "bytes": 93
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.42,
+          "ttfbMs": 0.39,
+          "bytes": 93
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.44,
+          "ttfbMs": 0.41,
+          "bytes": 93
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.91,
+          "ttfbMs": 0.38,
+          "bytes": 93
+        }
+      ]
+    },
+    {
+      "id": "admin-metrics",
+      "name": "Admin metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "payloadProfile": "protected metrics read",
+      "requestCount": 8,
+      "durationMs": 4.76,
+      "metrics": {
+        "latencyMs": {
+          "p50": 0.72,
+          "p95": 2.65,
+          "p99": 2.65
+        },
+        "ttfbMs": {
+          "p50": 0.69,
+          "p95": 2.61,
+          "p99": 2.61
+        },
+        "rps": {
+          "sustained": 1681.5,
+          "peak": 8
+        },
+        "errorRatePercent": 0,
+        "statusCounts": {
+          "200": 8
+        },
+        "bytesRead": 848
+      },
+      "samples": [
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.61,
+          "ttfbMs": 0.58,
+          "bytes": 106
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.73,
+          "ttfbMs": 0.7,
+          "bytes": 106
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.6,
+          "ttfbMs": 0.57,
+          "bytes": 106
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.57,
+          "ttfbMs": 0.54,
+          "bytes": 106
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.26,
+          "ttfbMs": 2.04,
+          "bytes": 106
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 2.65,
+          "ttfbMs": 2.61,
+          "bytes": 106
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 1.12,
+          "ttfbMs": 1,
+          "bytes": 106
+        },
+        {
+          "status": 200,
+          "ok": true,
+          "error": null,
+          "latencyMs": 0.72,
+          "ttfbMs": 0.69,
+          "bytes": 106
+        }
+      ]
+    }
+  ]
+}
