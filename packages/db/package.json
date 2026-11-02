@@ -11,4 +11,28 @@
   "devDependencies": {
     "prisma": "^5.17.0"
   }
+{
+  "name": "@freelanceflow/db",
+import { describe, it, expect } from 'vitest';
+
+describe('@freelanceflow/db import', () => {
+  it('should import from workspace package', async () => {
+    const db = await import('@freelanceflow/db');
+    expect(db).toBeDefined();
+  });
+});
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts",
+      "types": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@prisma/client": "^5.0.0"
+  }
+}
 }
