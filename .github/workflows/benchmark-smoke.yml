@@ -1,0 +1,38 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  benchmark-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Start local API
+        env:
+          BENCHMARK_MODE: "1"
+          JWT_SECRET: ci-benchmark-secret
+        run: |
+          npm run dev -w apps/api > /tmp/api.log 2>&1 &
+          echo $! > /tmp/api.pid
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4000/health; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/api.log
+          exit 1
+      - name: Run smoke benchmark
+        env:
+          BENCHMARK_TARGET_URL: http://127.0.0.1:4000
+          BENCHMARK_ALLOW_MUTATIONS: "1"
+          BENCHMARK_JWT_SECRET: ci-benchmark-secret
+          BENCHMARK_DURATION_SECONDS: "1"
+          BENCHMARK_CONCURRENCY: "1"
+          BENCHMARK_TIMEOUT_MS: "10000"
+        run: npm run benchmark:smoke
