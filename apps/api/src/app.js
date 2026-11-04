@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { env } from "./config/env.js";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { authRoutes } from "./routes/authRoutes.js";
@@ -15,11 +16,24 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+function corsOptions() {
+  const allowed = env.corsOrigins;
+  return {
+    origin(origin, callback) {
+      // Non-browser and same-origin requests carry no Origin header.
+      if (!origin || allowed.includes(origin)) return callback(null, true);
+      // Keep local development usable when no allowlist is configured.
+      if (allowed.length === 0 && env.nodeEnv !== "production") return callback(null, true);
+      return callback(null, false);
+    }
+  };
+}
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(corsOptions()));
   app.use(express.json());
   app.use(apiLimiter);
 
