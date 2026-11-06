@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Client dashboard pipeline demo</title>
+  <desc id="desc">Regression summary for the actionable client dashboard.</desc>
+  <rect width="1280" height="720" fill="#0b1020"/>
+  <rect x="64" y="52" width="1152" height="616" rx="24" fill="#111936" stroke="#2a3765" stroke-width="2"/>
+  <text x="104" y="118" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="42" font-weight="700">Client dashboard pipeline</text>
+  <text x="104" y="166" fill="#aab7e8" font-family="Arial, sans-serif" font-size="24">The placeholder dashboard now exposes active work, candidates, and payment status.</text>
+
+  <rect x="104" y="216" width="330" height="132" rx="14" fill="#151c35" stroke="#3a4b84" stroke-width="2"/>
+  <text x="132" y="262" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="26" font-weight="700">Active jobs</text>
+  <text x="132" y="314" fill="#9ff0c2" font-family="Arial, sans-serif" font-size="44" font-weight="700">3</text>
+
+  <rect x="476" y="216" width="330" height="132" rx="14" fill="#151c35" stroke="#3a4b84" stroke-width="2"/>
+  <text x="504" y="262" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="26" font-weight="700">Shortlisted</text>
+  <text x="504" y="314" fill="#9ff0c2" font-family="Arial, sans-serif" font-size="44" font-weight="700">8</text>
+
+  <rect x="848" y="216" width="328" height="132" rx="14" fill="#151c35" stroke="#3a4b84" stroke-width="2"/>
+  <text x="876" y="262" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="26" font-weight="700">Milestones</text>
+  <text x="876" y="314" fill="#9ff0c2" font-family="Arial, sans-serif" font-size="44" font-weight="700">$4.2k</text>
+
+  <rect x="104" y="390" width="520" height="184" rx="14" fill="#151c35" stroke="#3a4b84" stroke-width="2"/>
+  <text x="132" y="436" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">Project pipeline</text>
+  <text x="132" y="486" fill="#c6d2ff" font-family="Arial, sans-serif" font-size="22">AI support widget · Interviewing · Review 3 proposals</text>
+  <text x="132" y="528" fill="#c6d2ff" font-family="Arial, sans-serif" font-size="22">Node API migration · In progress · Approve milestone 2</text>
+
+  <rect x="664" y="390" width="512" height="184" rx="14" fill="#151c35" stroke="#3a4b84" stroke-width="2"/>
+  <text x="692" y="436" fill="#f2f5ff" font-family="Arial, sans-serif" font-size="28" font-weight="700">Candidate and payment signals</text>
+  <text x="692" y="486" fill="#c6d2ff" font-family="Arial, sans-serif" font-size="22">Shortlisted freelancers include fit and response time.</text>
+  <text x="692" y="528" fill="#c6d2ff" font-family="Arial, sans-serif" font-size="22">Milestones show review and payment status.</text>
+
+  <rect x="104" y="610" width="1072" height="42" rx="10" fill="#0f1530" stroke="#2a3765" stroke-width="1"/>
+  <text x="132" y="638" fill="#f2f5ff" font-family="Menlo, monospace" font-size="20">npm run build -w apps/web: /dashboard/client generated successfully</text>
+</svg>
