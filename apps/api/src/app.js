@@ -1,4 +1,5 @@
 import cors from "cors";
+import morgan from "morgan";
 import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
@@ -18,7 +19,7 @@ import { adminRoutes } from "./routes/adminRoutes.js";
 export function createApp() {
   const app = express();
 
-  app.use(helmet());
+  app.use(morgan("dev"));
   app.use(cors());
   app.use(express.json());
   app.use(apiLimiter);
