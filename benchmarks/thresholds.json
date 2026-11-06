@@ -1,0 +1,15 @@
+{
+  "default": {
+    "p99Ms": 500,
+    "maxErrorRatePercent": 0
+  },
+  "smoke": {
+    "p99Ms": 1000,
+    "maxErrorRatePercent": 0
+  },
+  "endpoints": {
+    "POST /api/uploads": {
+      "p99Ms": 1000
+    }
+  }
+}
