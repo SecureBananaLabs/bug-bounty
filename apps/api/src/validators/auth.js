@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const registerSchema = z.object({
   email: z.string().email(),
+  fullName: z.string().min(1),
   password: z.string().min(8),
   role: z.enum(["client", "freelancer", "admin"]).default("client")
 });
