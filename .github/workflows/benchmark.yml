@@ -1,0 +1,52 @@
+name: Benchmark Smoke Test
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install API dependencies
+        run: npm install
+        working-directory: apps/api
+
+      - name: Install benchmark dependencies
+        run: npm install
+        working-directory: benchmarks
+
+      - name: Start API server
+        run: npm run dev &
+        working-directory: apps/api
+        env:
+          PORT: 3000
+          JWT_SECRET: benchmark-test-secret
+          DATABASE_URL: "file:./test.db"
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:3000/health -t 30000
+
+      - name: Run smoke benchmark
+        run: node run.js --smoke
+        working-directory: benchmarks
+        env:
+          BENCHMARK_HOST: http://localhost:3000
+          BENCHMARK_SMOKE_DURATION: 3
+          BENCHMARK_SMOKE_CONNECTIONS: 5
+
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmarks/results/
