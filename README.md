@@ -86,3 +86,7 @@ Prisma schema is available in `packages/db/prisma/schema.prisma` with models for
 ## Environment Variables
 
 Each app/package expects its own `.env` values for DB, auth, and integrations.
+
+The API needs `JWT_SECRET` in every non-local environment: with `NODE_ENV` set to
+anything other than `development` or `test`, the process refuses to start when the
+variable is missing. Only local work falls back to `development-secret`.
