@@ -9,3 +9,7 @@ export async function createProposal(payload) {
   proposals.push(proposal);
   return proposal;
 }
+
+export async function getProposalById(id) {
+  return proposals.find((p) => p.id === id) || null;
+}
