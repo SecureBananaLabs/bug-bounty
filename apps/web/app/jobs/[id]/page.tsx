@@ -1,9 +1,29 @@
-export default function JobDetailPage({ params }: { params: { id: string } }) {
+import { notFound } from "next/navigation";
+import { findJobById, jobs } from "../../../lib/mock";
+
+export function generateStaticParams() {
+  return jobs.map((job) => ({ id: job.id }));
+}
+
+type JobDetailPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function JobDetailPage({ params }: JobDetailPageProps) {
+  const { id } = await params;
+  const job = findJobById(id);
+
+  if (!job) {
+    notFound();
+  }
+
   return (
     <section className="card">
-      <h2>Job Detail</h2>
-      <p>Viewing details for <strong>{params.id}</strong>.</p>
-      <p>Responsibilities, milestones, and proposals would be shown here.</p>
+      <h2>{job.title}</h2>
+      <p>{job.description}</p>
+      <p>
+        Budget: <strong>{job.budget}</strong>
+      </p>
     </section>
   );
 }
