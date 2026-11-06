@@ -10,3 +10,7 @@ export const createJobSchema = z.object({
 });
 
 export const updateJobSchema = createJobSchema.partial();
+
+export const updateJobStatusSchema = z.object({
+  status: z.enum(["DRAFT", "OPEN", "IN_PROGRESS", "COMPLETED", "CANCELLED"])
+});
