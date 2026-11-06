@@ -32,7 +32,7 @@ The web app includes pages for:
 The API includes:
 
 - Auth routes (register, login, OAuth callback, JWT refresh)
-- CRUD routes for users, jobs, and proposals
+- List and create routes for users, jobs, and proposals
 - Payments routes (Stripe-focused service placeholder)
 - Reviews, messaging, notifications
 - File uploads and search
