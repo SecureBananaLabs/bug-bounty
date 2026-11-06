@@ -1,0 +1,464 @@
+{
+  "generatedAt": "2026-10-25T00:50:21.024Z",
+  "mode": "smoke",
+  "target": "isolated loopback Express app",
+  "duration": 1,
+  "concurrency": 1,
+  "environment": {
+    "node": "v22.23.3",
+    "platform": "linux",
+    "release": "6.17.0-1020-oracle",
+    "arch": "arm64",
+    "cpu": "Neoverse-N1",
+    "logicalCpus": 2,
+    "availableCpus": 2,
+    "totalMemory": 12506689536,
+    "freeMemory": 9469288448,
+    "network": "loopback",
+    "rateLimiter": "disabled only for isolated app"
+  },
+  "limitations": "In-memory placeholder services, not database/Stripe production performance; no warmup, includes first request; fixed-duration closed-loop load; body fully consumed; TTFB measured at response headers; secret headers and response bodies never stored.",
+  "results": [
+    {
+      "endpoint": "POST /api/auth/register",
+      "payloadBytes": 90,
+      "requests": 781,
+      "seconds": 1.000835913,
+      "latencyMs": {
+        "p50": 1.027482999999961,
+        "p95": 1.7914450000000102,
+        "p99": 3.4026099999999815
+      },
+      "ttfbMs": {
+        "p50": 0.9852029999999559,
+        "p95": 1.5744040000000723,
+        "p99": 3.255728999999974
+      },
+      "sustainedRps": 780.3476972153776,
+      "peakRps": 780,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 781
+      }
+    },
+    {
+      "endpoint": "POST /api/auth/login",
+      "payloadBytes": 74,
+      "requests": 948,
+      "seconds": 1.000264792,
+      "latencyMs": {
+        "p50": 0.9282030000001669,
+        "p95": 1.1135639999999967,
+        "p99": 3.098248999999896
+      },
+      "ttfbMs": {
+        "p50": 0.8918029999999817,
+        "p95": 1.0742830000001504,
+        "p99": 3.0602890000000116
+      },
+      "sustainedRps": 947.7490436352376,
+      "peakRps": 947,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 948
+      }
+    },
+    {
+      "endpoint": "GET /api/auth/oauth/github/callback",
+      "payloadBytes": 0,
+      "requests": 1474,
+      "seconds": 1.0004501919999997,
+      "latencyMs": {
+        "p50": 0.5718019999999342,
+        "p95": 0.7212819999999738,
+        "p99": 2.5178069999997206
+      },
+      "ttfbMs": {
+        "p50": 0.5392820000001848,
+        "p95": 0.6810820000000604,
+        "p99": 2.3704069999998865
+      },
+      "sustainedRps": 1473.3367155973322,
+      "peakRps": 1473,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1474
+      }
+    },
+    {
+      "endpoint": "POST /api/auth/refresh",
+      "payloadBytes": 2,
+      "requests": 1180,
+      "seconds": 1.0007474730000003,
+      "latencyMs": {
+        "p50": 0.7553230000003168,
+        "p95": 0.8642020000002049,
+        "p99": 1.4707649999995738
+      },
+      "ttfbMs": {
+        "p50": 0.7249219999998786,
+        "p95": 0.8323230000000876,
+        "p99": 1.4387249999999767
+      },
+      "sustainedRps": 1179.1186406523152,
+      "peakRps": 1179,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1180
+      }
+    },
+    {
+      "endpoint": "GET /api/users",
+      "payloadBytes": 0,
+      "requests": 1473,
+      "seconds": 1.0002543910000004,
+      "latencyMs": {
+        "p50": 0.5096010000006572,
+        "p95": 1.1964829999997164,
+        "p99": 3.5170099999995728
+      },
+      "ttfbMs": {
+        "p50": 0.47924199999943085,
+        "p95": 1.0922039999995832,
+        "p99": 3.4846899999993184
+      },
+      "sustainedRps": 1472.6253773576282,
+      "peakRps": 1472,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1473
+      }
+    },
+    {
+      "endpoint": "POST /api/users",
+      "payloadBytes": 81,
+      "requests": 1271,
+      "seconds": 1.000043871,
+      "latencyMs": {
+        "p50": 0.5964819999999236,
+        "p95": 1.264763999999559,
+        "p99": 4.820733999999902
+      },
+      "ttfbMs": {
+        "p50": 0.5643220000001747,
+        "p95": 1.1828040000000328,
+        "p99": 4.7782139999999345
+      },
+      "sustainedRps": 1270.9442424051415,
+      "peakRps": 1270,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 1271
+      }
+    },
+    {
+      "endpoint": "GET /api/jobs",
+      "payloadBytes": 0,
+      "requests": 1520,
+      "seconds": 1.0006741930000007,
+      "latencyMs": {
+        "p50": 0.46956200000022363,
+        "p95": 1.1546030000008614,
+        "p99": 3.5874900000007983
+      },
+      "ttfbMs": {
+        "p50": 0.4440819999999803,
+        "p95": 1.032043000000158,
+        "p99": 3.1003690000006827
+      },
+      "sustainedRps": 1518.975917069542,
+      "peakRps": 1519,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1520
+      }
+    },
+    {
+      "endpoint": "POST /api/jobs",
+      "payloadBytes": 1259,
+      "requests": 1368,
+      "seconds": 1.0004117520000009,
+      "latencyMs": {
+        "p50": 0.5797609999999622,
+        "p95": 1.208162999999331,
+        "p99": 2.9887680000001637
+      },
+      "ttfbMs": {
+        "p50": 0.5552009999992151,
+        "p95": 1.1405239999994592,
+        "p99": 2.8646090000002005
+      },
+      "sustainedRps": 1367.4369550988629,
+      "peakRps": 1367,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 1368
+      }
+    },
+    {
+      "endpoint": "GET /api/proposals",
+      "payloadBytes": 0,
+      "requests": 1953,
+      "seconds": 1.0004534719999993,
+      "latencyMs": {
+        "p50": 0.4539619999995921,
+        "p95": 0.5227209999993647,
+        "p99": 0.6065209999997023
+      },
+      "ttfbMs": {
+        "p50": 0.4324010000000271,
+        "p95": 0.5004420000004757,
+        "p99": 0.5854810000000725
+      },
+      "sustainedRps": 1952.1147706107429,
+      "peakRps": 1952,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1953
+      }
+    },
+    {
+      "endpoint": "POST /api/proposals",
+      "payloadBytes": 757,
+      "requests": 1630,
+      "seconds": 1.0001652709999997,
+      "latencyMs": {
+        "p50": 0.5374410000003991,
+        "p95": 0.6454819999999017,
+        "p99": 1.0978829999985464
+      },
+      "ttfbMs": {
+        "p50": 0.5142009999999573,
+        "p95": 0.6193620000012743,
+        "p99": 0.9466019999999844
+      },
+      "sustainedRps": 1629.7306527852838,
+      "peakRps": 1629,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 1630
+      }
+    },
+    {
+      "endpoint": "POST /api/payments",
+      "payloadBytes": 56,
+      "requests": 1733,
+      "seconds": 1.0003015510000004,
+      "latencyMs": {
+        "p50": 0.519600999999966,
+        "p95": 0.5964420000000246,
+        "p99": 0.6794819999995525
+      },
+      "ttfbMs": {
+        "p50": 0.49788100000114355,
+        "p95": 0.5712409999996453,
+        "p99": 0.653362000000925
+      },
+      "sustainedRps": 1732.4775696563918,
+      "peakRps": 1732,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 1733
+      }
+    },
+    {
+      "endpoint": "GET /api/reviews",
+      "payloadBytes": 0,
+      "requests": 1971,
+      "seconds": 1.00021119,
+      "latencyMs": {
+        "p50": 0.4548419999991893,
+        "p95": 0.5190019999990909,
+        "p99": 0.5759219999999914
+      },
+      "ttfbMs": {
+        "p50": 0.4344410000012431,
+        "p95": 0.49908200000027136,
+        "p99": 0.5570019999995566
+      },
+      "sustainedRps": 1970.5838324004355,
+      "peakRps": 1970,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1971
+      }
+    },
+    {
+      "endpoint": "POST /api/reviews",
+      "payloadBytes": 134,
+      "requests": 1700,
+      "seconds": 1.0002571110000007,
+      "latencyMs": {
+        "p50": 0.5231210000001738,
+        "p95": 0.6098819999988336,
+        "p99": 0.8538429999989603
+      },
+      "ttfbMs": {
+        "p50": 0.5011610000001383,
+        "p95": 0.5858820000012201,
+        "p99": 0.8150429999986954
+      },
+      "sustainedRps": 1699.5630236514248,
+      "peakRps": 1699,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 1700
+      }
+    },
+    {
+      "endpoint": "GET /api/messages",
+      "payloadBytes": 0,
+      "requests": 1928,
+      "seconds": 1.0001116700000003,
+      "latencyMs": {
+        "p50": 0.45712099999946076,
+        "p95": 0.5405609999997978,
+        "p99": 0.6549619999987044
+      },
+      "ttfbMs": {
+        "p50": 0.43596100000104343,
+        "p95": 0.517400999999154,
+        "p99": 0.6264019999998709
+      },
+      "sustainedRps": 1927.784724279839,
+      "peakRps": 1927,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1928
+      }
+    },
+    {
+      "endpoint": "POST /api/messages",
+      "payloadBytes": 1093,
+      "requests": 1666,
+      "seconds": 1.000304630999999,
+      "latencyMs": {
+        "p50": 0.5396419999997306,
+        "p95": 0.614121000000523,
+        "p99": 1.100843000000168
+      },
+      "ttfbMs": {
+        "p50": 0.5177610000009736,
+        "p95": 0.5889620000016293,
+        "p99": 1.0752030000003288
+      },
+      "sustainedRps": 1665.4926393117955,
+      "peakRps": 1665,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 1666
+      }
+    },
+    {
+      "endpoint": "GET /api/notifications",
+      "payloadBytes": 0,
+      "requests": 1962,
+      "seconds": 1.0016070350000008,
+      "latencyMs": {
+        "p50": 0.4548419999991893,
+        "p95": 0.5236820000009175,
+        "p99": 0.5994420000006357
+      },
+      "ttfbMs": {
+        "p50": 0.433960999998817,
+        "p95": 0.5014420000006794,
+        "p99": 0.5790820000001986
+      },
+      "sustainedRps": 1958.8520561858857,
+      "peakRps": 1961,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1962
+      }
+    },
+    {
+      "endpoint": "POST /api/notifications",
+      "payloadBytes": 115,
+      "requests": 1701,
+      "seconds": 1.0005460309999998,
+      "latencyMs": {
+        "p50": 0.521442000001116,
+        "p95": 0.5946020000010321,
+        "p99": 0.7502420000018901
+      },
+      "ttfbMs": {
+        "p50": 0.5000010000003385,
+        "p95": 0.5716009999996459,
+        "p99": 0.7272020000018529
+      },
+      "sustainedRps": 1700.07170814513,
+      "peakRps": 1700,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 1701
+      }
+    },
+    {
+      "endpoint": "POST /api/uploads",
+      "payloadBytes": 17551,
+      "requests": 1056,
+      "seconds": 1.0003041110000013,
+      "latencyMs": {
+        "p50": 0.8114419999983511,
+        "p95": 1.3158440000006522,
+        "p99": 3.0864089999995485
+      },
+      "ttfbMs": {
+        "p50": 0.786963000002288,
+        "p95": 1.2862440000026254,
+        "p99": 3.065088999999716
+      },
+      "sustainedRps": 1055.6789564168837,
+      "peakRps": 1055,
+      "errorRatePercent": 0,
+      "statuses": {
+        "201": 1056
+      }
+    },
+    {
+      "endpoint": "GET /api/search?q=dashboard",
+      "payloadBytes": 0,
+      "requests": 1769,
+      "seconds": 1.000203749999997,
+      "latencyMs": {
+        "p50": 0.4951209999999264,
+        "p95": 0.5929619999988063,
+        "p99": 1.3564839999999094
+      },
+      "ttfbMs": {
+        "p50": 0.47412099999928614,
+        "p95": 0.5714810000026773,
+        "p99": 1.326124000002892
+      },
+      "sustainedRps": 1768.639639673422,
+      "peakRps": 1768,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1769
+      }
+    },
+    {
+      "endpoint": "GET /api/admin/metrics",
+      "payloadBytes": 0,
+      "requests": 1352,
+      "seconds": 1.0002988299999998,
+      "latencyMs": {
+        "p50": 0.6649219999999332,
+        "p95": 0.7593219999980647,
+        "p99": 1.63056399999914
+      },
+      "ttfbMs": {
+        "p50": 0.644562000001315,
+        "p95": 0.7376430000003893,
+        "p99": 1.6105639999987034
+      },
+      "sustainedRps": 1351.5961025366794,
+      "peakRps": 1351,
+      "errorRatePercent": 0,
+      "statuses": {
+        "200": 1352
+      }
+    }
+  ],
+  "failed": []
+}

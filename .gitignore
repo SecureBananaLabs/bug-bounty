@@ -5,3 +5,5 @@ dist
 .env.*
 coverage
 *.log
+
+!benchmarks/.env.benchmark.example
