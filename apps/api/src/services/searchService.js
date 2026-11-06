@@ -1,9 +1,11 @@
-export async function globalSearch(query) {
-  // TODO: use PostgreSQL full-text search + ranking.
+export async function globalSearch(params) {
+  const { q, type = "all", page = 1, limit = 10 } = params;
   return {
-    query,
-    users: [],
-    jobs: [],
-    freelancers: []
+    query: q,
+    type,
+    page,
+    limit,
+    total: 0,
+    results: []
   };
 }
