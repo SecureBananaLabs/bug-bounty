@@ -1,4 +1,4 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
+import { registerSchema, loginSchema, oauthCallbackParamsSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
 import { ok } from "../utils/response.js";
 
@@ -14,11 +14,16 @@ export async function login(req, res) {
   return ok(res, result);
 }
 
-export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
-  });
+export async function oauthCallback(req, res, next) {
+  try {
+    const validated = oauthCallbackParamsSchema.parse(req.params);
+    return ok(res, {
+      provider: validated.provider,
+      status: "callback-received"
+    });
+  } catch (err) {
+    return next(err);
+  }
 }
 
 export async function refresh(req, res) {
