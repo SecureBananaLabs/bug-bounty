@@ -1,7 +1,9 @@
 const users = [];
 
 export async function listUsers() {
-  return users;
+  // Callers filter or sort the result in place, so hand them a snapshot rather
+  // than the array this service keeps appending to.
+  return [...users];
 }
 
 export async function createUser(payload) {
