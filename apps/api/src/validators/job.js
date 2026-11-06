@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const JOB_STATUSES = [
+  "DRAFT",
+  "OPEN",
+  "IN_PROGRESS",
+  "COMPLETED",
+  "CANCELLED"
+];
+
 export const createJobSchema = z.object({
   title: z.string().min(4),
   description: z.string().min(10),
@@ -10,3 +18,7 @@ export const createJobSchema = z.object({
 });
 
 export const updateJobSchema = createJobSchema.partial();
+
+export const updateJobStatusSchema = z.object({
+  status: z.enum(["DRAFT", "OPEN", "IN_PROGRESS", "COMPLETED", "CANCELLED"])
+});
