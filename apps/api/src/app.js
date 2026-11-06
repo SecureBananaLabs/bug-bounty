@@ -14,18 +14,33 @@ import { notificationRoutes } from "./routes/notificationRoutes.js";
 import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
+import { env } from "./config/env.js";
 
 export function createApp() {
   const app = express();
 
+  const corsOptions = {
+    origin: (origin, callback) => {
+      // allow requests with no origin (such as mobile apps, curl, or server-to-server)
+      if (!origin) return callback(null, true);
+      if (env.corsOrigins.includes("*") || env.corsOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      const err = new Error("Not allowed by CORS");
+      err.status = 403;
+      return callback(err);
+    }
+  };
+
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(corsOptions));
   app.use(express.json());
-  app.use(apiLimiter);
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
+
+  app.use(apiLimiter);
 
   app.use("/api/auth", authRoutes);
   app.use("/api/users", userRoutes);
