@@ -7,7 +7,8 @@ import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import { jobRoutes } from "./routes/jobRoutes.js";
 import { proposalRoutes } from "./routes/proposalRoutes.js";
-import { paymentRoutes } from "./routes/paymentRoutes.js";
+import { createPaymentRoutes } from "./routes/paymentRoutes.js";
+import { authMiddleware } from "./middleware/auth.js";
 import { reviewRoutes } from "./routes/reviewRoutes.js";
 import { messageRoutes } from "./routes/messageRoutes.js";
 import { notificationRoutes } from "./routes/notificationRoutes.js";
@@ -15,7 +16,7 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
-export function createApp() {
+export function createApp({ paymentAuth = authMiddleware } = {}) {
   const app = express();
 
   app.use(helmet());
@@ -31,7 +32,7 @@ export function createApp() {
   app.use("/api/users", userRoutes);
   app.use("/api/jobs", jobRoutes);
   app.use("/api/proposals", proposalRoutes);
-  app.use("/api/payments", paymentRoutes);
+  app.use("/api/payments", createPaymentRoutes({ requireAuth: paymentAuth }));
   app.use("/api/reviews", reviewRoutes);
   app.use("/api/messages", messageRoutes);
   app.use("/api/notifications", notificationRoutes);
