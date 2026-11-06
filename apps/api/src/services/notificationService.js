@@ -1,7 +1,7 @@
 const notifications = [];
 
-export async function listNotifications() {
-  return notifications;
+export async function listNotifications({ skip = 0, limit = 20 } = {}) {
+  return { items: notifications.slice(skip, skip + limit), total: notifications.length };
 }
 
 export async function createNotification(payload) {

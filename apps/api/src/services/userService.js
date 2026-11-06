@@ -1,7 +1,7 @@
 const users = [];
 
-export async function listUsers() {
-  return users;
+export async function listUsers({ skip = 0, limit = 20 } = {}) {
+  return { items: users.slice(skip, skip + limit), total: users.length };
 }
 
 export async function createUser(payload) {
