@@ -15,13 +15,29 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
 export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
-  app.use(express.json());
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`CORS: origin ${origin} not allowed`));
+        }
+      },
+      credentials: true
+    })
+  );
   app.use(apiLimiter);
+  app.use(express.json());
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
