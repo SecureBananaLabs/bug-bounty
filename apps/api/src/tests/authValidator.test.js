@@ -1,0 +1,1 @@
+@apps/api/src/tests/authValidator.test.js
