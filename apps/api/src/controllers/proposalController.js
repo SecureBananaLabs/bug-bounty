@@ -1,4 +1,5 @@
-import { ok } from "../utils/response.js";
+import { ok, fail } from "../utils/response.js";
+import { createProposalSchema } from "../validators/proposal.js";
 import { createProposal, listProposals } from "../services/proposalService.js";
 
 export async function getProposals(req, res) {
@@ -6,5 +7,10 @@ export async function getProposals(req, res) {
 }
 
 export async function postProposal(req, res) {
-  return ok(res, await createProposal(req.body), 201);
+  const parsed = createProposalSchema.safeParse(req.body);
+  if (!parsed.success) {
+    const message = parsed.error.issues.map((i) => i.message).join("; ");
+    return fail(res, message, 400);
+  }
+  return ok(res, await createProposal(parsed.data), 201);
 }
