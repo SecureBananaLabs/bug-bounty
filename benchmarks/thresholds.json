@@ -1,0 +1,10 @@
+{
+  "p99_max_ms": 2000,
+  "max_error_rate": 0.05,
+  "min_rps": 50,
+  "smoke": {
+    "p99_max_ms": 500,
+    "max_error_rate": 0.01,
+    "min_rps": 10
+  }
+}
