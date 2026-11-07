@@ -6,8 +6,10 @@
     "packages/*"
   ],
   "scripts": {
+    "benchmark": "node benchmarks/run-benchmark.mjs",
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api && npm run test:benchmarks",
+    "test:benchmarks": "node --test \"benchmarks/tests/**/*.test.mjs\""
   }
 }
