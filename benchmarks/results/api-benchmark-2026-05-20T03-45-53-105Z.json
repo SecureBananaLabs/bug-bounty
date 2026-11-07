@@ -1,0 +1,519 @@
+{
+  "mode": "full",
+  "startedAt": "2026-05-20T03:45:53.105Z",
+  "finishedAt": "2026-05-20T03:45:53.306Z",
+  "targetUrl": "http://127.0.0.1:50927",
+  "requestsPerEndpoint": 8,
+  "environment": {
+    "cpuModel": "Apple M4",
+    "cpuCount": 10,
+    "totalMemoryGb": 24,
+    "freeMemoryGb": 0.11,
+    "platform": "darwin",
+    "release": "25.2.0",
+    "node": "v25.4.0"
+  },
+  "summary": {
+    "endpointCount": 21,
+    "totalRequests": 168,
+    "overallErrorRatePercent": 0,
+    "slowestByP99": [
+      {
+        "name": "GET /health",
+        "method": "GET",
+        "path": "/health",
+        "auth": false,
+        "requests": 8,
+        "statusCounts": {
+          "200": 8
+        },
+        "p50LatencyMs": 1.07,
+        "p95LatencyMs": 65.59,
+        "p99LatencyMs": 65.59,
+        "p95TtfbMs": 64.03,
+        "sustainedRps": 106.07,
+        "peakRps": 8,
+        "errorRatePercent": 0,
+        "non2xxRatePercent": 0,
+        "durationMs": 75.42
+      },
+      {
+        "name": "POST /api/auth/register",
+        "method": "POST",
+        "path": "/api/auth/register",
+        "auth": false,
+        "requests": 8,
+        "statusCounts": {
+          "201": 8
+        },
+        "p50LatencyMs": 1.22,
+        "p95LatencyMs": 15.35,
+        "p99LatencyMs": 15.35,
+        "p95TtfbMs": 15.2,
+        "sustainedRps": 320.29,
+        "peakRps": 8,
+        "errorRatePercent": 0,
+        "non2xxRatePercent": 0,
+        "durationMs": 24.98
+      },
+      {
+        "name": "POST /api/uploads",
+        "method": "POST",
+        "path": "/api/uploads",
+        "auth": false,
+        "requests": 8,
+        "statusCounts": {
+          "201": 8
+        },
+        "p50LatencyMs": 0.88,
+        "p95LatencyMs": 6.96,
+        "p99LatencyMs": 6.96,
+        "p95TtfbMs": 6.89,
+        "sustainedRps": 546.29,
+        "peakRps": 8,
+        "errorRatePercent": 0,
+        "non2xxRatePercent": 0,
+        "durationMs": 14.64
+      },
+      {
+        "name": "POST /api/proposals",
+        "method": "POST",
+        "path": "/api/proposals",
+        "auth": false,
+        "requests": 8,
+        "statusCounts": {
+          "201": 8
+        },
+        "p50LatencyMs": 0.53,
+        "p95LatencyMs": 1.71,
+        "p99LatencyMs": 1.71,
+        "p95TtfbMs": 1.66,
+        "sustainedRps": 1435.05,
+        "peakRps": 8,
+        "errorRatePercent": 0,
+        "non2xxRatePercent": 0,
+        "durationMs": 5.57
+      },
+      {
+        "name": "GET /api/admin/metrics",
+        "method": "GET",
+        "path": "/api/admin/metrics",
+        "auth": true,
+        "requests": 8,
+        "statusCounts": {
+          "200": 8
+        },
+        "p50LatencyMs": 0.48,
+        "p95LatencyMs": 1.49,
+        "p99LatencyMs": 1.49,
+        "p95TtfbMs": 1.45,
+        "sustainedRps": 1589.5,
+        "peakRps": 8,
+        "errorRatePercent": 0,
+        "non2xxRatePercent": 0,
+        "durationMs": 5.03
+      }
+    ]
+  },
+  "endpoints": [
+    {
+      "name": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 1.07,
+      "p95LatencyMs": 65.59,
+      "p99LatencyMs": 65.59,
+      "p95TtfbMs": 64.03,
+      "sustainedRps": 106.07,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 75.42
+    },
+    {
+      "name": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 1.22,
+      "p95LatencyMs": 15.35,
+      "p99LatencyMs": 15.35,
+      "p95TtfbMs": 15.2,
+      "sustainedRps": 320.29,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 24.98
+    },
+    {
+      "name": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.92,
+      "p95LatencyMs": 1.32,
+      "p99LatencyMs": 1.32,
+      "p95TtfbMs": 1.26,
+      "sustainedRps": 997.79,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 8.02
+    },
+    {
+      "name": "GET /api/auth/oauth/:provider/callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.51,
+      "p95LatencyMs": 0.86,
+      "p99LatencyMs": 0.86,
+      "p95TtfbMs": 0.76,
+      "sustainedRps": 1686.28,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 4.74
+    },
+    {
+      "name": "POST /api/auth/refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.66,
+      "p95LatencyMs": 0.97,
+      "p99LatencyMs": 0.97,
+      "p95TtfbMs": 0.88,
+      "sustainedRps": 1274.86,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 6.28
+    },
+    {
+      "name": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.44,
+      "p95LatencyMs": 1.11,
+      "p99LatencyMs": 1.11,
+      "p95TtfbMs": 1.06,
+      "sustainedRps": 1624.53,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 4.92
+    },
+    {
+      "name": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 0.58,
+      "p95LatencyMs": 1.38,
+      "p99LatencyMs": 1.38,
+      "p95TtfbMs": 1.33,
+      "sustainedRps": 1378.69,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 5.8
+    },
+    {
+      "name": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.44,
+      "p95LatencyMs": 0.76,
+      "p99LatencyMs": 0.76,
+      "p95TtfbMs": 0.68,
+      "sustainedRps": 1933.5,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 4.14
+    },
+    {
+      "name": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 0.62,
+      "p95LatencyMs": 1.18,
+      "p99LatencyMs": 1.18,
+      "p95TtfbMs": 1.13,
+      "sustainedRps": 1407.99,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 5.68
+    },
+    {
+      "name": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.39,
+      "p95LatencyMs": 0.53,
+      "p99LatencyMs": 0.53,
+      "p95TtfbMs": 0.48,
+      "sustainedRps": 2398.98,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 3.33
+    },
+    {
+      "name": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 0.53,
+      "p95LatencyMs": 1.71,
+      "p99LatencyMs": 1.71,
+      "p95TtfbMs": 1.66,
+      "sustainedRps": 1435.05,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 5.57
+    },
+    {
+      "name": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 0.51,
+      "p95LatencyMs": 0.63,
+      "p99LatencyMs": 0.63,
+      "p95TtfbMs": 0.59,
+      "sustainedRps": 1857.14,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 4.31
+    },
+    {
+      "name": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.35,
+      "p95LatencyMs": 0.44,
+      "p99LatencyMs": 0.44,
+      "p95TtfbMs": 0.4,
+      "sustainedRps": 2659.13,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 3.01
+    },
+    {
+      "name": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 0.44,
+      "p95LatencyMs": 0.52,
+      "p99LatencyMs": 0.52,
+      "p95TtfbMs": 0.48,
+      "sustainedRps": 2130.33,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 3.76
+    },
+    {
+      "name": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.32,
+      "p95LatencyMs": 0.4,
+      "p99LatencyMs": 0.4,
+      "p95TtfbMs": 0.36,
+      "sustainedRps": 2896.5,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 2.76
+    },
+    {
+      "name": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 0.46,
+      "p95LatencyMs": 0.59,
+      "p99LatencyMs": 0.59,
+      "p95TtfbMs": 0.55,
+      "sustainedRps": 1979.85,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 4.04
+    },
+    {
+      "name": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.36,
+      "p95LatencyMs": 1.29,
+      "p99LatencyMs": 1.29,
+      "p95TtfbMs": 1.23,
+      "sustainedRps": 2093.51,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 3.82
+    },
+    {
+      "name": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 0.53,
+      "p95LatencyMs": 0.77,
+      "p99LatencyMs": 0.77,
+      "p95TtfbMs": 0.71,
+      "sustainedRps": 1725.9,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 4.64
+    },
+    {
+      "name": "POST /api/uploads",
+      "method": "POST",
+      "path": "/api/uploads",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "201": 8
+      },
+      "p50LatencyMs": 0.88,
+      "p95LatencyMs": 6.96,
+      "p99LatencyMs": 6.96,
+      "p95TtfbMs": 6.89,
+      "sustainedRps": 546.29,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 14.64
+    },
+    {
+      "name": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark%20dashboard",
+      "auth": false,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.41,
+      "p95LatencyMs": 1.32,
+      "p99LatencyMs": 1.32,
+      "p95TtfbMs": 1.27,
+      "sustainedRps": 1861.55,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 4.3
+    },
+    {
+      "name": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "auth": true,
+      "requests": 8,
+      "statusCounts": {
+        "200": 8
+      },
+      "p50LatencyMs": 0.48,
+      "p95LatencyMs": 1.49,
+      "p99LatencyMs": 1.49,
+      "p95TtfbMs": 1.45,
+      "sustainedRps": 1589.5,
+      "peakRps": 8,
+      "errorRatePercent": 0,
+      "non2xxRatePercent": 0,
+      "durationMs": 5.03
+    }
+  ]
+}
