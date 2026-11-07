@@ -1,0 +1,23 @@
+name: benchmark-smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/benchmark-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run benchmark:smoke
