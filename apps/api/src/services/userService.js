@@ -5,7 +5,9 @@ export async function listUsers() {
 }
 
 export async function createUser(payload) {
-  const user = { id: `usr_${Date.now()}`, ...payload };
+  // Strip any client-supplied id; server owns identity generation
+  const { email, role } = payload;
+  const user = { id: `usr_${Date.now()}`, email, role };
   users.push(user);
   return user;
 }
