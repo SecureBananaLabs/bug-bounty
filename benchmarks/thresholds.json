@@ -1,0 +1,22 @@
+{
+  "GET /api/users": 250,
+  "POST /api/users": 250,
+  "GET /api/jobs": 250,
+  "POST /api/jobs": 250,
+  "GET /api/proposals": 250,
+  "POST /api/proposals": 250,
+  "POST /api/payments": 250,
+  "GET /api/reviews": 250,
+  "POST /api/reviews": 250,
+  "GET /api/messages": 250,
+  "POST /api/messages": 250,
+  "GET /api/notifications": 250,
+  "POST /api/notifications": 250,
+  "POST /api/uploads": 500,
+  "GET /api/search": 250,
+  "GET /api/auth/oauth/github/callback": 250,
+  "POST /api/auth/register": 300,
+  "POST /api/auth/login": 300,
+  "POST /api/auth/refresh": 250,
+  "GET /api/admin/metrics": 250
+}
