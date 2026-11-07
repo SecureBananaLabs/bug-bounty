@@ -1,0 +1,8 @@
+{
+  "name": "freelanceflow",
+  "version": "1.0.0",
+  "scripts": {
+    "benchmark": "node benchmarks/run-benchmarks.js"
+  },
+  "type": "module",
+  "scripts": {
