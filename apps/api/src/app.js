@@ -20,8 +20,10 @@ export function createApp() {
 
   app.use(helmet());
   app.use(cors());
-  app.use(express.json());
+  // The limiter runs before body parsing so that requests with unparsable
+  // bodies still consume quota instead of bypassing the limiter entirely.
   app.use(apiLimiter);
+  app.use(express.json());
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
