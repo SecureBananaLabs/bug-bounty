@@ -1,0 +1,20 @@
+{
+  "name": "bug-bounty-benchmarks",
+  "version": "1.0.0",
+  "description": "Comprehensive API benchmark suite for SecureBananaLabs/bug-bounty (issue #30)",
+  "private": true,
+  "scripts": {
+    "benchmark": "k6 run benchmark.js",
+    "benchmark:local": "k6 run -e TARGET_HOST=http://localhost:3000 benchmark.js",
+    "benchmark:staging": "k6 run -e TARGET_HOST=https://staging-api.example.com benchmark.js",
+    "benchmark:json": "k6 run --out json=results.json benchmark.js",
+    "benchmark:smoke": "k6 run -e VUS=5 -e DURATION=30s benchmark.js",
+    "benchmark:load": "k6 run -e VUS=50 -e DURATION=120s benchmark.js",
+    "benchmark:stress": "k6 run -e VUS=100 -e DURATION=300s benchmark.js"
+  },
+  "devDependencies": {
+    "k6": "^0.52.0"
+  },
+  "keywords": ["benchmark", "k6", "performance", "api"],
+  "license": "UNLICENSED"
+}
