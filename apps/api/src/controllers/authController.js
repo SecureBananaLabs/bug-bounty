@@ -1,16 +1,32 @@
 import { registerSchema, loginSchema } from "../validators/auth.js";
 import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { fail, ok } from "../utils/response.js";
+
+function parseBody(schema, body) {
+  const result = schema.safeParse(body);
+  if (!result.success) {
+    return { error: "Invalid request body" };
+  }
+  return { data: result.data };
+}
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
+  const payload = parseBody(registerSchema, req.body);
+  if (payload.error) {
+    return fail(res, payload.error, 400);
+  }
+
+  const result = await registerUser(payload.data);
   return ok(res, result, 201);
 }
 
 export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
+  const payload = parseBody(loginSchema, req.body);
+  if (payload.error) {
+    return fail(res, payload.error, 400);
+  }
+
+  const result = await loginUser(payload.data);
   return ok(res, result);
 }
 
