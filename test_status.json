@@ -1,0 +1,4 @@
+{
+  "passed": true,
+  "output": "\n> test\n> npm run test -w apps/api\n\n\n> test\n> node --test src/tests\n\nTAP version 13\n# Subtest: GET /health returns ok payload\nok 1 - GET /health returns ok payload\n  ---\n  duration_ms: 30.190125\n  ...\n# Subtest: payment flow integration tests\n    # Subtest: POST /api/payments fails without authentication\n    ok 1 - POST /api/payments fails without authentication\n      ---\n      duration_ms: 39.74325\n      ...\n    # Subtest: POST /api/payments succeeds with valid token\n    ok 2 - POST /api/payments succeeds with valid token\n      ---\n      duration_ms: 31.457542\n      ...\n    1..2\nok 2 - payment flow integration tests\n  ---\n  duration_ms: 76.084833\n  ...\n1..2\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 235.145917\n"
+}
