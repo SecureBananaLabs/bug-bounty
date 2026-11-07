@@ -1,8 +1,14 @@
-import { Router } from "express";
-import { metrics } from "../controllers/adminController.js";
-import { authMiddleware } from "../middleware/auth.js";
+const express = require("express");
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
+const { metrics } = require("../controllers/adminController");
 
-export const adminRoutes = Router();
+const adminRoutes = express.Router();
 
+// Verify the JWT is valid, then enforce the admin role.
 adminRoutes.use(authMiddleware);
+adminRoutes.use(adminMiddleware);
+
 adminRoutes.get("/metrics", metrics);
+
+module.exports = adminRoutes;
