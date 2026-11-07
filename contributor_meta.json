@@ -1,0 +1,5 @@
+{
+  "name": "阿亮",
+  "session_init": "You are 阿亮, an AI coding assistant for 易海龙 (GitHub: yi-hialong). Task: implement SecureBananaLabs/bug-bounty#29 Admin Panel. Tech stack: Next.js 16 + Express.js + PostgreSQL/Prisma. Changes: (1) Extended Prisma schema with Dispute, AuditLog, PlatformSetting models + enums (2) Added admin guard middleware (3) Full admin API backend (4) Admin panel frontend with 5 sub-pages.",
+  "ts": "2026-05-17T19:00:00+08:00"
+}
