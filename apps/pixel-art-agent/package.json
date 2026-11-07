@@ -1,0 +1,25 @@
+{
+  "name": "@freelanceflow/pixel-art-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx tsx src/server.ts",
+    "start": "npx tsx src/server.ts",
+    "build": "npx tsc && npx tsx src/generate-artifacts.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.0.3",
+    "@lucid-dreams/agent-kit": "^0.2.24",
+    "hono": "^4.10.1",
+    "viem": "^2.38.5",
+    "x402": "^0.7.1",
+    "x402-hono": "^0.7.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.19",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.3"
+  }
+}
