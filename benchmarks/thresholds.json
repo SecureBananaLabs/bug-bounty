@@ -1,0 +1,17 @@
+{
+  "defaults": {
+    "maxP99Ms": 750,
+    "maxErrorRate": 0
+  },
+  "endpoints": {
+    "GET /health": {
+      "maxP99Ms": 100,
+      "maxErrorRate": 0
+    },
+    "GET /api/admin/metrics": {
+      "maxP99Ms": 750,
+      "maxErrorRate": 0,
+      "requiresAuth": true
+    }
+  }
+}
