@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-23T15:04:29.296Z",
+  "mode": "full",
+  "results": [
+    {
+      "endpoint": "GET /api/health",
+      "requests": 120,
+      "concurrency": 12,
+      "p50Ms": 3.62,
+      "p95Ms": 19.42,
+      "p99Ms": 20.92,
+      "ttfbP50Ms": 3.59,
+      "ttfbP95Ms": 19.34,
+      "sustainedRps": 1973.83,
+      "peakRps": 1973.83,
+      "errorRatePct": 0,
+      "thresholdMaxP99Ms": 150,
+      "passed": true
+    },
+    {
+      "endpoint": "GET /api/bounties",
+      "requests": 120,
+      "concurrency": 12,
+      "p50Ms": 3.34,
+      "p95Ms": 12.39,
+      "p99Ms": 13.03,
+      "ttfbP50Ms": 3.31,
+      "ttfbP95Ms": 12.34,
+      "sustainedRps": 2730.61,
+      "peakRps": 2730.61,
+      "errorRatePct": 0,
+      "thresholdMaxP99Ms": 350,
+      "passed": true
+    },
+    {
+      "endpoint": "POST /api/submissions",
+      "requests": 120,
+      "concurrency": 12,
+      "p50Ms": 4.89,
+      "p95Ms": 7.94,
+      "p99Ms": 8.83,
+      "ttfbP50Ms": 4.85,
+      "ttfbP95Ms": 7.9,
+      "sustainedRps": 2262.82,
+      "peakRps": 2262.82,
+      "errorRatePct": 0,
+      "thresholdMaxP99Ms": 450,
+      "passed": true
+    }
+  ]
+}
