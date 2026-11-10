@@ -1,0 +1,25 @@
+{
+  "default": {
+    "max_p99_latency_ms": 750,
+    "max_p95_latency_ms": 400,
+    "max_p50_latency_ms": 200,
+    "max_error_rate_pct": 5.0,
+    "min_rps": 25
+  },
+  "endpoints": {
+    "/health": {
+      "max_p99_latency_ms": 150,
+      "max_p95_latency_ms": 80,
+      "max_p50_latency_ms": 30
+    },
+    "/api/jobs": {
+      "max_p99_latency_ms": 750
+    },
+    "/api/users": {
+      "max_p99_latency_ms": 750
+    },
+    "/api/proposals": {
+      "max_p99_latency_ms": 750
+    }
+  }
+}
