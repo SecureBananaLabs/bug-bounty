@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "endpoints": {
+    "auth-register": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "auth-login": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "auth-oauth": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "auth-refresh": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "users-list": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "users-create": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "jobs-list": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "jobs-create": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "proposals-list": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "proposals-create": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "payments-create": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "reviews-list": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "reviews-create": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "messages-list": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "messages-create": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "notifications-list": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "notifications-create": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "uploads-create": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "search": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 },
+    "admin-metrics": { "p99Ms": 250, "maxErrorRatePct": 0, "minSamples": 30 }
+  }
+}
