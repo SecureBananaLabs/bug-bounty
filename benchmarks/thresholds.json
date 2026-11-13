@@ -1,0 +1,6 @@
+{
+  "p99_ms": 500,
+  "error_rate_pct": 5,
+  "smoke_p99_ms": 1000,
+  "smoke_error_rate_pct": 10
+}
