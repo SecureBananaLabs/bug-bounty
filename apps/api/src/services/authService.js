@@ -12,10 +12,10 @@ export async function registerUser(payload) {
 
 export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
-  return {
-    email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
-  };
+  const id = "usr_existing";
+  const role = "client";
+  const token = signAccessToken({ sub: id, role });
+  return { id, email: payload.email, role, token };
 }
 
 export async function refreshToken() {
