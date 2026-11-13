@@ -1,0 +1,7 @@
+{
+  "default": {
+    "p99Ms": 250,
+    "errorRatePercent": 0
+  },
+  "endpoints": {}
+}
