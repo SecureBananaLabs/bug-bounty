@@ -14,3 +14,12 @@ export function authMiddleware(req, res, next) {
     return fail(res, "Invalid token", 401);
   }
 }
+
+export function requireRole(requiredRole) {
+  return (req, res, next) => {
+    if (!req.user || req.user.role !== requiredRole) {
+      return fail(res, "Forbidden: insufficient permissions", 403);
+    }
+    return next();
+  };
+}
