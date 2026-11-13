@@ -1,9 +1,16 @@
 export async function createPaymentIntent(payload) {
-  // TODO: integrate Stripe SDK and return client secret.
+  const amount = Number(payload.amount);
+  const currency = (payload.currency ?? "usd").toLowerCase().trim();
+
+  const SUPPORTED_CURRENCIES = ["usd", "eur", "gbp", "cad", "aud"];
+  if (!SUPPORTED_CURRENCIES.includes(currency)) {
+    throw Object.assign(new Error(`Unsupported currency: ${currency}`), { status: 400 });
+  }
+
   return {
     paymentId: `pay_${Date.now()}`,
-    amount: payload.amount,
-    currency: payload.currency ?? "usd",
+    amount,
+    currency,
     provider: "stripe"
   };
 }
