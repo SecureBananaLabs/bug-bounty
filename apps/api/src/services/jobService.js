@@ -1,5 +1,5 @@
 const jobs = [];
-
+  return [...jobs];
 export async function listJobs() {
   return jobs;
 }
