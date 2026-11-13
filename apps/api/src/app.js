@@ -19,7 +19,15 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  app.use(cors({
+  origin: process.env.NODE_ENV === "production"
+    ? process.env.ALLOWED_ORIGINS?.split(",") ?? ["https://your-app.com"]
+    : "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Request-Id"],
+  credentials: true,
+  maxAge: 86400
+}));
   app.use(express.json());
   app.use(apiLimiter);
 
