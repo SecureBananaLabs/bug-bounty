@@ -7,14 +7,15 @@ const links = [
   ["/dashboard/client", "Client Dashboard"],
   ["/dashboard/freelancer", "Freelancer Dashboard"],
   ["/messaging", "Messaging"],
-  ["/admin", "Admin"]
+  ["/billing", "Billing"],
+  ["/admin", "Admin"],
 ];
 
 export function Navigation() {
   return (
-    <nav style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>
+    <nav className="app-nav" aria-label="Primary navigation">
       {links.map(([href, label]) => (
-        <Link key={href} href={href} className="card" style={{ padding: "0.5rem 0.8rem" }}>
+        <Link key={href} href={href} className="nav-link">
           {label}
         </Link>
       ))}
