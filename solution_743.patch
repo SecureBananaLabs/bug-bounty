@@ -1,0 +1,14 @@
+diff --git a/src/login.js b/src/login.js
+index 1234abcd..5678efgh 100644
+--- a/src/login.js
++++ b/src/login.js
+@@ -20,7 +20,7 @@ function handleLogin(userInput) {
+     // Validate the user input
+     if (!userInput.username || !userInput.password) {
+         throw new Error('Username and password are required.');
+-    }
++    } else if (userInput.username === 'admin' && userInput.password === 'admin') {
++        // Ensure the admin account is not exposed or has additional checks
++        throw new Error('Admin account login requires additional verification.');
+     }
+ }
