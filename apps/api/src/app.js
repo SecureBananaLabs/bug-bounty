@@ -19,7 +19,20 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(cors());
+  // Restrict CORS to an explicit allowlist. Configure via the
+  // CORS_ALLOWED_ORIGINS env var (comma-separated). With no origins
+  // configured, no Access-Control-Allow-Origin header is sent, so only
+  // same-origin requests work.
+  const allowedOrigins = (process.env.CORS_ALLOWED_ORIGINS ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+  app.use(
+    cors({
+      origin: allowedOrigins.length > 0 ? allowedOrigins : false,
+      credentials: true,
+    })
+  );
   app.use(express.json());
   app.use(apiLimiter);
 
