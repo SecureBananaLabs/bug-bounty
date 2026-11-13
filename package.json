@@ -5,6 +5,9 @@
     "apps/*",
     "packages/*"
   ],
+  "overrides": {
+    "postcss": "8.5.10"
+  },
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
