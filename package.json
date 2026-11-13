@@ -6,8 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
-    "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "build": "npm run build -w apps/web",
+    "lint": "echo \"No lint configured\"",
+    "test": "npm run test -w apps/api",
+    "type-check": "tsc -p apps/web/tsconfig.json --noEmit"
   }
 }
