@@ -12,9 +12,15 @@ export async function registerUser(payload) {
 
 export async function loginUser(payload) {
   // TODO: verify password hash against stored user record
+  const id = "usr_existing";
+  const role = "client";
+  // The login response is the only identity payload a client receives after the
+  // password check, so it has to carry the same id and role the token claims.
   return {
+    id,
     email: payload.email,
-    token: signAccessToken({ sub: "usr_existing", role: "client" })
+    role,
+    token: signAccessToken({ sub: id, role })
   };
 }
 
