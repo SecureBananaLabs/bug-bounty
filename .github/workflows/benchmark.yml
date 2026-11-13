@@ -1,0 +1,36 @@
+name: API benchmark smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "benchmarks/**"
+      - "package*.json"
+      - ".github/workflows/benchmark.yml"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --workspace apps/api --ignore-scripts --no-audit --no-fund
+      - run: npm run test:benchmark
+      - run: npm run benchmark:smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-benchmark-smoke
+          path: benchmarks/results/
+          if-no-files-found: ignore
