@@ -1,0 +1,1 @@
+{"GET /api/jobs":500,"GET /api/search":500,"GET /health":100,"POST /api/jobs":500,"_comment":"CI smoke-benchmark p99 latency thresholds (ms). Reviewable: raise only with justification in the PR.","default":500}
