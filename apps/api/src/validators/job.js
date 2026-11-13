@@ -5,7 +5,7 @@ export const createJobSchema = z.object({
   description: z.string().min(10),
   budgetMin: z.number().nonnegative(),
   budgetMax: z.number().nonnegative(),
-  categoryId: z.string().min(1),
+  categoryId: z.string().trim().min(1).max(80),
   skills: z.array(z.string().min(1)).default([])
 });
 
