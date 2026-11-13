@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Server-owned message records demo</title>
+  <desc id="desc">Animated service demo showing that message ids are server-owned and returned records are defensive snapshots.</desc>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+    }
+    .bg { fill: #f8faf8; }
+    .panel { fill: #fff; stroke: #d9e2d7; stroke-width: 2; rx: 8; }
+    .heading { fill: #17251d; font-size: 30px; font-weight: 700; }
+    .subtle { fill: #607466; font-size: 17px; }
+    .label { fill: #24372b; font-size: 20px; font-weight: 700; }
+    .code { font-family: Consolas, "Courier New", monospace; fill: #15261c; font-size: 18px; }
+    .ok { fill: #157347; }
+    .warn { fill: #9a4f00; }
+    .card { fill: #f2f7f1; stroke: #d9e2d7; rx: 8; }
+    .bar { fill: #dde9db; rx: 7; }
+    .server { fill: #c9efd8; }
+    .client { fill: #ffe0bd; }
+    .step { opacity: 0; animation: showStep 9s infinite; }
+    .step2 { animation-delay: 3s; }
+    .step3 { animation-delay: 6s; }
+    @keyframes showStep {
+      0%, 4% { opacity: 0; }
+      8%, 31% { opacity: 1; }
+      35%, 100% { opacity: 0; }
+    }
+  </style>
+  <rect class="bg" width="960" height="540"/>
+  <rect class="panel" x="48" y="40" width="864" height="460"/>
+  <text class="heading" x="86" y="92">Message records stay server-owned</text>
+  <text class="subtle" x="86" y="124">The service now protects generated ids and returns snapshots instead of live records.</text>
+
+  <rect class="card" x="86" y="158" width="788" height="270"/>
+  <text class="label" x="122" y="206">Caller input</text>
+  <text class="label" x="560" y="206">Stored result</text>
+  <line x1="520" y1="182" x2="520" y2="404" stroke="#d9e2d7" stroke-width="2"/>
+
+  <g class="step step1">
+    <rect class="bar client" x="122" y="236" width="330" height="54" rx="7"/>
+    <text class="code" x="146" y="270">id: client_supplied_id</text>
+    <rect class="bar server" x="560" y="236" width="250" height="54" rx="7"/>
+    <text class="code ok" x="584" y="270">id: msg_...</text>
+    <text class="subtle" x="122" y="345">Generated id is applied after payload fields, so callers cannot override it.</text>
+  </g>
+
+  <g class="step step2">
+    <rect class="bar client" x="122" y="236" width="330" height="54" rx="7"/>
+    <text class="code" x="146" y="270">returned.body = "mutated"</text>
+    <rect class="bar server" x="560" y="236" width="250" height="54" rx="7"/>
+    <text class="code ok" x="584" y="270">stored: "original"</text>
+    <text class="subtle" x="122" y="345">sendMessage returns a defensive copy, not the in-memory record.</text>
+  </g>
+
+  <g class="step step3">
+    <rect class="bar client" x="122" y="236" width="330" height="54" rx="7"/>
+    <text class="code" x="146" y="270">listed.length = 0</text>
+    <rect class="bar server" x="560" y="236" width="250" height="54" rx="7"/>
+    <text class="code ok" x="584" y="270">list unchanged</text>
+    <text class="subtle" x="122" y="345">listMessages returns snapshots so external mutation cannot corrupt storage.</text>
+  </g>
+
+  <rect x="86" y="448" width="788" height="1" fill="#d9e2d7"/>
+  <text class="subtle" x="86" y="476">Validated by node --test apps/api/src/tests/messageService.test.js</text>
+</svg>
