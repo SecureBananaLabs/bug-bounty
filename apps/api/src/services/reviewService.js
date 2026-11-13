@@ -1,7 +1,9 @@
 const reviews = [];
 
 export async function listReviews() {
-  return reviews;
+  // Callers format or trim the list for their own response shape; handing out the
+  // backing array would let one response rewrite what the next caller sees.
+  return [...reviews];
 }
 
 export async function createReview(payload) {
