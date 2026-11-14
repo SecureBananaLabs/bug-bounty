@@ -1,0 +1,20 @@
+{
+  "endpoint": "GET /api/admin/users/:id",
+  "description": "User detail with jobs and disputes",
+  "response": {
+    "id": "usr_abc123",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "role": "freelancer",
+    "status": "active",
+    "trustScore": "high",
+    "joinedAt": "2025-03-15T08:22:00Z",
+    "jobs": [
+      { "id": "job_001", "title": "React Dashboard Development", "status": "completed", "budget": 2500 },
+      { "id": "job_002", "title": "API Integration", "status": "in_progress", "budget": 1200 }
+    ],
+    "disputes": [
+      { "id": "dsp_012", "jobId": "job_001", "status": "resolved", "ruling": "client" }
+    ]
+  }
+}
