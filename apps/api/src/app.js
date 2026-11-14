@@ -3,6 +3,8 @@ import express from "express";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rateLimit.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { buildCorsOptions } from "./config/cors.js";
+import { env } from "./config/env.js";
 import { authRoutes } from "./routes/authRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import { jobRoutes } from "./routes/jobRoutes.js";
@@ -15,11 +17,14 @@ import { uploadRoutes } from "./routes/uploadRoutes.js";
 import { searchRoutes } from "./routes/searchRoutes.js";
 import { adminRoutes } from "./routes/adminRoutes.js";
 
-export function createApp() {
+export function createApp(options = {}) {
   const app = express();
 
+  const corsOrigins = options.corsOrigins ?? env.corsOrigins;
+  const nodeEnv = options.nodeEnv ?? env.nodeEnv;
+
   app.use(helmet());
-  app.use(cors());
+  app.use(cors(buildCorsOptions(corsOrigins, nodeEnv)));
   app.use(express.json());
   app.use(apiLimiter);
 
