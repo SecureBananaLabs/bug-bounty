@@ -1,0 +1,13 @@
+{
+  "name": "securebanana-benchmarks",
+  "version": "1.0.0",
+  "description": "API Benchmarking Suite",
+  "scripts": {
+    "benchmark": "node run-benchmarks.js",
+    "benchmark:smoke": "node run-benchmarks.js --smoke"
+  },
+  "dependencies": {
+    "autocannon": "^7.14.0",
+    "dotenv": "^16.4.1"
+  }
+}
