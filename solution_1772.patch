@@ -1,0 +1,7 @@
+diff --git a/apps/api/src/routes/paymentRoutes.js b/apps/api/src/routes/paymentRoutes.js
+index 1234abcd...ef567890 100644
+--- a/apps/api/src/routes/paymentRoutes.js
++++ b/apps/api/src/routes/paymentRoutes.js
+@@ -5,7 +5,7 @@ import { createPayment } from '../controllers/paymentController';
+ 
+ paymentRoutes.post("/", authMiddleware, createPayment);
