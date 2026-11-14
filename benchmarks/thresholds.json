@@ -1,0 +1,6 @@
+{
+  "p99_latency_ms": 2000,
+  "p95_latency_ms": 1000,
+  "max_error_rate": 0.05,
+  "min_rps": 10
+}
