@@ -1,5 +1,14 @@
 {
   "name": "@freelanceflow/ui",
+  "version": "0.1.0",
   "private": true,
-  "main": "src/index.ts"
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js",
+      "types": "./src/index.d.ts"
+    }
+  }
 }
