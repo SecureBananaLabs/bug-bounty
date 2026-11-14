@@ -1,3 +1,5 @@
+import { snapshotRecord } from "./snapshot.js";
+
 const notifications = [];
 
 export async function listNotifications() {
@@ -5,7 +7,7 @@ export async function listNotifications() {
 }
 
 export async function createNotification(payload) {
-  const notification = { id: `ntf_${Date.now()}`, read: false, ...payload };
+  const notification = snapshotRecord({ id: `ntf_${Date.now()}`, read: false, ...payload });
   notifications.push(notification);
-  return notification;
+  return snapshotRecord(notification);
 }
