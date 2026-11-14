@@ -1,0 +1,517 @@
+{
+  "generatedAt": "2026-05-28T16:54:34.361Z",
+  "targetUrl": "http://127.0.0.1:53856",
+  "mode": "full",
+  "config": {
+    "concurrency": 4,
+    "durationMs": 1500,
+    "warmupRequests": 3
+  },
+  "results": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health",
+      "description": "Platform health check",
+      "requests": 10609,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 7071.79,
+        "peak": 6666
+      },
+      "latencyMs": {
+        "p50": 0.49,
+        "p95": 0.9,
+        "p99": 1.39,
+        "max": 9.08
+      },
+      "ttfbMs": {
+        "p50": 0.48,
+        "p95": 0.88,
+        "p99": 1.35
+      }
+    },
+    {
+      "name": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "description": "Client account registration",
+      "requests": 5628,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 3751.73,
+        "peak": 3648
+      },
+      "latencyMs": {
+        "p50": 0.98,
+        "p95": 1.41,
+        "p99": 2.13,
+        "max": 3.73
+      },
+      "ttfbMs": {
+        "p50": 0.97,
+        "p95": 1.4,
+        "p99": 2.11
+      }
+    },
+    {
+      "name": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "description": "Existing client login",
+      "requests": 5860,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 3906.25,
+        "peak": 3888
+      },
+      "latencyMs": {
+        "p50": 0.95,
+        "p95": 1.29,
+        "p99": 2.16,
+        "max": 7.15
+      },
+      "ttfbMs": {
+        "p50": 0.94,
+        "p95": 1.27,
+        "p99": 2.14
+      }
+    },
+    {
+      "name": "auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "description": "OAuth provider callback acknowledgement",
+      "requests": 12524,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 8348.43,
+        "peak": 8464
+      },
+      "latencyMs": {
+        "p50": 0.45,
+        "p95": 0.56,
+        "p99": 0.95,
+        "max": 2.51
+      },
+      "ttfbMs": {
+        "p50": 0.44,
+        "p95": 0.55,
+        "p99": 0.94
+      }
+    },
+    {
+      "name": "auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "description": "Access token refresh",
+      "requests": 7160,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 4772.19,
+        "peak": 4776
+      },
+      "latencyMs": {
+        "p50": 0.79,
+        "p95": 0.94,
+        "p99": 1.56,
+        "max": 3.4
+      },
+      "ttfbMs": {
+        "p50": 0.78,
+        "p95": 0.93,
+        "p99": 1.55
+      }
+    },
+    {
+      "name": "users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "description": "User directory listing",
+      "requests": 12658,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 8437.18,
+        "peak": 8353
+      },
+      "latencyMs": {
+        "p50": 0.44,
+        "p95": 0.55,
+        "p99": 1.09,
+        "max": 7.09
+      },
+      "ttfbMs": {
+        "p50": 0.43,
+        "p95": 0.54,
+        "p99": 1.08
+      }
+    },
+    {
+      "name": "users-create",
+      "method": "POST",
+      "path": "/api/users",
+      "description": "User profile creation",
+      "requests": 9818,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 6544.05,
+        "peak": 6380
+      },
+      "latencyMs": {
+        "p50": 0.56,
+        "p95": 0.74,
+        "p99": 1.34,
+        "max": 19.41
+      },
+      "ttfbMs": {
+        "p50": 0.55,
+        "p95": 0.72,
+        "p99": 1.33
+      }
+    },
+    {
+      "name": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "description": "Open jobs listing",
+      "requests": 12973,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 8647.63,
+        "peak": 8660
+      },
+      "latencyMs": {
+        "p50": 0.43,
+        "p95": 0.5,
+        "p99": 1.02,
+        "max": 3.13
+      },
+      "ttfbMs": {
+        "p50": 0.43,
+        "p95": 0.49,
+        "p99": 1.01
+      }
+    },
+    {
+      "name": "jobs-create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "description": "Client job posting",
+      "requests": 9680,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 6451.6,
+        "peak": 6392
+      },
+      "latencyMs": {
+        "p50": 0.58,
+        "p95": 0.73,
+        "p99": 1.46,
+        "max": 2.41
+      },
+      "ttfbMs": {
+        "p50": 0.57,
+        "p95": 0.72,
+        "p99": 1.44
+      }
+    },
+    {
+      "name": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "description": "Proposal listing",
+      "requests": 12688,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 8457.58,
+        "peak": 8415
+      },
+      "latencyMs": {
+        "p50": 0.44,
+        "p95": 0.52,
+        "p99": 0.98,
+        "max": 9.49
+      },
+      "ttfbMs": {
+        "p50": 0.43,
+        "p95": 0.51,
+        "p99": 0.96
+      }
+    },
+    {
+      "name": "proposals-create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "description": "Freelancer proposal submission",
+      "requests": 9892,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 6593.93,
+        "peak": 6480
+      },
+      "latencyMs": {
+        "p50": 0.56,
+        "p95": 0.69,
+        "p99": 1.31,
+        "max": 18.96
+      },
+      "ttfbMs": {
+        "p50": 0.55,
+        "p95": 0.68,
+        "p99": 1.29
+      }
+    },
+    {
+      "name": "payments-create",
+      "method": "POST",
+      "path": "/api/payments",
+      "description": "Payment intent creation",
+      "requests": 10576,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 7049.8,
+        "peak": 7028
+      },
+      "latencyMs": {
+        "p50": 0.54,
+        "p95": 0.61,
+        "p99": 1.04,
+        "max": 2.42
+      },
+      "ttfbMs": {
+        "p50": 0.53,
+        "p95": 0.6,
+        "p99": 1.03
+      }
+    },
+    {
+      "name": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "description": "Review listing",
+      "requests": 12769,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 8511.4,
+        "peak": 8483
+      },
+      "latencyMs": {
+        "p50": 0.44,
+        "p95": 0.51,
+        "p99": 1.21,
+        "max": 4.13
+      },
+      "ttfbMs": {
+        "p50": 0.43,
+        "p95": 0.51,
+        "p99": 1.19
+      }
+    },
+    {
+      "name": "reviews-create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "description": "Completed contract review",
+      "requests": 10331,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 6885.88,
+        "peak": 6887
+      },
+      "latencyMs": {
+        "p50": 0.55,
+        "p95": 0.62,
+        "p99": 1.29,
+        "max": 2.65
+      },
+      "ttfbMs": {
+        "p50": 0.54,
+        "p95": 0.61,
+        "p99": 1.27
+      }
+    },
+    {
+      "name": "messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "description": "Message inbox listing",
+      "requests": 12215,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 8138.21,
+        "peak": 7988
+      },
+      "latencyMs": {
+        "p50": 0.45,
+        "p95": 0.57,
+        "p99": 0.96,
+        "max": 18.95
+      },
+      "ttfbMs": {
+        "p50": 0.44,
+        "p95": 0.56,
+        "p99": 0.95
+      }
+    },
+    {
+      "name": "messages-create",
+      "method": "POST",
+      "path": "/api/messages",
+      "description": "Conversation message creation",
+      "requests": 9693,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 6459.67,
+        "peak": 6420
+      },
+      "latencyMs": {
+        "p50": 0.58,
+        "p95": 0.77,
+        "p99": 1.25,
+        "max": 3.33
+      },
+      "ttfbMs": {
+        "p50": 0.57,
+        "p95": 0.76,
+        "p99": 1.24
+      }
+    },
+    {
+      "name": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "description": "Notification feed listing",
+      "requests": 12672,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 8446.85,
+        "peak": 8496
+      },
+      "latencyMs": {
+        "p50": 0.44,
+        "p95": 0.54,
+        "p99": 1.23,
+        "max": 2.57
+      },
+      "ttfbMs": {
+        "p50": 0.43,
+        "p95": 0.53,
+        "p99": 1.21
+      }
+    },
+    {
+      "name": "notifications-create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "description": "Notification creation",
+      "requests": 10245,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 6828.89,
+        "peak": 6864
+      },
+      "latencyMs": {
+        "p50": 0.55,
+        "p95": 0.65,
+        "p99": 1.46,
+        "max": 3.19
+      },
+      "ttfbMs": {
+        "p50": 0.54,
+        "p95": 0.64,
+        "p99": 1.43
+      }
+    },
+    {
+      "name": "uploads-create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "description": "Small portfolio attachment upload",
+      "requests": 6684,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 4455.63,
+        "peak": 4300
+      },
+      "latencyMs": {
+        "p50": 0.78,
+        "p95": 1.21,
+        "p99": 2.98,
+        "max": 8.72
+      },
+      "ttfbMs": {
+        "p50": 0.77,
+        "p95": 1.2,
+        "p99": 2.97
+      }
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/search?q=secure%20payments%20react",
+      "description": "Global search query",
+      "requests": 11120,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 7411.64,
+        "peak": 7329
+      },
+      "latencyMs": {
+        "p50": 0.5,
+        "p95": 0.59,
+        "p99": 1.25,
+        "max": 5.65
+      },
+      "ttfbMs": {
+        "p50": 0.5,
+        "p95": 0.58,
+        "p99": 1.23
+      }
+    },
+    {
+      "name": "admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "description": "Auth-protected admin metrics",
+      "requests": 6448,
+      "errors": 0,
+      "errorRatePct": 0,
+      "rps": {
+        "sustained": 4298.1,
+        "peak": 4268
+      },
+      "latencyMs": {
+        "p50": 0.88,
+        "p95": 1.05,
+        "p99": 1.89,
+        "max": 3.57
+      },
+      "ttfbMs": {
+        "p50": 0.87,
+        "p95": 1.04,
+        "p99": 1.88
+      }
+    }
+  ],
+  "thresholdFailures": []
+}
