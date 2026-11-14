@@ -1,0 +1,397 @@
+{
+  "mode": "full",
+  "startedAt": "2026-05-18T01:59:35.201Z",
+  "finishedAt": "2026-05-18T01:59:55.268Z",
+  "target": "http://127.0.0.1:60304",
+  "config": {
+    "duration": 1,
+    "connections": 8,
+    "pipelining": 1
+  },
+  "routeCount": 20,
+  "routes": [
+    {
+      "name": "POST /api/auth/register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "statusCode": "2xx",
+      "requestsTotal": 12094,
+      "sustainedRps": 12092,
+      "peakRps": 12094,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1
+      },
+      "ttfbMs": 9.61,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/auth/login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "statusCode": "2xx",
+      "requestsTotal": 13645,
+      "sustainedRps": 13644,
+      "peakRps": 13645,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 1
+      },
+      "ttfbMs": 2.15,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/auth/oauth/:provider/callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/github/callback",
+      "statusCode": "2xx",
+      "requestsTotal": 20474,
+      "sustainedRps": 20472,
+      "peakRps": 20474,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.91,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/auth/refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "statusCode": "2xx",
+      "requestsTotal": 14410,
+      "sustainedRps": 14412,
+      "peakRps": 14410,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 1
+      },
+      "ttfbMs": 0.71,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/users",
+      "method": "GET",
+      "path": "/api/users",
+      "statusCode": "2xx",
+      "requestsTotal": 21160,
+      "sustainedRps": 21160,
+      "peakRps": 21160,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.67,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/users",
+      "method": "POST",
+      "path": "/api/users",
+      "statusCode": "2xx",
+      "requestsTotal": 18348,
+      "sustainedRps": 18344,
+      "peakRps": 18348,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.53,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/jobs",
+      "method": "GET",
+      "path": "/api/jobs",
+      "statusCode": "2xx",
+      "requestsTotal": 20976,
+      "sustainedRps": 20984,
+      "peakRps": 20976,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.49,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/jobs",
+      "method": "POST",
+      "path": "/api/jobs",
+      "statusCode": "2xx",
+      "requestsTotal": 17198,
+      "sustainedRps": 17192,
+      "peakRps": 17198,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 1
+      },
+      "ttfbMs": 0.82,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/proposals",
+      "method": "GET",
+      "path": "/api/proposals",
+      "statusCode": "2xx",
+      "requestsTotal": 21001,
+      "sustainedRps": 21000,
+      "peakRps": 21001,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.91,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/proposals",
+      "method": "POST",
+      "path": "/api/proposals",
+      "statusCode": "2xx",
+      "requestsTotal": 18384,
+      "sustainedRps": 18392,
+      "peakRps": 18384,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.49,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/payments",
+      "method": "POST",
+      "path": "/api/payments",
+      "statusCode": "2xx",
+      "requestsTotal": 17629,
+      "sustainedRps": 17624,
+      "peakRps": 17629,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 1
+      },
+      "ttfbMs": 0.32,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/reviews",
+      "method": "GET",
+      "path": "/api/reviews",
+      "statusCode": "2xx",
+      "requestsTotal": 19755,
+      "sustainedRps": 19752,
+      "peakRps": 19755,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 1
+      },
+      "ttfbMs": 0.76,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/reviews",
+      "method": "POST",
+      "path": "/api/reviews",
+      "statusCode": "2xx",
+      "requestsTotal": 17857,
+      "sustainedRps": 17864,
+      "peakRps": 17857,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.5,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/messages",
+      "method": "GET",
+      "path": "/api/messages",
+      "statusCode": "2xx",
+      "requestsTotal": 20743,
+      "sustainedRps": 20744,
+      "peakRps": 20743,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.53,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/messages",
+      "method": "POST",
+      "path": "/api/messages",
+      "statusCode": "2xx",
+      "requestsTotal": 17446,
+      "sustainedRps": 17448,
+      "peakRps": 17446,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 1
+      },
+      "ttfbMs": 0.5,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/notifications",
+      "method": "GET",
+      "path": "/api/notifications",
+      "statusCode": "2xx",
+      "requestsTotal": 20088,
+      "sustainedRps": 20088,
+      "peakRps": 20088,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 1.33,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/notifications",
+      "method": "POST",
+      "path": "/api/notifications",
+      "statusCode": "2xx",
+      "requestsTotal": 18136,
+      "sustainedRps": 18136,
+      "peakRps": 18136,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.45,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "POST /api/uploads",
+      "method": "POST",
+      "path": "/api/uploads",
+      "statusCode": "2xx",
+      "requestsTotal": 14353,
+      "sustainedRps": 14356,
+      "peakRps": 14353,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1
+      },
+      "ttfbMs": 2.14,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "statusCode": "2xx",
+      "requestsTotal": 19619,
+      "sustainedRps": 19624,
+      "peakRps": 19619,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": 0
+      },
+      "ttfbMs": 0.85,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    },
+    {
+      "name": "GET /api/admin/metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "statusCode": "2xx",
+      "requestsTotal": 13991,
+      "sustainedRps": 13988,
+      "peakRps": 13991,
+      "latencyMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1
+      },
+      "ttfbMs": 1.34,
+      "errorRatePct": 0,
+      "errors": 0,
+      "timeouts": 0,
+      "non2xx": 0
+    }
+  ],
+  "thresholds": {
+    "failures": []
+  }
+}
