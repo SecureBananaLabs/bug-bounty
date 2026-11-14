@@ -1,0 +1,15 @@
+{
+  "$schema": "./thresholds.schema.json",
+  "defaults": {
+    "p99LatencyMs": 1500,
+    "ttfbMs": 1000,
+    "errorRatePct": 1
+  },
+  "endpoints": {
+    "POST /api/uploads": {
+      "p99LatencyMs": 2500,
+      "ttfbMs": 1500,
+      "errorRatePct": 1
+    }
+  }
+}
