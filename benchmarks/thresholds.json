@@ -1,0 +1,14 @@
+{
+  "defaults": {
+    "p99LatencyMs": 1000,
+    "p99TtfbMs": 1000,
+    "errorRate": 0
+  },
+  "routes": {
+    "POST /api/uploads": {
+      "p99LatencyMs": 1500,
+      "p99TtfbMs": 1500,
+      "errorRate": 0
+    }
+  }
+}
