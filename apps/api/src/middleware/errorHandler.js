@@ -1,11 +1,17 @@
 export function errorHandler(err, req, res, next) {
-  console.error("Unhandled API error:", err);
+  if (!err.expose) {
+    console.error("Unhandled API error:", err);
+  }
+
   if (res.headersSent) {
     return next(err);
   }
 
-  return res.status(500).json({
+  const status = Number.isInteger(err.status) ? err.status : 500;
+  const message = err.expose ? err.message : "Unexpected server error";
+
+  return res.status(status).json({
     success: false,
-    message: "Unexpected server error"
+    message
   });
 }
