@@ -8,6 +8,7 @@
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
     "lint": "echo \"No root lint configured\"",
-    "test": "npm run test -w apps/api"
+    "test": "npm run test -w apps/api && node --test benchmarks/tests/*.test.mjs",
+    "benchmark": "node --env-file-if-exists=.env.benchmark benchmarks/run.mjs"
   }
 }
