@@ -1,0 +1,12 @@
+{
+  "default": {
+    "p99Ms": 750,
+    "errorRatePercent": 0
+  },
+  "endpoints": {
+    "POST /api/uploads": {
+      "p99Ms": 1000,
+      "errorRatePercent": 0
+    }
+  }
+}
