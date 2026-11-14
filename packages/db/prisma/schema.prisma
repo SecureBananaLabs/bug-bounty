@@ -54,6 +54,7 @@ model Job {
   category      Category    @relation(fields: [categoryId], references: [id])
   proposals     Proposal[]
   payments      Payment[]
+  reviews       Review[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -89,6 +90,8 @@ model Review {
   reviewer      User        @relation("Reviewer", fields: [reviewerId], references: [id])
   revieweeId    String
   reviewee      User        @relation("Reviewee", fields: [revieweeId], references: [id])
+  jobId         String
+  job           Job         @relation(fields: [jobId], references: [id])
   createdAt     DateTime    @default(now())
 }
 
