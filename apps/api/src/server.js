@@ -1,13 +1,23 @@
-import { connectDb } from "./config/db.js";
-import { env } from "./config/env.js";
 import { createApp } from "./app.js";
+import { env } from "./config/env.js";
 
-async function bootstrap() {
-  await connectDb();
-  const app = createApp();
-  app.listen(env.port, () => {
-    console.log(`API listening on http://localhost:${env.port}`);
+const app = createApp();
+const server = app.listen(env.port, () => {
+  console.log(`API server listening on port ${env.port}`);
+});
+
+process.on("SIGTERM", () => {
+  console.log("Received SIGTERM, shutting down gracefully...");
+  server.close(() => {
+    console.log("Server closed");
+    process.exit(0);
   });
-}
+});
 
-bootstrap();
+process.on("SIGINT", () => {
+  console.log("Received SIGINT, shutting down gracefully...");
+  server.close(() => {
+    console.log("Server closed");
+    process.exit(0);
+  });
+});
