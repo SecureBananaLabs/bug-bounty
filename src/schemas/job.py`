@@ -1,0 +1,54 @@
+from pydantic import BaseModel, Field, validator, root_validator
+from typing import Optional
+from decimal import Decimal
+
+
+class CreateJobSchema(BaseModel):
+    """Schema for creating a new job with budget validation."""
+    
+    title: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(..., min_length=1)
+    budgetMin: Optional[Decimal] = Field(None, ge=0)
+    budgetMax: Optional[Decimal] = Field(None, ge=0)
+    currency: str = Field(default="USD", max_length=3)
+    # ... other fields as needed
+    
+    @root_validator
+    def validate_budget_range(cls, values):
+        """Ensure budgetMax is not less than budgetMin when both are present."""
+        budget_min = values.get('budgetMin')
+        budget_max = values.get('budgetMax')
+        
+        if budget_min is not None and budget_max is not None:
+            if budget_max < budget_min:
+                raise ValueError(
+                    f'budgetMax ({budget_max}) cannot be less than budgetMin ({budget_min})'
+                )
+        
+        return values
+
+
+class UpdateJobSchema(BaseModel):
+    """Schema for updating an existing job with budget validation."""
+    
+    title: Optional[str] = Field(None, min_length=1, max_length=200)
+    description: Optional[str] = Field(None, min_length=1)
+    budgetMin: Optional[Decimal] = Field(None, ge=0)
+    budgetMax: Optional[Decimal] = Field(None, ge=0)
+    currency: Optional[str] = Field(None, max_length=3)
+    # ... other fields as needed
+    
+    @root_validator
+    def validate_budget_range(cls, values):
+        """Ensure budgetMax is not less than budgetMin when both are present."""
+        budget_min = values.get('budgetMin')
+        budget_max = values.get('budgetMax')
+        
+        # Only validate if both fields are being updated
+        if budget_min is not None and budget_max is not None:
+            if budget_max < budget_min:
+                raise ValueError(
+                    f'budgetMax ({budget_max}) cannot be less than budgetMin ({budget_min})'
+                )
+        
+        return values
