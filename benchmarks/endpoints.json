@@ -1,0 +1,174 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/auth/register",
+    "expectedStatus": 201,
+    "body": {
+      "email": "benchmark-client@example.invalid",
+      "password": "benchmark-only-password",
+      "role": "client"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/login",
+    "expectedStatus": 200,
+    "body": {
+      "email": "benchmark-client@example.invalid",
+      "password": "benchmark-only-password"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/auth/oauth/:provider/callback",
+    "expectedStatus": 200,
+    "requestPath": "/api/auth/oauth/benchmark/callback"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "expectedStatus": 200,
+    "body": {}
+  },
+  {
+    "method": "GET",
+    "path": "/api/users",
+    "expectedStatus": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/users",
+    "expectedStatus": 201,
+    "seedCollection": true,
+    "body": {
+      "email": "benchmark-freelancer@example.invalid",
+      "fullName": "Benchmark Freelancer",
+      "passwordHash": "fixture-only-not-a-real-password-hash",
+      "bio": "Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. Experienced web developer. ",
+      "role": "FREELANCER",
+      "isVerified": true
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/jobs",
+    "expectedStatus": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/jobs",
+    "expectedStatus": 201,
+    "seedCollection": true,
+    "body": {
+      "title": "Build a searchable project dashboard",
+      "description": "Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. Design a responsive dashboard with accessible filtering, pagination and project summaries. ",
+      "budgetMin": 1200,
+      "budgetMax": 2500,
+      "categoryId": "benchmark-web",
+      "clientId": "benchmark-client",
+      "skills": [
+        "javascript",
+        "accessibility",
+        "postgresql"
+      ]
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/proposals",
+    "expectedStatus": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/proposals",
+    "expectedStatus": 201,
+    "seedCollection": true,
+    "body": {
+      "coverLetter": "I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. I will implement the dashboard with accessible components, regression tests and deployment notes. ",
+      "bidAmount": 1900,
+      "estDuration": "3 weeks",
+      "jobId": "benchmark-job",
+      "freelancerId": "benchmark-freelancer"
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/messages",
+    "expectedStatus": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/messages",
+    "expectedStatus": 201,
+    "seedCollection": true,
+    "body": {
+      "body": "The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. The first dashboard prototype is ready for review. ",
+      "senderId": "benchmark-client",
+      "receiverId": "benchmark-freelancer",
+      "isRead": false
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/notifications",
+    "expectedStatus": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/notifications",
+    "expectedStatus": 201,
+    "seedCollection": true,
+    "body": {
+      "userId": "benchmark-client",
+      "title": "Proposal received",
+      "body": "A developer submitted a proposal for your dashboard. A developer submitted a proposal for your dashboard. A developer submitted a proposal for your dashboard. A developer submitted a proposal for your dashboard. A developer submitted a proposal for your dashboard. A developer submitted a proposal for your dashboard. A developer submitted a proposal for your dashboard. A developer submitted a proposal for your dashboard. ",
+      "read": false
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/api/reviews",
+    "expectedStatus": 200
+  },
+  {
+    "method": "POST",
+    "path": "/api/reviews",
+    "expectedStatus": 201,
+    "seedCollection": true,
+    "body": {
+      "rating": 5,
+      "comment": "Delivered the agreed dashboard with clear documentation and useful tests. Delivered the agreed dashboard with clear documentation and useful tests. Delivered the agreed dashboard with clear documentation and useful tests. Delivered the agreed dashboard with clear documentation and useful tests. Delivered the agreed dashboard with clear documentation and useful tests. Delivered the agreed dashboard with clear documentation and useful tests. Delivered the agreed dashboard with clear documentation and useful tests. Delivered the agreed dashboard with clear documentation and useful tests. ",
+      "reviewerId": "benchmark-client",
+      "revieweeId": "benchmark-freelancer"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/payments",
+    "expectedStatus": 201,
+    "body": {
+      "amount": 1900,
+      "currency": "USD",
+      "status": "pending",
+      "jobId": "benchmark-job"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/api/uploads",
+    "expectedStatus": 201,
+    "uploadBytes": 65536
+  },
+  {
+    "method": "GET",
+    "path": "/api/search",
+    "expectedStatus": 200,
+    "requestPath": "/api/search?q=dashboard"
+  },
+  {
+    "method": "GET",
+    "path": "/api/admin/metrics",
+    "expectedStatus": 200,
+    "requiresAuth": true
+  }
+]
