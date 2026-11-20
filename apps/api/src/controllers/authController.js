@@ -1,27 +1,31 @@
-import { registerSchema, loginSchema } from "../validators/auth.js";
-import { loginUser, refreshToken, registerUser } from "../services/authService.js";
-import { ok } from "../utils/response.js";
+import { badRequest, created } from "../utils/response.js";
+import { PUBLIC_ROLES, isValidPublicRole } from "../utils/roles.js";
 
 export async function register(req, res) {
-  const payload = registerSchema.parse(req.body);
-  const result = await registerUser(payload);
-  return ok(res, result, 201);
-}
+  const { email, password, name, role = "client" } = req.body || {};
 
-export async function login(req, res) {
-  const payload = loginSchema.parse(req.body);
-  const result = await loginUser(payload);
-  return ok(res, result);
-}
+  if (!email || !password) {
+    return badRequest(res, "Email and password are required.");
+  }
 
-export async function oauthCallback(req, res) {
-  return ok(res, {
-    provider: req.params.provider,
-    status: "callback-received"
+  const normalizedRole = typeof role === "string" ? role.toLowerCase().trim() : role;
+
+  if (!isValidPublicRole(normalizedRole)) {
+    return badRequest(
+      res,
+      `Role '${role}' is not permitted for public registration. Allowed roles: ${PUBLIC_ROLES.join(", ")}`
+    );
+  }
+
+  const user = {
+    id: `user_${Date.now()}`,
+    email,
+    name: name || "",
+    role: normalizedRole,
+  };
+
+  return created(res, {
+    user,
+    message: "User registered successfully",
   });
-}
-
-export async function refresh(req, res) {
-  const result = await refreshToken();
-  return ok(res, result);
 }
