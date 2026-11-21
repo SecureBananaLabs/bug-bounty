@@ -3,12 +3,11 @@
   "private": true,
   "scripts": {
     "generate": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy"
   },
   "dependencies": {
-    "@prisma/client": "^5.17.0"
-  },
-  "devDependencies": {
+    "@prisma/client": "^5.17.0",
     "prisma": "^5.17.0"
   }
 }
