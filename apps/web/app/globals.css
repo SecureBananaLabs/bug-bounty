@@ -4,3 +4,34 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.admin-shell { display: grid; gap: 1rem; }
+.admin-header, .admin-panel-header, .admin-list-row, .admin-actions, .admin-toggle {
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.admin-header, .admin-panel-header { justify-content: space-between; }
+.admin-header p, .admin-list-row p, .admin-empty { color: #aab6df; margin: 0.35rem 0 0; }
+.admin-button, .admin-link-button {
+  border: 1px solid #425184; background: #202a4c; color: #f2f5ff; padding: 0.55rem 0.8rem; border-radius: 8px; cursor: pointer;
+}
+.admin-link-button { padding: 0.35rem 0.55rem; }
+.admin-link-button.danger { border-color: #9f4154; background: #43202b; }
+.admin-metrics { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.admin-tile, .admin-panel {
+  background: #151c35; border: 1px solid #2a3765; border-radius: 8px; padding: 1rem;
+}
+.admin-tile span { color: #aab6df; display: block; font-size: 0.85rem; }
+.admin-tile strong { display: block; font-size: 1.45rem; margin-top: 0.35rem; }
+.admin-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.admin-panel { overflow-x: auto; }
+.admin-panel table { width: 100%; border-collapse: collapse; min-width: 420px; }
+.admin-panel th, .admin-panel td { border-bottom: 1px solid #2a3765; padding: 0.65rem; text-align: left; }
+.admin-panel th { color: #aab6df; font-weight: 600; }
+.admin-panel input { background: #0b1020; border: 1px solid #2a3765; color: #f2f5ff; border-radius: 8px; padding: 0.55rem; max-width: 180px; }
+.admin-badge { background: #2a3765; color: #ffd866; border-radius: 999px; padding: 0.3rem 0.6rem; font-size: 0.85rem; }
+.admin-list-row { justify-content: space-between; border-top: 1px solid #2a3765; padding-top: 1rem; align-items: flex-start; }
+.admin-toggle { justify-content: flex-start; margin-top: 0.75rem; }
+@media (max-width: 640px) {
+  main { padding: 1rem; }
+  .admin-header, .admin-panel-header, .admin-list-row { align-items: stretch; flex-direction: column; }
+  .admin-panel input { max-width: none; width: 100%; }
+}
