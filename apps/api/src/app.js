@@ -21,7 +21,9 @@ export function createApp() {
   app.use(helmet());
   app.use(cors());
   app.use(express.json());
-  app.use(apiLimiter);
+  if (process.env.BENCHMARK_DISABLE_RATE_LIMIT !== "true") {
+    app.use(apiLimiter);
+  }
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
