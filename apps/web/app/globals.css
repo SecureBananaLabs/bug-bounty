@@ -4,3 +4,11 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.metric-card { display: block; text-align: center; padding: 1.5rem 1rem; margin-bottom: 0; transition: border-color 0.2s; cursor: pointer; }
+.metric-card:hover { border-color: #4a5a9a; }
+.metric-value { font-size: 2rem; font-weight: 700; margin: 0 0 0.25rem; line-height: 1; }
+.metric-label { color: #94a3b8; margin: 0; font-size: 0.85rem; }
+.action-btn { display: inline-block; padding: 0.4rem 0.8rem; font-size: 0.85rem; cursor: pointer; border: 1px solid #2a3765; background: #151c35; color: #f2f5ff; border-radius: 8px; margin: 0; transition: opacity 0.15s; }
+.action-btn:hover { opacity: 0.8; }
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+button.action-btn { font-family: inherit; }
