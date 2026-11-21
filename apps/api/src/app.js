@@ -20,8 +20,8 @@ export function createApp() {
 
   app.use(helmet());
   app.use(cors());
-  app.use(express.json());
   app.use(apiLimiter);
+  app.use(express.json());
 
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
@@ -38,6 +38,10 @@ export function createApp() {
   app.use("/api/uploads", uploadRoutes);
   app.use("/api/search", searchRoutes);
   app.use("/api/admin", adminRoutes);
+
+  app.use((req, res) => {
+    res.status(404).json({ error: "Not Found", message: "Route does not exist" });
+  });
 
   app.use(errorHandler);
   return app;
