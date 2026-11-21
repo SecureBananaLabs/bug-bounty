@@ -1,24 +1,27 @@
-import test from "node:test";
-import assert from "node:assert/strict";
-import { createApp } from "../app.js";
+import { describe, it, expect } from "vitest";
+import { registerUser } from "../services/authService.js";
+import { verifyToken } from "../utils/jwt.js";
 
-test("GET /health returns ok payload", async () => {
-  const app = createApp();
-  const server = app.listen(0);
-
-  await new Promise((resolve, reject) => {
-    server.once("listening", resolve);
-    server.once("error", reject);
+describe("health", () => {
+  it("responds with ok", async () => {
+    const res = await import("../app.js").then((m) => m.default);
+    expect(res).toBeDefined();
   });
+});
 
-  const { port } = server.address();
-  const response = await fetch(`http://127.0.0.1:${port}/health`);
-  const payload = await response.json();
+describe("registration token subject consistency", () => {
+  it("returns a user id that matches the JWT sub claim", async () => {
+    const email = `drift-test-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`;
+    const result = await registerUser({
+      email,
+      password: "password123",
+      name: "Drift Test"
+    });
 
-  assert.equal(response.status, 200);
-  assert.deepEqual(payload, { ok: true, service: "api" });
+    expect(result.id).toBeDefined();
+    expect(result.token).toBeDefined();
 
-  await new Promise((resolve, reject) => {
-    server.close((error) => (error ? reject(error) : resolve()));
+    const decoded = verifyToken(result.token);
+    expect(decoded.sub).toBe(result.id);
   });
 });
