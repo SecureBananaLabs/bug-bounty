@@ -1,0 +1,15 @@
+{
+  "defaults": {
+    "p99Ms": 1000,
+    "errorRate": 0,
+    "non2xx": 0
+  },
+  "endpoints": {
+    "uploads-create": {
+      "p99Ms": 1500
+    },
+    "admin-metrics": {
+      "p99Ms": 1200
+    }
+  }
+}
