@@ -4,3 +4,29 @@ a { color: inherit; text-decoration: none; }
 main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
 .card { background: #151c35; border: 1px solid #2a3765; border-radius: 12px; padding: 1rem; margin-bottom: 1rem; }
 .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.admin-panel { display: grid; gap: 1rem; }
+.admin-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; background: #151c35; border: 1px solid #2a3765; border-radius: 8px; padding: 1rem; }
+.admin-toolbar h2 { margin: 0 0 0.25rem; }
+.admin-toolbar p { margin: 0; color: #aab6d3; }
+.admin-metrics { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.admin-metrics article, .admin-section { background: #151c35; border: 1px solid #2a3765; border-radius: 8px; padding: 1rem; }
+.admin-metrics span { display: block; color: #aab6d3; font-size: 0.85rem; }
+.admin-metrics strong { display: block; margin-top: 0.35rem; font-size: 1.6rem; }
+.admin-tabs, .admin-filters, .admin-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+button, input, select { border: 1px solid #3a4a82; border-radius: 8px; background: #202a4a; color: #f2f5ff; padding: 0.55rem 0.75rem; }
+button { cursor: pointer; }
+button:hover, button.active { background: #31518c; }
+input, select { min-height: 2.4rem; }
+.admin-table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 760px; }
+th, td { border-bottom: 1px solid #2a3765; padding: 0.75rem; text-align: left; vertical-align: top; }
+td span { display: block; margin-top: 0.25rem; color: #aab6d3; }
+.trust-bar { width: 120px; height: 10px; background: #273250; border-radius: 999px; overflow: hidden; }
+.trust-bar span { display: block; height: 100%; background: #8df0b2; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid #2a3765; padding: 0.8rem 0; }
+
+@media (max-width: 720px) {
+  .admin-toolbar { align-items: stretch; flex-direction: column; }
+  table { min-width: 680px; }
+}
