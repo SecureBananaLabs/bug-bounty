@@ -1,0 +1,31 @@
+name: Admin panel smoke
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/admin-panel-smoke.yml"
+      - "apps/api/**"
+      - "apps/web/**"
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
+
+jobs:
+  admin-panel-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test -w apps/api
+
+      - run: npm run build -w apps/web
