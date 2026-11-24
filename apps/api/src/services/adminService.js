@@ -1,8 +1,4 @@
-export async function getAdminMetrics() {
-  return {
-    openJobs: 42,
-    activeFreelancers: 185,
-    flaggedAccounts: 3,
-    monthlyVolume: 128900
-  };
-}
+export { listAdminUsers, getAdminUserProfile, suspendAdminUser, reinstateAdminUser, banAdminUser } from "./adminUsersService.js";
+export { listFlaggedJobs, moderateJob } from "./adminJobsService.js";
+export { listAdminDisputes, getAdminDispute, resolveAdminDispute } from "./adminDisputesService.js";
+export { getPlatformMetrics as getAdminMetrics } from "./adminMetricsService.js";
