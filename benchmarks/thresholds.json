@@ -1,0 +1,16 @@
+{
+  "defaults": {
+    "maxP99Ms": 1000,
+    "maxErrorRatePercent": 1
+  },
+  "endpoints": {
+    "uploads-create": {
+      "maxP99Ms": 1500,
+      "maxErrorRatePercent": 1
+    },
+    "admin-metrics": {
+      "maxP99Ms": 1000,
+      "maxErrorRatePercent": 1
+    }
+  }
+}
