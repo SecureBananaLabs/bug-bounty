@@ -1,8 +1,13 @@
 import rateLimit from "express-rate-limit";
 
-export const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 200,
-  standardHeaders: "draft-7",
-  legacyHeaders: false
-});
+export function createApiLimiter() {
+  const windowMs = Number(process.env.RATE_LIMIT_WINDOW_MS ?? 15 * 60 * 1000);
+  const limit = Number(process.env.RATE_LIMIT_MAX ?? 200);
+
+  return rateLimit({
+    windowMs,
+    limit,
+    standardHeaders: "draft-7",
+    legacyHeaders: false
+  });
+}
