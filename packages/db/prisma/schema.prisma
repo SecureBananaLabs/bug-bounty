@@ -1,5 +1,7 @@
+
 generator client {
   provider = "prisma-client-js"
+  output   = "../../../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -21,6 +23,24 @@ enum JobStatus {
   CANCELLED
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum JobModerationStatus {
+  APPROVED
+  FLAGGED
+  REJECTED
+}
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+}
+
 model User {
   id             String      @id @default(cuid())
   email          String      @unique
@@ -28,6 +48,7 @@ model User {
   fullName       String
   bio            String?
   role           UserRole    @default(CLIENT)
+  status         UserStatus  @default(ACTIVE)
   isVerified     Boolean     @default(false)
   skills         Skill[]
   postedJobs     Job[]       @relation("ClientJobs")
@@ -37,25 +58,29 @@ model User {
   reviewsGiven   Review[]    @relation("Reviewer")
   reviewsGot     Review[]    @relation("Reviewee")
   notifications  Notification[]
+  disputesAsClient      Dispute[] @relation("ClientDisputes")
+  disputesAsFreelancer  Dispute[] @relation("FreelancerDisputes")
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 }
 
 model Job {
-  id            String      @id @default(cuid())
-  title         String
-  description   String
-  budgetMin     Float
-  budgetMax     Float
-  status        JobStatus   @default(OPEN)
-  clientId      String
-  client        User        @relation("ClientJobs", fields: [clientId], references: [id])
-  categoryId    String
-  category      Category    @relation(fields: [categoryId], references: [id])
-  proposals     Proposal[]
-  payments      Payment[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id               String      @id @default(cuid())
+  title            String
+  description      String
+  budgetMin        Float
+  budgetMax        Float
+  status           JobStatus   @default(OPEN)
+  moderationStatus JobModerationStatus @default(APPROVED)
+  clientId         String
+  client           User        @relation("ClientJobs", fields: [clientId], references: [id])
+  categoryId       String
+  category         Category    @relation(fields: [categoryId], references: [id])
+  proposals        Proposal[]
+  payments         Payment[]
+  disputes         Dispute[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
 }
 
 model Proposal {
@@ -124,4 +149,37 @@ model Notification {
   body          String
   read          Boolean     @default(false)
   createdAt     DateTime    @default(now())
+}
+
+model Dispute {
+  id             String        @id @default(cuid())
+  jobId          String
+  job            Job           @relation(fields: [jobId], references: [id])
+  clientId       String
+  client         User          @relation("ClientDisputes", fields: [clientId], references: [id])
+  freelancerId   String
+  freelancer     User          @relation("FreelancerDisputes", fields: [freelancerId], references: [id])
+  reason         String
+  evidence       String?
+  status         DisputeStatus @default(OPEN)
+  resolution     String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  adminId     String
+  action      String
+  targetType  String   // e.g. "USER", "JOB", "DISPUTE", "PLATFORM"
+  targetId    String?
+  details     String?  // JSON string
+  createdAt   DateTime @default(now())
+}
+
+model PlatformSettings {
+  id                     String   @id @default(cuid())
+  registrationsEnabled   Boolean  @default(true)
+  jobPostingsEnabled     Boolean  @default(true)
+  updatedAt              DateTime @updatedAt
 }
