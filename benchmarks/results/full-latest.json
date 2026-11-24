@@ -1,0 +1,651 @@
+{
+  "mode": "full",
+  "target": "http://127.0.0.1:51582",
+  "generatedAt": "2026-05-20T20:29:40.993Z",
+  "configuration": {
+    "concurrency": 2,
+    "requestsPerEndpoint": 8,
+    "thresholdsFile": "benchmarks/thresholds.json"
+  },
+  "summary": {
+    "endpointCount": 21,
+    "totalRequests": 168,
+    "totalErrors": 0,
+    "errorRate": 0,
+    "maxP99LatencyMs": 13.01,
+    "maxP99TtfbMs": 12.74,
+    "passed": true
+  },
+  "results": [
+    {
+      "name": "health",
+      "method": "GET",
+      "path": "/health",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 390.66,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 4.74,
+        "p50": 1.87,
+        "p95": 13.01,
+        "p99": 13.01
+      },
+      "ttfbMs": {
+        "mean": 4.58,
+        "p50": 1.72,
+        "p95": 12.74,
+        "p99": 12.74
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "auth-register",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 574.19,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 3.34,
+        "p50": 1.37,
+        "p95": 8.73,
+        "p99": 8.73
+      },
+      "ttfbMs": {
+        "mean": 3.29,
+        "p50": 1.34,
+        "p95": 8.55,
+        "p99": 8.55
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "auth-login",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 1491.7,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 1.3,
+        "p50": 1.32,
+        "p95": 1.64,
+        "p99": 1.64
+      },
+      "ttfbMs": {
+        "mean": 1.26,
+        "p50": 1.29,
+        "p95": 1.58,
+        "p99": 1.58
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "auth-oauth-callback",
+      "method": "GET",
+      "path": "/api/auth/oauth/benchmark/callback",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3102.73,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.61,
+        "p50": 0.53,
+        "p95": 0.9,
+        "p99": 0.9
+      },
+      "ttfbMs": {
+        "mean": 0.58,
+        "p50": 0.5,
+        "p95": 0.86,
+        "p99": 0.86
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "auth-refresh",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3310.46,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.59,
+        "p50": 0.55,
+        "p95": 0.75,
+        "p99": 0.75
+      },
+      "ttfbMs": {
+        "mean": 0.56,
+        "p50": 0.53,
+        "p95": 0.72,
+        "p99": 0.72
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "users-list",
+      "method": "GET",
+      "path": "/api/users",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3269.87,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.58,
+        "p50": 0.47,
+        "p95": 0.91,
+        "p99": 0.91
+      },
+      "ttfbMs": {
+        "mean": 0.54,
+        "p50": 0.44,
+        "p95": 0.89,
+        "p99": 0.89
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "users-create",
+      "method": "POST",
+      "path": "/api/users",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 2616.98,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.73,
+        "p50": 0.62,
+        "p95": 1.14,
+        "p99": 1.14
+      },
+      "ttfbMs": {
+        "mean": 0.7,
+        "p50": 0.6,
+        "p95": 1.12,
+        "p99": 1.12
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "jobs-list",
+      "method": "GET",
+      "path": "/api/jobs",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3787.51,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.51,
+        "p50": 0.5,
+        "p95": 0.57,
+        "p99": 0.57
+      },
+      "ttfbMs": {
+        "mean": 0.48,
+        "p50": 0.47,
+        "p95": 0.55,
+        "p99": 0.55
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "jobs-create",
+      "method": "POST",
+      "path": "/api/jobs",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 2067.54,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.95,
+        "p50": 0.78,
+        "p95": 1.57,
+        "p99": 1.57
+      },
+      "ttfbMs": {
+        "mean": 0.92,
+        "p50": 0.75,
+        "p95": 1.54,
+        "p99": 1.54
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "proposals-list",
+      "method": "GET",
+      "path": "/api/proposals",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 4142.3,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.47,
+        "p50": 0.46,
+        "p95": 0.55,
+        "p99": 0.55
+      },
+      "ttfbMs": {
+        "mean": 0.44,
+        "p50": 0.43,
+        "p95": 0.53,
+        "p99": 0.53
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "proposals-create",
+      "method": "POST",
+      "path": "/api/proposals",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3359.05,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.58,
+        "p50": 0.57,
+        "p95": 0.7,
+        "p99": 0.7
+      },
+      "ttfbMs": {
+        "mean": 0.55,
+        "p50": 0.54,
+        "p95": 0.67,
+        "p99": 0.67
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "payments-create",
+      "method": "POST",
+      "path": "/api/payments",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3376.24,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.58,
+        "p50": 0.57,
+        "p95": 0.67,
+        "p99": 0.67
+      },
+      "ttfbMs": {
+        "mean": 0.55,
+        "p50": 0.55,
+        "p95": 0.64,
+        "p99": 0.64
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "reviews-list",
+      "method": "GET",
+      "path": "/api/reviews",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3575.88,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.53,
+        "p50": 0.46,
+        "p95": 0.75,
+        "p99": 0.75
+      },
+      "ttfbMs": {
+        "mean": 0.5,
+        "p50": 0.44,
+        "p95": 0.72,
+        "p99": 0.72
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "reviews-create",
+      "method": "POST",
+      "path": "/api/reviews",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 2460.75,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.79,
+        "p50": 0.59,
+        "p95": 1.44,
+        "p99": 1.44
+      },
+      "ttfbMs": {
+        "mean": 0.76,
+        "p50": 0.57,
+        "p95": 1.35,
+        "p99": 1.35
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "messages-list",
+      "method": "GET",
+      "path": "/api/messages",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 4278.26,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.45,
+        "p50": 0.45,
+        "p95": 0.54,
+        "p99": 0.54
+      },
+      "ttfbMs": {
+        "mean": 0.43,
+        "p50": 0.42,
+        "p95": 0.51,
+        "p99": 0.51
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "messages-create",
+      "method": "POST",
+      "path": "/api/messages",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 1984.31,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.99,
+        "p50": 0.77,
+        "p95": 1.73,
+        "p99": 1.73
+      },
+      "ttfbMs": {
+        "mean": 0.96,
+        "p50": 0.74,
+        "p95": 1.7,
+        "p99": 1.7
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "notifications-list",
+      "method": "GET",
+      "path": "/api/notifications",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 4168.84,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.46,
+        "p50": 0.44,
+        "p95": 0.57,
+        "p99": 0.57
+      },
+      "ttfbMs": {
+        "mean": 0.44,
+        "p50": 0.41,
+        "p95": 0.55,
+        "p99": 0.55
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "notifications-create",
+      "method": "POST",
+      "path": "/api/notifications",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3563.67,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.54,
+        "p50": 0.53,
+        "p95": 0.66,
+        "p99": 0.66
+      },
+      "ttfbMs": {
+        "mean": 0.52,
+        "p50": 0.51,
+        "p95": 0.64,
+        "p99": 0.64
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "uploads-create",
+      "method": "POST",
+      "path": "/api/uploads",
+      "expectedStatus": 201,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 939.32,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 2.05,
+        "p50": 1.17,
+        "p95": 4.86,
+        "p99": 4.86
+      },
+      "ttfbMs": {
+        "mean": 2.02,
+        "p50": 1.15,
+        "p95": 4.83,
+        "p99": 4.83
+      },
+      "threshold": {
+        "p99LatencyMs": 1500,
+        "p99TtfbMs": 1500,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/api/search?q=benchmark",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3003.28,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.65,
+        "p50": 0.53,
+        "p95": 1.05,
+        "p99": 1.05
+      },
+      "ttfbMs": {
+        "mean": 0.61,
+        "p50": 0.5,
+        "p95": 1.03,
+        "p99": 1.03
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    },
+    {
+      "name": "admin-metrics",
+      "method": "GET",
+      "path": "/api/admin/metrics",
+      "expectedStatus": 200,
+      "requests": 8,
+      "errors": 0,
+      "errorRate": 0,
+      "requestsPerSecond": 3019.67,
+      "peakRequestsPerSecond": 2000,
+      "latencyMs": {
+        "mean": 0.64,
+        "p50": 0.52,
+        "p95": 1.02,
+        "p99": 1.02
+      },
+      "ttfbMs": {
+        "mean": 0.62,
+        "p50": 0.5,
+        "p95": 1,
+        "p99": 1
+      },
+      "threshold": {
+        "p99LatencyMs": 1000,
+        "p99TtfbMs": 1000,
+        "errorRate": 0
+      },
+      "passedThresholds": true,
+      "failures": []
+    }
+  ]
+}
