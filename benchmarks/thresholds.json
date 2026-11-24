@@ -1,0 +1,11 @@
+{
+  "defaults": {
+    "p99Ms": 1000,
+    "errorRatePct": 0
+  },
+  "endpoints": {
+    "GET /health": { "p99Ms": 250, "errorRatePct": 0 },
+    "GET /api/admin/metrics": { "p99Ms": 500, "errorRatePct": 0 },
+    "POST /api/uploads": { "p99Ms": 1500, "errorRatePct": 0 }
+  }
+}
