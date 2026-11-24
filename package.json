@@ -7,7 +7,12 @@
   ],
   "scripts": {
     "build": "echo \"Run package-specific builds (e.g. npm run build -w apps/web)\"",
+    "benchmark": "node benchmarks/run.mjs",
+    "benchmark:smoke": "node benchmarks/run.mjs --profile=smoke --verify",
     "lint": "echo \"No root lint configured\"",
     "test": "npm run test -w apps/api"
+  },
+  "devDependencies": {
+    "autocannon": "^8.0.0"
   }
 }
