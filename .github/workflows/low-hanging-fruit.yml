@@ -1,0 +1,40 @@
+name: Low-Hanging Fruit Bug Scanner
+
+on:
+  schedule:
+    # Run weekly on Monday at 8:00 AM UTC
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run low-hanging fruit scanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run low-hanging-fruit
+      
+      - name: Create issue if bugs found
+        if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # This step would be enhanced to actually create issues
+          # For now, it just logs the results
+          echo "Low-hanging fruit scanner completed. Check the logs for findings."
