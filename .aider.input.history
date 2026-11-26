@@ -1,0 +1,54 @@
+
+# 2026-11-26 16:18:42.096287
++Resolva esta issue editando os arquivos em contexto:
++TÍTULO: Bug: registerUser signs token with a different generated user id
++DESCRIÇÃO: ## Description
++
++The `registerUser` service currently generates a timestamp-based user ID twice: once for the returned `id` and once for the JWT `sub` claim. If the two `Date.now()` calls land on different milliseconds, the API can return a user whose token points at a different subject.
++
++## Impact
++
++- The returned registration response can contain an `id` that does not match the token subject.
++- Authentication middleware or downstream lookups that trust `sub` may not match the newly-created user.
++- The service creates an inconsistent auth state before persistence is implemented.
++
++## Expected behavior
++
++Generate the user ID once and reuse that same value for both the response object and the signed access token subject.
++
++## File
++
++`apps/api/src/services/authService.js`
++
++Related to #743
++
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
++
++Faça a correção mínima. Edite os arquivos necessários.
+
+# 2026-11-26 16:18:42.096494
++Resolva esta issue editando os arquivos em contexto:
++TÍTULO: Bug: registerUser signs token with a different generated user id
++DESCRIÇÃO: ## Description
++
++The `registerUser` service currently generates a timestamp-based user ID twice: once for the returned `id` and once for the JWT `sub` claim. If the two `Date.now()` calls land on different milliseconds, the API can return a user whose token points at a different subject.
++
++## Impact
++
++- The returned registration response can contain an `id` that does not match the token subject.
++- Authentication middleware or downstream lookups that trust `sub` may not match the newly-created user.
++- The service creates an inconsistent auth state before persistence is implemented.
++
++## Expected behavior
++
++Generate the user ID once and reuse that same value for both the response object and the signed access token subject.
++
++## File
++
++`apps/api/src/services/authService.js`
++
++Related to #743
++
++This issue is limited only to the creator of this issue. This means that only the issue author can attempt to solve this issue. If you would like to work on it, please create another issue with the same contents and refer to issue #743 for more information.
++
++Faça a correção mínima. Edite os arquivos necessários.
