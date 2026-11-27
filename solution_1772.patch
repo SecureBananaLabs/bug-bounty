@@ -1,0 +1,6 @@
+diff --git a/apps/api/src/routes/paymentRoutes.js b/apps/api/src/routes/paymentRoutes.js
+--- a/apps/api/src/routes/paymentRoutes.js
++++ b/apps/api/src/routes/paymentRoutes.js
+@@ -3,7 +3,7 @@
+ 
+ paymentRoutes.post("/", authMiddleware, createPayment);
