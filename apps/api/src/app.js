@@ -23,6 +23,17 @@ export function createApp() {
   app.use(express.json());
   app.use(apiLimiter);
 
+  // Prevent admin role self-assignment during registration
+  app.use("/api/auth", (req, res, next) => {
+    // Assuming registration is a POST request to /api/auth/register
+    if (req.method === "POST" && req.body && req.body.role === "admin") {
+      return res.status(400).json({
+        error: "Cannot assign admin role during registration",
+      });
+    }
+    next();
+  });
+
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, service: "api" });
   });
